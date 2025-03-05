@@ -1,0 +1,10 @@
+# Ignore unnecessary files
+node_modules/
+.next/
+.vercel/
+.ml/  # (If ML models aren't needed for deployment)
+logs/
+*.log
+*.csv
+*.pkl
+

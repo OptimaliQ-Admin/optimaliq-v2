@@ -36,7 +36,6 @@ export async function POST(req: Request) {
     });
 
     // ✅ Store CWD before Next.js renames `process`
-    const _cwd = process.cwd();
 
     const scriptPath = path.resolve(_cwd, "ml/business_simulation.py");
     const modelPath = path.resolve(_cwd, "ml/business_score_model.pkl");
