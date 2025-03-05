@@ -1,10 +1,29 @@
-# Ignore unnecessary files
-node_modules/
-.next/
-.vercel/
-.ml/  # (If ML models aren't needed for deployment)
-logs/
+# Ignore unnecessary files and folders
+
+# ✅ Dependencies (Vercel installs them automatically)
+node_modules
+package-lock.json
+yarn.lock
+
+# ✅ Build output and cache
+.next
+out
+
+# ✅ Logs and temporary files
 *.log
-*.csv
-*.pkl
+*.tmp
+debug.log
+npm-debug.log
+vercel-debug.log
+
+# ✅ Machine learning & database files
+ml/*.csv
+ml/*.pkl
+ml/training_data.csv
+ml/simulation_history.csv
+
+# ✅ Environment variables and secrets (Ensure this is in .gitignore too)
+.env
+.env.local
+.env.production
 
