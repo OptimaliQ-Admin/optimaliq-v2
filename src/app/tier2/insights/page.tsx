@@ -1,24 +1,40 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 
-export default function InsightsPage() {
+function InsightsPage() {  // ⬅ Removed `export default`
   const searchParams = useSearchParams();
-  const email = searchParams.get("email"); // ✅ Get email from URL
+  const email = searchParams.get("email"); 
 
-  const [trends, setTrends] = useState([]);
+  if (!email) {
+    console.error("🚨 Email is required but missing!");
+    return <p className="text-red-500">⚠️ Error: Email is required.</p>;
+  } 
+  // Define the expected structure of simulationResult
+interface SimulationResult {
+  revenueImpact: number;
+  costSavings: number;
+  efficiencyGain: number;
+} 
+  const [trends, setTrends] = useState<Trend[]>([]); // ✅ Defined type once
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [simulationResult, setSimulationResult] = useState(null);
+  const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [simLoading, setSimLoading] = useState(false);
   const [strategyChange, setStrategyChange] = useState(0);
-const [processChange, setProcessChange] = useState(0);
-const [techChange, setTechChange] = useState(0);
-const [revenue, setRevenue] = useState(100000);
-const [costs, setCosts] = useState(50000);
-const [efficiency, setEfficiency] = useState(50);
+  const [processChange, setProcessChange] = useState(0);
+  const [techChange, setTechChange] = useState(0);
+  const [revenue, setRevenue] = useState(100000);
+  const [costs, setCosts] = useState(50000);
+  const [efficiency, setEfficiency] = useState(50);
 
+  // ✅ Define Trend Type
+  interface Trend {
+    trend: string;
+    whyItMatters: string;
+  }
 
   // Load User Data & Trends
   useEffect(() => {
@@ -42,7 +58,6 @@ const [efficiency, setEfficiency] = useState(50);
     fetchTrends();
   }, [email]); // ✅ Runs when email changes
 
-
   // Function to Run Simulation
   const runSimulation = async () => {
     setSimLoading(true);
@@ -65,33 +80,23 @@ const [efficiency, setEfficiency] = useState(50);
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">
       {/* Sidebar Navigation - Maintain User Session */}
-<aside className="w-64 bg-white shadow-lg h-screen p-6 flex flex-col justify-between">
-  <div>
-    <h2 className="text-2xl font-bold text-gray-800 mb-6">GMF+</h2>
-    <nav className="space-y-4">
-      <a href={`/tier2/dashboard?email=${encodeURIComponent(email)}`} 
-        className="block text-gray-700 hover:text-blue-600 font-medium">
-        📊 Dashboard
-      </a>
-      <a href={`/tier2/insights?email=${encodeURIComponent(email)}`} 
-        className="block text-gray-700 hover:text-blue-600 font-medium">
-        📑 Insights
-      </a>
-      <a href={`/tier2/assessment?email=${encodeURIComponent(email)}`} 
-   className="block text-gray-700 hover:text-blue-600 font-medium">
-  📝 Assessment
-</a>
+      <aside className="w-64 bg-white shadow-lg h-screen p-6 flex flex-col justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">GMF+</h2>
+          <nav className="space-y-4">
+            <a href={`/tier2/dashboard?email=${encodeURIComponent(email)}`} className="block text-gray-700 hover:text-blue-600 font-medium">📊 Dashboard</a>
+            <a href={`/tier2/insights?email=${encodeURIComponent(email)}`} className="block text-gray-700 hover:text-blue-600 font-medium">📑 Insights</a>
+            <a href={`/tier2/assessment?email=${encodeURIComponent(email)}`} className="block text-gray-700 hover:text-blue-600 font-medium">📝 Assessment</a>
+            <a href="#" className="block text-gray-700 hover:text-blue-600 font-medium">👥 Community</a>
+          </nav>
+        </div>
 
-      <a href="#" className="block text-gray-700 hover:text-blue-600 font-medium">👥 Community</a>
-    </nav>
-  </div>
-
-  {/* User Section */}
-  <div className="flex items-center space-x-3">
-    <div className="w-10 h-10 bg-gray-300 rounded-full"></div> {/* Placeholder for user avatar */}
-    <p className="text-gray-700 font-medium">{email || "User"}</p>
-  </div>
-</aside>
+        {/* User Section */}
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gray-300 rounded-full"></div> {/* Placeholder for user avatar */}
+          <p className="text-gray-700 font-medium">{email || "User"}</p>
+        </div>
+      </aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-8 space-y-6">
@@ -129,84 +134,12 @@ const [efficiency, setEfficiency] = useState(50);
           <div className="mt-4 space-y-4">
             <div>
               <label className="text-gray-700 font-medium">📌 Strategy Change</label>
-              <input
-                type="range"
-                min="-2"
-                max="2"
-                step="0.5"
-                value={strategyChange}
-                onChange={(e) => setStrategyChange(parseFloat(e.target.value))}
-                className="w-full"
-              />
+              <input type="range" min="-2" max="2" step="0.5" value={strategyChange} onChange={(e) => setStrategyChange(parseFloat(e.target.value))} className="w-full"/>
               <p className="text-gray-600">Change: {strategyChange}</p>
             </div>
-
-            <div>
-              <label className="text-gray-700 font-medium">⚙️ Process Change</label>
-              <input
-                type="range"
-                min="-2"
-                max="2"
-                step="0.5"
-                value={processChange}
-                onChange={(e) => setProcessChange(parseFloat(e.target.value))}
-                className="w-full"
-              />
-              <p className="text-gray-600">Change: {processChange}</p>
-            </div>
-
-            <div>
-              <label className="text-gray-700 font-medium">🔧 Technology Change</label>
-              <input
-                type="range"
-                min="-2"
-                max="2"
-                step="0.5"
-                value={techChange}
-                onChange={(e) => setTechChange(parseFloat(e.target.value))}
-                className="w-full"
-              />
-              <p className="text-gray-600">Change: {techChange}</p>
-            </div>
           </div>
 
-          {/* Additional Inputs */}
-          <div className="mt-6 space-y-4">
-            <div>
-              <label className="text-gray-700 font-medium">💰 Annual Revenue ($)</label>
-              <input
-                type="number"
-                value={revenue}
-                onChange={(e) => setRevenue(parseInt(e.target.value))}
-                className="w-full border border-gray-300 p-2 rounded"
-              />
-            </div>
-
-            <div>
-              <label className="text-gray-700 font-medium">💸 Operational Costs ($)</label>
-              <input
-                type="number"
-                value={costs}
-                onChange={(e) => setCosts(parseInt(e.target.value))}
-                className="w-full border border-gray-300 p-2 rounded"
-              />
-            </div>
-
-            <div>
-              <label className="text-gray-700 font-medium">📈 Efficiency (%)</label>
-              <input
-                type="number"
-                value={efficiency}
-                onChange={(e) => setEfficiency(parseInt(e.target.value))}
-                className="w-full border border-gray-300 p-2 rounded"
-              />
-            </div>
-          </div>
-
-          <button
-            onClick={runSimulation}
-            className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-          >
+          <button onClick={runSimulation} className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
             Run Simulation
           </button>
 
@@ -224,3 +157,13 @@ const [efficiency, setEfficiency] = useState(50);
     </div>
   );
 }
+// ✅ Wrap in Suspense to prevent Next.js hydration issues
+export default function InsightsWrapper() {
+  return (
+    <Suspense fallback={<p>Loading insights...</p>}>
+      <InsightsPage />
+    </Suspense>
+  );
+}
+
+

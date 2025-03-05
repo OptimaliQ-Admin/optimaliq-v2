@@ -3,13 +3,20 @@ import fs from "fs";
 import { spawnSync } from "child_process";
 import { NextResponse } from "next/server";
 
+// ✅ Define the expected shape of simulation results
+interface SimulationResult {
+  revenueImpact: number;
+  costSavings: number;
+  efficiencyGain: number;
+}
+
 // ✅ API to handle business simulations
 export async function POST(req: Request) {
   try {
     const { strategyChange, processChange, techChange, revenue, costs, efficiency } = await req.json();
     console.log("🔍 Running What-If Simulation with:", { strategyChange, processChange, techChange, revenue, costs, efficiency });
 
-    if (!strategyChange && !processChange && !techChange) {
+    if (strategyChange === undefined || processChange === undefined || techChange === undefined) {
       return NextResponse.json({ error: "No changes provided for simulation" }, { status: 400 });
     }
 
@@ -39,9 +46,9 @@ export async function POST(req: Request) {
 
     console.log("🔍 Raw Simulation Output:", simulationOutput);
 
-    let parsedResult = {};
+    let parsedResult: SimulationResult;
     try {
-      parsedResult = JSON.parse(simulationOutput);
+      parsedResult = JSON.parse(simulationOutput) as SimulationResult;
     } catch (error) {
       console.error("🚨 JSON Parsing Error:", error);
       return NextResponse.json({ error: "Failed to parse simulation results" }, { status: 500 });
@@ -59,14 +66,26 @@ export async function POST(req: Request) {
 }
 
 // ✅ Function to log simulations for tracking
-function logSimulation(strategy, process, tech, revenue, costs, efficiency, result) {
-  const logPath = path.resolve(process.cwd(), "ml/simulation_history.csv");
+function logSimulation(
+  strategy: number,
+  processChange: number,
+  tech: number,
+  revenue: number,
+  costs: number,
+  efficiency: number,
+  result: SimulationResult
+): void {
+  const logFilePath = path.resolve(globalThis.process.cwd(), "ml/simulation_history.csv");
 
-  if (!fs.existsSync(logPath)) {
-    fs.writeFileSync(logPath, "strategy,process,tech,revenue,costs,efficiency,revenueImpact,costSavings,efficiencyGain\n", "utf8");
+  if (!fs.existsSync(logFilePath)) {
+    fs.writeFileSync(
+      logFilePath,
+      "strategy,process,tech,revenue,costs,efficiency,revenueImpact,costSavings,efficiencyGain\n",
+      "utf8"
+    );
   }
 
-  const logEntry = `${strategy},${process},${tech},${revenue},${costs},${efficiency},${result.revenueImpact},${result.costSavings},${result.efficiencyGain}\n`;
-  fs.appendFileSync(logPath, logEntry, "utf8");
+  const logEntry = `${strategy},${processChange},${tech},${revenue},${costs},${efficiency},${result.revenueImpact},${result.costSavings},${result.efficiencyGain}\n`;
+  fs.appendFileSync(logFilePath, logEntry, "utf8");
 }
 

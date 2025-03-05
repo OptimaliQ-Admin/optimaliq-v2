@@ -2,8 +2,9 @@ import path from "path";
 import fs from "fs";
 import { NextResponse } from "next/server";
 import csv from "csv-parser";
-function generateWhyItMatters(trend) {
-  const insights = {
+
+function generateWhyItMatters(trend: string): string {
+  const insights: Record<string, string> = {
     "Data-Driven Decision Making": "Companies using data-driven decision-making see 23% higher profitability and improved customer targeting.",
     "Client Retention Strategies": "Firms with structured retention strategies increase customer lifetime value by up to 35%.",
     "AI-Powered Insights": "Organizations leveraging AI for insights identify market shifts 40% faster than competitors.",
@@ -12,8 +13,8 @@ function generateWhyItMatters(trend) {
   return insights[trend] || "This trend enhances competitive advantage and operational efficiency.";
 }
 
-function generateGrowthExplanation(trend) {
-  const growthInsights = {
+function generateGrowthExplanation(trend: string): string {
+  const growthInsights: Record<string, string> = {
     "Data-Driven Decision Making": "Data-driven firms achieve 20-30% faster revenue growth due to real-time adaptability.",
     "Client Retention Strategies": "Strong retention programs can increase repeat purchases by 50%, stabilizing revenue streams.",
     "AI-Powered Insights": "AI-driven market insights allow businesses to make proactive rather than reactive decisions.",
@@ -22,8 +23,8 @@ function generateGrowthExplanation(trend) {
   return growthInsights[trend] || "This trend contributes to sustainable business growth and market resilience.";
 }
 
-function generateImpactExplanation(trend) {
-  const impactInsights = {
+function generateImpactExplanation(trend: string): string {
+  const impactInsights: Record<string, string> = {
     "Data-Driven Decision Making": "Businesses implementing data-driven strategies outperform competitors by 18% in efficiency.",
     "Client Retention Strategies": "Retention-focused businesses report up to 60% higher net revenue growth vs competitors.",
     "AI-Powered Insights": "Leveraging AI insights can improve forecasting accuracy by 45%, reducing financial risk.",
@@ -52,18 +53,18 @@ export async function POST(req: Request) {
           .pipe(csv())
           .on("data", (row) => {
             if (row.industry === industry) {
+              const impactScore = (!isNaN(parseFloat(row.relevance)) ? parseFloat(row.relevance) : 1) *
+                                  (!isNaN(parseFloat(row.growth_potential)) ? parseFloat(row.growth_potential) : 1);
+
               trends.push({
                 trend: row.emerging_trends,
                 aiAdoption: parseFloat(row.AI_adoption_rate),
                 growthPotential: parseFloat(row.growth_potential),
-                impactScore: (!isNaN(parseFloat(row.relevance)) ? parseFloat(row.relevance) : 1) *
-                 (!isNaN(parseFloat(row.growth_potential)) ? parseFloat(row.growth_potential) : 1),
+                impactScore: impactScore,
                 whyItMatters: generateWhyItMatters(row.emerging_trends),
                 growthPotentialExplanation: `Rated ${row.growth_potential}/10 – ${generateGrowthExplanation(row.emerging_trends)}`,
-                impactScoreExplanation: `Impact Score: ${!isNaN(parseFloat(trends[trends.length - 1]?.impactScore)) ? parseFloat(trends[trends.length - 1]?.impactScore).toFixed(1) : "N/A"} – ${generateImpactExplanation(row.emerging_trends)}`,
-
+                impactScoreExplanation: `Impact Score: ${impactScore.toFixed(1)} – ${generateImpactExplanation(row.emerging_trends)}`,
               });
-              
             }
           })
           .on("end", resolve)

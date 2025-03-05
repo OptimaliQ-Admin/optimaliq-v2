@@ -1,29 +1,30 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
-export default function Page3() {
+function Page3Component() {  // ⬅ Wrapped in a separate function
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
+
   // Prevent duplicate API calls
   const hasFetched = useRef(false);
 
   // Retrieve responses from Page2
-  const [businessResponses, setBusinessResponses] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
-  const [score, setScore] = useState(0);
+  const [businessResponses, setBusinessResponses] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [score, setScore] = useState<number>(0);
   const [insights, setInsights] = useState({
     strategy: "Complete the assessment to receive insights.",
     process: "Complete the assessment to receive insights.",
     technology: "Complete the assessment to receive insights.",
   });
-  const [loading, setLoading] = useState(true);
-  const [roadmapData, setRoadmapData] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [roadmapData, setRoadmapData] = useState<{ month: string; score: number }[]>([]); // ✅ Correctly declared once
 
   useEffect(() => {
     if (hasFetched.current) return; // ✅ Prevent duplicate calls
@@ -50,7 +51,7 @@ export default function Page3() {
     }
   }, [searchParams]); // ✅ Only runs once, preventing multiple API calls
 
-  const fetchAIInsights = async (businessData, userData) => {
+  const fetchAIInsights = async (businessData: any, userData: any) => {
     if (!businessData || !userData) {
       console.error("❌ Missing data: businessData or userData is undefined.");
       return;
@@ -59,29 +60,33 @@ export default function Page3() {
     setLoading(true);
     try {
       const response = await axios.post("/api/getInsights", {
-        answers: { ...businessData, ...userData } // ✅ Send in the correct format
+        answers: { ...businessData, ...userData }, // ✅ Send in the correct format
       });
 
+      // ✅ Ensure the response data is parsed safely
+      const parsedData = response.data;
+
       // ✅ Round the score down to the nearest 0.5
-      const roundToNearestHalf = (num) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(response.data.score ?? 0);
+      const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
+      const roundedScore = roundToNearestHalf(parsedData.score ?? 0);
 
       setScore(roundedScore);
       setInsights({
-        strategy: response.data.strategyInsight || "No insight available.",
-        process: response.data.processInsight || "No insight available.",
-        technology: response.data.technologyInsight || "No insight available.",
+        strategy: parsedData.strategyInsight || "No insight available.",
+        process: parsedData.processInsight || "No insight available.",
+        technology: parsedData.technologyInsight || "No insight available.",
       });
 
+      // ✅ Set roadmapData (only one declaration now!)
       setRoadmapData([
         { month: "Now", score: roundedScore },
         { month: "3 Months", score: Math.min(5, roundedScore + 0.5) },
         { month: "6 Months", score: Math.min(5, roundedScore + 1) },
         { month: "12 Months", score: Math.min(5, roundedScore + 2) },
       ]);
-    } catch (error) {
-      console.error("🚨 Error fetching AI insights:", error.response?.data || error.message);
-    }
+    } catch (error: any) {
+      console.error("🚨 Error fetching AI insights:", error?.response?.data || error?.message);
+    }    
     setLoading(false);
   };
 
@@ -131,3 +136,11 @@ export default function Page3() {
     </div>
   );
 }
+export default function Page3() {
+  return (
+    <Suspense fallback={<p>Loading insights...</p>}>
+      <Page3Component />
+    </Suspense>
+  );
+}
+

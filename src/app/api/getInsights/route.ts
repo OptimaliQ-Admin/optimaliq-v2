@@ -8,41 +8,42 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ✅ Function to log user responses for ML training
-function logUserData(strategyScore, processScore, technologyScore, mlScore, industry) {
-    const logPath = path.resolve(process.cwd(), "ml/training_data.csv");
-
-    if (!fs.existsSync(logPath)) {
-        fs.writeFileSync(logPath, "strategy,process,technology,score,industry\n", "utf8");
-    }
-
-    const logEntry = `${strategyScore},${processScore},${technologyScore},${mlScore},${industry}\n`;
-    fs.appendFileSync(logPath, logEntry, "utf8");
-
-    const lines = fs.readFileSync(logPath, "utf8").trim().split("\n");
-    if (lines.length >= 12) {
-        console.log("🚀 Retraining ML model...");
-        const retrainProcess = spawnSync("python3", ["ml/train_model.py"]);
-        console.log("🔄 Retrain Output:", retrainProcess.stdout.toString().trim());
-        console.log("⚠️ Retrain Error (if any):", retrainProcess.stderr.toString().trim());
-    }
+// ✅ Define OpenAI Response Type
+interface AIResponse {
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
+  strategyInsight: string;
+  processInsight: string;
+  technologyInsight: string;
 }
 
-// ✅ Function to log user data for tracking (Separate from ML Training)
-function logUserDatabase(strategyScore, processScore, technologyScore, mlScore, industry, companySize, revenueRange, name, email) {
-  const logPath = path.resolve(process.cwd(), "ml/user_database.csv");
-
-  console.log("📌 Logging User Data:", { strategyScore, processScore, technologyScore, mlScore, industry, companySize, revenueRange, name, email });
+// ✅ Function to log user responses for ML training
+function logUserData(strategyScore: number, processScore: number, technologyScore: number, mlScore: number, industry: string): void {
+  const logPath = path.resolve(process.cwd(), "ml/training_data.csv");
 
   if (!fs.existsSync(logPath)) {
-      console.log("⚠️ CSV File Not Found. Creating...");
-      fs.writeFileSync(logPath, "name,email,strategy,process,technology,score,industry,companySize,revenueRange\n", "utf8");
+    fs.writeFileSync(logPath, "strategy,process,technology,score,industry\n", "utf8");
+  }
+
+  const logEntry = `${strategyScore},${processScore},${technologyScore},${mlScore},${industry}\n`;
+  fs.appendFileSync(logPath, logEntry, "utf8");
+
+  if (fs.readFileSync(logPath, "utf8").trim().split("\n").length >= 12) {
+    spawnSync("python3", ["ml/train_model.py"]);
+  }
+}
+
+// ✅ Function to log user data for tracking
+function logUserDatabase(strategyScore: number, processScore: number, technologyScore: number, mlScore: number, industry: string, companySize: string, revenueRange: string, name: string, email: string): void {
+  const logPath = path.resolve(process.cwd(), "ml/user_database.csv");
+
+  if (!fs.existsSync(logPath)) {
+    fs.writeFileSync(logPath, "name,email,strategy,process,technology,score,industry,companySize,revenueRange\n", "utf8");
   }
 
   const logEntry = `${name},${email},${strategyScore},${processScore},${technologyScore},${mlScore},${industry},${companySize},${revenueRange}\n`;
-  
   fs.appendFileSync(logPath, logEntry, "utf8");
-  console.log("✅ Successfully Logged to user_database.csv");
 }
 
 // ✅ Main API Route
@@ -86,16 +87,15 @@ export async function POST(req: Request) {
       **Example Output Format (strict JSON, no extra text):**
       {
         "strategyScore": 4,
-        "strategyInsight": "Your innovative solution has a strong foundation, but scaling requires a clear monetization path. Businesses that convert innovation into repeatable revenue models see a **5X valuation increase within 3 years.**",
+        "strategyInsight": "Your innovative solution has a strong foundation, but scaling requires a clear monetization path.",
         "processScore": 4,
-        "processInsight": "Your processes are efficient, which reduces operational bottlenecks. The next step is ensuring they are scalable—companies that optimize early scale 2.3X faster in new markets.",
+        "processInsight": "Your processes are efficient, but scalability requires early optimization.",
         "technologyScore": 5,
-        "technologyInsight": "With a cutting-edge tech stack, your biggest opportunity is ensuring seamless **cross-functional integration.** 89% of tech-driven businesses struggle with system silos—ensuring full alignment will maximize ROI."
+        "technologyInsight": "Your tech stack is cutting-edge. Focus on integration to maximize ROI."
       }
     `;
 
     console.log("🔹 Sending request to OpenAI...");
-
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [{ role: "system", content: aiPrompt }],
@@ -105,23 +105,22 @@ export async function POST(req: Request) {
 
     console.log("✅ OpenAI Response Received");
 
-    let parsedResponse = {}; // Initialize to avoid undefined errors
-    const rawResponse = response.choices?.[0]?.message?.content || "{}";
-    
-    try {
-        parsedResponse = JSON.parse(rawResponse);
-    } catch (error) {
-        console.error("🚨 JSON Parsing Error:", error);
-        console.log("📜 Raw OpenAI Response:", rawResponse); // Debugging log to see the issue
-    
-        return NextResponse.json({
-            error: "Failed to parse AI response. Try again later.",
-            strategyInsight: "Error generating insights. Please try again.",
-            processInsight: "Error generating insights. Please try again.",
-            technologyInsight: "Error generating insights. Please try again.",
-        }, { status: 500 });
+    // ✅ Ensure OpenAI response is valid
+    if (!response.choices?.[0]?.message?.content) {
+      console.error("🚨 OpenAI returned an empty or invalid response.");
+      return NextResponse.json({ error: "Failed to parse AI response. Try again later." }, { status: 500 });
     }
-    
+
+    // ✅ Parse response safely
+    let parsedResponse: AIResponse;
+    try {
+      parsedResponse = JSON.parse(response.choices[0].message.content);
+    } catch (error) {
+      console.error("🚨 JSON Parsing Error:", error);
+      console.log("📜 Raw OpenAI Response:", response.choices[0].message.content);
+      return NextResponse.json({ error: "Failed to parse AI response." }, { status: 500 });
+    }
+
     // ✅ Extract AI-generated scores & insights safely
     const strategyScore = parsedResponse.strategyScore ?? 1;
     const processScore = parsedResponse.processScore ?? 1;
@@ -129,9 +128,8 @@ export async function POST(req: Request) {
     const strategyInsight = parsedResponse.strategyInsight || "No strategy insight available.";
     const processInsight = parsedResponse.processInsight || "No process insight available.";
     const technologyInsight = parsedResponse.technologyInsight || "No technology insight available.";
-    
+
     let mlScore = strategyScore; // Default fallback
-    
     console.log("🔢 Using Scores for ML:", { strategyScore, processScore, technologyScore, mlScore });
 
     // ✅ Log Data Separately

@@ -1,12 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
-export default function Tier2Dashboard() {
+function Tier2DashboardComponent() { // ⬅ Wrapped in a separate function
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+
+  if (!email) {
+    console.error("🚨 Email is required but missing!");
+    return <p className="text-red-500">⚠️ Error: Email is required.</p>;
+  }  
+ 
 
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<any>(null);
@@ -130,14 +136,15 @@ export default function Tier2Dashboard() {
                 <div className="flex-1 p-6 shadow-lg bg-white rounded-lg">
                   <h2 className="text-lg font-bold text-gray-700">🚀 Next 30-Day Growth Plan</h2>
                   <ul className="list-disc list-inside text-gray-700">
-                    {insights?.roadmap && Array.isArray(insights.roadmap)
-                      ? insights.roadmap.map((step, index) => (
-                        <li key={index}>
-                          <strong>{step.task}:</strong> {step.expectedImpact}
-                        </li>
-                      ))
-                      : <li>N/A</li>}
-                  </ul>
+  {insights?.roadmap && Array.isArray(insights.roadmap)
+    ? insights.roadmap.map((step: { task: string; expectedImpact: string }, index: number) => (
+        <li key={index}>
+          <strong>{step.task}:</strong> {step.expectedImpact}
+        </li>
+      ))
+    : <li>No roadmap data available.</li>}
+</ul>
+
                 </div>
               </div>
             </div>
@@ -148,28 +155,30 @@ export default function Tier2Dashboard() {
               <div className="flex-1 p-6 shadow-lg bg-white rounded-lg">
                 <h2 className="text-lg font-bold text-gray-700">✅ Strengths</h2>
                 <ul className="list-disc list-inside text-gray-700">
-                  {Array.isArray(insights?.strengths) && insights.strengths.length > 0
-                    ? insights.strengths.map((strength, index) => (
-                      <li key={index}>
-                        <strong>{strength.title}:</strong> {strength.impact}
-                      </li>
-                    ))
-                    : <li>N/A</li>}
-                </ul>
+  {Array.isArray(insights?.strengths) && insights.strengths.length > 0
+    ? insights.strengths.map((strength: { title: string; impact: string }, index: number) => (
+        <li key={index}>
+          <strong>{strength.title}:</strong> {strength.impact}
+        </li>
+      ))
+    : <li>No strengths available.</li>}
+</ul>
+
               </div>
 
               {/* 🚨 Weaknesses */}
               <div className="flex-1 p-6 shadow-lg bg-white rounded-lg">
                 <h2 className="text-lg font-bold text-gray-700">🚨 Weaknesses</h2>
                 <ul className="list-disc list-inside text-gray-700">
-                  {Array.isArray(insights?.weaknesses) && insights.weaknesses.length > 0
-                    ? insights.weaknesses.map((weakness, index) => (
-                      <li key={index}>
-                        <strong>{weakness.title}:</strong> {weakness.impact}
-                      </li>
-                    ))
-                    : <li>N/A</li>}
-                </ul>
+  {Array.isArray(insights?.weaknesses) && insights.weaknesses.length > 0
+    ? insights.weaknesses.map((weakness: { title: string; impact: string }, index: number) => (
+        <li key={index}>
+          <strong>{weakness.title}:</strong> {weakness.impact}
+        </li>
+      ))
+    : <li>No weaknesses available.</li>}
+</ul>
+
               </div>
             </div>
             {/* BOTTOM SECTION - Trends & Insights */}
@@ -181,33 +190,32 @@ export default function Tier2Dashboard() {
               ) : (
                 <>
                   {insights?.topTrends?.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                      {insights.topTrends.map((trend, index) => (
-                        <div key={index} className="p-4 shadow-lg bg-white rounded-lg border border-gray-200">
-                          <h3 className="text-lg font-bold text-gray-800">{trend.trend}</h3>
-                          <p className="text-gray-600 mt-1 italic">{trend.whyItMatters}</p>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+    {insights.topTrends.map(
+      (trend: { trend: string; whyItMatters: string; aiAdoption: number; growthPotentialExplanation: string; impactScore: number; impactScoreExplanation: string }, index: number) => (
+        <div key={index} className="p-4 shadow-lg bg-white rounded-lg border border-gray-200">
+          <h3 className="text-lg font-bold text-gray-800">{trend.trend}</h3>
+          <p className="text-gray-600 mt-1 italic">{trend.whyItMatters}</p>
+          <p className="text-gray-600 mt-2">
+            <strong>Company Adoption:</strong> {(trend.aiAdoption * 100).toFixed(1)}% of businesses use this.
+          </p>
+          <p className="text-gray-600 mt-1">
+            <strong>Growth Potential:</strong> {trend.growthPotentialExplanation}
+          </p>
+          <p className="text-gray-600 mt-1">
+            <strong>Impact Score:</strong> {trend.impactScore ? trend.impactScore.toFixed(1) : "N/A"}
+          </p>
+          <p className="text-gray-600 mt-1">
+            <strong>Impact Score Explanation:</strong> {trend.impactScoreExplanation}
+          </p>
+        </div>
+      )
+    )}
+  </div>
+) : (
+  <p className="text-gray-500 mt-2">No trends available.</p>
+)}
 
-                          <p className="text-gray-600 mt-2">
-                            <strong>Company Adoption:</strong> {(trend.aiAdoption * 100).toFixed(1)}% of businesses use this.
-                          </p>
-
-                          <p className="text-gray-600 mt-1">
-                            <strong>Growth Potential:</strong> {trend.growthPotentialExplanation}
-                          </p>
-
-                          <p className="text-gray-600 mt-1">
-                            <strong>Impact Score:</strong> {trend.impactScore ? trend.impactScore.toFixed(1) : "N/A"}
-                          </p>
-
-                          <p className="text-gray-600 mt-1">
-                            <strong>Impact Score Explanation:</strong> {trend.impactScoreExplanation}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 mt-2">No trends available.</p>
-                  )}
                 </>
               )}
             </div>
@@ -279,5 +287,12 @@ export default function Tier2Dashboard() {
         )}
       </div>
     </div>
+  );
+}
+export default function Tier2Dashboard() {
+  return (
+    <Suspense fallback={<p>Loading dashboard...</p>}>
+      <Tier2DashboardComponent />
+    </Suspense>
   );
 }

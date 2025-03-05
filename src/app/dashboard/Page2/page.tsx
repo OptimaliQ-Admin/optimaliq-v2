@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Page2() {
+function Page2Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Retrieve business responses from Page1
   const [businessResponses, setBusinessResponses] = useState(null);
+  
   useEffect(() => {
     const businessData = searchParams.get("businessResponses");
     if (businessData) {
       setBusinessResponses(JSON.parse(decodeURIComponent(businessData)));
     } else {
-      // Redirect back to Page1 if no data is found
-      router.push("/dashboard/Page1");
+      router.push("/dashboard/Page1"); // Redirect if missing data
     }
   }, [searchParams, router]);
 
-  // State to store user information
+  // ✅ Define userInfo state
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -30,7 +30,7 @@ export default function Page2() {
   });
 
   // Handle form input changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setUserInfo({
       ...userInfo,
       [e.target.name]: e.target.value,
@@ -38,12 +38,12 @@ export default function Page2() {
   };
 
   // Handle form submission and navigate to Page3
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     // Validate required fields
     for (const key in userInfo) {
-      if (!userInfo[key]) {
+      if (!userInfo[key as keyof typeof userInfo]) {
         alert("⚠️ All fields are required. Please complete the form before proceeding.");
         return;
       }
@@ -152,5 +152,13 @@ export default function Page2() {
         </button>
       </form>
     </div>
+  );
+}
+// ✅ Wrap in Suspense to prevent hydration issues
+export default function Page2() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <Page2Component />
+    </Suspense>
   );
 }

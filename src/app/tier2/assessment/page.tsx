@@ -1,11 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function AssessmentPage() {
+function AssessmentComponent() {  // ⬅ Wrapped in a separate function
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email"); // ✅ Capture email from URL
+
+  if (!email) {
+    console.error("🚨 Email is required but missing!");
+    return <p className="text-red-500">⚠️ Error: Email is required.</p>;
+  }
+
 
   // Assessment options
   const assessments = [
@@ -118,5 +125,12 @@ export default function AssessmentPage() {
         </div>
       </div>
     </div>
+  );
+}
+export default function AssessmentPage() {
+  return (
+    <Suspense fallback={<p>Loading assessment...</p>}>
+      <AssessmentComponent />
+    </Suspense>
   );
 }

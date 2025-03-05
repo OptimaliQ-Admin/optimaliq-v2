@@ -3,13 +3,20 @@ import fs from "fs";
 import { spawnSync } from "child_process";
 import { NextResponse } from "next/server";
 
+// ✅ Correctly define `globalThis.__basedir` for TypeScript
+declare global {
+  var __basedir: string | undefined;
+}
+
+// ✅ Ensure `__basedir` is always set
+if (!globalThis.__basedir) {
+  globalThis.__basedir = process.cwd();
+}
+
 export async function POST(req: Request) {
   try {
     const { email, strategyChange, processChange, techChange, revenue, costs, efficiency } = await req.json();
-    if (!global.__basedir) {
-      global.__basedir = process.cwd();
-    }
-    
+
     if (!email) {
       return NextResponse.json({ error: "Missing user session (email required)." }, { status: 400 });
     }
@@ -35,8 +42,8 @@ export async function POST(req: Request) {
       efficiency,
     });
 
-    // ✅ Store CWD before Next.js renames `process`
-    const _cwd = process.cwd();
+    // ✅ Ensure `_cwd` is always a **valid string**
+    const _cwd: string = globalThis.__basedir || process.cwd();
 
     const scriptPath = path.resolve(_cwd, "ml/business_simulation.py");
     const modelPath = path.resolve(_cwd, "ml/business_score_model.pkl");
@@ -63,7 +70,16 @@ export async function POST(req: Request) {
 
     console.log("📊 Simulation Result:", output);
 
-    let simulationResult;
+    // ✅ Define the expected structure of `simulationResult`
+    interface SimulationResult {
+      revenueImpact: number;
+      costSavings: number;
+      efficiencyGain: number;
+      newOverallScore: number;
+    }
+
+    let simulationResult: SimulationResult;
+
     try {
       simulationResult = JSON.parse(output);
     } catch (parseError) {

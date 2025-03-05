@@ -16,24 +16,25 @@ export default function Page1() {
   });
 
   // Handle form input changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setBusinessResponses({
       ...businessResponses,
       [e.target.name]: e.target.value,
     });
   };
+  
 
   // Handle form submission and navigate to Page2
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Validate required fields
-    for (const key in businessResponses) {
-      if (!businessResponses[key]) {
-        alert("⚠️ All fields are required. Please complete the form before proceeding.");
-        return;
-      }
-    }
+   // Validate required fields
+for (const key in businessResponses) {
+  if (!businessResponses[key as keyof typeof businessResponses]) {
+    alert("⚠️ All fields are required. Please complete the form before proceeding.");
+    return;
+  }
+}
     
     // Navigate to Page2 with responses passed as a query parameter
     router.push(`/dashboard/Page2?businessResponses=${encodeURIComponent(JSON.stringify(businessResponses))}`);
