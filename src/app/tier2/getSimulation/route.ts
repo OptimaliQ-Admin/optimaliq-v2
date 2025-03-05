@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     });
 
     // ✅ Store CWD before Next.js renames `process`
+    const _cwd = process.cwd();
 
     const scriptPath = path.resolve(_cwd, "ml/business_simulation.py");
     const modelPath = path.resolve(_cwd, "ml/business_score_model.pkl");
@@ -78,9 +79,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ Set log file path
-    const _cwd = global.__basedir || process.cwd(); // Store CWD globally
-const logPath = path.join(_cwd, "ml/simulation_history.csv");
-
+    const logPath = path.join(_cwd, "ml/simulation_history.csv");
 
     console.log("✅ Logging simulation results...");
     console.log("🔹 Process.cwd():", _cwd);
