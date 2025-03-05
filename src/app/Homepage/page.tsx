@@ -38,83 +38,141 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl font-semibold text-gray-800 mb-8">How It Works</h2>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="relative p-10 bg-blue-900 rounded-lg shadow-lg text-white">
-              <Image
-                src="/images/Step1_Background.jpeg"
-                alt="Assess Business"
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0 rounded-lg opacity-30"
-              />
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold">1. Assess Your Business</h3>
-                <p className="mt-4 text-lg">
-                  Our AI-powered assessment pinpoints the exact obstacles preventing growth and highlights opportunities for scale.
-                </p>
-              </div>
-            </div>
-            <div className="relative p-10 bg-blue-900 rounded-lg shadow-lg text-white">
-              <Image
-                src="/images/Real-Time_Insights.jpeg"
-                alt="Real-Time Insights"
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0 rounded-lg opacity-30"
-              />
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold">2. Get Real-Time Insights</h3>
-                <p className="mt-4 text-lg">
-                  Our AI continuously analyzes real-time market trends and operational data to provide dynamic, personalized insights.
-                </p>
-              </div>
-            </div>
-            <div className="relative p-10 bg-blue-900 rounded-lg shadow-lg text-white">
-              <Image
-                src="/images/Optimize_Scale.jpeg"
-                alt="Optimize & Scale"
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0 rounded-lg opacity-30"
-              />
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold">3. Optimize & Scale</h3>
-                <p className="mt-4 text-lg">
-                  Turn AI-driven insights into action with scalable strategies that optimize efficiency, maximize revenue, and future-proof your business.
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* How It Works - Updated Section */}
+<section id="how-it-works" className="py-20 bg-gray-50">
+  <div className="max-w-6xl mx-auto text-center">
+    <h2 className="text-4xl font-semibold text-gray-800 mb-8">How It Works</h2>
+    <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+      
+      {/* Step 1 - Assess Your Business */}
+      <div className="relative p-10 bg-blue-800 rounded-lg shadow-lg text-white">
+        <Image
+          src="/images/Step1_Background.jpeg"
+          alt="Assess Business"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0 rounded-lg opacity-25" // Reduced overlay opacity
+        />
+        <div className="relative z-10">
+          <h3 className="text-2xl font-bold">1. Assess Your Business</h3>
+          <p className="mt-4 text-lg">
+          We analyze your <strong>strategy, operations, and market position to uncover 
+  high-impact growth opportunities. Our data-driven insights help you
+  overcome obstacles, scale efficiently, and maximize ROI—all tailored 
+  to your unique business challenges.</strong>
+          </p>
         </div>
-      </section>
+      </div>
 
-      {/* Key Features */}
-      <section id="key-features" className="py-16">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold text-gray-800">Key Features</h2>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-700">AI-Powered Business Assessments</h3>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-700">Real-Time Strategy Optimization</h3>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-700">Competitive Benchmarking</h3>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-700">Personalized Growth Insights</h3>
-            </div>
-          </div>
+      {/* Step 2 - Get Data-Driven Insights */}
+      <div className="relative p-10 bg-blue-800 rounded-lg shadow-lg text-white">
+        <Image
+          src="/images/Real-Time_Insights.jpeg"
+          alt="Data-Driven Insights"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0 rounded-lg opacity-25"
+        />
+        <div className="relative z-10">
+          <h3 className="text-2xl font-bold">2. Get Data-Driven Insights</h3>
+          <p className="mt-4 text-lg">
+          Harnessing <strong>machine learning across industries, we provide
+            customized insights tailored to your business objectives.  
+  Our models analyze real-world trends, market shifts, and operational data 
+  to help you identify opportunities, mitigate risks, and drive scalable growth.</strong>
+          </p>
         </div>
-      </section>
+      </div>
 
-      {/* FAQ Section */}
-      <section id="faq" className="py-16 bg-gray-50">
+      {/* Step 3 - Optimize & Scale */}
+      <div className="relative p-10 bg-blue-800 rounded-lg shadow-lg text-white">
+        <Image
+          src="/images/Optimize_Scale.jpeg"
+          alt="Optimize & Scale"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0 rounded-lg opacity-25"
+        />
+        <div className="relative z-10">
+          <h3 className="text-2xl font-bold">3. Implement & Scale</h3>
+          <p className="mt-4 text-lg">
+          <strong>Transform strategic insights into measurable success with
+            custom recommendations designed to enhance revenue, 
+  improve operational efficiency, and strengthen your competitive edge.  
+  Our data-driven approach ensures every decision is backed by industry insights 
+  and tailored to your unique growth trajectory.</strong>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{/* Key Features - Updated Section */}
+<section id="key-features" className="py-16">
+  <div className="max-w-5xl mx-auto text-center">
+    <h2 className="text-3xl font-semibold text-gray-800">Key Features</h2>
+    <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      {/* Feature 1 - AI-Powered Business Assessments */}
+      <div className="p-6 bg-gray-100 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full">
+            {/* Placeholder for Icon */}
+            <span>[ICON]</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-700">Business Health Assessments</h3>
+        </div>
+        <p className="mt-3 text-gray-600">
+          Evaluate your company’s strengths, weaknesses, and market position to make informed, data-backed decisions.
+        </p>
+      </div>
+
+      {/* Feature 2 - Real-Time Strategy Optimization */}
+      <div className="p-6 bg-white rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full">
+            <span>[ICON]</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-700">Real-Time Strategy Optimization</h3>
+        </div>
+        <p className="mt-3 text-gray-600">
+          Get continuous insights to adjust and refine your business strategies dynamically as new data emerges.
+        </p>
+      </div>
+
+      {/* Feature 3 - Competitive Benchmarking */}
+      <div className="p-6 bg-white rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full">
+            <span>[ICON]</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-700">Competitive Benchmarking</h3>
+        </div>
+        <p className="mt-3 text-gray-600">
+          Compare your performance with industry leaders and uncover actionable areas for improvement.
+        </p>
+      </div>
+
+      {/* Feature 4 - Predictive Growth Insights */}
+      <div className="p-6 bg-gray-100 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full">
+            <span>[ICON]</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-700">Predictive Growth Insights</h3>
+        </div>
+        <p className="mt-3 text-gray-600">
+          Forecast potential growth opportunities and make strategic moves before the market shifts.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+ {/* FAQ Section */}
+ <section id="faq" className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-800">Frequently Asked Questions</h2>
           <div className="mt-10 text-left space-y-4">

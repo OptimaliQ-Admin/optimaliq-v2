@@ -143,4 +143,3 @@ export default function Page3() {
     </Suspense>
   );
 }
-

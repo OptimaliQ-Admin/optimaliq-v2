@@ -7,153 +7,158 @@ function Page2Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Retrieve business responses from Page1
-  const [businessResponses, setBusinessResponses] = useState(null);
-  
+  // ✅ Retrieve user info from Page 1
+  const [userInfo, setUserInfo] = useState(null);
+  const [businessResponses, setBusinessResponses] = useState({
+    obstacles: "",
+    strategy: "",
+    process: "",
+    customers: "",
+    technology: "",
+  });
+
   useEffect(() => {
-    const businessData = searchParams.get("businessResponses");
-    if (businessData) {
-      setBusinessResponses(JSON.parse(decodeURIComponent(businessData)));
+    const userData = searchParams.get("userInfo");
+    if (userData) {
+      setUserInfo(JSON.parse(decodeURIComponent(userData)));
     } else {
-      router.push("/dashboard/Page1"); // Redirect if missing data
+      router.push("/dashboard/Page1"); // Redirect if missing user info
     }
   }, [searchParams, router]);
 
-  // ✅ Define userInfo state
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    industry: "",
-    role: "",
-    companySize: "",
-    revenueRange: "",
-  });
-
-  // Handle form input changes
+  // ✅ Handle business input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setUserInfo({
-      ...userInfo,
+    setBusinessResponses({
+      ...businessResponses,
       [e.target.name]: e.target.value,
     });
   };
 
-  // Handle form submission and navigate to Page3
+  // ✅ Handle form submission & navigate to Page 3
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Validate required fields
-    for (const key in userInfo) {
-      if (!userInfo[key as keyof typeof userInfo]) {
+
+    // ✅ Validate required fields
+    for (const key in businessResponses) {
+      if (!businessResponses[key as keyof typeof businessResponses]) {
         alert("⚠️ All fields are required. Please complete the form before proceeding.");
         return;
       }
     }
-    
-    // Navigate to Page3, passing all collected data
-    router.push(`/dashboard/Page3?businessResponses=${encodeURIComponent(JSON.stringify(businessResponses))}&userInfo=${encodeURIComponent(JSON.stringify(userInfo))}`);
+
+    // ✅ Encode & Navigate to Page 3, passing user & business data
+    const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
+    const encodedBusinessResponses = encodeURIComponent(JSON.stringify(businessResponses));
+
+    router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}&businessResponses=${encodedBusinessResponses}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col items-center px-4">
-      <header className="w-full max-w-4xl py-6 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Business Growth Assessment</h1>
-        <p className="text-gray-600 mt-2">Tell us more about yourself to get AI-driven insights.</p>
-      </header>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg">
+        {/* Progress Indicator */}
+        <p className="text-blue-600 text-sm font-bold mb-4 text-center">Step 2 of 2 – Business Profile</p>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-3xl bg-white p-6 shadow-lg rounded-lg space-y-4">
-        <label className="block">
-          <span className="text-gray-700">Your Name</span>
-          <input
-            type="text"
-            name="name"
-            value={userInfo.name}
-            onChange={handleChange}
-            className="block w-full mt-1 border border-gray-300 rounded p-2"
-            placeholder="Enter your name"
-            required
-          />
-        </label>
+        {/* Title & Value Statement */}
+        <header className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">Build Your Growth Roadmap</h1>
+          <p className="text-gray-600 mt-2 text-lg">
+            Answer a few quick questions to receive custom insights on how to scale your business effectively.
+          </p>
+        </header>
 
-        <label className="block">
-          <span className="text-gray-700">Your Email *</span>
-          <input
-            type="email"
-            name="email"
-            value={userInfo.email}
-            onChange={handleChange}
-            required
-            className="block w-full mt-1 border border-gray-300 rounded p-2"
-            placeholder="Enter your email"
-          />
-        </label>
+        {/* Form Section */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <label className="block">
+            <span className="text-gray-700">What are your biggest obstacles to scaling?</span>
+            <input
+              type="text"
+              name="obstacles"
+              value={businessResponses.obstacles}
+              onChange={handleChange}
+              className="block w-full mt-1 border border-gray-300 rounded p-2"
+              placeholder="e.g., funding, hiring, competition"
+              required
+            />
+          </label>
 
-        <label className="block">
-          <span className="text-gray-700">Your Industry *</span>
-          <select
-            name="industry"
-            value={userInfo.industry}
-            onChange={handleChange}
-            required
-            className="block w-full mt-1 border border-gray-300 rounded p-2"
+          <label className="block">
+            <span className="text-gray-700">How does your strategy differentiate you?</span>
+            <input
+              type="text"
+              name="strategy"
+              value={businessResponses.strategy}
+              onChange={handleChange}
+              className="block w-full mt-1 border border-gray-300 rounded p-2"
+              placeholder="e.g., Unique brand, low cost, innovation"
+              required
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-gray-700">Are your processes optimized for efficiency?</span>
+            <select
+              name="process"
+              value={businessResponses.process}
+              onChange={handleChange}
+              className="block w-full mt-1 border border-gray-300 rounded p-2"
+              required
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-gray-700">How well do you understand your customers' needs?</span>
+            <input
+              type="text"
+              name="customers"
+              value={businessResponses.customers}
+              onChange={handleChange}
+              className="block w-full mt-1 border border-gray-300 rounded p-2"
+              placeholder="e.g., Surveys, analytics, intuition"
+              required
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-gray-700">Is your technology stack supporting your growth?</span>
+            <select
+              name="technology"
+              value={businessResponses.technology}
+              onChange={handleChange}
+              className="block w-full mt-1 border border-gray-300 rounded p-2"
+              required
+            >
+              <option value="">Select</option>
+              <option value="Outdated">Outdated</option>
+              <option value="Needs Work">Needs Work</option>
+              <option value="Optimized">Optimized</option>
+              <option value="Cutting Edge">Cutting Edge</option>
+            </select>
+          </label>
+
+          {/* CTA Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition"
           >
-            <option value="">Select your industry</option>
-            <option value="Technology">Technology</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Finance">Finance</option>
-            <option value="Retail">Retail</option>
-            <option value="Manufacturing">Manufacturing</option>
-            <option value="Education">Education</option>
-            <option value="Consulting">Consulting</option>
-            <option value="Other">Other</option>
-          </select>
-        </label>
+            Get My Insights
+          </button>
+        </form>
 
-        <label className="block">
-          <span className="text-gray-700">Your Role</span>
-          <input
-            type="text"
-            name="role"
-            value={userInfo.role}
-            onChange={handleChange}
-            className="block w-full mt-1 border border-gray-300 rounded p-2"
-            placeholder="Enter your role"
-            required
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-gray-700">Company Size</span>
-          <select name="companySize" value={userInfo.companySize} onChange={handleChange} className="block w-full mt-1 border border-gray-300 rounded p-2" required>
-            <option value="">Select company size</option>
-            <option value="1-10">1-10 Employees</option>
-            <option value="11-50">11-50 Employees</option>
-            <option value="51-200">51-200 Employees</option>
-            <option value="201-500">201-500 Employees</option>
-            <option value="501-1000">501-1000 Employees</option>
-            <option value="1000+">1000+ Employees</option>
-          </select>
-        </label>
-
-        <label className="block">
-          <span className="text-gray-700">Annual Revenue</span>
-          <select name="revenueRange" value={userInfo.revenueRange} onChange={handleChange} className="block w-full mt-1 border border-gray-300 rounded p-2" required>
-            <option value="">Select revenue range</option>
-            <option value="<$100K">Less than $100K</option>
-            <option value="$100K-$500K">$100K - $500K</option>
-            <option value="$500K-$1M">$500K - $1M</option>
-            <option value="$1M-$10M">$1M - $10M</option>
-            <option value="$10M-$50M">$10M - $50M</option>
-            <option value="$50M+">More than $50M</option>
-          </select>
-        </label>
-
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
-          Submit
-        </button>
-      </form>
+        {/* Trust Signals */}
+        <div className="mt-6 text-center text-gray-500 text-sm">
+          <p>🔒 100% Data Secure – We never share your information</p>
+          <p>✅ Trusted by 500+ growing businesses</p>
+        </div>
+      </div>
     </div>
   );
 }
+
 // ✅ Wrap in Suspense to prevent hydration issues
 export default function Page2() {
   return (
