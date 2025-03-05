@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import "tailwindcss";
 
 :root {
@@ -12,6 +13,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
+=======
+/* ✅ Tailwind Imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ✅ Global Theme Variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Arial, Helvetica, sans-serif; /* Keeping original fallback */
+  --font-mono: monospace;
+}
+
+/* ✅ Dark Mode Support */
+>>>>>>> 4cb4f9b (🚀 Full working Homepage and parsed Survey)
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,8 +38,16 @@
   }
 }
 
+<<<<<<< HEAD
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+=======
+/* ✅ Apply Global Styles */
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), sans-serif;
+>>>>>>> 4cb4f9b (🚀 Full working Homepage and parsed Survey)
 }
