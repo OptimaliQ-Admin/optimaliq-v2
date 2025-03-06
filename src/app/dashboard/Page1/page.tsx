@@ -63,7 +63,7 @@ export default function Page1() {
           {/* Bottom Left - Security Assurance */}
           <div className="absolute bottom-0 left-0 flex items-center space-x-2">
             <FaShieldAlt className="text-blue-600 text-xl" />
-            <p className="text-blue-600 text-sm font-semibold">Data Privacy / Security Active</p>
+            <p className="text-blue-600 text-sm font-semibold">Data Privacy / Security Actived</p>
           </div>
 
           {/* Bottom Right - Trusted by Industry Leaders */}
