@@ -48,7 +48,7 @@ export default function RootLayout({
                 <a href="#faq" className="hover:text-blue-600">
                   FAQ
                 </a>
-                <a href="/pricing" className="hover:text-blue-600">
+                <a href="/Pricing" className="hover:text-blue-600">
                   Pricing
                 </a>
               </div>
