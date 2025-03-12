@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function PricingPage() {
-    const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");
-    // Default to Annual Pricing
+    const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual"); // Default to Annual Pricing
 
   const pricing = {
     annual: {
