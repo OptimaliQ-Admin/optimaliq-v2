@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
 // ✅ Correctly initialize the Supabase client
 const supabase = createClient(
