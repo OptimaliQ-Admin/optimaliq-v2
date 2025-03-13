@@ -48,7 +48,7 @@ function Page2Component() {
     }
 
     try {
-      const uniqueUserId = uuidv4();
+      const uniqueUserId = crypto.randomUUID();  // ✅ Native approach
 
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_responses").insert([
