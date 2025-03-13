@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase"; // Make sure to import your Supabase client
+import { supabase } from "@/lib/supabase";
 
 export default async function Notes() {
   try {
@@ -10,9 +10,16 @@ export default async function Notes() {
     }
 
     return (
-      <pre className="bg-gray-100 p-4 rounded-md">
-        {JSON.stringify(notes, null, 2)}
-      </pre>
+      <div className="p-6">
+        <h2 className="text-lg font-semibold">Notes</h2>
+        {notes.length > 0 ? (
+          <pre className="bg-gray-100 p-4 rounded-md overflow-auto">
+            {JSON.stringify(notes, null, 2)}
+          </pre>
+        ) : (
+          <p className="text-gray-600">No notes found.</p>
+        )}
+      </div>
     );
   } catch (err) {
     console.error("Unexpected Error:", err);
