@@ -38,7 +38,7 @@ function Page2Component() {
   // ✅ Handle form submission & save to Supabase
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     // ✅ Validate required fields
     for (const key in businessResponses) {
       if (!businessResponses[key as keyof typeof businessResponses]) {
@@ -46,9 +46,10 @@ function Page2Component() {
         return;
       }
     }
-
+  
     try {
-
+      console.log("Submitting Data:", businessResponses);
+  
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_performace").insert([
         {
@@ -59,41 +60,22 @@ function Page2Component() {
           technology: businessResponses.technology,
         },
       ]);
-
-      try {
-        console.log("Submitting Data:", {
-          obstacles: businessResponses.obstacles,
-          strategy: businessResponses.strategy,
-          process: businessResponses.process,
-          customers: businessResponses.customers,
-          technology: businessResponses.technology,
-        });
-      
-        const { data, error } = await supabase.from("Business_performace").insert([
-          {
-            obstacles: businessResponses.obstacles,
-            strategy: businessResponses.strategy,
-            process: businessResponses.process,
-            customers: businessResponses.customers,
-            technology: businessResponses.technology,
-          },
-        ]);
-      
-        if (error) {
-          console.error("Supabase Insert Error:", error);
-          alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
-          return;
-        }
-      
-        console.log("Success:", data);
-        router.push(`/dashboard/Page3`);
-      
-      } catch (err) {
-        console.error("Unexpected Error:", err);
-        alert("❌ Something went wrong. Try again.");
+  
+      if (error) {
+        console.error("Supabase Insert Error:", error);
+        alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
+        return;
       }
-      
-  }
+  
+      console.log("Success:", data);
+      router.push(`/dashboard/Page3`);
+  
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      alert("❌ Something went wrong. Try again.");
+    }
+  }; // ✅ Ensure this closing bracket and semicolon exist
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
