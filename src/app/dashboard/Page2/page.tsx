@@ -51,7 +51,7 @@ function Page2Component() {
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_responses").insert([
         {
-          user_id: userInfo?.id || "anonymous",
+          user_id: userInfo?.id ?? "anonymous",  // ✅ FIXED
           obstacles: businessResponses.obstacles,
           strategy: businessResponses.strategy,
           process: businessResponses.process,
