@@ -50,7 +50,7 @@ function Page2Component() {
     try {
 
       // ✅ Store data in Supabase
-      const { data, error } = await supabase.from("Business_responses").insert([
+      const { data, error } = await supabase.from("Business_performace").insert([
         {
           obstacles: businessResponses.obstacles,
           strategy: businessResponses.strategy,
