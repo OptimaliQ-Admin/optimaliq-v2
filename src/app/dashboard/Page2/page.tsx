@@ -2,48 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import { supabase } from "@/lib/supabase";  // Import Supabase client
-
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  // ✅ Validate required fields
-  for (const key in businessResponses) {
-    if (!businessResponses[key as keyof typeof businessResponses]) {
-      alert("⚠️ All fields are required. Please complete the form before proceeding.");
-      return;
-    }
-  }
-
-  try {
-    // ✅ Store data in Supabase
-    const { data, error } = await supabase.from("Business_responses").insert([
-      {
-        user_id: userInfo?.id || "anonymous",
-        obstacles: businessResponses.obstacles,
-        strategy: businessResponses.strategy,
-        process: businessResponses.process,
-        customers: businessResponses.customers,
-        technology: businessResponses.technology,
-      },
-    ]);
-
-    if (error) {
-      console.error("Error inserting into Supabase:", error);
-      alert("❌ Failed to save responses. Try again.");
-      return;
-    }
-
-    // ✅ Navigate to Page 3 after successful submission
-    const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-    router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
-  } catch (err) {
-    console.error("Unexpected Error:", err);
-    alert("❌ Something went wrong. Try again.");
-  }
-};
-
 
 function Page2Component() {
   const router = useRouter();
@@ -76,8 +35,8 @@ function Page2Component() {
     });
   };
 
-  // ✅ Handle form submission & navigate to Page 3
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // ✅ Handle form submission & save to Supabase
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // ✅ Validate required fields
@@ -88,11 +47,33 @@ function Page2Component() {
       }
     }
 
-    // ✅ Encode & Navigate to Page 3, passing user & business data
-    const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-    const encodedBusinessResponses = encodeURIComponent(JSON.stringify(businessResponses));
+    try {
+      // ✅ Store data in Supabase
+      const { data, error } = await supabase.from("Business_responses").insert([
+        {
+          user_id: userInfo?.id || "anonymous",
+          obstacles: businessResponses.obstacles,
+          strategy: businessResponses.strategy,
+          process: businessResponses.process,
+          customers: businessResponses.customers,
+          technology: businessResponses.technology,
+        },
+      ]);
 
-    router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}&businessResponses=${encodedBusinessResponses}`);
+      if (error) {
+        console.error("Error inserting into Supabase:", error);
+        alert("❌ Failed to save responses. Try again.");
+        return;
+      }
+
+      // ✅ Navigate to Page 3 after successful submission
+      const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
+      router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
+
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      alert("❌ Something went wrong. Try again.");
+    }
   };
 
   return (
