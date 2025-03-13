@@ -48,10 +48,12 @@ function Page2Component() {
     }
 
     try {
+      const uniqueUserId = uuidv4();
+
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_responses").insert([
         {
-          user_id: userInfo?.id ?? "anonymous",  // ✅ FIXED
+          user_id: uniqueUserId,  // ✅ Unique ID per submission
           obstacles: businessResponses.obstacles,
           strategy: businessResponses.strategy,
           process: businessResponses.process,
