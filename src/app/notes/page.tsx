@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 
 export default async function Notes() {
   try {
-    const { data: notes, error } = await supabase.from("notes").select();
+    const { data: notes, error } = await supabase.from("User_T1").select();
 
     if (error) {
       console.error("Supabase Error:", error);
