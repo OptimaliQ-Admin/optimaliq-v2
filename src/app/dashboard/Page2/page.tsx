@@ -48,12 +48,10 @@ function Page2Component() {
     }
 
     try {
-      const uniqueUserId = crypto.randomUUID();  // ✅ Native approach
 
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_responses").insert([
         {
-          user_id: uniqueUserId,  // ✅ Unique ID per submission
           obstacles: businessResponses.obstacles,
           strategy: businessResponses.strategy,
           process: businessResponses.process,
