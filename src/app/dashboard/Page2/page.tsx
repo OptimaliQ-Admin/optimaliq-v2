@@ -60,20 +60,39 @@ function Page2Component() {
         },
       ]);
 
-      if (error) {
-        console.error("Error inserting into Supabase:", error);
-        alert("❌ Failed to save responses. Try again.");
-        return;
+      try {
+        console.log("Submitting Data:", {
+          obstacles: businessResponses.obstacles,
+          strategy: businessResponses.strategy,
+          process: businessResponses.process,
+          customers: businessResponses.customers,
+          technology: businessResponses.technology,
+        });
+      
+        const { data, error } = await supabase.from("Business_performace").insert([
+          {
+            obstacles: businessResponses.obstacles,
+            strategy: businessResponses.strategy,
+            process: businessResponses.process,
+            customers: businessResponses.customers,
+            technology: businessResponses.technology,
+          },
+        ]);
+      
+        if (error) {
+          console.error("Supabase Insert Error:", error);
+          alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
+          return;
+        }
+      
+        console.log("Success:", data);
+        router.push(`/dashboard/Page3`);
+      
+      } catch (err) {
+        console.error("Unexpected Error:", err);
+        alert("❌ Something went wrong. Try again.");
       }
-
-      // ✅ Navigate to Page 3 after successful submission
-      const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-      router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
-
-    } catch (err) {
-      console.error("Unexpected Error:", err);
-      alert("❌ Something went wrong. Try again.");
-    }
+      
   };
 
   return (
