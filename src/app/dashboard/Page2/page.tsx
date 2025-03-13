@@ -53,10 +53,9 @@ function Page2Component() {
       // ✅ Store data in Supabase
       const { data, error } = await supabase.from("Business_performace").insert([
         {
-          obstacles: businessResponses.obstacles,
+          
           strategy: businessResponses.strategy,
           process: businessResponses.process,
-          customers: businessResponses.customers,
           technology: businessResponses.technology,
         },
       ]);
