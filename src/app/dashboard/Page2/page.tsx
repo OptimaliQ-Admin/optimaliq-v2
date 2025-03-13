@@ -93,7 +93,7 @@ function Page2Component() {
         alert("❌ Something went wrong. Try again.");
       }
       
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
