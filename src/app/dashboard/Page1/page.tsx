@@ -46,7 +46,7 @@ export default function Page1() {
       let userId = null;
       const { data: existingUser, error: userError } = await supabase
         .from("Users") // Ensure table name matches your DB
-        .select("U_.id")
+        .select("id")
         .eq("email", userInfo.email)
         .single();
 
@@ -57,7 +57,7 @@ export default function Page1() {
       }
 
       if (existingUser) {
-        console.log("✅ User already exists:", existingUser.U_.idS);
+        console.log("✅ User already exists:", existingUser.id);
         userId = existingUser.id;
       } else {
         // ✅ Step 2: Create a new user if they don't exist
