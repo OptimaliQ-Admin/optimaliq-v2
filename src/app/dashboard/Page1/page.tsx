@@ -57,7 +57,7 @@ export default function Page1() {
       }
 
       if (existingUser) {
-        console.log("✅ User already exists:", existingUser.id);
+        console.log("✅ User already exists:", existingUser.U_.idS);
         userId = existingUser.id;
       } else {
         // ✅ Step 2: Create a new user if they don't exist
