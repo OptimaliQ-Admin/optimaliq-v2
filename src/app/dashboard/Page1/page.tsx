@@ -58,7 +58,7 @@ export default function Page1() {
         return;
       }
 
-      if (existingUser && existingUser.id) {
+      if (existingUser && existingUser.U_id) {
         console.log("✅ User already exists with ID:", existingUser.U_id);
         userId = existingUser.U_id;
       } else {
