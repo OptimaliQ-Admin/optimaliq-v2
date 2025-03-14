@@ -2,13 +2,14 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase"; // Ensure Supabase client is imported
 
 function Page2Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // ✅ Retrieve user info from Page 1
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<{ id: string; name: string; email: string } | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
     obstacles: "",
     strategy: "",
@@ -34,8 +35,8 @@ function Page2Component() {
     });
   };
 
-  // ✅ Handle form submission & navigate to Page 3
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // ✅ Handle form submission & save to Supabase
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // ✅ Validate required fields
@@ -46,11 +47,41 @@ function Page2Component() {
       }
     }
 
-    // ✅ Encode & Navigate to Page 3, passing user & business data
-    const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-    const encodedBusinessResponses = encodeURIComponent(JSON.stringify(businessResponses));
+    try {
+      if (!userInfo?.id) {
+        alert("❌ User ID is missing. Please start from Page 1.");
+        return;
+      }
 
-    router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}&businessResponses=${encodedBusinessResponses}`);
+      // ✅ Store responses in Supabase `assessment` table & link to user_id
+      const { data, error } = await supabase
+        .from("Assessment") // ✅ Updated table name
+        .insert([
+          {
+            user_id: userInfo.id, // Link response to user
+            obstacles: businessResponses.obstacles,
+            strategy: businessResponses.strategy,
+            process: businessResponses.process,
+            customers: businessResponses.customers,
+            technology: businessResponses.technology,
+          },
+        ]);
+
+      if (error) {
+        console.error("Supabase Insert Error:", error);
+        alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
+        return;
+      }
+
+      console.log("Success:", data);
+
+      // ✅ Encode & Navigate to Page 3 after successful submission
+      const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
+      router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      alert("❌ Something went wrong. Try again.");
+    }
   };
 
   return (
