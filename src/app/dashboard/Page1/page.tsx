@@ -46,9 +46,10 @@ export default function Page1() {
       let userId = null;
       const { data: existingUser, error: userError } = await supabase
         .from("Users") // Ensure table name matches your DB
-        .select("id")
+        .select("U_.id")
         .eq("email", userInfo.email)
-        .single();
+        .maybeSingle(); // ✅ Prevents errors if no user is found
+
 
       if (userError && userError.code !== "PGRST116") {
         console.error("❌ Supabase User Lookup Error:", userError);
