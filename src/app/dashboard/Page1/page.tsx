@@ -97,10 +97,11 @@ export default function Page1() {
 
       const encodedUserInfo = encodeURIComponent(JSON.stringify(userDataToPass));
       router.push(`/dashboard/Page2?userInfo=${encodedUserInfo}`);
-    } catch (err) {
-      console.error("❌ Unexpected Error:", err);
-      alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
-    }
+
+  } catch (err: any) {
+  console.error("❌ Unexpected Error:", err);
+  alert(`Unexpected Error: ${err instanceof Error ? err.message : "Something went wrong. Try again."}`);
+}
   };
 
   return (
