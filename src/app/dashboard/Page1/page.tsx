@@ -47,7 +47,7 @@ export default function Page1() {
       const { data: existingUser, error: userError } = await supabase
         .from("Users") // Ensure table name matches your DB
         .select("U_id")
-        .eq("email", userInfo.email)
+        .eq("Email", userInfo.email)
         .maybeSingle(); // ✅ Prevents errors if no user is found
 
         console.log("🔎 Supabase Query Result:", existingUser, userError);
@@ -68,12 +68,12 @@ export default function Page1() {
           .from("Users")
           .insert([
             {
-              email: userInfo.email,
-              name: userInfo.name,
-              industry: userInfo.industry,
-              role: userInfo.role,
-              companySize: userInfo.companySize,
-              revenueRange: userInfo.revenueRange,
+              Email: userInfo.email,
+              Name: userInfo.name,
+              Industry: userInfo.industry,
+              Role: userInfo.role,
+              CompanySize: userInfo.companySize,
+              RevenueRange: userInfo.revenueRange,
             },
           ])
           .select("U_id") // ✅ Get the new user's ID
