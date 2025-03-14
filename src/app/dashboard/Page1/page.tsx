@@ -50,15 +50,16 @@ export default function Page1() {
         .eq("email", userInfo.email)
         .maybeSingle(); // ✅ Prevents errors if no user is found
 
+        console.log("🔎 Supabase Query Result:", existingUser, userError);
 
-      if (userError && userError.code !== "PGRST116") {
+      if (userError) {
         console.error("❌ Supabase User Lookup Error:", userError);
-        alert("Error checking user existence. Try again.");
+        alert(`Supabase Error: ${userError.message || "Check console for details."}`);
         return;
       }
 
-      if (existingUser) {
-        console.log("✅ User already exists:", existingUser.U_id);
+      if (existingUser && existingUser.id) {
+        console.log("✅ User already exists with ID:", existingUser.U_id);
         userId = existingUser.U_id;
       } else {
         // ✅ Step 2: Create a new user if they don't exist
@@ -75,22 +76,22 @@ export default function Page1() {
               revenueRange: userInfo.revenueRange,
             },
           ])
-          .select("id")
+          .select("id") // ✅ Get the new user's ID
           .single(); // Get new user’s ID
 
-        if (insertUserError) {
-          console.error("❌ Supabase Insert User Error:", insertUserError);
-          alert("Failed to save user. Try again.");
-          return;
-        }
-
-        userId = newUser.id;
-        console.log("✅ New user created with ID:", userId);
+          if (insertUserError) {
+            console.error("❌ Supabase Insert User Error:", insertUserError);
+            alert(`Supabase Insert Error: ${insertUserError.message}`);
+            return;
+          }
+  
+          userId = newUser.U_id;
+          console.log("✅ New user created with ID:", userId);
       }
 
       // ✅ Step 3: Pass user info to Page 2, including `user_id`
       const userDataToPass = {
-        id: userId, // Ensure user ID is passed
+        U_id: userId, // Ensure user ID is passed
         ...userInfo,
       };
 
@@ -98,7 +99,7 @@ export default function Page1() {
       router.push(`/dashboard/Page2?userInfo=${encodedUserInfo}`);
     } catch (err) {
       console.error("❌ Unexpected Error:", err);
-      alert("Something went wrong. Try again.");
+      alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
     }
   };
 
