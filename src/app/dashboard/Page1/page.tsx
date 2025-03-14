@@ -76,7 +76,7 @@ export default function Page1() {
               revenueRange: userInfo.revenueRange,
             },
           ])
-          .select("id") // ✅ Get the new user's ID
+          .select("U_id") // ✅ Get the new user's ID
           .single(); // Get new user’s ID
 
           if (insertUserError) {
