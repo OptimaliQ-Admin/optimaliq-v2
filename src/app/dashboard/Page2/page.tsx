@@ -7,9 +7,7 @@ import { supabase } from "@/lib/supabase"; // Ensure Supabase client is imported
 function Page2Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // ✅ Retrieve user info from Page 1
-  const [userInfo, setUserInfo] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ U_id: string } | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
     obstacles: "",
     strategy: "",
@@ -20,10 +18,29 @@ function Page2Component() {
 
   useEffect(() => {
     const userData = searchParams.get("userInfo");
+
     if (userData) {
-      setUserInfo(JSON.parse(decodeURIComponent(userData)));
+      try {
+        const parsedUserInfo = JSON.parse(decodeURIComponent(userData));
+
+        if (!parsedUserInfo.U_id) {
+          console.error("❌ User ID is missing in URL params:", parsedUserInfo);
+          alert("❌ User ID is missing. Please start from Page 1.");
+          router.push("/dashboard/Page1");
+          return;
+        }
+
+        setUserInfo(parsedUserInfo);
+        console.log("✅ User Info Retrieved:", parsedUserInfo);
+      } catch (error) {
+        console.error("❌ Failed to parse user info:", error);
+        alert("❌ Invalid user info. Please start from Page 1.");
+        router.push("/dashboard/Page1");
+      }
     } else {
-      router.push("/dashboard/Page1"); // Redirect if missing user info
+      console.error("❌ No user info found in URL.");
+      alert("❌ User ID is missing. Please start from Page 1.");
+      router.push("/dashboard/Page1");
     }
   }, [searchParams, router]);
 
@@ -35,30 +52,23 @@ function Page2Component() {
     });
   };
 
-  // ✅ Handle form submission & save to Supabase
+  // ✅ Handle form submission & store in Supabase
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // ✅ Validate required fields
-    for (const key in businessResponses) {
-      if (!businessResponses[key as keyof typeof businessResponses]) {
-        alert("⚠️ All fields are required. Please complete the form before proceeding.");
-        return;
-      }
+    if (!userInfo?.U_id) {
+      alert("❌ User ID is missing. Please start from Page 1.");
+      return;
     }
 
     try {
-      if (!userInfo?.id) {
-        alert("❌ User ID is missing. Please start from Page 1.");
-        return;
-      }
+      console.log("🔍 Saving responses for user:", userInfo.U_id);
 
-      // ✅ Store responses in Supabase `assessment` table & link to user_id
       const { data, error } = await supabase
         .from("Assessment") // ✅ Updated table name
         .insert([
           {
-            user_id: userInfo.id, // Link response to user
+            user_id: userInfo.U_id, // ✅ Correct field name
             obstacles: businessResponses.obstacles,
             strategy: businessResponses.strategy,
             process: businessResponses.process,
@@ -68,19 +78,19 @@ function Page2Component() {
         ]);
 
       if (error) {
-        console.error("Supabase Insert Error:", error);
+        console.error("❌ Supabase Insert Error:", error);
         alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
         return;
       }
 
-      console.log("Success:", data);
+      console.log("✅ Success:", data);
 
-      // ✅ Encode & Navigate to Page 3 after successful submission
+      // ✅ Navigate to Page 3
       const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
       router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
-    } catch (err) {
-      console.error("Unexpected Error:", err);
-      alert("❌ Something went wrong. Try again.");
+    } catch (err: any) {
+      console.error("❌ Unexpected Error:", err);
+      alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
     }
   };
 
