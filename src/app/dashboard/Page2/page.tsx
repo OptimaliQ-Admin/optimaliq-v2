@@ -68,12 +68,12 @@ function Page2Component() {
         .from("Assessment") // ✅ Updated table name
         .insert([
           {
-            user_id: userInfo.U_id, // ✅ Correct field name
-            obstacles: businessResponses.obstacles,
-            strategy: businessResponses.strategy,
-            process: businessResponses.process,
-            customers: businessResponses.customers,
-            technology: businessResponses.technology,
+            U_id: userInfo.U_id, // ✅ Correct field name
+            Obstacles: businessResponses.obstacles,
+            Strategy: businessResponses.strategy,
+            Process: businessResponses.process,
+            Customers: businessResponses.customers,
+            Technology: businessResponses.technology,
           },
         ]);
 
