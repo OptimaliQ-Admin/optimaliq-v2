@@ -134,9 +134,8 @@ export async function POST(req: Request) {
       strategyInsight,
       processInsight,
       technologyInsight,
-    },
-  ], { onConflict: "U_id" }); // ✅ FIX: Make this a string, not an array
-  
+    }
+  ], { onConflict: "U_id" }); // ✅ FIXED: Pass a string instead of an array
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);
