@@ -44,17 +44,23 @@ function Page3Component() {
 
   const fetchInsights = async (userData: any) => {
     if (!userData?.u_id) {
-      console.error("❌ Missing user ID.");
-      return;
-    }
+      console.warn("⚠️ No insights found for this user yet.");
+  setInsights({
+    strategy: "No insight available.",
+    process: "No insight available.",
+    technology: "No insight available.",
+  });
+  setLoading(false);
+  return;
+}
 
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("Insights")
-        .select("strategyScore, strategyInsight, processScore, processInsight, technologyScore, technologyInsight")
-        .eq("u_id", userData.u_id)
-        .single();
+  .from("insights")
+  .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight")
+  .eq("u_id", userData.u_id)
+  .maybeSingle(); // ✅ Fix: Avoids error if no row is found
 
       if (error) {
         console.error("🚨 Error fetching insights from Supabase:", error.message);

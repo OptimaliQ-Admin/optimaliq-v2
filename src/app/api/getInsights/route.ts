@@ -46,36 +46,41 @@ export async function POST(req: Request) {
 
     console.log("✅ Retrieved User Info:", user);
 
-    // ✅ Structure data for OpenAI prompt
+    // ✅ OpenAI Prompt
     const aiPrompt = `
-      You are a world-class business strategist. Analyze the user's business assessment and provide high-impact insights.
-      
+      You are a world-class business strategist, trusted by top executives and high-growth companies to uncover hidden opportunities,
+      and helping companies scale efficiently. Your expertise lies in diagnosing a company's current state and delivering precise, 
+      high-impact recommendations that create a clear, actionable roadmap for growth. 
+      Your task is to analyze the following business inputs and generate **customized insights** 
+      that reflect the user's unique situation.
+
       **Business Inputs:**
-      - **Biggest obstacles:** ${assessment.obstacles}
-      - **Strategy differentiation:** ${assessment.strategy}
-      - **Process optimization:** ${assessment.process}
-      - **Customer understanding:** ${assessment.customers}
-      - **Technology level:** ${assessment.technology}
-      
-      **Company Details:**
-      - **Industry:** ${user.industry}
-      - **Company Size:** ${user.companysize}
-      - **Revenue Range:** ${user.revenuerange}
-      
+      1️⃣ **Biggest obstacles:** ${answers.obstacles}
+      2️⃣ **Strategy differentiation:** ${answers.strategy}
+      3️⃣ **Process optimization:** ${answers.process}
+      4️⃣ **Customer understanding:** ${answers.customers}
+      5️⃣ **Technology level:** ${answers.technology}
+
       **Your Task:**
-      - Provide **custom insights** based on the user's inputs.
-      - Offer specific recommendations (not generic advice).
-      - Ensure insights align with business size & industry.
-      
-      **Example JSON Output:**
+      - Provide **custom insights** directly addressing the user's input.
+      - If an obstacle (e.g., "Funding") is listed, showcase how top-performing companies have overcome them. Provide real-world, battle-tested solutions (e.g., alternative funding sources, leadership restructuring, or automation strategies).
+      - If strategy is strong, guide the user toward maximum scalability. Offer specific growth levers, such as expanding market share, operational automation, pricing optimization, or vertical/horizontal expansion.
+      - If processes are optimized, focus on future-proofing & risk mitigation. Identify areas where bottlenecks could emerge at scale and suggest proactive measures to maintain efficiency.
+      - If technology is cutting-edge, provide advanced insights on maximizing ROI through integration, automation, AI-driven efficiencies, and leveraging first-party data.
+      - Deliver powerful, compelling insights. Avoid generic advice—every recommendation should be highly relevant, tailored, and capable of driving immediate action.
+      - Deliver strategic insights that go beyond surface-level advice. Use the user's inputs to provide deeply customized, high-value recommendations.
+
+      **Example Output Format (strict JSON, no extra text):**
       {
-        "strategyscore": 4,
-        "strategyinsight": "Your differentiation is strong, but market positioning needs refinement. Focus on targeted partnerships and market penetration strategies.",
-        "processscore": 3,
-        "processinsight": "Your processes are stable but lack scalability. Automate workflows to handle growth.",
-        "technologyscore": 5,
-        "technologyinsight": "You have a cutting-edge stack but need better integration. Implement predictive analytics for enhanced decision-making."
-      }
+  "strategyScore": 4,
+  "strategyInsight": "Your innovative solution is differentiated, but the market entry strategy lacks precision. Focus on refining your ideal customer profile (ICP) and developing a multi-channel acquisition strategy that includes strategic partnerships, outbound targeting, and conversion-optimized landing pages.",
+  
+  "processScore": 3,
+  "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
+  
+  "technologyScore": 5,
+  "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
+}
     `;
 
     console.log("🔹 Sending request to OpenAI...");
