@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { supabase } from "@/lib/supabase"; // ✅ Ensure Supabase client is imported
+import { supabase } from "@/lib/supabase";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,35 +15,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
 
-    // ✅ Retrieve stored business responses from Supabase
+    // ✅ Retrieve latest business assessment
     const { data: assessment, error: assessmentError } = await supabase
-    .from("assessment")
-    .select("*")
-    .eq("u_id", u_id)
-    .order("submittedat", { ascending: false }) // ✅ Get the latest submission
-    .limit(1) // ✅ Ensure we only get one row
-    .single(); // ✅ Safely retrieve a single row
-  
+      .from("assessment")
+      .select("*")
+      .eq("u_id", u_id)
+      .order("submittedat", { ascending: false }) // ✅ Get the latest submission
+      .limit(1)
+      .single();
 
     if (assessmentError || !assessment) {
-      console.error("❌ Supabase Fetch Error:", assessmentError);
+      console.error("❌ Supabase Fetch Error (Assessment):", assessmentError);
       return NextResponse.json({ error: "Failed to retrieve business responses" }, { status: 500 });
     }
-
     console.log("✅ Retrieved Business Responses:", assessment);
 
-    // ✅ Retrieve user details from Supabase
+    // ✅ Retrieve user details
     const { data: user, error: userError } = await supabase
-  .from("users")
-  .select("*")
-  .eq("u_id", u_id)
-  .single();
+      .from("users")
+      .select("*")
+      .eq("u_id", u_id)
+      .single();
 
     if (userError || !user) {
       console.error("❌ Supabase User Fetch Error:", userError);
       return NextResponse.json({ error: "Failed to retrieve user info" }, { status: 500 });
     }
-
     console.log("✅ Retrieved User Info:", user);
 
     // ✅ Structure data for OpenAI prompt
@@ -129,50 +126,58 @@ export async function POST(req: Request) {
       parsedResponse = JSON.parse(response.choices[0].message.content);
     } catch (error) {
       console.error("🚨 JSON Parsing Error:", error);
+      console.log("📜 Raw OpenAI Response:", response.choices[0].message.content);
       return NextResponse.json({ error: "Failed to parse AI response." }, { status: 500 });
     }
 
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
-    // ✅ Insert AI response into ai_log
-    const { error: logResponseError } = await supabase
-      .from("ai_log")
-      .update({
-        apiresponse: JSON.stringify(parsedResponse),
-        tokensused: response.usage?.total_tokens || 0,
-      })
-      .eq("log_id", logData?.log_id);
-
-    if (logResponseError) {
-      console.error("⚠️ Warning: Failed to log API response:", logResponseError);
-    } else {
-      console.log("✅ AI response logged in ai_log");
+    // ✅ Ensure AI response has all required fields before inserting into insights
+    if (!parsedResponse.strategyScore || !parsedResponse.strategyInsight || !parsedResponse.processScore) {
+      console.error("❌ AI response is missing required fields:", parsedResponse);
+      return NextResponse.json({ error: "AI response is incomplete" }, { status: 500 });
     }
 
-// ✅ Insert AI insights into Supabase with extra validation
-const insightsData = {
-  u_id,
-  strategyscore: parsedResponse.strategyScore,
-  strategyinsight: parsedResponse.strategyInsight,
-  processscore: parsedResponse.processScore,
-  processinsight: parsedResponse.processInsight,
-  technologyscore: parsedResponse.technologyScore,
-  technologyinsight: parsedResponse.technologyInsight,
-  generatedat: new Date().toISOString(),
-};
+    // ✅ Insert AI response into ai_log
+    if (logData?.log_id) {
+      const { error: logResponseError } = await supabase
+        .from("ai_log")
+        .update({
+          apiresponse: JSON.stringify(parsedResponse),
+          tokensused: response.usage?.total_tokens || 0,
+        })
+        .eq("log_id", logData.log_id);
 
-const { data: insertedInsights, error: storeError } = await supabase
-  .from("insights")
-  .insert([insightsData])
-  .select("*"); // ✅ Debugging: Fetch inserted rows
+      if (logResponseError) {
+        console.error("⚠️ Warning: Failed to log API response:", logResponseError);
+      } else {
+        console.log("✅ AI response logged in ai_log");
+      }
+    }
 
-if (storeError) {
-  console.error("❌ Supabase Insert Error:", storeError);
-  return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
-}
+    // ✅ Insert AI insights into Supabase
+    const insightsData = {
+      u_id,
+      strategyscore: parsedResponse.strategyScore,
+      strategyinsight: parsedResponse.strategyInsight,
+      processscore: parsedResponse.processScore,
+      processinsight: parsedResponse.processInsight,
+      technologyscore: parsedResponse.technologyScore,
+      technologyinsight: parsedResponse.technologyInsight,
+      generatedat: new Date().toISOString(),
+    };
 
-console.log("✅ AI Insights Successfully Stored:", insertedInsights);
+    const { data: insertedInsights, error: storeError } = await supabase
+      .from("insights")
+      .insert([insightsData])
+      .select("*"); // ✅ Fetch inserted rows
 
+    if (storeError) {
+      console.error("❌ Supabase Insert Error:", storeError);
+      return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
+    }
+
+    console.log("✅ AI Insights Successfully Stored:", insertedInsights);
 
     return NextResponse.json(parsedResponse);
 
