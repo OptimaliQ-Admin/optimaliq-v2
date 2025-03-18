@@ -65,19 +65,20 @@ export default function Page1() {
         // ✅ Step 2: Create a new user if they don't exist
         console.log("➕ Creating new user...");
         const { data: newUser, error: insertUserError } = await supabase
-          .from("users")
-          .insert([
-            {
-              Email: userInfo.email,
-              Name: userInfo.name,
-              Industry: userInfo.industry,
-              Role: userInfo.role,
-              CompanySize: userInfo.companySize,
-              RevenueRange: userInfo.revenueRange,
-            },
-          ])
-          .select("u_id") // ✅ Get the new user's ID
-          .single(); // Get new user’s ID
+        .from("users") // ✅ Use lowercase table name
+        .insert([
+          {
+            email: userInfo.email,  // ✅ Ensure correct lowercase column names
+            name: userInfo.name,
+            industry: userInfo.industry,
+            role: userInfo.role,
+            company_size: userInfo.companySize,  // ✅ Match DB column names
+            revenue_range: userInfo.revenueRange,
+          },
+        ])
+        .select("u_id") // ✅ Correct column name
+        .single();
+      
 
           if (insertUserError) {
             console.error("❌ Supabase Insert User Error:", insertUserError);
@@ -85,7 +86,7 @@ export default function Page1() {
             return;
           }
   
-          userId = newUser.U_id;
+          userId = newUser.u_id;
           console.log("✅ New user created with ID:", userId);
       }
 

@@ -43,7 +43,7 @@ function Page3Component() {
   }, [searchParams]);
 
   const fetchInsights = async (userData: any) => {
-    if (!userData?.U_id) {
+    if (!userData?.u_id) {
       console.error("❌ Missing user ID.");
       return;
     }
@@ -53,7 +53,7 @@ function Page3Component() {
       const { data, error } = await supabase
         .from("Insights")
         .select("strategyScore, strategyInsight, processScore, processInsight, technologyScore, technologyInsight")
-        .eq("U_id", userData.U_id)
+        .eq("u_id", userData.u_id)
         .single();
 
       if (error) {
