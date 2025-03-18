@@ -58,9 +58,9 @@ export default function Page1() {
         return;
       }
 
-      if (existingUser && existingUser.u_id) {
-        console.log("✅ User already exists with ID:", existingUser.u_id);
-        userId = existingUser.u_id;
+      if (existingUser && existingUser.U_id) {
+        console.log("✅ User already exists with ID:", existingUser.U_id);
+        userId = existingUser.U_id;
       } else {
         // ✅ Step 2: Create a new user if they don't exist
         console.log("➕ Creating new user...");
@@ -76,7 +76,7 @@ export default function Page1() {
               RevenueRange: userInfo.revenueRange,
             },
           ])
-          .select("U_id") // ✅ Get the new user's ID
+          .select("u_id") // ✅ Get the new user's ID
           .single(); // Get new user’s ID
 
           if (insertUserError) {
@@ -85,13 +85,13 @@ export default function Page1() {
             return;
           }
   
-          userId = newUser.u_id;
+          userId = newUser.U_id;
           console.log("✅ New user created with ID:", userId);
       }
 
       // ✅ Step 3: Pass user info to Page 2, including `user_id`
       const userDataToPass = {
-        u_id: userId, // Ensure user ID is passed
+        U_id: userId, // Ensure user ID is passed
         ...userInfo,
       };
 
