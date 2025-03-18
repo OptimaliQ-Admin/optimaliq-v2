@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase"; // Ensure Supabase client is imported
 function Page2Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [userInfo, setUserInfo] = useState<{ U_id: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ u_id: string } | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
     obstacles: "",
     strategy: "",
@@ -23,7 +23,7 @@ function Page2Component() {
       try {
         const parsedUserInfo = JSON.parse(decodeURIComponent(userData));
 
-        if (!parsedUserInfo.U_id) {
+        if (!parsedUserInfo.u_id) {
           console.error("❌ User ID is missing in URL params:", parsedUserInfo);
           alert("❌ User ID is missing. Please start from Page 1.");
           router.push("/dashboard/Page1");
@@ -56,19 +56,19 @@ function Page2Component() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!userInfo?.U_id) {
+    if (!userInfo?.u_id) {
       alert("❌ User ID is missing. Please start from Page 1.");
       return;
     }
 
     try {
-      console.log("🔍 Saving responses for user:", userInfo.U_id);
+      console.log("🔍 Saving responses for user:", userInfo.u_id);
 
       const { data, error } = await supabase
         .from("assessment") // ✅ Updated table name
         .insert([
           {
-            U_id: userInfo.U_id, // ✅ Correct field name
+            u_id: userInfo.u_id, // ✅ Correct field name
             Obstacles: businessResponses.obstacles,
             Strategy: businessResponses.strategy,
             Process: businessResponses.process,
