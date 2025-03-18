@@ -226,8 +226,8 @@ export default function Page1() {
             <div className="relative">
               <FaDollarSign className="absolute top-3 left-3 text-gray-400" />
               <select
-                name="revenueRange"
-                value={userInfo.revenueRange}
+                name="revenuerange"
+                value={userInfo.revenuerange}
                 onChange={handleChange}
                 className="block w-full pl-10 border border-gray-300 rounded p-2"
                 required
