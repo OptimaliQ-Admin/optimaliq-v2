@@ -72,8 +72,8 @@ export default function Page1() {
             name: userInfo.name,
             industry: userInfo.industry,
             role: userInfo.role,
-            company_size: userInfo.companysize,  // ✅ Match DB column names
-            revenue_range: userInfo.revenuerange,
+            companysize: userInfo.companysize,  // ✅ Match DB column names
+            revenuerange: userInfo.revenuerange,
           },
         ])
         .select("u_id") // ✅ Correct column name
