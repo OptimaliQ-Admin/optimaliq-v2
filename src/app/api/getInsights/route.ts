@@ -12,7 +12,6 @@ export async function POST(req: Request) {
     console.log("🔍 Fetching stored answers for User ID:", u_id);
 
     if (!u_id) {
-      console.error("❌ Missing user ID in request.");
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
 
@@ -77,6 +76,27 @@ export async function POST(req: Request) {
     `;
 
     console.log("🔹 Sending request to OpenAI...");
+
+    // ✅ Log API request in ai_log before calling OpenAI
+    const { data: logData, error: logError } = await supabase
+      .from("ai_log")
+      .insert([
+        {
+          u_id,
+          apirequest: aiPrompt,
+          createdat: new Date().toISOString(),
+        },
+      ])
+      .select("log_id")
+      .single();
+
+    if (logError) {
+      console.error("⚠️ Warning: Failed to log API request:", logError);
+    } else {
+      console.log("✅ API request logged in ai_log with ID:", logData?.log_id);
+    }
+
+    // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [{ role: "system", content: aiPrompt }],
@@ -101,8 +121,23 @@ export async function POST(req: Request) {
 
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
+    // ✅ Insert AI response into ai_log
+    const { error: logResponseError } = await supabase
+      .from("ai_log")
+      .update({
+        apiresponse: JSON.stringify(parsedResponse),
+        tokensused: response.usage?.total_tokens || 0,
+      })
+      .eq("log_id", logData?.log_id);
+
+    if (logResponseError) {
+      console.error("⚠️ Warning: Failed to log API response:", logResponseError);
+    } else {
+      console.log("✅ AI response logged in ai_log");
+    }
+
     // ✅ Insert insights into Supabase
-    const { data: insertedData, error: storeError } = await supabase
+    const { error: storeError } = await supabase
       .from("insights")
       .insert([
         {
@@ -122,7 +157,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
     }
 
-    console.log("✅ AI Insights Stored in Supabase:", insertedData);
+    console.log("✅ AI Insights Stored in Supabase");
 
     return NextResponse.json(parsedResponse);
 

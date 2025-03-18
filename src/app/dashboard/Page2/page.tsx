@@ -55,17 +55,19 @@ function Page2Component() {
   // ✅ Handle form submission & store in Supabase
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!userInfo?.u_id) {
       alert("❌ User ID is missing. Please start from Page 1.");
       return;
     }
-  
+
     try {
       console.log("🔍 Saving responses for user:", userInfo.u_id);
-  
+      console.log("📌 Submitting data:", businessResponses);
+
+      // ✅ Step 1: Insert assessment data
       const { data, error } = await supabase
-        .from("assessment")
+        .from("assessment") // ✅ Ensure correct table name
         .insert([
           {
             u_id: userInfo.u_id,
@@ -76,51 +78,49 @@ function Page2Component() {
             technology: businessResponses.technology,
             submittedat: new Date().toISOString(),
           },
-        ]);
-  
+        ])
+        .select("*"); // ✅ Fetch back the inserted data to verify
+
       if (error) {
         console.error("❌ Supabase Insert Error:", error);
         alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
         return;
       }
-  
-      console.log("✅ Success:", data);
-  
-      // ✅ Call AI insights API
+
+      console.log("✅ Success! Inserted into assessments:", data);
+
+      // ✅ Step 2: Call AI Insights API
       console.log("🚀 Generating AI Insights...");
       const insightsResponse = await fetch("/api/getInsights", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ u_id: userInfo.u_id }),
       });
-  
+
       const insightsData = await insightsResponse.json();
-  
+
       if (!insightsResponse.ok) {
         console.error("❌ AI Insights API Error:", insightsData.error);
         alert("❌ Failed to generate AI insights. Try again later.");
         return;
       }
-  
+
       console.log("✅ AI Insights Generated:", insightsData);
-  
-      // ✅ Navigate to Page 3
+
+      // ✅ Step 3: Navigate to Page 3
       const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
       router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
-  
+
     } catch (err: any) {
       console.error("❌ Unexpected Error:", err);
       alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
     }
-  };  
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg">
-        {/* Progress Indicator */}
         <p className="text-blue-600 text-sm font-bold mb-4 text-center">Step 2 of 2 – Business Profile</p>
-
-        {/* Title & Value Statement */}
         <header className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">Build Your Growth Roadmap</h1>
           <p className="text-gray-600 mt-2 text-lg">
@@ -138,7 +138,6 @@ function Page2Component() {
               value={businessResponses.obstacles}
               onChange={handleChange}
               className="block w-full mt-1 border border-gray-300 rounded p-2"
-              placeholder="e.g., funding, hiring, competition"
               required
             />
           </label>
@@ -151,7 +150,6 @@ function Page2Component() {
               value={businessResponses.strategy}
               onChange={handleChange}
               className="block w-full mt-1 border border-gray-300 rounded p-2"
-              placeholder="e.g., Unique brand, low cost, innovation"
               required
             />
           </label>
@@ -179,7 +177,6 @@ function Page2Component() {
               value={businessResponses.customers}
               onChange={handleChange}
               className="block w-full mt-1 border border-gray-300 rounded p-2"
-              placeholder="e.g., Surveys, analytics, intuition"
               required
             />
           </label>
@@ -202,19 +199,10 @@ function Page2Component() {
           </label>
 
           {/* CTA Button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition"
-          >
+          <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition">
             Get My Insights
           </button>
         </form>
-
-        {/* Trust Signals */}
-        <div className="mt-6 text-center text-gray-500 text-sm">
-          <p>🔒 100% Data Secure – We never share your information</p>
-          <p>✅ Trusted by 500+ growing businesses</p>
-        </div>
       </div>
     </div>
   );
