@@ -55,12 +55,17 @@ export async function POST(req: Request) {
       that reflect the user's unique situation.
 
       **Business Inputs:**
-      1️⃣ **Biggest obstacles:** ${answers.obstacles}
-      2️⃣ **Strategy differentiation:** ${answers.strategy}
-      3️⃣ **Process optimization:** ${answers.process}
-      4️⃣ **Customer understanding:** ${answers.customers}
-      5️⃣ **Technology level:** ${answers.technology}
-
+      - **Biggest obstacles:** ${assessment.obstacles}
+      - **Strategy differentiation:** ${assessment.strategy}
+      - **Process optimization:** ${assessment.process}
+      - **Customer understanding:** ${assessment.customers}
+      - **Technology level:** ${assessment.technology}
+      
+      **Company Details:**
+      - **Industry:** ${user.industry}
+      - **Company Size:** ${user.companysize}
+      - **Revenue Range:** ${user.revenuerange}
+     
       **Your Task:**
       - Provide **custom insights** directly addressing the user's input.
       - If an obstacle (e.g., "Funding") is listed, showcase how top-performing companies have overcome them. Provide real-world, battle-tested solutions (e.g., alternative funding sources, leadership restructuring, or automation strategies).
