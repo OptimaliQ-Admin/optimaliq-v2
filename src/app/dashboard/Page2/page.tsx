@@ -65,7 +65,7 @@ function Page2Component() {
       console.log("🔍 Saving responses for user:", userInfo.U_id);
 
       const { data, error } = await supabase
-        .from("Assessment") // ✅ Updated table name
+        .from("assessment") // ✅ Updated table name
         .insert([
           {
             U_id: userInfo.U_id, // ✅ Correct field name

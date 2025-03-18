@@ -45,7 +45,7 @@ export default function Page1() {
       // ✅ Step 1: Check if user already exists in Supabase
       let userId = null;
       const { data: existingUser, error: userError } = await supabase
-        .from("Users") // Ensure table name matches your DB
+        .from("users") // Ensure table name matches your DB
         .select("U_id")
         .eq("Email", userInfo.email)
         .maybeSingle(); // ✅ Prevents errors if no user is found
@@ -65,7 +65,7 @@ export default function Page1() {
         // ✅ Step 2: Create a new user if they don't exist
         console.log("➕ Creating new user...");
         const { data: newUser, error: insertUserError } = await supabase
-          .from("Users")
+          .from("users")
           .insert([
             {
               Email: userInfo.email,
