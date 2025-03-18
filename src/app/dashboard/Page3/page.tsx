@@ -44,39 +44,46 @@ function Page3Component() {
 
   const fetchInsights = async (userData: any) => {
     if (!userData?.u_id) {
-      console.warn("⚠️ No insights found for this user yet.");
-  setInsights({
-    strategy: "No insight available.",
-    process: "No insight available.",
-    technology: "No insight available.",
-  });
-  setLoading(false);
-  return;
-}
-
+      console.error("❌ Missing user ID.");
+      return;
+    }
+  
     setLoading(true);
     try {
       const { data, error } = await supabase
-  .from("insights")
-  .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight")
-  .eq("u_id", userData.u_id)
-  .maybeSingle(); // ✅ Fix: Avoids error if no row is found
-
+        .from("insights")
+        .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight")
+        .eq("u_id", userData.u_id)
+        .maybeSingle(); // ✅ Fix: Avoids query failure if no row is found
+  
       if (error) {
         console.error("🚨 Error fetching insights from Supabase:", error.message);
+        setLoading(false);
         return;
       }
-
+  
+      if (!data) {
+        console.warn("⚠️ No insights found for this user.");
+        setInsights({
+          strategy: "No insight available.",
+          process: "No insight available.",
+          technology: "No insight available.",
+        });
+        setLoading(false);
+        return;
+      }
+  
+      // ✅ Safely extract and set the insights
       const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(data.strategyScore ?? 0);
-
+      const roundedScore = roundToNearestHalf(data.strategyscore ?? 0);
+  
       setScore(roundedScore);
       setInsights({
-        strategy: data.strategyInsight || "No insight available.",
-        process: data.processInsight || "No insight available.",
-        technology: data.technologyInsight || "No insight available.",
+        strategy: data.strategyinsight || "No insight available.",
+        process: data.processinsight || "No insight available.",
+        technology: data.technologyinsight || "No insight available.",
       });
-
+  
       setRoadmapData([
         { month: "Now", score: roundedScore },
         { month: "3 Months", score: Math.min(5, roundedScore + 0.5) },
@@ -87,7 +94,7 @@ function Page3Component() {
       console.error("🚨 Error fetching AI insights:", error?.message);
     }
     setLoading(false);
-  };
+  };  
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center px-6">
