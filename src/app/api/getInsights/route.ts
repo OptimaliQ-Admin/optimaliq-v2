@@ -17,10 +17,13 @@ export async function POST(req: Request) {
 
     // ✅ Retrieve stored business responses from Supabase
     const { data: assessment, error: assessmentError } = await supabase
-      .from("assessment")
-      .select("*")
-      .eq("u_id", u_id)
-      .maybeSingle();
+    .from("assessment")
+    .select("*")
+    .eq("u_id", u_id)
+    .order("submittedat", { ascending: false }) // ✅ Get the latest submission
+    .limit(1) // ✅ Ensure we only get one row
+    .single(); // ✅ Safely retrieve a single row
+  
 
     if (assessmentError || !assessment) {
       console.error("❌ Supabase Fetch Error:", assessmentError);
