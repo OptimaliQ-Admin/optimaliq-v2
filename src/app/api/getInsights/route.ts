@@ -34,10 +34,10 @@ export async function POST(req: Request) {
 
     // ✅ Retrieve user details from Supabase
     const { data: user, error: userError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("u_id", u_id)
-      .maybeSingle();
+  .from("users")
+  .select("*")
+  .eq("u_id", u_id)
+  .single();
 
     if (userError || !user) {
       console.error("❌ Supabase User Fetch Error:", userError);
@@ -149,28 +149,30 @@ export async function POST(req: Request) {
       console.log("✅ AI response logged in ai_log");
     }
 
-    // ✅ Insert insights into Supabase
-    const { error: storeError } = await supabase
-      .from("insights")
-      .insert([
-        {
-          u_id, // ✅ Ensure lowercase
-          strategyscore: parsedResponse.strategyscore,
-          strategyinsight: parsedResponse.strategyinsight,
-          processscore: parsedResponse.processscore,
-          processinsight: parsedResponse.processinsight,
-          technologyscore: parsedResponse.technologyscore,
-          technologyinsight: parsedResponse.technologyinsight,
-          generatedat: new Date().toISOString(), // ✅ Add timestamp
-        },
-      ]);
+// ✅ Insert AI insights into Supabase with extra validation
+const insightsData = {
+  u_id,
+  strategyscore: parsedResponse.strategyScore,
+  strategyinsight: parsedResponse.strategyInsight,
+  processscore: parsedResponse.processScore,
+  processinsight: parsedResponse.processInsight,
+  technologyscore: parsedResponse.technologyScore,
+  technologyinsight: parsedResponse.technologyInsight,
+  generatedat: new Date().toISOString(),
+};
 
-    if (storeError) {
-      console.error("❌ Supabase Insert Error:", storeError);
-      return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
-    }
+const { data: insertedInsights, error: storeError } = await supabase
+  .from("insights")
+  .insert([insightsData])
+  .select("*"); // ✅ Debugging: Fetch inserted rows
 
-    console.log("✅ AI Insights Stored in Supabase");
+if (storeError) {
+  console.error("❌ Supabase Insert Error:", storeError);
+  return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
+}
+
+console.log("✅ AI Insights Successfully Stored:", insertedInsights);
+
 
     return NextResponse.json(parsedResponse);
 
