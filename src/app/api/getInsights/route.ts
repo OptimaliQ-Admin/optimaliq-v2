@@ -123,19 +123,18 @@ export async function POST(req: Request) {
     console.log("🔢 AI-Generated Scores:", { strategyScore, processScore, technologyScore });
 
     // ✅ Step 4: Store Insights in Supabase
-    const { data: storedInsights, error: storeError } = await supabase
-      .from("Insights")
-      .upsert([
-        {
-          U_id,
-          strategyScore,
-          processScore,
-          technologyScore,
-          strategyInsight,
-          processInsight,
-          technologyInsight,
-        }
-      ], { onConflict: ["U_id"] });
+    const { data: storedInsights, error: storeError } = await supabase.from("Insights").insert([
+      {
+        U_id,
+        strategyScore,
+        processScore,
+        technologyScore,
+        strategyInsight,
+        processInsight,
+        technologyInsight,
+      }
+    ], { onConflict: "U_id" });
+    
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);
