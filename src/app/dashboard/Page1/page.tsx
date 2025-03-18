@@ -58,9 +58,9 @@ export default function Page1() {
         return;
       }
 
-      if (existingUser && existingUser.U_id) {
-        console.log("✅ User already exists with ID:", existingUser.U_id);
-        userId = existingUser.U_id;
+      if (existingUser && existingUser.u_id) {
+        console.log("✅ User already exists with ID:", existingUser.u_id);
+        userId = existingUser.u_id;
       } else {
         // ✅ Step 2: Create a new user if they don't exist
         console.log("➕ Creating new user...");
@@ -92,7 +92,7 @@ export default function Page1() {
 
       // ✅ Step 3: Pass user info to Page 2, including `user_id`
       const userDataToPass = {
-        U_id: userId, // Ensure user ID is passed
+        u_id: userId, // Ensure user ID is passed
         ...userInfo,
       };
 
