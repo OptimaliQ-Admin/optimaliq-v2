@@ -46,22 +46,27 @@ export async function POST(req: Request) {
 
     console.log("✅ Retrieved User Info:", user);
 
-    // ✅ OpenAI Prompt
+    // ✅ Structure data for OpenAI prompt
     const aiPrompt = `
       You are a world-class business strategist, trusted by top executives and high-growth companies to uncover hidden opportunities,
       and helping companies scale efficiently. Your expertise lies in diagnosing a company's current state and delivering precise, 
       high-impact recommendations that create a clear, actionable roadmap for growth. 
       Your task is to analyze the following business inputs and generate **customized insights** 
       that reflect the user's unique situation.
-
+      
       **Business Inputs:**
       - **Biggest obstacles:** ${assessment.obstacles}
       - **Strategy differentiation:** ${assessment.strategy}
       - **Process optimization:** ${assessment.process}
       - **Customer understanding:** ${assessment.customers}
       - **Technology level:** ${assessment.technology}
-     
-      **Your Task:**
+      
+      **Company Details:**
+      - **Industry:** ${user.industry}
+      - **Company Size:** ${user.companysize}
+      - **Revenue Range:** ${user.revenuerange}
+      
+**Your Task:**
       - Provide **custom insights** directly addressing the user's input.
       - If an obstacle (e.g., "Funding") is listed, showcase how top-performing companies have overcome them. Provide real-world, battle-tested solutions (e.g., alternative funding sources, leadership restructuring, or automation strategies).
       - If strategy is strong, guide the user toward maximum scalability. Offer specific growth levers, such as expanding market share, operational automation, pricing optimization, or vertical/horizontal expansion.
