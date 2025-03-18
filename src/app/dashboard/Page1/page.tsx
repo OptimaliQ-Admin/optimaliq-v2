@@ -15,8 +15,8 @@ export default function Page1() {
     email: "",
     industry: "",
     role: "",
-    companySize: "",
-    revenueRange: "",
+    companysize: "",
+    revenuerange: "",
   });
 
   // ✅ Handle form input changes
@@ -47,7 +47,7 @@ export default function Page1() {
       const { data: existingUser, error: userError } = await supabase
         .from("users") // Ensure table name matches your DB
         .select("u_id")
-        .eq("Email", userInfo.email)
+        .eq("email", userInfo.email)
         .maybeSingle(); // ✅ Prevents errors if no user is found
 
         console.log("🔎 Supabase Query Result:", existingUser, userError);
@@ -72,8 +72,8 @@ export default function Page1() {
             name: userInfo.name,
             industry: userInfo.industry,
             role: userInfo.role,
-            company_size: userInfo.companySize,  // ✅ Match DB column names
-            revenue_range: userInfo.revenueRange,
+            company_size: userInfo.companysize,  // ✅ Match DB column names
+            revenue_range: userInfo.revenuerange,
           },
         ])
         .select("u_id") // ✅ Correct column name
@@ -206,8 +206,8 @@ export default function Page1() {
             <div className="relative">
               <FaBuilding className="absolute top-3 left-3 text-gray-400" />
               <select
-                name="companySize"
-                value={userInfo.companySize}
+                name="companysize"
+                value={userInfo.companysize}
                 onChange={handleChange}
                 className="block w-full pl-10 border border-gray-300 rounded p-2"
                 required
