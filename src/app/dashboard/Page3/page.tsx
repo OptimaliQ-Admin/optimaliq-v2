@@ -1,82 +1,87 @@
 "use client";
 
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import axios from "axios";
+import { supabase } from "@/lib/supabase"; // Import Supabase client
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 function Page3Component() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const hasFetched = useRef(false);
-  const [businessResponses, setBusinessResponses] = useState<any>(null);
-  const [userInfo, setUserInfo] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<{ U_id: string } | null>(null);
   const [score, setScore] = useState<number>(0);
-  const [insights, setInsights] = useState<{ [key: string]: string }>({
+  const [insights, setInsights] = useState<{ strategy: string; process: string; technology: string }>({
     strategy: "Complete the assessment to receive insights.",
     process: "Complete the assessment to receive insights.",
     technology: "Complete the assessment to receive insights.",
   });
-  
+
   const [loading, setLoading] = useState<boolean>(true);
   const [roadmapData, setRoadmapData] = useState<{ month: string; score: number }[]>([]);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    const businessData = searchParams.get("businessResponses");
     const userData = searchParams.get("userInfo");
 
-    if (businessData && userData) {
-      try {
-        const parsedBusinessData = JSON.parse(decodeURIComponent(businessData));
-        const parsedUserData = JSON.parse(decodeURIComponent(userData));
-
-        setBusinessResponses(parsedBusinessData);
-        setUserInfo(parsedUserData);
-
-        fetchAIInsights(parsedBusinessData, parsedUserData);
-      } catch (error) {
-        console.error("Error parsing query parameters:", error);
-        router.push("/dashboard/Page2");
-      }
-    } else {
-      router.push("/dashboard/Page2");
-    }
-  }, [searchParams]);
-
-  const fetchAIInsights = async (businessData: any, userData: any) => {
-    if (!businessData || !userData) {
-      console.error("❌ Missing data: businessData or userData is undefined.");
+    if (!userData) {
+      console.error("❌ No user info found in URL.");
+      alert("❌ User data is missing. Please start from Page 1.");
+      router.push("/dashboard/Page1");
       return;
     }
 
-    setLoading(true);
     try {
-      const response = await axios.post("/api/getInsights", {
-        answers: { ...businessData, ...userData },
-      });
+      const parsedUserInfo = JSON.parse(decodeURIComponent(userData));
+      if (!parsedUserInfo.U_id) {
+        console.error("❌ User ID is missing in URL params:", parsedUserInfo);
+        alert("❌ User ID is missing. Please start from Page 1.");
+        router.push("/dashboard/Page1");
+        return;
+      }
 
-      const parsedData = response.data;
-      const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(parsedData.score ?? 0);
+      setUserInfo(parsedUserInfo);
+      console.log("✅ User Info Retrieved:", parsedUserInfo);
 
-      setScore(roundedScore);
-      setInsights({
-        strategy: parsedData.strategyInsight || "No insight available.",
-        process: parsedData.processInsight || "No insight available.",
-        technology: parsedData.technologyInsight || "No insight available.",
-      });
+      fetchInsights(parsedUserInfo.U_id);
+    } catch (error) {
+      console.error("❌ Failed to parse user info:", error);
+      alert("❌ Invalid user info. Please start from Page 1.");
+      router.push("/dashboard/Page1");
+    }
+  }, [searchParams, router]);
 
-      setRoadmapData([
-        { month: "Now", score: roundedScore },
-        { month: "3 Months", score: Math.min(5, roundedScore + 0.5) },
-        { month: "6 Months", score: Math.min(5, roundedScore + 1) },
-        { month: "12 Months", score: Math.min(5, roundedScore + 2) },
-      ]);
+  // ✅ Fetch Insights from Supabase
+  const fetchInsights = async (userId: string) => {
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from("Insights")
+        .select("score, strategyInsight, processInsight, technologyInsight")
+        .eq("U_id", userId)
+        .single(); // Get the latest insights for this user
+
+      if (error) {
+        console.error("❌ Supabase Fetch Error:", error);
+        alert(`Failed to fetch insights: ${error.message}`);
+        return;
+      }
+
+      if (data) {
+        setScore(data.score);
+        setInsights({
+          strategy: data.strategyInsight || "No strategy insight available.",
+          process: data.processInsight || "No process insight available.",
+          technology: data.technologyInsight || "No technology insight available.",
+        });
+
+        // Generate Growth Projection Chart
+        setRoadmapData([
+          { month: "Now", score: data.score },
+          { month: "3 Months", score: Math.min(5, data.score + 0.5) },
+          { month: "6 Months", score: Math.min(5, data.score + 1) },
+          { month: "12 Months", score: Math.min(5, data.score + 2) },
+        ]);
     } catch (error: any) {
       console.error("🚨 Error fetching AI insights:", error?.response?.data || error?.message);
     }
