@@ -60,11 +60,6 @@ export async function POST(req: Request) {
       - **Process optimization:** ${assessment.process}
       - **Customer understanding:** ${assessment.customers}
       - **Technology level:** ${assessment.technology}
-      
-      **Company Details:**
-      - **Industry:** ${user.industry}
-      - **Company Size:** ${user.companysize}
-      - **Revenue Range:** ${user.revenuerange}
      
       **Your Task:**
       - Provide **custom insights** directly addressing the user's input.
