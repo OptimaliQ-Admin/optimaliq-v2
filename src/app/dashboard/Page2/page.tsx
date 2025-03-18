@@ -55,45 +55,64 @@ function Page2Component() {
   // ✅ Handle form submission & store in Supabase
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!userInfo?.u_id) {
       alert("❌ User ID is missing. Please start from Page 1.");
       return;
     }
-
+  
     try {
       console.log("🔍 Saving responses for user:", userInfo.u_id);
-
+  
       const { data, error } = await supabase
-  .from("assessment") // ✅ Correct table name
-  .insert([
-    {
-      u_id: userInfo.u_id, // ✅ Matches DB
-      obstacles: businessResponses.obstacles, // ✅ Matches DB (lowercase)
-      strategy: businessResponses.strategy, // ✅ Matches DB (lowercase)
-      process: businessResponses.process, // ✅ Matches DB (lowercase)
-      customers: businessResponses.customers, // ✅ Matches DB (lowercase)
-      technology: businessResponses.technology, // ✅ Matches DB (lowercase)
-      submittedat: new Date().toISOString(), // ✅ Add timestamp
-    },
-  ]);
-
+        .from("assessment")
+        .insert([
+          {
+            u_id: userInfo.u_id,
+            obstacles: businessResponses.obstacles,
+            strategy: businessResponses.strategy,
+            process: businessResponses.process,
+            customers: businessResponses.customers,
+            technology: businessResponses.technology,
+            submittedat: new Date().toISOString(),
+          },
+        ]);
+  
       if (error) {
         console.error("❌ Supabase Insert Error:", error);
         alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
         return;
       }
-
+  
       console.log("✅ Success:", data);
-
+  
+      // ✅ Call AI insights API
+      console.log("🚀 Generating AI Insights...");
+      const insightsResponse = await fetch("/api/getInsights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ u_id: userInfo.u_id }),
+      });
+  
+      const insightsData = await insightsResponse.json();
+  
+      if (!insightsResponse.ok) {
+        console.error("❌ AI Insights API Error:", insightsData.error);
+        alert("❌ Failed to generate AI insights. Try again later.");
+        return;
+      }
+  
+      console.log("✅ AI Insights Generated:", insightsData);
+  
       // ✅ Navigate to Page 3
       const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
       router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
+  
     } catch (err: any) {
       console.error("❌ Unexpected Error:", err);
       alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">

@@ -1,36 +1,25 @@
-import path from "path";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { supabase } from "@/lib/supabase"; // ✅ Ensure Supabase client is properly imported
+import { supabase } from "@/lib/supabase"; // ✅ Ensure Supabase client is imported
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ✅ Define OpenAI Response Type
-interface AIResponse {
-  strategyScore: number;
-  processScore: number;
-  technologyScore: number;
-  strategyInsight: string;
-  processInsight: string;
-  technologyInsight: string;
-}
-
 export async function POST(req: Request) {
   try {
-    const { U_id } = await req.json(); // Ensure request contains a valid user ID
-    console.log("🔍 Fetching stored answers for User ID:", U_id);
+    const { u_id } = await req.json(); // ✅ Ensure lowercase column name
+    console.log("🔍 Fetching stored answers for User ID:", u_id);
 
-    if (!U_id) {
+    if (!u_id) {
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
 
-    // ✅ Retrieve Stored Responses from Supabase
+    // ✅ Retrieve stored business responses from Supabase
     const { data: assessment, error: assessmentError } = await supabase
-      .from("Assessment")
+      .from("assessment")
       .select("*")
-      .eq("U_id", U_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     if (assessmentError || !assessment) {
@@ -40,11 +29,11 @@ export async function POST(req: Request) {
 
     console.log("✅ Retrieved Business Responses:", assessment);
 
-    // ✅ Retrieve User Details from Supabase
+    // ✅ Retrieve user details from Supabase
     const { data: user, error: userError } = await supabase
-      .from("Users")
+      .from("users")
       .select("*")
-      .eq("U_id", U_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     if (userError || !user) {
@@ -54,21 +43,21 @@ export async function POST(req: Request) {
 
     console.log("✅ Retrieved User Info:", user);
 
-    // ✅ Structure Data for OpenAI Prompt
+    // ✅ Structure data for OpenAI prompt
     const aiPrompt = `
       You are a world-class business strategist. Analyze the user's business assessment and provide high-impact insights.
       
       **Business Inputs:**
-      - **Biggest obstacles:** ${assessment.Obstacles}
-      - **Strategy differentiation:** ${assessment.Strategy}
-      - **Process optimization:** ${assessment.Process}
-      - **Customer understanding:** ${assessment.Customers}
-      - **Technology level:** ${assessment.Technology}
+      - **Biggest obstacles:** ${assessment.obstacles}
+      - **Strategy differentiation:** ${assessment.strategy}
+      - **Process optimization:** ${assessment.process}
+      - **Customer understanding:** ${assessment.customers}
+      - **Technology level:** ${assessment.technology}
       
       **Company Details:**
-      - **Industry:** ${user.Industry}
-      - **Company Size:** ${user.CompanySize}
-      - **Revenue Range:** ${user.RevenueRange}
+      - **Industry:** ${user.industry}
+      - **Company Size:** ${user.companysize}
+      - **Revenue Range:** ${user.revenuerange}
       
       **Your Task:**
       - Provide **custom insights** based on the user's inputs.
@@ -77,12 +66,12 @@ export async function POST(req: Request) {
       
       **Example JSON Output:**
       {
-        "strategyScore": 4,
-        "strategyInsight": "Your differentiation is strong, but market positioning needs refinement. Focus on targeted partnerships and market penetration strategies.",
-        "processScore": 3,
-        "processInsight": "Your processes are stable but lack scalability. Automate workflows to handle growth.",
-        "technologyScore": 5,
-        "technologyInsight": "You have a cutting-edge stack but need better integration. Implement predictive analytics for enhanced decision-making."
+        "strategyscore": 4,
+        "strategyinsight": "Your differentiation is strong, but market positioning needs refinement. Focus on targeted partnerships and market penetration strategies.",
+        "processscore": 3,
+        "processinsight": "Your processes are stable but lack scalability. Automate workflows to handle growth.",
+        "technologyscore": 5,
+        "technologyinsight": "You have a cutting-edge stack but need better integration. Implement predictive analytics for enhanced decision-making."
       }
     `;
 
@@ -91,7 +80,7 @@ export async function POST(req: Request) {
       model: "gpt-4o",
       messages: [{ role: "system", content: aiPrompt }],
       max_tokens: 300,
-      response_format: { type: "json_object" }
+      response_format: { type: "json_object" },
     });
 
     console.log("✅ OpenAI Response Received");
@@ -101,7 +90,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
     }
 
-    let parsedResponse: AIResponse;
+    let parsedResponse;
     try {
       parsedResponse = JSON.parse(response.choices[0].message.content);
     } catch (error) {
@@ -109,25 +98,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to parse AI response." }, { status: 500 });
     }
 
-    // ✅ Extract AI-generated insights safely
-    const { strategyScore, processScore, technologyScore, strategyInsight, processInsight, technologyInsight } = parsedResponse;
-    console.log("🔢 AI-Generated Scores:", { strategyScore, processScore, technologyScore });
+    console.log("🔢 AI-Generated Scores:", parsedResponse);
 
-    // ✅ Store Insights in Supabase
+    // ✅ Insert insights into Supabase
     const { error: storeError } = await supabase
-      .from("Insights")
-      .upsert(
-        [{
-          U_id,
-          strategyScore,
-          processScore,
-          technologyScore,
-          strategyInsight,
-          processInsight,
-          technologyInsight,
-        }],
-        { onConflict: "U_id" }
-      );
+      .from("insights")
+      .insert([
+        {
+          u_id, // ✅ Ensure lowercase
+          strategyscore: parsedResponse.strategyscore,
+          strategyinsight: parsedResponse.strategyinsight,
+          processscore: parsedResponse.processscore,
+          processinsight: parsedResponse.processinsight,
+          technologyscore: parsedResponse.technologyscore,
+          technologyinsight: parsedResponse.technologyinsight,
+          generatedat: new Date().toISOString(), // ✅ Add timestamp
+        },
+      ]);
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);
@@ -136,15 +123,8 @@ export async function POST(req: Request) {
 
     console.log("✅ AI Insights Stored in Supabase");
 
-    return NextResponse.json({
-      score: (strategyScore + processScore + technologyScore) / 3, // ✅ Calculate avg score
-      strategyScore,
-      strategyInsight,
-      processScore,
-      processInsight,
-      technologyScore,
-      technologyInsight,
-    });
+    return NextResponse.json(parsedResponse);
+
   } catch (error) {
     console.error("🚨 AI API Error:", error);
     return NextResponse.json({ error: "Failed to generate AI-driven insights" }, { status: 500 });
