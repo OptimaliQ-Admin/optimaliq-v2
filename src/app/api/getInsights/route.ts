@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     console.log("🔍 Fetching stored answers for User ID:", u_id);
 
     if (!u_id) {
+      console.error("❌ Missing user ID in request.");
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
 
@@ -101,7 +102,7 @@ export async function POST(req: Request) {
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
     // ✅ Insert insights into Supabase
-    const { error: storeError } = await supabase
+    const { data: insertedData, error: storeError } = await supabase
       .from("insights")
       .insert([
         {
@@ -121,7 +122,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
     }
 
-    console.log("✅ AI Insights Stored in Supabase");
+    console.log("✅ AI Insights Stored in Supabase:", insertedData);
 
     return NextResponse.json(parsedResponse);
 
