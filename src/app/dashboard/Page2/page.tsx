@@ -65,17 +65,18 @@ function Page2Component() {
       console.log("🔍 Saving responses for user:", userInfo.u_id);
 
       const { data, error } = await supabase
-        .from("assessment") // ✅ Updated table name
-        .insert([
-          {
-            u_id: userInfo.u_id, // ✅ Correct field name
-            Obstacles: businessResponses.obstacles,
-            Strategy: businessResponses.strategy,
-            Process: businessResponses.process,
-            Customers: businessResponses.customers,
-            Technology: businessResponses.technology,
-          },
-        ]);
+  .from("assessment") // ✅ Correct table name
+  .insert([
+    {
+      u_id: userInfo.u_id, // ✅ Matches DB
+      obstacles: businessResponses.obstacles, // ✅ Matches DB (lowercase)
+      strategy: businessResponses.strategy, // ✅ Matches DB (lowercase)
+      process: businessResponses.process, // ✅ Matches DB (lowercase)
+      customers: businessResponses.customers, // ✅ Matches DB (lowercase)
+      technology: businessResponses.technology, // ✅ Matches DB (lowercase)
+      submittedat: new Date().toISOString(), // ✅ Add timestamp
+    },
+  ]);
 
       if (error) {
         console.error("❌ Supabase Insert Error:", error);
