@@ -20,7 +20,7 @@ function AnalyzingComponent() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 🌀 Rotate statements every 2 seconds
+  // 🔁 Rotate statements every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % statements.length);
@@ -28,36 +28,30 @@ function AnalyzingComponent() {
     return () => clearInterval(interval);
   }, []);
 
-  // 🧠 Trigger API using localStorage u_id instead of query string
+  // 🧠 Call API to generate insights, then redirect
   useEffect(() => {
-    const u_id = localStorage.getItem("u_id");
+    const u_id = typeof window !== "undefined" ? localStorage.getItem("u_id") : null;
 
     if (!u_id) {
-      console.error("❌ u_id missing. Redirecting...");
       router.push("/dashboard/Page1");
       return;
     }
 
     const generateInsights = async () => {
       try {
-        console.log("📡 Sending request to generate insights...");
         const response = await fetch("/api/getInsights", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ u_id }),
         });
 
-        const result = await response.json();
-
-        if (!response.ok) {
-          console.error("❌ Insight generation failed:", result.error);
-          return;
+        if (response.ok) {
+          router.push("/dashboard/Page3");
+        } else {
+          router.push("/dashboard/Page1");
         }
-
-        console.log("✅ Insights generated, redirecting...");
-        router.push("/dashboard/Page3");
-      } catch (err) {
-        console.error("🔥 Error calling getInsights:", err);
+      } catch {
+        router.push("/dashboard/Page1");
       }
     };
 
@@ -78,7 +72,6 @@ function AnalyzingComponent() {
   );
 }
 
-// ✅ Wrap in Suspense to support client hooks
 export default function Page() {
   return (
     <Suspense fallback={<div className="text-center mt-12 text-gray-500">Preparing your insights...</div>}>

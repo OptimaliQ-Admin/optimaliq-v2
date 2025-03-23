@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase"; // Ensure Supabase client is imported
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 function Page2Component() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [userInfo, setUserInfo] = useState<{ u_id: string } | null>(null);
+
+  const [userId, setUserId] = useState<string | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
     obstacles: "",
     strategy: "",
@@ -17,19 +17,17 @@ function Page2Component() {
   });
 
   useEffect(() => {
-    const u_id = localStorage.getItem("u_id");
+    const u_id = typeof window !== "undefined" ? localStorage.getItem("u_id") : null;
 
-if (!u_id) {
-  alert("❌ User session expired. Please start again.");
-  router.push("/dashboard/Page1");
-  return;
-}
+    if (!u_id) {
+      alert("❌ User session expired. Please start again.");
+      router.push("/dashboard/Page1");
+      return;
+    }
 
-setUserInfo({ u_id }); // Just store the ID
+    setUserId(u_id);
+  }, [router]);
 
-  }, [searchParams, router]);
-
-  // ✅ Handle business input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setBusinessResponses({
       ...businessResponses,
@@ -37,50 +35,33 @@ setUserInfo({ u_id }); // Just store the ID
     });
   };
 
-  // ✅ Handle form submission & store in Supabase
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!userInfo?.u_id) {
-      alert("❌ User ID is missing. Please start from Page 1.");
+    if (!userId) {
+      alert("❌ User ID is missing. Please start again.");
       return;
     }
 
     try {
-      console.log("🔍 Saving responses for user:", userInfo.u_id);
-      console.log("📌 Submitting data:", businessResponses);
-
-      // ✅ Step 1: Insert assessment data
-      const { data, error } = await supabase
-        .from("assessment") // ✅ Ensure correct table name
+      const { error } = await supabase
+        .from("assessment")
         .insert([
           {
-            u_id: userInfo.u_id,
-            obstacles: businessResponses.obstacles,
-            strategy: businessResponses.strategy,
-            process: businessResponses.process,
-            customers: businessResponses.customers,
-            technology: businessResponses.technology,
+            u_id: userId,
+            ...businessResponses,
             submittedat: new Date().toISOString(),
           },
-        ])
-        .select("*"); // ✅ Fetch back the inserted data to verify
+        ]);
 
       if (error) {
-        console.error("❌ Supabase Insert Error:", error);
-        alert(`❌ Failed to save responses. Supabase says: ${error.message}`);
+        alert(`❌ Failed to save responses. ${error.message}`);
         return;
       }
 
-      console.log("✅ Success! Inserted into assessments:", data);
-
-// ✅ Step 2: Immediately navigate to Analyzing Page
-const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-router.push(`/dashboard/Analyzing?userInfo=${encodedUserInfo}`);
-
-    } catch (err: any) {
-      console.error("❌ Unexpected Error:", err);
-      alert(`Unexpected Error: ${err.message || "Something went wrong. Try again."}`);
+      router.push("/dashboard/Analyzing");
+    } catch {
+      alert("❌ Unexpected error. Please try again.");
     }
   };
 
@@ -95,77 +76,18 @@ router.push(`/dashboard/Analyzing?userInfo=${encodedUserInfo}`);
           </p>
         </header>
 
-        {/* Form Section */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <label className="block">
-            <span className="text-gray-700">What are your biggest obstacles to scaling?</span>
-            <input
-              type="text"
-              name="obstacles"
-              value={businessResponses.obstacles}
-              onChange={handleChange}
-              className="block w-full mt-1 border border-gray-300 rounded p-2"
-              required
-            />
-          </label>
-
-          <label className="block">
-            <span className="text-gray-700">How does your strategy differentiate you?</span>
-            <input
-              type="text"
-              name="strategy"
-              value={businessResponses.strategy}
-              onChange={handleChange}
-              className="block w-full mt-1 border border-gray-300 rounded p-2"
-              required
-            />
-          </label>
-
-          <label className="block">
-            <span className="text-gray-700">Are your processes optimized for efficiency?</span>
-            <select
-              name="process"
-              value={businessResponses.process}
-              onChange={handleChange}
-              className="block w-full mt-1 border border-gray-300 rounded p-2"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </label>
-
-          <label className="block">
-            <span className="text-gray-700">How well do you understand your customers' needs?</span>
-            <input
-              type="text"
-              name="customers"
-              value={businessResponses.customers}
-              onChange={handleChange}
-              className="block w-full mt-1 border border-gray-300 rounded p-2"
-              required
-            />
-          </label>
-
-          <label className="block">
-            <span className="text-gray-700">Is your technology stack supporting your growth?</span>
-            <select
-              name="technology"
-              value={businessResponses.technology}
-              onChange={handleChange}
-              className="block w-full mt-1 border border-gray-300 rounded p-2"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Outdated">Outdated</option>
-              <option value="Needs Work">Needs Work</option>
-              <option value="Optimized">Optimized</option>
-              <option value="Cutting Edge">Cutting Edge</option>
-            </select>
-          </label>
-
-          {/* CTA Button */}
+          <Input label="What are your biggest obstacles to scaling?" name="obstacles" value={businessResponses.obstacles} onChange={handleChange} />
+          <Input label="How does your strategy differentiate you?" name="strategy" value={businessResponses.strategy} onChange={handleChange} />
+          <Select label="Are your processes optimized for efficiency?" name="process" value={businessResponses.process} onChange={handleChange} options={["Yes", "No"]} />
+          <Input label="How well do you understand your customers' needs?" name="customers" value={businessResponses.customers} onChange={handleChange} />
+          <Select
+            label="Is your technology stack supporting your growth?"
+            name="technology"
+            value={businessResponses.technology}
+            onChange={handleChange}
+            options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]}
+          />
           <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition">
             Get My Insights
           </button>
@@ -175,7 +97,42 @@ router.push(`/dashboard/Analyzing?userInfo=${encodedUserInfo}`);
   );
 }
 
-// ✅ Wrap in Suspense to prevent hydration issues
+function Input({ label, name, value, onChange }: any) {
+  return (
+    <label className="block">
+      <span className="text-gray-700">{label}</span>
+      <input
+        type="text"
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="block w-full mt-1 border border-gray-300 rounded p-2"
+        required
+      />
+    </label>
+  );
+}
+
+function Select({ label, name, value, onChange, options }: any) {
+  return (
+    <label className="block">
+      <span className="text-gray-700">{label}</span>
+      <select
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="block w-full mt-1 border border-gray-300 rounded p-2"
+        required
+      >
+        <option value="">Select</option>
+        {options.map((opt: string) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 export default function Page2() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
