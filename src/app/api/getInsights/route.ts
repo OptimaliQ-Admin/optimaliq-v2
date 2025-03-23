@@ -229,9 +229,9 @@ export async function POST(req: Request) {
     };
 
     const { data: insertedInsights, error: storeError } = await supabase
-      .from("insights")
-      .insert([insightsData])
-      .select("*"); // ✅ Fetch inserted rows
+  .from("insights")
+  .upsert([insightsData], { onConflict: "u_id" }) // 👈 ensures one active insight per user
+  .select("*");
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);

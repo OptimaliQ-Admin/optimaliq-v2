@@ -38,10 +38,13 @@ function Page3Component() {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("insights")
-        .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight, overallscore")
-        .eq("u_id", u_id)
-        .maybeSingle();
+  .from("insights")
+  .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight, overallscore")
+  .eq("u_id", userData.u_id)
+  .order("generatedat", { ascending: false }) // get latest
+  .limit(1)
+  .maybeSingle();
+
 
       if (error || !data) {
         setInsights({
