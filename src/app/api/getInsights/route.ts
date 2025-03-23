@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
 import AWS from "aws-sdk";
-import AWS from "aws-sdk";
-import { AWSError } from "aws-sdk";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -252,26 +250,32 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("🚨 AI API Error (Raw):", error);
   
-    // If it's an AWS error
-    if (error instanceof AWS.AWSError) {
+    // 🔍 Check if it looks like an AWS error
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      "message" in error &&
+      "requestId" in error
+    ) {
       console.error("📛 AWS Error Code:", error.code);
       console.error("📄 AWS Error Message:", error.message);
       console.error("📃 AWS Request ID:", error.requestId);
       console.error("📦 AWS Error Stack:", error.stack);
     }
   
-    // If it's an OpenAI error (optional — if you use OpenAI SDK error types)
+    // 🧠 OpenAI-style error (optional)
     if (error.response && error.response.data) {
       console.error("🧠 OpenAI API Error Response:", JSON.stringify(error.response.data, null, 2));
     }
   
-    // General error logging
+    // General logging
     console.error("🧩 Stringified Error:", JSON.stringify(error, null, 2));
     console.error("🧱 Error Type:", typeof error);
     console.error("📌 Stack Trace:", error.stack || "No stack trace available");
   
     return NextResponse.json({ error: "Failed to generate AI-driven insights" }, { status: 500 });
-  }
+  }  
   
 }
 
