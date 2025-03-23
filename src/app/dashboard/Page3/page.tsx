@@ -26,20 +26,17 @@ function Page3Component() {
     if (hasFetched.current) return;
     hasFetched.current = true;
 
-    const userData = searchParams.get("userInfo");
+    const u_id = localStorage.getItem("u_id");
 
-    if (userData) {
-      try {
-        const parsedUserData = JSON.parse(decodeURIComponent(userData));
-        setUserInfo(parsedUserData);
-        fetchInsights(parsedUserData);
-      } catch (error) {
-        console.error("Error parsing query parameters:", error);
-        router.push("/dashboard/Page2");
-      }
-    } else {
-      router.push("/dashboard/Page2");
-    }
+if (!u_id) {
+  alert("❌ User session expired. Please start again.");
+  router.push("/dashboard/Page1");
+  return;
+}
+
+setUserInfo({ u_id });
+fetchInsights({ u_id });
+
   }, [searchParams]);
 
   const fetchInsights = async (userData: any) => {
@@ -199,6 +196,8 @@ const roundedScore = roundToNearestHalf(data.overallscore ?? 0);
     </div>
   );
 }
+
+localStorage.removeItem("u_id");
 
 export default function Page3() {
   return (

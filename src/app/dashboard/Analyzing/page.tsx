@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const statements = [
   "Bringing 20 years of battlefield strategy to your business.",
@@ -18,7 +18,6 @@ const statements = [
 
 function AnalyzingComponent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // 🌀 Rotate statements every 2 seconds
@@ -29,13 +28,15 @@ function AnalyzingComponent() {
     return () => clearInterval(interval);
   }, []);
 
-  // 🧠 Trigger AI API request and THEN redirect
+  // 🧠 Trigger API using localStorage u_id instead of query string
   useEffect(() => {
-    const userInfo = searchParams.get("userInfo");
+    const u_id = localStorage.getItem("u_id");
 
-    if (!userInfo) return;
-
-    const parsedUser = JSON.parse(decodeURIComponent(userInfo));
+    if (!u_id) {
+      console.error("❌ u_id missing. Redirecting...");
+      router.push("/dashboard/Page1");
+      return;
+    }
 
     const generateInsights = async () => {
       try {
@@ -43,26 +44,25 @@ function AnalyzingComponent() {
         const response = await fetch("/api/getInsights", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ u_id: parsedUser.u_id }),
+          body: JSON.stringify({ u_id }),
         });
 
         const result = await response.json();
 
         if (!response.ok) {
           console.error("❌ Insight generation failed:", result.error);
-          // Optional: add UI fallback here
           return;
         }
 
         console.log("✅ Insights generated, redirecting...");
-        router.push(`/dashboard/Page3?userInfo=${userInfo}`);
+        router.push("/dashboard/Page3");
       } catch (err) {
         console.error("🔥 Error calling getInsights:", err);
       }
     };
 
     generateInsights();
-  }, [searchParams, router]);
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center text-center px-4">
@@ -78,7 +78,7 @@ function AnalyzingComponent() {
   );
 }
 
-// ✅ Wrap in Suspense to handle useSearchParams properly
+// ✅ Wrap in Suspense to support client hooks
 export default function Page() {
   return (
     <Suspense fallback={<div className="text-center mt-12 text-gray-500">Preparing your insights...</div>}>

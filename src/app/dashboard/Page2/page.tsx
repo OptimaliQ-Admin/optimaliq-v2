@@ -17,31 +17,16 @@ function Page2Component() {
   });
 
   useEffect(() => {
-    const userData = searchParams.get("userInfo");
+    const u_id = localStorage.getItem("u_id");
 
-    if (userData) {
-      try {
-        const parsedUserInfo = JSON.parse(decodeURIComponent(userData));
+if (!u_id) {
+  alert("❌ User session expired. Please start again.");
+  router.push("/dashboard/Page1");
+  return;
+}
 
-        if (!parsedUserInfo.u_id) {
-          console.error("❌ User ID is missing in URL params:", parsedUserInfo);
-          alert("❌ User ID is missing. Please start from Page 1.");
-          router.push("/dashboard/Page1");
-          return;
-        }
+setUserInfo({ u_id }); // Just store the ID
 
-        setUserInfo(parsedUserInfo);
-        console.log("✅ User Info Retrieved:", parsedUserInfo);
-      } catch (error) {
-        console.error("❌ Failed to parse user info:", error);
-        alert("❌ Invalid user info. Please start from Page 1.");
-        router.push("/dashboard/Page1");
-      }
-    } else {
-      console.error("❌ No user info found in URL.");
-      alert("❌ User ID is missing. Please start from Page 1.");
-      router.push("/dashboard/Page1");
-    }
   }, [searchParams, router]);
 
   // ✅ Handle business input changes

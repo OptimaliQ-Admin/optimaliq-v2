@@ -96,8 +96,9 @@ export default function Page1() {
         ...userInfo,
       };
 
-      const encodedUserInfo = encodeURIComponent(JSON.stringify(userDataToPass));
-      router.push(`/dashboard/Page2?userInfo=${encodedUserInfo}`);
+      localStorage.setItem("u_id", userId);
+      router.push("/dashboard/Page2");
+      
 
   } catch (err: any) {
   console.error("❌ Unexpected Error:", err);
