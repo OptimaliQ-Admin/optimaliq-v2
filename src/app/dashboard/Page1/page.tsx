@@ -3,7 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { FaUser, FaEnvelope, FaIndustry, FaBriefcase, FaBuilding, FaDollarSign, FaShieldAlt } from "react-icons/fa";
+import ReCAPTCHA from "react-google-recaptcha";
+import {
+  FaUser,
+  FaEnvelope,
+  FaIndustry,
+  FaBriefcase,
+  FaBuilding,
+  FaDollarSign,
+  FaShieldAlt,
+} from "react-icons/fa";
 
 export default function Page1() {
   const router = useRouter();
@@ -16,6 +25,8 @@ export default function Page1() {
     companysize: "",
     revenuerange: "",
   });
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -31,10 +42,14 @@ export default function Page1() {
       }
     }
 
+    if (!captchaToken) {
+      alert("⚠️ Please verify you are not a robot.");
+      return;
+    }
+
     try {
       let userId: string | null = null;
 
-      // ✅ Check if user exists
       const { data: existingUser, error: userError } = await supabase
         .from("users")
         .select("u_id")
@@ -49,7 +64,6 @@ export default function Page1() {
       if (existingUser?.u_id) {
         userId = existingUser.u_id;
       } else {
-        // ✅ Create new user
         const { data: newUser, error: insertError } = await supabase
           .from("users")
           .insert([{ ...userInfo }])
@@ -64,12 +78,10 @@ export default function Page1() {
         userId = newUser.u_id;
       }
 
-      // ✅ Store user ID securely in localStorage
       if (typeof window !== "undefined" && userId) {
         localStorage.setItem("u_id", userId);
       }
 
-      // ✅ Go to Page 2 (no user data in URL)
       router.push("/dashboard/Page2");
     } catch {
       alert("Unexpected error. Please try again.");
@@ -103,12 +115,20 @@ export default function Page1() {
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <Input icon={FaUser} name="name" value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
             <Input icon={FaEnvelope} name="email" type="email" value={userInfo.email} onChange={handleChange} placeholder="Your Email" />
-            <Select icon={FaIndustry} name="industry" value={userInfo.industry} onChange={handleChange} options={["Technology", "Healthcare", "Finance", "Retail", "Manufacturing", "Education", "Consulting", "Other"]} />
+            <Select icon={FaIndustry} name="industry" value={userInfo.industry} onChange={handleChange} options={["E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail","Manufacturing","Consulting", "Entertainment","Real Estate","Transportation","Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive","Construction","Legal","Nonprofit","Other",]}/>
             <Input icon={FaBriefcase} name="role" value={userInfo.role} onChange={handleChange} placeholder="Your Role" />
             <Select icon={FaBuilding} name="companysize" value={userInfo.companysize} onChange={handleChange} options={["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"]} />
             <Select icon={FaDollarSign} name="revenuerange" value={userInfo.revenuerange} onChange={handleChange} options={["<$100K", "$100K-$500K", "$500K-$1M", "$1M-$10M", "$10M-$50M", "$50M+"]} />
-            
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition">
+
+            {/* 🔐 reCAPTCHA */}
+            <div className="pt-2">
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE as string}
+                onChange={(token) => setCaptchaToken(token)}
+              />
+            </div>
+
+            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition">
               Get My Free Insights
             </button>
             <p className="text-xs text-gray-500 text-center mt-3">No spam. No sales pitches. Just data-driven insights.</p>
@@ -123,11 +143,7 @@ function Input({ icon: Icon, ...props }: any) {
   return (
     <div className="relative">
       <Icon className="absolute top-3 left-3 text-gray-400" />
-      <input
-        {...props}
-        className="block w-full pl-10 border border-gray-300 rounded p-2"
-        required
-      />
+      <input {...props} className="block w-full pl-10 border border-gray-300 rounded p-2" required />
     </div>
   );
 }
@@ -136,13 +152,7 @@ function Select({ icon: Icon, name, value, onChange, options }: any) {
   return (
     <div className="relative">
       <Icon className="absolute top-3 left-3 text-gray-400" />
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="block w-full pl-10 border border-gray-300 rounded p-2"
-        required
-      >
+      <select name={name} value={value} onChange={onChange} className="block w-full pl-10 border border-gray-300 rounded p-2" required>
         <option value="">Select {name}</option>
         {options.map((option: string) => (
           <option key={option} value={option}>{option}</option>
