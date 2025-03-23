@@ -130,13 +130,14 @@ const csvPayload = sageInput.join(",");
     } else {
       console.log("✅ API request logged in ai_log with ID:", logData?.log_id);
     }
+    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME!;
 
     // ✅ Call SageMaker Endpoint
 let sageMakerScore = 0;
 try {
   const sageResponse = await sagemaker
     .invokeEndpoint({
-      EndpointName: process.env.SAGEMAKER_ENDPOINT_NAME!,
+      EndpointName: endpointName,
       Body: csvPayload,
       ContentType: "text/csv",
     })
