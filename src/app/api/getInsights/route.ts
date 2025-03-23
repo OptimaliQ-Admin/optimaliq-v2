@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
 import AWS from "aws-sdk";
+import AWS from "aws-sdk";
+import { AWSError } from "aws-sdk";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
