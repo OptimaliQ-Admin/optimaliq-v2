@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
+import AWS from "aws-sdk";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+});
+
+const sagemaker = new AWS.SageMakerRuntime({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
 export async function POST(req: Request) {
@@ -42,6 +49,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to retrieve user info" }, { status: 500 });
     }
     console.log("✅ Retrieved User Info:", user);
+
+    // ✅ Build input vector for SageMaker
+const industryOneHot = [
+  "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
+  "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
+  "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
+  "Construction", "Legal", "Nonprofit", "Other"
+].map((industry) => (user.industry === industry ? 1 : 0));
+
+const sageInput = [
+  assessment.strategyScore || 0,
+  assessment.processScore || 0,
+  assessment.technologyScore || 0,
+  ...industryOneHot,
+];
+
+const csvPayload = sageInput.join(",");
+
 
     // ✅ Structure data for OpenAI prompt
     const aiPrompt = `
@@ -106,6 +131,23 @@ export async function POST(req: Request) {
       console.log("✅ API request logged in ai_log with ID:", logData?.log_id);
     }
 
+    // ✅ Call SageMaker Endpoint
+let sageMakerScore = 0;
+try {
+  const sageResponse = await sagemaker
+    .invokeEndpoint({
+      EndpointName: process.env.SAGEMAKER_ENDPOINT_NAME,
+      Body: csvPayload,
+      ContentType: "text/csv",
+    })
+    .promise();
+
+  sageMakerScore = parseFloat(sageResponse.Body.toString("utf-8"));
+  console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
+} catch (error) {
+  console.error("❌ SageMaker Error:", error);
+}
+
     // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -165,6 +207,7 @@ export async function POST(req: Request) {
       technologyscore: parsedResponse.technologyScore,
       technologyinsight: parsedResponse.technologyInsight,
       generatedat: new Date().toISOString(),
+      overallscore: sageMakerScore,
     };
 
     const { data: insertedInsights, error: storeError } = await supabase
