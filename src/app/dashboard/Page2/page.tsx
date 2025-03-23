@@ -37,33 +37,36 @@ function Page2Component() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!userId) {
       alert("❌ User ID is missing. Please start again.");
       return;
     }
-
+  
     try {
       const { error } = await supabase
         .from("assessment")
-        .insert([
-          {
-            u_id: userId,
-            ...businessResponses,
-            submittedat: new Date().toISOString(),
-          },
-        ]);
-
+        .upsert(
+          [
+            {
+              u_id: userId,
+              ...businessResponses,
+              submittedat: new Date().toISOString(),
+            },
+          ],
+          { onConflict: "u_id" } // 🔐 Make sure u_id is a UNIQUE constraint in your DB
+        );
+  
       if (error) {
         alert(`❌ Failed to save responses. ${error.message}`);
         return;
       }
-
+  
       router.push("/dashboard/Analyzing");
     } catch {
       alert("❌ Unexpected error. Please try again.");
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
