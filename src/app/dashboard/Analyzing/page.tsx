@@ -19,10 +19,9 @@ const statements = [
 function AnalyzingComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Rotate statements every 2 seconds
+  // 🌀 Rotate statements every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % statements.length);
@@ -30,14 +29,39 @@ function AnalyzingComponent() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto redirect to Page 3 after delay
+  // 🧠 Trigger AI API request and THEN redirect
   useEffect(() => {
     const userInfo = searchParams.get("userInfo");
-    if (userInfo) {
-      setTimeout(() => {
+
+    if (!userInfo) return;
+
+    const parsedUser = JSON.parse(decodeURIComponent(userInfo));
+
+    const generateInsights = async () => {
+      try {
+        console.log("📡 Sending request to generate insights...");
+        const response = await fetch("/api/getInsights", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ u_id: parsedUser.u_id }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error("❌ Insight generation failed:", result.error);
+          // Optional: add UI fallback here
+          return;
+        }
+
+        console.log("✅ Insights generated, redirecting...");
         router.push(`/dashboard/Page3?userInfo=${userInfo}`);
-      }, 4500); // simulate loading delay
-    }
+      } catch (err) {
+        console.error("🔥 Error calling getInsights:", err);
+      }
+    };
+
+    generateInsights();
   }, [searchParams, router]);
 
   return (
@@ -54,7 +78,7 @@ function AnalyzingComponent() {
   );
 }
 
-// ✅ Wrap in Suspense for useSearchParams
+// ✅ Wrap in Suspense to handle useSearchParams properly
 export default function Page() {
   return (
     <Suspense fallback={<div className="text-center mt-12 text-gray-500">Preparing your insights...</div>}>

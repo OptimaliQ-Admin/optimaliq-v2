@@ -89,27 +89,9 @@ function Page2Component() {
 
       console.log("✅ Success! Inserted into assessments:", data);
 
-      // ✅ Step 2: Call AI Insights API
-      console.log("🚀 Generating AI Insights...");
-      const insightsResponse = await fetch("/api/getInsights", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ u_id: userInfo.u_id }),
-      });
-
-      const insightsData = await insightsResponse.json();
-
-      if (!insightsResponse.ok) {
-        console.error("❌ AI Insights API Error:", insightsData.error);
-        alert("❌ Failed to generate AI insights. Try again later.");
-        return;
-      }
-
-      console.log("✅ AI Insights Generated:", insightsData);
-
-      // ✅ Step 3: Navigate to Page 3
-      const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
-      router.push(`/dashboard/Page3?userInfo=${encodedUserInfo}`);
+// ✅ Step 2: Immediately navigate to Analyzing Page
+const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
+router.push(`/dashboard/Analyzing?userInfo=${encodedUserInfo}`);
 
     } catch (err: any) {
       console.error("❌ Unexpected Error:", err);
