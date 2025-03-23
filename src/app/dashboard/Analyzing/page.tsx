@@ -1,71 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-const messages = [
+const statements = [
   "Bringing 20 years of battlefield strategy to your business.",
   "One insight can change everything.",
-  "Uncovering hidden growth opportunities...",
-  "Mapping your customer journey for deeper engagement...",
-  "Analyzing your strategy for sustainable scale...",
-  "Evaluating process efficiency and automation gaps...",
-  "Benchmarking your technology stack against industry leaders...",
-  "Scanning for untapped revenue channels...",
-  "Profiling your business maturity in real time...",
-  "Diagnosing growth blind spots you didn't know you had...",
-  "Generating insights you can act on — not just read."
+  "Smart businesses don’t guess—they measure.",
+  "Turning complexity into clarity, one model at a time.",
+  "If you can’t scale it, you can’t sell it.",
+  "We don’t just diagnose. We prescribe transformation.",
+  "Clarity isn’t a luxury—it’s your growth engine.",
+  "You can’t fix what you don’t understand.",
+  "OptimaliQ reveals what your gut instinct misses.",
+  "Benchmark your way to category leadership.",
 ];
 
-export default function Analyzing() {
+function AnalyzingComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [messageIndex, setMessageIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Rotate statements every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }, 3000);
-
+      setCurrentIndex((prev) => (prev + 1) % statements.length);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
+  // Auto redirect to Page 3 after delay
   useEffect(() => {
-    const userData = searchParams.get("userInfo");
-    if (!userData) {
-      router.push("/dashboard/Page1");
-      return;
+    const userInfo = searchParams.get("userInfo");
+    if (userInfo) {
+      setTimeout(() => {
+        router.push(`/dashboard/Page3?userInfo=${userInfo}`);
+      }, 4500); // simulate loading delay
     }
-
-    const fetchInsights = async () => {
-      try {
-        const parsed = JSON.parse(decodeURIComponent(userData));
-        const res = await fetch("/api/getInsights", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ u_id: parsed.u_id }),
-        });
-
-        if (!res.ok) throw new Error("API call failed");
-
-        setTimeout(() => {
-          router.push(`/dashboard/Page3?userInfo=${encodeURIComponent(userData)}`);
-        }, 1000);
-      } catch (err) {
-        console.error("🔴 Error calling insights API:", err);
-        router.push("/dashboard/Page2");
-      }
-    };
-
-    fetchInsights();
-  }, [router, searchParams]);
+  }, [searchParams, router]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4 text-center">
-      <h1 className="text-4xl font-bold text-blue-700 mb-4">🔍 Analyzing Your Business...</h1>
-      <p className="text-lg text-gray-700 max-w-xl animate-pulse">{messages[messageIndex]}</p>
-      <div className="mt-8 text-sm text-gray-400">Powered by <span className="font-semibold text-blue-600">OptimaliQ.ai</span></div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center text-center px-4">
+      <h1 className="text-3xl font-bold text-blue-700 mb-4">Analyzing your business...</h1>
+      <p className="text-xl text-gray-700 italic max-w-xl transition-opacity duration-300 ease-in-out">
+        {statements[currentIndex]}
+      </p>
+      <div className="mt-8 w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
+      </div>
+      <p className="mt-4 text-sm text-gray-500">Powered by OptimaliQ.ai</p>
     </div>
+  );
+}
+
+// ✅ Wrap in Suspense for useSearchParams
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="text-center mt-12 text-gray-500">Preparing your insights...</div>}>
+      <AnalyzingComponent />
+    </Suspense>
   );
 }
