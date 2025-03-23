@@ -51,22 +51,62 @@ export async function POST(req: Request) {
     console.log("✅ Retrieved User Info:", user);
 
     // ✅ Build input vector for SageMaker
-const industryOneHot = [
-  "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-  "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-  "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-  "Construction", "Legal", "Nonprofit", "Other"
-].map((industry) => (user.industry === industry ? 1 : 0));
+    const industryOneHot = [
+      "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
+      "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
+      "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
+      "Construction", "Legal", "Nonprofit", "Other"
+    ].map((industry) => (user.industry === industry ? 1 : 0));
 
-const sageInput = [
-  assessment.strategyScore || 0,
-  assessment.processScore || 0,
-  assessment.technologyScore || 0,
-  ...industryOneHot,
-];
+    const sageInput = [
+      assessment.strategyScore || 0,
+      assessment.processScore || 0,
+      assessment.technologyScore || 0,
+      ...industryOneHot,
+    ];
 
-const csvPayload = sageInput.join(",");
+    const csvPayload = sageInput.join(",");
 
+    // 🧠 Log SageMaker request/response in ai_log (SageMaker)
+    await supabase
+      .from("ai_log")
+      .insert([
+        {
+          u_id,
+          apirequest: `SageMaker Payload: ${csvPayload}`,
+          model: "SageMaker",
+          createdat: new Date().toISOString(),
+        },
+      ]);
+
+    // ✅ Fail-safe check for SageMaker environment variable
+    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME;
+    if (!endpointName) {
+      console.error("❌ Missing SageMaker endpoint name in environment variables.");
+      return NextResponse.json({ error: "SageMaker endpoint not configured." }, { status: 500 });
+    }
+
+    // ✅ Call SageMaker Endpoint
+    let sageMakerScore = 0;
+    try {
+      const sageResponse = await sagemaker
+        .invokeEndpoint({
+          EndpointName: endpointName,
+          Body: csvPayload,
+          ContentType: "text/csv",
+        })
+        .promise();
+
+      // Ensure Body is correctly parsed as a Buffer before converting to string
+      sageMakerScore = parseFloat((sageResponse.Body as Buffer).toString("utf-8"));
+      console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
+
+      // Optionally, you can update the ai_log here with the sageMakerScore
+
+    } catch (error) {
+      console.error("❌ SageMaker Error:", error);
+      return NextResponse.json({ error: "SageMaker prediction failed." }, { status: 500 });
+    }
 
     // ✅ Structure data for OpenAI prompt
     const aiPrompt = `
@@ -88,7 +128,7 @@ const csvPayload = sageInput.join(",");
       - **Company Size:** ${user.companysize}
       - **Revenue Range:** ${user.revenuerange}
       
-**Your Task:**
+      **Your Task:**
       - Provide **custom insights** directly addressing the user's input.
       - If an obstacle (e.g., "Funding") is listed, showcase how top-performing companies have overcome them. Provide real-world, battle-tested solutions (e.g., alternative funding sources, leadership restructuring, or automation strategies).
       - If strategy is strong, guide the user toward maximum scalability. Offer specific growth levers, such as expanding market share, operational automation, pricing optimization, or vertical/horizontal expansion.
@@ -96,18 +136,18 @@ const csvPayload = sageInput.join(",");
       - If technology is cutting-edge, provide advanced insights on maximizing ROI through integration, automation, AI-driven efficiencies, and leveraging first-party data.
       - Deliver powerful, compelling insights. Avoid generic advice—every recommendation should be highly relevant, tailored, and capable of driving immediate action.
       - Deliver strategic insights that go beyond surface-level advice. Use the user's inputs to provide deeply customized, high-value recommendations.
-
+      
       **Example Output Format (strict JSON, no extra text):**
       {
-  "strategyScore": 4,
-  "strategyInsight": "Your innovative solution is differentiated, but the market entry strategy lacks precision. Focus on refining your ideal customer profile (ICP) and developing a multi-channel acquisition strategy that includes strategic partnerships, outbound targeting, and conversion-optimized landing pages.",
-  
-  "processScore": 3,
-  "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
-  
-  "technologyScore": 5,
-  "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
-}
+        "strategyScore": 4,
+        "strategyInsight": "Your innovative solution is differentiated, but the market entry strategy lacks precision. Focus on refining your ideal customer profile (ICP) and developing a multi-channel acquisition strategy that includes strategic partnerships, outbound targeting, and conversion-optimized landing pages.",
+        
+        "processScore": 3,
+        "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
+        
+        "technologyScore": 5,
+        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
+      }
     `;
 
     console.log("🔹 Sending request to OpenAI...");
@@ -130,24 +170,6 @@ const csvPayload = sageInput.join(",");
     } else {
       console.log("✅ API request logged in ai_log with ID:", logData?.log_id);
     }
-    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME!;
-
-    // ✅ Call SageMaker Endpoint
-let sageMakerScore = 0;
-try {
-  const sageResponse = await sagemaker
-    .invokeEndpoint({
-      EndpointName: endpointName,
-      Body: csvPayload,
-      ContentType: "text/csv",
-    })
-    .promise();
-
-  sageMakerScore = parseFloat(sageResponse.Body.toString("utf-8"));
-  console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
-} catch (error) {
-  console.error("❌ SageMaker Error:", error);
-}
 
     // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
