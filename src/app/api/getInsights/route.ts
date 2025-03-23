@@ -14,6 +14,7 @@ const sagemaker = new AWS.SageMakerRuntime({
 });
 
 export async function POST(req: Request) {
+  let sageMakerScore = 0; // initialize early
   try {
     const { u_id } = await req.json(); // ✅ Ensure lowercase column name
     console.log("🔍 Fetching stored answers for User ID:", u_id);
@@ -49,64 +50,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to retrieve user info" }, { status: 500 });
     }
     console.log("✅ Retrieved User Info:", user);
-
-    // ✅ Build input vector for SageMaker
-    const industryOneHot = [
-      "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-      "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-      "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-      "Construction", "Legal", "Nonprofit", "Other"
-    ].map((industry) => (user.industry === industry ? 1 : 0));
-
-    const sageInput = [
-      assessment.strategyScore || 0,
-      assessment.processScore || 0,
-      assessment.technologyScore || 0,
-      ...industryOneHot,
-    ];
-
-    const csvPayload = sageInput.join(",");
-
-    // 🧠 Log SageMaker request/response in ai_log (SageMaker)
-    await supabase
-      .from("ai_log")
-      .insert([
-        {
-          u_id,
-          apirequest: `SageMaker Payload: ${csvPayload}`,
-          model: "SageMaker",
-          createdat: new Date().toISOString(),
-        },
-      ]);
-
-    // ✅ Fail-safe check for SageMaker environment variable
-    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME;
-    if (!endpointName) {
-      console.error("❌ Missing SageMaker endpoint name in environment variables.");
-      return NextResponse.json({ error: "SageMaker endpoint not configured." }, { status: 500 });
-    }
-
-    // ✅ Call SageMaker Endpoint
-    let sageMakerScore = 0;
-    try {
-      const sageResponse = await sagemaker
-        .invokeEndpoint({
-          EndpointName: endpointName,
-          Body: csvPayload,
-          ContentType: "text/csv",
-        })
-        .promise();
-
-      // Ensure Body is correctly parsed as a Buffer before converting to string
-      sageMakerScore = parseFloat((sageResponse.Body as Buffer).toString("utf-8"));
-      console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
-
-      // Optionally, you can update the ai_log here with the sageMakerScore
-
-    } catch (error) {
-      console.error("❌ SageMaker Error:", error);
-      return NextResponse.json({ error: "SageMaker prediction failed." }, { status: 500 });
-    }
 
     // ✅ Structure data for OpenAI prompt
     const aiPrompt = `
@@ -197,10 +140,62 @@ export async function POST(req: Request) {
 
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
-    // ✅ Ensure AI response has all required fields before inserting into insights
-    if (!parsedResponse.strategyScore || !parsedResponse.strategyInsight || !parsedResponse.processScore) {
-      console.error("❌ AI response is missing required fields:", parsedResponse);
-      return NextResponse.json({ error: "AI response is incomplete" }, { status: 500 });
+    // ✅ Extract OpenAI scores to use in SageMaker input
+    const strategyScore = parsedResponse.strategyScore || 0;
+    const processScore = parsedResponse.processScore || 0;
+    const technologyScore = parsedResponse.technologyScore || 0;
+
+    // ✅ Build SageMaker input vector using the OpenAI scores
+    const industryOneHot = [
+      "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
+      "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
+      "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
+      "Construction", "Legal", "Nonprofit", "Other"
+    ].map((industry) => (user.industry === industry ? 1 : 0));
+
+    const sageInput = [
+      strategyScore,
+      processScore,
+      technologyScore,
+      ...industryOneHot,
+    ];
+
+    const csvPayload = sageInput.join(",");
+
+    // ✅ Fail-safe check for SageMaker environment variable and call SageMaker Endpoint
+    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME;
+    if (!endpointName) {
+      console.error("❌ Missing SageMaker endpoint name in environment variables.");
+      return NextResponse.json({ error: "SageMaker endpoint not configured." }, { status: 500 });
+    }
+    try {
+      const sageResponse = await sagemaker
+        .invokeEndpoint({
+          EndpointName: endpointName,
+          Body: csvPayload,
+          ContentType: "text/csv",
+        })
+        .promise();
+
+      // Ensure Body is correctly parsed as a Buffer before converting to string
+      sageMakerScore = parseFloat((sageResponse.Body as Buffer).toString("utf-8"));
+      console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
+
+    } catch (error) {
+      console.error("❌ SageMaker Error:", error);
+      // ✅ Log SageMaker error in ai_log
+      await supabase
+        .from("ai_log")
+        .insert([
+          {
+            u_id,
+            apirequest: `SageMaker Payload: ${csvPayload}`,
+            apiresponse: JSON.stringify(error),
+            model: "SageMaker",
+            createdat: new Date().toISOString(),
+          },
+        ]);
+      return NextResponse.json({ error: "SageMaker prediction failed." }, { status: 500 });
     }
 
     // ✅ Insert AI response into ai_log
@@ -276,7 +271,4 @@ export async function POST(req: Request) {
   
     return NextResponse.json({ error: "Failed to generate AI-driven insights" }, { status: 500 });
   }  
-  
 }
-
-
