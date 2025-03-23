@@ -136,7 +136,7 @@ let sageMakerScore = 0;
 try {
   const sageResponse = await sagemaker
     .invokeEndpoint({
-      EndpointName: process.env.SAGEMAKER_ENDPOINT_NAME,
+      EndpointName: process.env.SAGEMAKER_ENDPOINT_NAME!,
       Body: csvPayload,
       ContentType: "text/csv",
     })
