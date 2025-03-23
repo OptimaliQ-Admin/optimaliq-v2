@@ -50,6 +50,7 @@ export default function Page1() {
     try {
       let userId: string | null = null;
 
+      // ✅ Check if user exists
       const { data: existingUser, error: userError } = await supabase
         .from("users")
         .select("u_id")
@@ -64,6 +65,7 @@ export default function Page1() {
       if (existingUser?.u_id) {
         userId = existingUser.u_id;
       } else {
+        // ✅ Create new user
         const { data: newUser, error: insertError } = await supabase
           .from("users")
           .insert([{ ...userInfo }])
@@ -78,10 +80,12 @@ export default function Page1() {
         userId = newUser.u_id;
       }
 
+      // ✅ Store user ID securely in localStorage
       if (typeof window !== "undefined" && userId) {
         localStorage.setItem("u_id", userId);
       }
 
+      // ✅ Go to Page 2 (no user data in URL)
       router.push("/dashboard/Page2");
     } catch {
       alert("Unexpected error. Please try again.");
@@ -123,7 +127,7 @@ export default function Page1() {
             {/* 🔐 reCAPTCHA */}
             <div className="pt-2">
               <ReCAPTCHA
-                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE as string}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
                 onChange={(token) => setCaptchaToken(token)}
               />
             </div>
