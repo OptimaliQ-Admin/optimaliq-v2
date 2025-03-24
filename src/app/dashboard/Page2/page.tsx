@@ -6,6 +6,9 @@ import { supabase } from "@/lib/supabase";
 
 function Page2Component() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+const [cooldown, setCooldown] = useState(0);
+
 
   const [userId, setUserId] = useState<string | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
@@ -24,6 +27,22 @@ function Page2Component() {
       router.push("/dashboard/Page1");
       return;
     }
+
+    useEffect(() => {
+      if (cooldown === 0) return;
+    
+      const interval = setInterval(() => {
+        setCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    
+      return () => clearInterval(interval);
+    }, [cooldown]);
 
     setUserId(u_id);
   }, [router]);
@@ -57,16 +76,18 @@ function Page2Component() {
           { onConflict: "u_id" } // 🔐 Make sure u_id is a UNIQUE constraint in your DB
         );
   
-      if (error) {
-        alert(`❌ Failed to save responses. ${error.message}`);
-        return;
+        if (error) {
+          alert(`❌ Failed to save responses. ${error.message}`);
+        } else {
+          router.push("/dashboard/Analyzing");
+        }
+      } catch {
+        alert("❌ Unexpected error. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+        setCooldown(10); // 10-second cooldown
       }
-  
-      router.push("/dashboard/Analyzing");
-    } catch {
-      alert("❌ Unexpected error. Please try again.");
-    }
-  };  
+    };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -91,9 +112,22 @@ function Page2Component() {
             onChange={handleChange}
             options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]}
           />
-          <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition">
-            Get My Insights
-          </button>
+         <button
+  type="submit"
+  disabled={isSubmitting || cooldown > 0}
+  className={`w-full py-3 rounded-md text-lg font-semibold transition ${
+    isSubmitting || cooldown > 0
+      ? "bg-gray-400 cursor-not-allowed text-white"
+      : "bg-blue-600 text-white hover:bg-blue-700"
+  }`}
+>
+  {isSubmitting
+    ? "Submitting..."
+    : cooldown > 0
+    ? `Please wait (${cooldown}s)`
+    : "Get My Insights"}
+</button>
+
         </form>
       </div>
     </div>
