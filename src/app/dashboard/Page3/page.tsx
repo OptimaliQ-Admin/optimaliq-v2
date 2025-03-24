@@ -40,7 +40,7 @@ function Page3Component() {
       const { data, error } = await supabase
   .from("insights")
   .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight, overallscore")
-  .eq("u_id", userData.u_id)
+  .eq("u_id", u_id)
   .order("generatedat", { ascending: false }) // get latest
   .limit(1)
   .maybeSingle();
