@@ -80,10 +80,10 @@ function Page2Component() {
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="What are your biggest obstacles to scaling?" name="obstacles" value={businessResponses.obstacles} onChange={handleChange} />
-          <Input label="How does your strategy differentiate you?" name="strategy" value={businessResponses.strategy} onChange={handleChange} />
+          <Input label="What are your biggest obstacles to scaling?" name="obstacles" maxLength={250} value={businessResponses.obstacles} onChange={handleChange} />
+          <Input label="How does your strategy differentiate you?" name="strategy" maxLength={250} value={businessResponses.strategy} onChange={handleChange} />
           <Select label="Are your processes optimized for efficiency?" name="process" value={businessResponses.process} onChange={handleChange} options={["Yes", "No"]} />
-          <Input label="How well do you understand your customers' needs?" name="customers" value={businessResponses.customers} onChange={handleChange} />
+          <Input label="How well do you understand your customers' needs?" name="customers" maxLength={250} value={businessResponses.customers} onChange={handleChange} />
           <Select
             label="Is your technology stack supporting your growth?"
             name="technology"

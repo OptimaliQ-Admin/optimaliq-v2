@@ -132,15 +132,15 @@ export default function Page1() {
           <p className="text-gray-600 text-center mt-2">We’ll tailor insights to your business needs.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-            <Input icon={FaUser} name="name" value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
-            <Input icon={FaEnvelope} name="email" type="email" value={userInfo.email} onChange={handleChange} placeholder="Your Email" />
+            <Input icon={FaUser} name="name" maxLength={30} value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
+            <Input icon={FaEnvelope} name="email" maxLength={250} type="email" value={userInfo.email} onChange={handleChange} placeholder="Your Email" />
             <Select icon={FaIndustry} name="industry" value={userInfo.industry} onChange={handleChange} options={[
               "E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail",
               "Manufacturing","Consulting", "Entertainment","Real Estate","Transportation",
               "Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive",
               "Construction","Legal","Nonprofit","Other"
             ]} />
-            <Input icon={FaBriefcase} name="role" value={userInfo.role} onChange={handleChange} placeholder="Your Role" />
+            <Input icon={FaBriefcase} name="role" maxLength={250} value={userInfo.role} onChange={handleChange} placeholder="Your Role" />
             <Select icon={FaBuilding} name="companysize" value={userInfo.companysize} onChange={handleChange} options={[
               "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"
             ]} />
