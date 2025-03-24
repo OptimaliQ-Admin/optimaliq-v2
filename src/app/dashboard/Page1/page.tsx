@@ -35,6 +35,7 @@ export default function Page1() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // ✅ Validation
     for (const key in userInfo) {
       if (!userInfo[key as keyof typeof userInfo]) {
         alert("⚠️ All fields are required.");
@@ -50,22 +51,34 @@ export default function Page1() {
     try {
       let userId: string | null = null;
 
-      // ✅ Check if user exists
-      const { data: existingUser, error: userError } = await supabase
+      // 🔍 Check if user already exists
+      const { data: existingUser, error: fetchError } = await supabase
         .from("users")
         .select("u_id")
         .eq("email", userInfo.email)
         .maybeSingle();
 
-      if (userError) {
+      if (fetchError) {
         alert("Unable to check user. Try again.");
         return;
       }
 
       if (existingUser?.u_id) {
         userId = existingUser.u_id;
+
+        // 🔄 Update user info
+        const { error: updateError } = await supabase
+          .from("users")
+          .update({ ...userInfo })
+          .eq("u_id", userId);
+
+        if (updateError) {
+          alert("Failed to update user. Try again.");
+          return;
+        }
+
       } else {
-        // ✅ Create new user
+        // 🆕 Create new user
         const { data: newUser, error: insertError } = await supabase
           .from("users")
           .insert([{ ...userInfo }])
@@ -80,13 +93,14 @@ export default function Page1() {
         userId = newUser.u_id;
       }
 
-      // ✅ Store user ID securely in localStorage
+      // 💾 Save user ID to localStorage
       if (typeof window !== "undefined" && userId) {
         localStorage.setItem("u_id", userId);
       }
 
-      // ✅ Go to Page 2 (no user data in URL)
+      // 🚀 Go to Page 2
       router.push("/dashboard/Page2");
+
     } catch {
       alert("Unexpected error. Please try again.");
     }
@@ -95,7 +109,8 @@ export default function Page1() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center px-6">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-16 relative">
-        {/* Left */}
+        
+        {/* Left Column */}
         <div className="relative text-left flex flex-col justify-center h-full">
           <h1 className="text-4xl font-bold text-gray-900 text-center leading-tight relative top-[-80px]">
             Unlock Scalable Growth Backed by Data
@@ -111,7 +126,7 @@ export default function Page1() {
           <p className="absolute bottom-0 right-0 text-gray-500 text-sm">Trusted by industry leaders</p>
         </div>
 
-        {/* Right */}
+        {/* Right Column (Form) */}
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
           <h2 className="text-2xl font-bold text-gray-800 text-center">Tell Us About Yourself</h2>
           <p className="text-gray-600 text-center mt-2">We’ll tailor insights to your business needs.</p>
@@ -119,10 +134,19 @@ export default function Page1() {
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <Input icon={FaUser} name="name" value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
             <Input icon={FaEnvelope} name="email" type="email" value={userInfo.email} onChange={handleChange} placeholder="Your Email" />
-            <Select icon={FaIndustry} name="industry" value={userInfo.industry} onChange={handleChange} options={["E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail","Manufacturing","Consulting", "Entertainment","Real Estate","Transportation","Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive","Construction","Legal","Nonprofit","Other",]}/>
+            <Select icon={FaIndustry} name="industry" value={userInfo.industry} onChange={handleChange} options={[
+              "E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail",
+              "Manufacturing","Consulting", "Entertainment","Real Estate","Transportation",
+              "Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive",
+              "Construction","Legal","Nonprofit","Other"
+            ]} />
             <Input icon={FaBriefcase} name="role" value={userInfo.role} onChange={handleChange} placeholder="Your Role" />
-            <Select icon={FaBuilding} name="companysize" value={userInfo.companysize} onChange={handleChange} options={["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"]} />
-            <Select icon={FaDollarSign} name="revenuerange" value={userInfo.revenuerange} onChange={handleChange} options={["<$100K", "$100K-$500K", "$500K-$1M", "$1M-$10M", "$10M-$50M", "$50M+"]} />
+            <Select icon={FaBuilding} name="companysize" value={userInfo.companysize} onChange={handleChange} options={[
+              "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"
+            ]} />
+            <Select icon={FaDollarSign} name="revenuerange" value={userInfo.revenuerange} onChange={handleChange} options={[
+              "<$100K", "$100K-$500K", "$500K-$1M", "$1M-$10M", "$10M-$50M", "$50M+"
+            ]} />
 
             {/* 🔐 reCAPTCHA */}
             <div className="pt-2">
@@ -143,6 +167,7 @@ export default function Page1() {
   );
 }
 
+// 🔧 Input component
 function Input({ icon: Icon, ...props }: any) {
   return (
     <div className="relative">
@@ -152,6 +177,7 @@ function Input({ icon: Icon, ...props }: any) {
   );
 }
 
+// 🔧 Select component
 function Select({ icon: Icon, name, value, onChange, options }: any) {
   return (
     <div className="relative">
