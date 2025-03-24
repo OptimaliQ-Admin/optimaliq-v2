@@ -1,0 +1,71 @@
+"use client";
+
+import React from "react";
+import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import DragSortQuestion from "@/components/questions/DragSortQuestion";
+
+type Props = {
+  answers: Record<string, any>;
+  onAnswer: (key: string, value: any) => void;
+};
+
+export default function Group03_Operations({ answers, onAnswer }: Props) {
+  return (
+    <div className="space-y-10">
+
+      {/* Question 1: Tech Stack Overview */}
+      <MultiSelectQuestion
+        question="What platforms or tools are central to your operations?"
+        description="Select the platforms you actively use (you can add more later)."
+        options={[
+          { value: "Salesforce", label: "Salesforce (CRM)" },
+          { value: "HubSpot", label: "HubSpot (CRM)" },
+          { value: "Zoho", label: "Zoho (CRM)" },
+          { value: "Mailchimp", label: "Mailchimp (Marketing)" },
+          { value: "Klaviyo", label: "Klaviyo (Marketing)" },
+          { value: "Emarsys", label: "Emarsys (Marketing)" },
+          { value: "Shopify", label: "Shopify (Ecommerce)" },
+          { value: "WooCommerce", label: "WooCommerce (Ecommerce)" },
+          { value: "Asana", label: "Asana (Project Mgmt)" },
+          { value: "Trello", label: "Trello (Project Mgmt)" },
+          { value: "NetSuite", label: "NetSuite (Finance/ERP)" },
+          { value: "QuickBooks", label: "QuickBooks (Finance)" },
+          { value: "GA4", label: "Google Analytics (Analytics)" },
+          { value: "Looker", label: "Looker (Analytics)" },
+          { value: "Zendesk", label: "Zendesk (Support)" },
+          { value: "Intercom", label: "Intercom (Support)" },
+          { value: "Other", label: "Other (please describe)" },
+        ]}
+        selected={answers["tech_stack"] || []}
+        onChange={(val) => onAnswer("tech_stack", val)}
+        maxSelect={10}
+      />
+
+      {/* Question 2: Rank Business Priorities */}
+      <DragSortQuestion
+  question="Rank the following priorities from most to least important to your business right now."
+  description="Drag to reorder. 1 = most important."
+  items={answers["business_priorities"] || ["Growth", "Profitability", "Efficiency", "Innovation", "Brand Equity"]}
+  onChange={(val) => onAnswer("business_priorities", val)}
+/>
+
+
+      {/* Question 3: Process Maturity */}
+      <MultipleChoiceQuestion
+        question="Describe your internal process discipline."
+        description="Select the statement that best reflects your company today."
+        options={[
+          { value: "1", label: "Everything is ad hoc" },
+          { value: "2", label: "Some structure, but mostly reactive" },
+          { value: "3", label: "We have defined processes, but they’re not consistently followed" },
+          { value: "4", label: "Most departments follow documented processes" },
+          { value: "5", label: "Processes are standardized, automated, and continuously optimized" },
+        ]}
+        value={answers["process_discipline"] || ""}
+        onChange={(val) => onAnswer("process_discipline", val)}
+      />
+
+    </div>
+  );
+}
