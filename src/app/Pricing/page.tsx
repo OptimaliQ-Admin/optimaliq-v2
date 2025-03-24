@@ -88,6 +88,10 @@ export default function PricingPage() {
     </p>
     <p className="text-gray-500 text-sm">(Billed {billingCycle === "annual" ? "annually" : "monthly"})</p>
     <ul className="mt-6 text-gray-700 space-y-2 flex-grow">
+    <li>
+  ✅ Monthly Review Call 
+  <span title="Discuss your results with a strategist, refine goals, and unlock new insights.">🛈</span>
+</li>
       <li>✅ AI-Powered Business Assessments</li>
       <li>✅ Industry Benchmarking & Competitive Insights</li>
       <li>✅ Future Performance Overview</li>
