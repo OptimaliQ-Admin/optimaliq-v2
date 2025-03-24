@@ -15,9 +15,15 @@ export default function OnboardingAssessmentPage() {
   const [error, setError] = useState<string | null>(null);
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
+  const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   useEffect(() => {
     const checkSubscription = async () => {
+      if (skipCheck) {
+        setLoading(false);
+        return;
+      }
+
       if (!userEmail) {
         router.push("/pricing");
         return;
@@ -39,7 +45,11 @@ export default function OnboardingAssessmentPage() {
     };
 
     checkSubscription();
-  }, [router, userEmail]);
+  }, [router, userEmail, skipCheck]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
 
   const handleNext = () => {
     if (step < 6) {
