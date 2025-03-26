@@ -9,7 +9,7 @@ import Group05_Clarity from "./groups/Group05_Clarity";
 import Group06_Benchmarks from "./groups/Group06_Benchmarks";
 import Group07_Final from "./groups/Group07_Final";
 
-type StepGroupRendererProps = {
+type Props = {
   step: number;
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
