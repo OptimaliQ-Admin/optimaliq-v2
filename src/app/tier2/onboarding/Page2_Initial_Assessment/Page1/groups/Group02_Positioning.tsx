@@ -20,6 +20,7 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
         placeholder="E.g., We own a proprietary data model that predicts churn 90 days in advance..."
         value={answers["differentiator"] || ""}
         onChange={(val) => onAnswer("differentiator", val)}
+        maxLength={300}
       />
 
       {/* Question 5: Tech Stack */}
@@ -57,6 +58,7 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
         placeholder="E.g., 1) Profitability – we're managing cashflow closely; 2) Efficiency – streamlining fulfillment; 3) Innovation – launching a new AI-based product"
         value={answers["priorities_rank"] || ""}
         onChange={(val) => onAnswer("priorities_rank", val)}
+        maxLength={300}
       />
     </div>
   );

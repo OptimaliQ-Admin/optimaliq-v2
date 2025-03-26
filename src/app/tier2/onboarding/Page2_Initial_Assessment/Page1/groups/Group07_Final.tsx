@@ -19,6 +19,7 @@ export default function Group07_Final({ answers, onAnswer }: Props) {
         placeholder="Example: We know our onboarding process is hurting retention, but haven’t made time to redesign it."
         value={answers["unresolved_issue"] || ""}
         onChange={(val) => onAnswer("unresolved_issue", val)}
+        maxLength={300}
       />
 
       {/* Question 20: Final Confirmation */}

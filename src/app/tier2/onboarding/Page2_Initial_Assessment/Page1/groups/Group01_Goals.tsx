@@ -39,6 +39,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         placeholder="E.g., We drive traffic through paid and organic channels and convert through personalized onboarding flows..."
         value={answers["gtm_strategy"] || ""}
         onChange={(val) => onAnswer("gtm_strategy", val)}
+        maxLength={300}
       />
 
       {/* Question 3: Friction Points */}

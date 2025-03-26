@@ -19,6 +19,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         placeholder="Be honest. What’s slowing you down the most right now?"
         value={answers["decision_bottlenecks"] || ""}
         onChange={(val) => onAnswer("decision_bottlenecks", val)}
+        maxLength={300}
       />
 
       {/* Question 14: Team Alignment */}
@@ -42,6 +43,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         placeholder="Paint the picture: What does success look like in 12 months?"
         value={answers["future_success"] || ""}
         onChange={(val) => onAnswer("future_success", val)}
+        maxLength={300}
       />
     </div>
   );
