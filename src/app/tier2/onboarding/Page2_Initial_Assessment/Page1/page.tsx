@@ -10,7 +10,6 @@ import StepGroupRenderer from "./StepGroupRenderer";
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
@@ -104,7 +103,7 @@ export default function OnboardingAssessmentPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-              <StepGroupRenderer step={step} answers={answers} onAnswer={handleAnswer} />
+              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} />
             </motion.div>
           </AnimatePresence>
 
