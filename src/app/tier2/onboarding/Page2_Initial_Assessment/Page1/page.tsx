@@ -13,6 +13,8 @@ export default function OnboardingAssessmentPage() {
   const [answers, setAnswers] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
@@ -51,22 +53,40 @@ export default function OnboardingAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < 6) {
       setStep((prev) => prev + 1);
     } else {
-      console.log("✅ Final Submission Payload:", answers);
-      // Submit logic here
+      try {
+        console.log("Submitting answers:", formAnswers);
+  
+        const { data, error } = await supabase
+          .from("onboarding_assessments") // 👈 your Supabase table name here
+          .insert([{ ...formAnswers }]); // optional: include user identifier
+  
+        if (error) {
+          console.error("❌ Error submitting:", error);
+          alert("Something went wrong. Please try again.");
+        } else {
+          console.log("✅ Submission successful:", data);
+          router.push("/dashboard/insights"); // or a thank-you page
+        }
+      } catch (err) {
+        console.error("❌ Unexpected error:", err);
+        alert("Unexpected error. Please try again.");
+      }
     }
   };
+  
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (field: string, value: any) => {
-    setAnswers((prev: any) => ({ ...prev, [field]: value }));
+  const handleAnswer = (key: string, value: any) => {
+    setFormAnswers((prev) => ({ ...prev, [key]: value }));
   };
+  
 
   if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
 

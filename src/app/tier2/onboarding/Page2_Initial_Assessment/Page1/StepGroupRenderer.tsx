@@ -15,27 +15,23 @@ type StepGroupRendererProps = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function StepGroupRenderer({ step, answers, onAnswer }: StepGroupRendererProps) {
+export default function StepGroupRenderer({ step, answers, onAnswer }) {
   switch (step) {
     case 0:
       return <Group01_Goals answers={answers} onAnswer={onAnswer} />;
     case 1:
       return <Group02_Positioning answers={answers} onAnswer={onAnswer} />;
-    case 2:
-      return <Group03_Operations answers={answers} onAnswer={onAnswer} />;
-    case 3:
-      return <Group04_GrowthStack answers={answers} onAnswer={onAnswer} />;
-    case 4:
-      return <Group05_Clarity answers={answers} onAnswer={onAnswer} />;
-    case 5:
-      return <Group06_Benchmarks answers={answers} onAnswer={onAnswer} />;
-    case 6:
-      return <Group07_Final answers={answers} onAnswer={onAnswer} />;
+      case 2:
+        return <Group03_Operations answers={answers} onAnswer={onAnswer} />;
+      case 3:
+        return <Group04_GrowthStack answers={answers} onAnswer={onAnswer} />;
+      case 4:
+        return <Group05_Clarity answers={answers} onAnswer={onAnswer} />;
+      case 5:
+        return <Group06_Benchmarks answers={answers} onAnswer={onAnswer} />;
+      case 6:
+        return <Group07_Final answers={answers} onAnswer={onAnswer} />;
     default:
-      return (
-        <div className="p-4 border border-red-400 text-red-600 bg-red-50 rounded">
-          ❌ Unknown step group: {step}
-        </div>
-      );
+      return null;
   }
 }
