@@ -57,22 +57,23 @@ export default function OnboardingAssessmentPage() {
       setStep((prev) => prev + 1);
     } else {
       try {
-        console.log("Submitting answers:", formAnswers);
+        console.log("📤 Submitting formAnswers:", formAnswers);
   
         const { data, error } = await supabase
-          .from("onboarding_assessments") // 👈 your Supabase table name here
-          .insert([{ ...formAnswers }]); // optional: include user identifier
+          .from("onboarding_assessments")
+          .insert([{ ...formAnswers}]); // include email if you need it
   
         if (error) {
-          console.error("❌ Error submitting:", error);
-          alert("Something went wrong. Please try again.");
-        } else {
-          console.log("✅ Submission successful:", data);
-          router.push("/dashboard/insights"); // or a thank-you page
+          console.error("❌ Supabase error:", error);
+          alert(`Something went wrong: ${error.message}`);
+          return;
         }
-      } catch (err) {
+  
+        console.log("✅ Submission successful:", data);
+        router.push("/dashboard/insights");
+      } catch (err: any) {
         console.error("❌ Unexpected error:", err);
-        alert("Unexpected error. Please try again.");
+        alert(`Unexpected error: ${err.message}`);
       }
     }
   };
