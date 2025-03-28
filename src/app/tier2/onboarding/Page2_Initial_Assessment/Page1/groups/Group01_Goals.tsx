@@ -12,8 +12,7 @@ type Props = {
 
 export default function Group01_Goals({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-8">
-      {/* Question 1: Growth Objective */}
+<div className="p-6 max-w-2xl mx-auto">
       <MultipleChoiceQuestion
         question="What is your company’s #1 growth objective for the next 12 months?"
         description="Pick the one that most accurately reflects your true north."
@@ -31,6 +30,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         value={answers["growth_objective"] || ""}
         onChange={(val) => onAnswer("growth_objective", val)}
       />
+    </div>
 
       {/* Question 2: Go-To-Market Strategy */}
       <TextAreaQuestion
