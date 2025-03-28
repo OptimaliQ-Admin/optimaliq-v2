@@ -60,8 +60,8 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           { value: "regulatory_issues", label: "Regulatory or compliance issues" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={answers["growth_objective"] || ""}
-        onChange={(val) => onAnswer("growth_objective", val)}
+        selected={answers["friction_points"] || []}
+  onChange={(val) => onAnswer("friction_points", val)}
       />
     </div>
   );
