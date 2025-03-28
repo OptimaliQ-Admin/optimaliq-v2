@@ -32,7 +32,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
       />
     </div>
 
-      {/* Question 2: Go-To-Market Strategy */}
+      //Question 2: Go-To-Market Strategy
       <TextAreaQuestion
         question="In one or two sentences, describe your go-to-market strategy."
         description="How do you attract, convert, and retain customers?"
@@ -41,7 +41,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("gtm_strategy", val)}
       />
 
-      {/* Question 3: Friction Points */}
+      //Question 3: Friction Points */}
       <MultiSelectQuestion
   question="What are the biggest friction points actively holding your business back?"
   description="Select up to 3"
