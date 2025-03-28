@@ -13,7 +13,7 @@ type Props = {
 export default function Group01_Goals({ answers, onAnswer }: Props) {
   return (
 <div className="p-6 max-w-2xl mx-auto">
-  
+
       {/* Question 1: Growth Objective */}
       <MultipleChoiceQuestion
         question="What is your company’s #1 growth objective for the next 12 months?"
@@ -60,9 +60,8 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           { value: "regulatory_issues", label: "Regulatory or compliance issues" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        maxSelect={3}
-        selected={answers["friction_points"] || []}
-        onChange={(val) => onAnswer("friction_points", val)}
+        selected={answers["growth_objective"] || ""}
+        onChange={(val) => onAnswer("growth_objective", val)}
       />
     </div>
   );
