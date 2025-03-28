@@ -60,7 +60,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           { value: "regulatory_issues", label: "Regulatory or compliance issues" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={answers["friction_points"] || []}
+        selected={Array.isArray(answers["friction_points"]) ? answers["friction_points"] : []}
   onChange={(val) => onAnswer("friction_points", val)}
       />
     </div>
