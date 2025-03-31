@@ -16,24 +16,28 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
   return (
 <div className="p-6 max-w-2xl mx-auto">
 
-      {/* Question 1: Growth Objective */}
-      <DropdownQuestion
-        question="What is your company’s #1 growth objective for the next 12 months?"
-        description="Pick the one that most accurately reflects your true north."
-        options={[
-          { value: "increase_revenue", label: "Increase Revenue" },
-          { value: "improve_profitability", label: "Improve Profitability" },
-          { value: "scale_operations", label: "Scale Operations" },
-          { value: "expand_new_markets", label: "Expand into New Markets" },
-          { value: "launch_new_product", label: "Launch a New Product or Service" },
-          { value: "improve_retention", label: "Improve Customer Retention" },
-          { value: "raise_funding", label: "Raise Capital or Funding" },
-          { value: "prepare_exit", label: "Prepare for Acquisition or Exit" },
-          { value: "other", label: "Other (please describe)" },
-        ]}
-        value={answers["growth_objective"] || ""}
-        onChange={(val) => onAnswer("growth_objective", val)}
-      />
+      {/* Question 1: Growth Metrics */}
+<MultiSelectQuestion
+  question="What metrics do you track most closely to measure growth?"
+  description="Choose the KPIs that guide your key decisions today."
+  options={[
+    { value: "revenue", label: "Revenue" },
+    { value: "profit_margin", label: "Profit Margin" },
+    { value: "customer_ltv", label: "Customer Lifetime Value (LTV)" },
+    { value: "customer_acquisition_cost", label: "Customer Acquisition Cost (CAC)" },
+    { value: "churn_rate", label: "Customer Churn Rate" },
+    { value: "retention_rate", label: "Customer Retention Rate" },
+    { value: "conversion_rate", label: "Conversion Rate" },
+    { value: "traffic", label: "Website or App Traffic" },
+    { value: "active_users", label: "Monthly Active Users (MAU)" },
+    { value: "net_promoter_score", label: "Net Promoter Score (NPS)" },
+    { value: "other", label: "Other (please describe)" },
+  ]}
+  selected={answers["growth_metrics"] || []}
+  onChange={(val) => onAnswer("growth_metrics", val)}
+  maxSelect={5}
+/>
+
 
       {/* Question 2: Go-To-Market Strategy */}
       <TextAreaQuestion
