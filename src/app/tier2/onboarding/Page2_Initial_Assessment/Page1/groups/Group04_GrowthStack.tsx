@@ -57,6 +57,7 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
         placeholder="E.g., Email drip campaigns, customer success outreach, loyalty programs..."
         value={answers["retention_strategy"] || ""}
         onChange={(val) => onAnswer("retention_strategy", val)}
+        maxLength={300}
       />
     </div>
   );
