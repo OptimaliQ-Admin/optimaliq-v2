@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import {
   LineChart,
@@ -19,8 +19,8 @@ import GrowthChart from "@/components/dashboard/GrowthChart";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 
 function Tier2DashboardComponent() {
-  const session = useSession();
-  const email = session?.user?.email;
+  const searchParams = useSearchParams();
+const email = searchParams.get("email");
 
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<any>(null);
@@ -58,9 +58,9 @@ function Tier2DashboardComponent() {
   const mapList = (arr: any[], labelKey: string, detailKey: string) =>
     arr?.map((item) => ({ label: item[labelKey], detail: item[detailKey] })) || [];
 
-  if (!session) {
-    return <p className="text-center text-red-600">🔒 You must be logged in to view this page.</p>;
-  }
+  if (!email) {
+    return <p className="text-center text-red-600">⚠️ Email is required to access the dashboard.</p>;
+  }  
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">
