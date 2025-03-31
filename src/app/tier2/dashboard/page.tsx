@@ -29,7 +29,7 @@ function Tier2DashboardComponent() {
   useEffect(() => {
     const fetchInsights = async () => {
       try {
-        const insightsResponse = await axios.post("/api/tier2/getInsights", { email });
+        const insightsResponse = await axios.post("/api/tier2/dashboard", { email });
         const trendsResponse = await axios.post("/api/tier2/getTrends", {
           industry: "Consulting",
         });
@@ -37,10 +37,12 @@ function Tier2DashboardComponent() {
         if (insightsResponse.data.error) {
           setError(insightsResponse.data.error);
         } else {
-          setInsights({
-            ...insightsResponse.data,
-            topTrends: trendsResponse.data?.topTrends || [],
-          });
+          const { promptRetake, ...rest } = insightsResponse.data;
+setInsights({
+  ...rest,
+  promptRetake,
+  topTrends: trendsResponse.data?.topTrends || [],
+});
         }
       } catch (err) {
         setError("Failed to retrieve insights.");
@@ -103,6 +105,21 @@ function Tier2DashboardComponent() {
         ) : (
           <>
             <SectionHeader title="🏆 Business Score Overview" />
+            {insights?.promptRetake && (
+  <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md mb-4 shadow-sm">
+    <p className="font-semibold">🕒 It's time to retake your assessment.</p>
+    <p className="text-sm">
+      Your last assessment was over 30 days ago. To ensure accurate insights, please{" "}
+      <a
+        href={`/tier2/assessment?email=${encodeURIComponent(email || "")}`}
+        className="underline font-semibold text-yellow-700 hover:text-yellow-900"
+      >
+        retake your assessment
+      </a>
+      .
+    </p>
+  </div>
+)}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <ScoreCard
                 title="Overall Score"
