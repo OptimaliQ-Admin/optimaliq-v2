@@ -24,14 +24,15 @@ export default function Group07_Final({ answers, onAnswer }: Props) {
 
       {/* Question 20: Final Confirmation */}
       <MultipleChoiceQuestion
-        question="Final Check-In: Ready for lift-off?"
-        description="Are you ready to receive your personalized insights and 30-day growth roadmap?"
-        options={[
-          { value: "yes_ready", label: "✅ Yes — let’s go." },
-        ]}
-        value={answers["final_confirmation"] || ""}
-        onChange={(val) => onAnswer("final_confirmation", val)}
-      />
+  question="Are You Ready to Commit?"
+  description="Ready to level up? This path is built for ambitious businesses willing to do the work. Are you in?"
+  options={[
+    { value: "yes_ready", label: "✅ Yes — I’m ready to grow." },
+    { value: "no_not_ready", label: "❌ No — not at this time." },
+  ]}
+  value={answers["final_confirmation"] || ""}
+  onChange={(val) => onAnswer("final_confirmation", val)}
+/>
     </div>
   );
 }

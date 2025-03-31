@@ -45,7 +45,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
       {/* Question 2: Rank Business Priorities */}
       <DragSortQuestion
   question="Rank the following priorities from most to least important to your business right now."
-  description="Drag to reorder. 1 = most important."
+  description="Drag to reorder. Top = most important."
   items={answers["business_priorities"] || ["Growth", "Profitability", "Efficiency", "Innovation", "Brand Equity"]}
   onChange={(val) => onAnswer("business_priorities", val)}
 />
