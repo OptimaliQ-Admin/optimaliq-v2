@@ -10,9 +10,10 @@ import StepGroupRenderer from "./StepGroupRenderer";
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
@@ -51,22 +52,41 @@ export default function OnboardingAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < 6) {
       setStep((prev) => prev + 1);
     } else {
-      console.log("✅ Final Submission Payload:", answers);
-      // Submit logic here
+      try {
+        console.log("📤 Submitting formAnswers:", formAnswers);
+  
+        const { data, error } = await supabase
+          .from("onboarding_assessments")
+          .insert([{ ...formAnswers}]); // include email if you need it
+  
+        if (error) {
+          console.error("❌ Supabase error:", error);
+          alert(`Something went wrong: ${error.message}`);
+          return;
+        }
+  
+        console.log("✅ Submission successful:", data);
+        router.push("/dashboard/insights");
+      } catch (err: any) {
+        console.error("❌ Unexpected error:", err);
+        alert(`Unexpected error: ${err.message}`);
+      }
     }
   };
+  
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (field: string, value: any) => {
-    setAnswers((prev: any) => ({ ...prev, [field]: value }));
+  const handleAnswer = (key: string, value: any) => {
+    setFormAnswers((prev) => ({ ...prev, [key]: value }));
   };
+  
 
   if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
 
@@ -84,7 +104,7 @@ export default function OnboardingAssessmentPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-              <StepGroupRenderer step={step} answers={answers} onAnswer={handleAnswer} />
+              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} />
             </motion.div>
           </AnimatePresence>
 

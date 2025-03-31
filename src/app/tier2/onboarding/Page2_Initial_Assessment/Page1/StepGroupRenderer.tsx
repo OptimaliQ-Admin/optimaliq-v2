@@ -9,13 +9,13 @@ import Group05_Clarity from "./groups/Group05_Clarity";
 import Group06_Benchmarks from "./groups/Group06_Benchmarks";
 import Group07_Final from "./groups/Group07_Final";
 
-type StepGroupRendererProps = {
+type Props = {
   step: number;
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function StepGroupRenderer({ step, answers, onAnswer }: StepGroupRendererProps) {
+export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {
   switch (step) {
     case 0:
       return <Group01_Goals answers={answers} onAnswer={onAnswer} />;
@@ -32,10 +32,6 @@ export default function StepGroupRenderer({ step, answers, onAnswer }: StepGroup
     case 6:
       return <Group07_Final answers={answers} onAnswer={onAnswer} />;
     default:
-      return (
-        <div className="p-4 border border-red-400 text-red-600 bg-red-50 rounded">
-          ❌ Unknown step group: {step}
-        </div>
-      );
+      return null;
   }
 }

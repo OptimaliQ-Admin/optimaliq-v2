@@ -4,6 +4,8 @@ import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
+import DropdownQuestion from "@/components/questions/DropdownQuestion";
+
 
 type Props = {
   answers: Record<string, any>;
@@ -12,9 +14,10 @@ type Props = {
 
 export default function Group01_Goals({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-8">
+<div className="p-6 max-w-2xl mx-auto">
+
       {/* Question 1: Growth Objective */}
-      <MultipleChoiceQuestion
+      <DropdownQuestion
         question="What is your company’s #1 growth objective for the next 12 months?"
         description="Pick the one that most accurately reflects your true north."
         options={[
@@ -44,27 +47,25 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
 
       {/* Question 3: Friction Points */}
       <MultiSelectQuestion
-  question="What are the biggest friction points actively holding your business back?"
-  description="Select up to 3"
-  options={[
-    { value: "lack_funding", label: "Lack of funding" },
-    { value: "leadership_misalignment", label: "Leadership misalignment" },
-    { value: "hiring_retention", label: "Hiring or retention challenges" },
-    { value: "operational_inefficiencies", label: "Operational inefficiencies" },
-    { value: "underperforming_marketing", label: "Underperforming marketing" },
-    { value: "high_cac", label: "High customer acquisition cost" },
-    { value: "weak_retention", label: "Weak customer retention" },
-    { value: "tech_stack_issues", label: "Tech stack limitations or fragmentation" },
-    { value: "brand_positioning", label: "Undefined or inconsistent brand positioning" },
-    { value: "market_saturation", label: "Market saturation" },
-    { value: "regulatory_issues", label: "Regulatory or compliance issues" },
-    { value: "other", label: "Other (please describe)" },
-  ]}
-  maxSelect={3}
-  selected={answers["friction_points"] || []}
+        question="What are the biggest friction points actively holding your business back?"
+        description="Select up to 3"
+        options={[
+          { value: "lack_funding", label: "Lack of funding" },
+          { value: "leadership_misalignment", label: "Leadership misalignment" },
+          { value: "hiring_retention", label: "Hiring or retention challenges" },
+          { value: "operational_inefficiencies", label: "Operational inefficiencies" },
+          { value: "underperforming_marketing", label: "Underperforming marketing" },
+          { value: "high_cac", label: "High customer acquisition cost" },
+          { value: "weak_retention", label: "Weak customer retention" },
+          { value: "tech_stack_issues", label: "Tech stack limitations or fragmentation" },
+          { value: "brand_positioning", label: "Undefined or inconsistent brand positioning" },
+          { value: "market_saturation", label: "Market saturation" },
+          { value: "regulatory_issues", label: "Regulatory or compliance issues" },
+          { value: "other", label: "Other (please describe)" },
+        ]}
+        selected={answers["friction_points"] || []}
   onChange={(val) => onAnswer("friction_points", val)}
-/>
-
+      />
     </div>
   );
 }
