@@ -111,8 +111,31 @@ export default function OnboardingAssessmentPage() {
   };
 
   const handleAnswer = (key: string, value: any) => {
-    setFormAnswers((prev) => ({ ...prev, [key]: value }));
+    setFormAnswers((prev) => {
+      const updated = { ...prev, [key]: value };
+  
+      // When user types in "other" description
+      if (key === "growth_metrics_other") {
+        const metrics = prev["growth_metrics"] || [];
+        const cleaned = metrics.filter((m: string) => !m.startsWith("Other:"));
+        
+        if (value.trim()) {
+          cleaned.push(`Other: ${value.trim()}`);
+        }
+  
+        updated["growth_metrics"] = cleaned;
+      }
+  
+      // If user unchecks "other", clear the input + remove from metrics
+      if (key === "growth_metrics" && !value.includes("other")) {
+        updated["growth_metrics_other"] = "";
+        updated["growth_metrics"] = value.filter((v: string) => !v.startsWith("Other:"));
+      }
+  
+      return updated;
+    });
   };
+  
   
 
   if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
