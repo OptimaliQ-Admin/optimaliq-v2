@@ -73,7 +73,6 @@ export default function OnboardingAssessmentPage() {
   }, [step]);
 
   const handleNext = async () => {
-    // Step validation
     const validator = stepValidators[step];
     if (validator && !validator(formAnswers)) {
       alert("Please complete all required questions before continuing.");
@@ -86,9 +85,12 @@ export default function OnboardingAssessmentPage() {
       try {
         console.log("📤 Submitting formAnswers:", formAnswers);
   
+        // ⛔️ Remove fields not in Supabase
+        const { growth_metrics_other, ...sanitizedAnswers } = formAnswers;
+  
         const { data, error } = await supabase
           .from("onboarding_assessments")
-          .insert([{ ...formAnswers }]);
+          .insert([{ ...sanitizedAnswers }]);
   
         if (error) {
           console.error("❌ Supabase error:", error);
@@ -104,6 +106,7 @@ export default function OnboardingAssessmentPage() {
       }
     }
   };
+  
   
 
   const handleBack = () => {
