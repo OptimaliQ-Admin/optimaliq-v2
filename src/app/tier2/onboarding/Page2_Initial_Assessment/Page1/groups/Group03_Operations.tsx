@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
 export function isGroup03Complete(answers: Record<string, any>): boolean {
