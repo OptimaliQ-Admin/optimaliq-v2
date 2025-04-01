@@ -46,6 +46,16 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
   maxSelect={5}
 />
 
+{/* Conditionally show "Other" field */}
+{(answers["growth_metrics"] || []).includes("other") && (
+  <TextAreaQuestion
+    question="Please describe the other metric(s) you track"
+    placeholder="Describe any additional metrics you use to measure growth..."
+    value={answers["growth_metrics_other"] || ""}
+    onChange={(val) => onAnswer("growth_metrics_other", val)}
+    maxLength={50}
+  />
+)}
 
       {/* Question 2: Go-To-Market Strategy */}
       <TextAreaQuestion
