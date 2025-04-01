@@ -28,6 +28,9 @@ const [cooldown, setCooldown] = useState(0);
       return;
     }
 
+    setUserId(u_id);
+  }, [router]);
+
     useEffect(() => {
       if (cooldown === 0) return;
     
@@ -43,9 +46,6 @@ const [cooldown, setCooldown] = useState(0);
     
       return () => clearInterval(interval);
     }, [cooldown]);
-
-    setUserId(u_id);
-  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setBusinessResponses({
@@ -128,6 +128,8 @@ const [cooldown, setCooldown] = useState(0);
     : "Get My Insights"}
 </button>
 
+
+
         </form>
       </div>
     </div>
@@ -171,9 +173,5 @@ function Select({ label, name, value, onChange, options }: any) {
 }
 
 export default function Page2() {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <Page2Component />
-    </Suspense>
-  );
+  return <Page2Component />;
 }
