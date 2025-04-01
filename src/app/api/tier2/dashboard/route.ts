@@ -1,5 +1,3 @@
-// File: /src/app/api/tier2/dashboard/route.ts
-
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import OpenAI from "openai";
@@ -13,7 +11,7 @@ export async function POST(req: Request) {
     const { email } = await req.json();
     if (!email) return NextResponse.json({ error: "Missing email" }, { status: 400 });
 
-    // 🔍 Fetch user by email
+    // ✅ Fetch user by email
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
@@ -25,7 +23,7 @@ export async function POST(req: Request) {
 
     const userId = user.user_id;
 
-    // 🔍 Fetch most recent onboarding assessment
+    // ✅ Fetch most recent onboarding assessment using user_id
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
       .select("*")
@@ -37,13 +35,13 @@ export async function POST(req: Request) {
     if (assessmentError || !assessment)
       return NextResponse.json({ error: "Assessment not found" }, { status: 404 });
 
-    // ⏳ Check if assessment is older than 30 days
+    // ✅ Prompt retake if over 30 days
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const assessmentDate = new Date(assessment.created_at);
     const promptRetake = assessmentDate < thirtyDaysAgo;
 
-    // 🔍 Check if existing dashboard insights already exist
+    // ✅ Check for existing dashboard insights
     const { data: existingInsights } = await supabase
       .from("tier2_dashboard_insights")
       .select("*")
@@ -51,10 +49,10 @@ export async function POST(req: Request) {
       .single();
 
     if (existingInsights && !promptRetake) {
-      console.log("✅ Returning cached dashboard insights");
       return NextResponse.json({ ...existingInsights, promptRetake });
     }
 
+    // 🧠 Build OpenAI prompt
     const aiPrompt = `
 You are a world-class business strategist hired to evaluate high-growth companies. 
 Your role is to synthesize the qualitative and operational inputs below to generate a full assessment of the business: 
@@ -72,7 +70,6 @@ Return your response as a **well-formatted JSON object** with **no commentary or
 ---
 
 ## 📋 Strategic Assessment Responses
-These answers reflect how the company currently thinks about growth, operations, and market position:
 
 - **Growth Metrics Tracked:** ${assessment.growth_metrics}
 - **Go-to-Market Strategy:** ${assessment.gtm_strategy}
@@ -113,33 +110,16 @@ Return a structured JSON object like:
   "processScore": 3.0,
   "technologyScore": 4.0,
   "score": 3.5,
-
   "industryAvgScore": 3.2,
   "topPerformerScore": 4.5,
-
   "benchmarking": {
-    "strategy": "How this business compares on strategy",
-    "process": "How this business compares on process",
-    "technology": "How this business compares on tech"
+    "strategy": "...",
+    "process": "...",
+    "technology": "..."
   },
-
-  "strengths": [
-    { "title": "Strong Brand Perception", "impact": "Creates pricing power and customer loyalty" },
-    ...
-  ],
-
-  "weaknesses": [
-    { "title": "Lack of Retention Strategy", "impact": "Results in higher churn and lower lifetime value" },
-    ...
-  ],
-
-  "roadmap": [
-    {
-      "task": "Implement onboarding automation for new clients",
-      "expectedImpact": "Reduces churn and improves time-to-value for new accounts"
-    },
-    ...
-  ]
+  "strengths": [ { "title": "...", "impact": "..." } ],
+  "weaknesses": [ { "title": "...", "impact": "..." } ],
+  "roadmap": [ { "task": "...", "expectedImpact": "..." } ]
 }
 `;
 
@@ -154,7 +134,7 @@ Return a structured JSON object like:
 
     const parsed = JSON.parse(aiResponse.choices[0].message.content || "{}");
 
-    // 📈 Chart Data
+    // 📈 Score Chart
     const chartData = [
       { month: "Now", userScore: parsed.score, industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore },
       { month: "3 Months", userScore: Math.min(5, parsed.score + 0.5), industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore },
@@ -178,7 +158,7 @@ Return a structured JSON object like:
       updated_at: new Date().toISOString(),
     };
 
-    // 💾 Store in Supabase
+    // 💾 Store Insights
     await supabase
       .from("tier2_dashboard_insights")
       .upsert(finalPayload, { onConflict: "user_id" });
@@ -189,7 +169,3 @@ Return a structured JSON object like:
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
-  // ✅ Add this to verify the route exists and works on Vercel
-  export async function GET() {
-    return NextResponse.json({ status: "API route is live ✅" });
-  }
