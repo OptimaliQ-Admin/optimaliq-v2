@@ -1,20 +1,19 @@
+// File: /src/app/api/tier2/dashboard/route.ts
+
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-export async function GET() {
-  return NextResponse.json({ status: "API route is live ✅" });
-}
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
     const { email } = await req.json();
-    if (!email)
-      return NextResponse.json({ error: "Missing email" }, { status: 400 });
+    if (!email) return NextResponse.json({ error: "Missing email" }, { status: 400 });
 
-    // Fetch user data from Supabase
+    // ✅ Fetch user by email
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
@@ -26,7 +25,7 @@ export async function POST(req: Request) {
 
     const userId = user.user_id;
 
-    // Fetch the latest assessment for the user
+    // ✅ Fetch most recent onboarding assessment using user_id
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
       .select("*")
@@ -38,13 +37,13 @@ export async function POST(req: Request) {
     if (assessmentError || !assessment)
       return NextResponse.json({ error: "Assessment not found" }, { status: 404 });
 
-    // Determine if the assessment is older than 30 days
+    // ✅ Prompt retake if over 30 days
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const assessmentDate = new Date(assessment.created_at);
     const promptRetake = assessmentDate < thirtyDaysAgo;
 
-    // Check for existing insights if assessment is still recent
+    // ✅ Check for existing dashboard insights
     const { data: existingInsights } = await supabase
       .from("tier2_dashboard_insights")
       .select("*")
@@ -55,69 +54,77 @@ export async function POST(req: Request) {
       return NextResponse.json({ ...existingInsights, promptRetake });
     }
 
-    // Prepare the AI prompt using details from user and assessment
+    // 🧠 Build OpenAI prompt
     const aiPrompt = `
-You are a world-class business strategist specializing in **growth, efficiency, and market positioning**. 
-Your role is to analyze a company's current performance, compare it to industry benchmarks, and provide a highly actionable **30-day improvement plan**. 
-Your response must be formatted strictly as a **JSON object**.
----
+You are a world-class business strategist hired to evaluate high-growth companies. 
+Your role is to synthesize the qualitative and operational inputs below to generate a full assessment of the business: 
+its current position, strategic gaps, comparative benchmarks, and a 30-day improvement roadmap.
 
-## **📊 Company Profile & Performance Overview**
-**Business Name:** ${user.name}  
-**Industry:** ${user.industry}  
-**Company Size:** ${user.companySize || "N/A"} employees  
-**Revenue Range:** ${user.revenueRange || "N/A"}  
-
-**Current Scores:**
-- **Strategy:** ${assessment.strategy} / 5
-- **Process:** ${assessment.process} / 5
-- **Technology:** ${assessment.technology} / 5
-- **Overall Score:** ${assessment.score} / 5
+Return your response as a **well-formatted JSON object** with **no commentary or extra text**.
 
 ---
 
-## **📈 Benchmarking & Industry Comparisons**
-Compare the company’s performance to **industry norms** and **top performers**. Be specific. Use relevant insights for **their company size and revenue range**.
-
-- **Industry Avg Score:** What is the **average** performance level for this industry?
-- **Top Performer Score:** What score do the best companies achieve, and why?
-- **Key Gaps:** Identify where this company lags and **what top companies do differently**.
+## 🧠 Company Profile
+- **Industry:** ${user.industry}
+- **Company Size:** ${user.company_size}
+- **Revenue Range:** ${user.revenue_range}
 
 ---
 
-## **🔍 Strengths & Weaknesses Analysis**
-Analyze the **root causes** behind the company's scores. Provide **real business implications**—not generic feedback.
+## 📋 Strategic Assessment Responses
 
-### **✅ Strengths (Competitive Advantages)**
-List **specific** strengths and their business impact.
-- **[Strength Title]**: _How does this provide a business advantage?_
-- **[Strength Title]**: _What measurable impact does this create?_
-
-### **🚨 Weaknesses (Barriers to Growth)**
-Identify major weaknesses and how they impact revenue, efficiency, or scalability. Provide context and urgency.
-- **[Weakness Title]**: _What is the direct cost or risk of not fixing this?_
-- **[Weakness Title]**: _How does this impact customer experience, retention, or market positioning?_
-
----
-
-## **🚀 Next 30-Day Growth Plan**
-Give a **step-by-step, high-impact action plan** with measurable outcomes.
-- **Week 1 (Quick Wins):** What immediate changes can drive impact?
-- **Week 2-3 (Process Optimization):** What structural improvements should be made?
-- **Week 4 (Scaling & Revenue Growth):** What long-term optimizations will drive sustained performance?
-
-Each action should:
-✅ Be **specific and doable within 30 days**  
-✅ Have a **measurable business impact**  
-✅ Improve **Strategy, Process, or Overall Score**  
+- **Growth Metrics Tracked:** ${assessment.growth_metrics}
+- **Go-to-Market Strategy:** ${assessment.gtm_strategy}
+- **Biggest Friction Points:** ${assessment.friction_points}
+- **Differentiator (Competitive Edge):** ${assessment.differentiator}
+- **Customer Brand Perception:** ${assessment.brand_perception}
+- **Top Priorities (Ranked):** ${assessment.business_priorities}
+- **Core Tech Stack:** ${assessment.tech_stack}
+- **Internal Process Discipline:** ${assessment.process_discipline}
+- **Winning Acquisition Channels:** ${assessment.acquisition_channels}
+- **Technology Maturity Level:** ${assessment.tech_maturity}
+- **Retention Strategy:** ${assessment.retention_strategy}
+- **Current Decision Bottlenecks:** ${assessment.decision_bottlenecks}
+- **Team Alignment on Goals:** ${assessment.team_alignment}
+- **12-Month Vision of Success:** ${assessment.future_success}
+- **Preferred Benchmarking Insights:** ${assessment.benchmark_preferences}
+- **Funding Status or Exit Prep:** ${assessment.funding_status}
+- **Ideal Pace of Growth:** ${assessment.growth_pace}
+- **Unresolved Internal Issues:** ${assessment.unresolved_issue}
+- **Willingness to Commit to Growth Model:** ${assessment.final_confirmation}
 
 ---
 
-## **📈 Future Score Projection**
-Forecast how implementing these recommendations will impact the company’s overall score.
-    `;
+## 🎯 Your Task
+Using this data:
+- Assign a score (1–5) for **strategy**, **process**, and **technology** maturity
+- Benchmark this business against **industry averages** and **top performers**
+- List 2–4 **strengths** and **weaknesses**, each with a practical business impact
+- Build a high-impact **30-day roadmap** with tactical steps that address weaknesses and accelerate growth
 
-    // Send prompt to OpenAI
+---
+
+## 📦 JSON Response Format
+Return a structured JSON object like:
+
+{
+  "strategyScore": 3.5,
+  "processScore": 3.0,
+  "technologyScore": 4.0,
+  "score": 3.5,
+  "industryAvgScore": 3.2,
+  "topPerformerScore": 4.5,
+  "benchmarking": {
+    "strategy": "...",
+    "process": "...",
+    "technology": "..."
+  },
+  "strengths": [ { "title": "...", "impact": "..." } ],
+  "weaknesses": [ { "title": "...", "impact": "..." } ],
+  "roadmap": [ { "task": "...", "expectedImpact": "..." } ]
+}
+`;
+
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -127,68 +134,33 @@ Forecast how implementing these recommendations will impact the company’s over
       max_tokens: 900,
     });
 
-    let rawContent = aiResponse.choices[0].message.content || "{}";
+    const parsed = JSON.parse(aiResponse.choices[0].message.content || "{}");
 
-// 🧼 Strip Markdown-style code block wrappers if present
-if (rawContent.startsWith("```")) {
-  rawContent = rawContent.replace(/```(?:json)?/g, "").trim();
-}
-
-let insightsFromAI;
-try {
-  insightsFromAI = JSON.parse(rawContent);
-} catch (parseError) {
-  console.error("❌ JSON Parse Error:", parseError);
-  console.log("🪵 Raw AI Response:", rawContent);
-  return NextResponse.json({ error: "Invalid AI response format" }, { status: 500 });
-}
-    // Use the assessment's overall score as the baseline for chart data
-    const overallScore = parseFloat(assessment.score) || 0;
+    // 📈 Score Chart
     const chartData = [
-      {
-        month: "Now",
-        userScore: overallScore,
-        industryScore: insightsFromAI.industryAvgScore,
-        topPerformerScore: insightsFromAI.topPerformerScore,
-      },
-      {
-        month: "3 Months",
-        userScore: Math.min(5, overallScore + 0.5),
-        industryScore: insightsFromAI.industryAvgScore,
-        topPerformerScore: insightsFromAI.topPerformerScore,
-      },
-      {
-        month: "6 Months",
-        userScore: Math.min(5, overallScore + 1),
-        industryScore: insightsFromAI.industryAvgScore,
-        topPerformerScore: insightsFromAI.topPerformerScore,
-      },
-      {
-        month: "12 Months",
-        userScore: Math.min(5, overallScore + 2),
-        industryScore: insightsFromAI.industryAvgScore,
-        topPerformerScore: insightsFromAI.topPerformerScore,
-      },
+      { month: "Now", userScore: parsed.score, industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore },
+      { month: "3 Months", userScore: Math.min(5, parsed.score + 0.5), industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore },
+      { month: "6 Months", userScore: Math.min(5, parsed.score + 1), industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore },
+      { month: "12 Months", userScore: Math.min(5, parsed.score + 2), industryScore: parsed.industryAvgScore, topPerformerScore: parsed.topPerformerScore }
     ];
 
-    // Construct final payload combining assessment scores and AI insights
     const finalPayload = {
       user_id: userId,
-      strategyScore: parseFloat(assessment.strategy) || 0,
-      processScore: parseFloat(assessment.process) || 0,
-      technologyScore: parseFloat(assessment.technology) || 0,
-      score: overallScore,
-      industryAvgScore: insightsFromAI.industryAvgScore,
-      topPerformerScore: insightsFromAI.topPerformerScore,
-      benchmarking: insightsFromAI.benchmarking,
-      strengths: insightsFromAI.strengths,
-      weaknesses: insightsFromAI.weaknesses,
-      roadmap: insightsFromAI.roadmap,
+      strategyScore: parsed.strategyScore,
+      processScore: parsed.processScore,
+      technologyScore: parsed.technologyScore,
+      score: parsed.score,
+      industryAvgScore: parsed.industryAvgScore,
+      topPerformerScore: parsed.topPerformerScore,
+      benchmarking: parsed.benchmarking,
+      strengths: parsed.strengths,
+      weaknesses: parsed.weaknesses,
+      roadmap: parsed.roadmap,
       chartData,
       updated_at: new Date().toISOString(),
     };
 
-    // Upsert the new insights to Supabase
+    // 💾 Store Insights
     await supabase
       .from("tier2_dashboard_insights")
       .upsert(finalPayload, { onConflict: "user_id" });
