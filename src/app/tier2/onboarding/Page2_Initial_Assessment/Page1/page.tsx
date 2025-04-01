@@ -111,27 +111,8 @@ export default function OnboardingAssessmentPage() {
   };
 
   const handleAnswer = (key: string, value: any) => {
-    setFormAnswers((prev) => {
-      const updated = { ...prev, [key]: value };
-  
-      // Merge "Other" custom value into growth_metrics
-      if (key === "growth_metrics_other" && prev["growth_metrics"]?.includes("other")) {
-        const cleaned = prev["growth_metrics"].filter((m: string) => m !== "other");
-        if (value.trim()) {
-          cleaned.push(`Other: ${value.trim()}`);
-        }
-        updated["growth_metrics"] = cleaned;
-      }
-  
-      // If user changes growth_metrics and removes "other", clear the field
-      if (key === "growth_metrics" && !value.includes("other")) {
-        updated["growth_metrics_other"] = "";
-      }
-  
-      return updated;
-    });
+    setFormAnswers((prev) => ({ ...prev, [key]: value }));
   };
-  
   
 
   if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
