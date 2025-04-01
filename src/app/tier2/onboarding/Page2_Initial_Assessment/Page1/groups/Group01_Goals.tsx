@@ -8,12 +8,26 @@ import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
 export function isGroup01Complete(answers: Record<string, any>): boolean {
-  return (
-    Array.isArray(answers["growth_metrics"]) && answers["growth_metrics"].length > 0 &&
-    typeof answers["gtm_strategy"] === "string" && answers["gtm_strategy"].trim().length > 0 &&
-    Array.isArray(answers["friction_points"]) && answers["friction_points"].length > 0
-  );
+  const hasGrowthMetrics =
+    Array.isArray(answers["growth_metrics"]) &&
+    answers["growth_metrics"].length > 0 &&
+    (
+      !answers["growth_metrics"].includes("other") ||
+      (typeof answers["growth_metrics_other"] === "string" &&
+        answers["growth_metrics_other"].trim().length > 0)
+    );
+
+  const hasGTMStrategy =
+    typeof answers["gtm_strategy"] === "string" &&
+    answers["gtm_strategy"].trim().length > 0;
+
+  const hasFrictionPoints =
+    Array.isArray(answers["friction_points"]) &&
+    answers["friction_points"].length > 0;
+
+  return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
 }
+
 
 type Props = {
   answers: Record<string, any>;
