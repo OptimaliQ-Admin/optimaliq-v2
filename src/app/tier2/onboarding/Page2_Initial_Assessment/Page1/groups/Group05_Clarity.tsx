@@ -4,6 +4,21 @@ import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
+
+export function isGroup05Complete(answers: Record<string, any>): boolean {
+  return (
+    typeof answers["decision_bottlenecks"] === "string" &&
+    answers["decision_bottlenecks"].trim().length > 0 &&
+
+    typeof answers["team_alignment"] === "string" &&
+    answers["team_alignment"].trim().length > 0 &&
+
+    typeof answers["future_success"] === "string" &&
+    answers["future_success"].trim().length > 0
+  );
+}
+
+
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;

@@ -7,13 +7,23 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals"
+import Group02_Goals, { isGroup02Complete } from "./groups/Group02_Positioning"
+import Group03_Goals, { isGroup03Complete } from "./groups/Group03_Operations"
+import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack"
+import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
+import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
+import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
+
 
 
 const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
   0: isGroup01Complete,
-  // 1: isGroup02Complete,
-  // 2: isGroup03Complete,
-  // Add more as needed
+  1: isGroup02Complete,
+  2: isGroup03Complete,
+  3: isGroup04Complete,
+  4: isGroup05Complete,
+  5: isGroup06Complete,
+  6: isGroup07Complete,
 };
 
 

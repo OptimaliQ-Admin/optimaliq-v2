@@ -4,6 +4,18 @@ import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
+
+export function isGroup07Complete(answers: Record<string, any>): boolean {
+  return (
+    typeof answers["unresolved_issue"] === "string" &&
+    answers["unresolved_issue"].trim().length > 0 &&
+
+    typeof answers["final_confirmation"] === "string" &&
+    answers["final_confirmation"].trim().length > 0
+  );
+}
+
+
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;

@@ -5,6 +5,18 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 import DragSortQuestion from "@/components/questions/DragSortQuestion";
 
+
+export function isGroup03Complete(answers: Record<string, any>): boolean {
+  return (
+    Array.isArray(answers["tech_stack"]) && answers["tech_stack"].length > 0 &&
+
+    Array.isArray(answers["business_priorities"]) && answers["business_priorities"].length > 0 &&
+
+    typeof answers["process_discipline"] === "string" && answers["process_discipline"].trim().length > 0
+  );
+}
+
+
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;

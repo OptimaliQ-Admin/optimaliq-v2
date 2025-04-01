@@ -5,6 +5,21 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
+
+export function isGroup04Complete(answers: Record<string, any>): boolean {
+  return (
+    Array.isArray(answers["acquisition_channels"]) &&
+    answers["acquisition_channels"].length > 0 &&
+
+    typeof answers["tech_maturity"] === "string" &&
+    answers["tech_maturity"].trim().length > 0 &&
+
+    typeof answers["retention_strategy"] === "string" &&
+    answers["retention_strategy"].trim().length > 0
+  );
+}
+
+
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
