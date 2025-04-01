@@ -134,7 +134,21 @@ Return a structured JSON object like:
       max_tokens: 900,
     });
 
-    const parsed = JSON.parse(aiResponse.choices[0].message.content || "{}");
+    let rawContent = aiResponse.choices[0].message.content || "{}";
+
+// 🧼 Strip Markdown code block if present
+if (rawContent.startsWith("```")) {
+  rawContent = rawContent.replace(/```(?:json)?/g, "").trim();
+}
+
+let parsed;
+try {
+  parsed = JSON.parse(rawContent);
+} catch (parseError) {
+  console.error("❌ JSON Parse Error:", parseError);
+  console.log("🪵 Raw OpenAI Response:", rawContent);
+  return NextResponse.json({ error: "Invalid JSON from AI" }, { status: 500 });
+}
 
     // 📈 Score Chart
     const chartData = [
