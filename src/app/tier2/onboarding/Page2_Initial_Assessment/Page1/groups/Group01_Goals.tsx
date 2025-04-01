@@ -7,6 +7,14 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
+export function isGroup01Complete(answers: Record<string, any>): boolean {
+  return (
+    Array.isArray(answers["growth_metrics"]) && answers["growth_metrics"].length > 0 &&
+    typeof answers["gtm_strategy"] === "string" && answers["gtm_strategy"].trim().length > 0 &&
+    Array.isArray(answers["friction_points"]) && answers["friction_points"].length > 0
+  );
+}
+
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;

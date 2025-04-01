@@ -6,6 +6,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
+import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals"
+
+
+const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
+  0: isGroup01Complete,
+  // 1: isGroup02Complete,
+  // 2: isGroup03Complete,
+  // Add more as needed
+};
+
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
@@ -53,6 +63,13 @@ export default function OnboardingAssessmentPage() {
   }, [step]);
 
   const handleNext = async () => {
+    // Step validation
+    const validator = stepValidators[step];
+    if (validator && !validator(formAnswers)) {
+      alert("Please complete all required questions before continuing.");
+      return;
+    }
+  
     if (step < 6) {
       setStep((prev) => prev + 1);
     } else {
@@ -61,7 +78,7 @@ export default function OnboardingAssessmentPage() {
   
         const { data, error } = await supabase
           .from("onboarding_assessments")
-          .insert([{ ...formAnswers}]); // include email if you need it
+          .insert([{ ...formAnswers }]);
   
         if (error) {
           console.error("❌ Supabase error:", error);
