@@ -23,6 +23,8 @@ type Props = {
 };
 
 export default function Group03_Operations({ answers, onAnswer }: Props) {
+  const techSelected = answers["tech_stack"] || [];
+
   return (
     <div className="space-y-10">
 
@@ -53,6 +55,17 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("tech_stack", val)}
         maxSelect={10}
       />
+
+      {/* Conditionally show "Other" field */}
+      {(answers["tech_stack"] || []).includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the other platforms or tools that are central to your operations"
+          placeholder="Describe any additional platforms or tools used..."
+          value={answers["tech_stack_other"] || ""}
+          onChange={(val) => onAnswer("tech_stack_other", val)}
+          maxLength={50}
+        />
+      )}
 
       {/* Question 2: Rank Business Priorities */}
       <DragSortQuestion

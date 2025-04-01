@@ -26,6 +26,8 @@ type Props = {
 };
 
 export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
+  const acquisitionSelected = answers["acquisition_channels"] || [];
+
   return (
     <div className="space-y-10">
       {/* Question 10: Acquisition Channels */}
@@ -49,6 +51,17 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("acquisition_channels", val)}
         maxSelect={6}
       />
+
+      {/* Conditionally show "Other" field */}
+      {(answers["acquisition_channels"] || []).includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the acquisition channels that are driving meaningful results"
+          placeholder="Describe the acquisition channels..."
+          value={answers["acquisition_channels_other"] || ""}
+          onChange={(val) => onAnswer("acquisition_channels_other", val)}
+          maxLength={50}
+        />
+      )}
 
       {/* Question 11: Tech Maturity */}
       <MultipleChoiceQuestion

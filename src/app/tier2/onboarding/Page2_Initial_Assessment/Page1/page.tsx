@@ -33,11 +33,25 @@ export default function OnboardingAssessmentPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-
+  const validator = stepValidators[step];
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
+  
+  const stripUnusedOtherFields = (answers: Record<string, any>) => {
+    const result: Record<string, any> = {};
+  
+    for (const key in answers) {
+      if (key.endsWith("_other")) continue; // don't save _other fields
+  
+      result[key] = answers[key]; // pass everything else through
+    }
+  
+    return result;
+  };
+  
+  
   useEffect(() => {
     const checkSubscription = async () => {
       if (skipCheck) {
@@ -85,8 +99,7 @@ export default function OnboardingAssessmentPage() {
       try {
         console.log("📤 Submitting formAnswers:", formAnswers);
   
-        // ⛔️ Remove fields not in Supabase
-        const { growth_metrics_other, ...sanitizedAnswers } = formAnswers;
+        const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
   
         const { data, error } = await supabase
           .from("onboarding_assessments")
@@ -108,6 +121,7 @@ export default function OnboardingAssessmentPage() {
   };
   
   
+  
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
@@ -117,27 +131,30 @@ export default function OnboardingAssessmentPage() {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
   
-      // When user types in "other" description
-      if (key === "growth_metrics_other") {
-        const metrics = prev["growth_metrics"] || [];
-        const cleaned = metrics.filter((m: string) => !m.startsWith("Other:"));
-        
+      // 🔁 For any "other" text field
+      if (key.endsWith("_other")) {
+        const baseKey = key.replace("_other", "");
+        const baseValue = prev[baseKey] || [];
+  
+        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
+  
         if (value.trim()) {
           cleaned.push(`Other: ${value.trim()}`);
         }
   
-        updated["growth_metrics"] = cleaned;
+        updated[baseKey] = cleaned;
       }
   
-      // If user unchecks "other", clear the input + remove from metrics
-      if (key === "growth_metrics" && !value.includes("other")) {
-        updated["growth_metrics_other"] = "";
-        updated["growth_metrics"] = value.filter((v: string) => !v.startsWith("Other:"));
+      // 🔁 If a select field is updated and "other" was removed, clear its _other input
+      if (Array.isArray(value) && key && !value.includes("other")) {
+        updated[`${key}_other`] = "";
+        updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }
   
       return updated;
     });
   };
+  
   
   
 

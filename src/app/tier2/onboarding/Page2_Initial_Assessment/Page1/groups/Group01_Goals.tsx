@@ -31,6 +31,9 @@ type Props = {
 };
 
 export default function Group01_Goals({ answers, onAnswer }: Props) {
+  const growthSelected = answers["growth_metrics"] || [];
+  const frictionSelected = answers["friction_points"] || [];
+
   return (
 <div className="p-6 max-w-2xl mx-auto">
 
@@ -95,9 +98,20 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           { value: "regulatory_issues", label: "Regulatory or compliance issues" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={Array.isArray(answers["friction_points"]) ? answers["friction_points"] : []}
-  onChange={(val) => onAnswer("friction_points", val)}
+        selected={frictionSelected}
+        onChange={(val) => onAnswer("friction_points", val)}
+        maxSelect={3}
       />
+
+      {/* "Other" input for friction_points */}
+      {frictionSelected.includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the other friction point(s)"
+          placeholder="E.g., Internal delays, market confusion, etc."
+          value={answers["friction_points_other"] || ""}
+          onChange={(val) => onAnswer("friction_points_other", val)}
+          maxLength={50}
+        />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
 export function isGroup06Complete(answers: Record<string, any>): boolean {
@@ -25,6 +26,9 @@ type Props = {
 };
 
 export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
+  const benchmarkSelected = answers["benchmark_preferences"] || [];
+  const fundingSelected = answers["funding_status"] || [];
+  
   return (
     <div className="space-y-10">
       {/* Question 16: Insights & Benchmarks */}
@@ -47,6 +51,17 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
         maxSelect={6}
       />
 
+      {/* Conditionally show "Other" field */}
+      {(answers["benchmark_preferences"] || []).includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the other insights or benchmarks"
+          placeholder="Describe any additional insights or benchmarks..."
+          value={answers["benchmark_preferences_other"] || ""}
+          onChange={(val) => onAnswer("benchmark_preferences_other", val)}
+          maxLength={50}
+        />
+      )}
+
       {/* Question 17: Capital/Funding Status */}
       <MultipleChoiceQuestion
         question="Are you currently raising capital or preparing for an exit?"
@@ -60,6 +75,17 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
         value={answers["funding_status"] || ""}
         onChange={(val) => onAnswer("funding_status", val)}
       />
+
+      {/* Conditionally show "Other" field */}
+      {(answers["funding_status"] || []).includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the other ways you are currently raising capital or preparing for an exit"
+          placeholder="Describe any how you are preparing..."
+          value={answers["funding_status_other"] || ""}
+          onChange={(val) => onAnswer("funding_status_other", val)}
+          maxLength={50}
+        />
+      )}
 
       {/* Question 18: Growth Pace */}
       <MultipleChoiceQuestion

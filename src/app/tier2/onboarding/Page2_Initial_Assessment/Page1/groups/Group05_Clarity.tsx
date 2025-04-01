@@ -25,6 +25,7 @@ type Props = {
 };
 
 export default function Group05_Clarity({ answers, onAnswer }: Props) {
+  const teamSelected = answers["team_alignment"] || [];
   return (
     <div className="space-y-10">
       {/* Question 13: Decision Bottlenecks */}
@@ -50,6 +51,17 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         value={answers["team_alignment"] || ""}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
+
+      {/* Conditionally show "Other" field */}
+      {(answers["team_alignment"] || []).includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the alignment of your team"
+          placeholder="Describe the alignment of your team..."
+          value={answers["team_alignment_other"] || ""}
+          onChange={(val) => onAnswer("team_alignment_other", val)}
+          maxLength={50}
+        />
+      )}
 
       {/* Question 15: Future State */}
       <TextAreaQuestion
