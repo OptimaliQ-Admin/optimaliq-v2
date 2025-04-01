@@ -127,8 +127,21 @@ Forecast how implementing these recommendations will impact the company’s over
       max_tokens: 900,
     });
 
-    const insightsFromAI = JSON.parse(aiResponse.choices[0].message.content || "{}");
+    let rawContent = aiResponse.choices[0].message.content || "{}";
 
+// 🧼 Strip Markdown-style code block wrappers if present
+if (rawContent.startsWith("```")) {
+  rawContent = rawContent.replace(/```(?:json)?/g, "").trim();
+}
+
+let insightsFromAI;
+try {
+  insightsFromAI = JSON.parse(rawContent);
+} catch (parseError) {
+  console.error("❌ JSON Parse Error:", parseError);
+  console.log("🪵 Raw AI Response:", rawContent);
+  return NextResponse.json({ error: "Invalid AI response format" }, { status: 500 });
+}
     // Use the assessment's overall score as the baseline for chart data
     const overallScore = parseFloat(assessment.score) || 0;
     const chartData = [
