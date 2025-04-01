@@ -51,13 +51,13 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
           { value: "Intercom", label: "Intercom (Support)" },
           { value: "Other", label: "Other (please describe)" },
         ]}
-        selected={answers["tech_stack"] || []}
+        selected={techSelected}
         onChange={(val) => onAnswer("tech_stack", val)}
         maxSelect={10}
       />
 
       {/* Conditionally show "Other" field */}
-      {(answers["tech_stack"] || []).includes("other") && (
+      {techSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the other platforms or tools that are central to your operations"
           placeholder="Describe any additional platforms or tools used..."

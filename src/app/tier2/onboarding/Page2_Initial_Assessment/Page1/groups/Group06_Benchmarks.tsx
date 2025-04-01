@@ -46,13 +46,13 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "funnel_analysis", label: "Marketing & sales funnel analysis" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={answers["benchmark_preferences"] || []}
+        selected={benchmarkSelected}
         onChange={(val) => onAnswer("benchmark_preferences", val)}
         maxSelect={6}
       />
 
       {/* Conditionally show "Other" field */}
-      {(answers["benchmark_preferences"] || []).includes("other") && (
+      {benchmarkSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the other insights or benchmarks"
           placeholder="Describe any additional insights or benchmarks..."
@@ -72,12 +72,12 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "not_planned", label: "No, not on the roadmap" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={answers["funding_status"] || ""}
+        value={fundingSelected}
         onChange={(val) => onAnswer("funding_status", val)}
       />
 
       {/* Conditionally show "Other" field */}
-      {(answers["funding_status"] || []).includes("other") && (
+      {fundingSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the other ways you are currently raising capital or preparing for an exit"
           placeholder="Describe any how you are preparing..."

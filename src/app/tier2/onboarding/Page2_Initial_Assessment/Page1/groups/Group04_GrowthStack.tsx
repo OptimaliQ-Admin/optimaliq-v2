@@ -47,13 +47,13 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
           { value: "retail", label: "Retail or Channel Distribution" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={answers["acquisition_channels"] || []}
+        selected={acquisitionSelected}
         onChange={(val) => onAnswer("acquisition_channels", val)}
         maxSelect={6}
       />
 
       {/* Conditionally show "Other" field */}
-      {(answers["acquisition_channels"] || []).includes("other") && (
+      {acquisitionSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the acquisition channels that are driving meaningful results"
           placeholder="Describe the acquisition channels..."

@@ -48,12 +48,12 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
           { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={answers["team_alignment"] || ""}
+        value={teamSelected}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
 
       {/* Conditionally show "Other" field */}
-      {(answers["team_alignment"] || []).includes("other") && (
+      {teamSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the alignment of your team"
           placeholder="Describe the alignment of your team..."

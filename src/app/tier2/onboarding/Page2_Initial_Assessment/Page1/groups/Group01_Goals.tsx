@@ -35,7 +35,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
   const frictionSelected = answers["friction_points"] || [];
 
   return (
-<div className="p-6 max-w-2xl mx-auto">
+  <div className="p-6 max-w-2xl mx-auto">
 
       {/* Question 1: Growth Metrics */}
 <MultiSelectQuestion
@@ -54,21 +54,22 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
     { value: "net_promoter_score", label: "Net Promoter Score (NPS)" },
     { value: "other", label: "Other (please describe)" },
   ]}
-  selected={answers["growth_metrics"] || []}
-  onChange={(val) => onAnswer("growth_metrics", val)}
-  maxSelect={5}
-/>
+  selected={growthSelected}
+        onChange={(val) => onAnswer("growth_metrics", val)}
+        maxSelect={5}
+      />
 
-{/* Conditionally show "Other" field */}
-{(answers["growth_metrics"] || []).includes("other") && (
-  <TextAreaQuestion
-    question="Please describe the other metric(s) you track"
-    placeholder="Describe any additional metrics you use to measure growth..."
-    value={answers["growth_metrics_other"] || ""}
-    onChange={(val) => onAnswer("growth_metrics_other", val)}
-    maxLength={50}
-  />
-)}
+      {/* Conditionally show "Other" field for growth_metrics */}
+      {growthSelected.includes("other") && (
+        <TextAreaQuestion
+          question="Please describe the other metric(s) you track"
+          placeholder="Describe any additional metrics you use to measure growth..."
+          value={answers["growth_metrics_other"] || ""}
+          onChange={(val) => onAnswer("growth_metrics_other", val)}
+          maxLength={50}
+        />
+      )}
+
 
       {/* Question 2: Go-To-Market Strategy */}
       <TextAreaQuestion
@@ -103,7 +104,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         maxSelect={3}
       />
 
-      {/* "Other" input for friction_points */}
+      {/* Conditionally show "Other" field for friction_points */}
       {frictionSelected.includes("other") && (
         <TextAreaQuestion
           question="Please describe the other friction point(s)"
@@ -112,6 +113,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           onChange={(val) => onAnswer("friction_points_other", val)}
           maxLength={50}
         />
+      )}
     </div>
   );
 }
