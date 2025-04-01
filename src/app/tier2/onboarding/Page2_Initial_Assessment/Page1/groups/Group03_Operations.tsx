@@ -58,7 +58,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
       />
 
       {/* Conditionally show "Other" field */}
-      {techSelected.includes("other") && (
+      {techSelected.includes("Other") && (
         <TextAreaQuestion
           question="Please describe the other platforms or tools that are central to your operations"
           placeholder="Describe any additional platforms or tools used..."
