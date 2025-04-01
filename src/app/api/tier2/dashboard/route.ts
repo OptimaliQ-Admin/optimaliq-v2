@@ -189,3 +189,7 @@ Return a structured JSON object like:
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+  // ✅ Add this to verify the route exists and works on Vercel
+  export async function GET() {
+    return NextResponse.json({ status: "API route is live ✅" });
+  }
