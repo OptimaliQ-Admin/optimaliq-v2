@@ -50,9 +50,15 @@ export async function POST(req: Request) {
       .eq("user_id", userId)
       .single();
 
-    if (existingInsights && !promptRetake) {
-      return NextResponse.json({ ...existingInsights, promptRetake });
-    }
+      if (existingInsights) {
+        const insightAge = new Date(existingInsights.updated_at);
+        const isInsightOld = insightAge < thirtyDaysAgo;
+      
+        return NextResponse.json({
+          ...existingInsights,
+          promptRetake: isInsightOld,
+        });
+      }      
 
     // 🧠 Build OpenAI prompt
     const aiPrompt = `
