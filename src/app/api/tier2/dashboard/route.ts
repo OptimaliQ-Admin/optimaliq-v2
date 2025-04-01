@@ -173,15 +173,21 @@ try {
       chartData,
       updated_at: new Date().toISOString(),
     };
-
+    console.log("🔍 Parsed AI response:", parsed);
     // 💾 Store Insights
-    await supabase
-      .from("tier2_dashboard_insights")
-      .upsert(finalPayload, { onConflict: "user_id" });
+    const { error: upsertError } = await supabase
+  .from("tier2_dashboard_insights")
+  .upsert(finalPayload, { onConflict: "user_id" });
 
+if (upsertError) {
+  console.error("❌ Failed to insert dashboard insights:", upsertError);
+} else {
+  console.log("✅ Dashboard insights successfully stored in Supabase.");
+}
     return NextResponse.json({ ...finalPayload, promptRetake });
   } catch (error) {
     console.error("❌ Dashboard API Error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
+  
 }
