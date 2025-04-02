@@ -25,6 +25,8 @@ const email = searchParams.get("email");
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
+
 
   useEffect(() => {
     const fetchInsights = async () => {
@@ -54,6 +56,15 @@ const email = searchParams.get("email");
 
     if (email) fetchInsights();
   }, [email]);
+  useEffect(() => {
+    axios.post("/api/tier2/dashboard/welcome_message", { email })
+      .then(res => setWelcomeData(res.data))
+      .catch(() => setWelcomeData({
+        firstName: '',
+        quote: "Welcome back! Let's grow your business today.",
+        author: "GMF+"
+      }));
+  }, [email]);   
 
   const mapList = (arr: any[], labelKey: string, detailKey: string) =>
     arr?.map((item) => ({ label: item[labelKey], detail: item[detailKey] })) || [];
@@ -66,28 +77,34 @@ const email = searchParams.get("email");
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white shadow-lg h-screen p-6 flex flex-col justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">GMF+</h2>
-          <nav className="space-y-4">
-            <a href="/tier2/dashboard" className="block text-gray-700 hover:text-blue-600 font-medium">
-              📊 Dashboard
-            </a>
-            <a href="/tier2/insights" className="block text-gray-700 hover:text-blue-600 font-medium">
-              📑 Insights
-            </a>
-            <a href="/tier2/assessment" className="block text-gray-700 hover:text-blue-600 font-medium">
-              📝 Assessment
-            </a>
-            <a href="#" className="block text-gray-700 hover:text-blue-600 font-medium">
-              👥 Community
-            </a>
-          </nav>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gray-300 rounded-full" />
-          <p className="text-gray-700 font-medium">{email}</p>
-        </div>
-      </aside>
+  <div>
+    <h2 className="text-2xl font-bold text-gray-800 mb-6">GMF+</h2>
+    <nav className="space-y-4">
+      <a href="/tier2/dashboard" className="block text-gray-700 hover:text-blue-600 font-medium">
+        📊 Dashboard
+      </a>
+      <a href="/tier2/insights" className="block text-gray-700 hover:text-blue-600 font-medium">
+        📑 Insights
+      </a>
+      <a href="/tier2/assessment" className="block text-gray-700 hover:text-blue-600 font-medium">
+        📝 Assessment
+      </a>
+      <a href="#" className="block text-gray-700 hover:text-blue-600 font-medium">
+        👥 Community
+      </a>
+    </nav>
+    <div className="mt-6 p-3 bg-blue-50 rounded-lg shadow-sm">
+      <p className="italic text-gray-600">"{welcomeData.quote}"</p>
+      {welcomeData.author && (
+        <p className="text-right text-sm text-gray-500">— {welcomeData.author}</p>
+      )}
+    </div>
+  </div>
+  <div className="flex items-center space-x-3">
+    <div className="w-10 h-10 bg-gray-300 rounded-full" />
+    <p className="text-gray-700 font-medium">{email}</p>
+  </div>
+</aside>
 
       <div className="flex-1 flex flex-col p-8 space-y-6">
         {loading ? (
