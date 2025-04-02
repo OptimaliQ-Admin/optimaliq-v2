@@ -20,20 +20,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  // Fetch a random inspirational quote
-  const { data: quoteData, error: quoteError } = await supabase
-    .from('inspirational_quotes')
-    .select('quote, author')
-    .order('random()')
-    .limit(1)
-    .single();
+// ✅ Fetch a random quote using typed RPC (2 type args for older Supabase versions)
+const { data: quoteData, error: quoteError } = await supabase
+  .rpc<any, void>('get_random_quote')
+  .single();
+
 
   if (quoteError) {
     console.error("❌ Quote fetch error:", quoteError);
-  }
-
-  if (!quoteData) {
-    console.warn("⚠️ No quotes returned from DB");
   }
 
   const quote = quoteData ?? {
@@ -47,4 +41,3 @@ export async function POST(req: NextRequest) {
     author: quote.author,
   });
 }
-
