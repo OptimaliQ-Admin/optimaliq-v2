@@ -16,20 +16,28 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (userError || !userData) {
+    console.error("❌ User lookup failed:", userError);
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   // Fetch a random inspirational quote
   const { data: quoteData, error: quoteError } = await supabase
-    .from('inspirational_quotes')
-    .select('quote, author')
-    .order('random()')
-    .limit(1)
-    .single();
+  .rpc('get_random_quote')
+  .single();
 
-  const quote = quoteError || !quoteData
-    ? { quote: "Welcome back! Let's make today productive.", author: "GMF+" }
-    : quoteData;
+
+  if (quoteError) {
+    console.error("❌ Quote fetch error:", quoteError);
+  }
+
+  if (!quoteData) {
+    console.warn("⚠️ No quotes returned from DB");
+  }
+
+  const quote = quoteData ?? {
+    quote: "Welcome back! Let's make today productive.",
+    author: "GMF+"
+  };
 
   return NextResponse.json({
     firstName: userData.first_name,
@@ -37,3 +45,4 @@ export async function POST(req: NextRequest) {
     author: quote.author,
   });
 }
+
