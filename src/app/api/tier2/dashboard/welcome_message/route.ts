@@ -22,9 +22,11 @@ export async function POST(req: NextRequest) {
 
   // Fetch a random inspirational quote
   const { data: quoteData, error: quoteError } = await supabase
-  .rpc('get_random_quote')
-  .single();
-
+    .from('inspirational_quotes')
+    .select('quote, author')
+    .order('random()')
+    .limit(1)
+    .single();
 
   if (quoteError) {
     console.error("❌ Quote fetch error:", quoteError);
