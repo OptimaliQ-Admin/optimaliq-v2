@@ -29,7 +29,7 @@ function AssessmentComponent() {  // ⬅ Wrapped in a separate function
         "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations for optimization.",
     },
     {
-      id: "bpm",
+      id: "BPM",
       title: "⚙️ Business Process Management Assessment",
       description:
         "Analyze the efficiency of your internal processes and identify automation opportunities for improved workflow management.",
