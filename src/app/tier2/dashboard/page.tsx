@@ -160,7 +160,8 @@ const email = searchParams.get("email");
 <ScoreCard
   title="Overall Score"
   score={insights?.score}
-  benchmark={insights?.industryAvgScore}
+  industryAvg={insights?.industryAvgScore}
+  topPerformer={insights?.topPerformerScore}
   description="Your overall business score reflects maturity across strategy, process, and technology."
   onLearnMore={() => handleScoreClick("overall", insights?.score)}
 />
