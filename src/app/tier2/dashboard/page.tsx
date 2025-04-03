@@ -15,10 +15,10 @@ import {
 
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import InsightCard from "@/components/dashboard/InsightCard";
-import GrowthChart from "@/components/dashboard/GrowthChart";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 import InsightLoading from "@/components/dashboard/InsightLoading";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
+import ExecutiveGrowthChart from "@/components/dashboard/ExecutiveGrowthChart";
 
 
 function Tier2DashboardComponent() {
@@ -200,7 +200,8 @@ const email = searchParams.get("email");
 />
 
 
-            {insights?.chartData && <GrowthChart data={insights.chartData} />}
+{insights?.chartData && <ExecutiveGrowthChart data={insights.chartData} />}
+
 
             <InsightCard title="🚀 30-Day Growth Plan" items={mapList(insights?.roadmap || [], "task", "expectedImpact")} />
 
