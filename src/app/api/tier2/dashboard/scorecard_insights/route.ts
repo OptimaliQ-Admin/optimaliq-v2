@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
-  const { category, industry, score_min, score_max } = await req.json();
+  const { category, industry, score } = await req.json();
 
-  if (!category || !industry || score_min === undefined || score_max === undefined) {
+  if (!category || !industry || score === undefined) {
     return NextResponse.json({ error: 'Missing required parameters.' }, { status: 400 });
   }
 
@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
     .select('title, description, benchmark, focus_areas')
     .eq('category', category)
     .eq('industry', industry)
-    .eq('score_min', score_min)
-    .eq('score_max', score_max)
+    .filter('score_min', 'lte', score)
+    .filter('score_max', 'gt', score) // exclusive upper bound
     .single();
 
   if (error || !data) {
