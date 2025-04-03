@@ -1,14 +1,16 @@
-import React from "react";
+"use client";
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
   CartesianGrid,
   ReferenceDot,
+  ReferenceLine,
+  Label,
 } from "recharts";
 
 interface ChartPoint {
@@ -23,72 +25,101 @@ interface Props {
 }
 
 const ExecutiveGrowthChart: React.FC<Props> = ({ data }) => {
+  const lastPoint = data[data.length - 1];
+
   return (
-    <div className="bg-white rounded-xl shadow p-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">
-        📈 Growth Trajectory (You vs. Industry vs. Top Performers)
+    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+      <h3 className="text-2xl font-bold text-gray-800 mb-4">
+        📈 Your Growth Benchmarking
       </h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+      <p className="text-gray-500 mb-6">
+        Visualize how your business growth compares to the industry and top performers over time.
+      </p>
+      <ResponsiveContainer width="100%" height={320}>
+        <LineChart data={data} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
           <defs>
-            <linearGradient id="colorUser" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+            <linearGradient id="gradientUser" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.7} />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.1} />
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis dataKey="month" tick={{ fill: "#6b7280" }} />
-          <YAxis domain={[1, 5]} tick={{ fill: "#6b7280" }} tickCount={5} />
+          <CartesianGrid strokeDasharray="4 4" stroke="#e5e7eb" />
+          <XAxis
+            dataKey="month"
+            tick={{ fill: "#6b7280", fontSize: 12 }}
+            axisLine={{ stroke: "#d1d5db" }}
+            tickLine={false}
+          />
+          <YAxis
+            domain={[1, 5]}
+            ticks={[1, 2, 3, 4, 5]}
+            tick={{ fill: "#6b7280", fontSize: 12 }}
+            axisLine={{ stroke: "#d1d5db" }}
+            tickLine={false}
+          />
 
           <Tooltip
-            contentStyle={{ backgroundColor: "white", borderRadius: "0.5rem", border: "1px solid #e5e7eb" }}
+            contentStyle={{
+              backgroundColor: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "0.75rem",
+              padding: "1rem",
+            }}
             formatter={(value: number, name: string) => [value.toFixed(1), name]}
           />
 
-          <Legend verticalAlign="top" height={36} />
+          <Legend verticalAlign="top" height={36} wrapperStyle={{ paddingBottom: "1rem" }} />
 
-          <Area
+          <Line
             type="monotone"
             dataKey="userScore"
             name="You"
             stroke="#3b82f6"
-            fillOpacity={1}
-            fill="url(#colorUser)"
             strokeWidth={3}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
           />
 
-          <Area
+          <Line
             type="monotone"
             dataKey="industryScore"
             name="Industry Avg"
             stroke="#9ca3af"
-            fillOpacity={0}
-            strokeDasharray="4 2"
             strokeWidth={2}
+            strokeDasharray="5 5"
+            dot={false}
           />
 
-          <Area
+          <Line
             type="monotone"
             dataKey="topPerformerScore"
             name="Top Performers"
             stroke="#10b981"
-            fillOpacity={0}
-            strokeDasharray="2 2"
             strokeWidth={2}
+            strokeDasharray="2 2"
+            dot={false}
           />
 
-          {/* Optional callout dot at end */}
+          {/* Optional vertical line to emphasize "Now" */}
+          <ReferenceLine
+            x="Now"
+            stroke="#3b82f6"
+            strokeDasharray="3 3"
+            label={<Label position="top" className="text-xs text-blue-600">Current</Label>}
+          />
+
+          {/* Optional callout at the last data point */}
           <ReferenceDot
-            x={data[data.length - 1].month}
-            y={data[data.length - 1].userScore}
-            r={4}
+            x={lastPoint.month}
+            y={lastPoint.userScore}
+            r={5}
             fill="#3b82f6"
-            stroke="white"
+            stroke="#fff"
             strokeWidth={2}
             ifOverflow="visible"
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );
