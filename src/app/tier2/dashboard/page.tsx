@@ -93,7 +93,7 @@ const email = searchParams.get("email");
     console.log("📦 Payload being sent to API:", payload);
   
     try {
-      const res = await axios.post("/api/tier2/dashboard/ScorecardInsights/getScorecardInsight", payload);
+      const res = await axios.post("/api/tier2/dashboard/scorecard_insights/get_scorecard_insight", payload);
       console.log("✅ Response from API:", res.data);
   
       if (res.data) {
