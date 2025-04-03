@@ -156,38 +156,42 @@ const email = searchParams.get("email");
               </div>
             )}
 
-<div className="flex-1 flex flex-col p-8 space-y-6">
-            <ScoreCard
-  title="Overall Score"
-  score={insights?.score}
-  benchmark={insights?.industryAvgScore}
-  onClick={() => handleScoreClick("overall", insights?.score)}
-/>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <ScoreCard
+    title="Overall Score"
+    score={insights?.score}
+    description="Your overall business score reflects maturity across strategy, process, and technology."
+    onLearnMore={() => handleScoreClick("overall", insights?.score)}
+  />
 
-<ScoreCard
-  title="Strategy"
-  score={insights?.strategyScore}
-  onClick={() => handleScoreClick("strategy", insights?.strategyScore)}
-/>
+  <ScoreCard
+    title="Strategy"
+    score={insights?.strategyScore}
+    description="Assesses your clarity, positioning, and future vision across the business."
+    onLearnMore={() => handleScoreClick("strategy", insights?.strategyScore)}
+  />
 
-<ScoreCard
-  title="Process"
-  score={insights?.processScore}
-  onClick={() => handleScoreClick("process", insights?.processScore)}
-/>
+  <ScoreCard
+    title="Process"
+    score={insights?.processScore}
+    description="Evaluates your scalability, execution consistency, and operational discipline."
+    onLearnMore={() => handleScoreClick("process", insights?.processScore)}
+  />
 
-<ScoreCard
-  title="Technology"
-  score={insights?.technologyScore}
-  onClick={() => handleScoreClick("technology", insights?.technologyScore)}
-/>
-
-<ScoreContextModal
-    open={isModalOpen}
-    onClose={() => setIsModalOpen(false)}
-    data={selectedCardData}
+  <ScoreCard
+    title="Technology"
+    score={insights?.technologyScore}
+    description="Looks at how effectively your tech stack enables growth, automation, and CX."
+    onLearnMore={() => handleScoreClick("technology", insights?.technologyScore)}
   />
 </div>
+
+<ScoreContextModal
+  open={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  data={selectedCardData}
+/>
+
 
             {insights?.chartData && <GrowthChart data={insights.chartData} />}
 
