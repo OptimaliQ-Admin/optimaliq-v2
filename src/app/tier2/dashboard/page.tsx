@@ -157,12 +157,13 @@ const email = searchParams.get("email");
             )}
 
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-  <ScoreCard
-    title="Overall Score"
-    score={insights?.score}
-    description="Your overall business score reflects maturity across strategy, process, and technology."
-    onLearnMore={() => handleScoreClick("overall", insights?.score)}
-  />
+<ScoreCard
+  title="Overall Score"
+  score={insights?.score}
+  benchmark={insights?.industryAvgScore}
+  description="Your overall business score reflects maturity across strategy, process, and technology."
+  onLearnMore={() => handleScoreClick("overall", insights?.score)}
+/>
 
   <ScoreCard
     title="Strategy"
