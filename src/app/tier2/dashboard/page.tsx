@@ -86,14 +86,13 @@ const email = searchParams.get("email");
     const payload = {
       category,
       industry: insights?.industry ?? "Other",
-      score_min: band,
-      score_max: band + 0.5,
-    };
+      score,
+    };    
   
     console.log("📦 Payload being sent to API:", payload);
   
     try {
-      const res = await axios.post("/api/tier2/dashboard/scorecard_insights/route.ts", payload);
+      const res = await axios.post("/api/tier2/dashboard/scorecard_insights", payload);
       console.log("✅ Response from API:", res.data);
   
       if (res.data) {
