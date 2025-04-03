@@ -17,6 +17,9 @@ import ScoreCard from "@/components/dashboard/ScoreCard";
 import InsightCard from "@/components/dashboard/InsightCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import SectionHeader from "@/components/dashboard/SectionHeader";
+import InsightLoading from "@/components/dashboard/InsightLoading";
+import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
+
 
 function Tier2DashboardComponent() {
   const searchParams = useSearchParams();
@@ -26,7 +29,9 @@ const email = searchParams.get("email");
   const [insights, setInsights] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCardData, setSelectedCardData] = useState<any>(null);
+  
 
   useEffect(() => {
     const fetchInsights = async () => {
@@ -72,7 +77,28 @@ const email = searchParams.get("email");
   if (!email) {
     return <p className="text-center text-red-600">⚠️ Email is required to access the dashboard.</p>;
   }  
-
+  const handleScoreClick = async (category: string, score: number) => {
+    const scoreBands = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5];
+    const band = scoreBands.find((s) => score <= s + 0.5) ?? 4.5;
+  
+    const payload = {
+      category,
+      industry: insights?.industry ?? "Other",
+      score_min: band,
+      score_max: band + 0.5,
+    };
+  
+    try {
+      const res = await axios.post("/api/tier2/dashboard/ScorecardInsights/getScorecardInsight", payload);
+      if (res.data) {
+        setSelectedCardData(res.data);
+        setIsModalOpen(true);
+      }
+    } catch (err) {
+      console.error("Failed to fetch scorecard context:", err);
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">
       {/* Sidebar Navigation */}
@@ -107,9 +133,9 @@ const email = searchParams.get("email");
 </aside>
 
       <div className="flex-1 flex flex-col p-8 space-y-6">
-        {loading ? (
-          <p className="text-gray-600 text-lg text-center">Loading insights...</p>
-        ) : error ? (
+      {loading ? (
+  <InsightLoading />
+) : error ? (
           <p className="text-red-500 text-lg text-center">{error}</p>
         ) : (
           <>
@@ -130,12 +156,38 @@ const email = searchParams.get("email");
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ScoreCard title="Overall Score" score={insights?.score} benchmark={insights?.industryAvgScore} />
-              <ScoreCard title="Strategy" score={insights?.strategyScore} />
-              <ScoreCard title="Process" score={insights?.processScore} />
-              <ScoreCard title="Technology" score={insights?.technologyScore} />
-            </div>
+<div className="flex-1 flex flex-col p-8 space-y-6">
+            <ScoreCard
+  title="Overall Score"
+  score={insights?.score}
+  benchmark={insights?.industryAvgScore}
+  onClick={() => handleScoreClick("overall", insights?.score)}
+/>
+
+<ScoreCard
+  title="Strategy"
+  score={insights?.strategyScore}
+  onClick={() => handleScoreClick("strategy", insights?.strategyScore)}
+/>
+
+<ScoreCard
+  title="Process"
+  score={insights?.processScore}
+  onClick={() => handleScoreClick("process", insights?.processScore)}
+/>
+
+<ScoreCard
+  title="Technology"
+  score={insights?.technologyScore}
+  onClick={() => handleScoreClick("technology", insights?.technologyScore)}
+/>
+
+<ScoreContextModal
+    open={isModalOpen}
+    onClose={() => setIsModalOpen(false)}
+    data={selectedCardData}
+  />
+</div>
 
             {insights?.chartData && <GrowthChart data={insights.chartData} />}
 
