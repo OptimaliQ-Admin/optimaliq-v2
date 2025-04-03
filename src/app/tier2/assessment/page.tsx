@@ -23,7 +23,7 @@ function AssessmentComponent() {  // ⬅ Wrapped in a separate function
         "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
     },
     {
-      id: "tech-stack",
+      id: "TechStackAssessment",
       title: "🛠 Tech Stack Assessment",
       description:
         "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations for optimization.",
