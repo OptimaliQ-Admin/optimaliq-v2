@@ -78,6 +78,8 @@ const email = searchParams.get("email");
     return <p className="text-center text-red-600">⚠️ Email is required to access the dashboard.</p>;
   }  
   const handleScoreClick = async (category: string, score: number) => {
+    console.log("🔍 Learn More clicked:", { category, score });
+  
     const scoreBands = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5];
     const band = scoreBands.find((s) => score <= s + 0.5) ?? 4.5;
   
@@ -88,16 +90,20 @@ const email = searchParams.get("email");
       score_max: band + 0.5,
     };
   
+    console.log("📦 Payload being sent to API:", payload);
+  
     try {
       const res = await axios.post("/api/tier2/dashboard/ScorecardInsights/getScorecardInsight", payload);
+      console.log("✅ Response from API:", res.data);
+  
       if (res.data) {
         setSelectedCardData(res.data);
         setIsModalOpen(true);
       }
     } catch (err) {
-      console.error("Failed to fetch scorecard context:", err);
+      console.error("❌ Failed to fetch scorecard context:", err);
     }
-  };
+  };  
   
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">

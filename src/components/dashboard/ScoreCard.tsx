@@ -25,7 +25,7 @@ export default function ScoreCard({
 
         {industryAvg !== undefined && (
           <p className="text-sm text-gray-500 mt-1">
-            Industry Avg: {industryAvg.toFixed(1)}{" "}
+            Ind. Avg: {industryAvg.toFixed(1)}{" "}
             {topPerformer !== undefined && (
               <span className="ml-2">| Top Performers: {topPerformer.toFixed(1)}</span>
             )}
