@@ -211,17 +211,20 @@ const email = searchParams.get("email");
       industryAvg={insights.industryAvgScore}
       topPerformer={insights.topPerformerScore}
     />
-    <div className="h-full transition-transform duration-300 ease-in-out hover:scale-[1.01]">
-      <InsightCard
-        title="🚀 30-Day Growth Plan"
-        items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
-      />
-      {insights?.chartData && (
-        <div className="mt-4">
-          <GrowthChart data={insights.chartData} />
-        </div>
-      )}
+    <div className="h-full">
+  <div className="transition-transform duration-300 ease-in-out hover:scale-[1.01]">
+    <InsightCard
+      title="🚀 30-Day Growth Plan"
+      items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
+    />
+  </div>
+  {insights?.chartData && (
+    <div className="mt-2">
+      <GrowthChart data={insights.chartData} />
     </div>
+  )}
+</div>
+
   </div>
 )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
