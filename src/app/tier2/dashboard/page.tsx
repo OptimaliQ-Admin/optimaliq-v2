@@ -209,11 +209,12 @@ const email = searchParams.get("email");
       industryAvg={insights.industryAvgScore}
       topPerformer={insights.topPerformerScore}
     />
-    <InsightCard
-  title="🚀 30-Day Growth Plan"
-  items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
-  className="transition-transform transform hover:scale-[1.01] hover:shadow-lg duration-300"
-/>
+    <div className="h-full transition-transform duration-300 ease-in-out hover:scale-[1.01]">
+  <InsightCard
+    title="🚀 30-Day Growth Plan"
+    items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
+  />
+</div>
   </div>
 )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -228,37 +229,38 @@ const email = searchParams.get("email");
             /> */}
 
             {/* Placeholder Sections */}
-            <div className="flex-1 flex flex-col p-8 space-y-6">
-              <div className="p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction (Placeholder)</h2>
-                <p className="text-gray-600 mt-2">
-                  (Includes real market data, stock trends, and sector performance)
-                  <br />✅ Example:
-                  <br />📈 “Retail eCommerce growth has slowed to 3% YoY…”
-                </p>
-              </div>
-              <div className="p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions (Placeholder)</h2>
-                <p className="text-gray-600 mt-2">
-                  ✅ Example:
-                  <br />📢 “Remote work is stabilizing at 40% adoption…”
-                </p>
-              </div>
-              <div className="p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-lg font-bold text-gray-700">⚠️ Top Challenges & Opportunities in Industry (Placeholder)</h2>
-                <p className="text-gray-600 mt-2">
-                  ✅ Example:
-                  <br />⚠️ “Customer acquisition costs have risen by 30%…”
-                </p>
-              </div>
-              <div className="p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-lg font-bold text-gray-700">📢 Marketing Investment Trends (Placeholder)</h2>
-                <p className="text-gray-600 mt-2">
-                  ✅ Example:
-                  <br />📊 “SEO & content marketing are delivering the highest ROI…”
-                </p>
-              </div>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
+    <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction (Placeholder)</h2>
+    <p className="text-gray-600 mt-2">
+      (Includes real market data, stock trends, and sector performance)
+      <br />✅ Example:
+      <br />📈 “Retail eCommerce growth has slowed to 3% YoY…”
+    </p>
+  </div>
+  <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
+    <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions (Placeholder)</h2>
+    <p className="text-gray-600 mt-2">
+      ✅ Example:
+      <br />📢 “Remote work is stabilizing at 40% adoption…”
+    </p>
+  </div>
+  <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
+    <h2 className="text-lg font-bold text-gray-700">⚠️ Top Challenges & Opportunities in Industry (Placeholder)</h2>
+    <p className="text-gray-600 mt-2">
+      ✅ Example:
+      <br />⚠️ “Customer acquisition costs have risen by 30%…”
+    </p>
+  </div>
+  <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
+    <h2 className="text-lg font-bold text-gray-700">📢 Marketing Investment Trends (Placeholder)</h2>
+    <p className="text-gray-600 mt-2">
+      ✅ Example:
+      <br />📊 “SEO & content marketing are delivering the highest ROI…”
+    </p>
+  </div>
+</div>
+
           </>
         )}
       </div>

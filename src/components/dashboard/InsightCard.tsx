@@ -8,12 +8,11 @@ type InsightItem = {
 type InsightCardProps = {
   title: string;
   items: InsightItem[];
-  className?: string; // Allow className
 };
 
-export default function InsightCard({ title, items, className }: InsightCardProps) {
+export default function InsightCard({ title, items }: InsightCardProps) {
   return (
-    <div className={`bg-white p-6 rounded-lg shadow space-y-4 ${className || ''}`}>
+    <div className="bg-white p-6 rounded-lg shadow space-y-4">
       <h3 className="text-lg font-bold text-gray-800">{title}</h3>
       <ul className="list-disc list-inside text-gray-700 space-y-1">
         {items.length > 0 ? (
