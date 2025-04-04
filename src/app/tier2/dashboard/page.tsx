@@ -201,17 +201,20 @@ const email = searchParams.get("email");
 
 
 {insights && (
-  <ExecutiveRadarChart
-    strategy={insights.strategyScore}
-    process={insights.processScore}
-    technology={insights.technologyScore}
-    industryAvg={insights.industryAvgScore}
-    topPerformer={insights.topPerformerScore}
-  />
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+    <ExecutiveRadarChart
+      strategy={insights.strategyScore}
+      process={insights.processScore}
+      technology={insights.technologyScore}
+      industryAvg={insights.industryAvgScore}
+      topPerformer={insights.topPerformerScore}
+    />
+    <InsightCard
+      title="🚀 30-Day Growth Plan"
+      items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
+    />
+  </div>
 )}
-
-            <InsightCard title="🚀 30-Day Growth Plan" items={mapList(insights?.roadmap || [], "task", "expectedImpact")} />
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InsightCard title="✅ Strengths" items={mapList(insights?.strengths || [], "title", "impact")} />
               <InsightCard title="🚨 Weaknesses" items={mapList(insights?.weaknesses || [], "title", "impact")} />
