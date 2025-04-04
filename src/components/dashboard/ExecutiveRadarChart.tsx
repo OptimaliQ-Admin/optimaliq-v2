@@ -56,16 +56,15 @@ const ExecutiveRadarChart: React.FC<Props> = ({
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-      <div className="text-center mb-4">
-        <h3 className="text-3xl font-bold text-gray-800 mb-2">
-          🧭 Capability Comparison
-        </h3>
-        <p className="text-gray-500 text-base">
-          Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
-          <br />
-          See how close you are to enterprise excellence.
-        </p>
-      </div>
+      <div className="mb-4">
+  <h3 className="text-lg font-bold text-gray-800 mb-2">
+    🧭 Capability Comparison
+  </h3>
+  <p className="text-gray-500 text-sm leading-relaxed">
+    Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
+    See how close you are to enterprise excellence.
+  </p>
+</div>
 
       <ResponsiveContainer width="100%" height={450}>
         <RadarChart cx="50%" cy="50%" outerRadius={160} data={data}>
