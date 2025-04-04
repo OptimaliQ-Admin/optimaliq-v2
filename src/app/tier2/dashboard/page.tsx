@@ -210,9 +210,10 @@ const email = searchParams.get("email");
       topPerformer={insights.topPerformerScore}
     />
     <InsightCard
-      title="🚀 30-Day Growth Plan"
-      items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
-    />
+  title="🚀 30-Day Growth Plan"
+  items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
+  className="transition-transform transform hover:scale-[1.01] hover:shadow-lg duration-300"
+/>
   </div>
 )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -7,7 +7,6 @@ import {
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  Legend,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
@@ -57,29 +56,29 @@ const ExecutiveRadarChart: React.FC<Props> = ({
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+      <div className="text-center mb-4">
+        <h3 className="text-3xl font-bold text-gray-800 mb-2">
           🧭 Capability Comparison
         </h3>
-        <p className="text-gray-500">
+        <p className="text-gray-500 text-base">
           Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
           <br />
           See how close you are to enterprise excellence.
         </p>
       </div>
 
-      <ResponsiveContainer width="100%" height={420}>
-        <RadarChart cx="50%" cy="50%" outerRadius={140} data={data}>
+      <ResponsiveContainer width="100%" height={450}>
+        <RadarChart cx="50%" cy="50%" outerRadius={160} data={data}>
           <PolarGrid stroke="#d1d5db" strokeWidth={1.5} />
           <PolarAngleAxis
             dataKey="category"
-            tick={{ fill: "#374151", fontSize: 13, fontWeight: 500 }}
+            tick={{ fill: "#374151", fontSize: 18, fontWeight: 500 }}
           />
           <PolarRadiusAxis
             angle={30}
             domain={[1, 5]}
             tickCount={5}
-            tick={{ fill: "#6b7280", fontSize: 11 }}
+            tick={{ fill: "#6b7280", fontSize: 14 }}
             stroke="#e5e7eb"
           />
 
@@ -93,8 +92,8 @@ const ExecutiveRadarChart: React.FC<Props> = ({
           <Radar
             name="Industry Avg"
             dataKey="Industry Avg"
-            stroke="#6b7280"
-            fill="#6b7280"
+            stroke="#4b5563" // darker gray
+            fill="#4b5563"
             fillOpacity={0.3}
           />
           <Radar
@@ -109,7 +108,7 @@ const ExecutiveRadarChart: React.FC<Props> = ({
         </RadarChart>
       </ResponsiveContainer>
 
-      <div className="flex justify-around text-sm text-gray-600 font-medium pt-4">
+      <div className="flex justify-around text-sm text-gray-700 font-medium pt-4 mt-1">
         <span>🟦 You</span>
         <span>⬛ Industry Avg</span>
         <span>🟩 Top Performers</span>
