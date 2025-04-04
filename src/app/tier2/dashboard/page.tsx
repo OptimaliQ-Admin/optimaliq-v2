@@ -212,16 +212,16 @@ const email = searchParams.get("email");
       topPerformer={insights.topPerformerScore}
     />
     <div className="h-full transition-transform duration-300 ease-in-out hover:scale-[1.01]">
-  <InsightCard
-    title="🚀 30-Day Growth Plan"
-    items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
-  />
-  {insights?.chartData && (
-  <div className="mt-4">
-    <GrowthChart data={insights.chartData} />
-  </div>
-)}
-</div>
+      <InsightCard
+        title="🚀 30-Day Growth Plan"
+        items={mapList(insights?.roadmap || [], "task", "expectedImpact")}
+      />
+      {insights?.chartData && (
+        <div className="mt-4">
+          <GrowthChart data={insights.chartData} />
+        </div>
+      )}
+    </div>
   </div>
 )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
