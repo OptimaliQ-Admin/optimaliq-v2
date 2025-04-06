@@ -1,11 +1,11 @@
-// File path: /src/app/api/cron/generateMarketInsight/route.ts
+"use server";
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-export const dynamic = "force-dynamic"; // Required for Vercel cron execution
+export const dynamic = "force-dynamic";
 
-// Supabase client (with service role access for insert)
+// Supabase client using service role key
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -15,29 +15,38 @@ export async function GET() {
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY!;
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 
+  // ✅ TEMP LOG — for debugging only
+  console.log("✅ FINNHUB_API_KEY loaded:", FINNHUB_API_KEY ? "yes" : "NO");
+
   try {
-    // 1. Fetch sector performance
-    const sectorRes = await fetch(`https://finnhub.io/api/v1/stock/sector-performance?token=${FINNHUB_API_KEY}`);
+    // 1. Fetch sector performance (header auth)
+    const sectorRes = await fetch("https://finnhub.io/api/v1/stock/sector-performance", {
+      headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
+    });
+
     if (!sectorRes.ok) {
       const text = await sectorRes.text();
       console.error("❌ Sector API failed:", sectorRes.status, text);
       return NextResponse.json({ error: "Sector API failed" }, { status: 500 });
     }
+
     const sectorData = await sectorRes.json();
 
-    // 2. Fetch top news
-    const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
+    // 2. Fetch top headlines (header auth)
+    const newsRes = await fetch("https://finnhub.io/api/v1/news?category=general", {
+      headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
+    });
+
     if (!newsRes.ok) {
       const text = await newsRes.text();
       console.error("❌ News API failed:", newsRes.status, text);
       return NextResponse.json({ error: "News API failed" }, { status: 500 });
     }
-    const newsData = await newsRes.json();
 
-    // 3. Format news for GPT
+    const newsData = await newsRes.json();
     const topHeadlines = newsData.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n");
 
-    // 4. Compose OpenAI prompt
+    // 3. Compose OpenAI prompt
     const prompt = `
 Act as a McKinsey-caliber strategist. Analyze the following U.S. market data and news to create a strategic summary and actionable recommendation for growth-stage companies.
 
@@ -52,7 +61,7 @@ Format:
 🎯 Strategic Recommendation:
     `.trim();
 
-    // 5. Send prompt to OpenAI
+    // 4. Send to OpenAI
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -75,7 +84,7 @@ Format:
 
     const aiText = aiData.choices[0].message.content || "No insight returned";
 
-    // 6. Save to Supabase
+    // 5. Save to Supabase
     const { error } = await supabase.from("realtime_market_trends").insert([
       {
         title: "📊 Market Trend Prediction",
