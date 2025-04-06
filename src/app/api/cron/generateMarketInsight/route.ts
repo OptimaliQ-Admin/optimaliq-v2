@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // Required for Vercel cron
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,31 +20,26 @@ export async function GET() {
   }
 
   try {
-    // ✅ Fetch sector performance from Finnhub
+    // ✅ 1. Fetch Sector Performance
     const sectorRes = await fetch("https://finnhub.io/api/v1/stock/sector-performance", {
       headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
     });
-    if (!sectorRes.ok) {
-      const errorText = await sectorRes.text();
-      throw new Error(`Sector API failed: ${errorText}`);
-    }
+    if (!sectorRes.ok) throw new Error(`Sector API failed: ${await sectorRes.text()}`);
     const sectorData = await sectorRes.json();
 
-    // ✅ Fetch top news from Finnhub
+    // ✅ 2. Fetch Top News
     const newsRes = await fetch("https://finnhub.io/api/v1/news?category=general", {
       headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
     });
-    if (!newsRes.ok) {
-      const errorText = await newsRes.text();
-      throw new Error(`News API failed: ${errorText}`);
-    }
+    if (!newsRes.ok) throw new Error(`News API failed: ${await newsRes.text()}`);
     const newsData = await newsRes.json();
-
     const topHeadlines = newsData.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n");
 
-    // 🧠 Compose GPT prompt
+    // ✅ 3. Construct OpenAI Prompt with Strict JSON Format
     const prompt = `
-Act as a McKinsey-caliber strategist. Analyze the following U.S. market data and news to create a strategic summary and actionable recommendation for growth-stage companies.
+You are a McKinsey-level business strategist.
+
+Analyze the following U.S. market data and generate a clear strategic insight and growth recommendation.
 
 Sector Performance:
 ${sectorData.map((s: any) => `- ${s.sector}: ${s.change}%`).join("\n")}
@@ -52,14 +47,15 @@ ${sectorData.map((s: any) => `- ${s.sector}: ${s.change}%`).join("\n")}
 Top Headlines:
 ${topHeadlines}
 
-Format:
-📊 Summary Insight:
-🎯 Strategic Recommendation:
+Return ONLY this format:
+
+{
+  "summaryInsight": "One-sentence strategic observation based on the trends.",
+  "strategicRecommendation": "One-sentence recommendation for growth-stage businesses."
+}
     `.trim();
 
-    console.log("🧠 Sending prompt to GPT:", prompt);
-
-    // 🧠 OpenAI API call
+    // ✅ 4. Send to OpenAI
     const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -73,31 +69,36 @@ Format:
       }),
     });
 
-    if (!openaiRes.ok) {
-      const errorText = await openaiRes.text();
-      throw new Error(`OpenAI API failed: ${errorText}`);
+    const rawText = await openaiRes.text();
+
+    let parsed;
+    try {
+      const parsedJson = JSON.parse(rawText);
+      parsed = JSON.parse(parsedJson.choices[0].message.content);
+    } catch (err) {
+      console.error("❌ Failed to parse OpenAI response", rawText.slice(0, 300));
+      return NextResponse.json({ error: "OpenAI JSON parse failure" }, { status: 500 });
     }
 
-    const aiData = await openaiRes.json();
-    const aiText = aiData?.choices?.[0]?.message?.content ?? "No insight returned.";
+    const finalInsight = `📊 ${parsed.summaryInsight}\n\n🎯 ${parsed.strategicRecommendation}`;
 
-    // ✅ Save to Supabase
-    const { error: dbError } = await supabase.from("realtime_market_trends").insert([
+    // ✅ 5. Insert into Supabase
+    const { error } = await supabase.from("realtime_market_trends").insert([
       {
         title: "📊 Market Trend Prediction",
-        insight: aiText,
+        insight: finalInsight,
         source: "finnhub + GPT",
       },
     ]);
 
-    if (dbError) {
-      console.error("❌ Supabase insert error:", dbError);
-      return NextResponse.json({ error: "Failed to save insight to Supabase" }, { status: 500 });
+    if (error) {
+      console.error("❌ Supabase insert error:", error);
+      return NextResponse.json({ error: "Failed to store insight" }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, insight: aiText });
+    return NextResponse.json({ success: true, insight: finalInsight });
   } catch (err: any) {
-    console.error("❌ Unhandled error in cron job:", err.message || err);
+    console.error("❌ Unhandled error:", err.message || err);
     return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
   }
 }
