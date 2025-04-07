@@ -20,7 +20,6 @@ type Props = {
 
 export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {
   switch (step) {
-    switch (step) {
       case 0:
         return <Group01_Goals answers={answers} onAnswer={onAnswer} />;
       case 1:
