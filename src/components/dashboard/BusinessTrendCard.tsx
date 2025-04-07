@@ -4,40 +4,51 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Dialog } from "@headlessui/react";
 
-export default function BusinessTrendCard() {
-  const [trend, setTrend] = useState<string | null>(null);
+export default function MarketInsightCard({ industry }: { industry: string }) {
+  const [insight, setInsight] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const fetchTrend = async () => {
+    const fetchInsight = async () => {
       try {
-        const res = await fetch("/api/tier2/dashboard/insight/business_trends");
+        const res = await fetch(`/api/tier2/dashboard/insight/market_trends?industry=${encodeURIComponent(industry)}`);
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {
-          setTrend(data.insight);
-          setLastUpdated(format(new Date(data.createdat), "MMMM d, yyyy"));
+          const created = new Date(data.createdat);
+          const now = new Date();
+          const diffInDays = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
+
+          if (diffInDays <= 7) {
+            setInsight(data.insight);
+            setLastUpdated(format(created, "MMMM d, yyyy"));
+          } else {
+            // Trigger background refresh (non-blocking)
+            fetch("/api/cron/generateMarketInsight");
+            setInsight(data.insight); // Show stale data
+            setLastUpdated(format(created, "MMMM d, yyyy (stale)"));
+          }
         }
       } catch (error) {
-        console.error("Error fetching business trend insight:", error);
+        console.error("Error fetching market insight:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTrend();
-  }, []);
+    fetchInsight();
+  }, [industry]);
 
-  const preview = trend?.split("\n").slice(0, 4).join("\n");
+  const preview = insight?.split("🎯 Strategic Outlook for Growth Companies:")[0].trim();
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-      <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions</h2>
+      <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction</h2>
       {loading ? (
-        <p className="text-gray-400 mt-2 animate-pulse">Loading business trends...</p>
-      ) : trend ? (
+        <p className="text-gray-400 mt-2 animate-pulse">Loading latest insight...</p>
+      ) : insight ? (
         <>
           <p className="text-gray-600 mt-2 whitespace-pre-line">{preview}</p>
           <button
@@ -47,7 +58,12 @@ export default function BusinessTrendCard() {
             Read full outlook
           </button>
           {lastUpdated && (
-            <p className="mt-2 text-xs text-gray-400">Last updated: {lastUpdated}</p>
+            <p className="mt-2 text-xs text-gray-400">
+              Last updated: {lastUpdated}
+              {lastUpdated?.includes("stale") && (
+                <span className="ml-2 text-xs text-yellow-600 italic">refreshing...</span>
+              )}
+            </p>
           )}
 
           <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
@@ -55,10 +71,10 @@ export default function BusinessTrendCard() {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
                 <Dialog.Title className="text-lg font-bold text-gray-800 mb-2">
-                  🔥 Full Business Trend Prediction
+                  📊 Full Market Insight
                 </Dialog.Title>
                 <p className="text-gray-700 whitespace-pre-line max-h-[70vh] overflow-y-auto">
-                  {trend}
+                  {insight}
                 </p>
                 <div className="mt-4 text-right">
                   <button
@@ -73,7 +89,7 @@ export default function BusinessTrendCard() {
           </Dialog>
         </>
       ) : (
-        <p className="text-red-500 mt-2">⚠️ No business trend available</p>
+        <p className="text-red-500 mt-2">⚠️ No market insight available</p>
       )}
     </div>
   );
