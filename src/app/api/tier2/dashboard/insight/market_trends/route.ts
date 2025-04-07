@@ -10,17 +10,19 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const industry = searchParams.get("industry") ?? "Other";
 
+  console.log("🔎 Requested industry insight for:", industry);
+
   const { data, error } = await supabase
     .from("realtime_market_trends")
     .select("insight, createdat")
     .eq("industry", industry)
     .order("createdat", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  if (error) {
-    console.error("❌ Supabase fetch error:", error);
-    return NextResponse.json({ error: "Failed to load insight" }, { status: 500 });
+  if (error || !data) {
+    console.warn("⚠️ No insight found for:", industry);
+    return NextResponse.json({ error: "No insight found" }, { status: 404 });
   }
 
   return NextResponse.json(data);
