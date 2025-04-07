@@ -178,6 +178,7 @@ try {
       roadmap: parsed.roadmap,
       chartData,
       updated_at: new Date().toISOString(),
+      industry: user.industry?.trim().toLowerCase()
     };
     console.log("🔍 Parsed AI response:", parsed);
     // 💾 Store Insights
