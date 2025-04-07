@@ -22,54 +22,57 @@ export async function GET() {
   }
 
   try {
-    // ✅ Fetch ETF sector breakdown (macro view)
+    // 🌐 Sector allocation from SPY ETF
     console.log("🌐 Fetching ETF sector data from Finnhub...");
-    const etfRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
-    const etfText = await etfRes.text();
+    const sectorRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
+    const sectorJson = await sectorRes.json();
 
-    console.log("📥 ETF Sector Raw Response:", etfText.slice(0, 300));
-
-    let etfData;
-    try {
-      etfData = JSON.parse(etfText);
-    } catch (err) {
-      throw new Error("❌ Failed to parse ETF sector JSON. Response was not JSON.");
+    let sectorText = "Sector allocation data was not available.";
+    if (!sectorJson.error && Array.isArray(sectorJson.sectorWeights)) {
+      sectorText = sectorJson.sectorWeights
+        .map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`)
+        .join("\n");
+    } else {
+      console.warn("⚠️ Finnhub ETF sector endpoint error:", sectorJson.error || "Unexpected format");
     }
 
-    // ✅ Fetch general market news
+    // 🌐 Market sentiment
+    console.log("🌐 Fetching news sentiment from Finnhub...");
+    const sentimentRes = await fetch(`https://finnhub.io/api/v1/news-sentiment?symbol=AAPL&token=${FINNHUB_API_KEY}`);
+    const sentimentJson = await sentimentRes.json();
+
+    const bullish = sentimentJson.sentiment?.bullishPercent ?? "N/A";
+    const bearish = sentimentJson.sentiment?.bearishPercent ?? "N/A";
+
+    // 🌐 Market news
     console.log("🌐 Fetching market news from Finnhub...");
     const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
-    const newsText = await newsRes.text();
+    const newsJson = await newsRes.json();
+    const topHeadlines = Array.isArray(newsJson)
+      ? newsJson.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n")
+      : "No headlines available.";
 
-    console.log("📥 News Raw Response:", newsText.slice(0, 300));
-
-    let newsData;
-    try {
-      newsData = JSON.parse(newsText);
-    } catch (err) {
-      throw new Error("❌ Failed to parse news JSON. Response was not JSON.");
-    }
-
-    const topHeadlines = newsData.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n");
-
-    // 🧠 GPT prompt
+    // 🧠 Build GPT prompt
     const prompt = `
-Act as a McKinsey-caliber strategist. Analyze the following U.S. ETF sector allocation and headline news to generate a weekly strategic market trend summary.
+Act as a McKinsey-caliber strategist. Analyze the following U.S. market context and create a weekly insight summary with strategic implications for growth-stage companies.
 
-ETF Sector Breakdown (SPY):
-${etfData.sectorWeightings.map((s: any) => `- ${s.sector}: ${s.weight}%`).join("\n")}
+🟣 Sector Allocation (SPY ETF):
+${sectorText}
 
-Top Headlines:
+🔵 Market Sentiment (Apple as proxy):
+- Bullish: ${bullish}%
+- Bearish: ${bearish}%
+
+📰 Top Headlines:
 ${topHeadlines}
 
 Format:
 📊 Summary Insight:
-🎯 Strategic Recommendation:
+🎯 Strategic Outlook for Growth Companies:
     `.trim();
 
-    console.log("🧠 Sending prompt to GPT. Prompt size:", prompt.length);
+    console.log("🧠 Sending prompt to GPT. Length:", prompt.length);
 
-    // ✅ GPT call
     const gptRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -83,24 +86,15 @@ Format:
       }),
     });
 
-    const gptText = await gptRes.text();
-    console.log("📥 Raw OpenAI Response:", gptText.slice(0, 300));
-
-    let gptData;
-    try {
-      gptData = JSON.parse(gptText);
-    } catch (err) {
-      throw new Error("❌ Failed to parse GPT response. Got HTML or invalid JSON.");
-    }
-
-    const aiText = gptData?.choices?.[0]?.message?.content ?? "No insight returned.";
+    const gptJson = await gptRes.json();
+    const aiText = gptJson?.choices?.[0]?.message?.content ?? "No insight returned.";
 
     // ✅ Save to Supabase
     const { error: dbError } = await supabase.from("realtime_market_trends").insert([
       {
         title: "📊 Market Trend Prediction",
         insight: aiText,
-        source: "Finnhub + GPT",
+        source: "finnhub + GPT",
         createdat: new Date().toISOString(),
       },
     ]);
