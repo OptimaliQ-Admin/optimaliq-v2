@@ -37,6 +37,7 @@ export default function OnboardingAssessmentPage() {
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
+  const [bpmQuestions, setBpmQuestions] = useState<any[]>([]);
 
   
   const stripUnusedOtherFields = (answers: Record<string, any>) => {
@@ -75,9 +76,28 @@ export default function OnboardingAssessmentPage() {
         router.push("/pricing");
         return;
       }
+      
 
       setLoading(false);
     };
+
+    useEffect(() => {
+      async function loadBpmQuestions() {
+        const score = 2.5; // TODO: Replace with dynamic user score
+        const { data, error } = await supabase
+          .from("bpm_assessment_questions")
+          .select("*")
+          .lte("score_min", score)
+          .gte("score_max", score)
+          .order("order");
+    
+        if (error) console.error("Error loading BPM questions:", error);
+        if (data) setBpmQuestions(data);
+      }
+    
+      if (!loading) loadBpmQuestions();
+    }, [loading]);
+    
 
     checkSubscription();
   }, [router, userEmail, skipCheck]);
@@ -174,7 +194,13 @@ export default function OnboardingAssessmentPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} />
+              <StepGroupRenderer
+  step={step}
+  answers={formAnswers}
+  onAnswer={handleAnswer}
+  bpmQuestions={bpmQuestions}
+/>
+
             </motion.div>
           </AnimatePresence>
 

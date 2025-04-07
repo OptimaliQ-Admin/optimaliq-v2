@@ -39,7 +39,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
 
       {/* Question 1: Growth Metrics */}
 <MultiSelectQuestion
-  question="What metrics do you track most closely to measure growth?"
+  question="Old Questions"
   description="Choose the KPIs that guide your key decisions today."
   options={[
     { value: "revenue", label: "Revenue" },
