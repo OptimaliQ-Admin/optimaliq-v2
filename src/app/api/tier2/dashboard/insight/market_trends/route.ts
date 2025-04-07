@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const industry = searchParams.get("industry") ?? "Other";
+  const industry = (searchParams.get("industry") ?? "other").trim().toLowerCase();
 
   console.log("🔎 Requested industry insight for:", industry);
 
