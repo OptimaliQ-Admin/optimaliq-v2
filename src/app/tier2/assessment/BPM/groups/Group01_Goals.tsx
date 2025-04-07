@@ -39,7 +39,6 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
 
       {/* Question 1: Growth Metrics */}
 <MultiSelectQuestion
-id="growth_metrics"
   question="Old Questions"
   description="Choose the KPIs that guide your key decisions today."
   options={[
