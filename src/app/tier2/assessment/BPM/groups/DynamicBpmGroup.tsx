@@ -14,7 +14,7 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
             return (
               <MultipleChoiceQuestion
                 
-                id={q.id}
+              
                 question={q.question_text}
                 options={options}
                 value={value}
@@ -24,8 +24,7 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
           case "multi_select":
             return (
               <MultiSelectQuestion
-               
-                id={q.id}
+             
                 question={q.question_text}
                 options={options}
                 selected={value || []}
@@ -36,7 +35,7 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
           case "text_area":
             return (
                 <TextAreaQuestion
-                id={q.id}
+               
                 question={q.question_text}
                 value={value}
                 onChange={(val) => onAnswer(q.id, val)}

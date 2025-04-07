@@ -8,7 +8,6 @@ interface Option {
 }
 
 type Props = {
-  id: string; // ✅ if you're passing this
   question: string;
   options: { value: string; label: string }[];
   value: string[]; // ✅ <-- This is what's missing right now
