@@ -13,6 +13,7 @@ type Props = {
   value: string[]; // ✅ <-- This is what's missing right now
   onChange: (value: string[]) => void;
   maxSelect?: number;
+  description?: string;
 };
 
 
