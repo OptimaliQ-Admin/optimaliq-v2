@@ -56,8 +56,9 @@ export async function POST(req: Request) {
       
         return NextResponse.json({
           ...existingInsights,
+          industry: user.industry?.trim().toLowerCase(),
           promptRetake: isInsightOld,
-        });
+        });        
       }      
 
     // 🧠 Build OpenAI prompt
