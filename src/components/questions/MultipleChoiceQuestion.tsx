@@ -7,14 +7,15 @@ interface Option {
   label: string;
 }
 
-interface Props {
-  id: string;
+type Props = {
+  id: string; // ✅ if you're passing this
   question: string;
-  description?: string;
-  options: Option[];
-  value: string;
-  onChange: (value: string) => void;
-}
+  options: { value: string; label: string }[];
+  value: string[]; // ✅ <-- This is what's missing right now
+  onChange: (value: string[]) => void;
+  maxSelect?: number;
+};
+
 
 export default function MultipleChoiceQuestion({
   question,
