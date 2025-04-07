@@ -14,7 +14,7 @@ import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
 import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
 import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
 
-const gmfScore = 2.5; // or get it from Supabase/user context/state
+const score = 2.5; // or get it from Supabase/user context/state
 
 
 const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
@@ -175,7 +175,7 @@ export default function OnboardingAssessmentPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} score={gmfScore} />
+              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} score={score} />
             </motion.div>
           </AnimatePresence>
 
