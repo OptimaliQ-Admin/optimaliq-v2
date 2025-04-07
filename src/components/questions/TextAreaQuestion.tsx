@@ -3,6 +3,7 @@
 import React from "react";
 
 interface Props {
+  id: string;
   question: string;
   description?: string;
   value: string;

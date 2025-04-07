@@ -8,6 +8,7 @@ type Option = {
 };
 
 interface Props {
+  id: string;
   question: string;
   description?: string;
   options: Option[];

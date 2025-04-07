@@ -10,6 +10,7 @@ type Option = {
 };
 
 type Props = {
+  id: string;
   question: string;
   description?: string;
   options: Option[];
