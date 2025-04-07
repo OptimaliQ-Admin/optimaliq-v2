@@ -13,12 +13,14 @@ type Props = {
   step: number;
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
+  score: number;
+
 };
 
 export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {
   switch (step) {
     case 0:
-      return <Group01_Goals answers={answers} onAnswer={onAnswer} />;
+      return <Group01_Goals answers={answers} onAnswer={onAnswer} score={score} />;
     case 1:
       return <Group02_Positioning answers={answers} onAnswer={onAnswer} />;
     case 2:
