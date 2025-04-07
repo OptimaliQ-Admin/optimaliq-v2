@@ -7,7 +7,14 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       {questions.map((q: any) => {
         const value = answers[q.id] || "";
-        const options = q.options ? JSON.parse(q.options) : [];
+        let options: { value: string; label: string }[] = [];
+
+try {
+  options = q.options ? JSON.parse(q.options) : [];
+} catch (e) {
+  console.error("Failed to parse options for question:", q.id, q.options);
+}
+
 
         switch (q.question_type) {
             case "multiple_choice":
