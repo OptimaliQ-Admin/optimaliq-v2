@@ -9,12 +9,12 @@ interface Option {
 
 type Props = {
   question: string;
-  options: { value: string; label: string }[];
-  value: string[]; // ✅ <-- This is what's missing right now
-  onChange: (value: string[]) => void;
-  maxSelect?: number;
   description?: string;
+  options: { value: string; label: string }[];
+  value: string; // <-- Must be a string, not string[]
+  onChange: (val: string) => void;
 };
+
 
 
 export default function MultipleChoiceQuestion({
