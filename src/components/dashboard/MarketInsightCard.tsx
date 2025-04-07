@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import SectionTitleBar from "./SectionTitleBar";
 
 export default function MarketInsightCard({ industry }: { industry: string }) {
   const [insight, setInsight] = useState<string | null>(null);
@@ -75,7 +76,10 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-      <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction</h2>
+      <SectionTitleBar
+  title="📊 Market Trend Prediction"
+  tooltip="AI-generated insights based on financial signals and news sentiment. Updated weekly."
+/>
       {loading ? (
         <p className="text-gray-400 mt-2 animate-pulse">Loading latest insight...</p>
       ) : insight ? (

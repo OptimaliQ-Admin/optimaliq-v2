@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     .from('scorecard_insights')
     .select('title, description, benchmark, focus_areas')
     .eq('category', category)
-    .eq('industry', industry)
+    .eq('industry', industry.trim().toLowerCase())
     .filter('score_min', 'lte', score)
     .filter('score_max', 'gt', score) // exclusive upper bound
     .single();

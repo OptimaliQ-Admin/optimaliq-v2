@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Dialog } from "@headlessui/react";
+import SectionTitleBar from "./SectionTitleBar";
 
 export default function BusinessTrendCard() {
   const [trend, setTrend] = useState<string | null>(null);
@@ -34,7 +35,11 @@ export default function BusinessTrendCard() {
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-      <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions</h2>
+      <SectionTitleBar
+        title="🔥 Business Trend Predictions"
+        tooltip="Strategic market guidance pulled from real-time data and headlines. Updated weekly."
+      />
+
       {loading ? (
         <p className="text-gray-400 mt-2 animate-pulse">Loading business trends...</p>
       ) : trend ? (
