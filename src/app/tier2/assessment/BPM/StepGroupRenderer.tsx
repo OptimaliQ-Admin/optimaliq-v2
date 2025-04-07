@@ -17,7 +17,8 @@ type Props = {
 
 };
 
-export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {
+export default function StepGroupRenderer({ step, answers, onAnswer, score }: Props) {
+
   switch (step) {
     case 0:
       return <Group01_Goals answers={answers} onAnswer={onAnswer} score={score} />;
