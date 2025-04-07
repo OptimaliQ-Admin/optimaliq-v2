@@ -243,8 +243,9 @@ const email = searchParams.get("email");
 
            {/* Insight Sections */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <MarketInsightCard industry={(insights?.industry || "").trim().toLowerCase() || "other"} />
-  <BusinessTrendCard />
+  <MarketInsightCard industry={(insights?.industry || "other").trim().toLowerCase()} />
+  <BusinessTrendCard industry={(insights?.industry || "other").trim().toLowerCase()} />
+  
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
     <h2 className="text-lg font-bold text-gray-700">⚠️ Top Challenges & Opportunities in Industry (Placeholder)</h2>
     <p className="text-gray-600 mt-2">
@@ -252,6 +253,7 @@ const email = searchParams.get("email");
       <br />⚠️ “Customer acquisition costs have risen by 30%…”
     </p>
   </div>
+
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
     <h2 className="text-lg font-bold text-gray-700">📢 Marketing Investment Trends (Placeholder)</h2>
     <p className="text-gray-600 mt-2">
@@ -260,7 +262,6 @@ const email = searchParams.get("email");
     </p>
   </div>
 </div>
-
           </>
         )}
       </div>
