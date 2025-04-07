@@ -13,6 +13,11 @@ type Props = {
   score: number;
 };
 
+export function isGroup01Complete(answers: Record<string, any>) {
+  return !!answers["bpm_q_1"]; // Update this to check all required keys
+}
+
+
 export default function Group01_Goals({ answers, onAnswer, score }: Props) {
   const [questions, setQuestions] = useState<any[]>([]);
 
