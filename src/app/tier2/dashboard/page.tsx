@@ -19,6 +19,7 @@ import SectionHeader from "@/components/dashboard/SectionHeader";
 import InsightLoading from "@/components/dashboard/InsightLoading";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
+import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import dynamic from "next/dynamic";
 
@@ -244,11 +245,7 @@ const email = searchParams.get("email");
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <MarketInsightCard industry={(insights?.industry || "").trim().toLowerCase() || "other"} />
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-    <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions (Placeholder)</h2>
-    <p className="text-gray-600 mt-2">
-      ✅ Example:
-      <br />📢 “Remote work is stabilizing at 40% adoption…”
-    </p>
+  <BusinessTrendCard />
   </div>
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
     <h2 className="text-lg font-bold text-gray-700">⚠️ Top Challenges & Opportunities in Industry (Placeholder)</h2>
