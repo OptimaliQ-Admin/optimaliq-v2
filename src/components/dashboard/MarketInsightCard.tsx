@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-export default function MarketInsightCard() {
+export default function MarketInsightCard({ industry }: { industry: string }) {
   const [insight, setInsight] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ export default function MarketInsightCard() {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch("/api/tier2/dashboard/insight/market_trends");
+        const res = await fetch(`/api/tier2/dashboard/insight/market_trends?industry=${encodeURIComponent(industry)}`);
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {
@@ -38,7 +38,7 @@ export default function MarketInsightCard() {
     };
 
     fetchInsight();
-  }, []);
+  }, [industry]);
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
@@ -49,13 +49,13 @@ export default function MarketInsightCard() {
         <>
           <p className="text-gray-600 mt-2 whitespace-pre-line">{insight}</p>
           {lastUpdated && (
-  <p className="mt-4 text-xs text-gray-400">
-    Last updated: {lastUpdated}
-    {lastUpdated?.includes("stale") && (
-      <span className="ml-2 text-xs text-yellow-600 italic">refreshing...</span>
-    )}
-  </p>
-)}
+            <p className="mt-4 text-xs text-gray-400">
+              Last updated: {lastUpdated}
+              {lastUpdated?.includes("stale") && (
+                <span className="ml-2 text-xs text-yellow-600 italic">refreshing...</span>
+              )}
+            </p>
+          )}
         </>
       ) : (
         <p className="text-red-500 mt-2">⚠️ No market insight available</p>

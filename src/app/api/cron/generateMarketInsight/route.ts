@@ -2,29 +2,26 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function GET(req: Request) {
+  // 🔐 Protect cron route
   const authHeader = req.headers.get("Authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    console.warn("🔒 Unauthorized cron job trigger attempt.");
+    console.warn("🔒 Unauthorized cron trigger.");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY!;
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+
   console.log("🟡 [START] Cron job running:", new Date().toISOString());
 
-  if (!FINNHUB_API_KEY || !OPENAI_API_KEY) {
-    console.error("❌ Missing environment keys");
-    return NextResponse.json({ error: "Missing environment keys" }, { status: 500 });
-  }
-
   try {
+    // 1️⃣ Get all industry -> symbol mappings
     const { data: industries, error: industriesError } = await supabase
       .from("industry_stock_symbols")
       .select("industry, symbol");
@@ -33,12 +30,14 @@ export async function GET(req: Request) {
       throw new Error("❌ Failed to fetch industry symbols");
     }
 
+    // 2️⃣ Group symbols by industry (max 4 per)
     const industryMap: Record<string, string[]> = {};
     for (const { industry, symbol } of industries) {
       if (!industryMap[industry]) industryMap[industry] = [];
       if (industryMap[industry].length < 4) industryMap[industry].push(symbol);
     }
 
+    // 3️⃣ Loop to find the first outdated insight and process only that
     for (const [industry, symbols] of Object.entries(industryMap)) {
       const { data: existingInsight } = await supabase
         .from("realtime_market_trends")
@@ -53,18 +52,20 @@ export async function GET(req: Request) {
         (now.getTime() - new Date(existingInsight.createdat).getTime()) < 7 * 24 * 60 * 60 * 1000;
 
       if (isFresh) {
-        console.log(`⏩ Skipping ${industry} (already updated within 7 days)`);
+        console.log(`⏩ ${industry} is fresh. Skipping.`);
         continue;
       }
 
-      console.log(`🔄 Generating insight for: ${industry}`);
+      console.log(`🔄 Processing insight for: ${industry}`);
 
+      // 4️⃣ Sector Allocation
       const sectorRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
       const sectorJson = await sectorRes.json();
       const sectorText = Array.isArray(sectorJson.sectorWeights)
         ? sectorJson.sectorWeights.map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`).join("\n")
         : "Sector allocation unavailable.";
 
+      // 5️⃣ Sentiment
       let totalBullish = 0;
       let totalBearish = 0;
       for (const sym of symbols) {
@@ -73,10 +74,10 @@ export async function GET(req: Request) {
         totalBullish += sentimentJson.sentiment?.bullishPercent || 0;
         totalBearish += sentimentJson.sentiment?.bearishPercent || 0;
       }
-
       const bullish = (totalBullish / symbols.length).toFixed(1);
       const bearish = (totalBearish / symbols.length).toFixed(1);
 
+      // 6️⃣ Analyst Recs
       const recommendations = await Promise.all(
         symbols.map(async (sym) => {
           const res = await fetch(`https://finnhub.io/api/v1/stock/recommendation?symbol=${sym}&token=${FINNHUB_API_KEY}`);
@@ -86,12 +87,14 @@ export async function GET(req: Request) {
       );
       const analystSummary = recommendations.join("\n");
 
+      // 7️⃣ Headlines
       const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
       const newsJson = await newsRes.json();
       const topHeadlines = Array.isArray(newsJson)
-        ? newsJson.slice(0, 3).map((n: any) => `- \"${n.headline}\"`).join("\n")
+        ? newsJson.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n")
         : "No headlines available.";
 
+      // 8️⃣ GPT Prompt
       const prompt = `
 You are a world-class strategic advisor trusted by growth-stage companies to translate market signals into high-impact decisions.
 
@@ -115,11 +118,9 @@ ${topHeadlines}
 
 **Instructions:**
 - Write an insight memo that delivers **strategic foresight** — tell the user what this data means, why it matters, and how to position their business.
-- **Segment insights by industry type if relevant.**
-- Reference **macro implications** (e.g., investor sentiment, funding climate, regulatory changes) when relevant.
-- Offer **practical takeaways**: What should a smart, growth-focused company *do* with this info?
-- Avoid generic statements. Your insight should read like something a Bain or McKinsey consultant would send to an executive client.
-- Do NOT add filler or summaries. Start directly with the insight.
+- Segment insights by industry if relevant.
+- Reference macro trends (e.g., funding, supply chain, inflation).
+- Offer practical takeaways, no fluff.
 
 **Format:**
 📊 Market Summary:
@@ -155,8 +156,10 @@ ${topHeadlines}
       if (dbError) {
         console.error(`❌ Error saving insight for ${industry}:`, dbError);
       } else {
-        console.log(`✅ Saved insight for: ${industry}`);
+        console.log(`✅ Saved new insight for: ${industry}`);
       }
+
+      break; // ✅ Stop after first update
     }
 
     return NextResponse.json({ success: true });
@@ -166,7 +169,6 @@ ${topHeadlines}
       stack: err.stack,
       time: new Date().toISOString(),
     });
-
     return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
   }
 }

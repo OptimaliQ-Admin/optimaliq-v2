@@ -6,10 +6,14 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const industry = searchParams.get("industry") ?? "Other";
+
   const { data, error } = await supabase
     .from("realtime_market_trends")
     .select("insight, createdat")
+    .eq("industry", industry)
     .order("createdat", { ascending: false })
     .limit(1)
     .single();

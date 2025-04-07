@@ -242,7 +242,7 @@ const email = searchParams.get("email");
 
             {/* Placeholder Sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MarketInsightCard />
+            <MarketInsightCard industry={insights?.industry ?? "Other"} />
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
     <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions (Placeholder)</h2>
     <p className="text-gray-600 mt-2">
