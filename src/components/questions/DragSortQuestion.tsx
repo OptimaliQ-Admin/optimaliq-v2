@@ -18,7 +18,6 @@ import {
 import { SortableItem } from "./SortableItem";
 
 type Props = {
-  id: string;
   question: string;
   description?: string;
   items: string[];
