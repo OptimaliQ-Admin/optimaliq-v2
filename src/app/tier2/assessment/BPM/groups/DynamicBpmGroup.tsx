@@ -11,14 +11,15 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
 
         switch (q.question_type) {
             case "multiple_choice":
-                return (
-                  <MultipleChoiceQuestion
-                    question={q.question_text}
-                    options={options}
-                    value={answers[q.id] || ""}
-                    onChange={(val) => onAnswer(q.id, val)}
-                  />
-                );
+  return (
+    <MultipleChoiceQuestion
+      question={q.question_text}
+      options={options}
+      value={typeof value === "string" ? value : ""} // ⬅ ensure value is a string
+      onChange={(val) => onAnswer(q.id, val)}
+    />
+  );
+
           case "multi_select":
             return (
               <MultiSelectQuestion
