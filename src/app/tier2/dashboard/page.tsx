@@ -20,6 +20,7 @@ import InsightLoading from "@/components/dashboard/InsightLoading";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
 import GrowthChart from "@/components/dashboard/GrowthChart";
+import dynamic from "next/dynamic";
 
 
 
@@ -33,6 +34,7 @@ const email = searchParams.get("email");
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCardData, setSelectedCardData] = useState<any>(null);
+  const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
   
 
   useEffect(() => {
@@ -240,14 +242,7 @@ const email = searchParams.get("email");
 
             {/* Placeholder Sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-    <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction (Placeholder)</h2>
-    <p className="text-gray-600 mt-2">
-      (Includes real market data, stock trends, and sector performance)
-      <br />✅ Example:
-      <br />📈 “Retail eCommerce growth has slowed to 3% YoY…”
-    </p>
-  </div>
+            <MarketInsightCard />
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
     <h2 className="text-lg font-bold text-gray-700">🔥 Business Trend Predictions (Placeholder)</h2>
     <p className="text-gray-600 mt-2">
