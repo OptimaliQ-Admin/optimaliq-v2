@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import SectionTitleBar from "./SectionTitleBar";
 
 interface RadarDataPoint {
   category: string;
@@ -57,9 +58,10 @@ const ExecutiveRadarChart: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
       <div className="mb-4">
-  <h3 className="text-lg font-bold text-gray-800 mb-2">
-    🧭 Capability Comparison
-  </h3>
+      <SectionTitleBar
+  title="🧭 Capability Comparison"
+  tooltip="Compare your strategy, process, and technology maturity to industry benchmarks."
+/>
   <p className="text-gray-500 text-sm leading-relaxed">
     Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
     See how close you are to enterprise excellence.
