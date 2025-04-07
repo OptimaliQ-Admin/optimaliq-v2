@@ -3,13 +3,15 @@
 import React from "react";
 
 type Props = {
-  id: string; // ✅ if you're passing this
+  id: string;
   question: string;
-  options: { value: string; label: string }[];
-  value: string[]; // ✅ <-- This is what's missing right now
-  onChange: (value: string[]) => void;
-  maxSelect?: number;
+  description?: string;
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  maxLength?: number;
 };
+
 
 
 export default function TextAreaQuestion({

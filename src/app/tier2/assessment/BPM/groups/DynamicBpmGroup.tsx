@@ -35,12 +35,13 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
             );
           case "text_area":
             return (
-              <TextAreaQuestion
-                
+                <TextAreaQuestion
                 id={q.id}
                 question={q.question_text}
                 value={value}
                 onChange={(val) => onAnswer(q.id, val)}
+                placeholder={q.placeholder || ""}
+                maxLength={q.max_length || 300}
               />
             );
           default:
