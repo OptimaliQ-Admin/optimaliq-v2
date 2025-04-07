@@ -2,6 +2,7 @@
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
 
 export const dynamic = "force-dynamic";
 
@@ -10,93 +11,87 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 export async function GET() {
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-  if (!FINNHUB_API_KEY || !OPENAI_API_KEY) {
+  if (!FINNHUB_API_KEY || !process.env.OPENAI_API_KEY) {
     console.error("❌ Missing API Keys");
     return NextResponse.json({ error: "Missing environment keys" }, { status: 500 });
   }
 
   try {
-    // 1. Fetch Sector Data
+    // 1. Fetch sector data
     const sectorRes = await fetch("https://finnhub.io/api/v1/stock/sector-performance", {
       headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
     });
     const sectorData = await sectorRes.json();
 
-    // 2. Fetch News
+    // 2. Fetch news data
     const newsRes = await fetch("https://finnhub.io/api/v1/news?category=general", {
       headers: { "X-Finnhub-Token": FINNHUB_API_KEY },
     });
     const newsData = await newsRes.json();
-    const topHeadlines = newsData.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n");
+    const topHeadlines = newsData.slice(0, 3).map((n: any) => `- \"${n.headline}\"`).join("\n");
 
-    // 3. Compose Prompt
-    const prompt = `
-Act as a McKinsey-caliber strategist. Analyze the following U.S. market data and news to create a strategic summary and actionable recommendation for growth-stage companies.
+    // 3. Compose GPT prompt
+    const aiPrompt = `
+      You are a world-class market strategist. Analyze the following U.S. sector performance data and news headlines. Provide:
+      - A strategic insight summarizing the state of the market
+      - A high-level recommendation for growing companies to act on.
 
-Sector Performance:
-${sectorData.map((s: any) => `- ${s.sector}: ${s.change}%`).join("\n")}
+      Sector Performance:
+      ${sectorData.map((s: any) => `- ${s.sector}: ${s.change}%`).join("\n")}
 
-Top Headlines:
-${topHeadlines}
+      Headlines:
+      ${topHeadlines}
 
-Format:
-📊 Summary Insight:
-🎯 Strategic Recommendation:
-    `.trim();
+      Format (strict JSON only):
+      {
+        "summaryInsight": "...",
+        "strategicRecommendation": "..."
+      }
+    `;
 
-    // 4. Call OpenAI
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-      }),
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: aiPrompt }],
+      response_format: { type: "json_object" },
     });
 
-    const text = await openaiRes.text();
+    const raw = completion.choices?.[0]?.message?.content;
 
-    if (!openaiRes.ok) {
-      console.error("❌ OpenAI Error Text:", text.slice(0, 200));
-      return NextResponse.json({ error: "OpenAI request failed", detail: text }, { status: 500 });
-    }
-
-    let aiData;
+    let parsed;
     try {
-      aiData = JSON.parse(text);
+      parsed = JSON.parse(raw!);
     } catch (err) {
-      console.error("❌ Failed to parse OpenAI response as JSON");
-      console.log("📃 Raw OpenAI response:", text.slice(0, 500));
-      return NextResponse.json({ error: "Invalid JSON from OpenAI" }, { status: 500 });
+      console.error("🚨 JSON Parse Error:", err);
+      console.log("🔴 Raw content:", raw);
+      return NextResponse.json({ error: "OpenAI returned invalid JSON" }, { status: 500 });
     }
 
-    const aiText = aiData.choices?.[0]?.message?.content || "No insight returned.";
+    const { summaryInsight, strategicRecommendation } = parsed;
 
-    // 5. Store in Supabase
-    const { error: dbError } = await supabase.from("realtime_market_trends").insert([
+    // 4. Store in Supabase
+    const { error } = await supabase.from("realtime_market_trends").insert([
       {
         title: "📊 Market Trend Prediction",
-        insight: aiText,
+        insight: `📊 Summary Insight: ${summaryInsight}\n\n🎯 Strategic Recommendation: ${strategicRecommendation}`,
         source: "finnhub + GPT",
       },
     ]);
 
-    if (dbError) {
-      console.error("❌ Supabase Insert Error:", dbError);
-      return NextResponse.json({ error: "Failed to save to Supabase" }, { status: 500 });
+    if (error) {
+      console.error("❌ Supabase Insert Error:", error);
+      return NextResponse.json({ error: "Failed to store insight" }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, insight: aiText });
+    return NextResponse.json({ success: true, summaryInsight, strategicRecommendation });
   } catch (err: any) {
-    console.error("❌ Unhandled Error:", err.message || err);
+    console.error("❌ Unhandled error:", err);
     return NextResponse.json({ error: "Server error", detail: err.message || err }, { status: 500 });
   }
 }
