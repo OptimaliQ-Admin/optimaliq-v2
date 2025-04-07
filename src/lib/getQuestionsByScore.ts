@@ -9,7 +9,7 @@ const supabase = createClient(
 export async function getQuestionsByScore(score: number) {
   const bracket = Math.floor(score * 2) / 2;
   const { data, error } = await supabase
-    .from('bpm_questions')
+    .from('bpm_assessment_questions')
     .select('*')
     .eq('score_bracket', bracket);
 
