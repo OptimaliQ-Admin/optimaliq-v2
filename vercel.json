@@ -1,0 +1,9 @@
+{
+    "crons": [
+      {
+        "path": "/api/cron/generateMarketInsight",
+        "schedule": "*/15 1-4 * * 2"
+      }
+    ]
+  }
+  

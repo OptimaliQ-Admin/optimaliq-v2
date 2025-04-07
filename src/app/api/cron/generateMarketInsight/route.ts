@@ -8,10 +8,15 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function GET() {
+export async function GET(req: Request) {
+  const authHeader = req.headers.get("Authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    console.warn("🔒 Unauthorized cron job trigger attempt.");
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY!;
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-
   console.log("🟡 [START] Cron job running:", new Date().toISOString());
 
   if (!FINNHUB_API_KEY || !OPENAI_API_KEY) {
@@ -20,61 +25,74 @@ export async function GET() {
   }
 
   try {
-    // 1️⃣ Fetch bellwether stock symbols from industry table (limit 4)
-    const { data: bellwethers, error: bellwetherError } = await supabase
+    const { data: industries, error: industriesError } = await supabase
       .from("industry_stock_symbols")
-      .select("symbol")
-      .limit(4);
+      .select("industry, symbol");
 
-    if (bellwetherError || !bellwethers || bellwethers.length === 0) {
-      throw new Error("❌ No bellwether stocks found");
+    if (industriesError || !industries) {
+      throw new Error("❌ Failed to fetch industry symbols");
     }
 
-    const symbols = bellwethers.map((b) => b.symbol);
-
-    // 2️⃣ ETF Sector Allocation
-    console.log("🌐 Fetching ETF sector data from Finnhub...");
-    const sectorRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
-    const sectorJson = await sectorRes.json();
-    const sectorText = Array.isArray(sectorJson.sectorWeights)
-      ? sectorJson.sectorWeights.map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`).join("\n")
-      : "Sector allocation unavailable.";
-
-    // 3️⃣ Market Sentiment
-    let totalBullish = 0;
-    let totalBearish = 0;
-
-    for (const sym of symbols) {
-      const sentimentRes = await fetch(`https://finnhub.io/api/v1/news-sentiment?symbol=${sym}&token=${FINNHUB_API_KEY}`);
-      const sentimentJson = await sentimentRes.json();
-      totalBullish += sentimentJson.sentiment?.bullishPercent || 0;
-      totalBearish += sentimentJson.sentiment?.bearishPercent || 0;
+    const industryMap: Record<string, string[]> = {};
+    for (const { industry, symbol } of industries) {
+      if (!industryMap[industry]) industryMap[industry] = [];
+      if (industryMap[industry].length < 4) industryMap[industry].push(symbol);
     }
 
-    const bullish = (totalBullish / symbols.length).toFixed(1);
-    const bearish = (totalBearish / symbols.length).toFixed(1);
+    for (const [industry, symbols] of Object.entries(industryMap)) {
+      const { data: existingInsight } = await supabase
+        .from("realtime_market_trends")
+        .select("createdat")
+        .eq("industry", industry)
+        .order("createdat", { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
-    // 4️⃣ Analyst Recommendations
-    const recommendations = await Promise.all(
-      symbols.map(async (sym) => {
-        const res = await fetch(`https://finnhub.io/api/v1/stock/recommendation?symbol=${sym}&token=${FINNHUB_API_KEY}`);
-        const data = await res.json();
-        const rating = data?.[0]?.rating || "N/A";
-        return `- ${sym}: ${rating}`;
-      })
-    );
-    const analystSummary = recommendations.join("\n");
+      const now = new Date();
+      const isFresh = existingInsight?.createdat &&
+        (now.getTime() - new Date(existingInsight.createdat).getTime()) < 7 * 24 * 60 * 60 * 1000;
 
-    // 5️⃣ News Headlines
-    console.log("🌐 Fetching market news from Finnhub...");
-    const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
-    const newsJson = await newsRes.json();
-    const topHeadlines = Array.isArray(newsJson)
-      ? newsJson.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n")
-      : "No headlines available.";
+      if (isFresh) {
+        console.log(`⏩ Skipping ${industry} (already updated within 7 days)`);
+        continue;
+      }
 
-    // 6️⃣ GPT Prompt
-    const prompt = `
+      console.log(`🔄 Generating insight for: ${industry}`);
+
+      const sectorRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
+      const sectorJson = await sectorRes.json();
+      const sectorText = Array.isArray(sectorJson.sectorWeights)
+        ? sectorJson.sectorWeights.map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`).join("\n")
+        : "Sector allocation unavailable.";
+
+      let totalBullish = 0;
+      let totalBearish = 0;
+      for (const sym of symbols) {
+        const sentimentRes = await fetch(`https://finnhub.io/api/v1/news-sentiment?symbol=${sym}&token=${FINNHUB_API_KEY}`);
+        const sentimentJson = await sentimentRes.json();
+        totalBullish += sentimentJson.sentiment?.bullishPercent || 0;
+        totalBearish += sentimentJson.sentiment?.bearishPercent || 0;
+      }
+
+      const bullish = (totalBullish / symbols.length).toFixed(1);
+      const bearish = (totalBearish / symbols.length).toFixed(1);
+
+      const recommendations = await Promise.all(
+        symbols.map(async (sym) => {
+          const res = await fetch(`https://finnhub.io/api/v1/stock/recommendation?symbol=${sym}&token=${FINNHUB_API_KEY}`);
+          const data = await res.json();
+          return `- ${sym}: ${data?.[0]?.rating || "N/A"}`;
+        })
+      );
+      const analystSummary = recommendations.join("\n");
+
+      const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
+      const newsJson = await newsRes.json();
+      const topHeadlines = Array.isArray(newsJson)
+        ? newsJson.slice(0, 3).map((n: any) => `- \"${n.headline}\"`).join("\n")
+        : "No headlines available.";
+
+      const prompt = `
 You are a world-class strategic advisor trusted by growth-stage companies to translate market signals into high-impact decisions.
 
 **Your Mission:**
@@ -106,43 +124,42 @@ ${topHeadlines}
 **Format:**
 📊 Market Summary:
 🎯 Strategic Outlook for Growth Companies:
-`.trim();
+      `.trim();
 
-    console.log("🧠 Sending prompt to GPT. Length:", prompt.length);
+      const gptRes = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+        }),
+      });
 
-    const gptRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-      }),
-    });
+      const gptJson = await gptRes.json();
+      const aiText = gptJson?.choices?.[0]?.message?.content ?? "No insight returned.";
 
-    const gptJson = await gptRes.json();
-    const aiText = gptJson?.choices?.[0]?.message?.content ?? "No insight returned.";
+      const { error: dbError } = await supabase.from("realtime_market_trends").insert([
+        {
+          title: "📊 Market Trend Prediction",
+          insight: aiText,
+          source: "finnhub + GPT",
+          industry,
+          createdat: new Date().toISOString(),
+        },
+      ]);
 
-    // ✅ Save to Supabase
-    const { error: dbError } = await supabase.from("realtime_market_trends").insert([
-      {
-        title: "📊 Market Trend Prediction",
-        insight: aiText,
-        source: "finnhub + GPT",
-        createdat: new Date().toISOString(),
-      },
-    ]);
-
-    if (dbError) {
-      console.error("❌ Supabase insert error:", dbError);
-      return NextResponse.json({ error: "Failed to save insight to Supabase" }, { status: 500 });
+      if (dbError) {
+        console.error(`❌ Error saving insight for ${industry}:`, dbError);
+      } else {
+        console.log(`✅ Saved insight for: ${industry}`);
+      }
     }
 
-    console.log("✅ Cron job complete. Insight saved.");
-    return NextResponse.json({ success: true, insight: aiText });
+    return NextResponse.json({ success: true });
   } catch (err: any) {
     console.error("🔥 FULL ERROR DUMP:", {
       message: err.message,
