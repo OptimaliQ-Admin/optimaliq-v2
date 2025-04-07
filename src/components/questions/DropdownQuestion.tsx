@@ -12,7 +12,7 @@ interface Props {
   description?: string;
   options: Option[];
   value: string;
-  onChange: (value: string[]) => void;
+  onChange: (value: string) => void;
   placeholder?: string;
 }
 
