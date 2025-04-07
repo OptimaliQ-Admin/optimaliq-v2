@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+""import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 // Force dynamic for Vercel edge
@@ -22,22 +22,22 @@ export async function GET() {
   }
 
   try {
-    // ✅ Fetch sector performance
-    console.log("🌐 Fetching sector data from Finnhub...");
-    const sectorRes = await fetch(`https://finnhub.io/api/v1/stock/sector-performance?token=${FINNHUB_API_KEY}`);
-    const sectorText = await sectorRes.text();
+    // ✅ Fetch ETF sector breakdown (macro view)
+    console.log("🌐 Fetching ETF sector data from Finnhub...");
+    const etfRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
+    const etfText = await etfRes.text();
 
-    console.log("📥 Sector Raw Response:", sectorText.slice(0, 300));
+    console.log("📥 ETF Sector Raw Response:", etfText.slice(0, 300));
 
-    let sectorData;
+    let etfData;
     try {
-      sectorData = JSON.parse(sectorText);
+      etfData = JSON.parse(etfText);
     } catch (err) {
-      throw new Error("❌ Failed to parse sector performance JSON. Response was not JSON.");
+      throw new Error("❌ Failed to parse ETF sector JSON. Response was not JSON.");
     }
 
-    // ✅ Fetch top news (category=general)
-    console.log("🌐 Fetching news from Finnhub...");
+    // ✅ Fetch general market news
+    console.log("🌐 Fetching market news from Finnhub...");
     const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
     const newsText = await newsRes.text();
 
@@ -54,10 +54,10 @@ export async function GET() {
 
     // 🧠 GPT prompt
     const prompt = `
-Act as a McKinsey-caliber strategist. Analyze the following U.S. market data and news to create a strategic summary and actionable recommendation for growth-stage companies.
+Act as a McKinsey-caliber strategist. Analyze the following U.S. ETF sector allocation and headline news to generate a weekly strategic market trend summary.
 
-Sector Performance:
-${sectorData.map((s: any) => `- ${s.sector}: ${s.change}%`).join("\n")}
+ETF Sector Breakdown (SPY):
+${etfData.sectorWeightings.map((s: any) => `- ${s.sector}: ${s.weight}%`).join("\n")}
 
 Top Headlines:
 ${topHeadlines}
@@ -100,7 +100,7 @@ Format:
       {
         title: "📊 Market Trend Prediction",
         insight: aiText,
-        source: "finnhub + GPT",
+        source: "Finnhub + GPT",
         createdat: new Date().toISOString(),
       },
     ]);
