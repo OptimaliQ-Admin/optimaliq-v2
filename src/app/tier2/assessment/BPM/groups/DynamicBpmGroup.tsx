@@ -26,7 +26,7 @@ export default function DynamicBpmGroup({ questions, answers, onAnswer }: any) {
              
                 question={q.question_text}
                 options={options}
-                selected={value || []}
+                selected={Array.isArray(value) ? value : []}
                 onChange={(val) => onAnswer(q.id, val)}
                 maxSelect={3}
               />
