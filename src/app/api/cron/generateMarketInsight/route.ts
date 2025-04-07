@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Force dynamic for Vercel edge
 export const dynamic = "force-dynamic";
 
-// ✅ Supabase init
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -22,53 +20,76 @@ export async function GET() {
   }
 
   try {
-    // 🌐 Sector allocation from SPY ETF
+    // 1️⃣ Fetch bellwether stock symbols from industry table (limit to 4 total)
+    const { data: bellwethers, error: bellwetherError } = await supabase
+      .from("industry_stock_symbols")
+      .select("symbol")
+      .limit(4);
+
+    if (bellwetherError || !bellwethers || bellwethers.length === 0) {
+      throw new Error("❌ No bellwether stocks found");
+    }
+
+    const symbols = bellwethers.map((b) => b.symbol);
+
+    // 2️⃣ Fetch sector allocation
     console.log("🌐 Fetching ETF sector data from Finnhub...");
     const sectorRes = await fetch(`https://finnhub.io/api/v1/etf/sector?symbol=SPY&token=${FINNHUB_API_KEY}`);
     const sectorJson = await sectorRes.json();
 
-    let sectorText = "Sector allocation data was not available.";
+    let sectorText = "Sector allocation unavailable.";
     if (!sectorJson.error && Array.isArray(sectorJson.sectorWeights)) {
-      sectorText = sectorJson.sectorWeights
-        .map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`)
-        .join("\n");
-    } else {
-      console.warn("⚠️ Finnhub ETF sector endpoint error:", sectorJson.error || "Unexpected format");
+      sectorText = sectorJson.sectorWeights.map((s: any) => `- ${s.name}: ${s.weight.toFixed(2)}%`).join("\n");
     }
 
-    // 🌐 Market sentiment
-    console.log("🌐 Fetching news sentiment from Finnhub...");
-    const sentimentRes = await fetch(`https://finnhub.io/api/v1/news-sentiment?symbol=AAPL&token=${FINNHUB_API_KEY}`);
-    const sentimentJson = await sentimentRes.json();
+    // 3️⃣ Fetch news sentiment
+    let totalBullish = 0;
+    let totalBearish = 0;
+    for (const symbol of symbols) {
+      const sentimentRes = await fetch(`https://finnhub.io/api/v1/news-sentiment?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+      const sentimentJson = await sentimentRes.json();
+      totalBullish += sentimentJson.sentiment?.bullishPercent || 0;
+      totalBearish += sentimentJson.sentiment?.bearishPercent || 0;
+    }
+    const bullish = (totalBullish / symbols.length).toFixed(1);
+    const bearish = (totalBearish / symbols.length).toFixed(1);
 
-    const bullish = sentimentJson.sentiment?.bullishPercent ?? "N/A";
-    const bearish = sentimentJson.sentiment?.bearishPercent ?? "N/A";
+    // 4️⃣ Fetch analyst recommendations
+    const analystRecs = await Promise.all(symbols.map(async (symbol) => {
+      const res = await fetch(`https://finnhub.io/api/v1/stock/recommendation?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+      const data = await res.json();
+      return `- ${symbol}: ${data[0]?.rating || "N/A"}`;
+    }));
 
-    // 🌐 Market news
+    // 5️⃣ Fetch news
     console.log("🌐 Fetching market news from Finnhub...");
     const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
     const newsJson = await newsRes.json();
     const topHeadlines = Array.isArray(newsJson)
-      ? newsJson.slice(0, 3).map((n: any) => `- "${n.headline}"`).join("\n")
+      ? newsJson.slice(0, 3).map((n: any) => `- \"${n.headline}\"`).join("\n")
       : "No headlines available.";
 
-    // 🧠 Build GPT prompt
+    // 🧠 Compose GPT Prompt
     const prompt = `
-Act as a McKinsey-caliber strategist. Analyze the following U.S. market context and create a weekly insight summary with strategic implications for growth-stage companies.
-
-🟣 Sector Allocation (SPY ETF):
+Market Sector Allocation (from SPY):
 ${sectorText}
 
-🔵 Market Sentiment (Apple as proxy):
+Top Market Sentiment (avg from ${symbols.join(", ")}):
 - Bullish: ${bullish}%
 - Bearish: ${bearish}%
 
-📰 Top Headlines:
+Top Analyst Recommendations:
+${analystRecs.join("\n")}
+
+Recent Headlines:
 ${topHeadlines}
 
+TASK:
+Based on this market data, write a concise but consultative weekly insight for growth-stage companies. Be strategic. Be specific. Offer directional advice that helps them think like top-tier operators.
+
 Format:
-📊 Summary Insight:
-🎯 Strategic Outlook for Growth Companies:
+📊 Market Summary:
+🎯 Strategic Outlook:
     `.trim();
 
     console.log("🧠 Sending prompt to GPT. Length:", prompt.length);
@@ -89,7 +110,6 @@ Format:
     const gptJson = await gptRes.json();
     const aiText = gptJson?.choices?.[0]?.message?.content ?? "No insight returned.";
 
-    // ✅ Save to Supabase
     const { error: dbError } = await supabase.from("realtime_market_trends").insert([
       {
         title: "📊 Market Trend Prediction",
