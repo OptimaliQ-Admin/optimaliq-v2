@@ -6,6 +6,7 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
   const [insight, setInsight] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
     const fetchInsight = async () => {
@@ -40,6 +41,38 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
     fetchInsight();
   }, [industry]);
 
+  const renderFormattedInsight = (insight: string) => {
+    const splitPoint = "🎯 Strategic Outlook for Growth Companies:";
+    const [summary, strategySectionRaw] = insight.split(splitPoint);
+
+    if (!strategySectionRaw) return <p className="text-gray-600 mt-2 whitespace-pre-line">{insight}</p>;
+
+    return (
+      <>
+        <p className="text-gray-600 mt-2 whitespace-pre-line">{summary.trim()}</p>
+        <p className="text-gray-600 mt-4 font-semibold">{splitPoint}</p>
+        {collapsed ? (
+          <button
+            onClick={() => setCollapsed(false)}
+            className="text-sm text-blue-600 mt-2 font-medium hover:underline"
+          >
+            Learn more →
+          </button>
+        ) : (
+          <>
+            <p className="text-gray-600 mt-2 whitespace-pre-line">{strategySectionRaw.trim()}</p>
+            <button
+              onClick={() => setCollapsed(true)}
+              className="text-sm text-blue-600 mt-4 font-medium hover:underline"
+            >
+              Show less ▲
+            </button>
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
       <h2 className="text-lg font-bold text-gray-700">📊 Market Trend Prediction</h2>
@@ -47,7 +80,7 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
         <p className="text-gray-400 mt-2 animate-pulse">Loading latest insight...</p>
       ) : insight ? (
         <>
-          <p className="text-gray-600 mt-2 whitespace-pre-line">{insight}</p>
+          {renderFormattedInsight(insight)}
           {lastUpdated && (
             <p className="mt-4 text-xs text-gray-400">
               Last updated: {lastUpdated}
