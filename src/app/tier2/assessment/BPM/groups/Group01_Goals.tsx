@@ -22,7 +22,16 @@ export default function Group01_Goals({ answers, onAnswer, score }: Props) {
   const [questions, setQuestions] = useState<any[]>([]);
 
   useEffect(() => {
-    getQuestionsByScore(score).then(setQuestions).catch(console.error);
+    console.log("Fetching questions for score:", score);
+  
+    getQuestionsByScore(score)
+      .then((res) => {
+        console.log("Fetched questions:", res);
+        setQuestions(res);
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
+      });
   }, [score]);
 
   if (!questions.length) return <p>Loading questions…</p>;

@@ -7,16 +7,17 @@ const supabase = createClient(
 );
 
 export async function getQuestionsByScore(score: number) {
-  const bracket = Math.floor(score * 2) / 2;
+
   const { data, error } = await supabase
     .from('bpm_assessment_questions')
-    .select('*')
-    .eq('score_bracket', bracket);
+    .select("*")
+    .lte("min_score", score)
+    .gte("max_score", score);
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error fetching questions:", error);
+    return [];
+  }
 
-  return data.map((q) => ({
-    ...q,
-    options: q.options ? JSON.parse(q.options) : null // assuming options are stored as JSON string
-  }));
+  return data || [];
 }
