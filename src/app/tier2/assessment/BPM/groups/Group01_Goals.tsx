@@ -21,6 +21,8 @@ export function isGroup01Complete(answers: Record<string, any>) {
 export default function Group01_Goals({ answers, onAnswer, score }: Props) {
   const [questions, setQuestions] = useState<any[]>([]);
 
+  console.log("Using score:", score);
+
   useEffect(() => {
     console.log("Fetching questions for score:", score);
   

@@ -6,18 +6,32 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+
+useEffect(() => {
+  console.log("Fetching questions for score:", score);
+
+  getQuestionsByScore(score)
+    .then((res) => {
+      console.log("Fetched questions:", res);
+      setQuestions(res || []);
+    })
+    .catch((err) => {
+      console.error("Error fetching questions:", err);
+      setQuestions([]); // prevent infinite loading
+    });
+}, [score]);
+
 export async function getQuestionsByScore(score: number) {
-
-  const { data, error } = await supabase
-    .from('bpm_assessment_questions')
-    .select("*")
-    .lte("min_score", score)
-    .gte("max_score", score);
-
-  if (error) {
-    console.error("Error fetching questions:", error);
-    return [];
-  }
-
-  return data || [];
+  return [
+    {
+      id: 1,
+      type: "multiple_choice",
+      question: "What’s your biggest bottleneck?",
+      options: [
+        { value: "time", label: "Time" },
+        { value: "budget", label: "Budget" },
+        { value: "clarity", label: "Clarity" },
+      ],
+    },
+  ];
 }
