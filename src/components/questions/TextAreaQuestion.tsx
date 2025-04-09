@@ -2,17 +2,14 @@
 
 import React from "react";
 
-type Props = {
-
+interface Props {
   question: string;
   description?: string;
   value: string;
-  onChange: (val: string) => void;
+  onChange: (value: string) => void;
   placeholder?: string;
   maxLength?: number;
-};
-
-
+}
 
 export default function TextAreaQuestion({
   question,
