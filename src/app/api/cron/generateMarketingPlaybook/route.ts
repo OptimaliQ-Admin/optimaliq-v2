@@ -39,16 +39,20 @@ export async function GET(req: Request) {
 
     const contentChunk = headlines.slice(0, 20).join("\n");
     const prompt = `
-You are an elite marketing strategist for high-growth companies. Based on the latest headlines below from trusted sources, summarize:
+You are a marketing intelligence strategist trusted by top CMOs. Based on the headlines below, extract high-level strategic marketing trends and investment signals.
 
-1. 3–5 tactical marketing trends
-2. Actionable strategic plays companies should adopt
+Your goal is to help growth-stage companies understand how leading brands are allocating budget, shifting priorities, and adjusting their marketing playbooks. These insights should guide strategic thinking — not prescribe exact actions.
 
-Do not mention websites. Tie to business outcomes. Output format:
+Do not mention the original sources or websites.
 
-🧠 Tactical Marketing Brief — {Month Year}
+Format the response as:
+
+🧠 Marketing Intelligence Brief — {Month Year}
 🔥 Trends:
-🎯 Plays:
+List 4-5 emerging marketing shifts (e.g., "B2B brands reallocating 25% of paid media budget to lifecycle email campaigns").
+
+🎯 Strategic Plays:
+Offer 3-4 directional plays companies might consider, based on the trends above. Include ROI signals or benchmarks if possible (e.g., "Brands investing in short-form video are seeing 40% lift in engagement").
 
 Headlines:
 ${contentChunk}

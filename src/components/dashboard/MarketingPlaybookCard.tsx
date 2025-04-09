@@ -38,7 +38,7 @@ export default function MarketingPlaybookCard() {
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
       <SectionTitleBar
-        title="📢 Tactical Marketing Playbook"
+        title="📢 Marketing Intelligence Brief"
         tooltip="Insights from the most trusted marketing publications—analyzed and refreshed biweekly."
       />
 
