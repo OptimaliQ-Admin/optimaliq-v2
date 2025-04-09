@@ -14,8 +14,6 @@ const CRON_SECRET = process.env.CRON_SECRET!;
 
 const URLS_TO_SCRAPE = [
   "https://www.hubspot.com/hubfs/2025%20State%20of%20Marketing%20from%20HubSpot.pdf",
-  "https://www.sagefrog.com/wp-content/uploads/2024/11/Top-Marketing-Objectives-Playbook_v3.pdf",
-  "https://www.linkedin.com/pulse/my-2025-marketing-playbook-jeremy-mays-hi3fe/",
   "https://www.adweek.com/category/marketing/",
   "https://www.marketingdive.com/",
   "https://www.socialmediaexaminer.com/",
