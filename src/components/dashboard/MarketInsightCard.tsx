@@ -50,7 +50,7 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
       <SectionTitleBar
         title="📊 Market Trend Prediction"
-        tooltip="AI-generated insights based on financial signals and news sentiment. Updated weekly."
+        tooltip="Insights curated from real-time market signals and macro headlines. Refreshed weekly."
       />
 
       {loading ? (

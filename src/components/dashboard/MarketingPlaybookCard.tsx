@@ -39,7 +39,7 @@ export default function MarketingPlaybookCard() {
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
       <SectionTitleBar
         title="📢 Tactical Marketing Playbook"
-        tooltip="AI-summarized insights from HubSpot, LinkedIn, Adweek, and others. Refreshed every 2 weeks."
+        tooltip="Insights from the most trusted marketing publications—analyzed and refreshed biweekly."
       />
 
       {loading ? (

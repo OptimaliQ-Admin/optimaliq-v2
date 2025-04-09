@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { load } from "cheerio";
+import { scrapeHeadlinesFromUrls } from "@/lib/scrapeSources";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +12,14 @@ const supabase = createClient(
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const CRON_SECRET = process.env.CRON_SECRET!;
 
-const URLS_TO_SCRAPE = [
+const SOURCES = [
   "https://www.hubspot.com/hubfs/2025%20State%20of%20Marketing%20from%20HubSpot.pdf",
   "https://www.adweek.com/category/marketing/",
   "https://www.marketingdive.com/",
+  "https://www.sagefrog.com/wp-content/uploads/2024/11/Top-Marketing-Objectives-Playbook_v3.pdf",
   "https://www.socialmediaexaminer.com/",
   "https://www.contentmarketinginstitute.com/blog/",
+  "https://www.linkedin.com/pulse/my-2025-marketing-playbook-jeremy-mays-hi3fe/",
   "https://blog.hubspot.com/marketing",
   "https://marketingland.com/",
   "https://martech.org/"
@@ -29,33 +31,12 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  console.log("🟡 [START] Weekly Marketing Playbook Generator");
+  console.log("🟡 [START] Tactical Marketing Playbook Generator");
 
   try {
-    // Create a helper function for fetch and scrape
-    const fetchAndScrape = async (url: string) => {
-      try {
-        const html = await fetch(url).then((res) => res.text());
-        const $ = load(html);
-        const headlinesForUrl: string[] = [];
-        $("h1, h2, h3, p").each((_, el) => {
-          const text = $(el).text().trim();
-          if (text.length > 40 && text.length < 300) {
-            headlinesForUrl.push(`- ${text}`);
-          }
-        });
-        return headlinesForUrl;
-      } catch (e) {
-        console.warn("⚠️ Failed to fetch/scrape:", url);
-        return [];
-      }
-    };
+    const selectedSources = SOURCES.sort(() => 0.5 - Math.random()).slice(0, 3); // rotate sources randomly
+    const headlines = await scrapeHeadlinesFromUrls(selectedSources);
 
-    // Execute all fetch requests concurrently
-    const results = await Promise.all(URLS_TO_SCRAPE.map(fetchAndScrape));
-    const headlines = results.flat();
-
-    // Prepare prompt using the first 20 headlines
     const contentChunk = headlines.slice(0, 20).join("\n");
     const prompt = `
 You are an elite marketing strategist for high-growth companies. Based on the latest headlines below from trusted sources, summarize:
@@ -80,7 +61,7 @@ ${contentChunk}
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-o3-mini",
+        model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
       }),
