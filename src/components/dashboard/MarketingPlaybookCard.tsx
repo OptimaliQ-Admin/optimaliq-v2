@@ -33,7 +33,17 @@ export default function MarketingPlaybookCard() {
     fetchInsight();
   }, []);
 
-  const preview = insight?.split("\n").slice(0, 4).join("\n");
+  const formattedMonthYear = lastUpdated
+  ? new Date(lastUpdated).toLocaleString("default", { month: "long", year: "numeric" })
+  : "{Month Year}";
+
+const preview = insight
+  ?.replace("{Month Year}", formattedMonthYear)
+  .split("\n")
+  .slice(0, 4)
+  .join("\n");
+
+const fullInsight = insight?.replace("{Month Year}", formattedMonthYear);
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
@@ -62,11 +72,12 @@ export default function MarketingPlaybookCard() {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
                 <Dialog.Title className="text-lg font-bold text-gray-800 mb-2">
-                  📢 Full Tactical Marketing Playbook
+                  📢 Marketing Intelligence Brief
                 </Dialog.Title>
                 <p className="text-gray-700 whitespace-pre-line max-h-[70vh] overflow-y-auto">
-                  {insight}
-                </p>
+  {fullInsight}
+</p>
+
                 <div className="mt-4 text-right">
                   <button
                     onClick={() => setIsOpen(false)}
