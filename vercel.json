@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/cron/generateMarketingPlaybook",
-      "schedule": "0 1 */14 * 1"
+      "schedule": "0 1 * * 1"
     }
   ]
 }
