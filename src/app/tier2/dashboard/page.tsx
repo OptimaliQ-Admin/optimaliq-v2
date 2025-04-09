@@ -21,6 +21,7 @@ import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
+import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
 import dynamic from "next/dynamic";
 
 
@@ -255,11 +256,7 @@ const email = searchParams.get("email");
   </div>
 
   <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
-    <h2 className="text-lg font-bold text-gray-700">📢 Marketing Investment Trends (Placeholder)</h2>
-    <p className="text-gray-600 mt-2">
-      ✅ Example:
-      <br />📊 “SEO & content marketing are delivering the highest ROI…”
-    </p>
+  <MarketingPlaybookCard />
   </div>
 </div>
           </>
