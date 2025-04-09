@@ -32,21 +32,30 @@ export async function GET(req: Request) {
   console.log("🟡 [START] Weekly Marketing Playbook Generator");
 
   try {
-    const headlines: string[] = [];
-
-    for (const url of URLS_TO_SCRAPE) {
+    // Create a helper function for fetch and scrape
+    const fetchAndScrape = async (url: string) => {
       try {
         const html = await fetch(url).then((res) => res.text());
         const $ = load(html);
+        const headlinesForUrl: string[] = [];
         $("h1, h2, h3, p").each((_, el) => {
           const text = $(el).text().trim();
-          if (text.length > 40 && text.length < 300) headlines.push(`- ${text}`);
+          if (text.length > 40 && text.length < 300) {
+            headlinesForUrl.push(`- ${text}`);
+          }
         });
+        return headlinesForUrl;
       } catch (e) {
         console.warn("⚠️ Failed to fetch/scrape:", url);
+        return [];
       }
-    }
+    };
 
+    // Execute all fetch requests concurrently
+    const results = await Promise.all(URLS_TO_SCRAPE.map(fetchAndScrape));
+    const headlines = results.flat();
+
+    // Prepare prompt using the first 20 headlines
     const contentChunk = headlines.slice(0, 20).join("\n");
     const prompt = `
 You are an elite marketing strategist for high-growth companies. Based on the latest headlines below from trusted sources, summarize:
