@@ -1,7 +1,6 @@
 "use client";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Tier2Layout from "@/app/tier2/layout";
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
 import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
@@ -18,31 +17,26 @@ function GrowthStudioComponent() {
   }
 
   return (
-    <Tier2Layout>
-      <div className="p-6 max-w-6xl mx-auto space-y-10">
-        <SectionHeader
-          title="📈 Growth Studio"
-          subtitle="Explore curated trends and simulate how strategic improvements could impact your business."
-        />
+    <div className="p-6 max-w-6xl mx-auto space-y-10">
+      <SectionHeader
+        title="📈 Growth Studio"
+        subtitle="Explore curated trends and simulate how strategic improvements could impact your business."
+      />
 
-        {/* 🧠 Trends Section */}
+      <section>
+        <TrendInsightCard />
+      </section>
+
+      <section>
+        <SimulatorPanel onResult={setSimulationResult} />
+      </section>
+
+      {simulationResult && (
         <section>
-          <TrendInsightCard />
+          <SimulationResults results={simulationResult} />
         </section>
-
-        {/* ⚙️ Simulator Section */}
-        <section>
-          <SimulatorPanel onResult={setSimulationResult} />
-        </section>
-
-        {/* 📊 Simulation Results Section */}
-        {simulationResult && (
-          <section>
-            <SimulationResults results={simulationResult} />
-          </section>
-        )}
-      </div>
-    </Tier2Layout>
+      )}
+    </div>
   );
 }
 

@@ -113,10 +113,6 @@ const email = searchParams.get("email");
   };  
   
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex">
-      {/* Sidebar Navigation */}
-      <Sidebar email={email} />
-
       <div className="flex-1 flex flex-col p-8 space-y-6">
       {loading ? (
   <InsightLoading />
@@ -235,7 +231,6 @@ const email = searchParams.get("email");
           </>
         )}
       </div>
-    </div>
   );
 }
 
