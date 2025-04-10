@@ -55,14 +55,18 @@ Based on the business headlines and research insights below, generate 3 short He
 Avoid general advice. Use crisp, clear language. Do NOT include tags or a summary paragraph.
 
 Format:
+Lead in Statement
+
 [Headline 1]
     • [Insight 1]
     • [Insight 2]
     • [Insight 3]
+
 [Headline 2]
     • [Insight 1]
     • [Insight 2]
     • [Insight 3]
+    
 [Headline 3]
     • [Insight 1]
     • [Insight 2]
