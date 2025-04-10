@@ -10,7 +10,11 @@
     },
     {
       "path": "/api/cron/generateMarketingPlaybook",
-      "schedule": "0 1 * * 1"
+      "schedule": "0 2 */14 * *"
+    },
+    {
+      "path": "/api/cron/strategic-trends",
+      "schedule": "0 2 */14 * *"
     }
   ]
 }
