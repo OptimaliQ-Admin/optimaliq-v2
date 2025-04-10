@@ -19,7 +19,7 @@ export default function Sidebar({ email }: { email: string }) {
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       className={cn(
-        "bg-blue-900 text-white h-screen transition-all duration-300 ease-in-out flex flex-col",
+        "bg-optimaliq text-white h-screen transition-all duration-300 ease-in-out flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
@@ -45,7 +45,7 @@ export default function Sidebar({ email }: { email: string }) {
           <a
             key={item.href}
             href={item.href}
-            className="flex items-center p-2 rounded-md hover:bg-blue-800 transition-colors"
+            className="flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
           >
             <span className="text-xl mr-3">{item.icon}</span>
             <span
@@ -60,7 +60,7 @@ export default function Sidebar({ email }: { email: string }) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-blue-700 text-xs text-blue-200">
+      <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">
         {!collapsed && <span>{email}</span>}
       </div>
     </aside>

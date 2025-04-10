@@ -11,6 +11,10 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        optimaliq: {
+          DEFAULT: "#1A73E8",
+          dark: "#185ABC",    
+        },
       },
     },
   },
