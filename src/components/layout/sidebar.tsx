@@ -4,11 +4,18 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 
+import {
+  ChartBarIcon,
+  RocketLaunchIcon,
+  PencilSquareIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+
 const navItems = [
-  { href: "/tier2/dashboard", icon: "📊", label: "Dashboard" },
-  { href: "/tier2/insights", icon: "📑", label: "Insights" },
-  { href: "/tier2/assessment", icon: "📝", label: "Assessment" },
-  { href: "#", icon: "👥", label: "Community" },
+  { href: "/tier2/dashboard", icon: <ChartBarIcon className="w-5 h-5" />, label: "Dashboard" },
+  { href: "/tier2/growth-studio", icon: <RocketLaunchIcon className="w-5 h-5" />, label: "Growth Studio" },
+  { href: "/tier2/assessment", icon: <PencilSquareIcon className="w-5 h-5" />, label: "Assessment" },
+  { href: "#", icon: <UserGroupIcon className="w-5 h-5" />, label: "Community" },
 ];
 
 export default function Sidebar({ email }: { email: string }) {
@@ -47,7 +54,7 @@ export default function Sidebar({ email }: { email: string }) {
             href={item.href}
             className="flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
           >
-            <span className="text-xl mr-3">{item.icon}</span>
+            <span className="mr-3 text-white">{item.icon}</span>
             <span
               className={cn(
                 "text-sm font-semibold transition-opacity duration-200",

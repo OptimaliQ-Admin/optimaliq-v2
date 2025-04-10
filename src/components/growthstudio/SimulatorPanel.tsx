@@ -113,15 +113,6 @@ export default function SimulatorPanel({
           {loading ? "Simulating..." : "Run Simulation"}
         </Button>
 
-        {/* Results */}
-        {results && (
-          <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-            <h3 className="font-bold text-lg text-gray-700">📈 Simulation Results</h3>
-            <p className="text-gray-600">Revenue Impact: ${results.revenueImpact?.toLocaleString()}</p>
-            <p className="text-gray-600">Cost Savings: ${results.costSavings?.toLocaleString()}</p>
-            <p className="text-gray-600">Efficiency Gain: {results.efficiencyGain?.toFixed(1)}%</p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

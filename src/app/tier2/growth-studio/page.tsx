@@ -37,7 +37,7 @@ function GrowthStudioComponent() {
     }
   
     // ⏳ Add delay to allow GPT results to load cleanly before modal opens
-    setTimeout(() => setShowModal(true), 500); // 500ms to 750ms feels smooth
+    setTimeout(() => setShowModal(true), 300); // 500ms to 750ms feels smooth
   };
 
   if (!email) {
