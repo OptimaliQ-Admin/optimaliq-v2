@@ -1,9 +1,7 @@
-// File: /src/components/layout/Sidebar.tsx
-
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils"; // Utility function for conditional classNames
+import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 
 const navItems = [
@@ -21,14 +19,14 @@ export default function Sidebar({ email }: { email: string }) {
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       className={cn(
-        "bg-white shadow-lg h-screen transition-all duration-300 ease-in-out flex flex-col",
+        "bg-blue-900 text-white h-screen transition-all duration-300 ease-in-out flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
       <div className="p-4 flex items-center justify-between">
         <h2
           className={cn(
-            "font-bold text-gray-800 text-lg transition-opacity duration-200",
+            "font-bold text-white text-lg transition-opacity duration-200",
             collapsed && "opacity-0 invisible"
           )}
         >
@@ -36,7 +34,7 @@ export default function Sidebar({ email }: { email: string }) {
         </h2>
         <Menu
           className={cn(
-            "h-5 w-5 text-gray-500 transition-transform duration-200",
+            "h-5 w-5 text-white transition-transform duration-200",
             collapsed && "rotate-90"
           )}
         />
@@ -47,12 +45,12 @@ export default function Sidebar({ email }: { email: string }) {
           <a
             key={item.href}
             href={item.href}
-            className="flex items-center p-2 rounded-md text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            className="flex items-center p-2 rounded-md hover:bg-blue-800 transition-colors"
           >
             <span className="text-xl mr-3">{item.icon}</span>
             <span
               className={cn(
-                "text-sm font-medium transition-opacity duration-200",
+                "text-sm font-semibold transition-opacity duration-200",
                 collapsed && "opacity-0 invisible"
               )}
             >
@@ -62,7 +60,7 @@ export default function Sidebar({ email }: { email: string }) {
         ))}
       </nav>
 
-      <div className="p-4 border-t text-xs text-gray-500">
+      <div className="p-4 border-t border-blue-700 text-xs text-blue-200">
         {!collapsed && <span>{email}</span>}
       </div>
     </aside>

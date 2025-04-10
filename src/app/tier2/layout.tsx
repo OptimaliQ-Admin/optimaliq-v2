@@ -8,7 +8,7 @@ export default function Tier2Layout({ children }: { children: React.ReactNode })
   const email = "user@example.com"; // TODO: Replace with dynamic email from context or props
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900">
+    <div className="flex min-h-screen bg-gray-100 text-gray-900">
       {/* Sidebar */}
       <Tier2Sidebar email={email} />
 
@@ -20,3 +20,4 @@ export default function Tier2Layout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

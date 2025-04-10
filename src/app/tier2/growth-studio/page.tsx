@@ -19,23 +19,25 @@ function GrowthStudioComponent() {
 
   const handleRunSimulation = async (result: SimulationResult | null) => {
     if (!result) return;
-
+  
     setSimulationResult(result);
-    setShowModal(true);
-
+  
     try {
       const res = await fetch("/api/tier2/growth_studio/commentary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result),
       });
-
+  
       const data = await res.json();
       setAiInsight(data.summary || null);
     } catch (err) {
       console.error("❌ Failed to fetch AI insight:", err);
       setAiInsight(null);
     }
+  
+    // ⏳ Add delay to allow GPT results to load cleanly before modal opens
+    setTimeout(() => setShowModal(true), 500); // 500ms to 750ms feels smooth
   };
 
   if (!email) {
