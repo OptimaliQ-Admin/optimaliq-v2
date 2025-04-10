@@ -1,5 +1,3 @@
-// File: /src/components/growthstudio/TrendInsightCard.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,7 +5,7 @@ import { format } from "date-fns";
 import { Dialog } from "@headlessui/react";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
-export default function TrendInsightCard() {
+export default function TrendInsightCard({ email }: { email: string }) { // <-- Add email prop here
   const [insight, setInsight] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +14,7 @@ export default function TrendInsightCard() {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch("/api/tier2/growth_studio/trends");
+        const res = await fetch(`/api/tier2/growth_studio/trends?email=${email}`); // <-- optionally use email
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {
@@ -31,7 +29,7 @@ export default function TrendInsightCard() {
     };
 
     fetchInsight();
-  }, []);
+  }, [email]); // <-- add dependency
 
   const preview = insight?.split("\n").slice(0, 4).join("\n");
 

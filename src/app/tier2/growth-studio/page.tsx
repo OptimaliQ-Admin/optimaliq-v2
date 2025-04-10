@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Tier2Layout from "@/components/layouts/Tier2Layout";
+import Tier2Layout from "@/app/tier2/layout";
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
 import SimulationResults from "@/components/growthstudio/SimulationResults";

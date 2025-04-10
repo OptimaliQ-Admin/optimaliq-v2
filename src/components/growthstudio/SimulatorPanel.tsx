@@ -7,7 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
-export default function SimulatorPanel() {
+interface SimulationResult {
+  revenueImpact: number;
+  costSavings: number;
+  efficiencyGain: number;
+}
+
+export default function SimulatorPanel({
+  onResult,
+}: {
+  onResult: (result: SimulationResult | null) => void; // <-- add prop here
+}) {
   const [strategyChange, setStrategyChange] = useState(0);
   const [processChange, setProcessChange] = useState(0);
   const [techChange, setTechChange] = useState(0);
@@ -15,7 +25,7 @@ export default function SimulatorPanel() {
   const [costs, setCosts] = useState(50000);
   const [efficiency, setEfficiency] = useState(50);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<SimulationResult | null>(null);
 
   const runSimulation = async () => {
     setLoading(true);
@@ -35,12 +45,14 @@ export default function SimulatorPanel() {
       });
       const data = await res.json();
       setResults(data);
+      onResult(data); // <-- pass result back
     } catch (err) {
       console.error("❌ Simulation failed:", err);
+      onResult(null);
     }
     setLoading(false);
   };
-
+  
   return (
     <Card className="p-6 w-full max-w-3xl">
       <CardContent>
