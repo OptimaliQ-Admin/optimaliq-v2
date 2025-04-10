@@ -48,9 +48,26 @@ export async function GET() {
 
     // ✅ GPT Prompt
     const prompt = `
-You are a strategic advisor. Based on the business headlines and research insights below, generate 3 forward-looking insights that would help business leaders think strategically. Focus on emerging risks, technology shifts, or operational trends.
+You are a World renowned top strategic advisor that works for McKinsey and Company researching and creating Dialogue for business owners to help them understand the current business strategies and trends today.
 
-Return the summary in paragraph form and include 3 tags like ["strategy", "tech", "cx"].
+Based on the business headlines and research insights below, generate 3 short Headlines, with forward-looking bullet points that help business leaders think strategically. Focus on things like emerging risks, technology shifts, and market trends And anything else worth noting in your job — insights they can act on or consider.
+
+Avoid general advice. Use crisp, clear language. Do NOT include tags or a summary paragraph.
+
+Format:
+• [Headline 1]
+    • [Insight 1]
+    • [Insight 2]
+    • [Insight 3]
+• [Headline 2]
+    • [Insight 1]
+    • [Insight 2]
+    • [Insight 3]
+• [Headline 3]
+    • [Insight 1]
+    • [Insight 2]
+    • [Insight 3]
+Final thoughts
 
 Headlines:
 ${finalSummary}

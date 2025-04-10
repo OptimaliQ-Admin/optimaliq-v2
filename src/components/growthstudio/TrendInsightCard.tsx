@@ -33,7 +33,11 @@ export default function TrendInsightCard() {
     fetchInsight();
   }, []);
 
-  const preview = insight?.split("\n").slice(0, 4).join("\n");
+  const preview = insight
+  ?.split("\n")
+  .filter((line) => line.startsWith("•"))
+  .slice(0, 2)
+  .join("\n");
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
