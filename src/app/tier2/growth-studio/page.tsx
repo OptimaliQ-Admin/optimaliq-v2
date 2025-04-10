@@ -1,34 +1,24 @@
 "use client";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Tier2Layout from "@/app/tier2/layout";
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
-import SimulationResults from "@/components/growthstudio/SimulationResults";
+import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 
-interface SimulationResult {
-  revenueImpact: number;
-  costSavings: number;
-  efficiencyGain: number;
-}
-
-export default function GrowthStudioWrapper() {
-  return (
-    <Suspense fallback={<p>Loading Growth Studio...</p>}>
-      <GrowthStudioPage />
-    </Suspense>
-  );
-}
-
-function GrowthStudioPage() {
+function GrowthStudioComponent() {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const email = searchParams.get("email");
 
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
 
+  if (!email) {
+    return <p className="text-center text-red-600">⚠️ Email is required to access the Growth Studio.</p>;
+  }
+
   return (
-    <Tier2Layout email={email}>
+    <Tier2Layout>
       <div className="p-6 max-w-6xl mx-auto space-y-10">
         <SectionHeader
           title="📈 Growth Studio"
@@ -37,7 +27,7 @@ function GrowthStudioPage() {
 
         {/* 🧠 Trends Section */}
         <section>
-          <TrendInsightCard email={email} />
+          <TrendInsightCard />
         </section>
 
         {/* ⚙️ Simulator Section */}
@@ -45,13 +35,21 @@ function GrowthStudioPage() {
           <SimulatorPanel onResult={setSimulationResult} />
         </section>
 
-        {/* 📊 Simulation Output */}
+        {/* 📊 Simulation Results Section */}
         {simulationResult && (
           <section>
-            <SimulationResults {...simulationResult} />
+            <SimulationResults results={simulationResult} />
           </section>
         )}
       </div>
     </Tier2Layout>
+  );
+}
+
+export default function GrowthStudioPage() {
+  return (
+    <Suspense fallback={<p>Loading Growth Studio...</p>}>
+      <GrowthStudioComponent />
+    </Suspense>
   );
 }

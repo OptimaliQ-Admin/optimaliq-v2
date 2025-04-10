@@ -2,17 +2,19 @@
 
 import React from "react";
 
-interface SimulationResultsProps {
+export interface SimulationResult {
   revenueImpact: number;
   costSavings: number;
   efficiencyGain: number;
 }
 
-export default function SimulationResults({
-  revenueImpact,
-  costSavings,
-  efficiencyGain,
-}: SimulationResultsProps) {
+interface SimulationResultsProps {
+  results: SimulationResult;
+}
+
+export default function SimulationResults({ results }: SimulationResultsProps) {
+  const { revenueImpact, costSavings, efficiencyGain } = results;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
       <div className="bg-green-50 border border-green-200 p-4 rounded-lg shadow-sm">

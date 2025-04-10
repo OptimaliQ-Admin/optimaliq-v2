@@ -16,7 +16,7 @@ interface SimulationResult {
 export default function SimulatorPanel({
   onResult,
 }: {
-  onResult: (result: SimulationResult | null) => void; // <-- add prop here
+  onResult: (result: SimulationResult | null) => void;
 }) {
   const [strategyChange, setStrategyChange] = useState(0);
   const [processChange, setProcessChange] = useState(0);
@@ -45,7 +45,7 @@ export default function SimulatorPanel({
       });
       const data = await res.json();
       setResults(data);
-      onResult(data); // <-- pass result back
+      onResult(data);
     } catch (err) {
       console.error("❌ Simulation failed:", err);
       onResult(null);
