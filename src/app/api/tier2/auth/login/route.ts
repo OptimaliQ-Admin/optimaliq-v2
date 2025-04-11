@@ -15,27 +15,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // Step 1: Lookup subscription
-    const { data: sub, error: subError } = await supabase
-      .from("subscriptions")
-      .select("u_id")
-      .eq("status", "active")
-      .eq("email", email) // Optional: might need a join instead
-      .maybeSingle();
-
-    if (subError || !sub?.u_id) {
-      return NextResponse.json({ error: "No active subscription found." }, { status: 403 });
-    }
-
-    // Step 2: Lookup user
+    // Step 1: Lookup user first by email
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("user_id, email, first_name, last_name, company")
-      .eq("user_id", sub.u_id)
+      .eq("email", email)
       .maybeSingle();
 
     if (userError || !user) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
+
+    // Step 2: Check if they have an active subscription
+    const { data: sub, error: subError } = await supabase
+      .from("subscriptions")
+      .select("u_id")
+      .eq("status", "active")
+      .eq("u_id", user.user_id)
+      .maybeSingle();
+
+    if (subError || !sub) {
+      return NextResponse.json({ error: "No active subscription found." }, { status: 403 });
     }
 
     return NextResponse.json(user);
