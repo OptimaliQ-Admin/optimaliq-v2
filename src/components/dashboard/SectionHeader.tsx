@@ -1,3 +1,4 @@
+///src/components/dashboard/SectionHeader.tsx
 "use client";
 
 type SectionHeaderProps = {

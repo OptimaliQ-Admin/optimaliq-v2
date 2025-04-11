@@ -1,3 +1,4 @@
+//src/components/dashboard/InsightCard.tsx
 "use client";
 
 type InsightItem = {

@@ -1,3 +1,4 @@
+//src/components/dashboard/MarketInsightCard.tsx
 "use client";
 
 import { useEffect, useState } from "react";

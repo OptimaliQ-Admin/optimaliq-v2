@@ -1,3 +1,4 @@
+//src/components/dashboard/ScoreCard.tsx
 "use client";
 
 type ScoreCardProps = {

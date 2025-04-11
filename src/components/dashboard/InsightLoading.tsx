@@ -1,3 +1,4 @@
+//src/components/dashboard/InsightLoading.tsx
 "use client";
 
 import { useEffect, useState } from "react";

@@ -2,19 +2,39 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTier2User } from "@/context/Tier2UserContext";
 
 export default function Tier2Login() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
+  const { setUser } = useTier2User();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Redirect to Tier 2 dashboard with the email in URL query
-    if (email) {
-      router.push(`/tier2/dashboard?email=${encodeURIComponent(email)}`);
-    } else {
-      alert("⚠️ Please enter your email.");
+    setError("");
+
+    try {
+      const res = await fetch("/api/tier2/auth/lookup_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        return;
+      }
+
+      // ✅ Set the user in context
+      setUser(data);
+      // ✅ Navigate cleanly (no email in URL)
+      router.push("/tier2/dashboard");
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("Unexpected error");
     }
   };
 
@@ -36,6 +56,8 @@ export default function Tier2Login() {
               required
             />
           </label>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"

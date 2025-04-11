@@ -1,3 +1,4 @@
+//src/components/dashboard/SectionTitleBar.tsx
 "use client";
 
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
