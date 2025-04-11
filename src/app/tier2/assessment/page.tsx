@@ -1,122 +1,94 @@
+// src/app/tier2/assessment/page.tsx
 "use client";
+
+import { Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useTier2User } from "@/context/Tier2UserContext";
+import SectionHeader from "@/components/growthstudio/SectionHeader";
 
-function AssessmentComponent() {  // ⬅ Wrapped in a separate function
+function AssessmentComponent() {
+  const { user } = useTier2User();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email"); // ✅ Capture email from URL
 
-  if (!email) {
-    console.error("🚨 Email is required but missing!");
-    return <p className="text-red-500">⚠️ Error: Email is required.</p>;
+  const email = user?.email;
+  const user_id = user?.user_id;
+
+  if (!email || !user_id) {
+    return <p className="text-center text-red-600">⚠️ Email and User ID required.</p>;
   }
 
-
-  // Assessment options
   const assessments = [
     {
       id: "reassessment",
       title: "📊 Business Reassessment",
-      description:
-        "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
+      description: "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
     },
     {
       id: "tech-stack",
       title: "🛠 Tech Stack Assessment",
-      description:
-        "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations for optimization.",
+      description: "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations.",
     },
     {
       id: "BPM",
       title: "⚙️ Business Process Management Assessment",
-      description:
-        "Analyze the efficiency of your internal processes and identify automation opportunities for improved workflow management.",
+      description: "Analyze the efficiency of your internal processes and identify automation opportunities.",
     },
     {
       id: "strategy",
       title: "🎯 Strategic Maturity Assessment",
-      description:
-        "Evaluate how well-developed your business strategy is and receive insights on how to refine and strengthen it.",
+      description: "Evaluate your business strategy and receive insights to refine and strengthen it.",
     },
     {
       id: "marketing-effectiveness",
       title: "📢 Marketing Effectiveness Assessment",
-      description:
-        "Analyze your marketing performance and receive AI-driven recommendations on where to optimize your efforts.",
+      description: "Analyze your marketing performance and receive recommendations to optimize efforts.",
     },
     {
       id: "sales-performance",
-      title: "🎯 Sales Performance Assessment",
-      description:
-        "Evaluate your sales pipeline, conversion rates, and customer engagement to optimize your revenue strategy.",
+      title: "📈 Sales Performance Assessment",
+      description: "Evaluate sales pipeline and conversion rates to improve revenue outcomes.",
     },
     {
       id: "customer-experience",
       title: "👥 Customer Experience Assessment",
-      description:
-        "Understand your customer satisfaction levels and discover opportunities to improve retention and engagement.",
+      description: "Understand satisfaction levels and discover retention and engagement opportunities.",
     },
     {
       id: "ai-readiness",
-      title: "🚀 AI & Automation Readiness Assessment",
-      description:
-        "Measure how effectively your business is leveraging AI and automation to drive growth and efficiency.",
+      title: "🚀 AI & Automation Readiness",
+      description: "Measure how well your business is leveraging AI and automation.",
     },
     {
       id: "digital-transformation",
       title: "📡 Digital Transformation Readiness",
-      description:
-        "Evaluate how well your business is prepared for digital transformation and modern tech adoption.",
+      description: "Evaluate your preparedness for digital transformation and modern tech adoption.",
     },
     {
       id: "leadership-team",
-      title: "🏢 Leadership & Team Performance Assessment",
-      description:
-        "Assess leadership effectiveness and team alignment to optimize company culture and execution.",
+      title: "🏢 Leadership & Team Assessment",
+      description: "Assess leadership effectiveness and alignment to improve culture and execution.",
     },
     {
       id: "competitive-benchmarking",
-      title: "📊 Competitive Benchmarking Assessment",
-      description:
-        "Compare your business performance against industry peers to identify areas of strength and improvement.",
+      title: "📊 Competitive Benchmarking",
+      description: "Compare performance against peers to identify areas for growth.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex">
-      {/* Sidebar Navigation */}
-      <aside className="w-64 bg-white shadow-lg h-screen p-6 flex flex-col justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">GMF+</h2>
-          <nav className="space-y-4">
-            <a href={`/tier2/dashboard?email=${encodeURIComponent(email)}`} className="block text-gray-700 hover:text-blue-600 font-medium">📊 Dashboard</a>
-            <a href={`/tier2/insights?email=${encodeURIComponent(email)}`} className="block text-gray-700 hover:text-blue-600 font-medium">📑 Insights</a>
-            <a href={`/tier2/assessment?email=${encodeURIComponent(email)}`} className="block text-blue-600 font-bold">📝 Assessments</a>
-            <a href="#" className="block text-gray-700 hover:text-blue-600 font-medium">👥 Community</a>
-          </nav>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-          <p className="text-gray-700 font-medium">{email || "User"}</p>
-        </div>
-      </aside>
+    <div className="w-full flex justify-center px-4">
+      <div className="w-full max-w-6xl space-y-10">
+        <SectionHeader
+          title="📝 Business Assessments"
+          subtitle="Choose an assessment to gain deeper insights into your business."
+        />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col p-8 space-y-6">
-        <header className="w-full max-w-4xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight">📝 Business Assessments</h1>
-          <p className="text-gray-600 mt-2">Choose an assessment to gain deeper insights into your business.</p>
-        </header>
-
-        {/* Assessment Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {assessments.map((assessment) => (
             <div
               key={assessment.id}
               className="bg-white p-6 shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition"
-              onClick={() => router.push(`/tier2/assessment/${assessment.id}?email=${encodeURIComponent(email)}`)}
+              onClick={() => router.push(`/tier2/assessment/${assessment.id}`)}
             >
               <h2 className="text-xl font-bold text-gray-800">{assessment.title}</h2>
               <p className="text-gray-600 mt-2">{assessment.description}</p>
@@ -127,6 +99,7 @@ function AssessmentComponent() {  // ⬅ Wrapped in a separate function
     </div>
   );
 }
+
 export default function AssessmentPage() {
   return (
     <Suspense fallback={<p>Loading assessment...</p>}>

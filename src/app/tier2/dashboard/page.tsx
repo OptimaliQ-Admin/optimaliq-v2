@@ -2,8 +2,8 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import axios from "axios";
+import { useTier2User } from "@/context/Tier2UserContext";
 import {
   LineChart,
   Line,
@@ -26,12 +26,10 @@ import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard"
 import dynamic from "next/dynamic";
 import Sidebar from "@/components/layout/sidebar";
 
-
-
 function Tier2DashboardComponent() {
-  const searchParams = useSearchParams();
-const email = searchParams.get("email");
-
+  const { user } = useTier2User();
+const user_id = user?.user_id;
+const email = user?.email;
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -39,17 +37,11 @@ const email = searchParams.get("email");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCardData, setSelectedCardData] = useState<any>(null);
   const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
-  
 
   useEffect(() => {
     const fetchInsights = async () => {
       try {
-        const insightsResponse = await axios.post("/api/tier2/dashboard", { email });
-        // Trends are currently optional — comment out unless used
-        // const trendsResponse = await axios.post("/api/tier2/getTrends", {
-        //   industry: insightsResponse.data?.industry || "Consulting",
-        // });
-
+        const insightsResponse = await axios.post("/api/tier2/dashboard", { user_id });
         if (insightsResponse.data.error) {
           setError(insightsResponse.data.error);
         } else {
@@ -57,7 +49,6 @@ const email = searchParams.get("email");
           setInsights({
             ...rest,
             promptRetake,
-            // topTrends: trendsResponse.data?.topTrends || [],
           });
         }
       } catch (err) {
@@ -67,24 +58,22 @@ const email = searchParams.get("email");
       }
     };
 
-    if (email) fetchInsights();
-  }, [email]);
+    if (user_id) fetchInsights();
+  }, [user_id]);
+
   useEffect(() => {
-    axios.post("/api/tier2/dashboard/welcome_message", { email })
+    axios.post("/api/tier2/dashboard/welcome_message", { user_id })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',
         quote: "Welcome back! Let's grow your business today.",
         author: "GMF+"
       }));
-  }, [email]);   
+  }, [user_id]);  
 
   const mapList = (arr: any[], labelKey: string, detailKey: string) =>
     arr?.map((item) => ({ label: item[labelKey], detail: item[detailKey] })) || [];
 
-  if (!email) {
-    return <p className="text-center text-red-600">⚠️ Email is required to access the dashboard.</p>;
-  }  
   const handleScoreClick = async (category: string, score: number) => {
     console.log("🔍 Learn More clicked:", { category, score });
   

@@ -1,8 +1,8 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { Dialog } from "@headlessui/react";
+import { useTier2User } from "@/context/Tier2UserContext";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
@@ -11,9 +11,9 @@ import SectionHeader from "@/components/growthstudio/SectionHeader";
 import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 
 function GrowthStudioComponent() {
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-  const userId = searchParams.get("user_id");
+  const { user } = useTier2User();
+  const email = user?.email;
+  const userId = user?.user_id;
 
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showModal, setShowModal] = useState(false);

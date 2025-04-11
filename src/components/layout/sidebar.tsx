@@ -1,8 +1,10 @@
+// File: /src/components/layout/Sidebar.tsx
 "use client";
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
+import { useTier2User } from "@/context/Tier2UserContext";
 
 import {
   ChartBarIcon,
@@ -18,7 +20,8 @@ const navItems = [
   { href: "#", icon: <UserGroupIcon className="w-5 h-5" />, label: "Community" },
 ];
 
-export default function Sidebar({ email }: { email: string }) {
+export default function Sidebar() {
+  const { user } = useTier2User();
   const [collapsed, setCollapsed] = useState(true);
 
   return (
@@ -68,7 +71,7 @@ export default function Sidebar({ email }: { email: string }) {
       </nav>
 
       <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">
-        {!collapsed && <span>{email}</span>}
+        {!collapsed && <span>{user?.email || "Logged In"}</span>}
       </div>
     </aside>
   );
