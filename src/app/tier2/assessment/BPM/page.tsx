@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { bpmFormMap } from "@/app/tier2/assessments/BPM/forms";
+import { bpmFormMap } from "@/app/tier2/assessments/BPM";
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
