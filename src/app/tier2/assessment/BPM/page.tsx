@@ -13,6 +13,7 @@ import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack"
 import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
 import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
 import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
+import { bpmFormMap } from "@/app/tier2/assessments/BPM/forms";
 
 
 
@@ -37,22 +38,27 @@ export default function OnboardingAssessmentPage() {
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
-
-  
-  const stripUnusedOtherFields = (answers: Record<string, any>) => {
-    const result: Record<string, any> = {};
-  
-    for (const key in answers) {
-      if (key.endsWith("_other")) continue; // don't save _other fields
-  
-      result[key] = answers[key]; // pass everything else through
-    }
-  
-    return result;
-  };
   
   
   useEffect(() => {
+    function getScoreKey(score: number): string {
+      if (score < 1.5) return "1.0";
+      if (score < 2.0) return "1.5";
+      if (score < 2.5) return "2.0";
+      if (score < 3.0) return "2.5";
+      if (score < 3.5) return "3.0";
+      if (score < 4.0) return "3.5";
+      if (score < 4.5) return "4.0";
+      if (score < 5.0) return "4.5";
+      return "5.0";
+    }
+    
+    const fetchUserScore = async () => {
+      if (skipCheck) {
+        setScore(2.5); // or mock default
+        setLoading(false);
+        return;
+      }
     const checkSubscription = async () => {
       if (skipCheck) {
         setLoading(false);
@@ -102,7 +108,7 @@ export default function OnboardingAssessmentPage() {
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
   
         const { data, error } = await supabase
-          .from("customer-experience_assessment")
+          .from("bpm_assessment")
           .insert([{ ...sanitizedAnswers }]);
   
         if (error) {
