@@ -2,77 +2,47 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
-import ProgressBar from "./ProgressBar";
-import StepGroupRenderer from "./StepGroupRenderer";
-import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals"
-import Group02_Goals, { isGroup02Complete } from "./groups/Group02_Positioning"
-import Group03_Goals, { isGroup03Complete } from "./groups/Group03_Operations"
-import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack"
-import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
-import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
-import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
 import { bpmFormMap } from "@/app/tier2/assessments/BPM/forms";
-
-
-
-const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
-  0: isGroup01Complete,
-  1: isGroup02Complete,
-  2: isGroup03Complete,
-  3: isGroup04Complete,
-  4: isGroup05Complete,
-  5: isGroup06Complete,
-  6: isGroup07Complete,
-};
-
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
-  const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-  const validator = stepValidators[step];
+  const [score, setScore] = useState<number | null>(null);
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
-  
-  
-  useEffect(() => {
-    function getScoreKey(score: number): string {
-      if (score < 1.5) return "1.0";
-      if (score < 2.0) return "1.5";
-      if (score < 2.5) return "2.0";
-      if (score < 3.0) return "2.5";
-      if (score < 3.5) return "3.0";
-      if (score < 4.0) return "3.5";
-      if (score < 4.5) return "4.0";
-      if (score < 5.0) return "4.5";
-      return "5.0";
-    }
-    
-    const fetchUserScore = async () => {
-      if (skipCheck) {
-        setScore(2.5); // or mock default
-        setLoading(false);
-        return;
-      }
-    const checkSubscription = async () => {
-      if (skipCheck) {
-        setLoading(false);
-        return;
-      }
 
+  const getScoreKey = (score: number): string => {
+    if (score < 1.5) return "1.0";
+    if (score < 2.0) return "1.5";
+    if (score < 2.5) return "2.0";
+    if (score < 3.0) return "2.5";
+    if (score < 3.5) return "3.0";
+    if (score < 4.0) return "3.5";
+    if (score < 4.5) return "4.0";
+    if (score < 5.0) return "4.5";
+    return "5.0";
+  };
+
+  useEffect(() => {
+    const checkSubscriptionAndFetchScore = async () => {
       if (!userEmail) {
         router.push("/pricing");
         return;
       }
 
+      if (skipCheck) {
+        setScore(2.5);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("tier2_users")
-        .select("subscription_status")
+        .select("gmf_score, subscription_status")
         .eq("email", userEmail)
         .single();
 
@@ -82,123 +52,52 @@ export default function OnboardingAssessmentPage() {
         return;
       }
 
+      setScore(data.gmf_score);
       setLoading(false);
     };
 
-    checkSubscription();
+    checkSubscriptionAndFetchScore();
   }, [router, userEmail, skipCheck]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [step]);
-
-  const handleNext = async () => {
-    const validator = stepValidators[step];
-    if (validator && !validator(formAnswers)) {
-      alert("Please complete all required questions before continuing.");
-      return;
-    }
-  
-    if (step < 6) {
-      setStep((prev) => prev + 1);
-    } else {
-      try {
-        console.log("📤 Submitting formAnswers:", formAnswers);
-  
-        const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-  
-        const { data, error } = await supabase
-          .from("bpm_assessment")
-          .insert([{ ...sanitizedAnswers }]);
-  
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          alert(`Something went wrong: ${error.message}`);
-          return;
-        }
-  
-        console.log("✅ Submission successful:", data);
-        router.push("/dashboard/insights");
-      } catch (err: any) {
-        console.error("❌ Unexpected error:", err);
-        alert(`Unexpected error: ${err.message}`);
-      }
-    }
-  };
-  
-  
-  
-
-  const handleBack = () => {
-    if (step > 0) setStep((prev) => prev - 1);
-  };
-
   const handleAnswer = (key: string, value: any) => {
-    setFormAnswers((prev) => {
-      const updated = { ...prev, [key]: value };
-  
-      // 🔁 For any "other" text field
-      if (key.endsWith("_other")) {
-        const baseKey = key.replace("_other", "");
-        const baseValue = prev[baseKey] || [];
-  
-        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-  
-        if (value.trim()) {
-          cleaned.push(`Other: ${value.trim()}`);
-        }
-  
-        updated[baseKey] = cleaned;
-      }
-  
-      // 🔁 If a select field is updated and "other" was removed, clear its _other input
-      if (Array.isArray(value) && key && !value.includes("other")) {
-        updated[`${key}_other`] = "";
-        updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
-      }
-  
-      return updated;
-    });
+    setFormAnswers((prev) => ({ ...prev, [key]: value }));
   };
-  
-  
-  
 
-  if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
+  const handleSubmit = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("bpm_assessment")
+        .insert([{ ...formAnswers, overall_score: score }]);
+
+      if (error) throw error;
+
+      router.push("/dashboard/insights");
+    } catch (err: any) {
+      alert(`Submission error: ${err.message}`);
+    }
+  };
+
+  if (loading) return <div className="p-10 text-center">Checking subscription and loading assessment...</div>;
+
+  const scoreKey = score !== null ? getScoreKey(score) : "";
+  const SelectedForm = bpmFormMap[scoreKey];
+
+  if (!SelectedForm) {
+    return <div className="p-10 text-center text-red-600">No form available for score {scoreKey}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
-      <div className="max-w-4xl mx-auto">
-        <ProgressBar current={step} total={7} />
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <SelectedForm answers={formAnswers} onAnswer={handleAnswer} />
 
-        <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4 }}
-            >
-              <StepGroupRenderer step={step} answers={formAnswers} onAnswer={handleAnswer} />
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="mt-6 flex justify-between">
-            <button
-              disabled={step === 0}
-              onClick={handleBack}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded disabled:opacity-50"
-            >
-              Back
-            </button>
-            <button
-              onClick={handleNext}
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-            >
-              {step === 6 ? "Submit" : "Next"}
-            </button>
-          </div>
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
