@@ -2,17 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
-  const { email } = await req.json();
+  const { user_id } = await req.json();
 
-  if (!email) {
-    return NextResponse.json({ error: 'Email required' }, { status: 400 });
+  if (!user_id) {
+    return NextResponse.json({ error: 'User ID required' }, { status: 400 });
   }
 
-  // Fetch user's first name
+  // Fetch user's first name using user_id
   const { data: userData, error: userError } = await supabase
     .from('tier2_users')
     .select('first_name')
-    .eq('email', email)
+    .eq('user_id', user_id)
     .single();
 
   if (userError || !userData) {
@@ -20,15 +20,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-// ✅ Fetch a random quote using typed RPC (2 type args for older Supabase versions)
-const { data: quoteData, error: quoteError } = await supabase
-  .rpc<any, void>('get_random_quote')
-  .single();
-
-
-  if (quoteError) {
-    console.error("❌ Quote fetch error:", quoteError);
-  }
+  // ✅ Fetch a random quote
+  const { data: quoteData, error: quoteError } = await supabase
+    .rpc<any, void>('get_random_quote')
+    .single();
 
   const quote = quoteData ?? {
     quote: "Welcome back! Let's make today productive.",

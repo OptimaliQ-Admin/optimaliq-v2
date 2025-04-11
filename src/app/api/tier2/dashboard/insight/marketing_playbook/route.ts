@@ -1,3 +1,4 @@
+//src/app/api/tier2/dashboard/insight/marketing_playbook/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 

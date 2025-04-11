@@ -19,7 +19,7 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
               <a href="/Pricing" className="hover:text-blue-600">Pricing</a>
             </div>
             <a
-              href="/tier2/login"
+              href="/login"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
             >
               Sign In
