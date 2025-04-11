@@ -15,7 +15,7 @@ export default function Tier2Login() {
     setError("");
 
     try {
-      const res = await fetch("/api/tier2/auth/lookup_user", {
+      const res = await fetch("/api/tier2/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
