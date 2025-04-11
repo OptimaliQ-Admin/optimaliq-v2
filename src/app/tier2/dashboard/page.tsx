@@ -62,6 +62,8 @@ const email = user?.email;
   }, [user_id]);
 
   useEffect(() => {
+    if (!user_id) return; // ✅ Prevent API call if user isn't ready
+  
     axios.post("/api/tier2/dashboard/welcome_message", { user_id })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
@@ -69,7 +71,8 @@ const email = user?.email;
         quote: "Welcome back! Let's grow your business today.",
         author: "GMF+"
       }));
-  }, [user_id]);  
+  }, [user_id]);
+  
 
   const mapList = (arr: any[], labelKey: string, detailKey: string) =>
     arr?.map((item) => ({ label: item[labelKey], detail: item[detailKey] })) || [];
