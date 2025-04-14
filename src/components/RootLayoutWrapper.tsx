@@ -5,7 +5,8 @@ import { Tier2UserProvider } from "@/context/Tier2UserContext";
 
 export default function RootLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isTier2 = pathname.startsWith("/tier2");
+  const isTier2 = pathname.startsWith("/tier2") || pathname === "/login";
+
 
   const content = isTier2 ? (
     <Tier2UserProvider>
@@ -14,6 +15,7 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   ) : (
     children
   );
+  
 
   return (
     <div className="min-h-screen flex flex-col">
