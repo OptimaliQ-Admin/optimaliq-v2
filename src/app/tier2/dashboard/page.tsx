@@ -58,8 +58,9 @@ const email = user?.email;
       }
     };
 
-    if (user_id) fetchInsights();
-  }, [user_id]);
+    if (!user_id) return;
+  fetchInsights();
+}, [user_id]);
 
   useEffect(() => {
     if (!user_id) return; // ✅ Prevent API call if user isn't ready
@@ -103,7 +104,12 @@ const email = user?.email;
       console.error("❌ Failed to fetch scorecard context:", err);
     }
   };  
-  
+
+  if (!user_id) {
+    return <InsightLoading />; // or any loading spinner you prefer
+  }
+
+
   return (
       <div className="flex-1 flex flex-col p-8 space-y-6">
       {loading ? (
