@@ -1,10 +1,19 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { Tier2UserProvider } from "@/context/Tier2UserContext";
 
 export default function RootLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isTier2 = pathname.startsWith("/tier2");
+
+  const content = isTier2 ? (
+    <Tier2UserProvider>
+      {children}
+    </Tier2UserProvider>
+  ) : (
+    children
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -29,7 +38,7 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
       )}
 
       <main className={`${!isTier2 ? "pt-16" : ""} flex-grow`}>
-        {children}
+        {content}
       </main>
 
       {!isTier2 && (
