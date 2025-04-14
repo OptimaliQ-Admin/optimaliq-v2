@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Fetch all dummy company quadrant data
     const { data: companies, error: companiesError } = await supabase
       .from("growth_quadrant_data")
-      .select("name, strategy_score, process_score, technology_score, overall_score");
+      .select("label, strategy_score, process_score, technology_score, overall_score");
 
     if (companiesError) {
       console.error("❌ Failed to fetch quadrant data:", companiesError);
