@@ -1,7 +1,7 @@
 // src/context/Tier2UserContext.tsx
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type Tier2User = {
   user_id: string;
@@ -23,6 +23,24 @@ const Tier2UserContext = createContext<{
 
 export const Tier2UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Tier2User | null>(null);
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("tier2_user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // Persist user on change
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("tier2_user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("tier2_user");
+    }
+  }, [user]);
+
   return (
     <Tier2UserContext.Provider value={{ user, setUser }}>
       {children}
