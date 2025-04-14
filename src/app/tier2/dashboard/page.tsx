@@ -40,6 +40,7 @@ const email = user?.email;
 
   useEffect(() => {
     const fetchInsights = async () => {
+      
       try {
         const insightsResponse = await axios.post("/api/tier2/dashboard", { user_id });
         if (insightsResponse.data.error) {
@@ -58,9 +59,14 @@ const email = user?.email;
       }
     };
 
-    if (!user_id) return;
-  fetchInsights();
-}, [user_id]);
+    if (!user_id) {
+      console.log("🛑 No user_id found yet.");
+      return;
+    }
+  
+    console.log("✅ Fetching insights for user_id:", user_id);
+    fetchInsights();
+  }, [user_id]);
 
   useEffect(() => {
     if (!user_id) return; // ✅ Prevent API call if user isn't ready
