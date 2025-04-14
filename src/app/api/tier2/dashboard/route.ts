@@ -10,15 +10,15 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
-    if (!email) return NextResponse.json({ error: "Missing email" }, { status: 400 });
-
-    // ✅ Fetch user by email
+    const { user_id } = await req.json();
+    if (!user_id) return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
+    
+    // ✅ Fetch user by ID instead of email
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
-      .eq("email", email)
-      .single();
+      .eq("user_id", user_id)
+      .single();    
 
     if (userError || !user)
       return NextResponse.json({ error: "User not found" }, { status: 404 });
