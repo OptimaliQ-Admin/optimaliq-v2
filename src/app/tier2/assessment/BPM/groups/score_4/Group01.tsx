@@ -8,19 +8,16 @@ import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
 export function isGroup01Complete(answers: Record<string, any>): boolean {
-  const hasGrowthMetrics =
-    Array.isArray(answers["growth_metrics"]) &&
-    answers["growth_metrics"].length > 0;
+  return (
+    typeof answers["process_redesign"] === "string" &&
+    answers["process_redesign"].trim().length > 0 &&
 
-  const hasGTMStrategy =
-    typeof answers["gtm_strategy"] === "string" &&
-    answers["gtm_strategy"].trim().length > 0;
+    typeof answers["owner_accountability"] === "string" &&
+    answers["owner_accountability"].trim().length > 0 &&
 
-  const hasFrictionPoints =
-    Array.isArray(answers["friction_points"]) &&
-    answers["friction_points"].length > 0;
-
-  return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
+    typeof answers["tool_alignment"] === "string" &&
+    answers["tool_alignment"].trim().length > 0
+  );
 }
 
 
@@ -30,9 +27,7 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Group01_Goals({ answers, onAnswer }: Props) {
-  const growthSelected = answers["growth_metrics"] || [];
-  const frictionSelected = answers["friction_points"] || [];
+export default function Score4_Step01({ answers, onAnswer }: Props) {
 
   return (
   <div className="p-6 max-w-2xl mx-auto">

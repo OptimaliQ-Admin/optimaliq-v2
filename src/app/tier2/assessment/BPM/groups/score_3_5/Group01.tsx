@@ -8,20 +8,18 @@ import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
 export function isGroup01Complete(answers: Record<string, any>): boolean {
-  const hasGrowthMetrics =
-    Array.isArray(answers["growth_metrics"]) &&
-    answers["growth_metrics"].length > 0;
+  return (
+    typeof answers["tool_integration"] === "string" &&
+    answers["tool_integration"].trim().length > 0 &&
 
-  const hasGTMStrategy =
-    typeof answers["gtm_strategy"] === "string" &&
-    answers["gtm_strategy"].trim().length > 0;
+    typeof answers["metrics_review"] === "string" &&
+    answers["metrics_review"].trim().length > 0 &&
 
-  const hasFrictionPoints =
-    Array.isArray(answers["friction_points"]) &&
-    answers["friction_points"].length > 0;
-
-  return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
+    typeof answers["standardization"] === "string" &&
+    answers["standardization"].trim().length > 0
+  );
 }
+
 
 
 
@@ -30,9 +28,7 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Group01_Goals({ answers, onAnswer }: Props) {
-  const growthSelected = answers["growth_metrics"] || [];
-  const frictionSelected = answers["friction_points"] || [];
+export default function Score3_5_Step01({ answers, onAnswer }: Props) {
 
   return (
   <div className="p-6 max-w-2xl mx-auto">
@@ -46,7 +42,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
     { value: "Most processes", label: "Most processes live inside the tools" },
     { value: "Yes", label: "Yes — fully integrated workflows" },
   ]}
-  value={answers["review_freqtool_integrationuency"] || ""}
+  value={answers["tool_integration"] || ""}
   onChange={(val) => onAnswer("tool_integration", val)}
 />
 

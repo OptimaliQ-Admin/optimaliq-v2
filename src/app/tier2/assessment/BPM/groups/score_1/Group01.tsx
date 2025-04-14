@@ -8,19 +8,14 @@ import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
 export function isGroup01Complete(answers: Record<string, any>): boolean {
-  const hasGrowthMetrics =
-    Array.isArray(answers["growth_metrics"]) &&
-    answers["growth_metrics"].length > 0;
-
-  const hasGTMStrategy =
-    typeof answers["gtm_strategy"] === "string" &&
-    answers["gtm_strategy"].trim().length > 0;
-
-  const hasFrictionPoints =
-    Array.isArray(answers["friction_points"]) &&
-    answers["friction_points"].length > 0;
-
-  return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
+  return (
+    typeof answers["consistency"] === "string" &&
+    answers["consistency"].trim().length > 0 &&
+    typeof answers["documentation"] === "string" &&
+    answers["documentation"].trim().length > 0 &&
+    typeof answers["onboarding"] === "string" &&
+    answers["onboarding"].trim().length > 0
+  );
 }
 
 
@@ -30,7 +25,7 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Group01_Goals({ answers, onAnswer }: Props) {
+export default function Score1_Step01({ answers, onAnswer }: Props) {
   const growthSelected = answers["growth_metrics"] || [];
   const frictionSelected = answers["friction_points"] || [];
 

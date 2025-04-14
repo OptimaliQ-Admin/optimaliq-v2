@@ -8,20 +8,18 @@ import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
 export function isGroup01Complete(answers: Record<string, any>): boolean {
-  const hasGrowthMetrics =
-    Array.isArray(answers["growth_metrics"]) &&
-    answers["growth_metrics"].length > 0;
+  return (
+    typeof answers["bpm_strategy_alignment"] === "string" &&
+    answers["bpm_strategy_alignment"].trim().length > 0 &&
 
-  const hasGTMStrategy =
-    typeof answers["gtm_strategy"] === "string" &&
-    answers["gtm_strategy"].trim().length > 0;
+    Array.isArray(answers["bpm_scope"]) &&
+    answers["bpm_scope"].length > 0 &&
 
-  const hasFrictionPoints =
-    Array.isArray(answers["friction_points"]) &&
-    answers["friction_points"].length > 0;
-
-  return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
+    typeof answers["self_optimizing_processes"] === "string" &&
+    answers["self_optimizing_processes"].trim().length > 0
+  );
 }
+
 
 
 
@@ -30,9 +28,8 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Group01_Goals({ answers, onAnswer }: Props) {
-  const growthSelected = answers["growth_metrics"] || [];
-  const frictionSelected = answers["friction_points"] || [];
+export default function Score5_Step01({ answers, onAnswer }: Props) {
+  const bpm_scope = answers["bpm_scope"] || [];
 
   return (
   <div className="p-6 max-w-2xl mx-auto">

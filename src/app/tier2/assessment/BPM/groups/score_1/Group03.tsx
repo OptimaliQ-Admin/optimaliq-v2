@@ -9,11 +9,14 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isGroup03Complete(answers: Record<string, any>): boolean {
   return (
-    Array.isArray(answers["tech_stack"]) && answers["tech_stack"].length > 0 &&
+    typeof answers["ownership"] === "string" &&
+    answers["ownership"].trim().length > 0 &&
 
-    Array.isArray(answers["business_priorities"]) && answers["business_priorities"].length > 0 &&
+    typeof answers["self_diagnosis"] === "string" &&
+    answers["self_diagnosis"].trim().length > 0 &&
 
-    typeof answers["process_discipline"] === "string" && answers["process_discipline"].trim().length > 0
+    typeof answers["operations_maturity"] === "string" &&
+    answers["operations_maturity"].trim().length > 0
   );
 }
 
@@ -23,7 +26,7 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Group03_Operations({ answers, onAnswer }: Props) {
+export default function Score1_Step03({ answers, onAnswer }: Props) {
   const techSelected = answers["tech_stack"] || [];
 
   return (

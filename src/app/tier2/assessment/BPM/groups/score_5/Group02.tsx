@@ -8,16 +8,17 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isGroup02Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["differentiator"] === "string" &&
-    answers["differentiator"].trim().length > 0 &&
+    typeof answers["culture_alignment"] === "string" &&
+    answers["culture_alignment"].trim().length > 0 &&
 
-    typeof answers["brand_perception"] === "string" &&
-    answers["brand_perception"].trim().length > 0 &&
+    typeof answers["compliance_integration"] === "string" &&
+    answers["compliance_integration"].trim().length > 0 &&
 
-    typeof answers["strategy_decision_method"] === "string" &&
-    answers["strategy_decision_method"].trim().length > 0
+    typeof answers["recent_innovation"] === "string" &&
+    answers["recent_innovation"].trim().length > 0
   );
 }
+
 
 
 type Props = {
@@ -26,7 +27,7 @@ type Props = {
 };
 
 
-export default function Group02_Positioning({ answers, onAnswer }: Props) {
+export default function Score5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-8">
 

@@ -19,15 +19,17 @@ export function isGroup02Complete(answers: Record<string, any>): boolean {
   );
 }
 
-
 type Props = {
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
 };
 
 
-export default function Group02_Positioning({ answers, onAnswer }: Props) {
+export default function Score1_Step02({ answers, onAnswer }: Props) {
+  const tools = answers["tools"] || [];
   return (
+    
+
     <div className="space-y-8">
       {/* Question 4: error_handling */}
 <MultipleChoiceQuestion
