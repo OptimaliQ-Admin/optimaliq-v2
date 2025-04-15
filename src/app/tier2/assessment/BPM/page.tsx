@@ -32,13 +32,6 @@ export default function OnboardingAssessmentPage() {
     return result;
   };
 
-  useEffect(() => {
-    
-    if (!userEmail && !skipCheck) {
-      //router.push("/pricing");
-      console.warn("🛑 No email found yet — waiting...");
-      return;
-    }
     useEffect(() => {
       const fetchData = async () => {
         console.log("👤 Email from context:", userEmail);
