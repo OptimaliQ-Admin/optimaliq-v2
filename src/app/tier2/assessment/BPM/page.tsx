@@ -13,8 +13,6 @@ export default function OnboardingAssessmentPage() {
     const router = useRouter();
     const { user } = useTier2User(); // ✅ call it here
     const userEmail = user?.email;
-    console.log("✅ useTier2User email:", userEmail);
-  
     const [step, setStep] = useState(0);
     const [score, setScore] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
@@ -77,7 +75,7 @@ export default function OnboardingAssessmentPage() {
     };
   
     fetchData();
-  }, [router, userEmail, skipCheck]);
+  }, [ userEmail, skipCheck]); //router,
   
   
 
