@@ -6,17 +6,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
+import { useTier2User } from "@/context/Tier2UserContext";
+
 
 export default function OnboardingAssessmentPage() {
-  const router = useRouter();
-  const [step, setStep] = useState(0);
-  const [score, setScore] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-
-  const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
-  const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
+  cexport default function OnboardingAssessmentPage() {
+    const router = useRouter();
+    const { user } = useTier2User(); // ✅ call it here
+    const userEmail = user?.email;
+  
+    const [step, setStep] = useState(0);
+    const [score, setScore] = useState<number | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  
+    const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
+  
+  
 
   const stripUnusedOtherFields = (answers: Record<string, any>) => {
     const result: Record<string, any> = {};
