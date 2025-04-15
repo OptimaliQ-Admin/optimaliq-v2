@@ -154,7 +154,15 @@ export default function OnboardingAssessmentPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-              <StepGroupRenderer step={step} score={score} answers={formAnswers} onAnswer={handleAnswer} />
+             {score !== null && (
+  <StepGroupRenderer
+    step={step}
+    score={score}
+    answers={formAnswers}
+    onAnswer={handleAnswer}
+  />
+)}
+
             </motion.div>
           </AnimatePresence>
 
