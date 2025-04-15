@@ -42,10 +42,26 @@ export default function OnboardingAssessmentPage() {
           .eq("email", userEmail)
           .single();
   
-        if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
-          setError("Access Denied. Please subscribe first.");
-          router.push("/pricing");
-          return;
+        //if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
+          //setError("Access Denied. Please subscribe first.");
+          //router.push("/pricing");
+          //return;
+
+
+          if (!res.ok) {
+            setError(data.error || "Something went wrong");
+            return;
+          }
+          
+          // ✅ Save email in localStorage
+          localStorage.setItem("tier2_email", email);
+          
+          // ✅ Set the user in context
+          setUser(data);
+          
+          // ✅ Navigate cleanly
+          router.push("/tier2/dashboard");
+
         }
   
         // Step 2: Use user_id to fetch the score from insights
