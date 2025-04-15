@@ -57,12 +57,12 @@ export default function OnboardingAssessmentPage() {
           .limit(1)
           .single();
   
-        if (insightsError || !insightsData?.score) {
-          setError("Unable to load assessment score.");
-          return;
-        }
-  
-        setScore(insightsData.score); // ✅ Use score from insights
+          if (insightsError || !insightsData?.overallscore) {
+            setError("Unable to load assessment score.");
+            return;
+          }
+          
+          setScore(insightsData.overallscore);// ✅ Use score from insights
         setLoading(false);
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
