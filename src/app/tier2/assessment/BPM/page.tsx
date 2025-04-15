@@ -50,8 +50,8 @@ export default function OnboardingAssessmentPage() {
     
           console.log("🧠 userData:", userData);
     
-          if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
-            console.log("❌ Access denied or subscription invalid");
+          if (userError || !userData) {
+            console.log("❌ Access denied: User not found.");
             setError("Access Denied. Please subscribe first.");
             return;
           }
