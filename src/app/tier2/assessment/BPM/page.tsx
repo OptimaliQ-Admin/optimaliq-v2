@@ -44,7 +44,7 @@ export default function OnboardingAssessmentPage() {
         try {
           const { data: userData, error: userError } = await supabase
             .from("tier2_users")
-            .select("user_id, subscription_status")
+            .select("user_id")
             .eq("email", userEmail)
             .single();
     
