@@ -28,57 +28,39 @@ export default function OnboardingAssessmentPage() {
   };
 
   useEffect(() => {
-    const fetchScore = async () => {
+    const fetchData = async () => {
       if (!userEmail && !skipCheck) {
         router.push("/pricing");
         return;
       }
   
       try {
-        // Step 1: Get the user_id from tier2_users using email
         const { data: userData, error: userError } = await supabase
           .from("tier2_users")
           .select("user_id, subscription_status")
           .eq("email", userEmail)
           .single();
   
-        //if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
-          //setError("Access Denied. Please subscribe first.");
-          //router.push("/pricing");
-          //return;
-
-
-          if (!res.ok) {
-            setError(data.error || "Something went wrong");
-            return;
-          }
-          
-          // ✅ Save email in localStorage
-          localStorage.setItem("tier2_email", email);
-          
-          // ✅ Set the user in context
-          setUser(data);
-          
-          // ✅ Navigate cleanly
-          router.push("/tier2/dashboard");
-
+        if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
+          setError("Access Denied. Please subscribe first.");
+          router.push("/pricing");
+          return;
         }
   
-        // Step 2: Use user_id to fetch the score from insights
+        // ✅ Now fetch the score from insights table
         const { data: insightsData, error: insightsError } = await supabase
           .from("insights")
           .select("overallscore")
           .eq("user_id", userData.user_id)
-          .order("created_at", { ascending: false })
-          .limit(1)
           .single();
   
-          if (insightsError || !insightsData?.overallscore) {
-            setError("Unable to load assessment score.");
-            return;
-          }
-          
-          setScore(insightsData.overallscore);// ✅ Use score from insights
+        if (insightsError || !insightsData?.overallscore) {
+          setError("Unable to load assessment score.");
+          router.push("/pricing");
+          return;
+        }
+  
+        setScore(insightsData.overallscore); // ✅ Use score from insights
         setLoading(false);
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
@@ -87,8 +69,9 @@ export default function OnboardingAssessmentPage() {
       }
     };
   
-    fetchScore();
+    fetchData();
   }, [router, userEmail, skipCheck]);
+  
   
 
   useEffect(() => {
