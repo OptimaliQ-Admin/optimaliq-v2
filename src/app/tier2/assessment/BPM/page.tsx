@@ -59,7 +59,7 @@ export default function OnboardingAssessmentPage() {
           const { data: insightsData, error: insightsError } = await supabase
             .from("insights")
             .select("overallscore")
-            .eq("user_id", userData.user_id)
+            .eq("u_id", userData.user_id)
             .single();
     
           console.log("📊 insightsData:", insightsData);
