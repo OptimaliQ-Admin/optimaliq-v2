@@ -33,11 +33,13 @@ export default function OnboardingAssessmentPage() {
   };
 
   useEffect(() => {
+    
+    if (!userEmail && !skipCheck) {
+      //router.push("/pricing");
+      console.warn("🛑 No email found yet — waiting...");
+      return;
+    }
     const fetchData = async () => {
-      if (!userEmail && !skipCheck) {
-        //router.push("/pricing");
-        return;
-      }
   
       try {
         const { data: userData, error: userError } = await supabase
@@ -132,8 +134,11 @@ export default function OnboardingAssessmentPage() {
     });
   };
 
-  if (loading || score === null) return <div className="p-10 text-center">Loading your assessment...</div>;
-  if (error) return <div className="p-10 text-red-600 text-center">{error}</div>;
+  if (loading)
+    return <div className="p-10 text-center">Loading your assessment...</div>;
+  
+  if (score === null && !error)
+    return <div className="p-10 text-center">Still waiting for your score...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
