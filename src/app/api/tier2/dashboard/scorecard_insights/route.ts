@@ -1,31 +1,27 @@
-//src/app/api/tier2/dashboard/insight/marketing_playbook/route.ts
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+// src/app/api/tier2/dashboard/scorecard_insights/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 
-export const dynamic = "force-dynamic";
+export async function POST(req: NextRequest) {
+  const { category, industry, score } = await req.json();
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-export async function GET() {
-  try {
-    const { data, error } = await supabase
-      .from("realtime_marketing_playbook")
-      .select("*")
-      .order("createdat", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error || !data) {
-      console.error("❌ No marketing playbook found:", error);
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(data);
-  } catch (err: any) {
-    console.error("🔥 Error fetching marketing playbook:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  if (!category || !industry || score === undefined) {
+    return NextResponse.json({ error: 'Missing required parameters.' }, { status: 400 });
   }
+
+  const { data, error } = await supabase
+    .from('scorecard_insights')
+    .select('title, description, benchmark, focus_areas')
+    .eq('category', category)
+    .eq('industry', industry)
+    .filter('score_min', 'lte', score)
+    .filter('score_max', 'gt', score) // exclusive upper bound
+    .single();
+
+  if (error || !data) {
+    console.error('❌ Failed to fetch insight:', error);
+    return NextResponse.json({ error: 'Insight not found.' }, { status: 404 });
+  }
+
+  return NextResponse.json(data);
 }
