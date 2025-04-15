@@ -28,26 +28,41 @@ export default function OnboardingAssessmentPage() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchScore = async () => {
       if (!userEmail && !skipCheck) {
         router.push("/pricing");
         return;
       }
-
+  
       try {
-        const { data, error } = await supabase
+        // Step 1: Get the user_id from tier2_users using email
+        const { data: userData, error: userError } = await supabase
           .from("tier2_users")
-          .select("subscription_status, gmf_score")
+          .select("user_id, subscription_status")
           .eq("email", userEmail)
           .single();
-
-        if (error || !data || (!skipCheck && data.subscription_status !== "active")) {
+  
+        if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
           setError("Access Denied. Please subscribe first.");
           router.push("/pricing");
           return;
         }
-
-        setScore(data.gmf_score || 1); // Default to 1 if missing
+  
+        // Step 2: Use user_id to fetch the score from insights
+        const { data: insightsData, error: insightsError } = await supabase
+          .from("insights")
+          .select("overallscore")
+          .eq("user_id", userData.user_id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single();
+  
+        if (insightsError || !insightsData?.score) {
+          setError("Unable to load assessment score.");
+          return;
+        }
+  
+        setScore(insightsData.score); // ✅ Use score from insights
         setLoading(false);
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
@@ -55,9 +70,10 @@ export default function OnboardingAssessmentPage() {
         router.push("/pricing");
       }
     };
-
-    fetchData();
+  
+    fetchScore();
   }, [router, userEmail, skipCheck]);
+  
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
