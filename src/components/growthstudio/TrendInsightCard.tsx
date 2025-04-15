@@ -1,5 +1,3 @@
-// File: /src/components/growthstudio/TrendInsightCard.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -33,11 +31,51 @@ export default function TrendInsightCard() {
     fetchInsight();
   }, []);
 
-  const preview = insight
-  ?.split("\n")
-  .filter((line) => line.startsWith("•"))
-  .slice(0, 2)
-  .join("\n");
+  const getLeadIn = (text: string) =>
+    text.split("\n").find((line) => line.toLowerCase().includes("lead in")) ||
+    "Lead-in not found";
+
+  const getTopBullets = (text: string) =>
+    text
+      .split("\n")
+      .filter((line) => line.startsWith("•"))
+      .slice(0, 2)
+      .join("\n");
+
+  const formatModalContent = (text: string) => {
+    const [main, tail] = text.split("Final thoughts");
+
+    return (
+      <>
+        <div className="text-sm text-gray-800 leading-relaxed whitespace-pre-line space-y-4 max-h-[70vh] overflow-y-auto">
+          {main
+            .replace("Lead in Statement", "🔥 Business Trend Summary:")
+            .replace(/\[Headline.*?\]/g, (match) => `🎯 ${match.replace(/[\[\]]/g, "")}`)
+            .split("\n")
+            .map((line, idx) => (
+              <p
+                key={idx}
+                className={
+                  line.startsWith("•")
+                    ? "ml-4 before:content-['•_']"
+                    : line.startsWith("🎯")
+                    ? "font-semibold mt-4"
+                    : ""
+                }
+              >
+                {line}
+              </p>
+            ))}
+        </div>
+
+        {tail && (
+          <div className="mt-6 italic text-sm text-gray-600 border-t pt-4">
+            {tail.trim()}
+          </div>
+        )}
+      </>
+    );
+  };
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
@@ -50,12 +88,14 @@ export default function TrendInsightCard() {
         <p className="text-gray-400 mt-2 animate-pulse">Loading insights...</p>
       ) : insight ? (
         <>
-          <p className="text-gray-600 mt-2 whitespace-pre-line">{preview}</p>
+          <p className="text-gray-700 font-semibold mb-1">{getLeadIn(insight)}</p>
+          <p className="text-gray-600 whitespace-pre-line text-sm">{getTopBullets(insight)}</p>
+
           <button
             onClick={() => setIsOpen(true)}
             className="mt-4 text-blue-600 underline text-sm hover:text-blue-800"
           >
-            Read full insight
+            🔍 Read full insight
           </button>
           {lastUpdated && (
             <p className="mt-2 text-xs text-gray-400">Last updated: {lastUpdated}</p>
@@ -65,13 +105,13 @@ export default function TrendInsightCard() {
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
-                <Dialog.Title className="text-lg font-bold text-gray-800 mb-2">
-                  📈 Full Growth Trends Insight
+                <Dialog.Title className="text-lg font-bold text-red-600 mb-4">
+                  🔥 Full Business Trend Prediction
                 </Dialog.Title>
-                <p className="text-gray-700 whitespace-pre-line max-h-[70vh] overflow-y-auto">
-                  {insight}
-                </p>
-                <div className="mt-4 text-right">
+
+                {insight && formatModalContent(insight)}
+
+                <div className="mt-6 text-right">
                   <button
                     onClick={() => setIsOpen(false)}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
