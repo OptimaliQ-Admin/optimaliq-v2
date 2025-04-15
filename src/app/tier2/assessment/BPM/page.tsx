@@ -37,7 +37,7 @@ export default function OnboardingAssessmentPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (!userEmail && !skipCheck) {
-        router.push("/pricing");
+        //router.push("/pricing");
         return;
       }
   
@@ -50,7 +50,7 @@ export default function OnboardingAssessmentPage() {
   
         if (userError || !userData || (!skipCheck && userData.subscription_status !== "active")) {
           setError("Access Denied. Please subscribe first.");
-          router.push("/pricing");
+          //router.push("/pricing");
           return;
         }
   
@@ -63,7 +63,7 @@ export default function OnboardingAssessmentPage() {
   
         if (insightsError || !insightsData?.overallscore) {
           setError("Unable to load assessment score.");
-          router.push("/pricing");
+          //router.push("/pricing");
           return;
         }
   
@@ -72,7 +72,7 @@ export default function OnboardingAssessmentPage() {
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
         setError("An unexpected error occurred.");
-        router.push("/pricing");
+        //router.push("/pricing");
       }
     };
   
