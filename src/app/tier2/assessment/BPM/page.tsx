@@ -10,7 +10,6 @@ import { useTier2User } from "@/context/Tier2UserContext";
 
 
 export default function OnboardingAssessmentPage() {
-  cexport default function OnboardingAssessmentPage() {
     const router = useRouter();
     const { user } = useTier2User(); // ✅ call it here
     const userEmail = user?.email;
