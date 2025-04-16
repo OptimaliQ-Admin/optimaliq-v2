@@ -118,7 +118,18 @@ const handleNext = async () => {
     alert("Please complete all required questions before continuing.");
     return;
   }
+  const isLastStep = step >= 2;
 
+  if (!isLastStep) {
+    setStep((prev) => prev + 1);
+    return;
+  }
+
+  if (!user?.user_id) {
+    alert("User ID missing. Please try again.");
+    return;
+  }
+  
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       const { data, error } = await supabase
