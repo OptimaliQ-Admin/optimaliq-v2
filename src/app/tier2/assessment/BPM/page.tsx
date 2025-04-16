@@ -94,7 +94,7 @@ export default function OnboardingAssessmentPage() {
       try {
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
         const { data, error } = await supabase
-          .from("onboarding_assessments")
+          .from("bpm_assessment")
           .insert([{ ...sanitizedAnswers, score }]);
 
         if (error) {
