@@ -111,7 +111,7 @@ const handleNext = async () => {
     return;
   }
   const normalized = normalizeScore(score);
-  const validator = stepValidators[step];
+  const validator = validatorSets[normalized]?.[step];
   const isStepValid = validator ? validator(formAnswers) : true;
 
   if (!isStepValid) {
