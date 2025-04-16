@@ -33,7 +33,46 @@ export default function OnboardingAssessmentPage() {
     return result;
   };
 
+
   useEffect(() => {
+    const checkSubscription = async () => {
+      if (skipCheck) {
+        setLoading(false);
+        return;
+      }
+  
+      // If no user email, redirect to pricing
+      if (!user?.email) {
+        router.push("/pricing");
+        return;
+      }
+  
+      try {
+        const { data, error } = await supabase
+          .from("tier2_users")
+          .select("subscription_status")
+          .eq("email", user.email)
+          .single();
+  
+        if (error || !data || data.subscription_status !== "active") {
+          console.warn("🚫 Access denied: not an active tier2 user");
+          setError("Access Denied. Please subscribe first.");
+          router.push("/pricing");
+          return;
+        }
+  
+        setLoading(false); // ✅ allowed
+      } catch (err) {
+        console.error("❌ Error checking subscription:", err);
+        setError("Something went wrong. Try again later.");
+      }
+    };
+  
+    checkSubscription();
+  }, [router, user?.email, skipCheck]);
+  
+  useEffect(() => {
+
     const fetchScore = async () => {
       if (!user?.user_id && !skipCheck) return;
 
