@@ -106,6 +106,10 @@ export default function OnboardingAssessmentPage() {
 
 
 const handleNext = async () => {
+  if (score === null) {
+    alert("Score is not loaded yet. Please try again.");
+    return;
+  }
   const normalized = normalizeScore(score);
   const validator = stepValidators[step];
   const isStepValid = validator ? validator(formAnswers) : true;
