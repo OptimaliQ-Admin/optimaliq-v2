@@ -20,6 +20,7 @@ export default function OnboardingAssessmentPage() {
     const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
   
     const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
+    const [userId, setUserId] = useState<string | null>(null);
   
   
 
@@ -47,6 +48,10 @@ export default function OnboardingAssessmentPage() {
             .select("user_id")
             .eq("email", userEmail)
             .single();
+
+
+            if (userData?.user_id) {
+              setUserId(userData.user_id);
     
           console.log("🧠 userData:", userData);
     
@@ -95,7 +100,7 @@ export default function OnboardingAssessmentPage() {
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
         const { data, error } = await supabase
           .from("bpm_assessment")
-          .insert([{ ...sanitizedAnswers, score }]);
+          .insert([{ ...sanitizedAnswers, score, u_id: userId }]);
 
         if (error) {
           console.error("❌ Supabase error:", error);
