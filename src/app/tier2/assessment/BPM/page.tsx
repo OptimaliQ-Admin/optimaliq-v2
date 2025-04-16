@@ -64,12 +64,12 @@ export default function OnboardingAssessmentPage() {
     
           console.log("📊 insightsData:", insightsData);
     
-          if (insightsError || !insightsData?.overallscore) {
+          if (insightsError || !insightsData?.score) {
             setError("Unable to load assessment score.");
             return;
           }
     
-          setScore(insightsData.overallscore); // ← this is the key!
+          setScore(insightsData.score); // ← this is the key!
           setLoading(false);
         } catch (err) {
           console.error("❌ Unexpected error:", err);
