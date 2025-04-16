@@ -7,8 +7,15 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import { useTier2User } from "@/context/Tier2UserContext";
+import { normalizeScore, validatorSets } from "./StepGroupRenderer"; // adjust path if needed
 
 
+
+const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
+  0: isGroup01Complete,
+  1: isGroup02Complete,
+  2: isGroup03Complete,
+};
 
 export default function OnboardingAssessmentPage() {
     const router = useRouter();
@@ -103,34 +110,49 @@ export default function OnboardingAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const handleNext = async () => {
-    if (step < 2) {
-      setStep((prev) => prev + 1);
-    } else {
-      if (!user?.user_id) {
-        alert("User ID missing. Please try again.");
+
+const handleNext = async () => {
+  const normalized = normalizeScore(score);
+  const stepValidators = validatorSets[normalized] || {};
+  const validator = stepValidators[step];
+  const isStepValid = validator ? validator(formAnswers) : true;
+
+  if (!isStepValid) {
+    alert("Please complete all required questions before continuing.");
+    return;
+  }
+
+  // Determine if this is the last step for this score bracket
+  const isLastStep = step >= Object.keys(stepValidators).length - 1;
+
+  if (!isLastStep) {
+    setStep((prev) => prev + 1);
+  } else {
+    if (!user?.user_id) {
+      alert("User ID missing. Please try again.");
+      return;
+    }
+
+    try {
+      const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
+      const { data, error } = await supabase
+        .from("bpm_assessment")
+        .insert([{ ...sanitizedAnswers, score, u_id: user.user_id }]);
+
+      if (error) {
+        console.error("❌ Supabase error:", error);
+        alert(`Something went wrong: ${error.message}`);
         return;
       }
 
-      try {
-        const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-        const { data, error } = await supabase
-          .from("bpm_assessment")
-          .insert([{ ...sanitizedAnswers, score, u_id: user.user_id }]);
-
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          alert(`Something went wrong: ${error.message}`);
-          return;
-        }
-
-        router.push("/dashboard/insights");
-      } catch (err: any) {
-        console.error("❌ Unexpected error:", err);
-        alert(`Unexpected error: ${err.message}`);
-      }
+      router.push("/dashboard/insights");
+    } catch (err: any) {
+      console.error("❌ Unexpected error:", err);
+      alert(`Unexpected error: ${err.message}`);
     }
-  };
+  }
+};
+
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);

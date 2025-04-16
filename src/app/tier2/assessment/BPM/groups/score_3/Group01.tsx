@@ -7,7 +7,7 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isGroup01Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["review_frequency"] === "string" &&
     answers["review_frequency"].trim().length > 0 &&

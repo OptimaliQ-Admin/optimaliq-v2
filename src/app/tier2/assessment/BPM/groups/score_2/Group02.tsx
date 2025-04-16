@@ -6,7 +6,7 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
 
-export function isGroup02Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["compliance"] === "string" &&
     answers["compliance"].trim().length > 0 &&

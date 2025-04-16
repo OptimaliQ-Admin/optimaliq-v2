@@ -7,11 +7,14 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isGroup01Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    Array.isArray(answers["coverage"]) && answers["coverage"].length > 0 &&
+    Array.isArray(answers["coverage"]) &&
+    answers["coverage"].length > 0 &&
+
     typeof answers["documentation_storage"] === "string" &&
     answers["documentation_storage"].trim().length > 0 &&
+
     typeof answers["error_response"] === "string" &&
     answers["error_response"].trim().length > 0
   );

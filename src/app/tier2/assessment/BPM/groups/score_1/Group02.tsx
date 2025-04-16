@@ -6,16 +6,16 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
 
-export function isGroup02Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["differentiator"] === "string" &&
-    answers["differentiator"].trim().length > 0 &&
-
-    typeof answers["brand_perception"] === "string" &&
-    answers["brand_perception"].trim().length > 0 &&
-
-    typeof answers["strategy_decision_method"] === "string" &&
-    answers["strategy_decision_method"].trim().length > 0
+    typeof answers["error_handling"] === "string" &&
+    answers["error_handling"].trim().length > 0 &&
+    typeof answers["reflection"] === "string" &&
+    answers["reflection"].trim().length > 0 &&
+    typeof answers["issue_detection"] === "string" &&
+    answers["issue_detection"].trim().length > 0 &&
+    Array.isArray(answers["tools"]) &&
+    answers["tools"].length > 0
   );
 }
 

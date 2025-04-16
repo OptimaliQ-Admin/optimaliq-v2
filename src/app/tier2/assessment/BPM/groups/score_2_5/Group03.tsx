@@ -7,7 +7,7 @@ import DragSortQuestion from "@/components/questions/DragSortQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isGroup03Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["standardization"] === "string" &&
     answers["standardization"].trim().length > 0 &&

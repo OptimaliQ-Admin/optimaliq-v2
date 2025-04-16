@@ -7,12 +7,19 @@ import DragSortQuestion from "@/components/questions/DragSortQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isGroup03Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
   return (
-    Array.isArray(answers["task_tracking"]) && answers["task_tracking"].length > 0 &&
-    typeof answers["metrics"] === "string" && answers["metrics"].trim().length > 0 &&
-    typeof answers["challenge"] === "string" && answers["challenge"].trim().length > 0 &&
-    typeof answers["discipline"] === "string" && answers["discipline"].trim().length > 0
+    Array.isArray(answers["task_tracking"]) &&
+    answers["task_tracking"].length > 0 &&
+
+    typeof answers["metrics"] === "string" &&
+    answers["metrics"].trim().length > 0 &&
+
+    typeof answers["challenge"] === "string" &&
+    answers["challenge"].trim().length > 0 &&
+
+    typeof answers["discipline"] === "string" &&
+    answers["discipline"].trim().length > 0
   );
 }
 
