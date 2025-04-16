@@ -129,7 +129,7 @@ const handleNext = async () => {
     alert("User ID missing. Please try again.");
     return;
   }
-  
+
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       const { data, error } = await supabase
@@ -147,8 +147,7 @@ const handleNext = async () => {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${err.message}`);
     }
-  }
-};
+  };
 
 
   const handleBack = () => {
