@@ -7,6 +7,9 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import { useTier2User } from "@/context/Tier2UserContext";
+import { useRef } from "react";
+const userIdRef = useRef<string | null>(null);
+
 
 
 export default function OnboardingAssessmentPage() {
@@ -20,7 +23,6 @@ export default function OnboardingAssessmentPage() {
     const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
   
     const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
-    const [userId, setUserId] = useState<string | null>(null);
   
   
 
@@ -51,9 +53,9 @@ export default function OnboardingAssessmentPage() {
 
 
             if (userData?.user_id) {
-              setUserId(userData.user_id);
+              userIdRef.current = userData.user_id;
             }
-    
+            
           console.log("🧠 userData:", userData);
     
           if (userError || !userData) {
@@ -99,7 +101,7 @@ export default function OnboardingAssessmentPage() {
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
         const { data, error } = await supabase
           .from("bpm_assessment")
-          .insert([{ ...sanitizedAnswers, score, u_id: userId }]);
+          .insert([{ ...sanitizedAnswers, score, u_id: userIdRef.current }]);
 
         if (error) {
           console.error("❌ Supabase error:", error);
