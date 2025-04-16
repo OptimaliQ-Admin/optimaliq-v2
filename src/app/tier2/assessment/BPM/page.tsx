@@ -7,8 +7,6 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import { useTier2User } from "@/context/Tier2UserContext";
-import { useRef } from "react";
-const userIdRef = useRef<string | null>(null);
 
 
 
@@ -35,59 +33,32 @@ export default function OnboardingAssessmentPage() {
     return result;
   };
 
-    useEffect(() => {
-      const fetchData = async () => {
-        console.log("👤 Email from context:", userEmail);
-    
-        if (!userEmail && !skipCheck) {
-          console.log("🚫 No email and skipCheck is false");
+  useEffect(() => {
+    const fetchScore = async () => {
+      if (!user?.user_id && !skipCheck) return;
+
+      try {
+        const { data, error } = await supabase
+          .from("tier2_dashboard_insights")
+          .select("score")
+          .eq("user_id", user?.user_id)
+          .single();
+
+        if (error || !data?.score) {
+          setError("Unable to load assessment score.");
           return;
         }
-    
-        try {
-          const { data: userData, error: userError } = await supabase
-            .from("tier2_users")
-            .select("user_id")
-            .eq("email", userEmail)
-            .single();
 
+        setScore(data.score);
+        setLoading(false);
+      } catch (err) {
+        console.error("❌ Unexpected error:", err);
+        setError("An unexpected error occurred.");
+      }
+    };
 
-            if (userData?.user_id) {
-              userIdRef.current = userData.user_id;
-            }
-            
-          console.log("🧠 userData:", userData);
-    
-          if (userError || !userData) {
-            console.log("❌ Access denied: User not found.");
-            setError("Access Denied. Please subscribe first.");
-            return;
-          }
-    
-          const { data: insightsData, error: insightsError } = await supabase
-            .from("tier2_dashboard_insights")
-            .select("score")
-            .eq("user_id", userData.user_id)
-            .single();
-    
-          console.log("📊 insightsData:", insightsData);
-    
-          if (insightsError || !insightsData?.score) {
-            setError("Unable to load assessment score.");
-            return;
-          }
-    
-          setScore(insightsData.score); // ← this is the key!
-          setLoading(false);
-        } catch (err) {
-          console.error("❌ Unexpected error:", err);
-          setError("An unexpected error occurred.");
-        }
-      };
-    
-      fetchData();
-    }, [userEmail, skipCheck]);//router,  
-  
+    fetchScore();
+  }, [user?.user_id, skipCheck]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -97,11 +68,16 @@ export default function OnboardingAssessmentPage() {
     if (step < 2) {
       setStep((prev) => prev + 1);
     } else {
+      if (!user?.user_id) {
+        alert("User ID missing. Please try again.");
+        return;
+      }
+
       try {
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
         const { data, error } = await supabase
           .from("bpm_assessment")
-          .insert([{ ...sanitizedAnswers, score, u_id: userIdRef.current }]);
+          .insert([{ ...sanitizedAnswers, score, u_id: user.user_id }]);
 
         if (error) {
           console.error("❌ Supabase error:", error);
