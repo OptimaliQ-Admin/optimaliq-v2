@@ -11,12 +11,6 @@ import { normalizeScore, validatorSets } from "./StepGroupRenderer"; // adjust p
 
 
 
-const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
-  0: isGroup01Complete,
-  1: isGroup02Complete,
-  2: isGroup03Complete,
-};
-
 export default function OnboardingAssessmentPage() {
     const router = useRouter();
     const { user } = useTier2User(); // ✅ call it here
@@ -113,7 +107,6 @@ export default function OnboardingAssessmentPage() {
 
 const handleNext = async () => {
   const normalized = normalizeScore(score);
-  const stepValidators = validatorSets[normalized] || {};
   const validator = stepValidators[step];
   const isStepValid = validator ? validator(formAnswers) : true;
 
