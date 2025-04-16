@@ -119,17 +119,6 @@ const handleNext = async () => {
     return;
   }
 
-  // Determine if this is the last step for this score bracket
-  const isLastStep = step >= Object.keys(stepValidators).length - 1;
-
-  if (!isLastStep) {
-    setStep((prev) => prev + 1);
-  } else {
-    if (!user?.user_id) {
-      alert("User ID missing. Please try again.");
-      return;
-    }
-
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       const { data, error } = await supabase
