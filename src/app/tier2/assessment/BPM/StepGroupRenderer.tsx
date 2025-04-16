@@ -89,15 +89,15 @@ export default function StepGroupRenderer({ step, score, answers, onAnswer }: Pr
   const normalizedScore = normalizeScore(score);
 
   const stepGroups: Record<string, React.ComponentType<any>[]> = {
-    Score_1: [Score1_Step01, Score1_Step02, Score1_Step03],
-  Score_1_5: [Score1_5_Step01, Score1_5_Step02, Score1_5_Step03],
-  Score_2: [Score2_Step01, Score2_Step02, Score2_Step03],
-  Score_2_5: [Score2_5_Step01, Score2_5_Step02, Score2_5_Step03],
-  Score_3: [Score3_Step01, Score3_Step02, Score3_Step03],
-  Score_3_5: [Score3_5_Step01, Score3_5_Step02, Score3_5_Step03],
-  Score_4: [Score4_Step01, Score4_Step02, Score4_Step03],
-  Score_4_5: [Score4_5_Step01, Score4_5_Step02, Score4_5_Step03],
-  Score_5: [Score5_Step01, Score5_Step02, Score5_Step03],
+    score_1: [Score1_Step01, Score1_Step02, Score1_Step03],
+    score_1_5: [Score1_5_Step01, Score1_5_Step02, Score1_5_Step03],
+    score_2: [Score2_Step01, Score2_Step02, Score2_Step03],
+    score_2_5: [Score2_5_Step01, Score2_5_Step02, Score2_5_Step03],
+    score_3: [Score3_Step01, Score3_Step02, Score3_Step03],
+    score_3_5: [Score3_5_Step01, Score3_5_Step02, Score3_5_Step03],
+    score_4: [Score4_Step01, Score4_Step02, Score4_Step03],
+    score_4_5: [Score4_5_Step01, Score4_5_Step02, Score4_5_Step03],
+    score_5: [Score5_Step01, Score5_Step02, Score5_Step03],
   };
 
   const group = stepGroups[normalizedScore];
