@@ -52,6 +52,7 @@ export default function OnboardingAssessmentPage() {
 
             if (userData?.user_id) {
               setUserId(userData.user_id);
+            }
     
           console.log("🧠 userData:", userData);
     
@@ -83,9 +84,7 @@ export default function OnboardingAssessmentPage() {
       };
     
       fetchData();
-    }, [userEmail, skipCheck]);
-    //router,
-  
+    }, [userEmail, skipCheck]);//router,  
   
 
   useEffect(() => {
