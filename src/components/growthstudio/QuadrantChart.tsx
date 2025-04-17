@@ -80,10 +80,10 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   const strategyValues = allData.map(d => d.strategy_score);
   const processValues = allData.map(d => d.process_score);
 
-  const minX = Math.floor(Math.min(...strategyValues)) - 2;
-const maxX = Math.ceil(Math.max(...strategyValues)) + 2;
-const minY = Math.floor(Math.min(...processValues)) - 2;
-const maxY = Math.ceil(Math.max(...processValues)) + 2;
+  const minX = Math.floor(Math.min(...strategyValues)) - .2;
+const maxX = Math.ceil(Math.max(...strategyValues)) + .2;
+const minY = Math.floor(Math.min(...processValues)) - .2;
+const maxY = Math.ceil(Math.max(...processValues)) + .2;
 
   const quadrantMidX = 3;
   const quadrantMidY = 3;
