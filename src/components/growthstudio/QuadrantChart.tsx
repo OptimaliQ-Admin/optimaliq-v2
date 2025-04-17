@@ -10,7 +10,6 @@ import {
   Scatter,
   ResponsiveContainer,
   ReferenceLine,
-  ReferenceDot,
   LabelList,
 } from "recharts";
 import { motion } from "framer-motion";
@@ -90,89 +89,89 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         />
       </div>
 
-      <div className="p-6 pt-4">
-        <ResponsiveContainer width="100%" height={460}>
-          <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
-            {/* No grid lines */}
-            <XAxis
-              type="number"
-              dataKey="strategy_score"
-              domain={[1, 5]}
-              axisLine={false}
-              tickLine={false}
-              tick={false}
-            />
-            <YAxis
-              type="number"
-              dataKey="process_score"
-              domain={[1, 5]}
-              axisLine={false}
-              tickLine={false}
-              tick={false}
-            />
-            <ZAxis
-              type="number"
-              dataKey="technology_score"
-              range={[100, 400]}
-              name="Technology Score"
-            />
-            <Tooltip
-              formatter={(value: any, name: string, props: any) => {
-                const { payload } = props;
-                return [`${value}`, name === "name" ? payload.name : name.replace(/_/g, " ")];
-              }}
-              cursor={{ strokeDasharray: "3 3" }}
-            />
+      <div className="relative px-6 pt-4 pb-10">
+        {/* External Quadrant Labels */}
+        <div className="absolute top-0 left-0 text-sm text-gray-500 font-medium">
+          Strategic Builders
+        </div>
+        <div className="absolute top-0 right-0 text-sm text-gray-500 font-medium">
+          Accelerated Performers
+        </div>
+        <div className="absolute bottom-0 left-0 text-sm text-gray-500 font-medium">
+          Emerging Foundations
+        </div>
+        <div className="absolute bottom-0 right-0 text-sm text-gray-500 font-medium">
+          Efficient Executors
+        </div>
 
-            {/* Midlines only */}
-            <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
-            <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
+        <div className="flex justify-center items-center">
+          <ResponsiveContainer width="90%" height={460}>
+            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <XAxis
+                type="number"
+                dataKey="strategy_score"
+                domain={[1, 5]}
+                axisLine={false}
+                tickLine={false}
+                tick={false}
+              />
+              <YAxis
+                type="number"
+                dataKey="process_score"
+                domain={[1, 5]}
+                axisLine={false}
+                tickLine={false}
+                tick={false}
+              />
+              <ZAxis
+                type="number"
+                dataKey="technology_score"
+                range={[100, 400]}
+                name="Technology Score"
+              />
+              <Tooltip
+  formatter={(value: any, name: string, props: any) => {
+    const { payload } = props;
+    const labelMap: Record<string, string> = {
+      strategy_score: "Strategy Score",
+      process_score: "Process Score",
+      technology_score: "Technology Score",
+    };
+    return [`${value}`, labelMap[name] || name];
+  }}
+  labelFormatter={(_, payload) => {
+    if (payload?.[0]?.payload?.name) {
+      return `Company: ${payload[0].payload.name}`;
+    }
+    return "";
+  }}
+  cursor={{ strokeDasharray: "3 3" }}
+/>
 
-            {/* Quadrant Labels */}
-            <ReferenceDot
-              x={4.6}
-              y={4.6}
-              r={0}
-              label={{ value: "🚀 Accelerated Performers", fill: "#6b7280", fontSize: 12 }}
-            />
-            <ReferenceDot
-              x={1.4}
-              y={4.6}
-              r={0}
-              label={{ value: "🧭 Strategic Builders", fill: "#6b7280", fontSize: 12 }}
-            />
-            <ReferenceDot
-              x={1.4}
-              y={1.4}
-              r={0}
-              label={{ value: "🧱 Emerging Foundations", fill: "#6b7280", fontSize: 12 }}
-            />
-            <ReferenceDot
-              x={4.6}
-              y={1.4}
-              r={0}
-              label={{ value: "⚙️ Efficient Executors", fill: "#6b7280", fontSize: 12 }}
-            />
+              {/* Midlines */}
+              <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
+              <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
 
-            {/* Company Dots (no labels) */}
-            <Scatter
-              name="Other Companies"
-              data={normalizedCompanies}
-              fill="#CBD5E1"
-              shape="circle"
-            />
+              {/* Other Companies (no label) */}
+              <Scatter
+                name="Other Companies"
+                data={normalizedCompanies}
+                fill="#CBD5E1"
+                shape="circle"
+              />
 
-            {/* Your Dot (labeled) */}
-            <Scatter
-              name="Your Company"
-              data={[normalizedUser]}
-              fill="#2563eb"
-              shape="star"
-            >
-              <LabelList dataKey="name" position="top" />
-            </Scatter>
-          </ScatterChart>
-        </ResponsiveContainer>
+              {/* Your Company (with label) */}
+              <Scatter
+                name="Your Company"
+                data={[normalizedUser]}
+                fill="#2563eb"
+                shape="star"
+              >
+                <LabelList dataKey="name" position="top" />
+              </Scatter>
+            </ScatterChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </motion.div>
   );
