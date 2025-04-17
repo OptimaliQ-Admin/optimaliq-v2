@@ -71,8 +71,8 @@ export async function POST(req: Request) {
   const raw = weightSum ? total / weightSum : 0;
   const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
-  // ✅ Insert into score_BPM table
-  const { error: insertError } = await supabase.from("score_BPM").insert([
+   // ✅ Insert into score_BPM table
+   const { error: insertError } = await supabase.from("score_BPM").insert([
     {
       u_id: userId,
       gmf_score: score,
@@ -88,6 +88,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
   }
 
-  // Return score back to frontend
+  // ✅ Upsert into tier2_profiles (create or update profile with bpm score)
+  const { error: profileError } = await supabase.from("tier2_profiles").upsert(
+    {
+      u_id: userId,
+      bpm_score: normalized,
+      bpm_last_taken: new Date().toISOString(),
+    },
+    { onConflict: "u_id" } // ensures update instead of duplicate
+  );
+
+  if (profileError) {
+    console.error("❌ Failed to update tier2_profiles:", profileError);
+    return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
+  }
+
+  // 🎉 Return score to frontend
   return NextResponse.json({ bpmScore: normalized });
 }
