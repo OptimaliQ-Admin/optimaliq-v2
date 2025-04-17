@@ -89,18 +89,18 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         />
       </div>
 
-      <div className="relative px-6 pt-4 pb-10">
+      <div className="relative px-6 pt-12 pb-14">
         {/* External Quadrant Labels */}
-        <div className="absolute top-0 left-0 text-sm text-gray-500 font-medium">
+        <div className="absolute top-2 left-4 text-sm text-gray-500 font-medium">
           Strategic Builders
         </div>
-        <div className="absolute top-0 right-0 text-sm text-gray-500 font-medium">
+        <div className="absolute top-2 right-4 text-sm text-gray-500 font-medium">
           Accelerated Performers
         </div>
-        <div className="absolute bottom-0 left-0 text-sm text-gray-500 font-medium">
+        <div className="absolute bottom-2 left-4 text-sm text-gray-500 font-medium">
           Emerging Foundations
         </div>
-        <div className="absolute bottom-0 right-0 text-sm text-gray-500 font-medium">
+        <div className="absolute bottom-2 right-4 text-sm text-gray-500 font-medium">
           Efficient Executors
         </div>
 
@@ -129,24 +129,25 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                 range={[100, 400]}
                 name="Technology Score"
               />
+
+              {/* Custom Tooltip */}
               <Tooltip
-  formatter={(value: any, name: string, props: any) => {
-    const { payload } = props;
-    const labelMap: Record<string, string> = {
-      strategy_score: "Strategy Score",
-      process_score: "Process Score",
-      technology_score: "Technology Score",
-    };
-    return [`${value}`, labelMap[name] || name];
-  }}
-  labelFormatter={(_, payload) => {
-    if (payload?.[0]?.payload?.name) {
-      return `Company: ${payload[0].payload.name}`;
-    }
-    return "";
-  }}
-  cursor={{ strokeDasharray: "3 3" }}
-/>
+                content={({ payload }) => {
+                  if (!payload || payload.length === 0) return null;
+
+                  const { name, strategy_score, process_score, technology_score } = payload[0].payload;
+
+                  return (
+                    <div className="bg-white border border-gray-300 shadow-lg rounded-md p-3 text-sm text-gray-800">
+                      <div className="font-semibold mb-1">Company: {name}</div>
+                      <div>Strategy Score: {strategy_score}</div>
+                      <div>Process Score: {process_score}</div>
+                      <div>Technology Score: {technology_score}</div>
+                    </div>
+                  );
+                }}
+                cursor={{ strokeDasharray: "3 3" }}
+              />
 
               {/* Midlines */}
               <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
