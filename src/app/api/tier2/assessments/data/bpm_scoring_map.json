@@ -1,0 +1,813 @@
+{
+    "score_1_1_4": {
+      "consistency": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Each person has their own way": 1,
+          "We rely on experience or memory": 2,
+          "There\u2019s a checklist or basic notes": 3,
+          "We use software or formal instructions": 4
+        }
+      },
+      "documentation": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No, nothing is documented": 1,
+          "A few things are written down": 2,
+          "Most core processes are documented": 3,
+          "Everything is clearly documented and stored": 4
+        }
+      },
+      "onboarding": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "They would ask someone": 1,
+          "They\u2019d watch others or figure it out": 2,
+          "We'd give them a few tips or notes": 3,
+          "They\u2019d receive a clear training or guide": 4
+        }
+      },
+      "error_handling": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Yes, frequently": 1,
+          "Occasionally": 2,
+          "Rarely": 3,
+          "Never": 4
+        }
+      },
+      "issue_detection": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We hear from an unhappy customer": 1,
+          "Someone on the team notices": 2,
+          "We review manually": 3,
+          "We use reports or systems": 4
+        }
+      },
+      "tools": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Email": 1,
+          "Spreadsheets": 2,
+          "Shared documents": 3,
+          "Project management tools (e.g. Trello, Asana)": 4,
+          "None right now": 5
+        }
+      },
+      "ownership": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No clear ownership": 1,
+          "Somewhat \u2014 it depends on the day": 2,
+          "Mostly clear roles": 3,
+          "Everyone knows exactly what they own": 4
+        }
+      },
+      "operations_maturity": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Mostly reactive \u2014 we fix problems as they come": 1,
+          "Some systems, but things fall through": 2,
+          "Organized, but informal": 3,
+          "Very structured and proactive": 4
+        }
+      }
+    },
+    "score_1_5_1_9": {
+      "coverage": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Customer onboarding": 1,
+          "Order fulfillment": 2,
+          "Customer support": 3,
+          "Invoicing or billing": 4,
+          "Marketing campaigns": 5,
+          "None of the above": 6
+        }
+      },
+      "documentation_storage": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No central location": 1,
+          "We store things in email or chat": 2,
+          "We use shared folders or Google Docs": 3,
+          "Yes, we use a wiki or playbook system": 4
+        }
+      },
+      "error_response": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We fix it and move on": 1,
+          "We discuss it in the moment": 2,
+          "We try to understand why it happened": 3,
+          "We update the process to prevent it": 4
+        }
+      },
+      "process_definition": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No one \u2014 it\u2019s based on habits": 1,
+          "Each team or person defines their own": 2,
+          "It\u2019s loosely defined by a manager": 3,
+          "There\u2019s a clear owner for each process": 4
+        }
+      },
+      "knowledge_transfer": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "All the time": 1,
+          "Weekly": 2,
+          "Rarely": 3,
+          "Almost never": 4
+        }
+      },
+      "consistency": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident at all": 1,
+          "Somewhat confident": 2,
+          "Mostly confident": 3,
+          "Very confident": 4
+        }
+      },
+      "workflow_tools": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Spreadsheets": 1,
+          "Project boards (e.g., Trello, Asana)": 2,
+          "Slack or chat tools": 3,
+          "Email": 4,
+          "Dedicated workflow software": 5,
+          "None currently": 6
+        }
+      },
+      "training": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Verbal instructions only": 1,
+          "Shadowing a current employee": 2,
+          "We give them documents or checklists": 3,
+          "We follow a structured onboarding plan": 4
+        }
+      },
+      "discipline": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Very informal \u2014 depends on who\u2019s involved": 1,
+          "Semi-consistent, but not always followed": 2,
+          "Mostly standardized in key areas": 3,
+          "Well-defined and reliable across the board": 4
+        }
+      }
+    },
+    "score_2_2_4": {
+      "consistency": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Sales or lead management": 1,
+          "Customer onboarding": 2,
+          "Fulfillment or delivery": 3,
+          "Customer support": 4,
+          "None \u2014 it still depends on who\u2019s doing the work": 5
+        }
+      },
+      "review_frequency": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Never \u2014 they\u2019re mostly static": 1,
+          "Occasionally, when problems arise": 2,
+          "Annually or as part of planning cycles": 3,
+          "Quarterly or more frequently": 4
+        }
+      },
+      "ownership": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No one \u2014 it\u2019s not assigned": 1,
+          "Usually the person doing the work": 2,
+          "A team lead or department manager": 3,
+          "A dedicated operations/process owner": 4
+        }
+      },
+      "compliance": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We don\u2019t verify it": 1,
+          "We spot check occasionally": 2,
+          "We review it during team syncs": 3,
+          "We use tracking tools and reporting": 4
+        }
+      },
+      "clarity": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 they\u2019re more like rough guidelines": 1,
+          "Somewhat \u2014 roles and steps are outlined": 2,
+          "Mostly \u2014 they\u2019re detailed but not always used": 3,
+          "Yes \u2014 they\u2019re fully defined and referenced": 4
+        }
+      },
+      "issue_response": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We just fix it and move on": 1,
+          "We try to understand what went wrong": 2,
+          "We discuss it as a team": 3,
+          "We adjust the process to prevent recurrence": 4
+        }
+      },
+      "task_tracking": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Email or chat": 1,
+          "Project management tools (Trello, Monday)": 2,
+          "CRM or ERP software": 3,
+          "Custom dashboards or trackers": 4,
+          "We don\u2019t track task status formally": 5
+        }
+      },
+      "metrics": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No tracking at all": 1,
+          "Only informally or occasionally": 2,
+          "Some basic metrics in reports": 3,
+          "Yes \u2014 we monitor and review metrics": 4
+        }
+      },
+      "scalability": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident at all": 1,
+          "Somewhat confident": 2,
+          "Mostly confident": 3,
+          "Very confident": 4
+        }
+      }
+    },
+    "score_2_5_2_9": {
+      "documentation_access": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Scattered across email, chat, or drives": 1,
+          "Shared folders or team wikis": 2,
+          "Inside workflow/project management tools": 3,
+          "Centrally documented and linked to operations": 4
+        }
+      },
+      "change_communication": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We don\u2019t have a formal update process": 1,
+          "We announce it in a meeting or email": 2,
+          "We update documentation and notify the team": 3,
+          "We track changes and confirm everyone has adopted them": 4
+        }
+      },
+      "knowledge_gap": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Yes \u2014 many tasks are like that": 1,
+          "A few specialized areas only": 2,
+          "We\u2019re working to document those": 3,
+          "No \u2014 everything is documented or trained": 4
+        }
+      },
+      "role_clarity": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Unclear \u2014 people figure it out": 1,
+          "Somewhat \u2014 there\u2019s rough understanding": 2,
+          "Mostly \u2014 key roles are documented": 3,
+          "Very clearly \u2014 with RACI or equivalent models": 4
+        }
+      },
+      "workflow_disruption": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Frequently": 1,
+          "Occasionally": 2,
+          "Rarely": 3,
+          "Almost never": 4
+        }
+      },
+      "resiliency": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Very difficult \u2014 we rely on that person": 1,
+          "Somewhat difficult without guidance": 2,
+          "Mostly manageable with instructions": 3,
+          "Easy \u2014 the process is documented and repeatable": 4
+        }
+      },
+      "standardization": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 everyone documents differently": 1,
+          "Some use a common format, others don\u2019t": 2,
+          "We have a standard template": 3,
+          "Yes \u2014 all teams follow the same structure": 4
+        }
+      },
+      "success_criteria": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not at all": 1,
+          "Sometimes": 2,
+          "Usually": 3,
+          "Always": 4
+        }
+      },
+      "consistency_enforcement": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident": 1,
+          "Somewhat confident": 2,
+          "Mostly confident": 3,
+          "Fully confident": 4
+        }
+      }
+    },
+    "score_3_3_4": {
+      "review_frequency": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Rarely or never": 1,
+          "Once per year": 2,
+          "Once per quarter": 3,
+          "Reviewed regularly as part of operations": 4
+        }
+      },
+      "visual_mapping": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No, only written instructions": 1,
+          "We\u2019ve mapped a few key processes": 2,
+          "Most major processes are mapped": 3,
+          "Yes, every process is visually documented": 4
+        }
+      },
+      "mapping_tools": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Lucidchart, Miro, or similar": 1,
+          "ClickUp, Notion, or Monday": 2,
+          "Confluence or shared docs": 3,
+          "Whiteboards or paper": 4,
+          "We don\u2019t currently map processes": 5
+        }
+      },
+      "handoffs": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not documented": 1,
+          "Vaguely defined": 2,
+          "Mostly documented": 3,
+          "Clearly defined with owners and SLAs": 4
+        }
+      },
+      "alerts": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 we only notice after the fact": 1,
+          "Sometimes \u2014 based on manual checks": 2,
+          "Yes \u2014 we have alert systems in place": 3,
+          "Yes \u2014 alerts are automated and acted on": 4
+        }
+      },
+      "change_management": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Usually one team makes the change": 1,
+          "We informally communicate updates": 2,
+          "We hold coordination meetings": 3,
+          "Changes go through formal review with all stakeholders": 4
+        }
+      },
+      "adaptability": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 they often fall behind": 1,
+          "Slowly and reactively": 2,
+          "Usually within a few months": 3,
+          "Yes \u2014 we\u2019re proactive and flexible": 4
+        }
+      },
+      "process_visibility": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Very limited \u2014 we rely on gut feel": 1,
+          "Some visibility in certain areas": 2,
+          "We track performance in most areas": 3,
+          "We have full visibility with clear KPIs": 4
+        }
+      }
+    },
+    "score_3_5_3_9": {
+      "tool_integration": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No, they\u2019re tracked separately": 1,
+          "Some processes integrate with tools": 2,
+          "Most processes live inside the tools": 3,
+          "Yes \u2014 fully integrated workflows": 4
+        }
+      },
+      "metrics_review": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Rarely or never": 1,
+          "Quarterly": 2,
+          "Monthly": 3,
+          "Weekly or in real-time": 4
+        }
+      },
+      "standardization": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 every team documents differently": 1,
+          "Some consistency, but not standardized": 2,
+          "Mostly standardized": 3,
+          "Fully standardized and enforced": 4
+        }
+      },
+      "team_feedback": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We don\u2019t collect feedback": 1,
+          "We ask during 1:1s or meetings": 2,
+          "We use forms or surveys occasionally": 3,
+          "We have structured feedback loops": 4
+        }
+      },
+      "improvement_input": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Rarely": 1,
+          "Occasionally": 2,
+          "Frequently, but not always implemented": 3,
+          "Frequently, with follow-through": 4
+        }
+      },
+      "incident_review": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No": 1,
+          "Only after critical issues": 2,
+          "Sometimes": 3,
+          "Always \u2014 it\u2019s part of our culture": 4
+        }
+      },
+      "adoption": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident": 1,
+          "Somewhat confident": 2,
+          "Mostly confident": 3,
+          "Fully confident with audit trails": 4
+        }
+      },
+      "automation": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No automation": 1,
+          "A few isolated automations": 2,
+          "Widespread use in certain teams": 3,
+          "Automation is deeply embedded across functions": 4
+        }
+      },
+      "monitoring": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Dashboards or reports": 1,
+          "Workflow audit logs": 2,
+          "Manual check-ins": 3,
+          "Team feedback": 4,
+          "We don\u2019t currently monitor health": 5
+        }
+      },
+      "ownership_model": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No one \u2014 it\u2019s decentralized": 1,
+          "Functional managers own their teams' processes": 2,
+          "A centralized ops or enablement function": 3,
+          "A dedicated BPM, RevOps, or process team": 4
+        }
+      }
+    },
+    "score_4_4_4": {
+      "process_redesign": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Rarely \u2014 only when needed": 1,
+          "Annually as part of planning": 2,
+          "Quarterly based on metrics": 3,
+          "Continuously, as part of operations": 4
+        }
+      },
+      "owner_accountability": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 not part of performance review": 1,
+          "Only at a high level": 2,
+          "Some KPIs are process-based": 3,
+          "Yes \u2014 directly accountable to metrics": 4
+        }
+      },
+      "tool_alignment": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Tools and processes are separate": 1,
+          "Alignment is reviewed during tool onboarding": 2,
+          "Regular syncs to maintain alignment": 3,
+          "Full alignment strategy and governance": 4
+        }
+      },
+      "cx_integration": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 internal efficiency is the priority": 1,
+          "Occasionally, based on feedback": 2,
+          "Often, as part of updates": 3,
+          "Always \u2014 experience is a design priority": 4
+        }
+      },
+      "improvement_cycle": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Stakeholder input": 1,
+          "Cross-functional testing": 2,
+          "Root cause analysis": 3,
+          "Automation review": 4,
+          "None of these": 5
+        }
+      },
+      "adaptive_processes": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 they\u2019re static": 1,
+          "Slightly \u2014 through branching or roles": 2,
+          "Moderately \u2014 through conditional logic": 3,
+          "Yes \u2014 dynamic, rule-based, or AI-driven": 4
+        }
+      },
+      "knowledge_sharing": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Word of mouth or informal sharing": 1,
+          "Internal wikis or SOP libraries": 2,
+          "Structured onboarding and documentation": 3,
+          "Embedded in daily systems and training": 4
+        }
+      },
+      "strategic_alignment": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident": 1,
+          "Somewhat aligned": 2,
+          "Mostly aligned": 3,
+          "Fully aligned and designed with strategy in mind": 4
+        }
+      },
+      "goal_focus": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Reduce costs": 1,
+          "Increase speed or throughput": 2,
+          "Improve experience (customer or team)": 3,
+          "Enable scale or innovation": 4
+        }
+      }
+    },
+    "score_4_5_4_9": {
+      "insight_to_strategy": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Rarely": 1,
+          "Sometimes": 2,
+          "Frequently": 3,
+          "Always \u2014 insights are tightly linked to strategy": 4
+        }
+      },
+      "predictive_analytics": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not at all": 1,
+          "Occasionally, in some areas": 2,
+          "Frequently, with good accuracy": 3,
+          "Yes \u2014 it\u2019s a core capability": 4
+        }
+      },
+      "governance_model": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Performance metrics": 1,
+          "Risk & compliance checks": 2,
+          "SLA tracking": 3,
+          "Change management workflows": 4,
+          "Executive sponsorship": 5
+        }
+      },
+      "remote_visibility": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No formal monitoring": 1,
+          "Manual oversight or reviews": 2,
+          "Digital compliance and reporting": 3,
+          "Real-time dashboards and alerts": 4
+        }
+      },
+      "coe_structure": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No": 1,
+          "We\u2019ve discussed it": 2,
+          "Yes \u2014 newly formed": 3,
+          "Yes \u2014 active and well-established": 4
+        }
+      },
+      "scalability_confidence": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not confident": 1,
+          "Somewhat confident": 2,
+          "Mostly confident": 3,
+          "Fully confident \u2014 proven track record": 4
+        }
+      },
+      "adaptive_governance": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We update as needed": 1,
+          "We review them annually": 2,
+          "We monitor signals and review quarterly": 3,
+          "We have adaptive frameworks built into governance": 4
+        }
+      },
+      "ai_automation": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not part of our strategy": 1,
+          "Used in a few areas": 2,
+          "Actively expanding across departments": 3,
+          "Deeply integrated into all core processes": 4
+        }
+      },
+      "adaptability": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Requires significant rework": 1,
+          "Adaptable with some effort": 2,
+          "Processes are built to flex": 3,
+          "Fully modular and scalable by design": 4
+        }
+      }
+    },
+    "score_5_0": {
+      "bpm_scope": {
+        "type": "multi_select",
+        "weight": 1.0,
+        "values": {
+          "Customer journey design": 1,
+          "Product innovation": 2,
+          "ESG or sustainability initiatives": 3,
+          "AI strategy": 4,
+          "M&A integration": 5,
+          "None of these": 6
+        }
+      },
+      "self_optimizing_processes": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "No \u2014 they require manual updates": 1,
+          "Some minor adaptive capabilities": 2,
+          "Yes \u2014 partially self-tuning": 3,
+          "Yes \u2014 dynamic and responsive at scale": 4
+        }
+      },
+      "culture_alignment": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not really embedded": 1,
+          "Included in some leadership discussions": 2,
+          "Core part of operational training": 3,
+          "Baked into cultural values and rituals": 4
+        }
+      },
+      "compliance_integration": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not connected": 1,
+          "Light oversight only": 2,
+          "Integrated with audits/reviews": 3,
+          "Drives automated compliance enforcement": 4
+        }
+      },
+      "agility": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "It doesn\u2019t \u2014 change is slow": 1,
+          "Some teams can test and adapt": 2,
+          "It supports agile process improvement": 3,
+          "Experimentation is built into the system": 4
+        }
+      },
+      "ai_driven_processes": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "Not at all": 1,
+          "In a few workflows": 2,
+          "In most core functions": 3,
+          "AI is embedded across all major processes": 4
+        }
+      },
+      "benchmarking": {
+        "type": "multiple_choice",
+        "weight": 1.0,
+        "values": {
+          "We don\u2019t benchmark": 1,
+          "Informal or anecdotal comparisons": 2,
+          "Structured internal benchmarking": 3,
+          "Ongoing external benchmarking with industry metrics": 4
+        }
+      }
+    }
+  }

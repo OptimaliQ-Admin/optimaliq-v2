@@ -1,3 +1,4 @@
+//src/app/tier2/assessment/BPM/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -132,9 +133,39 @@ const handleNext = async () => {
 
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-      const { data, error } = await supabase
-        .from("bpm_assessment")
-        .insert([{ ...sanitizedAnswers, score, u_id: user.user_id }]);
+      // Step 1: Call your scoring API
+      const response = await fetch("/api/tier2/assessments/bpm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          answers: sanitizedAnswers,
+          score: score,
+          userId: user.user_id  // 👈 pass this along
+        }),
+      });      
+
+const result = await response.json();
+
+if (!response.ok || result.bpmScore === undefined) {
+  console.error("❌ Scoring API failed:", result);
+  alert("Something went wrong while scoring the assessment.");
+  return;
+}
+
+const bpmScore = result.bpmScore;
+
+// Step 2: Insert into Supabase
+const { data, error }: { data: any; error: any } = await supabase
+  .from("bpm_assessment")
+  .insert([{ ...sanitizedAnswers, score: bpmScore, u_id: user.user_id }]);
+
+if (error) {
+  console.error("❌ Supabase error:", error);
+  alert(`Something went wrong: ${error.message}`);
+  return;
+}
+
+router.push("/dashboard/insights");
 
       if (error) {
         console.error("❌ Supabase error:", error);
