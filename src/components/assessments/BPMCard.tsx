@@ -4,6 +4,8 @@
 import React from "react";
 import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
+import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
+
 
 const bpmDescriptions: Record<number, string> = {
   1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
