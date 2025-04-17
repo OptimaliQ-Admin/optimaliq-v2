@@ -1,3 +1,4 @@
+// /src/app/tier2/growth-studio/page.tsx
 "use client";
 
 import { Suspense, useState } from "react";
