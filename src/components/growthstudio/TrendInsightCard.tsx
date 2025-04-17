@@ -1,3 +1,4 @@
+//src/components/growthstudio/TrendInsightCard.tsx
 "use client";
 
 import { useEffect, useState } from "react";
