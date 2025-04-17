@@ -165,7 +165,7 @@ if (error) {
   return;
 }
 
-router.push("/dashboard/insights");
+router.push("/tier2/assessment");
 
       if (error) {
         console.error("❌ Supabase error:", error);
@@ -173,7 +173,7 @@ router.push("/dashboard/insights");
         return;
       }
 
-      router.push("/dashboard/insights");
+      router.push("/tier2/assessment");
     } catch (err: any) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${err.message}`);
