@@ -10,11 +10,12 @@ import {
   Tooltip,
   Scatter,
   ResponsiveContainer,
-  Label,
   ReferenceLine,
+  ReferenceDot,
   LabelList,
 } from "recharts";
 import { motion } from "framer-motion";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 interface CompanyPoint {
   label: string;
@@ -83,25 +84,19 @@ export default function QuadrantChart({ userId }: { userId: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="bg-gray-100 px-6 py-4 border-b border-gray-200">
-        <h2 className="text-base font-semibold text-gray-700">
-          📊 Strategic Growth Quadrant
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Compare your current business performance with industry benchmarks.
-          Bubble size represents your Technology score.
-        </p>
+      <div className="px-6 pt-6">
+        <SectionTitleBar
+          title="📊 Strategic Growth Quadrant"
+          tooltip="Compare Strategy and Process across the market. Bubble size represents Technology maturity."
+        />
       </div>
-      <div className="p-6">
-        <ResponsiveContainer width="100%" height={450}>
+
+      <div className="p-6 pt-4">
+        <ResponsiveContainer width="100%" height={460}>
           <ScatterChart margin={{ top: 20, right: 20, bottom: 40, left: 40 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" dataKey="strategy_score" domain={[1, 5]}>
-              <Label value="Strategy Score" offset={-10} position="insideBottom" />
-            </XAxis>
-            <YAxis type="number" dataKey="process_score" domain={[1, 5]}>
-              <Label value="Process Score" angle={-90} position="insideLeft" />
-            </YAxis>
+            <XAxis type="number" dataKey="strategy_score" domain={[1, 5]} />
+            <YAxis type="number" dataKey="process_score" domain={[1, 5]} />
             <ZAxis
               type="number"
               dataKey="technology_score"
@@ -113,52 +108,50 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               cursor={{ strokeDasharray: "3 3" }}
             />
 
-            {/* Horizontal and Vertical Midlines */}
+            {/* Midlines */}
             <ReferenceLine x={quadrantMidX} stroke="#e5e7eb" strokeDasharray="3 3" />
             <ReferenceLine y={quadrantMidY} stroke="#e5e7eb" strokeDasharray="3 3" />
 
             {/* Quadrant Labels */}
-            <Label
-              value="🚀 Growth Leaders"
-              position="top"
-              offset={-20}
-              angle={0}
-              className="text-xs text-gray-600"
-              viewBox={{ x: 380, y: 0 }}
+            <ReferenceDot
+              x={4.6}
+              y={4.6}
+              r={0}
+              label={{ value: "🚀 Accelerated Performers", fill: "#6b7280", fontSize: 12 }}
             />
-            <Label
-              value="🧭 Strategic but Inefficient"
-              position="top"
-              offset={-20}
-              angle={0}
-              viewBox={{ x: 40, y: 0 }}
+            <ReferenceDot
+              x={1.4}
+              y={4.6}
+              r={0}
+              label={{ value: "🧭 Strategic Builders", fill: "#6b7280", fontSize: 12 }}
             />
-            <Label
-              value="⚙️ Efficient but Misaligned"
-              position="bottom"
-              offset={10}
-              angle={0}
-              viewBox={{ x: 380, y: 400 }}
+            <ReferenceDot
+              x={1.4}
+              y={1.4}
+              r={0}
+              label={{ value: "🧱 Emerging Foundations", fill: "#6b7280", fontSize: 12 }}
             />
-            <Label
-              value="🧱 Foundational"
-              position="bottom"
-              offset={10}
-              angle={0}
-              viewBox={{ x: 40, y: 400 }}
+            <ReferenceDot
+              x={4.6}
+              y={1.4}
+              r={0}
+              label={{ value: "⚙️ Efficient Executors", fill: "#6b7280", fontSize: 12 }}
             />
 
+            {/* Data Points */}
             <Scatter
               name="Other Companies"
               data={normalizedCompanies}
-              fill="#CBD5E1" // slate-300
+              fill="#CBD5E1"
               shape="circle"
-            />
+            >
+              <LabelList dataKey="name" position="top" />
+            </Scatter>
 
             <Scatter
               name="Your Company"
               data={[normalizedUser]}
-              fill="#2563eb" // OptimaliQ blue
+              fill="#2563eb"
               shape="star"
             >
               <LabelList dataKey="name" position="top" />
