@@ -364,89 +364,90 @@
         }
       }
     },
-    "score_3_3_4": {
-      "review_frequency": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Rarely or never": 1,
-          "Once per year": 2,
-          "Once per quarter": 3,
-          "Reviewed regularly as part of operations": 4
-        }
-      },
-      "visual_mapping": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No, only written instructions": 1,
-          "We\u2019ve mapped a few key processes": 2,
-          "Most major processes are mapped": 3,
-          "Yes, every process is visually documented": 4
-        }
-      },
-      "mapping_tools": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Lucidchart, Miro, or similar": 1,
-          "ClickUp, Notion, or Monday": 2,
-          "Confluence or shared docs": 3,
-          "Whiteboards or paper": 4,
-          "We don\u2019t currently map processes": 5
-        }
-      },
-      "handoffs": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not documented": 1,
-          "Vaguely": 2,
-          "Mostly": 3,
-          "Clearly defined": 4
-        }
-      },
-      "alerts": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 we only notice after the fact": 1,
-          "Sometimes \u2014 based on manual checks": 2,
-          "Yes \u2014 we have alert systems in place": 3,
-          "Yes \u2014 alerts are automated and acted on": 4
-        }
-      },
-      "change_management": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "one team makes the change": 1,
-          "informally communicate updates": 2,
-          "hold coordination meetings": 3,
-          "formal review with all stakeholders": 4
-        }
-      },
-      "adaptability": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No": 1,
-          "Slowly": 2,
-          "within a few months": 3,
-          "Yes": 4
-        }        
-      },
-      "process_visibility": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Very limited \u2014 we rely on gut feel": 1,
-          "Some visibility in certain areas": 2,
-          "We track performance in most areas": 3,
-          "We have full visibility with clear KPIs": 4
-        }
-      }
-    },
+"score_3_3_4": {
+  "review_frequency": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Never": 1,
+      "Once per year": 2,
+      "Once per quarter": 3,
+      "Reviewed regularly": 4
+    }
+  },
+  "visual_mapping": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Never": 1,
+      "Occasionally": 2,
+      "Annually": 3,
+      "Quarterly": 4
+    }
+  },
+  "mapping_tools": {
+    "type": "multi_select",
+    "weight": 1.0,
+    "values": {
+      "Lucidchart, Miro, or similar": 1,
+      "ClickUp, Notion, or Monday": 2,
+      "Confluence or shared docs": 3,
+      "Whiteboards or paper": 4,
+      "We don’t currently map processes": 5
+    }
+  },
+  "handoffs": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Not documented": 1,
+      "Vaguely": 2,
+      "Mostly": 3,
+      "Clearly defined": 4
+    }
+  },
+  "alerts": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "No": 1,
+      "Sometimes": 2,
+      "Yes — we have alert systems": 3,
+      "Yes — alerts are automated": 4
+    }
+  },
+  "change_management": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "one team makes the change": 1,
+      "informally communicate updates": 2,
+      "hold coordination meetings": 3,
+      "formal review with all stakeholders": 4
+    }
+  },
+  "adaptability": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "No": 1,
+      "Slowly": 2,
+      "within a few months": 3,
+      "Yes": 4
+    }
+  },
+  "process_visibility": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Very limited": 1,
+      "Some visibility": 2,
+      "track performance in most areas": 3,
+      "full visibility with clear KPIs": 4
+    }
+  }
+}
+,
     "score_3_5_3_9": {
       "tool_integration": {
         "type": "multiple_choice",

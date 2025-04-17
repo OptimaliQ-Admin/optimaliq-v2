@@ -72,37 +72,41 @@ export async function POST(req: Request) {
   const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
    // ✅ Insert into score_BPM table
-   const { error: insertError } = await supabase.from("score_BPM").insert([
-    {
-      u_id: userId,
-      gmf_score: score,
-      bracket_key: bracketKey,
-      score: normalized,
-      answers,
-      version: "v1",
-    },
-  ]);
+const { error: insertError } = await supabase.from("score_BPM").insert([
+  {
+    u_id: userId,
+    gmf_score: score,
+    bracket_key: bracketKey,
+    score: normalized,
+    answers,
+    version: "v1",
+  },
+]);
 
-  if (insertError) {
-    console.error("❌ Supabase insert error:", insertError);
-    return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
-  }
+if (insertError) {
+  console.error("❌ Supabase insert error:", insertError);
+  return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
+}
 
-  // ✅ Upsert into tier2_profiles (create or update profile with bpm score)
-  const { error: profileError } = await supabase.from("tier2_profiles").upsert(
+// ✅ Upsert into tier2_profiles (create or update profile with bpm score)
+const { error: profileError } = await supabase
+  .from("tier2_profiles")
+  .upsert(
     {
       u_id: userId,
       bpm_score: normalized,
       bpm_last_taken: new Date().toISOString(),
     },
-    { onConflict: "u_id" }
+    {
+      onConflict: "u_id", // ✅ Moved into the second argument object properly
+    }
   );
 
-  if (profileError) {
-    console.error("❌ Failed to update tier2_profiles:", profileError);
-    return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
-  }
+if (profileError) {
+  console.error("❌ Failed to update tier2_profiles:", profileError);
+  return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
+}
 
-  // 🎉 Return score to frontend
-  return NextResponse.json({ bpmScore: normalized });
+// 🎉 Return score to frontend
+return NextResponse.json({ bpmScore: normalized });
 }
