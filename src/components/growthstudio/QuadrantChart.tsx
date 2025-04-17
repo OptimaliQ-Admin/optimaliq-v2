@@ -80,10 +80,10 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   const strategyValues = allData.map(d => d.strategy_score);
   const processValues = allData.map(d => d.process_score);
 
-  const minX = Math.floor(Math.min(...strategyValues)) - 0.5;
-  const maxX = Math.ceil(Math.max(...strategyValues)) + 0.5;
-  const minY = Math.floor(Math.min(...processValues)) - 0.5;
-  const maxY = Math.ceil(Math.max(...processValues)) + 0.5;
+  const minX = Math.floor(Math.min(...strategyValues)) - 1;
+const maxX = Math.ceil(Math.max(...strategyValues)) + 1;
+const minY = Math.floor(Math.min(...processValues)) - 1;
+const maxY = Math.ceil(Math.max(...processValues)) + 1;
 
   const quadrantMidX = 3;
   const quadrantMidY = 3;
@@ -143,11 +143,11 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                 tick={false}
               />
               <ZAxis
-                type="number"
-                dataKey="technology_score"
-                range={[60, 800]} // More dramatic bubble sizing
-                name="Technology Score"
-              />
+  type="number"
+  dataKey="technology_score"
+  range={[40, 120]}
+  name="Technology Score"
+/>
 
               <Tooltip
                 content={({ payload }) => {
