@@ -15,18 +15,18 @@ import {
 } from "recharts";
 
 interface CompanyPoint {
-  name: string;
-  strategy_score: number;
-  process_score: number;
-  technology_score: number;
-  overall_score: number;
+  label: string;
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
+  score: number;
 }
 
 interface UserPoint {
-  strategy_score: number;
-  process_score: number;
-  technology_score: number;
-  overall_score: number;
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
+  score: number;
 }
 
 interface APIResponse {
@@ -57,6 +57,19 @@ export default function QuadrantChart({ userId }: { userId: string }) {
 
   if (!data) return null;
 
+  // 🧠 Normalize camelCase → snake_case for Recharts compatibility
+  const normalizedCompanies = data.companies.map((company) => ({
+    name: company.label,
+    strategy_score: company.strategyScore,
+    process_score: company.processScore,
+  }));
+
+  const normalizedUser = {
+    name: "You",
+    strategy_score: data.user.strategyScore,
+    process_score: data.user.processScore,
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-lg font-bold text-gray-700 mb-4">📊 Strategic Growth Quadrant</h2>
@@ -72,17 +85,14 @@ export default function QuadrantChart({ userId }: { userId: string }) {
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
           <Scatter
             name="Other Companies"
-            data={data.companies}
+            data={normalizedCompanies}
             fill="#ccc"
             shape="circle"
           />
           <Scatter
             name="Your Company"
-            data={[{
-              ...data.user,
-              name: "You"
-            }]}
-            fill="#2563eb" // OptimaliQ blue
+            data={[normalizedUser]}
+            fill="#2563eb"
             shape="star"
           />
         </ScatterChart>

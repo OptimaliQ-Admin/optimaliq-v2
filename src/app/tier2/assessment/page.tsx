@@ -70,8 +70,8 @@ function AssessmentComponent() {
     },
     {
       id: "competitive-benchmarking",
-      title: "📊 Competitive Benchmarking",
-      description: "Compare performance against peers to identify areas for growth.",
+      title: "📊 Growth & Benchmarking Intake",
+      description: "Provide key business metrics and competitive insights to personalize your roadmap and compare your performance to industry benchmarks."
     },
   ];
 
