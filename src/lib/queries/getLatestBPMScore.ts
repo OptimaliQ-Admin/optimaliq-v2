@@ -9,22 +9,22 @@ export type BPMScoreResult = {
 
 export async function getLatestBPMScore(u_id: string): Promise<BPMScoreResult> {
   const { data, error } = await supabase
-    .from("score_BPM")
-    .select("score, created_at")
+    .from("tier2_profiles")
+    .select("bpm_score, bpm_last_taken")
     .eq("u_id", u_id)
-    .order("created_at", { ascending: false })
-    .limit(1)
     .maybeSingle();
 
   if (error) {
-    console.error("❌ Failed to fetch BPM score:", error);
+    console.error("❌ Failed to fetch BPM score from profile:", error);
     return null;
   }
 
-  if (!data) return null;
+  if (!data?.bpm_score || !data?.bpm_last_taken) {
+    return null;
+  }
 
-  const takenAt = data.created_at;
-  const score = data.score;
+  const takenAt = data.bpm_last_taken;
+  const score = data.bpm_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 

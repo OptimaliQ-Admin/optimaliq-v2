@@ -95,7 +95,7 @@ export async function POST(req: Request) {
       bpm_score: normalized,
       bpm_last_taken: new Date().toISOString(),
     },
-    { onConflict: "u_id" } // ensures update instead of duplicate
+    { onConflict: "u_id" }
   );
 
   if (profileError) {
