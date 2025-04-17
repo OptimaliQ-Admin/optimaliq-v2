@@ -10,6 +10,7 @@ import {
   Scatter,
   ResponsiveContainer,
   ReferenceLine,
+  ReferenceArea,
   LabelList,
 } from "recharts";
 import { motion } from "framer-motion";
@@ -58,6 +59,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
 
   if (!data) return null;
 
+  // Normalize data
   const normalizedCompanies = data.companies.map((company) => ({
     name: company.label,
     strategy_score: company.strategyScore,
@@ -71,6 +73,17 @@ export default function QuadrantChart({ userId }: { userId: string }) {
     process_score: data.user.processScore,
     technology_score: data.user.technologyScore,
   };
+
+  const allData = [...normalizedCompanies, normalizedUser];
+
+  // Auto-zoom bounds with padding
+  const strategyValues = allData.map(d => d.strategy_score);
+  const processValues = allData.map(d => d.process_score);
+
+  const minX = Math.floor(Math.min(...strategyValues)) - 0.5;
+  const maxX = Math.ceil(Math.max(...strategyValues)) + 0.5;
+  const minY = Math.floor(Math.min(...processValues)) - 0.5;
+  const maxY = Math.ceil(Math.max(...processValues)) + 0.5;
 
   const quadrantMidX = 3;
   const quadrantMidY = 3;
@@ -90,7 +103,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
       </div>
 
       <div className="relative px-6 pt-10 pb-12">
-        {/* Updated Quadrant Labels - closer, larger, and colored */}
+        {/* External Quadrant Labels */}
         <div className="absolute top-6 left-6 text-[15px] font-semibold text-blue-700">
           Strategic Builders
         </div>
@@ -107,10 +120,16 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         <div className="flex justify-center items-center">
           <ResponsiveContainer width="90%" height={460}>
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              {/* Soft quadrant backgrounds */}
+              <ReferenceArea x1={minX} x2={quadrantMidX} y1={quadrantMidY} y2={maxY} fill="#DBEAFE" fillOpacity={0.2} />
+              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={quadrantMidY} y2={maxY} fill="#DCFCE7" fillOpacity={0.2} />
+              <ReferenceArea x1={minX} x2={quadrantMidX} y1={minY} y2={quadrantMidY} fill="#FEF9C3" fillOpacity={0.2} />
+              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={minY} y2={quadrantMidY} fill="#EDE9FE" fillOpacity={0.2} />
+
               <XAxis
                 type="number"
                 dataKey="strategy_score"
-                domain={[1, 5]}
+                domain={[minX, maxX]}
                 axisLine={false}
                 tickLine={false}
                 tick={false}
@@ -118,7 +137,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <YAxis
                 type="number"
                 dataKey="process_score"
-                domain={[1, 5]}
+                domain={[minY, maxY]}
                 axisLine={false}
                 tickLine={false}
                 tick={false}
@@ -126,11 +145,10 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <ZAxis
                 type="number"
                 dataKey="technology_score"
-                range={[60, 800]} // 👈 More obvious bubble size
+                range={[60, 800]} // More dramatic bubble sizing
                 name="Technology Score"
               />
 
-              {/* Custom Tooltip */}
               <Tooltip
                 content={({ payload }) => {
                   if (!payload || payload.length === 0) return null;
@@ -153,7 +171,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
               <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
 
-              {/* Other Companies */}
+              {/* Companies */}
               <Scatter
                 name="Other Companies"
                 data={normalizedCompanies}
@@ -161,7 +179,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                 shape="circle"
               />
 
-              {/* Your Company */}
+              {/* You */}
               <Scatter
                 name="Your Company"
                 data={[normalizedUser]}
