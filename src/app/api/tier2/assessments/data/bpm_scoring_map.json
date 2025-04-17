@@ -1,183 +1,183 @@
 {
     "score_1_1_4": {
-      "consistency": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Each person has their own way": 1,
-          "We rely on experience or memory": 2,
-          "There\u2019s a checklist or basic notes": 3,
-          "We use software or formal instructions": 4
-        }
-      },
-      "documentation": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No, nothing is documented": 1,
-          "A few things are written down": 2,
-          "Most core processes are documented": 3,
-          "Everything is clearly documented and stored": 4
-        }
-      },
-      "onboarding": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "They would ask someone": 1,
-          "They\u2019d watch others or figure it out": 2,
-          "We'd give them a few tips or notes": 3,
-          "They\u2019d receive a clear training or guide": 4
-        }
-      },
-      "error_handling": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Yes, frequently": 1,
-          "Occasionally": 2,
-          "Rarely": 3,
-          "Never": 4
-        }
-      },
-      "issue_detection": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We hear from an unhappy customer": 1,
-          "Someone on the team notices": 2,
-          "We review manually": 3,
-          "We use reports or systems": 4
-        }
-      },
-      "tools": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Email": 1,
-          "Spreadsheets": 2,
-          "Shared documents": 3,
-          "Project management tools (e.g. Trello, Asana)": 4,
-          "None right now": 5
-        }
-      },
-      "ownership": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No clear ownership": 1,
-          "Somewhat \u2014 it depends on the day": 2,
-          "Mostly clear roles": 3,
-          "Everyone knows exactly what they own": 4
-        }
-      },
-      "operations_maturity": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Mostly reactive \u2014 we fix problems as they come": 1,
-          "Some systems, but things fall through": 2,
-          "Organized, but informal": 3,
-          "Very structured and proactive": 4
-        }
-      }
-    },
-    "score_1_5_1_9": {
-      "coverage": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Customer onboarding": 1,
-          "Order fulfillment": 2,
-          "Customer support": 3,
-          "Invoicing or billing": 4,
-          "Marketing campaigns": 5,
-          "None of the above": 6
-        }
-      },
-      "documentation_storage": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No central location": 1,
-          "We store things in email or chat": 2,
-          "We use shared folders or Google Docs": 3,
-          "Yes, we use a wiki or playbook system": 4
-        }
-      },
-      "error_response": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We fix it and move on": 1,
-          "We discuss it in the moment": 2,
-          "We try to understand why it happened": 3,
-          "We update the process to prevent it": 4
-        }
-      },
-      "process_definition": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No one \u2014 it\u2019s based on habits": 1,
-          "Each team or person defines their own": 2,
-          "It\u2019s loosely defined by a manager": 3,
-          "There\u2019s a clear owner for each process": 4
-        }
-      },
-      "knowledge_transfer": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "All the time": 1,
-          "Weekly": 2,
-          "Rarely": 3,
-          "Almost never": 4
-        }
-      },
-      "consistency": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident at all": 1,
-          "Somewhat confident": 2,
-          "Mostly confident": 3,
-          "Very confident": 4
-        }
-      },
-      "workflow_tools": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Spreadsheets": 1,
-          "Project boards (e.g., Trello, Asana)": 2,
-          "Slack or chat tools": 3,
-          "Email": 4,
-          "Dedicated workflow software": 5,
-          "None currently": 6
-        }
-      },
-      "training": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Verbal instructions only": 1,
-          "Shadowing a current employee": 2,
-          "We give them documents or checklists": 3,
-          "We follow a structured onboarding plan": 4
-        }
-      },
-      "discipline": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Very informal \u2014 depends on who\u2019s involved": 1,
-          "Semi-consistent, but not always followed": 2,
-          "Mostly standardized in key areas": 3,
-          "Well-defined and reliable across the board": 4
-        }
-      }
-    },
+  "consistency": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "own_way": 1,
+      "experience_memory": 2,
+      "checklisr": 3,
+      "software": 4
+    }
+  },
+  "documentation": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Nothing": 1,
+      "few": 2,
+      "most": 3,
+      "everything": 4
+    }
+  },
+  "onboarding": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "ask_someone": 1,
+      "watch": 2,
+      "tips": 3,
+      "training": 4
+    }
+  },
+  "error_handling": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "frequently": 1,
+      "Occasionally": 2,
+      "Rarely": 3,
+      "Never": 4
+    }
+  },
+  "issue_detection": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "unhappy_customer": 1,
+      "someone_notices": 2,
+      "manually": 3,
+      "reports": 4
+    }
+  },
+  "tools": {
+    "type": "multi_select",
+    "weight": 1.0,
+    "values": {
+      "Email": 1,
+      "Spreadsheets": 2,
+      "Shared_documents": 3,
+      "Project_management": 4,
+      "None": 5
+    }
+  },
+  "ownership": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "no_ownership": 1,
+      "Somewhat": 2,
+      "Mostly": 3,
+      "exactly": 4
+    }
+  },
+  "operations_maturity": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "reactive": 1,
+      "Some_systems": 2,
+      "Organized_informal": 3,
+      "structured": 4
+    }
+  }
+},
+"score_1_5_1_9": {
+  "coverage": {
+    "type": "multi_select",
+    "weight": 1.0,
+    "values": {
+      "Customer_onboarding": 1,
+      "Order_fulfillment": 2,
+      "Customer_support": 3,
+      "Invoicing_or_billing": 4,
+      "Marketing_campaigns": 5,
+      "None": 6
+    }
+  },
+  "documentation_storage": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "No_central_location": 1,
+      "email_or_chat": 2,
+      "shared folders": 3,
+      "playbook system": 4
+    }
+  },
+  "error_response": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "fix it and move on": 1,
+      "discuss it in the moment": 2,
+      " try to understand why it happened": 3,
+      "update the process to prevent it": 4
+    }
+  },
+  "process_definition": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "based on habits": 1,
+      "person defines their own": 2,
+      "loosely defined by a manager": 3,
+      "clear owner for each process": 4
+    }
+  },
+  "knowledge_transfer": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "All the time": 1,
+      "Weekly": 2,
+      "Rarely": 3,
+      "Almost never": 4
+    }
+  },
+  "consistency": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Not confident": 1,
+      "Somewhat": 2,
+      "Mostly": 3,
+      "Very confident": 4
+    }
+  },
+  "workflow_tools": {
+    "type": "multi_select",
+    "weight": 1.0,
+    "values": {
+      "Spreadsheets": 1,
+      "Project boards": 2,
+      "chat tools": 3,
+      "Email": 4,
+      "workflow software": 5,
+      "None": 6
+    }
+  },
+  "training": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Verbal": 1,
+      "Shadowing": 2,
+      "documents or checklists": 3,
+      "structured onboarding plan": 4
+    }
+  },
+  "discipline": {
+    "type": "multiple_choice",
+    "weight": 1.0,
+    "values": {
+      "Very informal": 1,
+      "Semi-consistent": 2,
+      "Mostly standardized": 3,
+      "Well-defined": 4
+    }
+  }
+},
     "score_2_2_4": {
       "consistency": {
         "type": "multi_select",
@@ -401,9 +401,9 @@
         "weight": 1.0,
         "values": {
           "Not documented": 1,
-          "Vaguely defined": 2,
-          "Mostly documented": 3,
-          "Clearly defined with owners and SLAs": 4
+          "Vaguely": 2,
+          "Mostly": 3,
+          "Clearly defined": 4
         }
       },
       "alerts": {
@@ -420,21 +420,21 @@
         "type": "multiple_choice",
         "weight": 1.0,
         "values": {
-          "Usually one team makes the change": 1,
-          "We informally communicate updates": 2,
-          "We hold coordination meetings": 3,
-          "Changes go through formal review with all stakeholders": 4
+          "one team makes the change": 1,
+          "informally communicate updates": 2,
+          "hold coordination meetings": 3,
+          "formal review with all stakeholders": 4
         }
       },
       "adaptability": {
         "type": "multiple_choice",
         "weight": 1.0,
         "values": {
-          "No \u2014 they often fall behind": 1,
-          "Slowly and reactively": 2,
-          "Usually within a few months": 3,
-          "Yes \u2014 we\u2019re proactive and flexible": 4
-        }
+          "No": 1,
+          "Slowly": 2,
+          "within a few months": 3,
+          "Yes": 4
+        }        
       },
       "process_visibility": {
         "type": "multiple_choice",

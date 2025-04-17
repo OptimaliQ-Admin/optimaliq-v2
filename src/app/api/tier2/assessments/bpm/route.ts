@@ -60,8 +60,12 @@ export async function POST(req: Request) {
       }
     }
 
-    total += valScore * q.weight;
-    weightSum += q.weight;
+    if (valScore > 0) {
+      total += valScore * q.weight;
+      weightSum += q.weight;
+    } else {
+      console.warn(`Unscored answer for '${key}':`, answer);
+    }
   }
 
   const raw = weightSum ? total / weightSum : 0;
