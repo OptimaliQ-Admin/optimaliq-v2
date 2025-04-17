@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   ScatterChart,
-  CartesianGrid,
   XAxis,
   YAxis,
   ZAxis,
@@ -87,16 +86,30 @@ export default function QuadrantChart({ userId }: { userId: string }) {
       <div className="px-6 pt-6">
         <SectionTitleBar
           title="📊 Strategic Growth Quadrant"
-          tooltip="Compare Strategy and Process across the market. Bubble size represents Technology maturity."
+          tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
         />
       </div>
 
       <div className="p-6 pt-4">
         <ResponsiveContainer width="100%" height={460}>
-          <ScatterChart margin={{ top: 20, right: 20, bottom: 40, left: 40 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" dataKey="strategy_score" domain={[1, 5]} />
-            <YAxis type="number" dataKey="process_score" domain={[1, 5]} />
+          <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
+            {/* No grid lines */}
+            <XAxis
+              type="number"
+              dataKey="strategy_score"
+              domain={[1, 5]}
+              axisLine={false}
+              tickLine={false}
+              tick={false}
+            />
+            <YAxis
+              type="number"
+              dataKey="process_score"
+              domain={[1, 5]}
+              axisLine={false}
+              tickLine={false}
+              tick={false}
+            />
             <ZAxis
               type="number"
               dataKey="technology_score"
@@ -104,13 +117,16 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               name="Technology Score"
             />
             <Tooltip
-              formatter={(value: any, name: string) => [`${value}`, name.replace(/_/g, " ")]}
+              formatter={(value: any, name: string, props: any) => {
+                const { payload } = props;
+                return [`${value}`, name === "name" ? payload.name : name.replace(/_/g, " ")];
+              }}
               cursor={{ strokeDasharray: "3 3" }}
             />
 
-            {/* Midlines */}
-            <ReferenceLine x={quadrantMidX} stroke="#e5e7eb" strokeDasharray="3 3" />
-            <ReferenceLine y={quadrantMidY} stroke="#e5e7eb" strokeDasharray="3 3" />
+            {/* Midlines only */}
+            <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
+            <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
 
             {/* Quadrant Labels */}
             <ReferenceDot
@@ -138,16 +154,15 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               label={{ value: "⚙️ Efficient Executors", fill: "#6b7280", fontSize: 12 }}
             />
 
-            {/* Data Points */}
+            {/* Company Dots (no labels) */}
             <Scatter
               name="Other Companies"
               data={normalizedCompanies}
               fill="#CBD5E1"
               shape="circle"
-            >
-              <LabelList dataKey="name" position="top" />
-            </Scatter>
+            />
 
+            {/* Your Dot (labeled) */}
             <Scatter
               name="Your Company"
               data={[normalizedUser]}
