@@ -89,18 +89,18 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         />
       </div>
 
-      <div className="relative px-6 pt-12 pb-14">
-        {/* External Quadrant Labels */}
-        <div className="absolute top-2 left-4 text-sm text-gray-500 font-medium">
+      <div className="relative px-6 pt-10 pb-12">
+        {/* Updated Quadrant Labels - closer, larger, and colored */}
+        <div className="absolute top-6 left-6 text-[15px] font-semibold text-blue-700">
           Strategic Builders
         </div>
-        <div className="absolute top-2 right-4 text-sm text-gray-500 font-medium">
+        <div className="absolute top-6 right-6 text-[15px] font-semibold text-green-700">
           Accelerated Performers
         </div>
-        <div className="absolute bottom-2 left-4 text-sm text-gray-500 font-medium">
+        <div className="absolute bottom-6 left-6 text-[15px] font-semibold text-yellow-700">
           Emerging Foundations
         </div>
-        <div className="absolute bottom-2 right-4 text-sm text-gray-500 font-medium">
+        <div className="absolute bottom-6 right-6 text-[15px] font-semibold text-purple-700">
           Efficient Executors
         </div>
 
@@ -126,7 +126,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <ZAxis
                 type="number"
                 dataKey="technology_score"
-                range={[100, 400]}
+                range={[60, 800]} // 👈 More obvious bubble size
                 name="Technology Score"
               />
 
@@ -153,7 +153,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
               <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
 
-              {/* Other Companies (no label) */}
+              {/* Other Companies */}
               <Scatter
                 name="Other Companies"
                 data={normalizedCompanies}
@@ -161,7 +161,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                 shape="circle"
               />
 
-              {/* Your Company (with label) */}
+              {/* Your Company */}
               <Scatter
                 name="Your Company"
                 data={[normalizedUser]}
