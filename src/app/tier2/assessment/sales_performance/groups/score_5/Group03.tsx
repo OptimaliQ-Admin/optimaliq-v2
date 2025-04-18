@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["reinvestment_posture"] === "string" &&
-    answers["reinvestment_posture"].trim().length > 0 &&
-    typeof answers["sales_engine_strength"] === "string" &&
-    answers["sales_engine_strength"].trim().length > 0 &&
-    typeof answers["sales_org_vision"] === "string" &&
-    answers["sales_org_vision"].trim().length > 0
+    typeof answers["what’s_719868"] === "string" &&
+    typeof answers["what_f078f0"] === "string" &&
+    typeof answers["what’s_5927ed"] === "string"
   );
 }
 
@@ -24,34 +21,34 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: reinvestment_posture */}
+      {/* Question 8: what’s_719868 */}
       <MultipleChoiceQuestion
-        question="What’s your organization’s posture toward reinvesting in sales excellence?"
+        question="What’s your organization’s posture toward reinvention and future-proofing sales?"
         options={[
-          { value: "focus_now", label: "We’re focused on what works now" },
-          { value: "discuss_innovation", label: "We discuss innovation occasionally" },
-          { value: "actively_experimenting", label: "We’re actively experimenting and evolving" },
-          { value: "building_sales_moat", label: "We’re building a sales excellence moat" },
+          { value: "focused_now", label: "We’re focused on what works now" },
+          { value: "slow_action", label: "We discuss the future but act slowly" },
+          { value: "exploring_models", label: "We actively explore new models" },
+          { value: "reinventing_proactively", label: "We continuously reinvent ahead of market shifts" },
         ]}
-        value={answers["reinvestment_posture"] || ""}
-        onChange={(val) => onAnswer("reinvestment_posture", val)}
+        value={answers["what’s_719868"] || ""}
+        onChange={(val) => onAnswer("what’s_719868", val)}
       />
 
-      {/* Question 9: sales_engine_strength */}
+      {/* Question 9: what_f078f0 */}
       <TextAreaQuestion
-        question="What part of your sales engine do you believe is your greatest strength today?"
+        question="What part of your sales engine do you believe gives you a competitive advantage?"
         placeholder="E.g., discovery, product demo, outbound, customer success handoff"
-        value={answers["sales_engine_strength"] || ""}
-        onChange={(val) => onAnswer("sales_engine_strength", val)}
+        value={answers["what_f078f0"] || ""}
+        onChange={(val) => onAnswer("what_f078f0", val)}
         maxLength={300}
       />
 
-      {/* Question 10: sales_org_vision */}
+      {/* Question 10: what’s_5927ed */}
       <TextAreaQuestion
-        question="What’s your vision for how your sales organization will evolve in the next 12–24 months?"
+        question="What’s your vision for how your sales organization will evolve over the next 18–24 months?"
         placeholder="E.g., new verticals, full lifecycle ownership, predictive tooling, etc."
-        value={answers["sales_org_vision"] || ""}
-        onChange={(val) => onAnswer("sales_org_vision", val)}
+        value={answers["what’s_5927ed"] || ""}
+        onChange={(val) => onAnswer("what’s_5927ed", val)}
         maxLength={300}
       />
     </div>

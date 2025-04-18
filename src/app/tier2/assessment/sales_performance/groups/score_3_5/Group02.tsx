@@ -5,14 +5,10 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["pipeline_gap_identification"] === "string" &&
-    answers["pipeline_gap_identification"].trim().length > 0 &&
-    typeof answers["deal_quality_tracking"] === "string" &&
-    answers["deal_quality_tracking"].trim().length > 0 &&
-    typeof answers["behavior_consistency"] === "string" &&
-    answers["behavior_consistency"].trim().length > 0 &&
-    typeof answers["forecast_review_cadence"] === "string" &&
-    answers["forecast_review_cadence"].trim().length > 0
+    typeof answers["how_05b3d7"] === "string" &&
+    typeof answers["how_5d49b3"] === "string" &&
+    typeof answers["how_b650ca"] === "string" &&
+    typeof answers["how_152df3"] === "string"
   );
 }
 
@@ -25,56 +21,56 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-8">
 
-      {/* Question 4: pipeline_gap_identification */}
+      {/* Question 4: how_05b3d7 */}
       <MultipleChoiceQuestion
-        question="How do you identify pipeline coverage gaps before it’s too late?"
+        question="How do you identify pipeline coverage gaps before they affect targets?"
         options={[
           { value: "too_late", label: "We don’t look until it’s too late" },
-          { value: "manual_calculation", label: "We manually calculate monthly coverage" },
-          { value: "forecast_ratio", label: "We look at pipeline-to-forecast ratios" },
-          { value: "automated_monitoring", label: "We use tools to monitor and alert on gaps" },
+          { value: "manual_monitoring", label: "Managers monitor activity and aging" },
+          { value: "dashboards", label: "We use dashboards or CRM reports" },
+          { value: "modeled_by_stage", label: "Coverage is monitored proactively and modeled by stage" },
         ]}
-        value={answers["pipeline_gap_identification"] || ""}
-        onChange={(val) => onAnswer("pipeline_gap_identification", val)}
+        value={answers["how_05b3d7"] || ""}
+        onChange={(val) => onAnswer("how_05b3d7", val)}
       />
 
-      {/* Question 5: deal_quality_tracking */}
+      {/* Question 5: how_5d49b3 */}
       <MultipleChoiceQuestion
-        question="How do you track deal quality (fit, velocity, and win probability)?"
+        question="How do you track deal quality (fit, velocity, engagement)?"
         options={[
           { value: "gut", label: "We rely on gut feel or notes" },
-          { value: "conversion_rates", label: "We look at conversion rates across stages" },
-          { value: "scorecard_or_notes", label: "We use a scorecard or call notes" },
-          { value: "quantitative_metrics", label: "We track multiple quantitative quality indicators" },
+          { value: "call_history", label: "We look at call history or deal size" },
+          { value: "lead_fit", label: "We use scoring or lead fit logic" },
+          { value: "multi_factor", label: "We use multi-factor scoring and sales insights tools" },
         ]}
-        value={answers["deal_quality_tracking"] || ""}
-        onChange={(val) => onAnswer("deal_quality_tracking", val)}
+        value={answers["how_5d49b3"] || ""}
+        onChange={(val) => onAnswer("how_5d49b3", val)}
       />
 
-      {/* Question 6: behavior_consistency */}
+      {/* Question 6: how_b650ca */}
       <MultipleChoiceQuestion
-        question="How are your most successful sales behaviors shared across the team?"
+        question="How are your most successful sales behaviors shared or replicated across the team?"
         options={[
           { value: "not_shared", label: "They’re not — it varies by rep" },
-          { value: "informal", label: "We highlight top reps occasionally" },
-          { value: "team_meetings", label: "We share behaviors during team meetings" },
-          { value: "enablement", label: "They’re documented and trained consistently" },
+          { value: "tips_informal", label: "Top reps share tips informally" },
+          { value: "best_practice_reviews", label: "We run playbook or best-practice reviews" },
+          { value: "documented_and_trained", label: "Top plays and behaviors are documented, trained, and tracked" },
         ]}
-        value={answers["behavior_consistency"] || ""}
-        onChange={(val) => onAnswer("behavior_consistency", val)}
+        value={answers["how_b650ca"] || ""}
+        onChange={(val) => onAnswer("how_b650ca", val)}
       />
 
-      {/* Question 7: forecast_review_cadence */}
+      {/* Question 7: how_152df3 */}
       <MultipleChoiceQuestion
-        question="How often do you run sales pipeline or forecast reviews?"
+        question="How often do you run sales pipeline or forecast health reviews?"
         options={[
           { value: "occasionally", label: "Occasionally or when things slow down" },
-          { value: "monthly", label: "Monthly across the org" },
-          { value: "weekly_team", label: "Weekly by team with leadership roll-up" },
-          { value: "real_time", label: "Live dashboards and real-time reviews" },
+          { value: "monthly", label: "Monthly" },
+          { value: "weekly", label: "Weekly" },
+          { value: "operating_cadence", label: "Part of a structured weekly operating cadence" },
         ]}
-        value={answers["forecast_review_cadence"] || ""}
-        onChange={(val) => onAnswer("forecast_review_cadence", val)}
+        value={answers["how_152df3"] || ""}
+        onChange={(val) => onAnswer("how_152df3", val)}
       />
     </div>
   );

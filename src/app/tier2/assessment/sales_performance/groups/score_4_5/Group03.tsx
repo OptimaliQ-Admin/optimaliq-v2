@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["rep_development"] === "string" &&
-    answers["rep_development"].trim().length > 0 &&
-    typeof answers["valuable_insight"] === "string" &&
-    answers["valuable_insight"].trim().length > 0 &&
-    typeof answers["scaling_confidence"] === "string" &&
-    answers["scaling_confidence"].trim().length > 0
+    typeof answers["how_229086"] === "string" &&
+    typeof answers["what’s_30c935"] === "string" &&
+    typeof answers["how_a07904"] === "string"
   );
 }
 
@@ -24,39 +21,39 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: rep_development */}
+      {/* Question 8: how_229086 */}
       <MultipleChoiceQuestion
-        question="How do you ensure sales reps are continuously developing and improving?"
+        question="How do you ensure sales reps are continuously learning and improving?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc feedback or call reviews" },
-          { value: "monthly_enablement", label: "Monthly enablement sessions" },
-          { value: "individual_plans", label: "Individualized coaching plans" },
-          { value: "structured_development", label: "Structured L&D tied to metrics + growth plans" },
+          { value: "ad_hoc_feedback", label: "Ad hoc feedback or call reviews" },
+          { value: "monthly_training", label: "Monthly enablement or training" },
+          { value: "structured_plans", label: "Structured coaching and development plans" },
+          { value: "kpi_tied_enablement", label: "Performance-based enablement tied to KPIs and growth goals" },
         ]}
-        value={answers["rep_development"] || ""}
-        onChange={(val) => onAnswer("rep_development", val)}
+        value={answers["how_229086"] || ""}
+        onChange={(val) => onAnswer("how_229086", val)}
       />
 
-      {/* Question 9: valuable_insight */}
+      {/* Question 9: what’s_30c935 */}
       <TextAreaQuestion
-        question="What’s the most valuable insight your sales or ops data revealed in the last quarter?"
+        question="What’s the most valuable insight your sales org has uncovered in the past quarter?"
         placeholder="E.g., reps winning faster when demo is skipped, churn risk linked to missed onboarding step"
-        value={answers["valuable_insight"] || ""}
-        onChange={(val) => onAnswer("valuable_insight", val)}
+        value={answers["what’s_30c935"] || ""}
+        onChange={(val) => onAnswer("what’s_30c935", val)}
         maxLength={300}
       />
 
-      {/* Question 10: scaling_confidence */}
+      {/* Question 10: how_a07904 */}
       <MultipleChoiceQuestion
-        question="How confident are you that your sales org can scale with new segments, reps, or geos?"
+        question="How confident are you that your sales org can hit a 20–30% stretch goal next year with current systems?"
         options={[
           { value: "not_confident", label: "Not confident — we’d need major changes" },
-          { value: "somewhat_ready", label: "Somewhat — playbook exists but untested" },
-          { value: "repeatable_model", label: "We have a repeatable model and early wins" },
-          { value: "fully_ready", label: "Fully ready — proven and ready to scale" },
+          { value: "somewhat", label: "Somewhat — we’d need better support or hiring" },
+          { value: "mostly", label: "Mostly — we’re building toward it" },
+          { value: "very_confident", label: "Very confident — our system is ready for that level of growth" },
         ]}
-        value={answers["scaling_confidence"] || ""}
-        onChange={(val) => onAnswer("scaling_confidence", val)}
+        value={answers["how_a07904"] || ""}
+        onChange={(val) => onAnswer("how_a07904", val)}
       />
     </div>
   );

@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["pricing_approach"] === "string" &&
-    answers["pricing_approach"].trim().length > 0 &&
-    typeof answers["biggest_obstacle"] === "string" &&
-    answers["biggest_obstacle"].trim().length > 0 &&
-    typeof answers["sales_improvement_area"] === "string" &&
-    answers["sales_improvement_area"].trim().length > 0
+    typeof answers["how_142ca2"] === "string" &&
+    typeof answers["what’s_3164b1"] === "string" &&
+    typeof answers["if_4526b6"] === "string"
   );
 }
 
@@ -24,34 +21,34 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: pricing_approach */}
+      {/* Question 8: how_142ca2 */}
       <MultipleChoiceQuestion
-        question="How would you describe your current approach to pricing?"
+        question="How would you describe your current approach to proposals or pricing?"
         options={[
-          { value: "make_it_up", label: "We make up pricing as we go" },
-          { value: "rough_pricing", label: "We have a price list or rough idea" },
-          { value: "standard_prices", label: "We have standard prices and discounts" },
-          { value: "formal_strategy", label: "We use a formal pricing strategy" },
+          { value: "We_make_up_pricing_as_we_go", label: "We make up pricing as we go" },
+          { value: "We_have_a_price_list_or_one_pager", label: "We have a price list or one-pager" },
+          { value: "We_use_a_templated_proposal_or_quote", label: "We use a templated proposal or quote" },
+          { value: "We_tailor_pricing_with_a_defined_structure", label: "We tailor pricing with a defined structure" },
         ]}
-        value={answers["pricing_approach"] || ""}
-        onChange={(val) => onAnswer("pricing_approach", val)}
+        value={answers["how_142ca2"] || ""}
+        onChange={(val) => onAnswer("how_142ca2", val)}
       />
 
-      {/* Question 9: biggest_obstacle */}
+      {/* Question 9: what’s_3164b1 */}
       <TextAreaQuestion
-        question="What’s the biggest obstacle you face when trying to grow sales?"
-        placeholder="E.g., lack of leads, poor follow-up, unclear value prop"
-        value={answers["biggest_obstacle"] || ""}
-        onChange={(val) => onAnswer("biggest_obstacle", val)}
+        question="What’s the biggest obstacle you face when trying to close more deals?"
+        placeholder="E.g., high CAC, unclear process, lead quality"
+        value={answers["what’s_3164b1"] || ""}
+        onChange={(val) => onAnswer("what’s_3164b1", val)}
         maxLength={300}
       />
 
-      {/* Question 10: sales_improvement_area */}
+      {/* Question 10: if_4526b6 */}
       <TextAreaQuestion
-        question="If you could improve one part of your sales process right now, what would it be?"
-        placeholder="E.g., sales tracking, qualification, lead nurturing"
-        value={answers["sales_improvement_area"] || ""}
-        onChange={(val) => onAnswer("sales_improvement_area", val)}
+        question="If you could improve one part of your sales process today, what would it be and why?"
+        placeholder="E.g., improve discovery, track deals better, reduce no-shows"
+        value={answers["if_4526b6"] || ""}
+        onChange={(val) => onAnswer("if_4526b6", val)}
         maxLength={300}
       />
     </div>

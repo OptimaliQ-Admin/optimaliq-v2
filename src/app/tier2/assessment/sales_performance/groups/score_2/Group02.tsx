@@ -6,14 +6,14 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["follow_up_tracking"] === "string" &&
-    answers["follow_up_tracking"].trim().length > 0 &&
-    Array.isArray(answers["sales_routines"]) &&
-    answers["sales_routines"].length > 0 &&
-    typeof answers["meeting_prep"] === "string" &&
-    answers["meeting_prep"].trim().length > 0 &&
-    typeof answers["call_documentation"] === "string" &&
-    answers["call_documentation"].trim().length > 0
+    typeof answers["how_a76658"] === "string" &&
+    answers["how_a76658"].trim().length > 0 &&
+    Array.isArray(answers["which_045862"]) &&
+    answers["which_045862"].length > 0 &&
+    typeof answers["how_5589a0"] === "string" &&
+    answers["how_5589a0"].trim().length > 0 &&
+    typeof answers["how_92a11d"] === "string" &&
+    answers["how_92a11d"].trim().length > 0
   );
 }
 
@@ -23,63 +23,63 @@ type Props = {
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
-  const selectedRoutines = answers["sales_routines"] || [];
+  const selectedOps = answers["which_045862"] || [];
 
   return (
     <div className="space-y-8">
 
-      {/* Question 4: follow_up_tracking */}
+      {/* Question 4: how_a76658 */}
       <MultipleChoiceQuestion
-        question="How do you track and manage follow-ups across deals?"
+        question="How do you track and manage follow-ups across your deals?"
         options={[
-          { value: "no_tracking", label: "We don’t track follow-ups well" },
-          { value: "rep_managed", label: "We rely on reps to manage it manually" },
-          { value: "systematic", label: "We have a systematic way (e.g., tasks, playbooks)" },
-          { value: "fully_automated", label: "We use automation and alerts for follow-ups" },
+          { value: "We don’t track follow-ups well", label: "We don’t track follow-ups well" },
+          { value: "We rely on calendar or reminders", label: "We rely on calendar or reminders" },
+          { value: "We have tasks inside our CRM", label: "We have tasks inside our CRM" },
+          { value: "We use automation or sequences to manage follow-ups", label: "We use automation or sequences to manage follow-ups" },
         ]}
-        value={answers["follow_up_tracking"] || ""}
-        onChange={(val) => onAnswer("follow_up_tracking", val)}
+        value={answers["how_a76658"] || ""}
+        onChange={(val) => onAnswer("how_a76658", val)}
       />
 
-      {/* Question 5: sales_routines */}
+      {/* Question 5: which_045862 */}
       <MultiSelectQuestion
-        question="Which of the following are part of your sales team's routines?"
+        question="Which of the following are part of your sales operations today?"
         options={[
-          { value: "pipeline_reviews", label: "Regular pipeline reviews" },
-          { value: "forecasting_reports", label: "Forecasting reports" },
-          { value: "team_huddles", label: "Team huddles or deal strategy sessions" },
-          { value: "collab_with_cs", label: "Collaboration with Customer Success or Marketing" },
-          { value: "none", label: "None of these are consistent" },
+          { value: "Regular pipeline reviews", label: "Regular pipeline reviews" },
+          { value: "Forecasting reports", label: "Forecasting reports" },
+          { value: "Deal stage conversion tracking", label: "Deal stage conversion tracking" },
+          { value: "Sales enablement content", label: "Sales enablement content" },
+          { value: "Performance dashboards", label: "Performance dashboards" },
         ]}
-        selected={selectedRoutines}
-        onChange={(val) => onAnswer("sales_routines", val)}
+        selected={selectedOps}
+        onChange={(val) => onAnswer("which_045862", val)}
         maxSelect={5}
       />
 
-      {/* Question 6: meeting_prep */}
+      {/* Question 6: how_5589a0 */}
       <MultipleChoiceQuestion
-        question="How do you typically prepare for a sales meeting?"
+        question="How do you typically prepare for a sales meeting or call?"
         options={[
-          { value: "wing_it", label: "We wing it" },
-          { value: "quick_review", label: "We glance at past notes or emails" },
-          { value: "research_plus_notes", label: "We review notes and do some research" },
-          { value: "formal_plan", label: "We have a prep doc or battlecard for each meeting" },
+          { value: "We wing it", label: "We wing it" },
+          { value: "We glance at past notes or emails", label: "We glance at past notes or emails" },
+          { value: "We follow a checklist or sales script", label: "We follow a checklist or sales script" },
+          { value: "We prep with research, context, and a discovery framework", label: "We prep with research, context, and a discovery framework" },
         ]}
-        value={answers["meeting_prep"] || ""}
-        onChange={(val) => onAnswer("meeting_prep", val)}
+        value={answers["how_5589a0"] || ""}
+        onChange={(val) => onAnswer("how_5589a0", val)}
       />
 
-      {/* Question 7: call_documentation */}
+      {/* Question 7: how_92a11d */}
       <MultipleChoiceQuestion
-        question="How often are sales conversations documented or summarized?"
+        question="How often are sales conversations documented or logged?"
         options={[
-          { value: "rarely", label: "Rarely" },
-          { value: "big_deals_only", label: "Only for big deals" },
-          { value: "most_calls", label: "Most calls are logged or documented" },
-          { value: "always_logged", label: "Everything is logged with context and notes" },
+          { value: "Rarely", label: "Rarely" },
+          { value: "Only for big deals", label: "Only for big deals" },
+          { value: "Most calls are noted in the CRM", label: "Most calls are noted in the CRM" },
+          { value: "Every interaction is logged and searchable", label: "Every interaction is logged and searchable" },
         ]}
-        value={answers["call_documentation"] || ""}
-        onChange={(val) => onAnswer("call_documentation", val)}
+        value={answers["how_92a11d"] || ""}
+        onChange={(val) => onAnswer("how_92a11d", val)}
       />
     </div>
   );

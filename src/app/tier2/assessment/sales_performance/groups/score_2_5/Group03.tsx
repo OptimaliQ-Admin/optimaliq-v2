@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["deal_focus_confidence"] === "string" &&
-    answers["deal_focus_confidence"].trim().length > 0 &&
-    typeof answers["improvement_opportunity"] === "string" &&
-    answers["improvement_opportunity"].trim().length > 0 &&
-    typeof answers["scalability"] === "string" &&
-    answers["scalability"].trim().length > 0
+    typeof answers["how_d30c39"] === "string" &&
+    typeof answers["what’s_9266fd"] === "string" &&
+    typeof answers["how_4a7d74"] === "string"
   );
 }
 
@@ -24,39 +21,39 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: deal_focus_confidence */}
+      {/* Question 8: how_d30c39 */}
       <MultipleChoiceQuestion
-        question="How confident are you that your team is pursuing the right deals?"
+        question="How confident are you that your team is pursuing the highest-value opportunities?"
         options={[
           { value: "not_confident", label: "Not confident — we chase everything" },
-          { value: "somewhat", label: "Somewhat — we try to focus but it’s messy" },
-          { value: "clear_criteria", label: "We use clear criteria to focus our time" },
-          { value: "ruthless", label: "We’re ruthless about fit and focus" },
+          { value: "somewhat", label: "Somewhat — we focus on hot leads" },
+          { value: "mostly", label: "Mostly — we use criteria or scoring" },
+          { value: "very", label: "Very — we rigorously prioritize our pipeline" },
         ]}
-        value={answers["deal_focus_confidence"] || ""}
-        onChange={(val) => onAnswer("deal_focus_confidence", val)}
+        value={answers["how_d30c39"] || ""}
+        onChange={(val) => onAnswer("how_d30c39", val)}
       />
 
-      {/* Question 9: improvement_opportunity */}
+      {/* Question 9: what’s_9266fd */}
       <TextAreaQuestion
-        question="What’s one sales behavior or process you’d want your team to improve this quarter?"
+        question="What’s one sales behavior or process you’d want your team to do more consistently?"
         placeholder="E.g., follow-ups, demo delivery, deal qualification"
-        value={answers["improvement_opportunity"] || ""}
-        onChange={(val) => onAnswer("improvement_opportunity", val)}
+        value={answers["what’s_9266fd"] || ""}
+        onChange={(val) => onAnswer("what’s_9266fd", val)}
         maxLength={300}
       />
 
-      {/* Question 10: scalability */}
+      {/* Question 10: how_4a7d74 */}
       <MultipleChoiceQuestion
-        question="How scalable is your current sales process if you doubled your pipeline?"
+        question="How scalable is your current sales process if you doubled your deal volume tomorrow?"
         options={[
           { value: "not_scalable", label: "Not scalable — we’d break down" },
-          { value: "somewhat_scalable", label: "Somewhat — with a lot of effort" },
-          { value: "mostly_scalable", label: "Mostly — with some adjustments" },
-          { value: "fully_scalable", label: "Fully scalable — bring it on" },
+          { value: "challenging", label: "It would be a challenge" },
+          { value: "mostly_scalable", label: "Mostly scalable with adjustments" },
+          { value: "fully_scalable", label: "Fully scalable — we’re built to grow" },
         ]}
-        value={answers["scalability"] || ""}
-        onChange={(val) => onAnswer("scalability", val)}
+        value={answers["how_4a7d74"] || ""}
+        onChange={(val) => onAnswer("how_4a7d74", val)}
       />
     </div>
   );

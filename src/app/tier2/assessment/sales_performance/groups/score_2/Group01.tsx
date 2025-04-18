@@ -5,12 +5,12 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["stage_definition"] === "string" &&
-    answers["stage_definition"].trim().length > 0 &&
-    typeof answers["forecast_accuracy"] === "string" &&
-    answers["forecast_accuracy"].trim().length > 0 &&
-    typeof answers["lead_prioritization"] === "string" &&
-    answers["lead_prioritization"].trim().length > 0
+    typeof answers["how_64a8d1"] === "string" &&
+    answers["how_64a8d1"].trim().length > 0 &&
+    typeof answers["how_7d8dcb"] === "string" &&
+    answers["how_7d8dcb"].trim().length > 0 &&
+    typeof answers["how_0fa447"] === "string" &&
+    answers["how_0fa447"].trim().length > 0
   );
 }
 
@@ -23,43 +23,43 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: stage_definition */}
+      {/* Question 1: how_64a8d1 */}
       <MultipleChoiceQuestion
-        question="How clearly are your sales stages defined (e.g., Discovery, Proposal, Closed)?"
+        question="How clearly are your sales stages defined (e.g. discovery, demo, proposal, negotiation)?"
         options={[
-          { value: "not_defined", label: "Not defined" },
-          { value: "loosely_defined", label: "Some stages are loosely defined" },
-          { value: "clearly_defined", label: "They’re clearly defined but not always followed" },
-          { value: "well_enforced", label: "They’re defined and consistently followed" },
+          { value: "Not defined", label: "Not defined" },
+          { value: "Some stages are loosely defined", label: "Some stages are loosely defined" },
+          { value: "Defined, but not consistently used", label: "Defined, but not consistently used" },
+          { value: "Clearly documented and used for tracking", label: "Clearly documented and used for tracking" },
         ]}
-        value={answers["stage_definition"] || ""}
-        onChange={(val) => onAnswer("stage_definition", val)}
+        value={answers["how_64a8d1"] || ""}
+        onChange={(val) => onAnswer("how_64a8d1", val)}
       />
 
-      {/* Question 2: forecast_accuracy */}
+      {/* Question 2: how_7d8dcb */}
       <MultipleChoiceQuestion
-        question="How confident are you in the accuracy of your sales forecast?"
+        question="How confident are you in the accuracy of your current pipeline data?"
         options={[
-          { value: "not_accurate", label: "Not accurate at all" },
-          { value: "somewhat_accurate", label: "Somewhat accurate" },
-          { value: "usually_accurate", label: "Usually accurate" },
-          { value: "very_confident", label: "Very confident with consistent results" },
+          { value: "Not accurate at all", label: "Not accurate at all" },
+          { value: "Somewhat accurate", label: "Somewhat accurate" },
+          { value: "Mostly accurate, with occasional cleanups", label: "Mostly accurate, with occasional cleanups" },
+          { value: "Very accurate and regularly maintained", label: "Very accurate and regularly maintained" },
         ]}
-        value={answers["forecast_accuracy"] || ""}
-        onChange={(val) => onAnswer("forecast_accuracy", val)}
+        value={answers["how_7d8dcb"] || ""}
+        onChange={(val) => onAnswer("how_7d8dcb", val)}
       />
 
-      {/* Question 3: lead_prioritization */}
+      {/* Question 3: how_0fa447 */}
       <MultipleChoiceQuestion
         question="How do you prioritize leads or accounts in your pipeline?"
         options={[
-          { value: "work_recent", label: "We work whatever is most recent" },
-          { value: "gut_feel", label: "We prioritize based on gut feel or rep preference" },
-          { value: "firmographics", label: "We use basic firmographics or engagement signals" },
-          { value: "scoring_model", label: "We use lead/account scoring to prioritize" },
+          { value: "We work whatever is most recent", label: "We work whatever is most recent" },
+          { value: "We prioritize based on gut feel", label: "We prioritize based on gut feel" },
+          { value: "We prioritize based on deal size or engagement", label: "We prioritize based on deal size or engagement" },
+          { value: "We use scoring or qualification criteria", label: "We use scoring or qualification criteria" },
         ]}
-        value={answers["lead_prioritization"] || ""}
-        onChange={(val) => onAnswer("lead_prioritization", val)}
+        value={answers["how_0fa447"] || ""}
+        onChange={(val) => onAnswer("how_0fa447", val)}
       />
     </div>
   );

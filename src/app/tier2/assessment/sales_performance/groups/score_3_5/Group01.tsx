@@ -6,12 +6,10 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["forecast_accuracy_team"] === "string" &&
-    answers["forecast_accuracy_team"].trim().length > 0 &&
-    typeof answers["enablement_delivery"] === "string" &&
-    answers["enablement_delivery"].trim().length > 0 &&
-    Array.isArray(answers["embedded_metrics"]) &&
-    answers["embedded_metrics"].length > 0
+    typeof answers["how_4d1ff3"] === "string" &&
+    typeof answers["how_fe4a96"] === "string" &&
+    Array.isArray(answers["which_d1a7ce"]) &&
+    answers["which_d1a7ce"].length > 0
   );
 }
 
@@ -21,49 +19,49 @@ type Props = {
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
-  const selectedMetrics = answers["embedded_metrics"] || [];
+  const selectedMetrics = answers["which_d1a7ce"] || [];
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: forecast_accuracy_team */}
+      {/* Question 1: how_4d1ff3 */}
       <MultipleChoiceQuestion
-        question="How do you measure forecast accuracy across teams or segments?"
+        question="How do you measure forecast accuracy across teams or reps?"
         options={[
-          { value: "no_tracking", label: "We don’t track forecast accuracy" },
-          { value: "historical_only", label: "We compare historicals only" },
-          { value: "deal_stage_accuracy", label: "We use stage-based or rep-level metrics" },
-          { value: "accurate_and_reviewed", label: "We review forecast accuracy weekly with leadership" },
+          { value: "not_tracked", label: "We don’t track forecast accuracy" },
+          { value: "manual_comparison", label: "We compare forecast to close manually" },
+          { value: "in_reporting", label: "It’s reviewed in performance reporting" },
+          { value: "rep_stage_level", label: "We track accuracy at rep and stage level" },
         ]}
-        value={answers["forecast_accuracy_team"] || ""}
-        onChange={(val) => onAnswer("forecast_accuracy_team", val)}
+        value={answers["how_4d1ff3"] || ""}
+        onChange={(val) => onAnswer("how_4d1ff3", val)}
       />
 
-      {/* Question 2: enablement_delivery */}
+      {/* Question 2: how_fe4a96 */}
       <MultipleChoiceQuestion
-        question="How is sales enablement delivered across your org?"
+        question="How is sales enablement delivered across your team today?"
         options={[
-          { value: "docs_or_decks", label: "Shared docs or onboarding decks" },
-          { value: "occasional_sessions", label: "Occasional live sessions or trainings" },
-          { value: "onboarding_and_ongoing", label: "Part of onboarding and ongoing learning" },
-          { value: "integrated_enablement", label: "Fully integrated with coaching and CRM guidance" },
+          { value: "shared_docs", label: "Shared docs or onboarding decks" },
+          { value: "occasional_training", label: "Occasional training sessions" },
+          { value: "structured_quarterly", label: "Structured onboarding + quarterly enablement" },
+          { value: "ongoing_enablement", label: "Ongoing enablement with tools, metrics, and coaching" },
         ]}
-        value={answers["enablement_delivery"] || ""}
-        onChange={(val) => onAnswer("enablement_delivery", val)}
+        value={answers["how_fe4a96"] || ""}
+        onChange={(val) => onAnswer("how_fe4a96", val)}
       />
 
-      {/* Question 3: embedded_metrics */}
+      {/* Question 3: which_d1a7ce */}
       <MultiSelectQuestion
-        question="Which of the following are built into your sales process and systems?"
+        question="Which of the following are built into your sales performance reviews?"
         options={[
           { value: "win_loss", label: "Win/loss insights" },
           { value: "stage_conversion", label: "Stage conversion analysis" },
-          { value: "rep_benchmarking", label: "Rep benchmarking dashboards" },
-          { value: "ai_scoring", label: "AI-powered deal scoring or recommendations" },
-          { value: "none", label: "None of these yet" },
+          { value: "forecast_accuracy", label: "Forecast vs. quota accuracy" },
+          { value: "deal_quality", label: "Deal quality or size trends" },
+          { value: "rep_coaching", label: "Rep coaching plans" },
         ]}
         selected={selectedMetrics}
-        onChange={(val) => onAnswer("embedded_metrics", val)}
+        onChange={(val) => onAnswer("which_d1a7ce", val)}
         maxSelect={5}
       />
     </div>
