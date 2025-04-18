@@ -1,6 +1,5 @@
-//src/app/api/tier2/assessments/bpm/route.ts
 import { NextResponse } from "next/server";
-import bpmScoringMap from "../data/bpm_scoring_map.json";
+import salesScoringMap from "../data/sales_scoring_map.json";
 import { createClient } from "@supabase/supabase-js";
 
 // Init Supabase service client
@@ -13,7 +12,7 @@ const supabase = createClient(
 function getBracket(score: number): string {
   if (score < 1.5) return "score_1_1_4";
   if (score < 2.0) return "score_1_5_1_9";
-  if (score < 2.5) return "score_2_2_4";
+  if (score < 2.5) return "score_2_0_2_4"; // ✅ Adjusted for accuracy
   if (score < 3.0) return "score_2_5_2_9";
   if (score < 3.5) return "score_3_3_4";
   if (score < 4.0) return "score_3_5_3_9";
@@ -30,7 +29,7 @@ export async function POST(req: Request) {
   }
 
   const bracketKey = getBracket(score);
-  const scoringConfig = (bpmScoringMap as Record<string, any>)[bracketKey];
+  const scoringConfig = (salesScoringMap as Record<string, any>)[bracketKey];
 
   if (!scoringConfig) {
     return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });
@@ -71,42 +70,40 @@ export async function POST(req: Request) {
   const raw = weightSum ? total / weightSum : 0;
   const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
-   // ✅ Insert into score_BPM table
-const { error: insertError } = await supabase.from("score_BPM").insert([
-  {
-    u_id: userId,
-    gmf_score: score,
-    bracket_key: bracketKey,
-    score: normalized,
-    answers,
-    version: "v1",
-  },
-]);
-
-if (insertError) {
-  console.error("❌ Supabase insert error:", insertError);
-  return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
-}
-
-// ✅ Upsert into tier2_profiles (create or update profile with bpm score)
-const { error: profileError } = await supabase
-  .from("tier2_profiles")
-  .upsert(
+  // ✅ Insert into score_SalesPerformance table
+  const { error: insertError } = await supabase.from("score_SalesPerformance").insert([
     {
       u_id: userId,
-      bpm_score: normalized,
-      bpm_last_taken: new Date().toISOString(),
+      gmf_score: score,
+      bracket_key: bracketKey,
+      score: normalized,
+      answers,
+      version: "v1",
     },
-    {
-      onConflict: "u_id", // ✅ Moved into the second argument object properly
-    }
-  );
+  ]);
 
-if (profileError) {
-  console.error("❌ Failed to update tier2_profiles:", profileError);
-  return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
-}
+  if (insertError) {
+    console.error("❌ Supabase insert error:", insertError);
+    return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
+  }
 
-// 🎉 Return score to frontend
-return NextResponse.json({ bpmScore: normalized });
+  // ✅ Upsert into tier2_profiles (create or update profile with sales score)
+  const { error: profileError } = await supabase
+    .from("tier2_profiles")
+    .upsert(
+      {
+        u_id: userId,
+        sales_score: normalized,
+        sales_last_taken: new Date().toISOString(),
+      },
+      { onConflict: "u_id" }
+    );
+
+  if (profileError) {
+    console.error("❌ Failed to update tier2_profiles:", profileError);
+    return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
+  }
+
+  // 🎉 Return score to frontend
+  return NextResponse.json({ salesScore: normalized });
 }
