@@ -1,0 +1,63 @@
+"use client";
+
+import React from "react";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+
+export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+  return (
+    typeof answers["team_digital_skills"] === "string" &&
+    typeof answers["data_visibility"] === "string" &&
+    typeof answers["tool_fragmentation"] === "string"
+  );
+}
+
+type Props = {
+  answers: Record<string, any>;
+  onAnswer: (key: string, value: any) => void;
+};
+
+export default function Score1_Step02({ answers, onAnswer }: Props) {
+  return (
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+
+      {/* Question 4: team_digital_skills */}
+      <MultipleChoiceQuestion
+        question="How would you rate your team’s digital skill set?"
+        options={[
+          { value: "very_low", label: "Very low — we avoid using new tools" },
+          { value: "basic", label: "Basic — we rely on common tools but struggle with more advanced ones" },
+          { value: "functional", label: "Functional — most people can navigate modern systems" },
+          { value: "proficient", label: "Proficient — we are confident with modern digital tools" },
+        ]}
+        value={answers["team_digital_skills"] || ""}
+        onChange={(val) => onAnswer("team_digital_skills", val)}
+      />
+
+      {/* Question 5: data_visibility */}
+      <MultipleChoiceQuestion
+        question="Do you have visibility into how different tools or platforms are being used?"
+        options={[
+          { value: "no_visibility", label: "No visibility" },
+          { value: "anecdotal_only", label: "Only anecdotal or ad hoc understanding" },
+          { value: "occasional_reports", label: "Occasional reports or usage checks" },
+          { value: "centralized_dashboard", label: "Yes, we have centralized dashboards or monitoring" },
+        ]}
+        value={answers["data_visibility"] || ""}
+        onChange={(val) => onAnswer("data_visibility", val)}
+      />
+
+      {/* Question 6: tool_fragmentation */}
+      <MultipleChoiceQuestion
+        question="How connected or fragmented is your tech stack?"
+        options={[
+          { value: "completely_fragmented", label: "Completely fragmented — nothing talks to anything" },
+          { value: "some_integrations", label: "Some tools are loosely integrated" },
+          { value: "most_integrated", label: "Most of our core tools are integrated" },
+          { value: "fully_connected", label: "Fully connected — data flows across systems" },
+        ]}
+        value={answers["tool_fragmentation"] || ""}
+        onChange={(val) => onAnswer("tool_fragmentation", val)}
+      />
+    </div>
+  );
+}
