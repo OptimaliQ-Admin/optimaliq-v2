@@ -1,3 +1,4 @@
+//src/lib/queries/getLatestSalesScore.ts
 import { supabase } from "@/lib/supabase";
 import { differenceInDays, parseISO } from "date-fns";
 

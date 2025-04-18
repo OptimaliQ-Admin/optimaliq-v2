@@ -1,3 +1,4 @@
+//src/components/assessments/SalesPerformanceCard.tsx
 "use client";
 
 import React from "react";
@@ -26,7 +27,7 @@ type Props = {
 export default function SalesPerformanceCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
 
-  const handleStart = () => router.push("/tier2/assessment/SalesPerformance");
+  const handleStart = () => router.push("/tier2/assessment/sales_performance");
 
   const daysSinceLast = lastTakenDate ? differenceInDays(new Date(), new Date(lastTakenDate)) : null;
   const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;

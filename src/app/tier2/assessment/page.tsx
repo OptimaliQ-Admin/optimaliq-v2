@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useTier2User } from "@/context/Tier2UserContext";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import BPMCard from "@/components/assessments/BPMCard";
+import SalesPerformanceCard from "@/components/assessments/SalesPerformanceCard";
 import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
+import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
 
 function AssessmentComponent() {
   const { user } = useTier2User();
@@ -17,6 +19,8 @@ function AssessmentComponent() {
 
   const [bpmScore, setBpmScore] = useState<number | null>(null);
   const [bpmLastTaken, setBpmLastTaken] = useState<string | null>(null);
+  const [salesScore, setSalesScore] = useState<number | null>(null);
+  const [salesLastTaken, setSalesLastTaken] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user_id) return;
@@ -27,7 +31,14 @@ function AssessmentComponent() {
       setBpmLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchSales = async () => {
+      const result = await getLatestSalesScore(user_id);
+      setSalesScore(result?.score ?? null);
+      setSalesLastTaken(result?.takenAt ?? null);
+    };
+
     fetchBPM();
+    fetchSales();
   }, [user_id]);
 
   if (!email || !user_id) {
@@ -42,9 +53,14 @@ function AssessmentComponent() {
           subtitle="Choose an assessment to gain deeper insights into your business."
         />
 
+
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-  {/* Inject BPMCard as the first grid item */}
+  {/* Inject BPMCard */}
   <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={user_id} />
+
+  {/* Inject SalesPerformanceCard */}
+  <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={user_id} />
+
   {[
     {
       id: "reassessment",
@@ -70,12 +86,7 @@ function AssessmentComponent() {
       description:
         "Analyze your marketing performance and receive recommendations to optimize efforts.",
     },
-    {
-      id: "sales-performance",
-      title: "📈 Sales Performance Assessment",
-      description:
-        "Evaluate sales pipeline and conversion rates to improve revenue outcomes.",
-    },
+    // Remove sales-performance from this map
     {
       id: "customer-experience",
       title: "👥 Customer Experience Assessment",
@@ -117,6 +128,7 @@ function AssessmentComponent() {
     </div>
   ))}
 </div>
+
       </div>
     </div>
   );
