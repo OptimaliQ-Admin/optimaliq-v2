@@ -42,11 +42,9 @@ function AssessmentComponent() {
           subtitle="Choose an assessment to gain deeper insights into your business."
         />
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-auto">
   {/* Inject BPMCard as the first grid item */}
   <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={user_id} />
-
-  {/* Render remaining assessment cards */}
   {[
     {
       id: "reassessment",
