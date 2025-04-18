@@ -37,7 +37,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   const hasTaken = score !== null && lastTakenDate !== null;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+    <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
       <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
 
       {!hasTaken && (
