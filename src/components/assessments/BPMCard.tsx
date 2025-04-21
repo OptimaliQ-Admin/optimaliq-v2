@@ -1,108 +1,95 @@
-// components/assessments/AssessmentIntroModal.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { format, differenceInDays } from "date-fns";
+import { useRouter } from "next/navigation";
+import AssessmentIntroModal from "./AssessmentIntroModal";
 
-export type AssessmentType =
-  | "BPM"
-  | "sales"
-  | "tech"
-  | "cx"
-  | "strategy"
-  | "ai"
-  | "digital"
-  | "leadership"
-  | "benchmarking";
-
-export const assessmentIntros: Record<
-  AssessmentType,
-  { title: string; description: string }
-> = {
-  BPM: {
-    title: "⚙️ Business Process Management Assessment",
-    description:
-      "Analyze how well your internal processes are structured and discover areas for automation. Answer honestly to ensure your score and roadmap reflect your true state.",
-  },
-  sales: {
-    title: "💼 Sales Performance Assessment",
-    description:
-      "Evaluate the health of your sales pipeline and how consistently your team executes. Your answers shape personalized growth strategies—be honest for best results.",
-  },
-  tech: {
-    title: "🛠️ Tech Stack Assessment",
-    description:
-      "Review the tools and platforms used across your business to identify integration gaps and inefficiencies. Honest answers will help us give tailored tech optimization guidance.",
-  },
-  cx: {
-    title: "🎯 Customer Experience Assessment",
-    description:
-      "Evaluate how effectively you meet customer expectations across the lifecycle. Accurate input leads to sharper insights and retention strategies.",
-  },
-  strategy: {
-    title: "🚀 Strategic Maturity Assessment",
-    description:
-      "Measure the clarity and scalability of your strategic planning. Realistic answers help surface blind spots and prioritize smarter decisions.",
-  },
-  ai: {
-    title: "🤖 AI & Automation Readiness Assessment",
-    description:
-      "Understand your organization's current capacity to leverage AI and automation. Transparency here sets the foundation for realistic AI adoption plans.",
-  },
-  digital: {
-    title: "📲 Digital Transformation Readiness Assessment",
-    description:
-      "Assess how well your organization is prepared to evolve digitally. Clear input allows us to map out your transformation journey.",
-  },
-  leadership: {
-    title: "👥 Leadership & Team Performance Assessment",
-    description:
-      "Explore how aligned and effective your leadership team is in driving results. Candid responses help identify opportunities for stronger collaboration.",
-  },
-  benchmarking: {
-    title: "📊 Competitive Benchmarking Assessment",
-    description:
-      "See how your business stacks up against industry peers. Honest inputs generate the most actionable positioning recommendations.",
-  },
+const bpmDescriptions: Record<number, string> = {
+  1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
+  1.5: "Some structure exists, but it's inconsistent and mostly ad hoc.",
+  2: "You’re making progress toward defined processes but lack scalability.",
+  2.5: "You’ve got some structure, but there’s room to formalize processes further.",
+  3: "Your operations are stable and somewhat consistent — keep optimizing.",
+  3.5: "You’re approaching operational excellence with scalable workflows.",
+  4: "You have strong process maturity — focus now on innovation.",
+  4.5: "You’re advanced — lean into automation and continuous improvement.",
+  5: "Your BPM capabilities are world-class. Use them to drive competitive advantage."
 };
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  onStart: () => void;
-  assessmentType: AssessmentType;
+  score: number | null;
+  lastTakenDate: string | null;
+  userId: string;
 };
 
-export default function AssessmentIntroModal({
-  isOpen,
-  onClose,
-  onStart,
-  assessmentType,
-}: Props) {
-  const content = assessmentIntros[assessmentType];
+export default function BPMCard({ score, lastTakenDate, userId }: Props) {
+  const router = useRouter();
+  const [showIntro, setShowIntro] = useState(false);
 
-  if (!isOpen) return null;
+  const handleStart = () => setShowIntro(true);
+
+  const daysSinceLast = lastTakenDate ? differenceInDays(new Date(), new Date(lastTakenDate)) : null;
+  const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;
+
+  const needsRetake = daysSinceLast !== null && daysSinceLast > 30;
+  const hasTaken = score !== null && lastTakenDate !== null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-xl p-8 max-w-md w-full shadow-lg">
-        <h2 className="text-xl font-bold text-gray-800">{content.title}</h2>
-        <p className="text-gray-600 mt-4 whitespace-pre-line">{content.description}</p>
+    <>
+      <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
+        <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
 
-        <div className="flex justify-end mt-6 space-x-4">
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-800 hover:underline"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onStart}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Let’s Get Started
-          </button>
-        </div>
+        {!hasTaken && (
+          <>
+            <p className="text-gray-600">
+              Analyze the efficiency of your internal processes and identify automation opportunities.
+            </p>
+            <button
+              onClick={handleStart}
+              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Start Assessment
+            </button>
+          </>
+        )}
+
+        {hasTaken && (
+          <>
+            <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
+            <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
+            <p className="text-sm text-gray-500">
+              Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
+            </p>
+
+            {needsRetake && (
+              <div className="mt-4 border-t pt-4">
+                <p className="text-yellow-700 mb-2">
+                  Your last assessment is over 30 days old. Consider retaking it to reflect recent changes.
+                </p>
+                <button
+                  onClick={handleStart}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                >
+                  Retake Assessment
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </div>
+
+      {showIntro && (
+        <AssessmentIntroModal
+          isOpen={showIntro}
+          onClose={() => setShowIntro(false)}
+          onStart={() => {
+            setShowIntro(false);
+            router.push("/tier2/assessment/BPM");
+          }}
+          assessmentType="BPM"
+        />
+      )}
+    </>
   );
 }
