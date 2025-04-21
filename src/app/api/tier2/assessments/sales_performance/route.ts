@@ -13,7 +13,7 @@ const supabase = createClient(
 function getBracket(score: number): string {
   if (score < 1.5) return "score_1_1_4";
   if (score < 2.0) return "score_1_5_1_9";
-  if (score < 2.5) return "score_2_0_2_4"; // ✅ Adjusted for accuracy
+  if (score < 2.5) return "score_2_0_2_4";
   if (score < 3.0) return "score_2_5_2_9";
   if (score < 3.5) return "score_3_3_4";
   if (score < 4.0) return "score_3_5_3_9";
