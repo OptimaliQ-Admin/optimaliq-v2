@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["vision_alignment"] === "string" &&
-    typeof answers["emerging_tech"] === "string" &&
-    typeof answers["execution_rigidity"] === "string"
+    typeof answers["transformational_mindset"] === "string" &&
+    typeof answers["innovation_leadership"] === "string" &&
+    typeof answers["benchmarking_practice"] === "string"
   );
 }
 
@@ -19,40 +18,45 @@ type Props = {
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+
       {/* Question 1 */}
       <MultipleChoiceQuestion
-        question="How tightly is your digital transformation strategy aligned with your executive team’s vision?"
+        question="How would you describe your company’s overall approach to transformation?"
         options={[
-          { value: "no_alignment", label: "It’s not really aligned" },
-          { value: "periodic_checkins", label: "We do check-ins but often reactively" },
-          { value: "strong_alignment", label: "There’s strong ongoing alignment" },
-          { value: "co_created", label: "It’s co-created with leadership and drives org strategy" }
+          { value: "operational_improvement", label: "Focused mostly on operational improvement" },
+          { value: "incremental_innovation", label: "We embrace incremental innovation" },
+          { value: "bold_changes", label: "We pursue bold, disruptive changes when needed" },
+          { value: "transformation_leader", label: "We are seen as a leader in transformation" },
         ]}
-        value={answers["vision_alignment"] || ""}
-        onChange={(val) => onAnswer("vision_alignment", val)}
+        value={answers["transformational_mindset"] || ""}
+        onChange={(val) => onAnswer("transformational_mindset", val)}
       />
 
       {/* Question 2 */}
       <MultipleChoiceQuestion
-        question="How would you describe your appetite for experimentation with emerging technology?"
+        question="What role does leadership play in driving digital innovation?"
         options={[
-          { value: "low_risk", label: "We avoid risk and stick to proven tools" },
-          { value: "selective", label: "We experiment selectively with clear ROI" },
-          { value: "early_adopter", label: "We’re early adopters and build pilots regularly" },
-          { value: "pioneer", label: "We’re innovation leaders and often create new standards" }
+          { value: "not_involved", label: "Minimal — innovation happens bottom-up" },
+          { value: "supportive", label: "Supportive, but not leading" },
+          { value: "champions", label: "Leaders actively champion innovation" },
+          { value: "strategic_innovation", label: "Innovation is embedded in leadership strategy" },
         ]}
-        value={answers["emerging_tech"] || ""}
-        onChange={(val) => onAnswer("emerging_tech", val)}
+        value={answers["innovation_leadership"] || ""}
+        onChange={(val) => onAnswer("innovation_leadership", val)}
       />
 
       {/* Question 3 */}
-      <TextAreaQuestion
-        question="What’s the biggest internal challenge you still face when executing your digital strategy?"
-        placeholder="E.g., Leadership buy-in, resource prioritization, integration issues"
-        value={answers["execution_rigidity"] || ""}
-        onChange={(val) => onAnswer("execution_rigidity", val)}
-        maxLength={300}
+      <MultipleChoiceQuestion
+        question="How do you benchmark your digital performance?"
+        options={[
+          { value: "no_benchmarking", label: "We don’t benchmark at all" },
+          { value: "internal_only", label: "We do internal benchmarking" },
+          { value: "peer_comparison", label: "We compare to similar companies" },
+          { value: "industry_leading", label: "We benchmark against industry leaders and best practices" },
+        ]}
+        value={answers["benchmarking_practice"] || ""}
+        onChange={(val) => onAnswer("benchmarking_practice", val)}
       />
     </div>
   );

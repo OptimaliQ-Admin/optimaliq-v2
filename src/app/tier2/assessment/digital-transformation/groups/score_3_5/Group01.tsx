@@ -2,16 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["monitoring_progress"] === "string" &&
-    Array.isArray(answers["employee_interaction"]) &&
-    answers["employee_interaction"].length > 0 &&
-    typeof answers["tool_support"] === "string" &&
-    answers["tool_support"].trim().length > 0
+    typeof answers["tech_stack_confidence"] === "string" &&
+    typeof answers["system_redundancy"] === "string" &&
+    typeof answers["data_unification"] === "string"
   );
 }
 
@@ -21,51 +17,46 @@ type Props = {
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
-  const employeeOptions = answers["employee_interaction"] || [];
-
   return (
-    <div className="space-y-10">
-
-      {/* Question 1 */}
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+      {/* Question 1: tech_stack_confidence */}
       <MultipleChoiceQuestion
-        question="How do you monitor progress across your digital initiatives?"
+        question="How confident are you in the tools and platforms that make up your current tech stack?"
         options={[
-          { value: "check_in", label: "We check in during reviews or launches" },
-          { value: "track_objectives", label: "We track objectives but not consistently" },
-          { value: "kpis_reported", label: "KPIs are regularly reported and reviewed" },
-          { value: "real_time_dashboard", label: "Real-time dashboards aligned to strategic goals" }
+          { value: "not_confident", label: "Not confident — we’re due for an overhaul" },
+          { value: "somewhat_confident", label: "Somewhat confident — some gaps, but it works" },
+          { value: "mostly_confident", label: "Mostly confident — we’ve vetted our tools" },
+          { value: "very_confident", label: "Very confident — our stack is strategic and robust" },
         ]}
-        value={answers["monitoring_progress"] || ""}
-        onChange={(val) => onAnswer("monitoring_progress", val)}
+        value={answers["tech_stack_confidence"] || ""}
+        onChange={(val) => onAnswer("tech_stack_confidence", val)}
       />
 
-      {/* Question 2 */}
-      <MultiSelectQuestion
-        question="Which of the following describe how employees interact with digital tools?"
-        options={[
-          { value: "task_specific", label: "They use task-specific apps and tools" },
-          { value: "tool_fatigue", label: "They’re overwhelmed or experience tool fatigue" },
-          { value: "workflow_embedded", label: "Digital tools are embedded into workflows" },
-          { value: "collaboration_stack", label: "We’ve standardized a digital collaboration stack" }
-        ]}
-        selected={employeeOptions}
-        onChange={(val) => onAnswer("employee_interaction", val)}
-        maxSelect={4}
-      />
-
-      {/* Question 3 */}
+      {/* Question 2: system_redundancy */}
       <MultipleChoiceQuestion
-        question="How are digital tools supporting your company's agility and responsiveness?"
+        question="Do you have duplicate or overlapping tools doing similar things?"
         options={[
-          { value: "reactive", label: "We’re still fairly reactive" },
-          { value: "some_adaptability", label: "We can adapt in some areas, but not consistently" },
-          { value: "most_adaptable", label: "Most teams can pivot with minimal disruption" },
-          { value: "fully_adaptable", label: "We’re highly responsive with digital-first workflows" }
+          { value: "no_visibility", label: "No idea — we don’t track that" },
+          { value: "lots_overlap", label: "Yes — we have lots of overlap" },
+          { value: "some_overlap", label: "Some tools overlap but we’re managing it" },
+          { value: "fully_streamlined", label: "No — we’ve streamlined everything" },
         ]}
-        value={answers["tool_support"] || ""}
-        onChange={(val) => onAnswer("tool_support", val)}
+        value={answers["system_redundancy"] || ""}
+        onChange={(val) => onAnswer("system_redundancy", val)}
       />
 
+      {/* Question 3: data_unification */}
+      <MultipleChoiceQuestion
+        question="How unified is your customer or operational data across platforms?"
+        options={[
+          { value: "not_at_all", label: "Not at all — every tool has its own data silo" },
+          { value: "some_syncing", label: "Some syncing — but we still do lots of manual work" },
+          { value: "mostly_unified", label: "Mostly unified — just a few gaps" },
+          { value: "fully_unified", label: "Fully unified — our data works across systems" },
+        ]}
+        value={answers["data_unification"] || ""}
+        onChange={(val) => onAnswer("data_unification", val)}
+      />
     </div>
   );
 }

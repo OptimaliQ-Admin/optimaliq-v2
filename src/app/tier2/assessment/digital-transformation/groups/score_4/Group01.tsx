@@ -2,12 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["ai_alignment"] === "string" &&
-    typeof answers["data_interoperability"] === "string" &&
-    typeof answers["accessibility"] === "string"
+    typeof answers["tools_aligned_with_goals"] === "string" &&
+    Array.isArray(answers["strategy_execution_components"]) &&
+    typeof answers["transformation_communication"] === "string"
   );
 }
 
@@ -17,48 +18,51 @@ type Props = {
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
+  const selected = answers["strategy_execution_components"] || [];
+
   return (
-    <div className="space-y-10">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
 
       {/* Question 1 */}
       <MultipleChoiceQuestion
-        question="How aligned are your digital systems and workflows with AI/automation readiness?"
+        question="How are digital tools aligned with revenue growth or cost efficiency?"
         options={[
-          { value: "not_considered", label: "AI/automation hasn’t been considered" },
-          { value: "exploring_use_cases", label: "We’re exploring a few use cases" },
-          { value: "intentional_design", label: "Processes are being intentionally designed with AI in mind" },
-          { value: "ai_native", label: "Workflows are AI-native or deeply integrated" }
+          { value: "loosely_aligned", label: "Loosely aligned by department" },
+          { value: "reviewed_during_projects", label: "Reviewed during digital projects" },
+          { value: "alignment_principles", label: "We use principles or OKRs for alignment" },
+          { value: "fully_integrated", label: "Fully integrated with planning and performance" },
         ]}
-        value={answers["ai_alignment"] || ""}
-        onChange={(val) => onAnswer("ai_alignment", val)}
+        value={answers["tools_aligned_with_goals"] || ""}
+        onChange={(val) => onAnswer("tools_aligned_with_goals", val)}
       />
 
       {/* Question 2 */}
-      <MultipleChoiceQuestion
-        question="How well do your tools, systems, and data work together across departments?"
+      <MultiSelectQuestion
+        question="Which of the following are part of your digital strategy execution?"
         options={[
-          { value: "fragmented", label: "Data is fragmented and stored in silos" },
-          { value: "integrated_ops", label: "Some integration between core tools or functions" },
-          { value: "unified_layer", label: "We use a unified data layer or central platform" },
-          { value: "seamless_visibility", label: "All departments share a real-time view of critical data" }
+          { value: "kpi_dashboards", label: "Real-time KPI dashboards" },
+          { value: "automated_decision_support", label: "Automated decision support" },
+          { value: "cross_functional_initiatives", label: "Cross-functional initiatives" },
+          { value: "change_management_plans", label: "Change management plans" },
+          { value: "none", label: "None of the above" },
         ]}
-        value={answers["data_interoperability"] || ""}
-        onChange={(val) => onAnswer("data_interoperability", val)}
+        selected={selected}
+        onChange={(val) => onAnswer("strategy_execution_components", val)}
+        maxSelect={5}
       />
 
       {/* Question 3 */}
       <MultipleChoiceQuestion
-        question="Can your teams securely access the data, tools, or insights they need from anywhere?"
+        question="How is transformation progress communicated across the organization?"
         options={[
-          { value: "mostly_on_prem", label: "Mostly on-premise or physically restricted" },
-          { value: "limited_remote", label: "Some cloud-based access but limited control" },
-          { value: "secure_cloud", label: "Most tools are accessible with secure cloud-based authentication" },
-          { value: "zero_trust", label: "We use zero-trust models and device-agnostic access" }
+          { value: "project_team_only", label: "Only within the project team" },
+          { value: "some_meetings", label: "Shared in all-hands or department meetings" },
+          { value: "executive_reporting", label: "Reported to executives and sponsors" },
+          { value: "dashboards_available", label: "Dashboards and updates are accessible org-wide" },
         ]}
-        value={answers["accessibility"] || ""}
-        onChange={(val) => onAnswer("accessibility", val)}
+        value={answers["transformation_communication"] || ""}
+        onChange={(val) => onAnswer("transformation_communication", val)}
       />
-
     </div>
   );
 }

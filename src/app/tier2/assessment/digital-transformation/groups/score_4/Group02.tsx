@@ -5,9 +5,10 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["platform_ownership"] === "string" &&
-    typeof answers["change_tracking"] === "string" &&
-    typeof answers["workflow_efficiency"] === "string"
+    typeof answers["department_alignment"] === "string" &&
+    typeof answers["data_flow_integration"] === "string" &&
+    typeof answers["innovation_process"] === "string" &&
+    typeof answers["investment_impact_review"] === "string"
   );
 }
 
@@ -18,47 +19,59 @@ type Props = {
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
 
       {/* Question 4 */}
       <MultipleChoiceQuestion
-        question="Who owns or governs your core technology stack?"
+        question="How well are departments aligned when executing digital initiatives?"
         options={[
-          { value: "individual_departments", label: "Each department manages its own tools" },
-          { value: "central_ops", label: "We have a centralized ops or IT team for core systems" },
-          { value: "cross_team", label: "It’s shared between operations, IT, and business teams" },
-          { value: "co_governance", label: "We follow a co-governance model with clear decision rights" }
+          { value: "not_aligned", label: "They’re not — each runs independently" },
+          { value: "basic_collaboration", label: "Basic collaboration during implementation" },
+          { value: "cross_dept_planning", label: "Joint planning and coordination is common" },
+          { value: "fully_integrated", label: "Fully aligned with cross-functional ownership" },
         ]}
-        value={answers["platform_ownership"] || ""}
-        onChange={(val) => onAnswer("platform_ownership", val)}
+        value={answers["department_alignment"] || ""}
+        onChange={(val) => onAnswer("department_alignment", val)}
       />
 
       {/* Question 5 */}
       <MultipleChoiceQuestion
-        question="How do you track changes or improvements made to your digital infrastructure?"
+        question="How would you describe your internal data flow across platforms and teams?"
         options={[
-          { value: "no_tracking", label: "We don’t track this formally" },
-          { value: "informal_notes", label: "It’s captured in tickets or internal notes" },
-          { value: "versioned", label: "We use versioning or release logs" },
-          { value: "audit_ready", label: "Changes are tracked with full documentation and auditability" }
+          { value: "manual_or_fragmented", label: "Mostly manual or fragmented" },
+          { value: "some_integrations", label: "Some integrations between key systems" },
+          { value: "central_data_layer", label: "We have a central data layer or warehouse" },
+          { value: "real_time_flow", label: "Data flows automatically across all core systems" },
         ]}
-        value={answers["change_tracking"] || ""}
-        onChange={(val) => onAnswer("change_tracking", val)}
+        value={answers["data_flow_integration"] || ""}
+        onChange={(val) => onAnswer("data_flow_integration", val)}
       />
 
       {/* Question 6 */}
       <MultipleChoiceQuestion
-        question="How well do your current systems support streamlined, automated workflows?"
+        question="How do you approach innovation within your digital transformation efforts?"
         options={[
-          { value: "disconnected", label: "They’re mostly disconnected or manual" },
-          { value: "partially_automated", label: "Some key workflows are automated" },
-          { value: "coordinated", label: "Workflows are automated and coordinated across platforms" },
-          { value: "continuously_improving", label: "We continuously optimize workflows with automation and analytics" }
+          { value: "ad_hoc_experiments", label: "Ad hoc — mostly pilot programs" },
+          { value: "structured_initiatives", label: "Structured initiatives within teams" },
+          { value: "innovation_labs", label: "Dedicated innovation lab or task force" },
+          { value: "embedded_in_teams", label: "Innovation is embedded in day-to-day execution" },
         ]}
-        value={answers["workflow_efficiency"] || ""}
-        onChange={(val) => onAnswer("workflow_efficiency", val)}
+        value={answers["innovation_process"] || ""}
+        onChange={(val) => onAnswer("innovation_process", val)}
       />
 
+      {/* Question 7 */}
+      <MultipleChoiceQuestion
+        question="How often do you review the ROI or impact of your digital investments?"
+        options={[
+          { value: "rarely_review", label: "Rarely or never" },
+          { value: "only_big_projects", label: "Only for major projects or tools" },
+          { value: "scheduled_reviews", label: "We have scheduled ROI reviews" },
+          { value: "real_time_tracking", label: "ROI is monitored in real time" },
+        ]}
+        value={answers["investment_impact_review"] || ""}
+        onChange={(val) => onAnswer("investment_impact_review", val)}
+      />
     </div>
   );
 }

@@ -7,7 +7,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["team_digital_skills"] === "string" &&
     typeof answers["data_visibility"] === "string" &&
-    typeof answers["tool_fragmentation"] === "string"
+    typeof answers["tool_fragmentation"] === "string" &&
+    typeof answers["alignment_efficiency"] === "string"
   );
 }
 
@@ -19,8 +20,7 @@ type Props = {
 export default function Score1_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: team_digital_skills */}
+      {/* Question 4 */}
       <MultipleChoiceQuestion
         question="How would you rate your team’s digital skill set?"
         options={[
@@ -33,7 +33,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("team_digital_skills", val)}
       />
 
-      {/* Question 5: data_visibility */}
+      {/* Question 5 */}
       <MultipleChoiceQuestion
         question="Do you have visibility into how different tools or platforms are being used?"
         options={[
@@ -46,7 +46,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("data_visibility", val)}
       />
 
-      {/* Question 6: tool_fragmentation */}
+      {/* Question 6 */}
       <MultipleChoiceQuestion
         question="How connected or fragmented is your tech stack?"
         options={[
@@ -57,6 +57,19 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
         ]}
         value={answers["tool_fragmentation"] || ""}
         onChange={(val) => onAnswer("tool_fragmentation", val)}
+      />
+
+      {/* Question 7 */}
+      <MultipleChoiceQuestion
+        question="Do your current tools support efficient cross-team collaboration?"
+        options={[
+          { value: "not_at_all", label: "Not at all — most work in silos" },
+          { value: "partially", label: "Partially — some collaboration happens, but it’s clunky" },
+          { value: "mostly", label: "Mostly — our teams work together fairly well using tools" },
+          { value: "completely", label: "Completely — our tools are built for collaboration" },
+        ]}
+        value={answers["alignment_efficiency"] || ""}
+        onChange={(val) => onAnswer("alignment_efficiency", val)}
       />
     </div>
   );

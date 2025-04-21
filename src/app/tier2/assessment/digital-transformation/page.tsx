@@ -133,7 +133,7 @@ const handleNext = async () => {
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       const { data, error } = await supabase
-        .from("customer_experience_assessment")
+        .from("digital_transformation_assessment")
         .insert([{ ...sanitizedAnswers, score, u_id: user.user_id }]);
 
       if (error) {

@@ -2,14 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2_0Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_consistency"] === "string" &&
-    typeof answers["data_strategy_alignment"] === "string" &&
-    Array.isArray(answers["channels_used"]) &&
-    answers["channels_used"].length > 0
+    typeof answers["digital_strategy"] === "string" &&
+    typeof answers["platform_usage"] === "string" &&
+    typeof answers["current_limitations"] === "string"
   );
 }
 
@@ -18,50 +16,46 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score2_Step01({ answers, onAnswer }: Props) {
+export default function Score2_0_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-      
-      {/* Question 1: integration_consistency */}
+      {/* Question 1: digital_strategy */}
       <MultipleChoiceQuestion
-        question="How consistently do your systems and platforms share data across the business?"
+        question="Do you have a digital strategy that guides your priorities?"
         options={[
-          { value: "not_consistent", label: "Not at all — most tools don’t talk to each other" },
-          { value: "partially_consistent", label: "Some tools share data, but it’s inconsistent" },
-          { value: "mostly_consistent", label: "Data sharing works in most areas" },
-          { value: "fully_consistent", label: "Yes — everything is synced across tools" },
+          { value: "no_strategy", label: "No — we act on immediate needs" },
+          { value: "informal_strategy", label: "Somewhat — we have informal direction" },
+          { value: "partial_strategy", label: "Yes — we’ve defined a few goals or themes" },
+          { value: "clear_strategy", label: "Yes — we have a clearly defined strategy" },
         ]}
-        value={answers["integration_consistency"] || ""}
-        onChange={(val) => onAnswer("integration_consistency", val)}
+        value={answers["digital_strategy"] || ""}
+        onChange={(val) => onAnswer("digital_strategy", val)}
       />
 
-      {/* Question 2: data_strategy_alignment */}
+      {/* Question 2: platform_usage */}
       <MultipleChoiceQuestion
-        question="How well does your current tech stack align with your business goals or growth strategy?"
+        question="How would you describe your use of key platforms (CRM, CMS, ERP, etc.)?"
         options={[
-          { value: "no_alignment", label: "Not at all — we haven’t thought about it" },
-          { value: "some_alignment", label: "It somewhat aligns, but gaps exist" },
-          { value: "mostly_aligned", label: "It supports most of our growth plans" },
-          { value: "fully_aligned", label: "It’s intentionally built to align with our goals" },
+          { value: "minimal_usage", label: "We barely use them" },
+          { value: "scattered_usage", label: "We use a few features inconsistently" },
+          { value: "core_features", label: "We use the core features effectively" },
+          { value: "fully_leveraged", label: "We fully leverage platform capabilities" },
         ]}
-        value={answers["data_strategy_alignment"] || ""}
-        onChange={(val) => onAnswer("data_strategy_alignment", val)}
+        value={answers["platform_usage"] || ""}
+        onChange={(val) => onAnswer("platform_usage", val)}
       />
 
-      {/* Question 3: channels_used */}
-      <MultiSelectQuestion
-        question="Which digital channels do you actively use for customer engagement?"
+      {/* Question 3: current_limitations */}
+      <MultipleChoiceQuestion
+        question="What limits your ability to deliver on digital initiatives today?"
         options={[
-          { value: "email", label: "Email marketing" },
-          { value: "sms", label: "SMS or mobile push" },
-          { value: "social", label: "Social media" },
-          { value: "website", label: "Website personalization" },
-          { value: "paid_ads", label: "Paid advertising" },
-          { value: "none", label: "None of these" },
+          { value: "tech_issues", label: "Technology limitations or lack of tools" },
+          { value: "data_problems", label: "Poor data quality or access" },
+          { value: "lack_resources", label: "Lack of people or capacity" },
+          { value: "not_prioritized", label: "It’s not prioritized by leadership" },
         ]}
-        selected={answers["channels_used"] || []}
-        onChange={(val) => onAnswer("channels_used", val)}
-        maxSelect={5}
+        value={answers["current_limitations"] || ""}
+        onChange={(val) => onAnswer("current_limitations", val)}
       />
     </div>
   );

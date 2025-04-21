@@ -2,13 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_2_0Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["team_tech_training"] === "string" &&
-    typeof answers["current_stack_limitations"] === "string" &&
-    answers["current_stack_limitations"].trim().length > 0
+    typeof answers["customer_visibility"] === "string" &&
+    typeof answers["internal_collaboration"] === "string" &&
+    typeof answers["tool_overlap"] === "string" &&
+    typeof answers["digital_leadership"] === "string"
   );
 }
 
@@ -17,30 +17,59 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score2_Step02({ answers, onAnswer }: Props) {
+export default function Score2_0_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: team_tech_training */}
+      {/* Question 4: customer_visibility */}
       <MultipleChoiceQuestion
-        question="How prepared is your team to adopt and use new digital tools or systems?"
+        question="Do you have a unified view of your customer across systems?"
         options={[
-          { value: "not_prepared", label: "Not very — there’s a steep learning curve" },
-          { value: "somewhat_prepared", label: "Somewhat — we get by with trial and error" },
-          { value: "mostly_prepared", label: "Mostly — we train teams as needed" },
-          { value: "fully_prepared", label: "Very — we have a plan for enablement and adoption" },
+          { value: "no_customer_view", label: "No — customer data is siloed" },
+          { value: "partial_customer_view", label: "Some data is connected, but incomplete" },
+          { value: "mostly_connected", label: "We mostly have unified customer profiles" },
+          { value: "fully_connected", label: "Yes — all customer data is integrated and accessible" },
         ]}
-        value={answers["team_tech_training"] || ""}
-        onChange={(val) => onAnswer("team_tech_training", val)}
+        value={answers["customer_visibility"] || ""}
+        onChange={(val) => onAnswer("customer_visibility", val)}
       />
 
-      {/* Question 5: current_stack_limitations */}
-      <TextAreaQuestion
-        question="What limitations in your current stack or digital operations are slowing your team down?"
-        placeholder="E.g., Duplicate data, disconnected systems, slow processes..."
-        value={answers["current_stack_limitations"] || ""}
-        onChange={(val) => onAnswer("current_stack_limitations", val)}
-        maxLength={300}
+      {/* Question 5: internal_collaboration */}
+      <MultipleChoiceQuestion
+        question="How do teams collaborate on digital projects or changes?"
+        options={[
+          { value: "no_process", label: "There’s no formal collaboration process" },
+          { value: "ad_hoc_meetings", label: "Occasional ad hoc meetings" },
+          { value: "cross_team_initiatives", label: "We run cross-team initiatives regularly" },
+          { value: "structured_governance", label: "We have structured governance and alignment" },
+        ]}
+        value={answers["internal_collaboration"] || ""}
+        onChange={(val) => onAnswer("internal_collaboration", val)}
+      />
+
+      {/* Question 6: tool_overlap */}
+      <MultipleChoiceQuestion
+        question="How often do you encounter overlapping or redundant tools?"
+        options={[
+          { value: "constantly", label: "Constantly — we have tool sprawl" },
+          { value: "occasionally", label: "Occasionally — it’s a known issue" },
+          { value: "rarely", label: "Rarely — tools are mostly distinct" },
+          { value: "never", label: "Never — we have clear tool ownership" },
+        ]}
+        value={answers["tool_overlap"] || ""}
+        onChange={(val) => onAnswer("tool_overlap", val)}
+      />
+
+      {/* Question 7: digital_leadership */}
+      <MultipleChoiceQuestion
+        question="Who leads digital transformation efforts in your business?"
+        options={[
+          { value: "no_owner", label: "No one owns it" },
+          { value: "part_time_owner", label: "Someone handles it part-time" },
+          { value: "shared_ownership", label: "It’s shared across departments" },
+          { value: "dedicated_leader", label: "We have a dedicated digital leader or team" },
+        ]}
+        value={answers["digital_leadership"] || ""}
+        onChange={(val) => onAnswer("digital_leadership", val)}
       />
     </div>
   );

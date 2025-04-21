@@ -2,15 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_3_0Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["tech_stack_alignment"] === "string" &&
-    typeof answers["organization_rhythm"] === "string" &&
-    typeof answers["adoption_monitoring"] === "string" &&
-    typeof answers["most_valuable_tool"] === "string" &&
-    answers["most_valuable_tool"].trim().length > 0
+    typeof answers["technology_ownership"] === "string" &&
+    typeof answers["digital_strategy_alignment"] === "string" &&
+    typeof answers["governance_model"] === "string"
   );
 }
 
@@ -19,56 +16,47 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score3_Step03({ answers, onAnswer }: Props) {
+export default function Score3_0_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10 p-6 max-w-2xl mx-auto">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 7: tech_stack_alignment */}
+      {/* Question 8: technology_ownership */}
       <MultipleChoiceQuestion
-        question="How well does your current tech stack support your transformation goals?"
+        question="Who is primarily responsible for driving digital transformation?"
         options={[
-          { value: "not_aligned", label: "Not aligned — we’re using legacy or fragmented tools" },
-          { value: "somewhat", label: "Somewhat aligned — a few key platforms are connected" },
-          { value: "mostly", label: "Mostly aligned — our core platforms are integrated" },
-          { value: "fully_aligned", label: "Fully aligned — designed to support our transformation" },
+          { value: "no_clear_owner", label: "No one — it’s not clearly owned" },
+          { value: "shared_ownership", label: "Shared between departments" },
+          { value: "it_owned", label: "Mostly IT or a tech leader" },
+          { value: "dedicated_owner", label: "A dedicated digital or transformation leader" },
         ]}
-        value={answers["tech_stack_alignment"] || ""}
-        onChange={(val) => onAnswer("tech_stack_alignment", val)}
+        value={answers["technology_ownership"] || ""}
+        onChange={(val) => onAnswer("technology_ownership", val)}
       />
 
-      {/* Question 8: organization_rhythm */}
+      {/* Question 9: digital_strategy_alignment */}
       <MultipleChoiceQuestion
-        question="What best describes your company’s digital operating rhythm?"
+        question="How well does your digital strategy align with overall business goals?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc — digital work happens as needed" },
-          { value: "project_based", label: "Project-based — limited to certain teams" },
-          { value: "cross_functional", label: "Cross-functional — consistent but not company-wide" },
-          { value: "institutionalized", label: "Institutionalized — built into how we operate" },
+          { value: "no_alignment", label: "Not at all — we just try things" },
+          { value: "some_alignment", label: "Somewhat aligned — but not fully integrated" },
+          { value: "mostly_aligned", label: "Mostly aligned with major initiatives" },
+          { value: "fully_aligned", label: "Fully aligned — digital is a business driver" },
         ]}
-        value={answers["organization_rhythm"] || ""}
-        onChange={(val) => onAnswer("organization_rhythm", val)}
+        value={answers["digital_strategy_alignment"] || ""}
+        onChange={(val) => onAnswer("digital_strategy_alignment", val)}
       />
 
-      {/* Question 9: adoption_monitoring */}
+      {/* Question 10: governance_model */}
       <MultipleChoiceQuestion
-        question="How do you monitor whether employees adopt and use new digital tools?"
+        question="Do you have a governance model for digital initiatives?"
         options={[
-          { value: "we_dont", label: "We don’t track adoption" },
-          { value: "manual_feedback", label: "We gather feedback informally" },
-          { value: "usage_reports", label: "We use usage reports or dashboards" },
-          { value: "training_metrics", label: "We track adoption and provide training/metrics" },
+          { value: "none", label: "No — decisions are made ad hoc" },
+          { value: "some_review", label: "Some review, but inconsistent" },
+          { value: "formal_model", label: "Formal governance for major initiatives" },
+          { value: "mature_model", label: "Yes — with clear criteria, roles, and reporting" },
         ]}
-        value={answers["adoption_monitoring"] || ""}
-        onChange={(val) => onAnswer("adoption_monitoring", val)}
-      />
-
-      {/* Question 10: most_valuable_tool */}
-      <TextAreaQuestion
-        question="Which tool or platform currently provides the most value to your digital transformation efforts?"
-        placeholder="E.g., Salesforce, Shopify, Power BI, etc."
-        value={answers["most_valuable_tool"] || ""}
-        onChange={(val) => onAnswer("most_valuable_tool", val)}
-        maxLength={300}
+        value={answers["governance_model"] || ""}
+        onChange={(val) => onAnswer("governance_model", val)}
       />
     </div>
   );

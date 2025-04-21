@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["budgeting"] === "string" &&
-    typeof answers["tech_scalability"] === "string" &&
-    typeof answers["transformation_priority"] === "string"
+    typeof answers["platform_consistency"] === "string" &&
+    typeof answers["digital_success_criteria"] === "string" &&
+    typeof answers["adaptability_to_change"] === "string"
   );
 }
 
@@ -21,43 +20,43 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 7: budgeting */}
+      {/* Question 8: platform_consistency */}
       <MultipleChoiceQuestion
-        question="How are digital tools and transformation efforts budgeted?"
+        question="How consistent is the experience across your digital platforms (e.g. website, mobile, customer portal)?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc, when something breaks or is needed" },
-          { value: "project_based", label: "Only as part of specific projects" },
-          { value: "annual", label: "Annually, as part of planning cycles" },
-          { value: "ongoing", label: "We have ongoing investment in digital capabilities" },
+          { value: "very_inconsistent", label: "Very inconsistent — each looks/feels different" },
+          { value: "somewhat_consistent", label: "Somewhat consistent — we try to align them" },
+          { value: "mostly_consistent", label: "Mostly consistent — same branding and layout" },
+          { value: "fully_unified", label: "Fully unified — seamless across all platforms" },
         ]}
-        value={answers["budgeting"] || ""}
-        onChange={(val) => onAnswer("budgeting", val)}
+        value={answers["platform_consistency"] || ""}
+        onChange={(val) => onAnswer("platform_consistency", val)}
       />
 
-      {/* Question 8: tech_scalability */}
+      {/* Question 9: digital_success_criteria */}
       <MultipleChoiceQuestion
-        question="How confident are you that your current technology can scale with your business?"
+        question="Do you define success metrics for your digital transformation efforts?"
         options={[
-          { value: "not_confident", label: "Not confident at all" },
-          { value: "somewhat_confident", label: "Somewhat confident" },
-          { value: "mostly_confident", label: "Mostly confident" },
-          { value: "fully_confident", label: "Fully confident" },
+          { value: "no_criteria", label: "No — we’re not sure how to measure it" },
+          { value: "broad_metrics", label: "We use broad or general metrics" },
+          { value: "defined_kpis", label: "We have defined KPIs for most efforts" },
+          { value: "clear_roi", label: "Yes — each initiative has clear goals and ROI metrics" },
         ]}
-        value={answers["tech_scalability"] || ""}
-        onChange={(val) => onAnswer("tech_scalability", val)}
+        value={answers["digital_success_criteria"] || ""}
+        onChange={(val) => onAnswer("digital_success_criteria", val)}
       />
 
-      {/* Question 9: transformation_priority */}
+      {/* Question 10: adaptability_to_change */}
       <MultipleChoiceQuestion
-        question="Where does digital transformation rank as a company priority?"
+        question="How well can your organization pivot in response to new digital trends or customer behaviors?"
         options={[
-          { value: "not_on_radar", label: "It’s not really on our radar" },
-          { value: "talked_about", label: "We’ve talked about it, but haven’t started" },
-          { value: "in_progress", label: "We’re taking steps in certain areas" },
-          { value: "high_priority", label: "It’s a top priority across the company" },
+          { value: "slow_response", label: "Slow — it takes a long time to adapt" },
+          { value: "inconsistent", label: "Inconsistent — depends on the team or situation" },
+          { value: "moderately_agile", label: "Moderately agile — we can shift direction with effort" },
+          { value: "very_agile", label: "Very agile — we adapt quickly and proactively" },
         ]}
-        value={answers["transformation_priority"] || ""}
-        onChange={(val) => onAnswer("transformation_priority", val)}
+        value={answers["adaptability_to_change"] || ""}
+        onChange={(val) => onAnswer("adaptability_to_change", val)}
       />
     </div>
   );

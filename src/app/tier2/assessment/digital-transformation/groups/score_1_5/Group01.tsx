@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["workflow_maturity"] === "string" &&
-    typeof answers["data_driven"] === "string" &&
-    typeof answers["data_quality"] === "string"
+    typeof answers["digital_leadership"] === "string" &&
+    typeof answers["tech_stack_review"] === "string" &&
+    typeof answers["digital_baseline"] === "string"
   );
 }
 
@@ -19,44 +19,43 @@ type Props = {
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 1: workflow_maturity */}
+      {/* Question 1: digital_leadership */}
       <MultipleChoiceQuestion
-        question="How well-defined are your business workflows or processes?"
+        question="Who is responsible for driving digital transformation in your organization?"
         options={[
-          { value: "not_defined", label: "They’re not defined at all" },
-          { value: "loosely_documented", label: "Loosely documented or tribal knowledge" },
-          { value: "standardized_key_areas", label: "Standardized in a few key areas" },
-          { value: "well_documented", label: "Well-documented and followed" },
+          { value: "no_one", label: "No one owns it" },
+          { value: "part_time", label: "Someone owns it as a part-time focus" },
+          { value: "internal_owner", label: "There’s a clear internal owner" },
+          { value: "dedicated_team", label: "There’s a dedicated digital or innovation team" },
         ]}
-        value={answers["workflow_maturity"] || ""}
-        onChange={(val) => onAnswer("workflow_maturity", val)}
+        value={answers["digital_leadership"] || ""}
+        onChange={(val) => onAnswer("digital_leadership", val)}
       />
 
-      {/* Question 2: data_driven */}
+      {/* Question 2: tech_stack_review */}
       <MultipleChoiceQuestion
-        question="How would you describe your approach to making business decisions?"
+        question="When was the last time your tech stack or toolset was evaluated for alignment with goals?"
         options={[
-          { value: "gut", label: "Mostly gut feel" },
-          { value: "some_data", label: "Some data, mostly intuition" },
-          { value: "data_guided", label: "We let data guide most decisions" },
-          { value: "data_driven", label: "Data is central to all decisions" },
+          { value: "never", label: "Never — we’re using what we’ve always had" },
+          { value: "couple_years", label: "A few years ago" },
+          { value: "within_year", label: "Within the past year" },
+          { value: "ongoing", label: "We review it regularly or continuously" },
         ]}
-        value={answers["data_driven"] || ""}
-        onChange={(val) => onAnswer("data_driven", val)}
+        value={answers["tech_stack_review"] || ""}
+        onChange={(val) => onAnswer("tech_stack_review", val)}
       />
 
-      {/* Question 3: data_quality */}
+      {/* Question 3: digital_baseline */}
       <MultipleChoiceQuestion
-        question="How confident are you in the accuracy and completeness of your business data?"
+        question="Do you have a clear baseline of how digital transformation is currently impacting your business?"
         options={[
-          { value: "not_confident", label: "Not confident" },
-          { value: "somewhat_confident", label: "Somewhat confident" },
-          { value: "mostly_confident", label: "Mostly confident" },
-          { value: "very_confident", label: "Very confident — we audit and maintain it regularly" },
+          { value: "no_baseline", label: "No baseline — we haven’t measured anything" },
+          { value: "some_data", label: "We have a few metrics or benchmarks" },
+          { value: "basic_snapshot", label: "We’ve captured a basic snapshot of key areas" },
+          { value: "full_baseline", label: "Yes — we track and compare it over time" },
         ]}
-        value={answers["data_quality"] || ""}
-        onChange={(val) => onAnswer("data_quality", val)}
+        value={answers["digital_baseline"] || ""}
+        onChange={(val) => onAnswer("digital_baseline", val)}
       />
     </div>
   );

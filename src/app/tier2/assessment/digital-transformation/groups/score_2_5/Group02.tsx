@@ -2,14 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["data_access"] === "string" &&
-    Array.isArray(answers["tech_stack_visibility"]) &&
-    answers["tech_stack_visibility"].length > 0 &&
-    typeof answers["ownership_alignment"] === "string"
+    typeof answers["data_utilization"] === "string" &&
+    typeof answers["project_prioritization"] === "string" &&
+    typeof answers["tool_evaluation"] === "string" &&
+    typeof answers["tech_training"] === "string"
   );
 }
 
@@ -19,50 +18,58 @@ type Props = {
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
-  const selected = answers["tech_stack_visibility"] || [];
-
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: data_access */}
+      {/* Question 4: data_utilization */}
       <MultipleChoiceQuestion
-        question="How easily can teams across your company access data they need?"
+        question="How do you use data to support digital initiatives?"
         options={[
-          { value: "very_difficult", label: "It’s very difficult or manual to access" },
-          { value: "somewhat_difficult", label: "We have some shared tools, but it’s clunky" },
-          { value: "generally_easy", label: "Generally easy across most departments" },
-          { value: "real_time", label: "Data is accessible and updated in real time" },
+          { value: "we_dont_use_data", label: "We don’t really use data" },
+          { value: "basic_reporting", label: "Basic reporting or gut-based decisions" },
+          { value: "insights_for_optimization", label: "We use insights to adjust or improve" },
+          { value: "real_time_analytics", label: "We use real-time data to drive changes" },
         ]}
-        value={answers["data_access"] || ""}
-        onChange={(val) => onAnswer("data_access", val)}
+        value={answers["data_utilization"] || ""}
+        onChange={(val) => onAnswer("data_utilization", val)}
       />
 
-      {/* Question 5: tech_stack_visibility */}
-      <MultiSelectQuestion
-        question="Which areas of your tech stack are highly visible or well-managed?"
+      {/* Question 5: project_prioritization */}
+      <MultipleChoiceQuestion
+        question="How do you decide which digital projects or improvements to pursue?"
         options={[
-          { value: "crm", label: "CRM or Customer Database" },
-          { value: "ecommerce", label: "Ecommerce or Transaction Systems" },
-          { value: "marketing", label: "Marketing and Communications Tools" },
-          { value: "finance", label: "Finance or Accounting Platforms" },
-          { value: "none", label: "None of the above are well-managed" },
+          { value: "reactionary", label: "It’s reactive — we fix what breaks" },
+          { value: "internal_requests", label: "Based on internal requests or intuition" },
+          { value: "value_alignment", label: "Based on value alignment or potential impact" },
+          { value: "formal_frameworks", label: "We use a scoring or prioritization framework" },
         ]}
-        selected={selected}
-        onChange={(val) => onAnswer("tech_stack_visibility", val)}
-        maxSelect={5}
+        value={answers["project_prioritization"] || ""}
+        onChange={(val) => onAnswer("project_prioritization", val)}
       />
 
-      {/* Question 6: ownership_alignment */}
+      {/* Question 6: tool_evaluation */}
       <MultipleChoiceQuestion
-        question="How aligned are your teams on who owns digital tools and systems?"
+        question="How often do you evaluate whether your tools still meet your needs?"
         options={[
-          { value: "no_alignment", label: "No one really owns them" },
-          { value: "some_alignment", label: "There’s informal ownership" },
-          { value: "clear_ownership", label: "Each system has a clear owner" },
-          { value: "shared_governance", label: "There’s shared governance across departments" },
+          { value: "rarely", label: "Rarely — we keep using what we have" },
+          { value: "when_needed", label: "Only when something major breaks or changes" },
+          { value: "annual_review", label: "We review tools at least annually" },
+          { value: "continuous_improvement", label: "We continuously evaluate and optimize our stack" },
         ]}
-        value={answers["ownership_alignment"] || ""}
-        onChange={(val) => onAnswer("ownership_alignment", val)}
+        value={answers["tool_evaluation"] || ""}
+        onChange={(val) => onAnswer("tool_evaluation", val)}
+      />
+
+      {/* Question 7: tech_training */}
+      <MultipleChoiceQuestion
+        question="What training or enablement do you offer for new tools or systems?"
+        options={[
+          { value: "none", label: "None — people are expected to figure it out" },
+          { value: "basic_training", label: "We provide basic onboarding or demos" },
+          { value: "guided_learning", label: "We offer guided training and documentation" },
+          { value: "continuous_learning", label: "We provide continuous enablement and certifications" },
+        ]}
+        value={answers["tech_training"] || ""}
+        onChange={(val) => onAnswer("tech_training", val)}
       />
     </div>
   );

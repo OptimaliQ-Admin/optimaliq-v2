@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_quality"] === "string" &&
-    typeof answers["execution_speed"] === "string" &&
-    typeof answers["platform_strategy"] === "string"
+    typeof answers["modernization_strategy"] === "string" &&
+    typeof answers["workflow_efficiency"] === "string" &&
+    typeof answers["optimization_maturity"] === "string"
   );
 }
 
@@ -19,43 +18,45 @@ type Props = {
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-
-      {/* Question 7 */}
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+      {/* Question 8: modernization_strategy */}
       <MultipleChoiceQuestion
-        question="How well integrated are your digital systems and platforms?"
+        question="What best describes your current approach to system modernization?"
         options={[
-          { value: "manual", label: "We copy/paste or manually move data" },
-          { value: "some_automation", label: "Some automation or point integrations exist" },
-          { value: "moderate_sync", label: "Most tools sync regularly with shared data" },
-          { value: "full_integration", label: "Systems are unified with strong data governance" }
+          { value: "no_plan", label: "We don’t really have a modernization plan" },
+          { value: "in_progress", label: "We’re starting to upgrade or consolidate" },
+          { value: "actively_modernizing", label: "We’re actively replacing legacy systems" },
+          { value: "fully_modern", label: "Our stack is modern and continuously improved" },
         ]}
-        value={answers["integration_quality"] || ""}
-        onChange={(val) => onAnswer("integration_quality", val)}
+        value={answers["modernization_strategy"] || ""}
+        onChange={(val) => onAnswer("modernization_strategy", val)}
       />
 
-      {/* Question 8 */}
+      {/* Question 9: workflow_efficiency */}
       <MultipleChoiceQuestion
-        question="How quickly can you launch, update, or scale digital initiatives?"
+        question="How efficient are your workflows across systems and teams?"
         options={[
-          { value: "months", label: "It takes months due to dependencies and bottlenecks" },
-          { value: "weeks", label: "Weeks — we can move with some agility" },
-          { value: "sprint_based", label: "Initiatives run in defined sprints or project plans" },
-          { value: "continuous", label: "We operate in a continuous delivery model" }
+          { value: "manual_and_slow", label: "Manual and slow — many handoffs and delays" },
+          { value: "partially_optimized", label: "Partially optimized — some automation or syncs" },
+          { value: "mostly_automated", label: "Mostly automated — strong internal systems" },
+          { value: "streamlined_and_scalable", label: "Streamlined and scalable — very few bottlenecks" },
         ]}
-        value={answers["execution_speed"] || ""}
-        onChange={(val) => onAnswer("execution_speed", val)}
+        value={answers["workflow_efficiency"] || ""}
+        onChange={(val) => onAnswer("workflow_efficiency", val)}
       />
 
-      {/* Question 9 */}
-      <TextAreaQuestion
-        question="What’s one thing that would make your digital platform or tech stack more scalable or future-ready?"
-        placeholder="e.g., More modular systems, less legacy..."
-        value={answers["platform_strategy"] || ""}
-        onChange={(val) => onAnswer("platform_strategy", val)}
-        maxLength={400}
+      {/* Question 10: optimization_maturity */}
+      <MultipleChoiceQuestion
+        question="How would you describe your maturity with continuous process improvement?"
+        options={[
+          { value: "no_review", label: "We don’t revisit workflows unless there’s an issue" },
+          { value: "some_reviews", label: "We review some processes each year" },
+          { value: "structured_reviews", label: "We have structured reviews and process owners" },
+          { value: "fully_mature", label: "Continuous optimization is built into our operations" },
+        ]}
+        value={answers["optimization_maturity"] || ""}
+        onChange={(val) => onAnswer("optimization_maturity", val)}
       />
-
     </div>
   );
 }

@@ -2,14 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_level"] === "string" &&
-    typeof answers["manual_process_impact"] === "string" &&
-    Array.isArray(answers["tools_used"]) &&
-    answers["tools_used"].length > 0
+    typeof answers["team_skill_gap"] === "string" &&
+    typeof answers["data_accessibility"] === "string" &&
+    typeof answers["integration_quality"] === "string" &&
+    typeof answers["data_governance"] === "string"
   );
 }
 
@@ -21,47 +20,56 @@ type Props = {
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: integration_level */}
+      {/* Question 4: team_skill_gap */}
       <MultipleChoiceQuestion
-        question="How integrated are the systems and tools you use across departments?"
+        question="How would you rate your team’s readiness to work with modern digital tools and processes?"
         options={[
-          { value: "not_integrated", label: "Not integrated — everything is siloed" },
-          { value: "partially_integrated", label: "Some systems talk to each other" },
-          { value: "mostly_integrated", label: "Most data flows between systems" },
-          { value: "fully_integrated", label: "Fully integrated — we have a centralized view" },
+          { value: "not_ready", label: "Not ready — major skill gaps exist" },
+          { value: "learning", label: "Learning — we’re upskilling slowly" },
+          { value: "mostly_ready", label: "Mostly ready — basic proficiency exists" },
+          { value: "fully_capable", label: "Fully capable — we’re confident and capable" },
         ]}
-        value={answers["integration_level"] || ""}
-        onChange={(val) => onAnswer("integration_level", val)}
+        value={answers["team_skill_gap"] || ""}
+        onChange={(val) => onAnswer("team_skill_gap", val)}
       />
 
-      {/* Question 5: manual_process_impact */}
+      {/* Question 5: data_accessibility */}
       <MultipleChoiceQuestion
-        question="How do manual processes impact your team’s productivity?"
+        question="How easily can teams access the data they need from your systems?"
         options={[
-          { value: "heavily_slowing", label: "They slow us down significantly" },
-          { value: "some_impact", label: "They cause some delays or inefficiencies" },
-          { value: "minor_impact", label: "Minor inconvenience but manageable" },
-          { value: "no_impact", label: "No major impact — most processes are automated" },
+          { value: "hard_to_access", label: "It’s hard to access or scattered" },
+          { value: "somewhat_accessible", label: "Some data is centralized, some isn’t" },
+          { value: "mostly_accessible", label: "Most data is accessible with effort" },
+          { value: "fully_accessible", label: "Fully accessible via integrated platforms or dashboards" },
         ]}
-        value={answers["manual_process_impact"] || ""}
-        onChange={(val) => onAnswer("manual_process_impact", val)}
+        value={answers["data_accessibility"] || ""}
+        onChange={(val) => onAnswer("data_accessibility", val)}
       />
 
-      {/* Question 6: tools_used */}
-      <MultiSelectQuestion
-        question="Which tools or platforms does your business currently use?"
+      {/* Question 6: integration_quality */}
+      <MultipleChoiceQuestion
+        question="How well do your tools and platforms integrate with each other?"
         options={[
-          { value: "email", label: "Email marketing (e.g. Mailchimp)" },
-          { value: "crm", label: "CRM (e.g. Salesforce, HubSpot)" },
-          { value: "ecommerce", label: "Ecommerce platform (e.g. Shopify)" },
-          { value: "erp", label: "ERP or inventory system" },
-          { value: "analytics", label: "Analytics or BI tools (e.g. GA4, Looker)" },
-          { value: "none", label: "None of the above" },
+          { value: "no_integration", label: "They don’t — everything is siloed" },
+          { value: "basic_integrations", label: "Basic integrations exist, but they break often" },
+          { value: "working_well", label: "They mostly work well together" },
+          { value: "seamless", label: "Seamlessly integrated with real-time syncing" },
         ]}
-        selected={answers["tools_used"] || []}
-        onChange={(val) => onAnswer("tools_used", val)}
-        maxSelect={5}
+        value={answers["integration_quality"] || ""}
+        onChange={(val) => onAnswer("integration_quality", val)}
+      />
+
+      {/* Question 7: data_governance */}
+      <MultipleChoiceQuestion
+        question="Do you have clear processes or roles for managing your data (quality, security, access)?"
+        options={[
+          { value: "no_governance", label: "No — data is unmanaged" },
+          { value: "some_process", label: "Some informal processes exist" },
+          { value: "documented_roles", label: "We have documented roles and rules" },
+          { value: "formal_governance", label: "Yes — full governance model in place" },
+        ]}
+        value={answers["data_governance"] || ""}
+        onChange={(val) => onAnswer("data_governance", val)}
       />
     </div>
   );

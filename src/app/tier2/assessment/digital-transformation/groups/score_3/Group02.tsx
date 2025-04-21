@@ -33,7 +33,84 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
         ]}
         value={answers["kpi_review"] || ""}
         onChange={(val) => onAnswer("kpi_review", val)}
-      />
+      />"use client";
+
+      import React from "react";
+      import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+      
+      export function isScore_3_0Group2Complete(answers: Record<string, any>): boolean {
+        return (
+          typeof answers["performance_metrics"] === "string" &&
+          typeof answers["team_enablement"] === "string" &&
+          typeof answers["data_accessibility"] === "string" &&
+          typeof answers["innovation_culture"] === "string"
+        );
+      }
+      
+      type Props = {
+        answers: Record<string, any>;
+        onAnswer: (key: string, value: any) => void;
+      };
+      
+      export default function Score3_0_Step02({ answers, onAnswer }: Props) {
+        return (
+          <div className="p-6 max-w-2xl mx-auto space-y-8">
+            
+            {/* Question 4: performance_metrics */}
+            <MultipleChoiceQuestion
+              question="How frequently do you review digital performance metrics (e.g. engagement, uptime, conversion)?"
+              options={[
+                { value: "rarely", label: "Rarely — only when there’s an issue" },
+                { value: "monthly", label: "Monthly" },
+                { value: "weekly", label: "Weekly" },
+                { value: "real_time", label: "Real-time dashboards and alerts" },
+              ]}
+              value={answers["performance_metrics"] || ""}
+              onChange={(val) => onAnswer("performance_metrics", val)}
+            />
+      
+            {/* Question 5: team_enablement */}
+            <MultipleChoiceQuestion
+              question="How well-equipped are your teams to adopt and use new technology?"
+              options={[
+                { value: "resistant", label: "Not well — adoption is a major challenge" },
+                { value: "training_needed", label: "Basic enablement — we need more training" },
+                { value: "proficient", label: "Proficient — teams are trained and supported" },
+                { value: "self_driven", label: "Very well — teams actively seek new tools" },
+              ]}
+              value={answers["team_enablement"] || ""}
+              onChange={(val) => onAnswer("team_enablement", val)}
+            />
+      
+            {/* Question 6: data_accessibility */}
+            <MultipleChoiceQuestion
+              question="Can stakeholders easily access the data they need to make decisions?"
+              options={[
+                { value: "data_silos", label: "No — data is siloed or difficult to retrieve" },
+                { value: "basic_reports", label: "We have basic reports, but they’re limited" },
+                { value: "self_service", label: "Yes — users can pull what they need" },
+                { value: "integrated_insights", label: "Yes — insights are pushed to the right people automatically" },
+              ]}
+              value={answers["data_accessibility"] || ""}
+              onChange={(val) => onAnswer("data_accessibility", val)}
+            />
+      
+            {/* Question 7: innovation_culture */}
+            <MultipleChoiceQuestion
+              question="How would you describe your organization's culture around digital innovation?"
+              options={[
+                { value: "risk_averse", label: "Risk-averse — we rarely try new things" },
+                { value: "neutral", label: "Neutral — we try new tools when necessary" },
+                { value: "progressive", label: "Progressive — we actively test and adopt new solutions" },
+                { value: "trailblazing", label: "Trailblazing — we are a digital innovation leader" },
+              ]}
+              value={answers["innovation_culture"] || ""}
+              onChange={(val) => onAnswer("innovation_culture", val)}
+            />
+          </div>
+        );
+      }
+      
 
       {/* Question 5: impact */}
       <MultipleChoiceQuestion

@@ -19,8 +19,7 @@ type Props = {
 export default function Score1_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 7: tech_confidence */}
+      {/* Question 8 */}
       <MultipleChoiceQuestion
         question="How confident are you in making decisions about which technology to adopt?"
         options={[
@@ -33,7 +32,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("tech_confidence", val)}
       />
 
-      {/* Question 8: change_resistance */}
+      {/* Question 9 */}
       <MultipleChoiceQuestion
         question="How would you describe your company’s mindset toward digital change?"
         options={[
@@ -46,7 +45,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("change_resistance", val)}
       />
 
-      {/* Question 9: digital_goals_clarity */}
+      {/* Question 10 */}
       <MultipleChoiceQuestion
         question="Do you have clear goals for how digital efforts should impact the business?"
         options={[

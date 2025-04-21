@@ -2,14 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["ai_impact"] === "string" &&
-    typeof answers["talent_strategy"] === "string" &&
-    Array.isArray(answers["external_influence"]) &&
-    answers["external_influence"].length > 0
+    typeof answers["data_governance"] === "string" &&
+    typeof answers["ai_infrastructure"] === "string" &&
+    typeof answers["customer_centricity"] === "string" &&
+    typeof answers["scalability_maturity"] === "string"
   );
 }
 
@@ -19,49 +18,59 @@ type Props = {
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
-  const externalInfluence = answers["external_influence"] || [];
-
   return (
-    <div className="space-y-10">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+
       {/* Question 4 */}
       <MultipleChoiceQuestion
-        question="What impact is AI having on your transformation efforts?"
+        question="How mature is your data governance and stewardship program?"
         options={[
-          { value: "not_applicable", label: "It’s not applicable yet" },
-          { value: "selective_use", label: "We use it in select functions" },
-          { value: "broadly_embedded", label: "It’s broadly embedded in workflows" },
-          { value: "core_enabler", label: "It’s a core enabler of our digital strategy" }
+          { value: "none", label: "We don’t have one" },
+          { value: "ad_hoc", label: "Ad hoc — handled as issues arise" },
+          { value: "formalized", label: "We have formalized governance processes" },
+          { value: "advanced_governance", label: "It’s embedded in operations with defined owners and policies" },
         ]}
-        value={answers["ai_impact"] || ""}
-        onChange={(val) => onAnswer("ai_impact", val)}
+        value={answers["data_governance"] || ""}
+        onChange={(val) => onAnswer("data_governance", val)}
       />
 
       {/* Question 5 */}
       <MultipleChoiceQuestion
-        question="Which statement best reflects your digital talent strategy?"
+        question="What best describes your infrastructure to support AI and automation?"
         options={[
-          { value: "limited_internal", label: "We rely heavily on external partners" },
-          { value: "growing_internal", label: "We’re building internal skills gradually" },
-          { value: "hybrid_model", label: "We use a hybrid of internal teams and partners" },
-          { value: "internal_center", label: "We have strong internal capabilities across domains" }
+          { value: "no_infra", label: "We haven’t explored it yet" },
+          { value: "pilots", label: "We’ve run pilots or used third-party tools" },
+          { value: "integrated", label: "We have integrated some automation and AI" },
+          { value: "core_capability", label: "It’s a core capability built into our architecture" },
         ]}
-        value={answers["talent_strategy"] || ""}
-        onChange={(val) => onAnswer("talent_strategy", val)}
+        value={answers["ai_infrastructure"] || ""}
+        onChange={(val) => onAnswer("ai_infrastructure", val)}
       />
 
       {/* Question 6 */}
-      <MultiSelectQuestion
-        question="Which external factors most influence your transformation roadmap?"
+      <MultipleChoiceQuestion
+        question="How do you ensure that digital transformation aligns with customer needs?"
         options={[
-          { value: "regulatory_changes", label: "Regulatory or compliance changes" },
-          { value: "market_shifts", label: "Market or customer behavior shifts" },
-          { value: "tech_innovation", label: "Technology breakthroughs" },
-          { value: "competitive_pressure", label: "Competitive pressure or disruption" },
-          { value: "board_mandate", label: "Board-level mandates or goals" }
+          { value: "internal_only", label: "We focus mostly on internal operations" },
+          { value: "some_feedback", label: "We occasionally use customer feedback" },
+          { value: "journey_mapping", label: "We use journey mapping and feedback loops" },
+          { value: "cx_design", label: "Customer experience is at the center of every initiative" },
         ]}
-        selected={externalInfluence}
-        onChange={(val) => onAnswer("external_influence", val)}
-        maxSelect={5}
+        value={answers["customer_centricity"] || ""}
+        onChange={(val) => onAnswer("customer_centricity", val)}
+      />
+
+      {/* Question 7 */}
+      <MultipleChoiceQuestion
+        question="How scalable is your digital infrastructure for future growth?"
+        options={[
+          { value: "not_scalable", label: "Not scalable — it’s already stretched" },
+          { value: "limited_scalability", label: "Somewhat scalable — it needs frequent upgrades" },
+          { value: "scalable_with_effort", label: "Scalable with effort — we’ve planned for growth" },
+          { value: "highly_scalable", label: "Highly scalable — designed with flexibility and scale in mind" },
+        ]}
+        value={answers["scalability_maturity"] || ""}
+        onChange={(val) => onAnswer("scalability_maturity", val)}
       />
     </div>
   );

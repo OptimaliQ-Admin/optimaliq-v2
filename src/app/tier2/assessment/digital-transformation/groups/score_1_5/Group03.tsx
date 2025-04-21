@@ -2,14 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["digital_vision"] === "string" &&
-    typeof answers["tech_stack_consideration"] === "string" &&
-    typeof answers["biggest_barrier"] === "string" &&
-    answers["biggest_barrier"].trim().length > 0
+    typeof answers["tool_adoption"] === "string" &&
+    typeof answers["roadmap_alignment"] === "string" &&
+    typeof answers["digital_metrics"] === "string"
   );
 }
 
@@ -21,40 +19,43 @@ type Props = {
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 7: digital_vision */}
+      {/* Question 8: tool_adoption */}
       <MultipleChoiceQuestion
-        question="How would you describe your vision for digital transformation?"
+        question="How consistent is adoption of digital tools across your teams?"
         options={[
-          { value: "no_vision", label: "We haven’t really discussed it" },
-          { value: "basic_vision", label: "We have a general idea, but it’s not clear" },
-          { value: "emerging_plan", label: "We’ve started developing a plan" },
-          { value: "clear_roadmap", label: "We have a clear roadmap and goals" },
+          { value: "low_adoption", label: "Low — only a few use them" },
+          { value: "inconsistent", label: "Inconsistent — usage varies by person or team" },
+          { value: "mostly_used", label: "Mostly adopted — some gaps remain" },
+          { value: "fully_adopted", label: "Fully adopted — it’s part of daily work" },
         ]}
-        value={answers["digital_vision"] || ""}
-        onChange={(val) => onAnswer("digital_vision", val)}
+        value={answers["tool_adoption"] || ""}
+        onChange={(val) => onAnswer("tool_adoption", val)}
       />
 
-      {/* Question 8: tech_stack_consideration */}
+      {/* Question 9: roadmap_alignment */}
       <MultipleChoiceQuestion
-        question="When choosing new tools or systems, how much do you consider long-term scalability or integration?"
+        question="Do your digital investments align with your business roadmap?"
         options={[
-          { value: "no_consideration", label: "We don’t really think about that" },
-          { value: "some_consideration", label: "It’s one factor, but not a priority" },
-          { value: "important_consideration", label: "It’s an important part of our evaluation" },
-          { value: "critical_consideration", label: "It’s a top priority for every decision" },
+          { value: "no_alignment", label: "No — it feels ad hoc or reactive" },
+          { value: "some_alignment", label: "Somewhat — leadership sees the value" },
+          { value: "aligned", label: "Yes — we connect projects to strategic goals" },
+          { value: "deeply_aligned", label: "Deeply aligned — digital is core to our roadmap" },
         ]}
-        value={answers["tech_stack_consideration"] || ""}
-        onChange={(val) => onAnswer("tech_stack_consideration", val)}
+        value={answers["roadmap_alignment"] || ""}
+        onChange={(val) => onAnswer("roadmap_alignment", val)}
       />
 
-      {/* Question 9: biggest_barrier */}
-      <TextAreaQuestion
-        question="What’s the biggest barrier holding you back from making better use of digital tools?"
-        placeholder="E.g., Budget, skills, time, lack of clarity, etc."
-        value={answers["biggest_barrier"] || ""}
-        onChange={(val) => onAnswer("biggest_barrier", val)}
-        maxLength={300}
+      {/* Question 10: digital_metrics */}
+      <MultipleChoiceQuestion
+        question="Do you track success metrics for your digital projects?"
+        options={[
+          { value: "no_metrics", label: "No — we don’t really track outcomes" },
+          { value: "basic_tracking", label: "We track some basic KPIs" },
+          { value: "metrics_reviewed", label: "Yes — we review success regularly" },
+          { value: "impact_driven", label: "Yes — results guide future investments" },
+        ]}
+        value={answers["digital_metrics"] || ""}
+        onChange={(val) => onAnswer("digital_metrics", val)}
       />
     </div>
   );

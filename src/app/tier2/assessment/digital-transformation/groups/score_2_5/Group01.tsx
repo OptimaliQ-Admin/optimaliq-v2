@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["dx_definition"] === "string" &&
-    typeof answers["dx_urgency"] === "string" &&
-    typeof answers["system_sync"] === "string"
+    typeof answers["goals_linked_to_tech"] === "string" &&
+    typeof answers["change_readiness"] === "string" &&
+    typeof answers["integration_visibility"] === "string"
   );
 }
 
@@ -19,43 +19,43 @@ type Props = {
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-      {/* Question 1: dx_definition */}
+      {/* Question 1: goals_linked_to_tech */}
       <MultipleChoiceQuestion
-        question="How clearly is 'digital transformation' defined in your business?"
+        question="Are your digital transformation goals linked to specific technology outcomes?"
         options={[
-          { value: "no_definition", label: "It’s not clearly defined or discussed" },
-          { value: "vague", label: "We’ve discussed it, but it’s still vague" },
-          { value: "some_definition", label: "There’s a working definition in place" },
-          { value: "clear_definition", label: "It’s clearly defined and used to guide decisions" },
+          { value: "not_linked", label: "No — they are general or aspirational" },
+          { value: "somewhat_linked", label: "Somewhat — a few projects are tech-aligned" },
+          { value: "mostly_linked", label: "Mostly — most initiatives have tech KPIs" },
+          { value: "fully_linked", label: "Yes — every project has aligned metrics and tech outcomes" },
         ]}
-        value={answers["dx_definition"] || ""}
-        onChange={(val) => onAnswer("dx_definition", val)}
+        value={answers["goals_linked_to_tech"] || ""}
+        onChange={(val) => onAnswer("goals_linked_to_tech", val)}
       />
 
-      {/* Question 2: dx_urgency */}
+      {/* Question 2: change_readiness */}
       <MultipleChoiceQuestion
-        question="How urgent is digital transformation viewed across the organization?"
+        question="How ready is your team for process and technology change?"
         options={[
-          { value: "not_urgent", label: "Not very — it's not a priority right now" },
-          { value: "somewhat_urgent", label: "Somewhat — we're watching the market" },
-          { value: "important", label: "Important — it's on our near-term roadmap" },
-          { value: "very_urgent", label: "Very — we're actively prioritizing transformation" },
+          { value: "resistant", label: "Resistant — we avoid big changes" },
+          { value: "open_with_issues", label: "Open — but change usually causes disruption" },
+          { value: "some_preparedness", label: "Some preparedness — we provide training or support" },
+          { value: "proactive", label: "Proactive — change is expected and planned for" },
         ]}
-        value={answers["dx_urgency"] || ""}
-        onChange={(val) => onAnswer("dx_urgency", val)}
+        value={answers["change_readiness"] || ""}
+        onChange={(val) => onAnswer("change_readiness", val)}
       />
 
-      {/* Question 3: system_sync */}
+      {/* Question 3: integration_visibility */}
       <MultipleChoiceQuestion
-        question="How well do your systems, tools, and platforms work together?"
+        question="Do you know which systems are integrated and how data flows across them?"
         options={[
-          { value: "disconnected", label: "They are mostly disconnected and siloed" },
-          { value: "somewhat_integrated", label: "Some are integrated, but there are major gaps" },
-          { value: "mostly_integrated", label: "Most are integrated and sync reliably" },
-          { value: "fully_integrated", label: "Everything is connected and flows seamlessly" },
+          { value: "no_awareness", label: "No — we don’t have that visibility" },
+          { value: "partial_awareness", label: "Partial — we know some basic flows" },
+          { value: "clear_visibility", label: "Yes — we know how data moves between tools" },
+          { value: "documented_maps", label: "Yes — we have documentation and process maps" },
         ]}
-        value={answers["system_sync"] || ""}
-        onChange={(val) => onAnswer("system_sync", val)}
+        value={answers["integration_visibility"] || ""}
+        onChange={(val) => onAnswer("integration_visibility", val)}
       />
     </div>
   );

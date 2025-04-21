@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_readiness"] === "string" &&
-    typeof answers["partner_ecosystem"] === "string" &&
-    typeof answers["future_proofing"] === "string"
+    typeof answers["ai_enablement"] === "string" &&
+    typeof answers["digital_resilience"] === "string" &&
+    typeof answers["cross_functional_alignment"] === "string"
   );
 }
 
@@ -19,40 +18,45 @@ type Props = {
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 7 */}
-      <MultipleChoiceQuestion
-        question="How would you describe your readiness to integrate new technologies (e.g., automation, personalization, AI)?"
-        options={[
-          { value: "resistant", label: "We’re typically resistant or slow to adopt" },
-          { value: "selective", label: "We’re selective and cautious" },
-          { value: "proactive", label: "We’re proactive and test frequently" },
-          { value: "embedded", label: "We’re fast-moving and integration-ready by default" }
-        ]}
-        value={answers["integration_readiness"] || ""}
-        onChange={(val) => onAnswer("integration_readiness", val)}
-      />
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
 
       {/* Question 8 */}
       <MultipleChoiceQuestion
-        question="How do you approach external tech partnerships (e.g., platforms, vendors, consultants)?"
+        question="To what extent is AI or automation embedded into your digital operations?"
         options={[
-          { value: "minimal_use", label: "We rarely use outside partners" },
-          { value: "as_needed", label: "We bring in help when needed" },
-          { value: "strategic_support", label: "We engage partners for strategic support" },
-          { value: "deep_ecosystem", label: "We have a deep ecosystem of partners integrated into our roadmap" }
+          { value: "not_used", label: "Not at all — we haven’t explored it" },
+          { value: "used_in_isolation", label: "Used in a few isolated processes" },
+          { value: "integrated", label: "Integrated into multiple workflows" },
+          { value: "core_capability", label: "It’s a core capability — built into strategy and delivery" },
         ]}
-        value={answers["partner_ecosystem"] || ""}
-        onChange={(val) => onAnswer("partner_ecosystem", val)}
+        value={answers["ai_enablement"] || ""}
+        onChange={(val) => onAnswer("ai_enablement", val)}
       />
 
       {/* Question 9 */}
-      <TextAreaQuestion
-        question="What’s one technology or trend you believe your company will need to adopt in the next 12–24 months?"
-        placeholder="E.g., Generative AI, CDP, Blockchain, Privacy infrastructure"
-        value={answers["future_proofing"] || ""}
-        onChange={(val) => onAnswer("future_proofing", val)}
-        maxLength={300}
+      <MultipleChoiceQuestion
+        question="How resilient is your digital infrastructure when faced with disruptions (e.g. outages, scale surges, vendor changes)?"
+        options={[
+          { value: "not_resilient", label: "Not resilient — any issue causes major problems" },
+          { value: "somewhat_resilient", label: "Somewhat — we can adapt but it’s disruptive" },
+          { value: "resilient", label: "Resilient — we have systems and redundancies in place" },
+          { value: "highly_resilient", label: "Highly resilient — we handle disruptions with minimal impact" },
+        ]}
+        value={answers["digital_resilience"] || ""}
+        onChange={(val) => onAnswer("digital_resilience", val)}
+      />
+
+      {/* Question 10 */}
+      <MultipleChoiceQuestion
+        question="How aligned are different departments on digital strategy and priorities?"
+        options={[
+          { value: "not_aligned", label: "Not at all — everyone operates independently" },
+          { value: "basic_alignment", label: "Some awareness, but not truly aligned" },
+          { value: "mostly_aligned", label: "Mostly aligned — shared priorities exist" },
+          { value: "fully_aligned", label: "Fully aligned — cross-functional goals and KPIs" },
+        ]}
+        value={answers["cross_functional_alignment"] || ""}
+        onChange={(val) => onAnswer("cross_functional_alignment", val)}
       />
     </div>
   );

@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_3_0Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["alignment"] === "string" &&
-    typeof answers["enablement"] === "string" &&
-    Array.isArray(answers["departments"]) && answers["departments"].length > 0
+    typeof answers["integration_depth"] === "string" &&
+    typeof answers["governance_process"] === "string" &&
+    typeof answers["system_usability"] === "string"
   );
 }
 
@@ -17,48 +16,47 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score3_Step01({ answers, onAnswer }: Props) {
+export default function Score3_0_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10 p-6 max-w-2xl mx-auto">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: alignment */}
+      {/* Question 1: integration_depth */}
       <MultipleChoiceQuestion
-        question="How aligned is your digital transformation roadmap with overall business goals?"
+        question="How deeply are your systems integrated (e.g. CRM, ERP, CMS)?"
         options={[
-          { value: "lightly_aligned", label: "Lightly aligned — priorities are set separately" },
-          { value: "somewhat_aligned", label: "Somewhat aligned — leadership syncs occasionally" },
-          { value: "mostly_aligned", label: "Mostly aligned — reviewed together in planning" },
-          { value: "fully_aligned", label: "Fully aligned — roadmap is integral to company goals" },
+          { value: "standalone_tools", label: "Mostly standalone tools — we export/import manually" },
+          { value: "limited_integration", label: "Limited integration — a few key data flows exist" },
+          { value: "connected_workflows", label: "Connected workflows across multiple systems" },
+          { value: "fully_integrated", label: "Fully integrated — data flows seamlessly across tools" },
         ]}
-        value={answers["alignment"] || ""}
-        onChange={(val) => onAnswer("alignment", val)}
+        value={answers["integration_depth"] || ""}
+        onChange={(val) => onAnswer("integration_depth", val)}
       />
 
-      {/* Question 2: enablement */}
+      {/* Question 2: governance_process */}
       <MultipleChoiceQuestion
-        question="How do you ensure new digital tools are successfully adopted by the team?"
+        question="Do you have a formal governance process for technology or digital decisions?"
         options={[
-          { value: "self_learn", label: "We give access and let teams self-learn" },
-          { value: "minimal_training", label: "We provide minimal training or onboarding" },
-          { value: "structured_onboarding", label: "We offer structured onboarding and support" },
-          { value: "change_management", label: "We use change management frameworks" },
+          { value: "no_process", label: "No — decisions are made ad hoc" },
+          { value: "informal_alignment", label: "Some informal alignment among teams" },
+          { value: "defined_roles", label: "Yes — roles and decision-making are defined" },
+          { value: "cross_functional_review", label: "Yes — includes cross-functional review and accountability" },
         ]}
-        value={answers["enablement"] || ""}
-        onChange={(val) => onAnswer("enablement", val)}
+        value={answers["governance_process"] || ""}
+        onChange={(val) => onAnswer("governance_process", val)}
       />
 
-      {/* Question 3: departments */}
-      <MultiSelectQuestion
-        question="Which departments are most involved in shaping your digital roadmap?"
+      {/* Question 3: system_usability */}
+      <MultipleChoiceQuestion
+        question="How would you rate the usability of your current systems and tools?"
         options={[
-          { value: "marketing", label: "Marketing or sales" },
-          { value: "operations", label: "Operations or logistics" },
-          { value: "finance", label: "Finance or accounting" },
-          { value: "product_it", label: "Product or IT" },
+          { value: "frustrating", label: "Frustrating — people avoid them when possible" },
+          { value: "acceptable", label: "Acceptable — people make it work" },
+          { value: "user_friendly", label: "User-friendly — most find them easy to use" },
+          { value: "delightful", label: "Delightful — systems are intuitive and boost productivity" },
         ]}
-        selected={answers["departments"] || []}
-        onChange={(val) => onAnswer("departments", val)}
-        maxSelect={4}
+        value={answers["system_usability"] || ""}
+        onChange={(val) => onAnswer("system_usability", val)}
       />
     </div>
   );

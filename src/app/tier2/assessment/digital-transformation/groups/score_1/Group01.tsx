@@ -2,7 +2,6 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
   return (
@@ -18,11 +17,9 @@ type Props = {
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
-  const tools = answers["current_tools"] || [];
-
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-      {/* Question 1: digital_priority */}
+      {/* Question 1 */}
       <MultipleChoiceQuestion
         question="How would you describe your company’s current approach to digital transformation?"
         options={[
@@ -35,7 +32,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("digital_priority", val)}
       />
 
-      {/* Question 2: tech_stack_age */}
+      {/* Question 2 */}
       <MultipleChoiceQuestion
         question="How modern is your current tech stack?"
         options={[
@@ -48,7 +45,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
         onChange={(val) => onAnswer("tech_stack_age", val)}
       />
 
-      {/* Question 3: current_challenges */}
+      {/* Question 3 */}
       <MultipleChoiceQuestion
         question="What’s your biggest challenge with digital transformation today?"
         options={[

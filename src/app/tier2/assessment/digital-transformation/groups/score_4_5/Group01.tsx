@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["platform_architecture"] === "string" &&
-    typeof answers["integration_management"] === "string" &&
-    typeof answers["governance_model"] === "string"
+    typeof answers["ecosystem_partnerships"] === "string" &&
+    typeof answers["digital_governance_model"] === "string" &&
+    typeof answers["process_alignment"] === "string"
   );
 }
 
@@ -18,44 +18,45 @@ type Props = {
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="p-6 max-w-2xl mx-auto space-y-8">
+
       {/* Question 1 */}
       <MultipleChoiceQuestion
-        question="Which best describes your current digital platform architecture?"
+        question="How are you leveraging ecosystem partnerships in your digital strategy?"
         options={[
-          { value: "standalone", label: "Standalone systems or manual tools" },
-          { value: "partially_connected", label: "Some connected systems, but data is fragmented" },
-          { value: "integrated_platforms", label: "Most tools are connected via APIs or automation" },
-          { value: "modular_flexible", label: "Modular, API-first platform that supports fast integration and flexibility" }
+          { value: "not_considered", label: "We haven’t considered partnerships" },
+          { value: "occasional_partners", label: "We work with partners occasionally" },
+          { value: "strategic_partners", label: "Partners are part of specific initiatives" },
+          { value: "integrated_ecosystem", label: "We have a defined ecosystem strategy and partner actively" },
         ]}
-        value={answers["platform_architecture"] || ""}
-        onChange={(val) => onAnswer("platform_architecture", val)}
+        value={answers["ecosystem_partnerships"] || ""}
+        onChange={(val) => onAnswer("ecosystem_partnerships", val)}
       />
 
       {/* Question 2 */}
       <MultipleChoiceQuestion
-        question="How do you manage integrations and dependencies across systems?"
+        question="What kind of governance model exists for your digital strategy?"
         options={[
-          { value: "not_managed", label: "They’re not really managed" },
-          { value: "manual_updates", label: "We handle updates manually as issues come up" },
-          { value: "coordination_team", label: "We coordinate system updates via IT or RevOps" },
-          { value: "central_framework", label: "We have a central integration strategy and frameworks in place" }
+          { value: "none", label: "None — decisions are ad hoc" },
+          { value: "basic_guidelines", label: "Some guidelines, but loosely enforced" },
+          { value: "structured_model", label: "Structured governance with clear roles" },
+          { value: "formal_board", label: "Formal digital governance board oversees progress" },
         ]}
-        value={answers["integration_management"] || ""}
-        onChange={(val) => onAnswer("integration_management", val)}
+        value={answers["digital_governance_model"] || ""}
+        onChange={(val) => onAnswer("digital_governance_model", val)}
       />
 
       {/* Question 3 */}
       <MultipleChoiceQuestion
-        question="Which best describes your governance model for digital platforms?"
+        question="How well are your digital initiatives aligned with business outcomes?"
         options={[
-          { value: "no_governance", label: "We don’t really have governance processes" },
-          { value: "basic_access_controls", label: "Basic access controls and admin rules" },
-          { value: "shared_responsibility", label: "Shared ownership between business and tech teams" },
-          { value: "mature_governance", label: "Clear roles, rules, and enforcement for all tools and data" }
+          { value: "poor_alignment", label: "They aren’t — there’s a disconnect" },
+          { value: "some_alignment", label: "Some initiatives are aligned" },
+          { value: "mostly_aligned", label: "Most initiatives support key business goals" },
+          { value: "fully_aligned", label: "All digital efforts are aligned with measurable outcomes" },
         ]}
-        value={answers["governance_model"] || ""}
-        onChange={(val) => onAnswer("governance_model", val)}
+        value={answers["process_alignment"] || ""}
+        onChange={(val) => onAnswer("process_alignment", val)}
       />
     </div>
   );
