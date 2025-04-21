@@ -6,14 +6,11 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["ownership"] === "string" &&
-    answers["ownership"].trim().length > 0 &&
-    typeof answers["follow_up_consistency"] === "string" &&
-    answers["follow_up_consistency"].trim().length > 0 &&
-    typeof answers["qualification_method"] === "string" &&
-    answers["qualification_method"].trim().length > 0 &&
-    Array.isArray(answers["tracked_metrics"]) &&
-    answers["tracked_metrics"].length > 0
+    typeof answers["who_5d9558"] === "string" &&
+    typeof answers["how_454fc5"] === "string" &&
+    typeof answers["which_01150c"] === "string" &&
+    Array.isArray(answers["which_6a5924"]) &&
+    answers["which_6a5924"].length > 0
   );
 }
 
@@ -23,64 +20,63 @@ type Props = {
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
-  const tracked = answers["tracked_metrics"] || [];
+  const tracked = answers["which_6a5924"] || [];
 
   return (
     <div className="space-y-8">
 
-      {/* Question 4: ownership */}
+      {/* Question 4: who_5d9558 */}
       <MultipleChoiceQuestion
         question="Who in your organization is responsible for closing deals?"
         options={[
-          { value: "founder", label: "The founder or owner" },
-          { value: "one_salesperson", label: "One salesperson" },
-          { value: "team", label: "A sales team with shared ownership" },
-          { value: "clearly_defined_roles", label: "Clearly defined roles and handoffs" },
+          { value: "The_founder_or_owner", label: "The founder or owner" },
+          { value: "One_salesperson", label: "One salesperson" },
+          { value: "A_small_team", label: "A small team" },
+          { value: "A_dedicated_structured_sales_department", label: "A dedicated, structured sales department" },
         ]}
-        value={answers["ownership"] || ""}
-        onChange={(val) => onAnswer("ownership", val)}
+        value={answers["who_5d9558"] || ""}
+        onChange={(val) => onAnswer("who_5d9558", val)}
       />
 
-      {/* Question 5: follow_up_consistency */}
+      {/* Question 5: how_454fc5 */}
       <MultipleChoiceQuestion
-        question="How consistently do you follow up with leads or open opportunities?"
+        question="How consistently do you follow up with leads or prospects?"
         options={[
-          { value: "inconsistent", label: "Inconsistently or not at all" },
-          { value: "try_to_follow", label: "We try, but it’s not systematic" },
-          { value: "some_structure", label: "We have some structure and reminders" },
-          { value: "highly_disciplined", label: "We have a highly disciplined follow-up process" },
+          { value: "Inconsistently_or_not_at_all", label: "Inconsistently or not at all" },
+          { value: "We_try_but_sometimes_forget", label: "We try, but sometimes forget" },
+          { value: "We_have_a_basic_reminder_system", label: "We have a basic reminder system" },
+          { value: "We_have_automated_or_scheduled_follow_ups", label: "We have automated or scheduled follow-ups" },
         ]}
-        value={answers["follow_up_consistency"] || ""}
-        onChange={(val) => onAnswer("follow_up_consistency", val)}
+        value={answers["how_454fc5"] || ""}
+        onChange={(val) => onAnswer("how_454fc5", val)}
       />
 
-      {/* Question 6: qualification_method */}
+      {/* Question 6: which_01150c */}
       <MultipleChoiceQuestion
         question="Which of the following best describes how you qualify leads?"
         options={[
-          { value: "anyone_interested", label: "We talk to anyone interested" },
-          { value: "ask_basic_questions", label: "We ask a few basic questions" },
-          { value: "criteria_based", label: "We use defined qualification criteria" },
-          { value: "formal_scoring", label: "We use a formal scoring model or methodology" },
+          { value: "We_talk_to_anyone_interested", label: "We talk to anyone interested" },
+          { value: "We_ask_a_few_questions_during_discovery", label: "We ask a few questions during discovery" },
+          { value: "We_use_basic_criteria_eg_budget_need", label: "We use basic criteria (e.g. budget, need)" },
+          { value: "We_follow_a_lead_scoring_or_qualification_framework", label: "We follow a lead scoring or qualification framework" },
         ]}
-        value={answers["qualification_method"] || ""}
-        onChange={(val) => onAnswer("qualification_method", val)}
+        value={answers["which_01150c"] || ""}
+        onChange={(val) => onAnswer("which_01150c", val)}
       />
 
-      {/* Question 7: tracked_metrics */}
+      {/* Question 7: which_6a5924 */}
       <MultiSelectQuestion
-        question="Which of the following do you currently track for your sales team?"
+        question="Which of the following do you currently track or measure in your sales process?"
         options={[
-          { value: "lead_sources", label: "Lead sources" },
-          { value: "conversion_rates", label: "Deal stage conversion rates" },
-          { value: "cycle_length", label: "Sales cycle length" },
-          { value: "rep_activity", label: "Rep activity (calls, meetings, etc.)" },
-          { value: "close_rate", label: "Close rate" },
-          { value: "none", label: "We don’t track much right now" },
+          { value: "Lead_sources", label: "Lead sources" },
+          { value: "Deal_stage_conversion_rates", label: "Deal stage conversion rates" },
+          { value: "Time_to_close", label: "Time to close" },
+          { value: "Win_loss_reasons", label: "Win/loss reasons" },
+          { value: "Sales_activity_calls_emails", label: "Sales activity (calls, emails)" },
         ]}
         selected={tracked}
-        onChange={(val) => onAnswer("tracked_metrics", val)}
-        maxSelect={6}
+        onChange={(val) => onAnswer("which_6a5924", val)}
+        maxSelect={5}
       />
     </div>
   );

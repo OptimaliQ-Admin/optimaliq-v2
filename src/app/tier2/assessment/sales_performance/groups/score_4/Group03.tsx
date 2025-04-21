@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["win_loss_insight_cadence"] === "string" &&
-    answers["win_loss_insight_cadence"].trim().length > 0 &&
-    typeof answers["future_gtm_capability"] === "string" &&
-    answers["future_gtm_capability"].trim().length > 0 &&
-    typeof answers["sales_capacity_clarity"] === "string" &&
-    answers["sales_capacity_clarity"].trim().length > 0
+    typeof answers["how_03fce6"] === "string" &&
+    typeof answers["what’s_4c7c04"] === "string" &&
+    typeof answers["how_4633fe"] === "string"
   );
 }
 
@@ -24,39 +21,39 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: win_loss_insight_cadence */}
+      {/* Question 8: how_03fce6 */}
       <MultipleChoiceQuestion
-        question="How regularly are win/loss insights shared across the business?"
+        question="How regularly are win/loss insights shared across teams?"
         options={[
           { value: "rarely", label: "Rarely" },
-          { value: "occasional_retros", label: "Occasionally in retros" },
-          { value: "monthly_review", label: "Monthly review across sales + product" },
-          { value: "integrated_loop", label: "Integrated into a closed-loop feedback process" },
+          { value: "retros", label: "Occasionally in retros" },
+          { value: "monthly_leadership", label: "Monthly with leadership" },
+          { value: "shared_across_org", label: "Regular insights shared across teams, segments, and channels" },
         ]}
-        value={answers["win_loss_insight_cadence"] || ""}
-        onChange={(val) => onAnswer("win_loss_insight_cadence", val)}
+        value={answers["how_03fce6"] || ""}
+        onChange={(val) => onAnswer("how_03fce6", val)}
       />
 
-      {/* Question 9: future_gtm_capability */}
+      {/* Question 9: what’s_4c7c04 */}
       <TextAreaQuestion
-        question="What’s one future GTM capability you’re planning to invest in?"
+        question="What’s one future GTM capability you’re planning to build?"
         placeholder="E.g., self-serve funnel, ABM, vertical specialization, etc."
-        value={answers["future_gtm_capability"] || ""}
-        onChange={(val) => onAnswer("future_gtm_capability", val)}
+        value={answers["what’s_4c7c04"] || ""}
+        onChange={(val) => onAnswer("what’s_4c7c04", val)}
         maxLength={300}
       />
 
-      {/* Question 10: sales_capacity_clarity */}
+      {/* Question 10: how_4633fe */}
       <MultipleChoiceQuestion
-        question="How well do you understand your sales org’s capacity and workload?"
+        question="How well do you understand your sales org’s capacity and coverage model?"
         options={[
-          { value: "no_clarity", label: "We don’t really have one" },
-          { value: "rough_estimates", label: "We use rough headcount + quota math" },
-          { value: "segment_level_modeling", label: "We model it by segment or rep cohort" },
-          { value: "fully_modeled_capacity", label: "Fully modeled capacity and coverage plans" },
+          { value: "no_model", label: "We don’t really have one" },
+          { value: "rough_model", label: "We use rough territory or ratio models" },
+          { value: "defined_model", label: "We have a defined model" },
+          { value: "dynamic_modeling", label: "We model capacity dynamically across segments and reps" },
         ]}
-        value={answers["sales_capacity_clarity"] || ""}
-        onChange={(val) => onAnswer("sales_capacity_clarity", val)}
+        value={answers["how_4633fe"] || ""}
+        onChange={(val) => onAnswer("how_4633fe", val)}
       />
     </div>
   );

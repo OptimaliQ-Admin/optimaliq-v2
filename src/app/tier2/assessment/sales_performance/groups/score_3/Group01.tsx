@@ -6,12 +6,10 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["sales_velocity_tracking"] === "string" &&
-    answers["sales_velocity_tracking"].trim().length > 0 &&
-    typeof answers["rep_consistency"] === "string" &&
-    answers["rep_consistency"].trim().length > 0 &&
-    Array.isArray(answers["reviewed_metrics"]) &&
-    answers["reviewed_metrics"].length > 0
+    typeof answers["how_c7b9f7"] === "string" &&
+    typeof answers["what_84c5f2"] === "string" &&
+    Array.isArray(answers["which_e20c5f"]) &&
+    answers["which_e20c5f"].length > 0
   );
 }
 
@@ -21,50 +19,51 @@ type Props = {
 };
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
-  const reviewed = answers["reviewed_metrics"] || [];
+  const reviewed = answers["which_e20c5f"] || [];
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: sales_velocity_tracking */}
+      {/* Question 1: how_c7b9f7 */}
       <MultipleChoiceQuestion
-        question="How do you monitor and improve sales velocity (i.e. speed through pipeline)?"
+        question="How do you monitor and improve sales velocity (time to close)?"
         options={[
-          { value: "dont_track", label: "We don’t track it" },
-          { value: "review_agings", label: "We review deal aging and cycle length occasionally" },
-          { value: "measured_metrics", label: "We measure it with defined metrics" },
-          { value: "optimize_velocity", label: "We actively optimize for velocity" },
+          { value: "not_tracked", label: "We don’t track it" },
+          { value: "review_aging", label: "We review deal aging occasionally" },
+          { value: "track_by_stage", label: "We track time per stage" },
+          { value: "optimize_with_reports", label: "We optimize funnel speed with reports and benchmarks" },
         ]}
-        value={answers["sales_velocity_tracking"] || ""}
-        onChange={(val) => onAnswer("sales_velocity_tracking", val)}
+        value={answers["how_c7b9f7"] || ""}
+        onChange={(val) => onAnswer("how_c7b9f7", val)}
       />
 
-      {/* Question 2: rep_consistency */}
+      {/* Question 2: what_84c5f2 */}
       <MultipleChoiceQuestion
-        question="What level of consistency do you see in how different reps execute?"
+        question="What level of consistency do you see in how different reps work the same stages?"
         options={[
           { value: "all_different", label: "Everyone does it differently" },
-          { value: "some_follow", label: "Most reps follow a general structure" },
-          { value: "consistent_execution", label: "Most reps follow the process consistently" },
-          { value: "highly_consistent", label: "Execution is highly consistent across the team" },
+          { value: "basic_following", label: "Most reps follow the basics" },
+          { value: "trained", label: "We train and document best practices" },
+          { value: "standardized", label: "We have standardized playbooks and sales enablement" },
         ]}
-        value={answers["rep_consistency"] || ""}
-        onChange={(val) => onAnswer("rep_consistency", val)}
+        value={answers["what_84c5f2"] || ""}
+        onChange={(val) => onAnswer("what_84c5f2", val)}
       />
 
-      {/* Question 3: reviewed_metrics */}
+      {/* Question 3: which_e20c5f */}
       <MultiSelectQuestion
-        question="Which of the following metrics do you review regularly?"
+        question="Which of the following metrics do you review regularly to optimize sales performance?"
         options={[
           { value: "pipeline_coverage", label: "Pipeline coverage" },
           { value: "deal_velocity", label: "Deal velocity" },
-          { value: "conversion_rates", label: "Conversion rates by stage" },
-          { value: "win_rates", label: "Win rates by rep" },
-          { value: "none", label: "We don’t review metrics consistently" },
+          { value: "conversion_by_stage", label: "Conversion rates by stage" },
+          { value: "call_to_meeting", label: "Call-to-meeting ratio" },
+          { value: "forecast_accuracy", label: "Forecast vs. actual" },
+          { value: "rep_capacity", label: "Rep capacity" },
         ]}
         selected={reviewed}
-        onChange={(val) => onAnswer("reviewed_metrics", val)}
-        maxSelect={5}
+        onChange={(val) => onAnswer("which_e20c5f", val)}
+        maxSelect={6}
       />
     </div>
   );

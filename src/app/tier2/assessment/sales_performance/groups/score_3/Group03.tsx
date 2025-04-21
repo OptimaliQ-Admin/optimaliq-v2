@@ -6,12 +6,9 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["sales_marketing_alignment"] === "string" &&
-    answers["sales_marketing_alignment"].trim().length > 0 &&
-    typeof answers["pipeline_strength"] === "string" &&
-    answers["pipeline_strength"].trim().length > 0 &&
-    typeof answers["scalability_readiness"] === "string" &&
-    answers["scalability_readiness"].trim().length > 0
+    typeof answers["how_1d7838"] === "string" &&
+    typeof answers["what’s_6ec1f3"] === "string" &&
+    typeof answers["how_de0081"] === "string"
   );
 }
 
@@ -24,39 +21,39 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
-      {/* Question 8: sales_marketing_alignment */}
+      {/* Question 8: how_1d7838 */}
       <MultipleChoiceQuestion
-        question="How aligned is your sales process with marketing efforts and lead generation?"
+        question="How aligned is your sales process with marketing or lead generation efforts?"
         options={[
           { value: "not_aligned", label: "Not aligned — we operate independently" },
-          { value: "some_overlap", label: "Some overlap, but we don’t collaborate much" },
-          { value: "shared_insights", label: "We share insights and meet occasionally" },
-          { value: "fully_aligned", label: "Fully aligned with shared goals and reporting" },
+          { value: "some_alignment", label: "Some alignment in handoff or messaging" },
+          { value: "shared_goals", label: "Shared goals and meeting cadence" },
+          { value: "fully_integrated", label: "Fully integrated strategy and performance tracking" },
         ]}
-        value={answers["sales_marketing_alignment"] || ""}
-        onChange={(val) => onAnswer("sales_marketing_alignment", val)}
+        value={answers["how_1d7838"] || ""}
+        onChange={(val) => onAnswer("how_1d7838", val)}
       />
 
-      {/* Question 9: pipeline_strength */}
+      {/* Question 9: what’s_6ec1f3 */}
       <TextAreaQuestion
-        question="What’s one part of your pipeline that’s working well or stands out as a strength?"
+        question="What’s one part of your pipeline that’s working really well — and why?"
         placeholder="E.g., discovery process, win rate, closing discipline"
-        value={answers["pipeline_strength"] || ""}
-        onChange={(val) => onAnswer("pipeline_strength", val)}
+        value={answers["what’s_6ec1f3"] || ""}
+        onChange={(val) => onAnswer("what’s_6ec1f3", val)}
         maxLength={300}
       />
 
-      {/* Question 10: scalability_readiness */}
+      {/* Question 10: how_de0081 */}
       <MultipleChoiceQuestion
-        question="How prepared is your team to scale sales across new regions, reps, or segments?"
+        question="How prepared is your team to scale sales across new regions, verticals, or segments?"
         options={[
           { value: "not_ready", label: "Not ready — we’re still refining" },
-          { value: "repeatable_processes", label: "We have repeatable processes in place" },
-          { value: "enablement_ready", label: "We’re set up with enablement and training" },
-          { value: "ready_to_scale", label: "We’re ready to scale with confidence" },
+          { value: "somewhat_ready", label: "Somewhat — we’re experimenting" },
+          { value: "mostly_ready", label: "Mostly — we’ve proven repeatability" },
+          { value: "very_ready", label: "Very ready — we have repeatable systems and resourcing" },
         ]}
-        value={answers["scalability_readiness"] || ""}
-        onChange={(val) => onAnswer("scalability_readiness", val)}
+        value={answers["how_de0081"] || ""}
+        onChange={(val) => onAnswer("how_de0081", val)}
       />
     </div>
   );

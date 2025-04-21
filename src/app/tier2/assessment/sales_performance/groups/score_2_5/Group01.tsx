@@ -5,12 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["forecasting_method"] === "string" &&
-    answers["forecasting_method"].trim().length > 0 &&
-    typeof answers["follow_up_system"] === "string" &&
-    answers["follow_up_system"].trim().length > 0 &&
-    typeof answers["objection_handling"] === "string" &&
-    answers["objection_handling"].trim().length > 0
+    typeof answers["how_61a52a"] === "string" &&
+    typeof answers["how_9e698a"] === "string" &&
+    typeof answers["how_e2391b"] === "string"
   );
 }
 
@@ -23,43 +20,43 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: forecasting_method */}
+      {/* Question 1: how_61a52a */}
       <MultipleChoiceQuestion
-        question="How are you currently forecasting revenue from your pipeline?"
+        question="How are you currently forecasting revenue from your sales pipeline?"
         options={[
           { value: "gut", label: "Based on deal count or gut feel" },
-          { value: "weighted", label: "Weighted based on stage or rep judgment" },
-          { value: "historical", label: "Based on historical data and trends" },
-          { value: "model_driven", label: "Model-driven with real-time updates" },
+          { value: "weighted", label: "Weighted by stage or rep confidence" },
+          { value: "historical_avg", label: "Based on past performance averages" },
+          { value: "modeled", label: "Modeled through CRM tools or formulas" },
         ]}
-        value={answers["forecasting_method"] || ""}
-        onChange={(val) => onAnswer("forecasting_method", val)}
+        value={answers["how_61a52a"] || ""}
+        onChange={(val) => onAnswer("how_61a52a", val)}
       />
 
-      {/* Question 2: follow_up_system */}
+      {/* Question 2: how_9e698a */}
       <MultipleChoiceQuestion
-        question="How do you ensure follow-ups and next steps are executed on time?"
+        question="How do you ensure follow-ups and next steps are happening consistently across deals?"
         options={[
           { value: "no_system", label: "We don’t have a system" },
-          { value: "rep_managed", label: "Reps are responsible, with some reminders" },
-          { value: "tools", label: "We use task tools and reminders in our CRM" },
-          { value: "automated_workflows", label: "We use automated workflows and alerts" },
+          { value: "rep_responsible", label: "Reps are responsible for follow-ups" },
+          { value: "crm_tasks", label: "Tasks/reminders are assigned in the CRM" },
+          { value: "workflows", label: "We have workflows or sequences to enforce follow-ups" },
         ]}
-        value={answers["follow_up_system"] || ""}
-        onChange={(val) => onAnswer("follow_up_system", val)}
+        value={answers["how_9e698a"] || ""}
+        onChange={(val) => onAnswer("how_9e698a", val)}
       />
 
-      {/* Question 3: objection_handling */}
+      {/* Question 3: how_e2391b */}
       <MultipleChoiceQuestion
-        question="How well does your team manage objections or stalls during the sales process?"
+        question="How well does your team manage objections or stalls during the sales cycle?"
         options={[
           { value: "not_well", label: "We don’t handle them well" },
-          { value: "address_basic", label: "We address basic ones with scripts" },
-          { value: "objection_library", label: "We maintain an objection handling library" },
-          { value: "confident_adaptive", label: "We’re confident and adapt based on context" },
+          { value: "reactive", label: "We address them as they arise" },
+          { value: "training", label: "We use objection-handling training or scripts" },
+          { value: "proactive", label: "We anticipate objections and proactively address them" },
         ]}
-        value={answers["objection_handling"] || ""}
-        onChange={(val) => onAnswer("objection_handling", val)}
+        value={answers["how_e2391b"] || ""}
+        onChange={(val) => onAnswer("how_e2391b", val)}
       />
     </div>
   );

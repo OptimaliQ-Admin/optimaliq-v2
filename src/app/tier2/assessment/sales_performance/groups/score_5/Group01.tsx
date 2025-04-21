@@ -6,12 +6,10 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["sales_org_influence"] === "string" &&
-    answers["sales_org_influence"].trim().length > 0 &&
-    Array.isArray(answers["future_capabilities_used"]) &&
-    answers["future_capabilities_used"].length > 0 &&
-    typeof answers["sales_culture_support"] === "string" &&
-    answers["sales_culture_support"].trim().length > 0
+    typeof answers["how_136dcf"] === "string" &&
+    Array.isArray(answers["which_68025d"]) &&
+    answers["which_68025d"].length > 0 &&
+    typeof answers["how_e9af60"] === "string"
   );
 }
 
@@ -21,49 +19,50 @@ type Props = {
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
-  const selected = answers["future_capabilities_used"] || [];
+  const selected = answers["which_68025d"] || [];
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: sales_org_influence */}
+      {/* Question 1: how_136dcf */}
       <MultipleChoiceQuestion
-        question="How does your sales org contribute to shaping company strategy?"
+        question="How does your sales org contribute to shaping company strategy and innovation?"
         options={[
-          { value: "just_results", label: "Sales delivers results, but isn’t involved in strategy" },
-          { value: "provides_input", label: "Sales provides input based on customer feedback" },
-          { value: "collaborates", label: "Sales collaborates regularly with leadership" },
-          { value: "strategic_driver", label: "Sales is a strategic driver and co-shapes roadmap" },
+          { value: "not_involved", label: "Sales delivers results, but isn’t involved in strategy" },
+          { value: "market_insights", label: "Sales provides occasional market insights" },
+          { value: "gtm_collaboration", label: "Sales participates in GTM or product strategy" },
+          { value: "co_owns_innovation", label: "Sales co-owns innovation planning based on buyer intelligence" },
         ]}
-        value={answers["sales_org_influence"] || ""}
-        onChange={(val) => onAnswer("sales_org_influence", val)}
+        value={answers["how_136dcf"] || ""}
+        onChange={(val) => onAnswer("how_136dcf", val)}
       />
 
-      {/* Question 2: future_capabilities_used */}
+      {/* Question 2: which_68025d */}
       <MultiSelectQuestion
-        question="Which of the following future-focused capabilities are part of your sales org today?"
+        question="Which of the following future-focused capabilities are active in your sales operations?"
         options={[
           { value: "ai_forecasting", label: "AI-enhanced forecasting" },
-          { value: "buyer_intent", label: "Buyer intent and predictive scoring" },
-          { value: "revenue_ops", label: "Revenue operations integration" },
-          { value: "deal_health", label: "Deal health monitoring or alerts" },
+          { value: "buyer_intent", label: "Buyer intent and account intelligence" },
+          { value: "real_time_coaching", label: "Real-time coaching and deal insights" },
+          { value: "adaptive_territory", label: "Adaptive territory planning" },
+          { value: "predictive_modeling", label: "Predictive revenue modeling" },
         ]}
         selected={selected}
-        onChange={(val) => onAnswer("future_capabilities_used", val)}
-        maxSelect={4}
+        onChange={(val) => onAnswer("which_68025d", val)}
+        maxSelect={5}
       />
 
-      {/* Question 3: sales_culture_support */}
+      {/* Question 3: how_e9af60 */}
       <MultipleChoiceQuestion
-        question="How do you ensure your sales culture supports long-term success?"
+        question="How do you ensure your sales culture supports learning, experimentation, and continuous improvement?"
         options={[
           { value: "performance_only", label: "We focus mostly on performance outcomes" },
-          { value: "limited_support", label: "Leadership shares values but reps aren’t measured on them" },
-          { value: "balanced", label: "Reps are recognized for both results and behaviors" },
-          { value: "integrated_model", label: "Our culture, incentives, and metrics reinforce our values" },
+          { value: "informal_learning", label: "Learning happens informally" },
+          { value: "growth_supported", label: "We support growth through feedback and enablement" },
+          { value: "learning_norm", label: "Learning is a cultural norm tied to performance and growth metrics" },
         ]}
-        value={answers["sales_culture_support"] || ""}
-        onChange={(val) => onAnswer("sales_culture_support", val)}
+        value={answers["how_e9af60"] || ""}
+        onChange={(val) => onAnswer("how_e9af60", val)}
       />
     </div>
   );

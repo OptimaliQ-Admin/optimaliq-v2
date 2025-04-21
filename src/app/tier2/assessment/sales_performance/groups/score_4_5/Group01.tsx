@@ -6,12 +6,10 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["sales_capacity_monitoring"] === "string" &&
-    answers["sales_capacity_monitoring"].trim().length > 0 &&
-    Array.isArray(answers["advanced_insights_used"]) &&
-    answers["advanced_insights_used"].length > 0 &&
-    typeof answers["methodology_testing"] === "string" &&
-    answers["methodology_testing"].trim().length > 0
+    typeof answers["how_18515e"] === "string" &&
+    Array.isArray(answers["which_117dee"]) &&
+    answers["which_117dee"].length > 0 &&
+    typeof answers["how_70b7b8"] === "string"
   );
 }
 
@@ -21,49 +19,50 @@ type Props = {
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
-  const selectedInsights = answers["advanced_insights_used"] || [];
+  const selectedInsights = answers["which_117dee"] || [];
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 1: sales_capacity_monitoring */}
+      {/* Question 1: how_18515e */}
       <MultipleChoiceQuestion
-        question="How do you proactively monitor sales capacity across segments?"
+        question="How do you proactively monitor sales capacity to prevent burnout or bottlenecks?"
         options={[
-          { value: "no_monitoring", label: "We don’t monitor it actively" },
-          { value: "manager_level", label: "Manager-level tracking only" },
-          { value: "capacity_modeling", label: "We use capacity modeling by team/segment" },
-          { value: "integrated_dashboard", label: "Live dashboards with forecast + productivity" },
+          { value: "not_monitored", label: "We don’t monitor it actively" },
+          { value: "manager_checkins", label: "Managers check in during 1:1s" },
+          { value: "quarterly_reviews", label: "We run quarterly reviews" },
+          { value: "monthly_models", label: "Capacity models are updated monthly and tied to forecasting" },
         ]}
-        value={answers["sales_capacity_monitoring"] || ""}
-        onChange={(val) => onAnswer("sales_capacity_monitoring", val)}
+        value={answers["how_18515e"] || ""}
+        onChange={(val) => onAnswer("how_18515e", val)}
       />
 
-      {/* Question 2: advanced_insights_used */}
+      {/* Question 2: which_117dee */}
       <MultiSelectQuestion
-        question="Which of the following advanced sales insights are used in your business?"
+        question="Which of the following advanced sales insights are part of your process today?"
         options={[
           { value: "pipeline_velocity", label: "Pipeline velocity by segment" },
           { value: "deal_slippage", label: "Deal slippage tracking" },
-          { value: "rep_engagement", label: "Rep engagement heatmaps" },
-          { value: "ai_scoring", label: "AI-powered win likelihood or scoring" },
+          { value: "predictive_close", label: "Predictive close probability" },
+          { value: "revenue_per_activity", label: "Revenue per activity model" },
+          { value: "cycle_benchmarking", label: "Sales cycle benchmarking by persona or vertical" },
         ]}
         selected={selectedInsights}
-        onChange={(val) => onAnswer("advanced_insights_used", val)}
-        maxSelect={4}
+        onChange={(val) => onAnswer("which_117dee", val)}
+        maxSelect={5}
       />
 
-      {/* Question 3: methodology_testing */}
+      {/* Question 3: how_70b7b8 */}
       <MultipleChoiceQuestion
-        question="How do you test and evolve your sales methodology or approach?"
+        question="How do you test and evolve your sales methodology across markets or products?"
         options={[
           { value: "no_evolution", label: "We don’t evolve it much" },
-          { value: "test_and_adopt", label: "We test ideas occasionally" },
-          { value: "rep_feedback_loop", label: "We evolve based on rep + manager feedback" },
-          { value: "experiment_and_validate", label: "We run A/B tests and validate changes" },
+          { value: "occasional_testing", label: "We test ideas occasionally" },
+          { value: "pilot_segments", label: "We pilot changes in segments or teams" },
+          { value: "strategic_experimentation", label: "We run strategic experimentation and track impact" },
         ]}
-        value={answers["methodology_testing"] || ""}
-        onChange={(val) => onAnswer("methodology_testing", val)}
+        value={answers["how_70b7b8"] || ""}
+        onChange={(val) => onAnswer("how_70b7b8", val)}
       />
     </div>
   );
