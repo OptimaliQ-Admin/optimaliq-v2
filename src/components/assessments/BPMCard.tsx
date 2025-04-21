@@ -1,11 +1,9 @@
-// components/assessments/BPMCard.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
-import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
-
+import AssessmentIntroModal from "./AssessmentIntroModal";
 
 const bpmDescriptions: Record<number, string> = {
   1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
@@ -21,14 +19,15 @@ const bpmDescriptions: Record<number, string> = {
 
 type Props = {
   score: number | null;
-  lastTakenDate: string | null; // ISO string
+  lastTakenDate: string | null;
   userId: string;
 };
 
 export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
+  const [showIntro, setShowIntro] = useState(false);
 
-  const handleStart = () => router.push("/tier2/assessment/BPM");
+  const handleStart = () => setShowIntro(true);
 
   const daysSinceLast = lastTakenDate ? differenceInDays(new Date(), new Date(lastTakenDate)) : null;
   const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;
@@ -37,46 +36,60 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   const hasTaken = score !== null && lastTakenDate !== null;
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
-      <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
+    <>
+      <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
+        <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
 
-      {!hasTaken && (
-        <>
-          <p className="text-gray-600">
-            Analyze the efficiency of your internal processes and identify automation opportunities.
-          </p>
-          <button
-            onClick={handleStart}
-            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Start Assessment
-          </button>
-        </>
+        {!hasTaken && (
+          <>
+            <p className="text-gray-600">
+              Analyze the efficiency of your internal processes and identify automation opportunities.
+            </p>
+            <button
+              onClick={handleStart}
+              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Start Assessment
+            </button>
+          </>
+        )}
+
+        {hasTaken && (
+          <>
+            <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
+            <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
+            <p className="text-sm text-gray-500">
+              Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
+            </p>
+
+            {needsRetake && (
+              <div className="mt-4 border-t pt-4">
+                <p className="text-yellow-700 mb-2">
+                  Your last assessment is over 30 days old. Consider retaking it to reflect recent changes.
+                </p>
+                <button
+                  onClick={handleStart}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                >
+                  Retake Assessment
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {showIntro && (
+        <AssessmentIntroModal
+          isOpen={showIntro}
+          onClose={() => setShowIntro(false)}
+          onStart={() => {
+            setShowIntro(false);
+            router.push("/tier2/assessment/BPM");
+          }}
+          assessmentType="BPM"
+        />
       )}
-
-      {hasTaken && (
-        <>
-          <div className="text-3xl font-bold text-blue-700">{roundedScore}</div>
-          <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
-          <p className="text-sm text-gray-500">
-            Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-          </p>
-
-          {needsRetake && (
-            <div className="mt-4 border-t pt-4">
-              <p className="text-yellow-700 mb-2">
-                Your last assessment is over 30 days old. Consider retaking it to reflect recent changes.
-              </p>
-              <button
-                onClick={handleStart}
-                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-              >
-                Retake Assessment
-              </button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+    </>
   );
 }
