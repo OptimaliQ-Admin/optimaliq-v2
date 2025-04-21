@@ -1,11 +1,9 @@
-// components/assessments/BPMCard.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
-import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
-
+import AssessmentIntroModal from "./AssessmentIntroModal";
 
 const bpmDescriptions: Record<number, string> = {
   1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
@@ -27,8 +25,9 @@ type Props = {
 
 export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
+  const [showIntro, setShowIntro] = useState(false);
 
-  const handleStart = () => router.push("/tier2/assessment/BPM");
+  const handleStart = () => setShowIntro(true);
 
   const daysSinceLast = lastTakenDate ? differenceInDays(new Date(), new Date(lastTakenDate)) : null;
   const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;
@@ -56,7 +55,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
 
       {hasTaken && (
         <>
-          <div className="text-3xl font-bold text-blue-700">{roundedScore}</div>
+          <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
           <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
           <p className="text-sm text-gray-500">
             Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
@@ -76,6 +75,14 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
             </div>
           )}
         </>
+      )}
+
+      {showIntro && (
+        <AssessmentIntroModal
+          assessmentType="bpm"
+          onClose={() => setShowIntro(false)}
+          onStart={() => router.push("/tier2/assessment/BPM")}
+        />
       )}
     </div>
   );

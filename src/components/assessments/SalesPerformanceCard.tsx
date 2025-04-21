@@ -55,7 +55,7 @@ export default function SalesPerformanceCard({ score, lastTakenDate, userId }: P
 
       {hasTaken && (
         <>
-          <div className="text-3xl font-bold text-blue-700">{roundedScore}</div>
+          <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
           <p className="text-gray-600">{salesDescriptions[roundedScore ?? 1]}</p>
           <p className="text-sm text-gray-500">
             Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
