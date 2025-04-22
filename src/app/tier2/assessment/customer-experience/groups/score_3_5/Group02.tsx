@@ -3,12 +3,11 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["cx_metrics_tracked"] === "string" &&
-    typeof answers["personalization_level"] === "string" &&
-    typeof answers["cx_insight_sharing"] === "string" &&
-    typeof answers["cx_accountability"] === "string"
+    typeof answers["cx_goal_alignment"] === "string" &&
+    typeof answers["cx_strategy_adaptation"] === "string" &&
+    typeof answers["cx_team_enablement"] === "string"
   );
 }
 
@@ -17,36 +16,47 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score3_5_Step02({ answers, onAnswer }: Props) {
+export default function Score3_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-8">
-
+      {/* Question 8: cx_goal_alignment */}
       <MultipleChoiceQuestion
-        question="What types of customer experience (CX) metrics do you track?"
+        question="How aligned are your CX efforts with broader company goals?"
         options={[
-          { value: "none", label: "None or anecdotal only" },
-          { value: "basic_metrics", label: "NPS, CSAT, or similar basic scores" },
-          { value: "cx_with_behavioral", label: "CX scores with behavioral/transaction data" },
-          { value: "full_funnel", label: "Full-funnel metrics tied to CX and business outcomes" },
+          { value: "not_aligned", label: "Not aligned — it feels like a separate effort" },
+          { value: "somewhat_aligned", label: "Somewhat aligned — we try to connect initiatives" },
+          { value: "mostly_aligned", label: "Mostly aligned — key metrics are tied to goals" },
+          { value: "fully_aligned", label: "Fully aligned and measured against company OKRs" },
         ]}
-        value={answers["cx_metrics_tracked"] || ""}
-        onChange={(val) => onAnswer("cx_metrics_tracked", val)}
+        value={answers["cx_goal_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_goal_alignment", val)}
       />
 
+      {/* Question 9: cx_strategy_adaptation */}
       <MultipleChoiceQuestion
-        question="How personalized is your customer experience today?"
+        question="How often is your customer experience strategy revisited or adapted?"
         options={[
-          { value: "generic", label: "Generic for all customers" },
-          { value: "some_segmentation", label: "Some segmentation (e.g. personas, lifecycle)" },
-          { value: "real_time_personalization", label: "Real-time personalization on channels" },
-          { value: "omnichannel_ai", label: "Omnichannel, AI-driven personalization" },
+          { value: "rarely", label: "Rarely — it’s static" },
+          { value: "annually", label: "Annually — during planning cycles" },
+          { value: "quarterly", label: "Quarterly — tied to key results" },
+          { value: "ongoing", label: "Ongoing — we optimize based on live data" },
         ]}
-        value={answers["personalization_level"] || ""}
-        onChange={(val) => onAnswer("personalization_level", val)}
+        value={answers["cx_strategy_adaptation"] || ""}
+        onChange={(val) => onAnswer("cx_strategy_adaptation", val)}
       />
 
+      {/* Question 10: cx_team_enablement */}
       <MultipleChoiceQuestion
-        question="How are customer insights shared across your company?"
+        question="How would you rate your team’s ability to act on customer feedback or needs?"
         options={[
-          { value: "not_shared", label: "Not formally shared" },
-          { value: "shared_in_meetings", label: "
+          { value: "low", label: "Low — feedback gets lost or ignored" },
+          { value: "inconsistent", label: "Inconsistent — depends on who sees it" },
+          { value: "proactive", label: "Proactive — we act on patterns and themes" },
+          { value: "empowered", label: "Empowered — teams are equipped to make changes quickly" },
+        ]}
+        value={answers["cx_team_enablement"] || ""}
+        onChange={(val) => onAnswer("cx_team_enablement", val)}
+      />
+    </div>
+  );
+}
