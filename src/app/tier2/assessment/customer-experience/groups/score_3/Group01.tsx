@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["alignment"] === "string" &&
-    typeof answers["enablement"] === "string" &&
-    Array.isArray(answers["departments"]) && answers["departments"].length > 0
+    typeof answers["insight_sharing"] === "string" &&
+    typeof answers["feedback_loop"] === "string" &&
+    typeof answers["team_alignment"] === "string"
   );
 }
 
@@ -19,46 +18,41 @@ type Props = {
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10 p-6 max-w-2xl mx-auto">
-
-      {/* Question 1: alignment */}
+    <div className="space-y-8">
       <MultipleChoiceQuestion
-        question="How aligned is your digital transformation roadmap with overall business goals?"
+        question="How often do customer insights get shared across departments?"
         options={[
-          { value: "lightly_aligned", label: "Lightly aligned — priorities are set separately" },
-          { value: "somewhat_aligned", label: "Somewhat aligned — leadership syncs occasionally" },
-          { value: "mostly_aligned", label: "Mostly aligned — reviewed together in planning" },
-          { value: "fully_aligned", label: "Fully aligned — roadmap is integral to company goals" },
+          { value: "rarely_shared", label: "Rarely — insights stay siloed" },
+          { value: "sometimes_shared", label: "Sometimes shared informally" },
+          { value: "frequently_shared", label: "Frequently shared with key teams" },
+          { value: "fully_integrated", label: "Fully integrated into team workflows" },
         ]}
-        value={answers["alignment"] || ""}
-        onChange={(val) => onAnswer("alignment", val)}
+        value={answers["insight_sharing"] || ""}
+        onChange={(val) => onAnswer("insight_sharing", val)}
       />
 
-      {/* Question 2: enablement */}
       <MultipleChoiceQuestion
-        question="How do you ensure new digital tools are successfully adopted by the team?"
+        question="What kind of feedback loop do you have with customers?"
         options={[
-          { value: "self_learn", label: "We give access and let teams self-learn" },
-          { value: "minimal_training", label: "We provide minimal training or onboarding" },
-          { value: "structured_onboarding", label: "We offer structured onboarding and support" },
-          { value: "change_management", label: "We use change management frameworks" },
+          { value: "none", label: "None — we don’t ask regularly" },
+          { value: "ad_hoc", label: "Ad hoc — occasional surveys or outreach" },
+          { value: "structured", label: "Structured — regular reviews and analysis" },
+          { value: "strategic", label: "Strategic — insights shape priorities" },
         ]}
-        value={answers["enablement"] || ""}
-        onChange={(val) => onAnswer("enablement", val)}
+        value={answers["feedback_loop"] || ""}
+        onChange={(val) => onAnswer("feedback_loop", val)}
       />
 
-      {/* Question 3: departments */}
-      <MultiSelectQuestion
-        question="Which departments are most involved in shaping your digital roadmap?"
+      <MultipleChoiceQuestion
+        question="How aligned is your team around the customer experience?"
         options={[
-          { value: "marketing", label: "Marketing or sales" },
-          { value: "operations", label: "Operations or logistics" },
-          { value: "finance", label: "Finance or accounting" },
-          { value: "product_it", label: "Product or IT" },
+          { value: "not_aligned", label: "Not aligned — everyone has their own view" },
+          { value: "somewhat_aligned", label: "Somewhat aligned — we agree on basics" },
+          { value: "mostly_aligned", label: "Mostly aligned — shared goals and priorities" },
+          { value: "fully_aligned", label: "Fully aligned — strong CX culture" },
         ]}
-        selected={answers["departments"] || []}
-        onChange={(val) => onAnswer("departments", val)}
-        maxSelect={4}
+        value={answers["team_alignment"] || ""}
+        onChange={(val) => onAnswer("team_alignment", val)}
       />
     </div>
   );

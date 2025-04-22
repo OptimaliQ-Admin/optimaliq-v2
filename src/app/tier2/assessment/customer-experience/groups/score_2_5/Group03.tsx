@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["budgeting"] === "string" &&
-    typeof answers["tech_scalability"] === "string" &&
-    typeof answers["transformation_priority"] === "string"
+    typeof answers["customer_retention_focus"] === "string" &&
+    typeof answers["loyalty_initiatives"] === "string" &&
+    typeof answers["cx_success_definition"] === "string"
   );
 }
 
@@ -21,43 +20,43 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
 
-      {/* Question 7: budgeting */}
+      {/* Question 8: customer_retention_focus */}
       <MultipleChoiceQuestion
-        question="How are digital tools and transformation efforts budgeted?"
+        question="How much of your strategy is focused on customer retention?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc, when something breaks or is needed" },
-          { value: "project_based", label: "Only as part of specific projects" },
-          { value: "annual", label: "Annually, as part of planning cycles" },
-          { value: "ongoing", label: "We have ongoing investment in digital capabilities" },
+          { value: "none", label: "None — mostly focused on new acquisition" },
+          { value: "basic_efforts", label: "Some — we do occasional retention campaigns" },
+          { value: "consistent", label: "Consistent retention efforts exist" },
+          { value: "strategic_priority", label: "Retention is a strategic priority with clear KPIs" },
         ]}
-        value={answers["budgeting"] || ""}
-        onChange={(val) => onAnswer("budgeting", val)}
+        value={answers["customer_retention_focus"] || ""}
+        onChange={(val) => onAnswer("customer_retention_focus", val)}
       />
 
-      {/* Question 8: tech_scalability */}
+      {/* Question 9: loyalty_initiatives */}
       <MultipleChoiceQuestion
-        question="How confident are you that your current technology can scale with your business?"
+        question="Do you have any programs or initiatives to drive customer loyalty?"
         options={[
-          { value: "not_confident", label: "Not confident at all" },
-          { value: "somewhat_confident", label: "Somewhat confident" },
-          { value: "mostly_confident", label: "Mostly confident" },
-          { value: "fully_confident", label: "Fully confident" },
+          { value: "no_programs", label: "No — not currently" },
+          { value: "basic_discounts", label: "Yes — basic discounts or rewards" },
+          { value: "tiered_programs", label: "Yes — we have a tiered or gamified program" },
+          { value: "fully_integrated", label: "Yes — loyalty is deeply integrated with the brand" },
         ]}
-        value={answers["tech_scalability"] || ""}
-        onChange={(val) => onAnswer("tech_scalability", val)}
+        value={answers["loyalty_initiatives"] || ""}
+        onChange={(val) => onAnswer("loyalty_initiatives", val)}
       />
 
-      {/* Question 9: transformation_priority */}
+      {/* Question 10: cx_success_definition */}
       <MultipleChoiceQuestion
-        question="Where does digital transformation rank as a company priority?"
+        question="How do you define success in your customer experience efforts?"
         options={[
-          { value: "not_on_radar", label: "It’s not really on our radar" },
-          { value: "talked_about", label: "We’ve talked about it, but haven’t started" },
-          { value: "in_progress", label: "We’re taking steps in certain areas" },
-          { value: "high_priority", label: "It’s a top priority across the company" },
+          { value: "undefined", label: "It’s not clearly defined" },
+          { value: "general_sentiment", label: "Based on general satisfaction or gut feel" },
+          { value: "survey_scores", label: "Driven by NPS or CSAT scores" },
+          { value: "kpi_driven", label: "Clearly defined KPIs aligned to growth and retention" },
         ]}
-        value={answers["transformation_priority"] || ""}
-        onChange={(val) => onAnswer("transformation_priority", val)}
+        value={answers["cx_success_definition"] || ""}
+        onChange={(val) => onAnswer("cx_success_definition", val)}
       />
     </div>
   );

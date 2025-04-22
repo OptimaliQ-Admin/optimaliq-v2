@@ -2,12 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["tech_confidence"] === "string" &&
-    typeof answers["change_resistance"] === "string" &&
-    typeof answers["digital_goals_clarity"] === "string"
+    typeof answers["customer_journey_understanding"] === "string" &&
+    typeof answers["cx_success_definition"] === "string" &&
+    typeof answers["customer_success_ownership"] === "string"
   );
 }
 
@@ -19,44 +20,43 @@ type Props = {
 export default function Score1_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 7: tech_confidence */}
+      {/* Question 8 */}
       <MultipleChoiceQuestion
-        question="How confident are you in making decisions about which technology to adopt?"
+        question="How well do you understand the journey your customers take from awareness to repeat purchase?"
         options={[
-          { value: "guessing", label: "We’re guessing or going with trends" },
-          { value: "basic_research", label: "We do basic research and hope for the best" },
-          { value: "evaluated_decisions", label: "We evaluate based on needs and fit" },
-          { value: "strategic_alignment", label: "Tech choices are aligned with strategy and vetted" },
+          { value: "not_mapped", label: "We haven’t mapped it" },
+          { value: "basic_understanding", label: "We have a basic idea" },
+          { value: "mapped", label: "We’ve mapped it, but not fully optimized it" },
+          { value: "clear_and_optimized", label: "It’s clear and continuously optimized" },
         ]}
-        value={answers["tech_confidence"] || ""}
-        onChange={(val) => onAnswer("tech_confidence", val)}
+        value={answers["customer_journey_understanding"] || ""}
+        onChange={(val) => onAnswer("customer_journey_understanding", val)}
       />
 
-      {/* Question 8: change_resistance */}
+      {/* Question 9 */}
       <MultipleChoiceQuestion
-        question="How would you describe your company’s mindset toward digital change?"
+        question="How do you define and measure customer success or satisfaction?"
         options={[
-          { value: "avoidance", label: "Avoidant — change is met with resistance" },
-          { value: "cautious", label: "Cautious — people need convincing" },
-          { value: "open", label: "Open — willing to try new things if justified" },
-          { value: "embracing", label: "Embracing — innovation is part of the culture" },
+          { value: "dont_define", label: "We don’t really define or measure it" },
+          { value: "gut_feel", label: "We go by gut feel or ad hoc feedback" },
+          { value: "some_metrics", label: "We use basic metrics like NPS or reviews" },
+          { value: "data_driven", label: "We use data and track CX performance regularly" },
         ]}
-        value={answers["change_resistance"] || ""}
-        onChange={(val) => onAnswer("change_resistance", val)}
+        value={answers["cx_success_definition"] || ""}
+        onChange={(val) => onAnswer("cx_success_definition", val)}
       />
 
-      {/* Question 9: digital_goals_clarity */}
+      {/* Question 10 */}
       <MultipleChoiceQuestion
-        question="Do you have clear goals for how digital efforts should impact the business?"
+        question="Who owns the customer experience in your organization?"
         options={[
-          { value: "no_goals", label: "No — we’re just trying different things" },
-          { value: "broad_goals", label: "Yes, but they’re broad or vague" },
-          { value: "defined_goals", label: "Yes — we’ve defined objectives for most projects" },
-          { value: "measurable_goals", label: "Yes — we have measurable goals and track them" },
+          { value: "no_owner", label: "No one specifically" },
+          { value: "shared_informally", label: "It’s shared across teams informally" },
+          { value: "cx_leader", label: "We have someone focused on it part-time or as part of a larger role" },
+          { value: "dedicated_team", label: "We have a dedicated CX leader or team" },
         ]}
-        value={answers["digital_goals_clarity"] || ""}
-        onChange={(val) => onAnswer("digital_goals_clarity", val)}
+        value={answers["customer_success_ownership"] || ""}
+        onChange={(val) => onAnswer("customer_success_ownership", val)}
       />
     </div>
   );

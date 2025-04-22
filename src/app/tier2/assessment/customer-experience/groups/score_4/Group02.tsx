@@ -5,9 +5,10 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["platform_ownership"] === "string" &&
-    typeof answers["change_tracking"] === "string" &&
-    typeof answers["workflow_efficiency"] === "string"
+    typeof answers["cx_feedback_channels"] === "string" &&
+    typeof answers["cx_adaptation"] === "string" &&
+    typeof answers["cx_leadership_alignment"] === "string" &&
+    typeof answers["cx_success_criteria"] === "string"
   );
 }
 
@@ -16,49 +17,60 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score4_Step02({ answers, onAnswer }: Props) {
+export default function Score4_0_Step02({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-
-      {/* Question 4 */}
+    <div className="space-y-8">
+      {/* Question 4: cx_feedback_channels */}
       <MultipleChoiceQuestion
-        question="Who owns or governs your core technology stack?"
+        question="How do you collect and act on customer feedback?"
         options={[
-          { value: "individual_departments", label: "Each department manages its own tools" },
-          { value: "central_ops", label: "We have a centralized ops or IT team for core systems" },
-          { value: "cross_team", label: "It’s shared between operations, IT, and business teams" },
-          { value: "co_governance", label: "We follow a co-governance model with clear decision rights" }
+          { value: "no_feedback", label: "We don’t have formal feedback channels" },
+          { value: "basic_channels", label: "We collect feedback through basic surveys" },
+          { value: "analyzed_periodically", label: "We analyze feedback and review it periodically" },
+          { value: "real_time_loops", label: "We use real-time feedback loops to guide action" },
         ]}
-        value={answers["platform_ownership"] || ""}
-        onChange={(val) => onAnswer("platform_ownership", val)}
+        value={answers["cx_feedback_channels"] || ""}
+        onChange={(val) => onAnswer("cx_feedback_channels", val)}
       />
 
-      {/* Question 5 */}
+      {/* Question 5: cx_adaptation */}
       <MultipleChoiceQuestion
-        question="How do you track changes or improvements made to your digital infrastructure?"
+        question="How quickly does your organization adapt based on customer insights?"
         options={[
-          { value: "no_tracking", label: "We don’t track this formally" },
-          { value: "informal_notes", label: "It’s captured in tickets or internal notes" },
-          { value: "versioned", label: "We use versioning or release logs" },
-          { value: "audit_ready", label: "Changes are tracked with full documentation and auditability" }
+          { value: "rarely_act", label: "We rarely act on insights" },
+          { value: "occasional_changes", label: "Occasionally, if there’s a clear need" },
+          { value: "moderately_fast", label: "Moderately fast — a few weeks" },
+          { value: "very_fast", label: "Very fast — days or real-time changes" },
         ]}
-        value={answers["change_tracking"] || ""}
-        onChange={(val) => onAnswer("change_tracking", val)}
+        value={answers["cx_adaptation"] || ""}
+        onChange={(val) => onAnswer("cx_adaptation", val)}
       />
 
-      {/* Question 6 */}
+      {/* Question 6: cx_leadership_alignment */}
       <MultipleChoiceQuestion
-        question="How well do your current systems support streamlined, automated workflows?"
+        question="How aligned is leadership around CX as a business priority?"
         options={[
-          { value: "disconnected", label: "They’re mostly disconnected or manual" },
-          { value: "partially_automated", label: "Some key workflows are automated" },
-          { value: "coordinated", label: "Workflows are automated and coordinated across platforms" },
-          { value: "continuously_improving", label: "We continuously optimize workflows with automation and analytics" }
+          { value: "not_discussed", label: "It’s not a major discussion topic" },
+          { value: "some_support", label: "Some leaders advocate for it" },
+          { value: "active_support", label: "It’s actively supported by leadership" },
+          { value: "executive_ownership", label: "It has executive sponsorship and clear goals" },
         ]}
-        value={answers["workflow_efficiency"] || ""}
-        onChange={(val) => onAnswer("workflow_efficiency", val)}
+        value={answers["cx_leadership_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_leadership_alignment", val)}
       />
 
+      {/* Question 7: cx_success_criteria */}
+      <MultipleChoiceQuestion
+        question="What success criteria do you use to evaluate CX initiatives?"
+        options={[
+          { value: "gut_feel", label: "We rely on gut feel or anecdotal wins" },
+          { value: "basic_engagement", label: "Basic engagement metrics (clicks, opens)" },
+          { value: "retention_and_loyalty", label: "Retention, NPS, or loyalty indicators" },
+          { value: "roi_and_impact", label: "ROI, growth impact, and customer lifetime value" },
+        ]}
+        value={answers["cx_success_criteria"] || ""}
+        onChange={(val) => onAnswer("cx_success_criteria", val)}
+      />
     </div>
   );
 }

@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["platform_auditing"] === "string" &&
-    typeof answers["roadmap_alignment"] === "string" &&
-    typeof answers["evolution_speed"] === "string"
+    typeof answers["cx_cross_team_execution"] === "string" &&
+    typeof answers["cx_scalability"] === "string" &&
+    typeof answers["cx_predictive_capabilities"] === "string"
   );
 }
 
@@ -16,49 +16,48 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score4_Step03({ answers, onAnswer }: Props) {
+export default function Score4_0_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
 
-      {/* Question 7 */}
+      {/* Question 8: cx_cross_team_execution */}
       <MultipleChoiceQuestion
-        question="How do you monitor the health and performance of your digital systems?"
+        question="How coordinated are your CX efforts across teams (marketing, support, product, etc.)?"
         options={[
-          { value: "manual_reviews", label: "Manual reviews or anecdotal reports" },
-          { value: "some_monitoring", label: "Some systems have dashboards or alerts" },
-          { value: "central_reporting", label: "We have centralized reporting and health checks" },
-          { value: "real_time_analytics", label: "We use real-time analytics and system-wide observability tools" }
+          { value: "siloed_efforts", label: "Teams work in silos with little coordination" },
+          { value: "some_alignment", label: "Some alignment but efforts are fragmented" },
+          { value: "collaborative_initiatives", label: "We run some joint CX initiatives" },
+          { value: "fully_coordinated", label: "Efforts are fully coordinated and shared" },
         ]}
-        value={answers["platform_auditing"] || ""}
-        onChange={(val) => onAnswer("platform_auditing", val)}
+        value={answers["cx_cross_team_execution"] || ""}
+        onChange={(val) => onAnswer("cx_cross_team_execution", val)}
       />
 
-      {/* Question 8 */}
+      {/* Question 9: cx_scalability */}
       <MultipleChoiceQuestion
-        question="How aligned is your tech roadmap with your broader business strategy?"
+        question="How scalable is your current CX strategy as your business grows?"
         options={[
-          { value: "not_aligned", label: "We don’t really have a roadmap" },
-          { value: "loosely_aligned", label: "Tech projects are approved based on immediate needs" },
-          { value: "some_alignment", label: "There’s some coordination between tech and business" },
-          { value: "fully_integrated", label: "The roadmap is fully integrated with strategic goals and timelines" }
+          { value: "not_scalable", label: "Not scalable — we’re reinventing constantly" },
+          { value: "some_scalability", label: "Somewhat scalable — with effort" },
+          { value: "scalable_frameworks", label: "We’ve built repeatable frameworks" },
+          { value: "scales_freely", label: "Highly scalable — it evolves as we grow" },
         ]}
-        value={answers["roadmap_alignment"] || ""}
-        onChange={(val) => onAnswer("roadmap_alignment", val)}
+        value={answers["cx_scalability"] || ""}
+        onChange={(val) => onAnswer("cx_scalability", val)}
       />
 
-      {/* Question 9 */}
+      {/* Question 10: cx_predictive_capabilities */}
       <MultipleChoiceQuestion
-        question="How quickly can you adapt your systems or processes to support a new business model or opportunity?"
+        question="Do you use predictive analytics to anticipate customer behavior or needs?"
         options={[
-          { value: "slow", label: "It would require major rework" },
-          { value: "weeks", label: "It would take weeks of planning and execution" },
-          { value: "flexible", label: "We can adapt with moderate planning" },
-          { value: "agile_flexible", label: "We’re agile and can pivot within days if needed" }
+          { value: "no_usage", label: "No — we rely on past data only" },
+          { value: "basic_predictions", label: "Basic predictions in some campaigns" },
+          { value: "integrated_predictions", label: "Predictions are integrated into strategy" },
+          { value: "real_time_adaptation", label: "Real-time predictions drive CX decisions" },
         ]}
-        value={answers["evolution_speed"] || ""}
-        onChange={(val) => onAnswer("evolution_speed", val)}
+        value={answers["cx_predictive_capabilities"] || ""}
+        onChange={(val) => onAnswer("cx_predictive_capabilities", val)}
       />
-
     </div>
   );
 }

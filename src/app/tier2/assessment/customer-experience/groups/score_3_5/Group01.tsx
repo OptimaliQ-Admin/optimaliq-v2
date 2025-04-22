@@ -2,16 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["monitoring_progress"] === "string" &&
-    Array.isArray(answers["employee_interaction"]) &&
-    answers["employee_interaction"].length > 0 &&
-    typeof answers["tool_support"] === "string" &&
-    answers["tool_support"].trim().length > 0
+    typeof answers["journey_mapping_clarity"] === "string" &&
+    typeof answers["voice_of_customer_program"] === "string" &&
+    typeof answers["feedback_loop_speed"] === "string"
   );
 }
 
@@ -21,51 +17,44 @@ type Props = {
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
-  const employeeOptions = answers["employee_interaction"] || [];
-
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
 
-      {/* Question 1 */}
       <MultipleChoiceQuestion
-        question="How do you monitor progress across your digital initiatives?"
+        question="How clearly are your customer journeys mapped across channels?"
         options={[
-          { value: "check_in", label: "We check in during reviews or launches" },
-          { value: "track_objectives", label: "We track objectives but not consistently" },
-          { value: "kpis_reported", label: "KPIs are regularly reported and reviewed" },
-          { value: "real_time_dashboard", label: "Real-time dashboards aligned to strategic goals" }
+          { value: "not_mapped", label: "Not mapped — we rely on assumptions" },
+          { value: "basic_mapping", label: "Some mapping for key touchpoints" },
+          { value: "comprehensive_mapping", label: "Comprehensive mapping across most channels" },
+          { value: "real_time_mapping", label: "Mapped in real-time and regularly updated" },
         ]}
-        value={answers["monitoring_progress"] || ""}
-        onChange={(val) => onAnswer("monitoring_progress", val)}
+        value={answers["journey_mapping_clarity"] || ""}
+        onChange={(val) => onAnswer("journey_mapping_clarity", val)}
       />
 
-      {/* Question 2 */}
-      <MultiSelectQuestion
-        question="Which of the following describe how employees interact with digital tools?"
-        options={[
-          { value: "task_specific", label: "They use task-specific apps and tools" },
-          { value: "tool_fatigue", label: "They’re overwhelmed or experience tool fatigue" },
-          { value: "workflow_embedded", label: "Digital tools are embedded into workflows" },
-          { value: "collaboration_stack", label: "We’ve standardized a digital collaboration stack" }
-        ]}
-        selected={employeeOptions}
-        onChange={(val) => onAnswer("employee_interaction", val)}
-        maxSelect={4}
-      />
-
-      {/* Question 3 */}
       <MultipleChoiceQuestion
-        question="How are digital tools supporting your company's agility and responsiveness?"
+        question="Do you have a formal voice of customer (VoC) program in place?"
         options={[
-          { value: "reactive", label: "We’re still fairly reactive" },
-          { value: "some_adaptability", label: "We can adapt in some areas, but not consistently" },
-          { value: "most_adaptable", label: "Most teams can pivot with minimal disruption" },
-          { value: "fully_adaptable", label: "We’re highly responsive with digital-first workflows" }
+          { value: "none", label: "No — feedback is ad hoc" },
+          { value: "informal", label: "Some structured feedback collection" },
+          { value: "program", label: "Defined VoC program across teams" },
+          { value: "integrated", label: "Fully integrated VoC with cross-functional usage" },
         ]}
-        value={answers["tool_support"] || ""}
-        onChange={(val) => onAnswer("tool_support", val)}
+        value={answers["voice_of_customer_program"] || ""}
+        onChange={(val) => onAnswer("voice_of_customer_program", val)}
       />
 
+      <MultipleChoiceQuestion
+        question="How quickly do you act on customer feedback or complaints?"
+        options={[
+          { value: "rarely_addressed", label: "Rarely addressed or slow to respond" },
+          { value: "sometimes_addressed", label: "Sometimes addressed within weeks" },
+          { value: "usually_addressed", label: "Usually addressed within days" },
+          { value: "immediate_response", label: "Immediate response with systems/processes" },
+        ]}
+        value={answers["feedback_loop_speed"] || ""}
+        onChange={(val) => onAnswer("feedback_loop_speed", val)}
+      />
     </div>
   );
 }

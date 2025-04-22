@@ -2,12 +2,14 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["team_digital_skills"] === "string" &&
-    typeof answers["data_visibility"] === "string" &&
-    typeof answers["tool_fragmentation"] === "string"
+    typeof answers["response_time_expectation"] === "string" &&
+    typeof answers["channel_consistency"] === "string" &&
+    typeof answers["customer_feedback_use"] === "string" &&
+    typeof answers["customer_experience_gap"] === "string"
   );
 }
 
@@ -19,44 +21,52 @@ type Props = {
 export default function Score1_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: team_digital_skills */}
+      {/* Question 4 */}
       <MultipleChoiceQuestion
-        question="How would you rate your team’s digital skill set?"
+        question="How quickly do you typically respond to customer inquiries or issues?"
         options={[
-          { value: "very_low", label: "Very low — we avoid using new tools" },
-          { value: "basic", label: "Basic — we rely on common tools but struggle with more advanced ones" },
-          { value: "functional", label: "Functional — most people can navigate modern systems" },
-          { value: "proficient", label: "Proficient — we are confident with modern digital tools" },
+          { value: "takes_days", label: "It can take days" },
+          { value: "usually_within_day", label: "Usually within a day" },
+          { value: "few_hours", label: "Within a few hours" },
+          { value: "real_time", label: "We aim for real-time responses" },
         ]}
-        value={answers["team_digital_skills"] || ""}
-        onChange={(val) => onAnswer("team_digital_skills", val)}
+        value={answers["response_time_expectation"] || ""}
+        onChange={(val) => onAnswer("response_time_expectation", val)}
       />
 
-      {/* Question 5: data_visibility */}
+      {/* Question 5 */}
       <MultipleChoiceQuestion
-        question="Do you have visibility into how different tools or platforms are being used?"
+        question="How consistent is your customer experience across channels (email, phone, social, etc.)?"
         options={[
-          { value: "no_visibility", label: "No visibility" },
-          { value: "anecdotal_only", label: "Only anecdotal or ad hoc understanding" },
-          { value: "occasional_reports", label: "Occasional reports or usage checks" },
-          { value: "centralized_dashboard", label: "Yes, we have centralized dashboards or monitoring" },
+          { value: "not_aligned", label: "Each channel feels different" },
+          { value: "mostly_similar", label: "Mostly similar, but with gaps" },
+          { value: "very_similar", label: "Very similar, customers feel the same regardless of channel" },
+          { value: "fully_integrated", label: "Fully integrated, seamless omnichannel experience" },
         ]}
-        value={answers["data_visibility"] || ""}
-        onChange={(val) => onAnswer("data_visibility", val)}
+        value={answers["channel_consistency"] || ""}
+        onChange={(val) => onAnswer("channel_consistency", val)}
       />
 
-      {/* Question 6: tool_fragmentation */}
+      {/* Question 6 */}
       <MultipleChoiceQuestion
-        question="How connected or fragmented is your tech stack?"
+        question="How do you use customer feedback in your business?"
         options={[
-          { value: "completely_fragmented", label: "Completely fragmented — nothing talks to anything" },
-          { value: "some_integrations", label: "Some tools are loosely integrated" },
-          { value: "most_integrated", label: "Most of our core tools are integrated" },
-          { value: "fully_connected", label: "Fully connected — data flows across systems" },
+          { value: "not_used", label: "We don’t really use it" },
+          { value: "informal_input", label: "Used informally when we get it" },
+          { value: "some_process", label: "There’s some process to review it" },
+          { value: "actively_applied", label: "We regularly use it to improve experiences" },
         ]}
-        value={answers["tool_fragmentation"] || ""}
-        onChange={(val) => onAnswer("tool_fragmentation", val)}
+        value={answers["customer_feedback_use"] || ""}
+        onChange={(val) => onAnswer("customer_feedback_use", val)}
+      />
+
+      {/* Question 7 */}
+      <TextAreaQuestion
+        question="What’s one area of the customer experience that feels the most broken or confusing today?"
+        placeholder="E.g., onboarding emails, support handoffs, checkout flow..."
+        value={answers["customer_experience_gap"] || ""}
+        onChange={(val) => onAnswer("customer_experience_gap", val)}
+        maxLength={300}
       />
     </div>
   );

@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["workflow_maturity"] === "string" &&
-    typeof answers["data_driven"] === "string" &&
-    typeof answers["data_quality"] === "string"
+    typeof answers["customer_insight_methods"] === "string" &&
+    typeof answers["support_channel_consistency"] === "string" &&
+    typeof answers["touchpoint_visibility"] === "string"
   );
 }
 
@@ -16,47 +16,46 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score1_5_Step01({ answers, onAnswer }: Props) {
+export default function Score_1_5_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 1: workflow_maturity */}
+      {/* Question 1: customer_insight_methods */}
       <MultipleChoiceQuestion
-        question="How well-defined are your business workflows or processes?"
+        question="How do you typically gather insights about your customers’ experiences?"
         options={[
-          { value: "not_defined", label: "They’re not defined at all" },
-          { value: "loosely_documented", label: "Loosely documented or tribal knowledge" },
-          { value: "standardized_key_areas", label: "Standardized in a few key areas" },
-          { value: "well_documented", label: "Well-documented and followed" },
+          { value: "no_formal_method", label: "We don’t have a formal method" },
+          { value: "anecdotal_feedback", label: "Anecdotal feedback or complaints" },
+          { value: "occasional_surveys", label: "Occasional surveys or reviews" },
+          { value: "structured_feedback", label: "Structured feedback collection across touchpoints" },
         ]}
-        value={answers["workflow_maturity"] || ""}
-        onChange={(val) => onAnswer("workflow_maturity", val)}
+        value={answers["customer_insight_methods"] || ""}
+        onChange={(val) => onAnswer("customer_insight_methods", val)}
       />
 
-      {/* Question 2: data_driven */}
+      {/* Question 2: support_channel_consistency */}
       <MultipleChoiceQuestion
-        question="How would you describe your approach to making business decisions?"
+        question="How consistent is your support experience across different channels (e.g. email, chat, phone)?"
         options={[
-          { value: "gut", label: "Mostly gut feel" },
-          { value: "some_data", label: "Some data, mostly intuition" },
-          { value: "data_guided", label: "We let data guide most decisions" },
-          { value: "data_driven", label: "Data is central to all decisions" },
+          { value: "not_consistent", label: "Not consistent — it varies by channel or agent" },
+          { value: "basic_guidelines", label: "We have basic guidelines, but no enforcement" },
+          { value: "mostly_consistent", label: "Mostly consistent with some gaps" },
+          { value: "very_consistent", label: "Very consistent — supported by processes or training" },
         ]}
-        value={answers["data_driven"] || ""}
-        onChange={(val) => onAnswer("data_driven", val)}
+        value={answers["support_channel_consistency"] || ""}
+        onChange={(val) => onAnswer("support_channel_consistency", val)}
       />
 
-      {/* Question 3: data_quality */}
+      {/* Question 3: touchpoint_visibility */}
       <MultipleChoiceQuestion
-        question="How confident are you in the accuracy and completeness of your business data?"
+        question="How well can you see a customer’s experience across different touchpoints (e.g. marketing, sales, support)?"
         options={[
-          { value: "not_confident", label: "Not confident" },
-          { value: "somewhat_confident", label: "Somewhat confident" },
-          { value: "mostly_confident", label: "Mostly confident" },
-          { value: "very_confident", label: "Very confident — we audit and maintain it regularly" },
+          { value: "no_visibility", label: "We don’t have any visibility" },
+          { value: "fragmented", label: "We can see some touchpoints but not all" },
+          { value: "mostly_tracked", label: "Most interactions are tracked in some system" },
+          { value: "fully_visible", label: "We have a full, unified view of the customer journey" },
         ]}
-        value={answers["data_quality"] || ""}
-        onChange={(val) => onAnswer("data_quality", val)}
+        value={answers["touchpoint_visibility"] || ""}
+        onChange={(val) => onAnswer("touchpoint_visibility", val)}
       />
     </div>
   );

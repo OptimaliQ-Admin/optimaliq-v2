@@ -5,9 +5,10 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["data_strategy"] === "string" &&
-    typeof answers["ai_initiatives"] === "string" &&
-    typeof answers["change_enablement"] === "string"
+    typeof answers["cx_multichannel_vs_omnichannel"] === "string" &&
+    typeof answers["cx_data_consolidation"] === "string" &&
+    typeof answers["cx_proactive_support"] === "string" &&
+    typeof answers["cx_kpis_measured"] === "string"
   );
 }
 
@@ -18,44 +19,58 @@ type Props = {
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 4 */}
+    <div className="space-y-8">
+
+      {/* Question 4: cx_multichannel_vs_omnichannel */}
       <MultipleChoiceQuestion
-        question="How would you describe your data and analytics strategy?"
+        question="How would you describe your multichannel or omnichannel experience?"
         options={[
-          { value: "no_strategy", label: "We have no real strategy" },
-          { value: "operational_metrics", label: "We track basic KPIs and operational metrics" },
-          { value: "integrated_reporting", label: "We use integrated dashboards across functions" },
-          { value: "real_time_insights", label: "We use real-time, predictive insights for decision-making" }
+          { value: "basic_multichannel", label: "Basic multichannel — different teams own different channels" },
+          { value: "partially_integrated", label: "Partially integrated — some data is shared between channels" },
+          { value: "unified_experience", label: "Unified experience across most touchpoints" },
+          { value: "seamless_omnichannel", label: "Seamless omnichannel experience — consistent and connected" },
         ]}
-        value={answers["data_strategy"] || ""}
-        onChange={(val) => onAnswer("data_strategy", val)}
+        value={answers["cx_multichannel_vs_omnichannel"] || ""}
+        onChange={(val) => onAnswer("cx_multichannel_vs_omnichannel", val)}
       />
 
-      {/* Question 5 */}
+      {/* Question 5: cx_data_consolidation */}
       <MultipleChoiceQuestion
-        question="Which best describes your use of AI or ML in your business today?"
+        question="How well is your customer data unified across platforms?"
         options={[
-          { value: "not_using", label: "We’re not using it" },
-          { value: "basic_experiments", label: "We’re experimenting with basic use cases" },
-          { value: "integrated_in_workflows", label: "It’s integrated into a few workflows" },
-          { value: "core_to_strategy", label: "It’s a core part of our competitive advantage" }
+          { value: "completely_disparate", label: "Completely disparate systems" },
+          { value: "some_connections", label: "Some systems are integrated" },
+          { value: "centralized_customer_view", label: "We have a centralized customer view" },
+          { value: "customer_data_platform", label: "CDP or equivalent consolidates and activates data" },
         ]}
-        value={answers["ai_initiatives"] || ""}
-        onChange={(val) => onAnswer("ai_initiatives", val)}
+        value={answers["cx_data_consolidation"] || ""}
+        onChange={(val) => onAnswer("cx_data_consolidation", val)}
       />
 
-      {/* Question 6 */}
+      {/* Question 6: cx_proactive_support */}
       <MultipleChoiceQuestion
-        question="How do you enable change management for digital initiatives?"
+        question="Do you proactively reach out to customers based on behavior or signals?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc — depends on who is leading the change" },
-          { value: "basic_training", label: "We do basic communications and training" },
-          { value: "formal_process", label: "We have a formal process for onboarding new tools" },
-          { value: "integrated_program", label: "We run integrated change enablement programs tied to business impact" }
+          { value: "no_proactive_outreach", label: "No — we wait for them to contact us" },
+          { value: "basic_follow_up", label: "Some basic follow-up or win-back campaigns" },
+          { value: "automated_triggers", label: "We use triggers to re-engage based on behaviors" },
+          { value: "proactive_and_predictive", label: "Yes — predictive outreach to improve experience" },
         ]}
-        value={answers["change_enablement"] || ""}
-        onChange={(val) => onAnswer("change_enablement", val)}
+        value={answers["cx_proactive_support"] || ""}
+        onChange={(val) => onAnswer("cx_proactive_support", val)}
+      />
+
+      {/* Question 7: cx_kpis_measured */}
+      <MultipleChoiceQuestion
+        question="How do you measure the effectiveness of your customer experience strategy?"
+        options={[
+          { value: "no_kpis", label: "We don’t measure CX effectiveness" },
+          { value: "basic_kpis", label: "We track basic KPIs (e.g., NPS, CSAT)" },
+          { value: "multiple_metrics", label: "We use multiple metrics across channels" },
+          { value: "cx_scorecard", label: "We track against a unified CX scorecard tied to revenue" },
+        ]}
+        value={answers["cx_kpis_measured"] || ""}
+        onChange={(val) => onAnswer("cx_kpis_measured", val)}
       />
     </div>
   );

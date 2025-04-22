@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["tech_stack_alignment"] === "string" &&
-    typeof answers["future_positioning"] === "string" &&
-    typeof answers["transformation_north_star"] === "string"
+    typeof answers["cx_roiexpectations"] === "string" &&
+    typeof answers["cx_ethics_privacy"] === "string" &&
+    typeof answers["cx_leadership_alignment"] === "string"
   );
 }
 
@@ -19,40 +18,45 @@ type Props = {
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 7 */}
+    <div className="space-y-8">
+
+      {/* Question 8: cx_roiexpectations */}
       <MultipleChoiceQuestion
-        question="How well is your technology stack aligned to your business model and future growth?"
+        question="How clearly is the ROI of CX initiatives defined and measured?"
         options={[
-          { value: "legacy_disconnected", label: "Mostly legacy systems with limited integration" },
-          { value: "basic_alignment", label: "Some alignment to current business needs" },
-          { value: "strong_alignment", label: "Strong support for current and future needs" },
-          { value: "fully_aligned", label: "Purpose-built to enable innovation and agility" }
+          { value: "not_defined", label: "Not defined — CX is considered a soft investment" },
+          { value: "loosely_estimated", label: "We loosely estimate impact from anecdotal outcomes" },
+          { value: "measured_against_goals", label: "We measure impact against customer and business goals" },
+          { value: "modeled_and_tracked", label: "ROI is modeled and tracked across key CX metrics" },
         ]}
-        value={answers["tech_stack_alignment"] || ""}
-        onChange={(val) => onAnswer("tech_stack_alignment", val)}
+        value={answers["cx_roiexpectations"] || ""}
+        onChange={(val) => onAnswer("cx_roiexpectations", val)}
       />
 
-      {/* Question 8 */}
+      {/* Question 9: cx_ethics_privacy */}
       <MultipleChoiceQuestion
-        question="What best describes how your digital capabilities position you for the next 3–5 years?"
+        question="How do you incorporate ethics, accessibility, or privacy into your CX strategy?"
         options={[
-          { value: "behind", label: "We’re behind peers and risk falling further" },
-          { value: "competitive", label: "We’re competitive but need to keep pace" },
-          { value: "ahead", label: "We’re ahead in key areas of capability" },
-          { value: "pioneering", label: "We’re redefining the standard in our industry" }
+          { value: "not_considered", label: "Not actively considered" },
+          { value: "basic_compliance", label: "We ensure basic compliance (e.g., GDPR, ADA)" },
+          { value: "included_in_design", label: "It’s part of design and content guidelines" },
+          { value: "core_principle", label: "It’s a core principle in our CX design and messaging" },
         ]}
-        value={answers["future_positioning"] || ""}
-        onChange={(val) => onAnswer("future_positioning", val)}
+        value={answers["cx_ethics_privacy"] || ""}
+        onChange={(val) => onAnswer("cx_ethics_privacy", val)}
       />
 
-      {/* Question 9 */}
-      <TextAreaQuestion
-        question="What’s your digital transformation North Star for the next 12–24 months?"
-        placeholder="E.g., Become a fully connected and data-driven organization."
-        value={answers["transformation_north_star"] || ""}
-        onChange={(val) => onAnswer("transformation_north_star", val)}
-        maxLength={300}
+      {/* Question 10: cx_leadership_alignment */}
+      <MultipleChoiceQuestion
+        question="How aligned is your leadership team on the value of customer experience?"
+        options={[
+          { value: "misaligned", label: "Not aligned — viewed as a cost center" },
+          { value: "some_alignment", label: "Some alignment, but not consistent across functions" },
+          { value: "broad_alignment", label: "Broad alignment with CX viewed as a growth lever" },
+          { value: "full_alignment", label: "Full alignment — CX is part of strategic planning" },
+        ]}
+        value={answers["cx_leadership_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_leadership_alignment", val)}
       />
     </div>
   );

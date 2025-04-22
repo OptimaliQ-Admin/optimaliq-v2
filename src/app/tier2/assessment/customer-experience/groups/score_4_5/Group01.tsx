@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["platform_architecture"] === "string" &&
-    typeof answers["integration_management"] === "string" &&
-    typeof answers["governance_model"] === "string"
+    typeof answers["cx_real_time_orchestration"] === "string" &&
+    typeof answers["cx_feedback_system"] === "string" &&
+    typeof answers["cx_customer_memory"] === "string"
   );
 }
 
@@ -18,44 +18,45 @@ type Props = {
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 1 */}
+    <div className="space-y-8">
+
+      {/* Question 1: cx_real_time_orchestration */}
       <MultipleChoiceQuestion
-        question="Which best describes your current digital platform architecture?"
+        question="How real-time is your customer experience orchestration?"
         options={[
-          { value: "standalone", label: "Standalone systems or manual tools" },
-          { value: "partially_connected", label: "Some connected systems, but data is fragmented" },
-          { value: "integrated_platforms", label: "Most tools are connected via APIs or automation" },
-          { value: "modular_flexible", label: "Modular, API-first platform that supports fast integration and flexibility" }
+          { value: "batch_or_manual", label: "Mostly batch-driven or manual" },
+          { value: "delayed_automations", label: "Automated but with delayed execution" },
+          { value: "triggered_in_real_time", label: "Real-time triggers in some flows" },
+          { value: "fully_real_time", label: "Fully real-time and context-aware" },
         ]}
-        value={answers["platform_architecture"] || ""}
-        onChange={(val) => onAnswer("platform_architecture", val)}
+        value={answers["cx_real_time_orchestration"] || ""}
+        onChange={(val) => onAnswer("cx_real_time_orchestration", val)}
       />
 
-      {/* Question 2 */}
+      {/* Question 2: cx_feedback_system */}
       <MultipleChoiceQuestion
-        question="How do you manage integrations and dependencies across systems?"
+        question="How do you capture and act on customer feedback?"
         options={[
-          { value: "not_managed", label: "They’re not really managed" },
-          { value: "manual_updates", label: "We handle updates manually as issues come up" },
-          { value: "coordination_team", label: "We coordinate system updates via IT or RevOps" },
-          { value: "central_framework", label: "We have a central integration strategy and frameworks in place" }
+          { value: "infrequent_surveys", label: "Occasional surveys with limited follow-up" },
+          { value: "feedback_collected_but_unstructured", label: "We collect feedback but lack structure" },
+          { value: "structured_feedback_loops", label: "Structured feedback loops with improvements" },
+          { value: "closed_loop_feedback", label: "Closed-loop systems with CX performance tracking" },
         ]}
-        value={answers["integration_management"] || ""}
-        onChange={(val) => onAnswer("integration_management", val)}
+        value={answers["cx_feedback_system"] || ""}
+        onChange={(val) => onAnswer("cx_feedback_system", val)}
       />
 
-      {/* Question 3 */}
+      {/* Question 3: cx_customer_memory */}
       <MultipleChoiceQuestion
-        question="Which best describes your governance model for digital platforms?"
+        question="Does your system recognize customers and personalize based on history?"
         options={[
-          { value: "no_governance", label: "We don’t really have governance processes" },
-          { value: "basic_access_controls", label: "Basic access controls and admin rules" },
-          { value: "shared_responsibility", label: "Shared ownership between business and tech teams" },
-          { value: "mature_governance", label: "Clear roles, rules, and enforcement for all tools and data" }
+          { value: "no_memory", label: "No — every interaction is treated as new" },
+          { value: "some_personalization", label: "Some history-based personalization" },
+          { value: "persistent_profiles", label: "Persistent profiles used in multiple channels" },
+          { value: "omnichannel_memory", label: "Omnichannel memory drives seamless CX" },
         ]}
-        value={answers["governance_model"] || ""}
-        onChange={(val) => onAnswer("governance_model", val)}
+        value={answers["cx_customer_memory"] || ""}
+        onChange={(val) => onAnswer("cx_customer_memory", val)}
       />
     </div>
   );

@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["vision_alignment"] === "string" &&
-    typeof answers["emerging_tech"] === "string" &&
-    typeof answers["execution_rigidity"] === "string"
+    typeof answers["cx_strategy_alignment"] === "string" &&
+    typeof answers["cx_team_model"] === "string" &&
+    typeof answers["cx_data_activation"] === "string"
   );
 }
 
@@ -19,40 +18,45 @@ type Props = {
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 1 */}
+    <div className="space-y-8">
+
+      {/* Question 1: cx_strategy_alignment */}
       <MultipleChoiceQuestion
-        question="How tightly is your digital transformation strategy aligned with your executive team’s vision?"
+        question="How aligned is your customer experience strategy with your overall business goals?"
         options={[
-          { value: "no_alignment", label: "It’s not really aligned" },
-          { value: "periodic_checkins", label: "We do check-ins but often reactively" },
-          { value: "strong_alignment", label: "There’s strong ongoing alignment" },
-          { value: "co_created", label: "It’s co-created with leadership and drives org strategy" }
+          { value: "no_alignment", label: "Not aligned — CX is separate from strategy" },
+          { value: "some_alignment", label: "Somewhat — CX supports high-level goals" },
+          { value: "strong_alignment", label: "Strong — CX initiatives support key priorities" },
+          { value: "fully_integrated", label: "Fully aligned — CX is embedded in our strategic roadmap" },
         ]}
-        value={answers["vision_alignment"] || ""}
-        onChange={(val) => onAnswer("vision_alignment", val)}
+        value={answers["cx_strategy_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_strategy_alignment", val)}
       />
 
-      {/* Question 2 */}
+      {/* Question 2: cx_team_model */}
       <MultipleChoiceQuestion
-        question="How would you describe your appetite for experimentation with emerging technology?"
+        question="How is your CX team structured?"
         options={[
-          { value: "low_risk", label: "We avoid risk and stick to proven tools" },
-          { value: "selective", label: "We experiment selectively with clear ROI" },
-          { value: "early_adopter", label: "We’re early adopters and build pilots regularly" },
-          { value: "pioneer", label: "We’re innovation leaders and often create new standards" }
+          { value: "no_dedicated_team", label: "No dedicated CX team" },
+          { value: "ad_hoc_roles", label: "Ad hoc or part-time CX ownership" },
+          { value: "centralized_team", label: "Centralized CX team with dedicated leads" },
+          { value: "distributed_excellence", label: "CX embedded across functions with CoE support" },
         ]}
-        value={answers["emerging_tech"] || ""}
-        onChange={(val) => onAnswer("emerging_tech", val)}
+        value={answers["cx_team_model"] || ""}
+        onChange={(val) => onAnswer("cx_team_model", val)}
       />
 
-      {/* Question 3 */}
-      <TextAreaQuestion
-        question="What’s the biggest internal challenge you still face when executing your digital strategy?"
-        placeholder="E.g., Leadership buy-in, resource prioritization, integration issues"
-        value={answers["execution_rigidity"] || ""}
-        onChange={(val) => onAnswer("execution_rigidity", val)}
-        maxLength={300}
+      {/* Question 3: cx_data_activation */}
+      <MultipleChoiceQuestion
+        question="How do you activate customer data to drive personalized experiences?"
+        options={[
+          { value: "manual_use", label: "Mostly manual use of customer data" },
+          { value: "segment_driven", label: "Segment-driven personalization in campaigns" },
+          { value: "dynamic_journeys", label: "Dynamic journeys based on behavior and attributes" },
+          { value: "real_time_activation", label: "Real-time, AI-driven personalization at scale" },
+        ]}
+        value={answers["cx_data_activation"] || ""}
+        onChange={(val) => onAnswer("cx_data_activation", val)}
       />
     </div>
   );

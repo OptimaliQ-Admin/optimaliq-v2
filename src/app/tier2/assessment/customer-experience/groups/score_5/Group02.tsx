@@ -2,14 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["ai_impact"] === "string" &&
-    typeof answers["talent_strategy"] === "string" &&
-    Array.isArray(answers["external_influence"]) &&
-    answers["external_influence"].length > 0
+    typeof answers["cx_metrics_leadership"] === "string" &&
+    typeof answers["cx_decision_framework"] === "string" &&
+    typeof answers["cx_journey_optimization"] === "string" &&
+    typeof answers["cx_technology_scaling"] === "string"
   );
 }
 
@@ -19,49 +18,59 @@ type Props = {
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
-  const externalInfluence = answers["external_influence"] || [];
-
   return (
-    <div className="space-y-10">
-      {/* Question 4 */}
+    <div className="space-y-8">
+
+      {/* Question 4: cx_metrics_leadership */}
       <MultipleChoiceQuestion
-        question="What impact is AI having on your transformation efforts?"
+        question="How often are CX metrics discussed at the leadership level?"
         options={[
-          { value: "not_applicable", label: "It’s not applicable yet" },
-          { value: "selective_use", label: "We use it in select functions" },
-          { value: "broadly_embedded", label: "It’s broadly embedded in workflows" },
-          { value: "core_enabler", label: "It’s a core enabler of our digital strategy" }
+          { value: "rarely_discussed", label: "Rarely or never" },
+          { value: "periodically", label: "Periodically (quarterly or ad hoc)" },
+          { value: "regular_checkins", label: "Regular check-ins (monthly or OKRs)" },
+          { value: "embedded_in_strategy", label: "CX metrics are embedded in strategic reviews" },
         ]}
-        value={answers["ai_impact"] || ""}
-        onChange={(val) => onAnswer("ai_impact", val)}
+        value={answers["cx_metrics_leadership"] || ""}
+        onChange={(val) => onAnswer("cx_metrics_leadership", val)}
       />
 
-      {/* Question 5 */}
+      {/* Question 5: cx_decision_framework */}
       <MultipleChoiceQuestion
-        question="Which statement best reflects your digital talent strategy?"
+        question="Do you use a formal framework to prioritize CX initiatives?"
         options={[
-          { value: "limited_internal", label: "We rely heavily on external partners" },
-          { value: "growing_internal", label: "We’re building internal skills gradually" },
-          { value: "hybrid_model", label: "We use a hybrid of internal teams and partners" },
-          { value: "internal_center", label: "We have strong internal capabilities across domains" }
+          { value: "no_framework", label: "No — it’s based on gut or urgency" },
+          { value: "basic_prioritization", label: "Basic prioritization using time/cost/impact" },
+          { value: "formal_framework", label: "We use a formal framework to score ideas" },
+          { value: "data_driven_prioritization", label: "We use data, models, and CX value scores" },
         ]}
-        value={answers["talent_strategy"] || ""}
-        onChange={(val) => onAnswer("talent_strategy", val)}
+        value={answers["cx_decision_framework"] || ""}
+        onChange={(val) => onAnswer("cx_decision_framework", val)}
       />
 
-      {/* Question 6 */}
-      <MultiSelectQuestion
-        question="Which external factors most influence your transformation roadmap?"
+      {/* Question 6: cx_journey_optimization */}
+      <MultipleChoiceQuestion
+        question="How do you optimize customer journeys across channels?"
         options={[
-          { value: "regulatory_changes", label: "Regulatory or compliance changes" },
-          { value: "market_shifts", label: "Market or customer behavior shifts" },
-          { value: "tech_innovation", label: "Technology breakthroughs" },
-          { value: "competitive_pressure", label: "Competitive pressure or disruption" },
-          { value: "board_mandate", label: "Board-level mandates or goals" }
+          { value: "siloed_channels", label: "Channels operate independently" },
+          { value: "basic_coordination", label: "Basic coordination of key touchpoints" },
+          { value: "journey_maps", label: "We use journey maps and integrated reporting" },
+          { value: "cross_channel_ai", label: "Cross-channel orchestration with AI optimization" },
         ]}
-        selected={externalInfluence}
-        onChange={(val) => onAnswer("external_influence", val)}
-        maxSelect={5}
+        value={answers["cx_journey_optimization"] || ""}
+        onChange={(val) => onAnswer("cx_journey_optimization", val)}
+      />
+
+      {/* Question 7: cx_technology_scaling */}
+      <MultipleChoiceQuestion
+        question="What best describes your technology for delivering customer experience at scale?"
+        options={[
+          { value: "fragmented_tools", label: "Fragmented tools, mostly manual" },
+          { value: "some_automation", label: "Some automation and integrations" },
+          { value: "cx_platforms", label: "Integrated platforms for CX delivery" },
+          { value: "ai_and_platforms", label: "AI-enabled platforms powering real-time CX" },
+        ]}
+        value={answers["cx_technology_scaling"] || ""}
+        onChange={(val) => onAnswer("cx_technology_scaling", val)}
       />
     </div>
   );

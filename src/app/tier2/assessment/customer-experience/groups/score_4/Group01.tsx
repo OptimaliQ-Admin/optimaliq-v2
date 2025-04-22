@@ -5,9 +5,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 
 export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["ai_alignment"] === "string" &&
-    typeof answers["data_interoperability"] === "string" &&
-    typeof answers["accessibility"] === "string"
+    typeof answers["cx_strategic_initiatives"] === "string" &&
+    typeof answers["cx_personalization_maturity"] === "string" &&
+    typeof answers["cx_metrics_alignment"] === "string"
   );
 }
 
@@ -16,49 +16,45 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score4_Step01({ answers, onAnswer }: Props) {
+export default function Score4_0_Step01({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
 
-      {/* Question 1 */}
       <MultipleChoiceQuestion
-        question="How aligned are your digital systems and workflows with AI/automation readiness?"
+        question="What role does CX play in your strategic initiatives?"
         options={[
-          { value: "not_considered", label: "AI/automation hasn’t been considered" },
-          { value: "exploring_use_cases", label: "We’re exploring a few use cases" },
-          { value: "intentional_design", label: "Processes are being intentionally designed with AI in mind" },
-          { value: "ai_native", label: "Workflows are AI-native or deeply integrated" }
+          { value: "cx_not_considered", label: "CX isn’t typically considered strategically" },
+          { value: "cx_mentioned", label: "CX is mentioned, but not prioritized" },
+          { value: "cx_initiatives_included", label: "CX initiatives are included in planning" },
+          { value: "cx_strategic_driver", label: "CX is a core driver of strategy and investment" },
         ]}
-        value={answers["ai_alignment"] || ""}
-        onChange={(val) => onAnswer("ai_alignment", val)}
+        value={answers["cx_strategic_initiatives"] || ""}
+        onChange={(val) => onAnswer("cx_strategic_initiatives", val)}
       />
 
-      {/* Question 2 */}
       <MultipleChoiceQuestion
-        question="How well do your tools, systems, and data work together across departments?"
+        question="How mature is your personalization strategy across channels?"
         options={[
-          { value: "fragmented", label: "Data is fragmented and stored in silos" },
-          { value: "integrated_ops", label: "Some integration between core tools or functions" },
-          { value: "unified_layer", label: "We use a unified data layer or central platform" },
-          { value: "seamless_visibility", label: "All departments share a real-time view of critical data" }
+          { value: "minimal", label: "Minimal — mostly one-size-fits-all messaging" },
+          { value: "basic", label: "Basic — we segment and tailor occasionally" },
+          { value: "coordinated", label: "Coordinated — we personalize by journey stage" },
+          { value: "dynamic", label: "Dynamic — personalization adapts in real time" },
         ]}
-        value={answers["data_interoperability"] || ""}
-        onChange={(val) => onAnswer("data_interoperability", val)}
+        value={answers["cx_personalization_maturity"] || ""}
+        onChange={(val) => onAnswer("cx_personalization_maturity", val)}
       />
 
-      {/* Question 3 */}
       <MultipleChoiceQuestion
-        question="Can your teams securely access the data, tools, or insights they need from anywhere?"
+        question="How aligned are your CX and business performance metrics?"
         options={[
-          { value: "mostly_on_prem", label: "Mostly on-premise or physically restricted" },
-          { value: "limited_remote", label: "Some cloud-based access but limited control" },
-          { value: "secure_cloud", label: "Most tools are accessible with secure cloud-based authentication" },
-          { value: "zero_trust", label: "We use zero-trust models and device-agnostic access" }
+          { value: "not_tracked", label: "We don’t track CX metrics" },
+          { value: "loosely_tracked", label: "They’re tracked but not connected to performance" },
+          { value: "linked_to_kpis", label: "They’re linked to some key KPIs" },
+          { value: "fully_integrated", label: "They’re fully integrated with business metrics" },
         ]}
-        value={answers["accessibility"] || ""}
-        onChange={(val) => onAnswer("accessibility", val)}
+        value={answers["cx_metrics_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_metrics_alignment", val)}
       />
-
     </div>
   );
 }

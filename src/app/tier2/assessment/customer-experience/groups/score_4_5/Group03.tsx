@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_readiness"] === "string" &&
-    typeof answers["partner_ecosystem"] === "string" &&
-    typeof answers["future_proofing"] === "string"
+    typeof answers["cx_predictive_insights"] === "string" &&
+    typeof answers["cx_experience_testing"] === "string" &&
+    typeof answers["cx_journey_mapping"] === "string"
   );
 }
 
@@ -19,40 +18,45 @@ type Props = {
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
-      {/* Question 7 */}
+    <div className="space-y-8">
+
+      {/* Question 8: cx_predictive_insights */}
       <MultipleChoiceQuestion
-        question="How would you describe your readiness to integrate new technologies (e.g., automation, personalization, AI)?"
+        question="Do you use predictive analytics or AI to improve customer experience?"
         options={[
-          { value: "resistant", label: "We’re typically resistant or slow to adopt" },
-          { value: "selective", label: "We’re selective and cautious" },
-          { value: "proactive", label: "We’re proactive and test frequently" },
-          { value: "embedded", label: "We’re fast-moving and integration-ready by default" }
+          { value: "no_prediction", label: "No — we react based on past activity" },
+          { value: "basic_segmentation", label: "We use segmentation and behavior triggers" },
+          { value: "predictive_modeling", label: "We use some predictive modeling" },
+          { value: "ai_driven_experience", label: "Yes — AI actively drives CX decisions" },
         ]}
-        value={answers["integration_readiness"] || ""}
-        onChange={(val) => onAnswer("integration_readiness", val)}
+        value={answers["cx_predictive_insights"] || ""}
+        onChange={(val) => onAnswer("cx_predictive_insights", val)}
       />
 
-      {/* Question 8 */}
+      {/* Question 9: cx_experience_testing */}
       <MultipleChoiceQuestion
-        question="How do you approach external tech partnerships (e.g., platforms, vendors, consultants)?"
+        question="How often do you test and optimize your CX efforts?"
         options={[
-          { value: "minimal_use", label: "We rarely use outside partners" },
-          { value: "as_needed", label: "We bring in help when needed" },
-          { value: "strategic_support", label: "We engage partners for strategic support" },
-          { value: "deep_ecosystem", label: "We have a deep ecosystem of partners integrated into our roadmap" }
+          { value: "no_testing", label: "We don’t run formal tests" },
+          { value: "ad_hoc_testing", label: "Occasional tests (e.g., A/B emails)" },
+          { value: "regular_testing", label: "We run regular tests across touchpoints" },
+          { value: "embedded_optimization", label: "Optimization is embedded into our workflows" },
         ]}
-        value={answers["partner_ecosystem"] || ""}
-        onChange={(val) => onAnswer("partner_ecosystem", val)}
+        value={answers["cx_experience_testing"] || ""}
+        onChange={(val) => onAnswer("cx_experience_testing", val)}
       />
 
-      {/* Question 9 */}
-      <TextAreaQuestion
-        question="What’s one technology or trend you believe your company will need to adopt in the next 12–24 months?"
-        placeholder="E.g., Generative AI, CDP, Blockchain, Privacy infrastructure"
-        value={answers["future_proofing"] || ""}
-        onChange={(val) => onAnswer("future_proofing", val)}
-        maxLength={300}
+      {/* Question 10: cx_journey_mapping */}
+      <MultipleChoiceQuestion
+        question="Do you map and monitor the entire customer journey?"
+        options={[
+          { value: "no_journey_map", label: "No — we focus on single-channel metrics" },
+          { value: "basic_journey_map", label: "We’ve mapped major parts of the journey" },
+          { value: "monitored_journey", label: "We monitor journey stages across touchpoints" },
+          { value: "live_journey_orchestration", label: "We orchestrate and optimize the full journey in real-time" },
+        ]}
+        value={answers["cx_journey_mapping"] || ""}
+        onChange={(val) => onAnswer("cx_journey_mapping", val)}
       />
     </div>
   );

@@ -2,14 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["exec_alignment"] === "string" &&
-    typeof answers["future_investments"] === "string" &&
-    typeof answers["dt_priority"] === "string" &&
-    answers["dt_priority"].trim().length > 0
+    typeof answers["customer_retention_focus"] === "string" &&
+    typeof answers["team_cx_alignment"] === "string" &&
+    typeof answers["cx_reporting"] === "string"
   );
 }
 
@@ -18,43 +16,46 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score2_Step03({ answers, onAnswer }: Props) {
+export default function Score_2_0_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 6: exec_alignment */}
+      {/* Question 8: customer_retention_focus */}
       <MultipleChoiceQuestion
-        question="How aligned is your executive or leadership team around digital transformation goals?"
+        question="How much focus does your team place on customer retention?"
         options={[
-          { value: "not_aligned", label: "Not at all — we haven’t discussed it" },
-          { value: "somewhat_aligned", label: "Somewhat — a few people are championing it" },
-          { value: "mostly_aligned", label: "Mostly — leadership is generally on board" },
-          { value: "fully_aligned", label: "Fully — it’s a shared top priority" },
+          { value: "very_little", label: "Very little — we mainly focus on new customer acquisition" },
+          { value: "some_focus", label: "Some — we try to follow up and offer promotions" },
+          { value: "dedicated_efforts", label: "Dedicated efforts — we track retention and take action" },
+          { value: "strategic_retention", label: "It’s a strategic priority with campaigns and KPIs" },
         ]}
-        value={answers["exec_alignment"] || ""}
-        onChange={(val) => onAnswer("exec_alignment", val)}
+        value={answers["customer_retention_focus"] || ""}
+        onChange={(val) => onAnswer("customer_retention_focus", val)}
       />
 
-      {/* Question 7: future_investments */}
+      {/* Question 9: team_cx_alignment */}
       <MultipleChoiceQuestion
-        question="What best describes your investment plans in digital transformation?"
+        question="How aligned are your teams (marketing, sales, support) on delivering a consistent customer experience?"
         options={[
-          { value: "no_plan", label: "We don’t have a defined plan yet" },
-          { value: "considering", label: "We’re exploring options for the future" },
-          { value: "in_progress", label: "We’re actively investing and implementing" },
-          { value: "ongoing", label: "It’s an ongoing and strategic part of our roadmap" },
+          { value: "no_alignment", label: "Not aligned — each team works in silos" },
+          { value: "occasional_alignment", label: "Occasionally aligned — we share updates across teams" },
+          { value: "mostly_aligned", label: "Mostly aligned — some shared goals or processes" },
+          { value: "fully_aligned", label: "Fully aligned — we collaborate closely on CX delivery" },
         ]}
-        value={answers["future_investments"] || ""}
-        onChange={(val) => onAnswer("future_investments", val)}
+        value={answers["team_cx_alignment"] || ""}
+        onChange={(val) => onAnswer("team_cx_alignment", val)}
       />
 
-      {/* Question 8: dt_priority */}
-      <TextAreaQuestion
-        question="What is the single most important digital initiative your team should prioritize next?"
-        placeholder="E.g., Upgrading CRM, automating marketing, consolidating data..."
-        value={answers["dt_priority"] || ""}
-        onChange={(val) => onAnswer("dt_priority", val)}
-        maxLength={300}
+      {/* Question 10: cx_reporting */}
+      <MultipleChoiceQuestion
+        question="How do you track and report on customer experience performance?"
+        options={[
+          { value: "no_tracking", label: "We don’t really track it" },
+          { value: "ad_hoc", label: "Ad hoc — based on feedback or complaints" },
+          { value: "basic_reporting", label: "Basic reporting — some metrics reviewed regularly" },
+          { value: "advanced_reporting", label: "Advanced — clear KPIs tracked across the journey" },
+        ]}
+        value={answers["cx_reporting"] || ""}
+        onChange={(val) => onAnswer("cx_reporting", val)}
       />
     </div>
   );

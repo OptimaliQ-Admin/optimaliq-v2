@@ -2,14 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_level"] === "string" &&
-    typeof answers["manual_process_impact"] === "string" &&
-    Array.isArray(answers["tools_used"]) &&
-    answers["tools_used"].length > 0
+    typeof answers["customer_follow_up"] === "string" &&
+    typeof answers["customer_journey_mapping"] === "string" &&
+    typeof answers["satisfaction_insights"] === "string" &&
+    typeof answers["customer_feedback_channel"] === "string"
   );
 }
 
@@ -18,50 +17,59 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score1_5_Step02({ answers, onAnswer }: Props) {
+export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: integration_level */}
+      {/* Question 4: customer_follow_up */}
       <MultipleChoiceQuestion
-        question="How integrated are the systems and tools you use across departments?"
+        question="What’s your typical process after a customer has a negative experience?"
         options={[
-          { value: "not_integrated", label: "Not integrated — everything is siloed" },
-          { value: "partially_integrated", label: "Some systems talk to each other" },
-          { value: "mostly_integrated", label: "Most data flows between systems" },
-          { value: "fully_integrated", label: "Fully integrated — we have a centralized view" },
+          { value: "no_process", label: "We don’t really have a follow-up process" },
+          { value: "case_by_case", label: "Handled case-by-case depending on the agent" },
+          { value: "some_guidelines", label: "We have guidelines but no automation" },
+          { value: "proactive_recovery", label: "We follow structured recovery workflows" },
         ]}
-        value={answers["integration_level"] || ""}
-        onChange={(val) => onAnswer("integration_level", val)}
+        value={answers["customer_follow_up"] || ""}
+        onChange={(val) => onAnswer("customer_follow_up", val)}
       />
 
-      {/* Question 5: manual_process_impact */}
+      {/* Question 5: customer_journey_mapping */}
       <MultipleChoiceQuestion
-        question="How do manual processes impact your team’s productivity?"
+        question="Do you have a clear map of your customer journey stages?"
         options={[
-          { value: "heavily_slowing", label: "They slow us down significantly" },
-          { value: "some_impact", label: "They cause some delays or inefficiencies" },
-          { value: "minor_impact", label: "Minor inconvenience but manageable" },
-          { value: "no_impact", label: "No major impact — most processes are automated" },
+          { value: "no_journey_map", label: "No — we’ve never mapped it" },
+          { value: "loose_idea", label: "We have a loose idea of the journey" },
+          { value: "basic_map", label: "We’ve mapped a basic journey with key touchpoints" },
+          { value: "full_map", label: "Yes — we have a detailed, strategic customer journey map" },
         ]}
-        value={answers["manual_process_impact"] || ""}
-        onChange={(val) => onAnswer("manual_process_impact", val)}
+        value={answers["customer_journey_mapping"] || ""}
+        onChange={(val) => onAnswer("customer_journey_mapping", val)}
       />
 
-      {/* Question 6: tools_used */}
-      <MultiSelectQuestion
-        question="Which tools or platforms does your business currently use?"
+      {/* Question 6: satisfaction_insights */}
+      <MultipleChoiceQuestion
+        question="How do you measure customer satisfaction today?"
         options={[
-          { value: "email", label: "Email marketing (e.g. Mailchimp)" },
-          { value: "crm", label: "CRM (e.g. Salesforce, HubSpot)" },
-          { value: "ecommerce", label: "Ecommerce platform (e.g. Shopify)" },
-          { value: "erp", label: "ERP or inventory system" },
-          { value: "analytics", label: "Analytics or BI tools (e.g. GA4, Looker)" },
-          { value: "none", label: "None of the above" },
+          { value: "no_tracking", label: "We don’t track satisfaction" },
+          { value: "occasional_reviews", label: "We look at reviews or complaints occasionally" },
+          { value: "basic_surveys", label: "We run surveys or feedback forms occasionally" },
+          { value: "ongoing_tracking", label: "We track satisfaction consistently and review it regularly" },
         ]}
-        selected={answers["tools_used"] || []}
-        onChange={(val) => onAnswer("tools_used", val)}
-        maxSelect={5}
+        value={answers["satisfaction_insights"] || ""}
+        onChange={(val) => onAnswer("satisfaction_insights", val)}
+      />
+
+      {/* Question 7: customer_feedback_channel */}
+      <MultipleChoiceQuestion
+        question="Where does most of your customer feedback come from?"
+        options={[
+          { value: "we_dont_collect", label: "We don’t actively collect feedback" },
+          { value: "inbound_support", label: "It comes through support channels or complaints" },
+          { value: "surveys_or_nps", label: "We send surveys or track NPS after interactions" },
+          { value: "multiple_feedback_loops", label: "We gather feedback through multiple structured methods" },
+        ]}
+        value={answers["customer_feedback_channel"] || ""}
+        onChange={(val) => onAnswer("customer_feedback_channel", val)}
       />
     </div>
   );

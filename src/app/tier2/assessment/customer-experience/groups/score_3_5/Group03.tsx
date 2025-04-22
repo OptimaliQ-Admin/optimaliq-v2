@@ -2,13 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["integration_quality"] === "string" &&
-    typeof answers["execution_speed"] === "string" &&
-    typeof answers["platform_strategy"] === "string"
+    typeof answers["cx_feedback_loops"] === "string" &&
+    typeof answers["cx_innovation"] === "string" &&
+    typeof answers["cx_alignment"] === "string"
   );
 }
 
@@ -19,43 +18,43 @@ type Props = {
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
 
-      {/* Question 7 */}
       <MultipleChoiceQuestion
-        question="How well integrated are your digital systems and platforms?"
+        question="How are customer feedback loops managed?"
         options={[
-          { value: "manual", label: "We copy/paste or manually move data" },
-          { value: "some_automation", label: "Some automation or point integrations exist" },
-          { value: "moderate_sync", label: "Most tools sync regularly with shared data" },
-          { value: "full_integration", label: "Systems are unified with strong data governance" }
+          { value: "ad_hoc", label: "Ad hoc or not formally managed" },
+          { value: "surveys_only", label: "We use surveys occasionally" },
+          { value: "ongoing_cx_loops", label: "We have ongoing feedback loops" },
+          { value: "feedback_drives_change", label: "Feedback directly drives roadmap or strategy" },
         ]}
-        value={answers["integration_quality"] || ""}
-        onChange={(val) => onAnswer("integration_quality", val)}
+        value={answers["cx_feedback_loops"] || ""}
+        onChange={(val) => onAnswer("cx_feedback_loops", val)}
       />
 
-      {/* Question 8 */}
       <MultipleChoiceQuestion
-        question="How quickly can you launch, update, or scale digital initiatives?"
+        question="How often do you introduce new CX innovations or improvements?"
         options={[
-          { value: "months", label: "It takes months due to dependencies and bottlenecks" },
-          { value: "weeks", label: "Weeks — we can move with some agility" },
-          { value: "sprint_based", label: "Initiatives run in defined sprints or project plans" },
-          { value: "continuous", label: "We operate in a continuous delivery model" }
+          { value: "rarely", label: "Rarely or only reactively" },
+          { value: "sometimes", label: "Sometimes, during planning cycles" },
+          { value: "frequently", label: "Frequently — part of experimentation" },
+          { value: "cx_innovation_culture", label: "CX innovation is a continuous process" },
         ]}
-        value={answers["execution_speed"] || ""}
-        onChange={(val) => onAnswer("execution_speed", val)}
+        value={answers["cx_innovation"] || ""}
+        onChange={(val) => onAnswer("cx_innovation", val)}
       />
 
-      {/* Question 9 */}
-      <TextAreaQuestion
-        question="What’s one thing that would make your digital platform or tech stack more scalable or future-ready?"
-        placeholder="e.g., More modular systems, less legacy..."
-        value={answers["platform_strategy"] || ""}
-        onChange={(val) => onAnswer("platform_strategy", val)}
-        maxLength={400}
+      <MultipleChoiceQuestion
+        question="How aligned are your teams around delivering a consistent CX?"
+        options={[
+          { value: "low_alignment", label: "Teams are siloed or CX isn’t a shared priority" },
+          { value: "some_alignment", label: "Some alignment on high-level goals" },
+          { value: "cross_functional_support", label: "Cross-functional support for CX" },
+          { value: "full_alignment", label: "Everyone is aligned with shared CX goals and metrics" },
+        ]}
+        value={answers["cx_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_alignment", val)}
       />
-
     </div>
   );
 }

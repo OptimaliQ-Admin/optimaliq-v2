@@ -2,15 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["tech_stack_alignment"] === "string" &&
-    typeof answers["organization_rhythm"] === "string" &&
-    typeof answers["adoption_monitoring"] === "string" &&
-    typeof answers["most_valuable_tool"] === "string" &&
-    answers["most_valuable_tool"].trim().length > 0
+    typeof answers["cx_tools_alignment"] === "string" &&
+    typeof answers["customer_feedback_channels"] === "string" &&
+    typeof answers["experience_evolution"] === "string"
   );
 }
 
@@ -21,54 +18,42 @@ type Props = {
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10 p-6 max-w-2xl mx-auto">
+    <div className="space-y-8">
 
-      {/* Question 7: tech_stack_alignment */}
       <MultipleChoiceQuestion
-        question="How well does your current tech stack support your transformation goals?"
+        question="How well are your CX tools (surveys, CRM, support) aligned with business goals?"
         options={[
-          { value: "not_aligned", label: "Not aligned — we’re using legacy or fragmented tools" },
-          { value: "somewhat", label: "Somewhat aligned — a few key platforms are connected" },
-          { value: "mostly", label: "Mostly aligned — our core platforms are integrated" },
-          { value: "fully_aligned", label: "Fully aligned — designed to support our transformation" },
+          { value: "not_aligned", label: "Not aligned — disconnected from goals" },
+          { value: "loosely_aligned", label: "Loosely aligned — used for reporting only" },
+          { value: "mostly_aligned", label: "Mostly aligned — insights inform some actions" },
+          { value: "fully_aligned", label: "Fully aligned — drives strategy and improvements" },
         ]}
-        value={answers["tech_stack_alignment"] || ""}
-        onChange={(val) => onAnswer("tech_stack_alignment", val)}
+        value={answers["cx_tools_alignment"] || ""}
+        onChange={(val) => onAnswer("cx_tools_alignment", val)}
       />
 
-      {/* Question 8: organization_rhythm */}
       <MultipleChoiceQuestion
-        question="What best describes your company’s digital operating rhythm?"
+        question="How do customers provide feedback or share issues?"
         options={[
-          { value: "ad_hoc", label: "Ad hoc — digital work happens as needed" },
-          { value: "project_based", label: "Project-based — limited to certain teams" },
-          { value: "cross_functional", label: "Cross-functional — consistent but not company-wide" },
-          { value: "institutionalized", label: "Institutionalized — built into how we operate" },
+          { value: "no_process", label: "No formal process — only when customers complain" },
+          { value: "basic_forms", label: "Basic surveys or forms" },
+          { value: "proactive_requests", label: "We proactively request and analyze feedback" },
+          { value: "omnichannel_feedback", label: "Omnichannel feedback integrated into systems" },
         ]}
-        value={answers["organization_rhythm"] || ""}
-        onChange={(val) => onAnswer("organization_rhythm", val)}
+        value={answers["customer_feedback_channels"] || ""}
+        onChange={(val) => onAnswer("customer_feedback_channels", val)}
       />
 
-      {/* Question 9: adoption_monitoring */}
       <MultipleChoiceQuestion
-        question="How do you monitor whether employees adopt and use new digital tools?"
+        question="How often do you revisit and evolve your customer experience strategy?"
         options={[
-          { value: "we_dont", label: "We don’t track adoption" },
-          { value: "manual_feedback", label: "We gather feedback informally" },
-          { value: "usage_reports", label: "We use usage reports or dashboards" },
-          { value: "training_metrics", label: "We track adoption and provide training/metrics" },
+          { value: "never_updated", label: "Never — it hasn’t changed in years" },
+          { value: "annually", label: "Annually — part of our planning cycle" },
+          { value: "quarterly", label: "Quarterly or after major feedback" },
+          { value: "continuous", label: "Continuously — part of ongoing improvement" },
         ]}
-        value={answers["adoption_monitoring"] || ""}
-        onChange={(val) => onAnswer("adoption_monitoring", val)}
-      />
-
-      {/* Question 10: most_valuable_tool */}
-      <TextAreaQuestion
-        question="Which tool or platform currently provides the most value to your digital transformation efforts?"
-        placeholder="E.g., Salesforce, Shopify, Power BI, etc."
-        value={answers["most_valuable_tool"] || ""}
-        onChange={(val) => onAnswer("most_valuable_tool", val)}
-        maxLength={300}
+        value={answers["experience_evolution"] || ""}
+        onChange={(val) => onAnswer("experience_evolution", val)}
       />
     </div>
   );

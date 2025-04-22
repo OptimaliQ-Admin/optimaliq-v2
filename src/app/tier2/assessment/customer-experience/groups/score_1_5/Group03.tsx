@@ -2,14 +2,12 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["digital_vision"] === "string" &&
-    typeof answers["tech_stack_consideration"] === "string" &&
-    typeof answers["biggest_barrier"] === "string" &&
-    answers["biggest_barrier"].trim().length > 0
+    typeof answers["support_team_consistency"] === "string" &&
+    typeof answers["customer_data_access"] === "string" &&
+    typeof answers["cx_initiatives"] === "string"
   );
 }
 
@@ -18,43 +16,46 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score1_5_Step03({ answers, onAnswer }: Props) {
+export default function Score_1_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 7: digital_vision */}
+      {/* Question 8: support_team_consistency */}
       <MultipleChoiceQuestion
-        question="How would you describe your vision for digital transformation?"
+        question="How consistent is your customer support experience across channels (email, phone, chat, etc.)?"
         options={[
-          { value: "no_vision", label: "We haven’t really discussed it" },
-          { value: "basic_vision", label: "We have a general idea, but it’s not clear" },
-          { value: "emerging_plan", label: "We’ve started developing a plan" },
-          { value: "clear_roadmap", label: "We have a clear roadmap and goals" },
+          { value: "very_inconsistent", label: "Very inconsistent — it depends on who you get" },
+          { value: "somewhat_consistent", label: "Somewhat consistent, but with noticeable gaps" },
+          { value: "mostly_consistent", label: "Mostly consistent, with occasional breakdowns" },
+          { value: "very_consistent", label: "Very consistent — we follow unified guidelines and tone" },
         ]}
-        value={answers["digital_vision"] || ""}
-        onChange={(val) => onAnswer("digital_vision", val)}
+        value={answers["support_team_consistency"] || ""}
+        onChange={(val) => onAnswer("support_team_consistency", val)}
       />
 
-      {/* Question 8: tech_stack_consideration */}
+      {/* Question 9: customer_data_access */}
       <MultipleChoiceQuestion
-        question="When choosing new tools or systems, how much do you consider long-term scalability or integration?"
+        question="Can your team easily access customer data to personalize experiences?"
         options={[
-          { value: "no_consideration", label: "We don’t really think about that" },
-          { value: "some_consideration", label: "It’s one factor, but not a priority" },
-          { value: "important_consideration", label: "It’s an important part of our evaluation" },
-          { value: "critical_consideration", label: "It’s a top priority for every decision" },
+          { value: "no_access", label: "No — data is siloed or hard to find" },
+          { value: "basic_access", label: "We have access to some data, but it’s manual" },
+          { value: "integrated_data", label: "Most teams can access core data across tools" },
+          { value: "real_time_personalization", label: "Yes — data is integrated and accessible in real time" },
         ]}
-        value={answers["tech_stack_consideration"] || ""}
-        onChange={(val) => onAnswer("tech_stack_consideration", val)}
+        value={answers["customer_data_access"] || ""}
+        onChange={(val) => onAnswer("customer_data_access", val)}
       />
 
-      {/* Question 9: biggest_barrier */}
-      <TextAreaQuestion
-        question="What’s the biggest barrier holding you back from making better use of digital tools?"
-        placeholder="E.g., Budget, skills, time, lack of clarity, etc."
-        value={answers["biggest_barrier"] || ""}
-        onChange={(val) => onAnswer("biggest_barrier", val)}
-        maxLength={300}
+      {/* Question 10: cx_initiatives */}
+      <MultipleChoiceQuestion
+        question="Which of the following best describes your approach to improving CX (customer experience)?"
+        options={[
+          { value: "no_cx_initiatives", label: "We haven’t really focused on CX yet" },
+          { value: "reactive_cx", label: "We address CX issues as they come up" },
+          { value: "some_strategic_initiatives", label: "We’ve started a few initiatives around CX" },
+          { value: "proactive_cx_strategy", label: "CX is a key strategic priority with active initiatives" },
+        ]}
+        value={answers["cx_initiatives"] || ""}
+        onChange={(val) => onAnswer("cx_initiatives", val)}
       />
     </div>
   );

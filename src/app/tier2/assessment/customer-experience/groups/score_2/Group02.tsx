@@ -2,13 +2,13 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["team_tech_training"] === "string" &&
-    typeof answers["current_stack_limitations"] === "string" &&
-    answers["current_stack_limitations"].trim().length > 0
+    typeof answers["customer_journey_mapping"] === "string" &&
+    typeof answers["channel_consistency"] === "string" &&
+    typeof answers["cx_process_documentation"] === "string" &&
+    typeof answers["feedback_action"] === "string"
   );
 }
 
@@ -17,30 +17,59 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score2_Step02({ answers, onAnswer }: Props) {
+export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
-
-      {/* Question 4: team_tech_training */}
+      {/* Question 4: customer_journey_mapping */}
       <MultipleChoiceQuestion
-        question="How prepared is your team to adopt and use new digital tools or systems?"
+        question="Have you mapped out the full customer journey across touchpoints?"
         options={[
-          { value: "not_prepared", label: "Not very — there’s a steep learning curve" },
-          { value: "somewhat_prepared", label: "Somewhat — we get by with trial and error" },
-          { value: "mostly_prepared", label: "Mostly — we train teams as needed" },
-          { value: "fully_prepared", label: "Very — we have a plan for enablement and adoption" },
+          { value: "not_mapped", label: "No, we haven’t mapped it" },
+          { value: "basic_map", label: "We have a basic or partial map" },
+          { value: "comprehensive_map", label: "We have a comprehensive journey map" },
+          { value: "used_for_decision_making", label: "Yes, and it informs our decision-making" },
         ]}
-        value={answers["team_tech_training"] || ""}
-        onChange={(val) => onAnswer("team_tech_training", val)}
+        value={answers["customer_journey_mapping"] || ""}
+        onChange={(val) => onAnswer("customer_journey_mapping", val)}
       />
 
-      {/* Question 5: current_stack_limitations */}
-      <TextAreaQuestion
-        question="What limitations in your current stack or digital operations are slowing your team down?"
-        placeholder="E.g., Duplicate data, disconnected systems, slow processes..."
-        value={answers["current_stack_limitations"] || ""}
-        onChange={(val) => onAnswer("current_stack_limitations", val)}
-        maxLength={300}
+      {/* Question 5: channel_consistency */}
+      <MultipleChoiceQuestion
+        question="How consistent is your customer experience across different channels (email, social, chat, etc.)?"
+        options={[
+          { value: "very_inconsistent", label: "Very inconsistent — depends on the channel" },
+          { value: "somewhat_consistent", label: "Somewhat consistent — we aim for similar tone and response times" },
+          { value: "mostly_consistent", label: "Mostly consistent with a unified approach" },
+          { value: "fully_consistent", label: "Fully consistent — it's intentionally designed" },
+        ]}
+        value={answers["channel_consistency"] || ""}
+        onChange={(val) => onAnswer("channel_consistency", val)}
+      />
+
+      {/* Question 6: cx_process_documentation */}
+      <MultipleChoiceQuestion
+        question="How well documented are your customer service or experience processes?"
+        options={[
+          { value: "not_documented", label: "Not documented at all" },
+          { value: "partially_documented", label: "Some things are written down" },
+          { value: "mostly_documented", label: "Mostly documented and referenced" },
+          { value: "fully_documented", label: "Fully documented with regular updates" },
+        ]}
+        value={answers["cx_process_documentation"] || ""}
+        onChange={(val) => onAnswer("cx_process_documentation", val)}
+      />
+
+      {/* Question 7: feedback_action */}
+      <MultipleChoiceQuestion
+        question="How often do you take action based on customer feedback?"
+        options={[
+          { value: "rarely", label: "Rarely — we collect it but don’t act on it" },
+          { value: "sometimes", label: "Sometimes — we make ad hoc improvements" },
+          { value: "regularly", label: "Regularly — feedback informs process or product changes" },
+          { value: "systematic", label: "Systematic — feedback drives continuous improvement" },
+        ]}
+        value={answers["feedback_action"] || ""}
+        onChange={(val) => onAnswer("feedback_action", val)}
       />
     </div>
   );
