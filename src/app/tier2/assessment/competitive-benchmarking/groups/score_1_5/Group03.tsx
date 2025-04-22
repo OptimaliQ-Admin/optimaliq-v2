@@ -3,7 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
-export function isScore_1_5_1_9Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["industry_benchmark_usage"] === "string" &&
     typeof answers["market_awareness_level"] === "string" &&

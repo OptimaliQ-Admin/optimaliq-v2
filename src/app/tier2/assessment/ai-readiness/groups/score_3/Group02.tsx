@@ -3,7 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
-export function isScore_3_0Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
   return (
     typeof answers["tool_consistency"] === "string" &&
     typeof answers["training_access"] === "string" &&
