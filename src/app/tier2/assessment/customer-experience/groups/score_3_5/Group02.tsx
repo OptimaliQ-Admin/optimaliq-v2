@@ -3,11 +3,12 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
   return (
-    typeof answers["cx_goal_alignment"] === "string" &&
-    typeof answers["cx_strategy_adaptation"] === "string" &&
-    typeof answers["cx_team_enablement"] === "string"
+    typeof answers["cx_metric_tracking"] === "string" &&
+    typeof answers["cx_data_access"] === "string" &&
+    typeof answers["cx_prioritization"] === "string" &&
+    typeof answers["cx_accountability"] === "string"
   );
 }
 
@@ -16,46 +17,59 @@ type Props = {
   onAnswer: (key: string, value: any) => void;
 };
 
-export default function Score3_5_Step03({ answers, onAnswer }: Props) {
+export default function Score3_5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-8">
-      {/* Question 8: cx_goal_alignment */}
+      {/* Question 4: cx_metric_tracking */}
       <MultipleChoiceQuestion
-        question="How aligned are your CX efforts with broader company goals?"
+        question="What types of customer experience (CX) metrics do you track?"
         options={[
-          { value: "not_aligned", label: "Not aligned — it feels like a separate effort" },
-          { value: "somewhat_aligned", label: "Somewhat aligned — we try to connect initiatives" },
-          { value: "mostly_aligned", label: "Mostly aligned — key metrics are tied to goals" },
-          { value: "fully_aligned", label: "Fully aligned and measured against company OKRs" },
+          { value: "none", label: "None consistently" },
+          { value: "basic", label: "Basic satisfaction scores or feedback" },
+          { value: "blended", label: "Blended CX + operational data" },
+          { value: "real_time", label: "Real-time CX metrics by touchpoint" },
         ]}
-        value={answers["cx_goal_alignment"] || ""}
-        onChange={(val) => onAnswer("cx_goal_alignment", val)}
+        value={answers["cx_metric_tracking"] || ""}
+        onChange={(val) => onAnswer("cx_metric_tracking", val)}
       />
 
-      {/* Question 9: cx_strategy_adaptation */}
+      {/* Question 5: cx_data_access */}
       <MultipleChoiceQuestion
-        question="How often is your customer experience strategy revisited or adapted?"
+        question="How accessible is CX data to teams who need it?"
         options={[
-          { value: "rarely", label: "Rarely — it’s static" },
-          { value: "annually", label: "Annually — during planning cycles" },
-          { value: "quarterly", label: "Quarterly — tied to key results" },
-          { value: "ongoing", label: "Ongoing — we optimize based on live data" },
+          { value: "restricted", label: "Restricted to specific roles or systems" },
+          { value: "shared_on_request", label: "Available on request or ad hoc" },
+          { value: "self_service", label: "Self-serve dashboards available" },
+          { value: "embedded", label: "Embedded in team workflows and tools" },
         ]}
-        value={answers["cx_strategy_adaptation"] || ""}
-        onChange={(val) => onAnswer("cx_strategy_adaptation", val)}
+        value={answers["cx_data_access"] || ""}
+        onChange={(val) => onAnswer("cx_data_access", val)}
       />
 
-      {/* Question 10: cx_team_enablement */}
+      {/* Question 6: cx_prioritization */}
       <MultipleChoiceQuestion
-        question="How would you rate your team’s ability to act on customer feedback or needs?"
+        question="How are CX improvement efforts prioritized?"
         options={[
-          { value: "low", label: "Low — feedback gets lost or ignored" },
-          { value: "inconsistent", label: "Inconsistent — depends on who sees it" },
-          { value: "proactive", label: "Proactive — we act on patterns and themes" },
-          { value: "empowered", label: "Empowered — teams are equipped to make changes quickly" },
+          { value: "not_prioritized", label: "Not clearly prioritized or budgeted" },
+          { value: "based_on_feedback", label: "Based on urgent issues or feedback" },
+          { value: "planned_in_advance", label: "Planned as part of team OKRs or goals" },
+          { value: "aligned_with_strategy", label: "Tied to company-wide strategic priorities" },
         ]}
-        value={answers["cx_team_enablement"] || ""}
-        onChange={(val) => onAnswer("cx_team_enablement", val)}
+        value={answers["cx_prioritization"] || ""}
+        onChange={(val) => onAnswer("cx_prioritization", val)}
+      />
+
+      {/* Question 7: cx_accountability */}
+      <MultipleChoiceQuestion
+        question="Who is accountable for customer experience outcomes?"
+        options={[
+          { value: "no_one", label: "No one formally owns it" },
+          { value: "functional_leaders", label: "Functional leaders (support, success, etc.)" },
+          { value: "shared_across_teams", label: "Shared across multiple teams" },
+          { value: "dedicated_team", label: "Dedicated CX team or leadership role" },
+        ]}
+        value={answers["cx_accountability"] || ""}
+        onChange={(val) => onAnswer("cx_accountability", val)}
       />
     </div>
   );
