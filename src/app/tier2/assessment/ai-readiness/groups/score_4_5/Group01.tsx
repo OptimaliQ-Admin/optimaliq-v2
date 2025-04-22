@@ -28,4 +28,9 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "formal_review", label: "Formal review and approval process" },
           { value: "comprehensive_framework", label: "Comprehensive, org-wide governance framework" },
         ]}
-        value={answers["ai_governance"]
+        value={answers["ai_governance"] || ""}
+        onChange={(val) => onAnswer("ai_governance", val)}
+      />
+    </div>
+  );
+}
