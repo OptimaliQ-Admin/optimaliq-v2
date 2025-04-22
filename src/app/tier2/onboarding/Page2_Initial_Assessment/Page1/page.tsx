@@ -13,6 +13,9 @@ import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack";
 import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity";
 import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks";
 import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final";
+import { generateDashboardScores } from "@/lib/ai/generateDashboard";
+import { saveProfileScores } from "@/lib/sync/saveProfile";
+import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 
 const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
   0: isGroup01Complete,
@@ -58,7 +61,7 @@ export default function OnboardingAssessmentPage() {
 
       const { data, error } = await supabase
         .from("tier2_users")
-        .select("subscription_status")
+        .select("*")
         .eq("email", userEmail)
         .single();
 
@@ -89,21 +92,65 @@ export default function OnboardingAssessmentPage() {
       setStep((prev) => prev + 1);
     } else {
       try {
-        console.log("📤 Submitting formAnswers:", formAnswers);
-
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
 
-        const { data, error } = await supabase
-          .from("onboarding_assessments")
-          .insert([{ ...sanitizedAnswers }]);
+        const { data: userData, error: userError } = await supabase
+          .from("tier2_users")
+          .select("*")
+          .eq("email", userEmail)
+          .single();
 
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          alert(`Something went wrong: ${error.message}`);
+        if (userError || !userData) {
+          console.error("❌ User not found");
           return;
         }
 
-        console.log("✅ Submission successful:", data);
+        const userId = userData.user_id;
+
+        const { error: insertError } = await supabase
+          .from("onboarding_assessments")
+          .insert([{ ...sanitizedAnswers, user_id: userId }]);
+
+        if (insertError) {
+          console.error("❌ Error inserting onboarding assessment:", insertError);
+          return;
+        }
+
+        const aiScores = await generateDashboardScores(userData, sanitizedAnswers);
+        if (!aiScores) {
+          alert("Something went wrong generating AI scores");
+          return;
+        }
+
+        await saveProfileScores(userId, {
+          strategyScore: aiScores.strategyScore,
+          processScore: aiScores.processScore,
+          technologyScore: aiScores.technologyScore,
+          overallScore: aiScores.score,
+        });
+
+        await saveDashboardInsights({
+          user_id: userId,
+          strategyScore: aiScores.strategyScore,
+          processScore: aiScores.processScore,
+          technologyScore: aiScores.technologyScore,
+          score: aiScores.score,
+          industryAvgScore: 3.2,
+          topPerformerScore: 4.5,
+          benchmarking: {},
+          strengths: [],
+          weaknesses: [],
+          roadmap: [],
+          chartData: [
+            { month: "Now", userScore: aiScores.score, industryScore: 3.2, topPerformerScore: 4.5 },
+            { month: "3 Months", userScore: Math.min(5, aiScores.score + 0.5), industryScore: 3.2, topPerformerScore: 4.5 },
+            { month: "6 Months", userScore: Math.min(5, aiScores.score + 1), industryScore: 3.2, topPerformerScore: 4.5 },
+            { month: "12 Months", userScore: Math.min(5, aiScores.score + 2), industryScore: 3.2, topPerformerScore: 4.5 },
+          ],
+          updated_at: new Date().toISOString(),
+          industry: userData.industry?.trim().toLowerCase(),
+        });
+
         router.push("/tier2/dashboard");
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
