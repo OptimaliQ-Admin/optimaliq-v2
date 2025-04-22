@@ -131,16 +131,37 @@ function Input({ label, ...props }: any) {
   );
 }
 
-function Select({ label, name, value, onChange, options }: any) {
+function Select({
+  label,
+  name,
+  value,
+  onChange,
+  options = [],
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options?: string[];
+}) {
   return (
     <label className="block w-full">
       <span className="text-gray-700 font-medium">{label}</span>
-      <select name={name} value={value} onChange={onChange} className="block w-full mt-1 border border-gray-300 rounded p-2" required>
+      <select
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="block w-full mt-1 border border-gray-300 rounded p-2"
+        required
+      >
         <option value="">Select {label}</option>
-        {options.map((option: string) => (
-          <option key={option} value={option}>{option}</option>
+        {(options ?? []).map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
         ))}
       </select>
     </label>
   );
 }
+
