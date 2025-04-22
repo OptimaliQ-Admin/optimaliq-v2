@@ -26,25 +26,33 @@ export async function POST(req: Request) {
   // Handle event
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-
+  
+    console.log("📦 Stripe metadata received:", session.metadata);
+  
     const user_id = session.metadata?.user_id;
     const plan = session.metadata?.plan;
     const billingCycle = session.metadata?.billingCycle;
-
-    if (user_id) {
-      const { error } = await supabase
-        .from("subscriptions")
-        .update({
-          status: "active",
-          plan,
-          billingCycle,
-          nextbillingdate: new Date().toISOString(), // You can refine this
-        })
-        .eq("u_id", user_id);
-
-      if (error) console.error("❌ Failed to update subscription:", error);
+  
+    if (!user_id) {
+      console.error("❌ Missing user_id in metadata.");
+      return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
     }
-  }
-
+  
+    const { error } = await supabase
+      .from("subscriptions")
+      .update({
+        status: "active",
+        plan,
+        billingCycle,
+        nextbillingdate: new Date().toISOString(),
+      })
+      .eq("u_id", user_id);
+  
+    if (error) {
+      console.error("❌ Failed to update subscription:", error);
+    } else {
+      console.log("✅ Subscription updated for user:", user_id);
+    }
+  }  
   return NextResponse.json({ received: true });
 }
