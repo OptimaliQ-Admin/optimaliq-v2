@@ -1,4 +1,3 @@
-//src/app/tier2/onboarding/Page2_Initial_Assessment/Page1/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,15 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals"
-import Group02_Goals, { isGroup02Complete } from "./groups/Group02_Positioning"
-import Group03_Goals, { isGroup03Complete } from "./groups/Group03_Operations"
-import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack"
-import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
-import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
-import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
-
-
+import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals";
+import Group02_Goals, { isGroup02Complete } from "./groups/Group02_Positioning";
+import Group03_Goals, { isGroup03Complete } from "./groups/Group03_Operations";
+import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack";
+import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity";
+import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks";
+import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final";
 
 const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
   0: isGroup01Complete,
@@ -26,7 +23,6 @@ const stepValidators: Record<number, (answers: Record<string, any>) => boolean> 
   5: isGroup06Complete,
   6: isGroup07Complete,
 };
-
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
@@ -39,20 +35,15 @@ export default function OnboardingAssessmentPage() {
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
-  
   const stripUnusedOtherFields = (answers: Record<string, any>) => {
     const result: Record<string, any> = {};
-  
     for (const key in answers) {
-      if (key.endsWith("_other")) continue; // don't save _other fields
-  
-      result[key] = answers[key]; // pass everything else through
+      if (key.endsWith("_other")) continue;
+      result[key] = answers[key];
     }
-  
     return result;
   };
-  
-  
+
   useEffect(() => {
     const checkSubscription = async () => {
       if (skipCheck) {
@@ -93,36 +84,33 @@ export default function OnboardingAssessmentPage() {
       alert("Please complete all required questions before continuing.");
       return;
     }
-  
+
     if (step < 6) {
       setStep((prev) => prev + 1);
     } else {
       try {
         console.log("📤 Submitting formAnswers:", formAnswers);
-  
+
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-  
+
         const { data, error } = await supabase
           .from("onboarding_assessments")
           .insert([{ ...sanitizedAnswers }]);
-  
+
         if (error) {
           console.error("❌ Supabase error:", error);
           alert(`Something went wrong: ${error.message}`);
           return;
         }
-  
+
         console.log("✅ Submission successful:", data);
-        router.push("/dashboard/insights");
+        router.push("/tier2/dashboard");
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
         alert(`Unexpected error: ${err.message}`);
       }
     }
   };
-  
-  
-  
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
@@ -131,33 +119,23 @@ export default function OnboardingAssessmentPage() {
   const handleAnswer = (key: string, value: any) => {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
-  
-      // 🔁 For any "other" text field
+
       if (key.endsWith("_other")) {
         const baseKey = key.replace("_other", "");
         const baseValue = prev[baseKey] || [];
-  
         const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-  
-        if (value.trim()) {
-          cleaned.push(`Other: ${value.trim()}`);
-        }
-  
+        if (value.trim()) cleaned.push(`Other: ${value.trim()}`);
         updated[baseKey] = cleaned;
       }
-  
-      // 🔁 If a select field is updated and "other" was removed, clear its _other input
+
       if (Array.isArray(value) && key && !value.includes("other")) {
         updated[`${key}_other`] = "";
         updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }
-  
+
       return updated;
     });
   };
-  
-  
-  
 
   if (loading) return <div className="p-10 text-center">Checking subscription...</div>;
 
