@@ -39,14 +39,16 @@ export async function POST(req: Request) {
     }
   
     const { error } = await supabase
-      .from("subscriptions")
-      .update({
-        status: "active",
-        plan,
-        billingCycle,
-        nextbillingdate: new Date().toISOString(),
-      })
-      .eq("u_id", user_id);
+  .from("subscriptions")
+  .upsert([
+    {
+      u_id: user_id,
+      status: "active",
+      plan,
+      billingCycle,
+      nextbillingdate: new Date().toISOString(),
+    },
+  ], { onConflict: "u_id" }); // this ensures we update if it exists, insert if not
   
     if (error) {
       console.error("❌ Failed to update subscription:", error);
