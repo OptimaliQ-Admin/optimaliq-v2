@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("u_id", user_id)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("u_id", user_id)
       .single();
 
     if (userError || !user) {

@@ -14,7 +14,7 @@ import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 function GrowthStudioComponent() {
   const { user } = useTier2User();
   const email = user?.email;
-  const userId = user?.user_id;
+  const userId = user?.u_id;
 
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showModal, setShowModal] = useState(false);

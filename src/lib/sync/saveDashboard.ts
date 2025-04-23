@@ -3,7 +3,7 @@
 import { supabase } from "@/lib/supabase";
 
 type DashboardInsightPayload = {
-  user_id: string;
+  u_id: string;
   strategyScore: number;
   processScore: number;
   technologyScore: number;
@@ -23,7 +23,7 @@ export async function saveDashboardInsights(payload: DashboardInsightPayload): P
   try {
     const { error } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert(payload, { onConflict: "user_id" });
+      .upsert(payload, { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save dashboard insights:", error);

@@ -45,7 +45,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         const res = await fetch("/api/tier2/growth_studio/quadrant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: userId }),
+          body: JSON.stringify({ u_id: userId }),
         });
         const result = await res.json();
         setData(result);

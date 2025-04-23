@@ -1,7 +1,12 @@
-// src/app/login/page.tsx
+// src/app/subscribe/page.tsx
+
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import SubscribeForm from "@/components/subscribe/SubscribeForm";
+import ValueCarousel from "@/components/subscribe/ValueCarousel";
 import { useTier2User } from "@/context/Tier2UserContext";
 
 export default function Tier2Login() {

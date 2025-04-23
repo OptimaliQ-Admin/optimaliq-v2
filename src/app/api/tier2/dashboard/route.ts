@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("u_id", user_id)
       .single();
 
     if (userError || !user)
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("u_id", user_id)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     const { data: existingInsights } = await supabase
       .from("tier2_dashboard_insights")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("u_id", user_id)
       .single();
 
     const thirtyDaysAgo = new Date();
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
 
     const { error: upsertError } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert(dashboardPayload, { onConflict: "user_id" });
+      .upsert(dashboardPayload, { onConflict: "u_id" });
 
     if (upsertError) {
       console.error("❌ Failed to insert dashboard insights:", upsertError);

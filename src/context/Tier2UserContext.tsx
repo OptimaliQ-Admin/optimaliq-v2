@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type Tier2User = {
-  user_id: string;
+  u_id: string;
   email: string;
   first_name: string;
   last_name: string;

@@ -1,3 +1,4 @@
+//src/app/tier2/onboarding/Page2_Initial_Assessment/Page1/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -30,7 +31,6 @@ export default function OnboardingAssessmentPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-  const validator = stepValidators[step];
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
@@ -89,21 +89,28 @@ export default function OnboardingAssessmentPage() {
       setStep((prev) => prev + 1);
     } else {
       try {
-        console.log("📤 Submitting formAnswers:", formAnswers);
-
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
 
-        const { data, error } = await supabase
-          .from("onboarding_assessments")
-          .insert([{ ...sanitizedAnswers }]);
+        const response = await fetch("/api/tier2/onboarding/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userEmail,
+            formAnswers: sanitizedAnswers,
+          }),
+        });
 
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          alert(`Something went wrong: ${error.message}`);
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error("❌ API Error:", result.error);
+          alert(`Something went wrong: ${result.error}`);
           return;
         }
 
-        console.log("✅ Submission successful:", data);
+        console.log("✅ Onboarding complete!");
         router.push("/tier2/dashboard");
       } catch (err: any) {
         console.error("❌ Unexpected error:", err);
