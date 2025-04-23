@@ -3,7 +3,7 @@
 import { supabase } from "@/lib/supabase";
 
 type DashboardInsightPayload = {
-  user_id: string;
+  u_id: string;
   strategyScore: number;
   processScore: number;
   technologyScore: number;

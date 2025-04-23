@@ -25,12 +25,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const userId = userData.user_id;
+    const userId = userData.u_id;
+
 
     // ✅ Insert onboarding assessment
     const { error: insertError } = await supabase
       .from("onboarding_assessments")
-      .insert([{ ...formAnswers, user_id: userId }]);
+      .insert([{ ...formAnswers, u_id: userId }])
 
     if (insertError) {
       console.error("❌ Error inserting onboarding assessment:", insertError);
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
     // ✅ Save dashboard
     await saveDashboardInsights({
-      user_id: userId,
+      u_id: userId,    
       strategyScore: aiScores.strategyScore,
       processScore: aiScores.processScore,
       technologyScore: aiScores.technologyScore,
