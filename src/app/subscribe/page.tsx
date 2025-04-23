@@ -1,4 +1,5 @@
 // src/app/subscribe/page.tsx
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,10 +33,9 @@ export default function SubscribePage() {
 
       if (data?.status === "active") {
         router.push("/login");
-      } else if (data) {
-        setCheckingStatus(false); // Allow form to update and continue to Stripe
       } else {
-        setCheckingStatus(false); // New user, continue to form
+        // If they exist but not active or don’t exist at all, show form
+        setCheckingStatus(false);
       }
     };
 
