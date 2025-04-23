@@ -1,7 +1,9 @@
-//src/components/subscribe/ValueCarousel.tsx
+// src/components/subscribe/ValueCarousel.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
@@ -28,16 +30,26 @@ export default function ValueCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 3000);
     return () => clearInterval(timer);
   }, []);
 
   const { title, description } = slides[index];
 
   return (
-    <div className="text-white p-8 max-w-lg">
-      <h2 className="text-3xl font-bold mb-4">{title}</h2>
-      <p className="text-lg text-gray-300">{description}</p>
+    <div className="text-gray-900 p-8 max-w-lg">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-4xl font-extrabold leading-tight mb-4">{title}</h2>
+          <p className="text-xl text-gray-600">{description}</p>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

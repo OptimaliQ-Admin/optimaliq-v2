@@ -33,19 +33,47 @@ export default function SubscribeForm() {
     if (!captchaToken) return alert("⚠️ Please complete the captcha.");
     setLoading(true);
 
-    const { data: userInsert, error: userError } = await supabase
+    const { data: existingUser, error: fetchError } = await supabase
       .from("tier2_users")
-      .upsert([{ ...userInfo }], { onConflict: "email" })
       .select("u_id")
-      .single();
+      .eq("email", userInfo.email)
+      .maybeSingle();
 
-    if (userError || !userInsert?.u_id) {
-      alert("❌ Failed to save user.");
+    let user_id;
+
+    if (fetchError) {
+      alert("❌ Failed to check existing user.");
       setLoading(false);
       return;
     }
 
-    const user_id = userInsert.u_id;
+    if (existingUser) {
+      user_id = existingUser.u_id;
+      const { error: updateError } = await supabase
+        .from("tier2_users")
+        .update({ ...userInfo })
+        .eq("u_id", user_id);
+
+      if (updateError) {
+        alert("❌ Failed to update user info.");
+        setLoading(false);
+        return;
+      }
+    } else {
+      const { data: newUser, error: insertError } = await supabase
+        .from("tier2_users")
+        .insert([{ ...userInfo }])
+        .select("u_id")
+        .single();
+
+      if (insertError || !newUser?.u_id) {
+        alert("❌ Failed to create user.");
+        setLoading(false);
+        return;
+      }
+      user_id = newUser.u_id;
+    }
+
     localStorage.setItem("tier2_user_id", user_id);
     localStorage.setItem("tier2_email", userInfo.email);
 
@@ -80,11 +108,12 @@ export default function SubscribeForm() {
   };
 
   return (
-    <div className="bg-neutral-900 rounded-2xl shadow-xl p-10 text-white w-full max-w-xl">
-      <h2 className="text-3xl font-bold mb-2 text-center">Subscribe to OptimaliQ</h2>
-      <p className="text-gray-400 text-center mb-6">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 w-full max-w-xl">
+      <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-2">Subscribe to OptimaliQ</h2>
+      <p className="text-gray-600 text-center mb-6">
         Get your 30-day strategic roadmap and AI-driven insights — starting now.
       </p>
+
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex gap-4">
           <Input label="First Name" name="first_name" value={userInfo.first_name} onChange={handleChange} />
@@ -103,13 +132,13 @@ export default function SubscribeForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           {loading ? "Redirecting..." : "Continue to Payment"}
         </button>
 
         <p className="text-sm text-gray-500 text-center mt-3">
-          Secure checkout powered by Stripe. Cancel anytime.
+          🔒 Secure checkout powered by Stripe. Cancel anytime.
         </p>
       </form>
     </div>
@@ -119,8 +148,12 @@ export default function SubscribeForm() {
 function Input({ label, ...props }: any) {
   return (
     <label className="block w-full">
-      <span className="text-sm text-gray-300 font-medium">{label}</span>
-      <input {...props} className="mt-1 block w-full p-3 rounded-md bg-neutral-800 text-white border border-neutral-600" required />
+      <span className="text-sm text-gray-700 font-medium">{label}</span>
+      <input
+        {...props}
+        className="mt-1 block w-full p-3 rounded-md bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      />
     </label>
   );
 }
@@ -128,12 +161,12 @@ function Input({ label, ...props }: any) {
 function Select({ label, name, value, onChange, options = [] }: any) {
   return (
     <label className="block w-full">
-      <span className="text-sm text-gray-300 font-medium">{label}</span>
+      <span className="text-sm text-gray-700 font-medium">{label}</span>
       <select
         name={name}
         value={value}
         onChange={onChange}
-        className="mt-1 block w-full p-3 rounded-md bg-neutral-800 text-white border border-neutral-600"
+        className="mt-1 block w-full p-3 rounded-md bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         required
       >
         <option value="">Select {label}</option>
