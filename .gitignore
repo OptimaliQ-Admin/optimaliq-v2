@@ -1,62 +1,30 @@
-<<<<<<< HEAD
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ignore local environments and ML files
+ML/
+# Old virtual environments
+#/
+Create/
+a/
+environment/
+for/
+ml_env/
+virtual/
+venv/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Datasets and ML artifacts
+*.csv
+*.pkl
+*.py
+*.ipynb
 
-# testing
-/coverage
+# Test files
+test_openai.py
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-=======
-# Ignore dependencies and build files
+# Node and build artifacts (just in case)
 node_modules/
-.env
 .next/
-dist/
 out/
-.vscode/
-.DS_Store
+coverage/
+dist/
 
-# Ignore logs and temporary files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-logs/
-*.log
-ml/user_database.csv
-ml/training_data.csv
-
->>>>>>> 4cb4f9b (🚀 Full working Homepage and parsed Survey)
+# Dotfiles that shouldn't go to Vercel
+.env*

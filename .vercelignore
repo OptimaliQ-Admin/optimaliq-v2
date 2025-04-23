@@ -1,29 +1,30 @@
-# Ignore unnecessary files and folders
+# Node + Next.js
+node_modules/
+.next/
+dist/
+out/
+coverage/
 
-# ✅ Dependencies (Vercel installs them automatically)
-node_modules
-package-lock.json
-yarn.lock
-
-# ✅ Build output and cache
-.next
-out
-
-# ✅ Logs and temporary files
+# Logs
 *.log
-*.tmp
-debug.log
-npm-debug.log
-vercel-debug.log
 
-# ✅ Machine learning & database files
-ml/*.csv
-ml/*.pkl
-ml/training_data.csv
-ml/simulation_history.csv
-
-# ✅ Environment variables and secrets (Ensure this is in .gitignore too)
-.env
+# Environment variables
+.env*
 .env.local
-.env.production
 
+# System / IDE stuff
+.DS_Store
+.vscode/
+.idea/
+
+# Python / ML files (since you're AWS now)
+ML/
+*.csv
+*.pkl
+*.py
+__pycache__/
+venv/
+virtual/
+for/
+ml_env/
+test_openai.py
