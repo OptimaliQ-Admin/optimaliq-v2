@@ -28,7 +28,7 @@ import Sidebar from "@/components/layout/sidebar";
 
 function Tier2DashboardComponent() {
   const { user } = useTier2User();
-const user_id = user?.user_id;
+const user_id = user?.u_id;
 const email = user?.email;
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<any>(null);
@@ -64,7 +64,7 @@ const email = user?.email;
       return;
     }
   
-    console.log("✅ Fetching insights for user_id:", user_id);
+    console.log("✅ Fetching insights for u_id:", user_id);
     fetchInsights();
   }, [user_id]);
 
