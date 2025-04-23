@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import Group01_Goals from "../groups/Group01_Goals";
-import Group02_Positioning from "../groups/Group02_Positioning";
-import Group03_Operations from "../groups/Group03_Operations";
-import Group04_GrowthStack from "../groups/Group04_GrowthStack";
-import Group05_Clarity from "../groups/Group05_Clarity";
-import Group06_Benchmarks from "../groups/Group06_Benchmarks";
-import Group07_Final from "../groups/Group07_Final";
+import Group01_Goals from "./groups/Group01_Goals";
+import Group02_Positioning from "./groups/Group02_Positioning";
+import Group03_Operations from "./groups/Group03_Operations";
+import Group04_GrowthStack from "./groups/Group04_GrowthStack";
+import Group05_Clarity from "./groups/Group05_Clarity";
+import Group06_Benchmarks from "./groups/Group06_Benchmarks";
+import Group07_Final from "./groups/Group07_Final";
 
 type Props = {
   step: number;
