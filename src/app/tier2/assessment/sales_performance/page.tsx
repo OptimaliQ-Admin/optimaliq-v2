@@ -80,7 +80,7 @@ export default function SalesPerformanceAssessmentPage() {
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
           .select("score")
-          .eq("user_id", user?.user_id)
+          .eq("u_id", user?.user_id)
           .single();
 
         if (error || !data?.score) {

@@ -35,16 +35,16 @@ export default function SubscribePage() {
     const { data: userInsert, error: userError } = await supabase
       .from("tier2_users")
       .upsert([{ ...userInfo }], { onConflict: "email" })
-      .select("user_id")
+      .select("u_id")
       .single();
 
-    if (userError || !userInsert?.user_id) {
+    if (userError || !userInsert?.u_id) {
       alert("❌ Failed to save user.");
       setLoading(false);
       return;
     }
 
-    const user_id = userInsert.user_id;
+    const user_id = userInsert.u_id;
     localStorage.setItem("tier2_user_id", user_id);
     localStorage.setItem("tier2_email", userInfo.email);
 

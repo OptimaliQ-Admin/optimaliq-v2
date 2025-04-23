@@ -29,7 +29,7 @@ return NextResponse.json({ error: "Failed to fetch quadrant data" }, { status: 5
 const { data: userData, error: userError } = await supabase
 .from("tier2_dashboard_insights")
 .select("strategyScore, processScore, technologyScore, score")
-.eq("user_id", user_id)
+.eq("u_id", user_id)
 .single();
 
 if (userError || !userData) {

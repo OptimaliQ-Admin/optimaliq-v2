@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const { data: userData, error: userError } = await supabase
     .from('tier2_users')
     .select('first_name')
-    .eq('user_id', user_id)
+    .eq('u_id', user_id)
     .single();
 
   if (userError || !userData) {

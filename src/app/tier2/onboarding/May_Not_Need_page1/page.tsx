@@ -48,14 +48,14 @@ export default function Tier2OnboardingPage1() {
       return;
     }
 
-    const { error, data } = await supabase.from("tier2_users").insert([{ ...userInfo }]).select("user_id").single();
+    const { error, data } = await supabase.from("tier2_users").insert([{ ...userInfo }]).select("u_id").single();
 
-    if (error || !data?.user_id) {
+    if (error || !data?.u_id) {
       alert("❌ Failed to save user info.");
       return;
     }
 
-    localStorage.setItem("tier2_user_id", data.user_id);
+    localStorage.setItem("tier2_user_id", data.u_id);
     router.push("/tier2/onboarding/Page2_Initial_Assessment");
   };
 
