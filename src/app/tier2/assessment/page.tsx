@@ -15,7 +15,7 @@ function AssessmentComponent() {
   const router = useRouter();
 
   const email = user?.email;
-  const user_id = user?.user_id;
+  const user_id = user?.u_id;
 
   const [bpmScore, setBpmScore] = useState<number | null>(null);
   const [bpmLastTaken, setBpmLastTaken] = useState<string | null>(null);
