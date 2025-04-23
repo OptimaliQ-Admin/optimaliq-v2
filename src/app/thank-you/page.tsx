@@ -10,7 +10,7 @@ function ThankYouContent() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.push("/tier2/onboarding/Page2_Initial_Assessment");
+      router.push("/tier2/onboarding/Initial_Assessment");
     }, 4000);
     return () => clearTimeout(timeout);
   }, [router]);
