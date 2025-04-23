@@ -74,13 +74,13 @@ export default function SalesPerformanceAssessmentPage() {
   useEffect(() => {
 
     const fetchScore = async () => {
-      if (!user?.user_id && !skipCheck) return;
+      if (!user?.u_id && !skipCheck) return;
 
       try {
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
           .select("score")
-          .eq("u_id", user?.user_id)
+          .eq("u_id", user?.u_id)
           .single();
 
         if (error || !data?.score) {
@@ -97,7 +97,7 @@ export default function SalesPerformanceAssessmentPage() {
     };
 
     fetchScore();
-  }, [user?.user_id, skipCheck]);
+  }, [user?.u_id, skipCheck]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -124,7 +124,7 @@ const handleNext = async () => {
     return;
   }
 
-  if (!user?.user_id) {
+  if (!user?.u_id) {
     alert("User ID missing. Please try again.");
     return;
   }
@@ -138,7 +138,7 @@ const handleNext = async () => {
         body: JSON.stringify({
           answers: sanitizedAnswers,
           score: score,
-          userId: user.user_id
+          userId: user.u_id
         }),
       });           
 
@@ -155,7 +155,7 @@ const salesScore = result.salesScore;
 // Step 2: Insert into Supabase
 const { data, error }: { data: any; error: any } = await supabase
   .from("sales_performance_assessment")
-  .insert([{ ...sanitizedAnswers, score: salesScore, u_id: user.user_id }]);
+  .insert([{ ...sanitizedAnswers, score: salesScore, u_id: user.u_id }]);
 
 if (error) {
   console.error("❌ Supabase error:", error);

@@ -76,13 +76,13 @@ export default function OnboardingAssessmentPage() {
   useEffect(() => {
 
     const fetchScore = async () => {
-      if (!user?.user_id && !skipCheck) return;
+      if (!user?.u_id && !skipCheck) return;
 
       try {
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
           .select("score")
-          .eq("u_id", user?.user_id)
+          .eq("u_id", user?.u_id)
           .single();
 
         if (error || !data?.score) {
@@ -99,7 +99,7 @@ export default function OnboardingAssessmentPage() {
     };
 
     fetchScore();
-  }, [user?.user_id, skipCheck]);
+  }, [user?.u_id, skipCheck]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -126,7 +126,7 @@ const handleNext = async () => {
     return;
   }
 
-  if (!user?.user_id) {
+  if (!user?.u_id) {
     alert("User ID missing. Please try again.");
     return;
   }
@@ -140,7 +140,7 @@ const handleNext = async () => {
         body: JSON.stringify({
           answers: sanitizedAnswers,
           score: score,
-          userId: user.user_id  // 👈 pass this along
+          userId: user.u_id  // 👈 pass this along
         }),
       });      
 
@@ -157,7 +157,7 @@ const bpmScore = result.bpmScore;
 // Step 2: Insert into Supabase
 const { data, error }: { data: any; error: any } = await supabase
   .from("bpm_assessment")
-  .insert([{ ...sanitizedAnswers, score: bpmScore, u_id: user.user_id }]);
+  .insert([{ ...sanitizedAnswers, score: bpmScore, u_id: user.u_id }]);
 
 if (error) {
   console.error("❌ Supabase error:", error);
