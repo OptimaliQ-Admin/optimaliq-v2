@@ -1,14 +1,25 @@
-// src/components/subscribe/SubscribeForm.tsx
-
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import ReCAPTCHA from "react-google-recaptcha";
+import { IconInput } from "@/components/shared/IconInput";
+import { IconSelect } from "@/components/shared/IconSelect";
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaBriefcase,
+  FaBuilding,
+  FaDollarSign,
+  FaIndustry,
+} from "react-icons/fa";
 
 export default function SubscribeForm() {
   const router = useRouter();
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
     first_name: "",
     last_name: "",
@@ -21,10 +32,9 @@ export default function SubscribeForm() {
     industry: "",
   });
 
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
@@ -108,31 +118,105 @@ export default function SubscribeForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 w-full max-w-xl">
-      <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-2">Subscribe to OptimaliQ</h2>
+    <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-xl">
+      <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-2">
+        Subscribe to OptimaliQ
+      </h2>
       <p className="text-gray-600 text-center mb-6">
         Get your 30-day strategic roadmap and AI-driven insights — starting now.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex gap-4">
-          <Input label="First Name" name="first_name" value={userInfo.first_name} onChange={handleChange} />
-          <Input label="Last Name" name="last_name" value={userInfo.last_name} onChange={handleChange} />
+          <IconInput
+            icon={FaUser}
+            name="first_name"
+            value={userInfo.first_name}
+            onChange={handleChange}
+            placeholder="First Name"
+          />
+          <IconInput
+            icon={FaUser}
+            name="last_name"
+            value={userInfo.last_name}
+            onChange={handleChange}
+            placeholder="Last Name"
+          />
         </div>
-        <Input label="Email" name="email" value={userInfo.email} onChange={handleChange} type="email" />
-        <Input label="Phone" name="phone" value={userInfo.phone} onChange={handleChange} />
-        <Input label="Title / Role" name="title" value={userInfo.title} onChange={handleChange} />
-        <Input label="Company Name" name="company" value={userInfo.company} onChange={handleChange} />
-        <Select label="Company Size" name="company_size" value={userInfo.company_size} onChange={handleChange} options={["1-10", "11-50", "51-200", "201-500", "500+"]} />
-        <Select label="Revenue Range" name="revenue_range" value={userInfo.revenue_range} onChange={handleChange} options={["<$100K", "$100K-$500K", "$500K-$1M", "$1M-$10M", "$10M+"]} />
-        <Select label="Industry" name="industry" value={userInfo.industry} onChange={handleChange} options={["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail", "Consulting", "Other"]} />
 
-        <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} onChange={(token) => setCaptchaToken(token)} />
+        <IconInput
+          icon={FaEnvelope}
+          type="email"
+          name="email"
+          value={userInfo.email}
+          onChange={handleChange}
+          placeholder="Email Address"
+        />
+        <IconInput
+          icon={FaPhone}
+          name="phone"
+          value={userInfo.phone}
+          onChange={handleChange}
+          placeholder="Phone Number"
+        />
+        <IconInput
+          icon={FaBriefcase}
+          name="title"
+          value={userInfo.title}
+          onChange={handleChange}
+          placeholder="Your Role"
+        />
+        <IconInput
+          icon={FaBuilding}
+          name="company"
+          value={userInfo.company}
+          onChange={handleChange}
+          placeholder="Company Name"
+        />
+
+        <IconSelect
+          icon={FaBuilding}
+          name="company_size"
+          value={userInfo.company_size}
+          onChange={handleChange}
+          options={["1-10", "11-50", "51-200", "201-500", "500+"]}
+        />
+        <IconSelect
+          icon={FaDollarSign}
+          name="revenue_range"
+          value={userInfo.revenue_range}
+          onChange={handleChange}
+          options={["<$100K", "$100K-$500K", "$500K-$1M", "$1M-$10M", "$10M+"]}
+        />
+        <IconSelect
+          icon={FaIndustry}
+          name="industry"
+          value={userInfo.industry}
+          onChange={handleChange}
+          options={[
+            "E-commerce",
+            "Finance",
+            "SaaS",
+            "Education",
+            "Technology",
+            "Healthcare",
+            "Retail",
+            "Consulting",
+            "Other",
+          ]}
+        />
+
+        <div className="pt-2">
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onChange={(token) => setCaptchaToken(token)}
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           {loading ? "Redirecting..." : "Continue to Payment"}
         </button>
@@ -142,38 +226,5 @@ export default function SubscribeForm() {
         </p>
       </form>
     </div>
-  );
-}
-
-function Input({ label, ...props }: any) {
-  return (
-    <label className="block w-full">
-      <span className="text-sm text-gray-700 font-medium">{label}</span>
-      <input
-        {...props}
-        className="mt-1 block w-full p-3 rounded-md bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        required
-      />
-    </label>
-  );
-}
-
-function Select({ label, name, value, onChange, options = [] }: any) {
-  return (
-    <label className="block w-full">
-      <span className="text-sm text-gray-700 font-medium">{label}</span>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="mt-1 block w-full p-3 rounded-md bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        required
-      >
-        <option value="">Select {label}</option>
-        {options.map((option: string) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-    </label>
   );
 }
