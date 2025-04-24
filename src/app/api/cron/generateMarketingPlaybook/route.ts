@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { scrapeHeadlinesFromUrls } from "@/lib/scrapeSources";
+import { scrapeHeadlinesFromUrls } from "src/lib/scrapeSources";
 
 export const dynamic = "force-dynamic";
 
