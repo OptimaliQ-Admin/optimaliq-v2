@@ -6,15 +6,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-<<<<<<< HEAD
-import { useTier2User } from "@/context/Tier2UserContext";
-import { normalizeScore, validatorSets } from "./StepGroupRenderer";
-=======
 import { useTier2User } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer"; // adjust path if needed
 
 
->>>>>>> bdfceb4 (refractoring structor)
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
