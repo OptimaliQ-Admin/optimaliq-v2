@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
+import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
+import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
+import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
+import DropdownQuestion from "src/components/questions/DropdownQuestion";
 
 
 export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {

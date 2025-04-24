@@ -2,9 +2,9 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
+import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
+import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
 
 
 export function isScore_1Group2Complete(answers: Record<string, any>): boolean {

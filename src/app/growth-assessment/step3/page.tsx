@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-import ScoreCardGrid from "@/components/growthAssessment/step3/ScoreCardGrid";
-import ScoreLineChart from "@/components/growthAssessment/step3/ScoreLineChart";
-import ScoreInsightGrid from "@/components/growthAssessment/step3/ScoreInsightGrid";
+import { supabase } from "src/lib/supabase";
+import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardGrid";
+import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
+import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 
 function Step3Component() {
   const router = useRouter();
