@@ -3,7 +3,8 @@
 
 import { useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import AnalyzingMessage from "@/components/shared/AnalyzingMessage";
+import AnalyzingMessage from "../../../components/shared/AnalyzingMessage";
+
 
 function AnalyzingComponent() {
   const router = useRouter();

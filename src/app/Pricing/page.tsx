@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import PricingToggle from "@/components/pricing/PricingToggle";
-import PricingGrid from "@/components/pricing/PricingGrid";
-import ComparisonBlock from "@/components/pricing/ComparisonBlock";
+import PricingToggle from "../../components/pricing/PricingToggle";
+import PricingGrid from "../../components/pricing/PricingGrid";
+import ComparisonBlock from "../../components/pricing/ComparisonBlock";
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");

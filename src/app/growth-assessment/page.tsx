@@ -1,9 +1,9 @@
 // src/app/growth-assessment/page.tsx
 "use client";
 
-import FormHeader from "@/components/growthAssessment/FormHeader";
-import GrowthAssessmentForm from "@/components/growthAssessment/GrowthAssessmentForm";
-import TrustFooter from "@/components/growthAssessment/TrustFooter";
+import FormHeader from "../../components/growthAssessment/FormHeader";
+import GrowthAssessmentForm from "../../components/growthAssessment/GrowthAssessmentForm";
+import TrustFooter from "../../components/growthAssessment/TrustFooter";
 
 export default function GrowthAssessmentPage() {
   return (
