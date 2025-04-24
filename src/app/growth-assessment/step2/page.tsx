@@ -3,11 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-import LabeledInput from "@/components/shared/LabeledInput";
-import LabeledSelect from "@/components/shared/LabeledSelect";
-import SubmitButton from "@/components/shared/SubmitButton";
-import FormSectionHeader from "@/components/shared/FormSectionHeader";
+import { supabase } from "src/lib/supabase";
+import LabeledInput from "../../../components/shared/LabeledInput";
+import LabeledSelect from "../../../components/shared/LabeledSelect";
+import SubmitButton from "../../../components/shared/SubmitButton";
+import FormSectionHeader from "../../../components/shared/FormSectionHeader";
 
 export default function GrowthAssessmentStep2() {
   const router = useRouter();
