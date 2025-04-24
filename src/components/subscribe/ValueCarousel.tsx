@@ -1,4 +1,4 @@
-// src/components/subscribe/ValueCarousel.tsx
+// refactor/src/components/subscribe/ValueCarousel.tsx
 
 "use client";
 

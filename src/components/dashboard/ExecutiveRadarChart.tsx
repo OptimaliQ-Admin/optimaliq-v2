@@ -1,4 +1,3 @@
-//src/components/dashboard/ExecutiveRadarChart.tsx
 "use client";
 
 import React from "react";
@@ -59,15 +58,15 @@ const ExecutiveRadarChart: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
       <div className="mb-4">
-      <SectionTitleBar
-  title="🧭 Capability Comparison"
-  tooltip="Compare your strategy, process, and technology maturity to industry benchmarks."
-/>
-  <p className="text-gray-500 text-sm leading-relaxed">
-    Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
-    See how close you are to enterprise excellence.
-  </p>
-</div>
+        <SectionTitleBar
+          title="\ud83d\udded Capability Comparison"
+          tooltip="Compare your strategy, process, and technology maturity to industry benchmarks."
+        />
+        <p className="text-gray-500 text-sm leading-relaxed">
+          Compare your maturity across Strategy, Process, and Technology against industry averages and top performers.
+          See how close you are to enterprise excellence.
+        </p>
+      </div>
 
       <ResponsiveContainer width="100%" height={450}>
         <RadarChart cx="50%" cy="50%" outerRadius={160} data={data}>
@@ -94,7 +93,7 @@ const ExecutiveRadarChart: React.FC<Props> = ({
           <Radar
             name="Industry Avg"
             dataKey="Industry Avg"
-            stroke="#4b5563" // darker gray
+            stroke="#4b5563"
             fill="#4b5563"
             fillOpacity={0.3}
           />
@@ -111,9 +110,9 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       </ResponsiveContainer>
 
       <div className="flex justify-around text-sm text-gray-700 font-medium pt-4 mt-1">
-        <span>🟦 You</span>
-        <span>⬛ Industry Avg</span>
-        <span>🟩 Top Performers</span>
+        <span>\ud83d\udd66 You</span>
+        <span>\u2b1b Industry Avg</span>
+        <span>\ud83d\udfe9 Top Performers</span>
       </div>
     </div>
   );
