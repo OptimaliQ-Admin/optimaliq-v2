@@ -1,12 +1,15 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
-//src/app/tier2/onboarding/Page2_Initial_Assessment/Page1/groups/Group01_Goals.tsx
 "use client";
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
+// ✅ Validation function
 export function isGroup01Complete(answers: AssessmentAnswers): boolean {
   const hasGrowthMetrics =
     Array.isArray(answers["growth_metrics"]) &&
@@ -23,38 +26,40 @@ export function isGroup01Complete(answers: AssessmentAnswers): boolean {
   return hasGrowthMetrics && hasGTMStrategy && hasFrictionPoints;
 }
 
-
-
 type Props = {
   answers: AssessmentAnswers;
   onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group01_Goals({ answers, onAnswer }: Props) {
-  const growthSelected = answers["growth_metrics"] || [];
-  const frictionSelected = answers["friction_points"] || [];
+  const growthSelected = Array.isArray(answers["growth_metrics"])
+    ? answers["growth_metrics"]
+    : [];
+
+  const frictionSelected = Array.isArray(answers["friction_points"])
+    ? answers["friction_points"]
+    : [];
 
   return (
-  <div className="p-6 max-w-2xl mx-auto">
-
+    <div className="p-6 max-w-2xl mx-auto">
       {/* Question 1: Growth Metrics */}
-<MultiSelectQuestion
-  question="What metrics do you track most closely to measure growth?"
-  description="Choose the KPIs that guide your key decisions today."
-  options={[
-    { value: "revenue", label: "Revenue" },
-    { value: "profit_margin", label: "Profit Margin" },
-    { value: "customer_ltv", label: "Customer Lifetime Value (LTV)" },
-    { value: "customer_acquisition_cost", label: "Customer Acquisition Cost (CAC)" },
-    { value: "churn_rate", label: "Customer Churn Rate" },
-    { value: "retention_rate", label: "Customer Retention Rate" },
-    { value: "conversion_rate", label: "Conversion Rate" },
-    { value: "traffic", label: "Website or App Traffic" },
-    { value: "active_users", label: "Monthly Active Users (MAU)" },
-    { value: "net_promoter_score", label: "Net Promoter Score (NPS)" },
-    { value: "other", label: "Other (please describe)" },
-  ]}
-  selected={growthSelected}
+      <MultiSelectQuestion
+        question="What metrics do you track most closely to measure growth?"
+        description="Choose the KPIs that guide your key decisions today."
+        options={[
+          { value: "revenue", label: "Revenue" },
+          { value: "profit_margin", label: "Profit Margin" },
+          { value: "customer_ltv", label: "Customer Lifetime Value (LTV)" },
+          { value: "customer_acquisition_cost", label: "Customer Acquisition Cost (CAC)" },
+          { value: "churn_rate", label: "Customer Churn Rate" },
+          { value: "retention_rate", label: "Customer Retention Rate" },
+          { value: "conversion_rate", label: "Conversion Rate" },
+          { value: "traffic", label: "Website or App Traffic" },
+          { value: "active_users", label: "Monthly Active Users (MAU)" },
+          { value: "net_promoter_score", label: "Net Promoter Score (NPS)" },
+          { value: "other", label: "Other (please describe)" },
+        ]}
+        selected={growthSelected}
         onChange={(val) => onAnswer("growth_metrics", val)}
         maxSelect={5}
       />
@@ -69,7 +74,6 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           maxLength={50}
         />
       )}
-
 
       {/* Question 2: Go-To-Market Strategy */}
       <TextAreaQuestion

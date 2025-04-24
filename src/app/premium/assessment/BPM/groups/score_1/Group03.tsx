@@ -1,6 +1,9 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
-//src/app/tier2/assessment/BPM/groups/score_1/Group03.tsx
 "use client";
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
