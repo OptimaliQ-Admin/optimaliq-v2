@@ -7,23 +7,18 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import { useTier2User } from "@/context/Tier2UserContext";
-import { normalizeScore, validatorSets } from "./StepGroupRenderer"; // adjust path if needed
-
-
+import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 
 export default function OnboardingAssessmentPage() {
-    const router = useRouter();
-    const { user } = useTier2User(); // ✅ call it here
-    const userEmail = user?.email;
-    const [step, setStep] = useState(0);
-    const [score, setScore] = useState<number | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-  
-    const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
-  
-  
+  const router = useRouter();
+  const { user } = useTier2User();
+  const [step, setStep] = useState(0);
+  const [score, setScore] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+
+  const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   const stripUnusedOtherFields = (answers: Record<string, any>) => {
     const result: Record<string, any> = {};
@@ -34,46 +29,45 @@ export default function OnboardingAssessmentPage() {
     return result;
   };
 
-
+  // ✅ Subscription validation
   useEffect(() => {
     const checkSubscription = async () => {
       if (skipCheck) {
         setLoading(false);
         return;
       }
-  
-      // If no user email, redirect to pricing
+
       if (!user?.email) {
         router.push("/pricing");
         return;
       }
-  
+
       try {
         const { data, error } = await supabase
           .from("tier2_users")
           .select("subscription_status")
           .eq("email", user.email)
           .single();
-  
+
         if (error || !data || data.subscription_status !== "active") {
-          console.warn("🚫 Access denied: not an active tier2 user");
+          console.warn("🚫 Not an active Tier 2 user");
           setError("Access Denied. Please subscribe first.");
           router.push("/pricing");
           return;
         }
-  
-        setLoading(false); // ✅ allowed
+
+        setLoading(false);
       } catch (err) {
         console.error("❌ Error checking subscription:", err);
         setError("Something went wrong. Try again later.");
       }
     };
-  
+
     checkSubscription();
   }, [router, user?.email, skipCheck]);
-  
-  useEffect(() => {
 
+  // ✅ Load current GMF+ score
+  useEffect(() => {
     const fetchScore = async () => {
       if (!user?.u_id && !skipCheck) return;
 
@@ -104,51 +98,74 @@ export default function OnboardingAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  const handleNext = async () => {
+    if (score === null) {
+      alert("Score is not loaded yet. Please try again.");
+      return;
+    }
 
-const handleNext = async () => {
-  if (score === null) {
-    alert("Score is not loaded yet. Please try again.");
-    return;
-  }
-  const normalized = normalizeScore(score);
-  const validator = validatorSets[normalized]?.[step];
-  const isStepValid = validator ? validator(formAnswers) : true;
+    const normalized = normalizeScore(score);
+    const validator = validatorSets[normalized]?.[step];
+    const isStepValid = validator ? validator(formAnswers) : true;
 
-  if (!isStepValid) {
-    alert("Please complete all required questions before continuing.");
-    return;
-  }
-  const isLastStep = step >= 2;
+    if (!isStepValid) {
+      alert("Please complete all required questions before continuing.");
+      return;
+    }
 
-  if (!isLastStep) {
-    setStep((prev) => prev + 1);
-    return;
-  }
+    const isLastStep = step >= 2;
+    if (!isLastStep) {
+      setStep((prev) => prev + 1);
+      return;
+    }
 
-  if (!user?.u_id) {
-    alert("User ID missing. Please try again.");
-    return;
-  }
+    if (!user?.u_id) {
+      alert("User ID missing. Please try again.");
+      return;
+    }
 
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-      const { data, error } = await supabase
-        .from("ai_readiness_assessment")
-        .insert([{ ...sanitizedAnswers, score, u_id: user.u_id }]);
 
-      if (error) {
-        console.error("❌ Supabase error:", error);
-        alert(`Something went wrong: ${error.message}`);
+      // ✅ Step 1: Call AI Readiness scoring API
+      const response = await fetch("/api/tier2/assessments/ai_readiness", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          answers: sanitizedAnswers,
+          score,
+          userId: user.u_id,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result.aiScore === undefined) {
+        console.error("❌ Scoring API failed:", result);
+        alert("Something went wrong while scoring the assessment.");
         return;
       }
 
-      router.push("/dashboard/insights");
+      const aiScore = result.aiScore;
+
+      // ✅ Step 2: Insert raw answers into ai_readiness_assessment
+      const { error: insertError } = await supabase
+        .from("ai_readiness_assessment")
+        .insert([{ ...sanitizedAnswers, score: aiScore, u_id: user.u_id }]);
+
+      if (insertError) {
+        console.error("❌ Supabase error:", insertError);
+        alert(`Something went wrong: ${insertError.message}`);
+        return;
+      }
+
+      // ✅ Success - Redirect to dashboard
+      router.push("/tier2/assessment");
     } catch (err: any) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${err.message}`);
     }
   };
-
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
@@ -175,9 +192,9 @@ const handleNext = async () => {
     });
   };
 
-  if (loading )
+  if (loading)
     return <div className="p-10 text-center">Loading your assessment...</div>;
-  
+
   if (score === null && !error)
     return <div className="p-10 text-center">Still waiting for your score...</div>;
 
@@ -185,7 +202,6 @@ const handleNext = async () => {
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-4xl mx-auto">
         <ProgressBar current={step} total={3} />
-
         <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
           <AnimatePresence mode="wait">
             <motion.div
@@ -195,15 +211,14 @@ const handleNext = async () => {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-             {score !== null && (
-  <StepGroupRenderer
-    step={step}
-    score={score}
-    answers={formAnswers}
-    onAnswer={handleAnswer}
-  />
-)}
-
+              {score !== null && (
+                <StepGroupRenderer
+                  step={step}
+                  score={score}
+                  answers={formAnswers}
+                  onAnswer={handleAnswer}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
 

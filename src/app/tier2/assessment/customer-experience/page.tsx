@@ -7,23 +7,17 @@ import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
 import { useTier2User } from "@/context/Tier2UserContext";
-import { normalizeScore, validatorSets } from "./StepGroupRenderer"; // adjust path if needed
+import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 
-
-
-export default function OnboardingAssessmentPage() {
-    const router = useRouter();
-    const { user } = useTier2User(); // ✅ call it here
-    const userEmail = user?.email;
-    const [step, setStep] = useState(0);
-    const [score, setScore] = useState<number | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-  
-    const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
-  
-  
+export default function CustomerExperienceAssessmentPage() {
+  const router = useRouter();
+  const { user } = useTier2User();
+  const [step, setStep] = useState(0);
+  const [score, setScore] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   const stripUnusedOtherFields = (answers: Record<string, any>) => {
     const result: Record<string, any> = {};
@@ -34,46 +28,35 @@ export default function OnboardingAssessmentPage() {
     return result;
   };
 
-
   useEffect(() => {
     const checkSubscription = async () => {
-      if (skipCheck) {
-        setLoading(false);
-        return;
-      }
-  
-      // If no user email, redirect to pricing
-      if (!user?.email) {
-        router.push("/pricing");
-        return;
-      }
-  
+      if (skipCheck) return setLoading(false);
+      if (!user?.email) return router.push("/pricing");
+
       try {
         const { data, error } = await supabase
           .from("tier2_users")
           .select("subscription_status")
           .eq("email", user.email)
           .single();
-  
+
         if (error || !data || data.subscription_status !== "active") {
-          console.warn("🚫 Access denied: not an active tier2 user");
           setError("Access Denied. Please subscribe first.");
           router.push("/pricing");
           return;
         }
-  
-        setLoading(false); // ✅ allowed
+
+        setLoading(false);
       } catch (err) {
-        console.error("❌ Error checking subscription:", err);
-        setError("Something went wrong. Try again later.");
+        console.error("❌ Subscription check error:", err);
+        setError("Subscription check failed.");
       }
     };
-  
+
     checkSubscription();
   }, [router, user?.email, skipCheck]);
-  
-  useEffect(() => {
 
+  useEffect(() => {
     const fetchScore = async () => {
       if (!user?.u_id && !skipCheck) return;
 
@@ -92,8 +75,8 @@ export default function OnboardingAssessmentPage() {
         setScore(data.score);
         setLoading(false);
       } catch (err) {
-        console.error("❌ Unexpected error:", err);
-        setError("An unexpected error occurred.");
+        console.error("❌ Score fetch error:", err);
+        setError("Failed to fetch score.");
       }
     };
 
@@ -104,51 +87,70 @@ export default function OnboardingAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  const handleNext = async () => {
+    if (score === null) {
+      alert("Score not loaded yet. Try again.");
+      return;
+    }
 
-const handleNext = async () => {
-  if (score === null) {
-    alert("Score is not loaded yet. Please try again.");
-    return;
-  }
-  const normalized = normalizeScore(score);
-  const validator = validatorSets[normalized]?.[step];
-  const isStepValid = validator ? validator(formAnswers) : true;
+    const normalized = normalizeScore(score);
+    const validator = validatorSets[normalized]?.[step];
+    const isStepValid = validator ? validator(formAnswers) : true;
 
-  if (!isStepValid) {
-    alert("Please complete all required questions before continuing.");
-    return;
-  }
-  const isLastStep = step >= 2;
+    if (!isStepValid) {
+      alert("Please complete all required questions.");
+      return;
+    }
 
-  if (!isLastStep) {
-    setStep((prev) => prev + 1);
-    return;
-  }
+    const isLastStep = step >= 2;
+    if (!isLastStep) return setStep((prev) => prev + 1);
 
-  if (!user?.u_id) {
-    alert("User ID missing. Please try again.");
-    return;
-  }
+    if (!user?.u_id) {
+      alert("User ID missing.");
+      return;
+    }
 
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-      const { data, error } = await supabase
-        .from("customer_experience_assessment")
-        .insert([{ ...sanitizedAnswers, score, u_id: user.u_id }]);
 
-      if (error) {
-        console.error("❌ Supabase error:", error);
-        alert(`Something went wrong: ${error.message}`);
+      // ✅ Step 1: Call your scoring API
+      const response = await fetch("/api/tier2/assessments/customer_experience", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          answers: sanitizedAnswers,
+          score,
+          userId: user.u_id,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result.customerExperienceScore === undefined) {
+        console.error("❌ Scoring failed:", result);
+        alert("Failed to score assessment.");
         return;
       }
 
-      router.push("/dashboard/insights");
+      const cxScore = result.customerExperienceScore;
+
+      // ✅ Step 2: Save raw answers to assessment table
+      const { error } = await supabase
+        .from("customer_experience_assessment")
+        .insert([{ ...sanitizedAnswers, score: cxScore, u_id: user.u_id }]);
+
+      if (error) {
+        console.error("❌ Supabase insert error:", error);
+        alert(`Insert failed: ${error.message}`);
+        return;
+      }
+
+      router.push("/tier2/assessment");
     } catch (err: any) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${err.message}`);
     }
   };
-
 
   const handleBack = () => {
     if (step > 0) setStep((prev) => prev - 1);
@@ -175,9 +177,8 @@ const handleNext = async () => {
     });
   };
 
-  if (loading )
+  if (loading)
     return <div className="p-10 text-center">Loading your assessment...</div>;
-  
   if (score === null && !error)
     return <div className="p-10 text-center">Still waiting for your score...</div>;
 
@@ -195,15 +196,14 @@ const handleNext = async () => {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
             >
-             {score !== null && (
-  <StepGroupRenderer
-    step={step}
-    score={score}
-    answers={formAnswers}
-    onAnswer={handleAnswer}
-  />
-)}
-
+              {score !== null && (
+                <StepGroupRenderer
+                  step={step}
+                  score={score}
+                  answers={formAnswers}
+                  onAnswer={handleAnswer}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
 
