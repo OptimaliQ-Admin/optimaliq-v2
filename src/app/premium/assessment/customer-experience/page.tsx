@@ -6,12 +6,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "./ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-import { useTier2User } from "@/context/Tier2UserContext";
+import { PremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 
 export default function CustomerExperienceAssessmentPage() {
   const router = useRouter();
-  const { user } = useTier2User();
+  const { user } = PremiumUser();
   const [step, setStep] = useState(0);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
