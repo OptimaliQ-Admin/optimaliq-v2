@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["progress_tracking_method"] === "string" &&
     typeof answers["course_correction"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "scorecards_dashboards", label: "Scorecards or dashboards for major goals" },
           { value: "automated_reporting", label: "Automated reporting with regular reviews" },
         ]}
-        value={answers["progress_tracking_method"] || ""}
+        value={getStringAnswer(answers["progress_tracking_method"])}
         onChange={(val) => onAnswer("progress_tracking_method", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "discussion_then_action", label: "We discuss root causes and adjust course" },
           { value: "proactive_adjustment", label: "We proactively adjust plans and resources" },
         ]}
-        value={answers["course_correction"] || ""}
+        value={getStringAnswer(answers["course_correction"])}
         onChange={(val) => onAnswer("course_correction", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly_updates", label: "Quarterly updates or all-hands" },
           { value: "regular_open_communication", label: "Regular updates — strategy is part of the culture" },
         ]}
-        value={answers["communication_frequency"] || ""}
+        value={getStringAnswer(answers["communication_frequency"])}
         onChange={(val) => onAnswer("communication_frequency", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly check-ins and reviews" },
           { value: "monthly_ongoing", label: "Monthly or ongoing discussions" },
         ]}
-        value={answers["strategy_meeting_cadence"] || ""}
+        value={getStringAnswer(answers["strategy_meeting_cadence"])}
         onChange={(val) => onAnswer("strategy_meeting_cadence", val)}
       />
     </div>

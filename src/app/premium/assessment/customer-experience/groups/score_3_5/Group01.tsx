@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["journey_mapping_clarity"] === "string" &&
     typeof answers["voice_of_customer_program"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "comprehensive_mapping", label: "Comprehensive mapping across most channels" },
           { value: "real_time_mapping", label: "Mapped in real-time and regularly updated" },
         ]}
-        value={answers["journey_mapping_clarity"] || ""}
+        value={getStringAnswer(answers["journey_mapping_clarity"])}
         onChange={(val) => onAnswer("journey_mapping_clarity", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "program", label: "Defined VoC program across teams" },
           { value: "integrated", label: "Fully integrated VoC with cross-functional usage" },
         ]}
-        value={answers["voice_of_customer_program"] || ""}
+        value={getStringAnswer(answers["voice_of_customer_program"])}
         onChange={(val) => onAnswer("voice_of_customer_program", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "usually_addressed", label: "Usually addressed within days" },
           { value: "immediate_response", label: "Immediate response with systems/processes" },
         ]}
-        value={answers["feedback_loop_speed"] || ""}
+        value={getStringAnswer(answers["feedback_loop_speed"])}
         onChange={(val) => onAnswer("feedback_loop_speed", val)}
       />
     </div>

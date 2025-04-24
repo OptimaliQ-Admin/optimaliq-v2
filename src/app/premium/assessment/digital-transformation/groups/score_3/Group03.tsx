@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["technology_ownership"] === "string" &&
     typeof answers["digital_strategy_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "it_owned", label: "Mostly IT or a tech leader" },
           { value: "dedicated_owner", label: "A dedicated digital or transformation leader" },
         ]}
-        value={answers["technology_ownership"] || ""}
+        value={getStringAnswer(answers["technology_ownership"])}
         onChange={(val) => onAnswer("technology_ownership", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned with major initiatives" },
           { value: "fully_aligned", label: "Fully aligned — digital is a business driver" },
         ]}
-        value={answers["digital_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["digital_strategy_alignment"])}
         onChange={(val) => onAnswer("digital_strategy_alignment", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "formal_model", label: "Formal governance for major initiatives" },
           { value: "mature_model", label: "Yes — with clear criteria, roles, and reporting" },
         ]}
-        value={answers["governance_model"] || ""}
+        value={getStringAnswer(answers["governance_model"])}
         onChange={(val) => onAnswer("governance_model", val)}
       />
     </div>

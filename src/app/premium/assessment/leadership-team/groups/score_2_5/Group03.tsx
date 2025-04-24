@@ -1,9 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";  AssessmentAnswers,
+  AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["clarity_of_mission"] === "string" &&
     typeof answers["decision_making_involvement"] === "string" &&
@@ -12,8 +17,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +33,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "generally_clear", label: "Generally clear — it’s discussed at meetings" },
           { value: "very_clear", label: "Very clear — it's embedded in daily operations" },
         ]}
-        value={answers["clarity_of_mission"] || ""}
+        value={getStringAnswer(answers["clarity_of_mission"])}
         onChange={(val) => onAnswer("clarity_of_mission", val)}
       />
 
@@ -41,7 +46,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "informed", label: "Often informed and encouraged to speak up" },
           { value: "collaborative", label: "Collaborative — teams contribute to decisions" },
         ]}
-        value={answers["decision_making_involvement"] || ""}
+        value={getStringAnswer(answers["decision_making_involvement"])}
         onChange={(val) => onAnswer("decision_making_involvement", val)}
       />
 
@@ -54,7 +59,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "some_structure", label: "Some structure like awards or bonuses" },
           { value: "systematic", label: "Systematic — part of our management practices" },
         ]}
-        value={answers["recognition_practices"] || ""}
+        value={getStringAnswer(answers["recognition_practices"])}
         onChange={(val) => onAnswer("recognition_practices", val)}
       />
     </div>

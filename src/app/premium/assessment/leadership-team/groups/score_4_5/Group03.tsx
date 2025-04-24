@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_alignment"] === "string" &&
     typeof answers["innovation_mindset"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Goals are mostly aligned and reviewed" },
           { value: "fully_aligned", label: "There is full alignment and shared ownership" },
         ]}
-        value={answers["strategy_alignment"] || ""}
+        value={getStringAnswer(answers["strategy_alignment"])}
         onChange={(val) => onAnswer("strategy_alignment", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "structured_support", label: "There are structured ways to propose and test ideas" },
           { value: "innovation_culture", label: "Innovation is a core part of leadership culture" },
         ]}
-        value={answers["innovation_mindset"] || ""}
+        value={getStringAnswer(answers["innovation_mindset"])}
         onChange={(val) => onAnswer("innovation_mindset", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "scalable_with_training", label: "It scales with intentional training and hiring" },
           { value: "fully_scalable_model", label: "We have a fully scalable model with strong succession planning" },
         ]}
-        value={answers["leadership_scalability"] || ""}
+        value={getStringAnswer(answers["leadership_scalability"])}
         onChange={(val) => onAnswer("leadership_scalability", val)}
       />
     </div>

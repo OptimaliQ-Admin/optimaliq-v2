@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tools_aligned_with_goals"] === "string" &&
     Array.isArray(answers["strategy_execution_components"]) &&
@@ -13,8 +17,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "alignment_principles", label: "We use principles or OKRs for alignment" },
           { value: "fully_integrated", label: "Fully integrated with planning and performance" },
         ]}
-        value={answers["tools_aligned_with_goals"] || ""}
+        value={getStringAnswer(answers["tools_aligned_with_goals"])}
         onChange={(val) => onAnswer("tools_aligned_with_goals", val)}
       />
 
@@ -60,7 +64,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "executive_reporting", label: "Reported to executives and sponsors" },
           { value: "dashboards_available", label: "Dashboards and updates are accessible org-wide" },
         ]}
-        value={answers["transformation_communication"] || ""}
+        value={getStringAnswer(answers["transformation_communication"])}
         onChange={(val) => onAnswer("transformation_communication", val)}
       />
     </div>

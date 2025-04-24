@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_insight_methods"] === "string" &&
     typeof answers["support_channel_consistency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_1_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score_1_5_Step01({ answers, onAnswer }: Props) {
           { value: "occasional_surveys", label: "Occasional surveys or reviews" },
           { value: "structured_feedback", label: "Structured feedback collection across touchpoints" },
         ]}
-        value={answers["customer_insight_methods"] || ""}
+        value={getStringAnswer(answers["customer_insight_methods"])}
         onChange={(val) => onAnswer("customer_insight_methods", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score_1_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent with some gaps" },
           { value: "very_consistent", label: "Very consistent — supported by processes or training" },
         ]}
-        value={answers["support_channel_consistency"] || ""}
+        value={getStringAnswer(answers["support_channel_consistency"])}
         onChange={(val) => onAnswer("support_channel_consistency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score_1_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_tracked", label: "Most interactions are tracked in some system" },
           { value: "fully_visible", label: "We have a full, unified view of the customer journey" },
         ]}
-        value={answers["touchpoint_visibility"] || ""}
+        value={getStringAnswer(answers["touchpoint_visibility"])}
         onChange={(val) => onAnswer("touchpoint_visibility", val)}
       />
     </div>

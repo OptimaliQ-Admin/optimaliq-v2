@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -46,8 +47,8 @@ user: {
   score: userData.score,
 },
 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🔥 Unexpected error in quadrant API:", err);
-    return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) || "Unknown error" }, { status: 500 });
   }
 }

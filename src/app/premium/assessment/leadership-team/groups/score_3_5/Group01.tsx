@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["leadership_transparency"] === "string" &&
     typeof answers["team_autonomy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "regular", label: "Regular — we share dashboards and updates" },
           { value: "open", label: "Open — leadership shares wins, losses, and direction openly" },
         ]}
-        value={answers["leadership_transparency"] || ""}
+        value={getStringAnswer(answers["leadership_transparency"])}
         onChange={(val) => onAnswer("leadership_transparency", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "moderate", label: "Moderate — teams set many of their own targets" },
           { value: "high", label: "High — teams operate with significant autonomy" },
         ]}
-        value={answers["team_autonomy"] || ""}
+        value={getStringAnswer(answers["team_autonomy"])}
         onChange={(val) => onAnswer("team_autonomy", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "distributed", label: "Distributed — managers are expected to own decisions" },
           { value: "empowered", label: "Empowered — decision-making is a shared responsibility" },
         ]}
-        value={answers["decision_delegation"] || ""}
+        value={getStringAnswer(answers["decision_delegation"])}
         onChange={(val) => onAnswer("decision_delegation", val)}
       />
     </div>

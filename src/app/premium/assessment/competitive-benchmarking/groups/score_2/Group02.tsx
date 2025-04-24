@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmark_frequency"] === "string" &&
     typeof answers["stakeholder_visibility"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly" },
           { value: "continuous", label: "Continuously or as needed" },
         ]}
-        value={answers["benchmark_frequency"] || ""}
+        value={getStringAnswer(answers["benchmark_frequency"])}
         onChange={(val) => onAnswer("benchmark_frequency", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "some_teams", label: "Some teams reference it occasionally" },
           { value: "widely_shared", label: "It’s widely shared and referenced regularly" },
         ]}
-        value={answers["stakeholder_visibility"] || ""}
+        value={getStringAnswer(answers["stakeholder_visibility"])}
         onChange={(val) => onAnswer("stakeholder_visibility", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "adjust_positioning", label: "We adjust our messaging or campaigns" },
           { value: "strategic_response", label: "We adapt strategically with cross-functional input" },
         ]}
-        value={answers["competitive_reaction"] || ""}
+        value={getStringAnswer(answers["competitive_reaction"])}
         onChange={(val) => onAnswer("competitive_reaction", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "defined_but_static", label: "Yes — but it’s not consistently applied" },
           { value: "strategic_and_tracked", label: "Yes — it’s strategic, defined, and tracked" },
         ]}
-        value={answers["differentiation_strategy"] || ""}
+        value={getStringAnswer(answers["differentiation_strategy"])}
         onChange={(val) => onAnswer("differentiation_strategy", val)}
       />
     </div>

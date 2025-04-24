@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitive_insights_usage"] === "string" &&
     typeof answers["team_involvement"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "inform_strategy", label: "They directly inform strategy and plans" },
           { value: "integrated", label: "They are integrated into core decision-making" },
         ]}
-        value={answers["competitive_insights_usage"] || ""}
+        value={getStringAnswer(answers["competitive_insights_usage"])}
         onChange={(val) => onAnswer("competitive_insights_usage", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "team_leads", label: "Team leads or department heads" },
           { value: "dedicated_team", label: "We have a dedicated strategy or insights team" },
         ]}
-        value={answers["team_involvement"] || ""}
+        value={getStringAnswer(answers["team_involvement"])}
         onChange={(val) => onAnswer("team_involvement", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly as part of reviews" },
           { value: "consistently", label: "Consistently — it’s part of our operating model" },
         ]}
-        value={answers["internal_comparison"] || ""}
+        value={getStringAnswer(answers["internal_comparison"])}
         onChange={(val) => onAnswer("internal_comparison", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "high", label: "High — we use a defined methodology and deep dives" },
           { value: "advanced", label: "Advanced — we combine internal and external benchmarks for insights" },
         ]}
-        value={answers["benchmarking_rigor"] || ""}
+        value={getStringAnswer(answers["benchmarking_rigor"])}
         onChange={(val) => onAnswer("benchmarking_rigor", val)}
       />
     </div>

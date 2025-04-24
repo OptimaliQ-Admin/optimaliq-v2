@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_visibility"] === "string" &&
     typeof answers["internal_collaboration"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_0_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_connected", label: "We mostly have unified customer profiles" },
           { value: "fully_connected", label: "Yes — all customer data is integrated and accessible" },
         ]}
-        value={answers["customer_visibility"] || ""}
+        value={getStringAnswer(answers["customer_visibility"])}
         onChange={(val) => onAnswer("customer_visibility", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_0_Step02({ answers, onAnswer }: Props) {
           { value: "cross_team_initiatives", label: "We run cross-team initiatives regularly" },
           { value: "structured_governance", label: "We have structured governance and alignment" },
         ]}
-        value={answers["internal_collaboration"] || ""}
+        value={getStringAnswer(answers["internal_collaboration"])}
         onChange={(val) => onAnswer("internal_collaboration", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_0_Step02({ answers, onAnswer }: Props) {
           { value: "rarely", label: "Rarely — tools are mostly distinct" },
           { value: "never", label: "Never — we have clear tool ownership" },
         ]}
-        value={answers["tool_overlap"] || ""}
+        value={getStringAnswer(answers["tool_overlap"])}
         onChange={(val) => onAnswer("tool_overlap", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_0_Step02({ answers, onAnswer }: Props) {
           { value: "shared_ownership", label: "It’s shared across departments" },
           { value: "dedicated_leader", label: "We have a dedicated digital leader or team" },
         ]}
-        value={answers["digital_leadership"] || ""}
+        value={getStringAnswer(answers["digital_leadership"])}
         onChange={(val) => onAnswer("digital_leadership", val)}
       />
     </div>

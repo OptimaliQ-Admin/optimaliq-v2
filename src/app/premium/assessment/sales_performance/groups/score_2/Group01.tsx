@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_64a8d1"] === "string" &&
     answers["how_64a8d1"].trim().length > 0 &&
@@ -15,8 +18,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -32,7 +35,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "Defined, but not consistently used", label: "Defined, but not consistently used" },
           { value: "Clearly documented and used for tracking", label: "Clearly documented and used for tracking" },
         ]}
-        value={answers["how_64a8d1"] || ""}
+        value={getStringAnswer(answers["how_64a8d1"])}
         onChange={(val) => onAnswer("how_64a8d1", val)}
       />
 
@@ -45,7 +48,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "Mostly accurate, with occasional cleanups", label: "Mostly accurate, with occasional cleanups" },
           { value: "Very accurate and regularly maintained", label: "Very accurate and regularly maintained" },
         ]}
-        value={answers["how_7d8dcb"] || ""}
+        value={getStringAnswer(answers["how_7d8dcb"])}
         onChange={(val) => onAnswer("how_7d8dcb", val)}
       />
 
@@ -58,7 +61,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "We prioritize based on deal size or engagement", label: "We prioritize based on deal size or engagement" },
           { value: "We use scoring or qualification criteria", label: "We use scoring or qualification criteria" },
         ]}
-        value={answers["how_0fa447"] || ""}
+        value={getStringAnswer(answers["how_0fa447"])}
         onChange={(val) => onAnswer("how_0fa447", val)}
       />
     </div>

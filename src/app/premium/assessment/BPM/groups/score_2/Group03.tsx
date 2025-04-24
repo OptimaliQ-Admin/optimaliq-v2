@@ -2,12 +2,15 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["task_tracking"]) &&
     answers["task_tracking"].length > 0 &&
@@ -26,8 +29,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -61,7 +64,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "basic metrics in reports", label: "Some basic metrics in reports" },
           { value: "we monitor and review metrics", label: "Yes — we monitor and review metrics" },
         ]}
-        value={answers["metrics"] || ""}
+        value={getStringAnswer(answers["metrics"])}
         onChange={(val) => onAnswer("metrics", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the biggest challenge you face in making sure processes are followed?"
         placeholder="E.g.,"
-        value={answers["challenge"] || ""}
+        value={getStringAnswer(answers["challenge"])}
         onChange={(val) => onAnswer("challenge", val)}
         maxLength={300}
       />
@@ -85,7 +88,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly", label: "Mostly confident" },
           { value: "Very confident", label: "Very confident" },
         ]}
-        value={answers["discipline"] || ""}
+        value={getStringAnswer(answers["discipline"])}
         onChange={(val) => onAnswer("discipline", val)}
       />
 

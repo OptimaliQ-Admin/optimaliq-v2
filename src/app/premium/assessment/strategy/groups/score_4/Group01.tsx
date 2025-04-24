@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["long_term_strategy"] === "string" &&
     typeof answers["team_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -27,7 +30,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly — short-term decisions ladder up" },
           { value: "fully_aligned", label: "Fully — strategy informs all decisions" },
         ]}
-        value={answers["long_term_strategy"] || ""}
+        value={getStringAnswer(answers["long_term_strategy"])}
         onChange={(val) => onAnswer("long_term_strategy", val)}
       />
 
@@ -39,7 +42,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned with clear direction" },
           { value: "fully_aligned", label: "Fully aligned and communicating regularly" },
         ]}
-        value={answers["team_alignment"] || ""}
+        value={getStringAnswer(answers["team_alignment"])}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
 
@@ -51,7 +54,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "regular_updates", label: "Regular updates are provided" },
           { value: "transparent_dashboard", label: "Visible in dashboards or OKR tools" },
         ]}
-        value={answers["visibility"] || ""}
+        value={getStringAnswer(answers["visibility"])}
         onChange={(val) => onAnswer("visibility", val)}
       />
     </div>

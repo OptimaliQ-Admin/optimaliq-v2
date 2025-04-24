@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_knowledge"] === "string" &&
     typeof answers["data_foundation"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "functional", label: "Functional — we’ve explored some AI use cases" },
           { value: "proficient", label: "Proficient — we understand what’s possible and what’s not" },
         ]}
-        value={answers["ai_knowledge"] || ""}
+        value={getStringAnswer(answers["ai_knowledge"])}
         onChange={(val) => onAnswer("ai_knowledge", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "solid", label: "Solid — we have decent quality and structure" },
           { value: "strong", label: "Strong — data is clean, accessible, and reliable" },
         ]}
-        value={answers["data_foundation"] || ""}
+        value={getStringAnswer(answers["data_foundation"])}
         onChange={(val) => onAnswer("data_foundation", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "centralized_innovation", label: "A centralized innovation or tech lead" },
           { value: "dedicated_owner", label: "A dedicated AI/automation owner or task force" },
         ]}
-        value={answers["ai_responsibility"] || ""}
+        value={getStringAnswer(answers["ai_responsibility"])}
         onChange={(val) => onAnswer("ai_responsibility", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "clear_ideas", label: "We have clear ideas on where automation could help" },
           { value: "prioritized_list", label: "We’ve prioritized specific areas or workflows" },
         ]}
-        value={answers["workflow_opportunity"] || ""}
+        value={getStringAnswer(answers["workflow_opportunity"])}
         onChange={(val) => onAnswer("workflow_opportunity", val)}
       />
     </div>

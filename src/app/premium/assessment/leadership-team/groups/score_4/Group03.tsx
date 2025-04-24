@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["leadership_alignment"] === "string" &&
     typeof answers["employee_sentiment_strategy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "aligned_top_down", label: "Generally aligned through top-down planning" },
           { value: "fully_aligned", label: "Fully aligned with shared understanding and buy-in" },
         ]}
-        value={answers["leadership_alignment"] || ""}
+        value={getStringAnswer(answers["leadership_alignment"])}
         onChange={(val) => onAnswer("leadership_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "regularly_reviewed", label: "Regularly reviewed during leadership meetings" },
           { value: "embedded_feedback_loop", label: "Embedded — it drives leadership focus" },
         ]}
-        value={answers["employee_sentiment_strategy"] || ""}
+        value={getStringAnswer(answers["employee_sentiment_strategy"])}
         onChange={(val) => onAnswer("employee_sentiment_strategy", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "process_based", label: "Some cross-functional processes exist" },
           { value: "proactively_enabled", label: "Proactively enabled through shared goals and incentives" },
         ]}
-        value={answers["cross_functional_enablement"] || ""}
+        value={getStringAnswer(answers["cross_functional_enablement"])}
         onChange={(val) => onAnswer("cross_functional_enablement", val)}
       />
     </div>

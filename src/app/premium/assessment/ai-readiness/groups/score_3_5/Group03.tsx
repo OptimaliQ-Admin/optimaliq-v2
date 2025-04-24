@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_change_management"] === "string" &&
     typeof answers["ai_cost_impact"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "formal_change_process", label: "Formalized process including risk analysis" },
           { value: "change_governance", label: "Full change governance with tracking and communication plans" },
         ]}
-        value={answers["ai_change_management"] || ""}
+        value={getStringAnswer(answers["ai_change_management"])}
         onChange={(val) => onAnswer("ai_change_management", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "roi_tracked", label: "We track ROI on major AI investments" },
           { value: "cost_impact_modeling", label: "We use cost-impact modeling pre and post implementation" },
         ]}
-        value={answers["ai_cost_impact"] || ""}
+        value={getStringAnswer(answers["ai_cost_impact"])}
         onChange={(val) => onAnswer("ai_cost_impact", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "scalable_framework", label: "We use frameworks that support scaling AI use" },
           { value: "enterprise_scale", label: "We build and deploy AI at enterprise scale" },
         ]}
-        value={answers["ai_scalability"] || ""}
+        value={getStringAnswer(answers["ai_scalability"])}
         onChange={(val) => onAnswer("ai_scalability", val)}
       />
     </div>

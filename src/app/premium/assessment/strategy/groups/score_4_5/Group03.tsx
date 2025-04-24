@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["alignment_with_mission"] === "string" &&
     typeof answers["adaptive_decision_making"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "strong_alignment", label: "Strong — they guide our priorities" },
           { value: "full_alignment", label: "Fully — mission and values shape all key decisions" },
         ]}
-        value={answers["alignment_with_mission"] || ""}
+        value={getStringAnswer(answers["alignment_with_mission"])}
         onChange={(val) => onAnswer("alignment_with_mission", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "moderate", label: "Moderately — we respond with agility when needed" },
           { value: "proactive", label: "Very quickly — our strategy is designed to evolve" },
         ]}
-        value={answers["adaptive_decision_making"] || ""}
+        value={getStringAnswer(answers["adaptive_decision_making"])}
         onChange={(val) => onAnswer("adaptive_decision_making", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly confident — we have strong fundamentals" },
           { value: "fully_confident", label: "Fully confident — we’re a strategic leader" },
         ]}
-        value={answers["strategic_maturity_confidence"] || ""}
+        value={getStringAnswer(answers["strategic_maturity_confidence"])}
         onChange={(val) => onAnswer("strategic_maturity_confidence", val)}
       />
     </div>

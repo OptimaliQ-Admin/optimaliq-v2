@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getErrorMessage } from "@/utils/errorHandler";
 
 export const dynamic = "force-dynamic";
 
@@ -80,8 +81,8 @@ ${headlines}
 
     console.log("✅ Business trends insight saved.");
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("🔥 Cron Error:", err.message);
-    return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error("🔥 Cron Error:", getErrorMessage(err));
+    return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
 }

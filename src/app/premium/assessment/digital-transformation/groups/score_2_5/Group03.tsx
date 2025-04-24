@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["platform_consistency"] === "string" &&
     typeof answers["digital_success_criteria"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent — same branding and layout" },
           { value: "fully_unified", label: "Fully unified — seamless across all platforms" },
         ]}
-        value={answers["platform_consistency"] || ""}
+        value={getStringAnswer(answers["platform_consistency"])}
         onChange={(val) => onAnswer("platform_consistency", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "defined_kpis", label: "We have defined KPIs for most efforts" },
           { value: "clear_roi", label: "Yes — each initiative has clear goals and ROI metrics" },
         ]}
-        value={answers["digital_success_criteria"] || ""}
+        value={getStringAnswer(answers["digital_success_criteria"])}
         onChange={(val) => onAnswer("digital_success_criteria", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "moderately_agile", label: "Moderately agile — we can shift direction with effort" },
           { value: "very_agile", label: "Very agile — we adapt quickly and proactively" },
         ]}
-        value={answers["adaptability_to_change"] || ""}
+        value={getStringAnswer(answers["adaptability_to_change"])}
         onChange={(val) => onAnswer("adaptability_to_change", val)}
       />
     </div>

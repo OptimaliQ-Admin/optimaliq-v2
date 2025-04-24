@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_market_data"] === "string" &&
     typeof answers["competitive_positioning_review"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "detailed_and_timely", label: "Detailed and mostly timely" },
           { value: "real_time_and_targeted", label: "Real-time and targeted to strategy" },
         ]}
-        value={answers["strategic_market_data"] || ""}
+        value={getStringAnswer(answers["strategic_market_data"])}
         onChange={(val) => onAnswer("strategic_market_data", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "multiple_times_per_year", label: "Multiple times per year" },
           { value: "integrated_into_strategy", label: "It’s integrated into ongoing strategy work" },
         ]}
-        value={answers["competitive_positioning_review"] || ""}
+        value={getStringAnswer(answers["competitive_positioning_review"])}
         onChange={(val) => onAnswer("competitive_positioning_review", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "backed_by_surveys", label: "Some data from surveys or research" },
           { value: "deep_analysis", label: "Deep, ongoing pricing analysis" },
         ]}
-        value={answers["pricing_insights_quality"] || ""}
+        value={getStringAnswer(answers["pricing_insights_quality"])}
         onChange={(val) => onAnswer("pricing_insights_quality", val)}
       />
     </div>

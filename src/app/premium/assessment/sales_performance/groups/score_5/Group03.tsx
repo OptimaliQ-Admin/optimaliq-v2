@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["what’s_719868"] === "string" &&
     typeof answers["what_f078f0"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "exploring_models", label: "We actively explore new models" },
           { value: "reinventing_proactively", label: "We continuously reinvent ahead of market shifts" },
         ]}
-        value={answers["what’s_719868"] || ""}
+        value={getStringAnswer(answers["what’s_719868"])}
         onChange={(val) => onAnswer("what’s_719868", val)}
       />
 
@@ -38,7 +42,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What part of your sales engine do you believe gives you a competitive advantage?"
         placeholder="E.g., discovery, product demo, outbound, customer success handoff"
-        value={answers["what_f078f0"] || ""}
+        value={getStringAnswer(answers["what_f078f0"])}
         onChange={(val) => onAnswer("what_f078f0", val)}
         maxLength={300}
       />
@@ -47,7 +51,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s your vision for how your sales organization will evolve over the next 18–24 months?"
         placeholder="E.g., new verticals, full lifecycle ownership, predictive tooling, etc."
-        value={answers["what’s_5927ed"] || ""}
+        value={getStringAnswer(answers["what’s_5927ed"])}
         onChange={(val) => onAnswer("what’s_5927ed", val)}
         maxLength={300}
       />

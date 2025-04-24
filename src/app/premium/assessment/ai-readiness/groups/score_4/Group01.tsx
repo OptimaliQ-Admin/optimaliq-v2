@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_strategy_alignment"] === "string" &&
     typeof answers["ai_governance_model"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "It’s mostly aligned with key initiatives" },
           { value: "fully_integrated", label: "It’s fully integrated into strategic planning" },
         ]}
-        value={answers["ai_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["ai_strategy_alignment"])}
         onChange={(val) => onAnswer("ai_strategy_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "clear_policies", label: "Clear policies and accountability exist" },
           { value: "mature_governance", label: "Robust governance with cross-functional oversight" },
         ]}
-        value={answers["ai_governance_model"] || ""}
+        value={getStringAnswer(answers["ai_governance_model"])}
         onChange={(val) => onAnswer("ai_governance_model", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "documented_process", label: "We follow a documented process" },
           { value: "formal_lifecycle", label: "We have a formal lifecycle for AI experiments" },
         ]}
-        value={answers["ai_experimentation_process"] || ""}
+        value={getStringAnswer(answers["ai_experimentation_process"])}
         onChange={(val) => onAnswer("ai_experimentation_process", val)}
       />
     </div>

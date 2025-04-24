@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tech_scalability"] === "string" &&
     typeof answers["data_governance"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "scales_with_effort", label: "It scales, but requires planning and resources" },
           { value: "fully_scalable", label: "Fully scalable — built to handle growth" },
         ]}
-        value={answers["tech_scalability"] || ""}
+        value={getStringAnswer(answers["tech_scalability"])}
         onChange={(val) => onAnswer("tech_scalability", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "centralized_framework", label: "A centralized framework governs usage" },
           { value: "advanced_governance", label: "Advanced policies and audits are in place" },
         ]}
-        value={answers["data_governance"] || ""}
+        value={getStringAnswer(answers["data_governance"])}
         onChange={(val) => onAnswer("data_governance", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "allocated_resources", label: "We allocate resources for innovation" },
           { value: "embedded_model", label: "It’s embedded in strategy with formal innovation programs" },
         ]}
-        value={answers["innovation_model"] || ""}
+        value={getStringAnswer(answers["innovation_model"])}
         onChange={(val) => onAnswer("innovation_model", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "dynamic_personalization", label: "Dynamic personalization across key channels" },
           { value: "hyper_personalization", label: "Hyper-personalized — real-time, AI-driven" },
         ]}
-        value={answers["cx_personalization"] || ""}
+        value={getStringAnswer(answers["cx_personalization"])}
         onChange={(val) => onAnswer("cx_personalization", val)}
       />
     </div>

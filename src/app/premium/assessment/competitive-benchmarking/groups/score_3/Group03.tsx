@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitive_positioning"] === "string" &&
     typeof answers["market_differentiation"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "moderate", label: "We have some differentiation but it’s not well known" },
           { value: "clear_position", label: "We’re clearly positioned and known for something specific" },
         ]}
-        value={answers["competitive_positioning"] || ""}
+        value={getStringAnswer(answers["competitive_positioning"])}
         onChange={(val) => onAnswer("competitive_positioning", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "unique_product", label: "Our product or brand experience is noticeably different" },
           { value: "deep_loyalty", label: "We offer a unique promise that creates deep loyalty" },
         ]}
-        value={answers["market_differentiation"] || ""}
+        value={getStringAnswer(answers["market_differentiation"])}
         onChange={(val) => onAnswer("market_differentiation", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "infrequent", label: "We’ve done competitive analysis once or twice" },
           { value: "regular_comparison", label: "Yes — we review it regularly and adjust strategy" },
         ]}
-        value={answers["kpi_comparison"] || ""}
+        value={getStringAnswer(answers["kpi_comparison"])}
         onChange={(val) => onAnswer("kpi_comparison", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["vision_alignment"] === "string" &&
     typeof answers["roles_clarity"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_clear", label: "It’s mostly clear and communicated" },
           { value: "very_clear", label: "It’s very clear and regularly reinforced" },
         ]}
-        value={answers["vision_alignment"] || ""}
+        value={getStringAnswer(answers["vision_alignment"])}
         onChange={(val) => onAnswer("vision_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_clear", label: "Mostly clear — roles are generally understood" },
           { value: "very_clear", label: "Very clear — everyone knows their scope and boundaries" },
         ]}
-        value={answers["roles_clarity"] || ""}
+        value={getStringAnswer(answers["roles_clarity"])}
         onChange={(val) => onAnswer("roles_clarity", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly — we encourage ongoing feedback" },
           { value: "always", label: "Always — it’s embedded in our team culture" },
         ]}
-        value={answers["team_feedback_frequency"] || ""}
+        value={getStringAnswer(answers["team_feedback_frequency"])}
         onChange={(val) => onAnswer("team_feedback_frequency", val)}
       />
     </div>

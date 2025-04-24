@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 type Option = {
   value: string;

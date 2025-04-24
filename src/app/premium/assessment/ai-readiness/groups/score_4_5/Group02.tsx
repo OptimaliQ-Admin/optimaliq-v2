@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_scaling"] === "string" &&
     typeof answers["ai_risk_management"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "coordinated_initiatives", label: "Scaling through coordinated cross-team initiatives" },
           { value: "enterprise_strategy", label: "Scaling as part of an enterprise-wide strategy" },
         ]}
-        value={answers["ai_scaling"] || ""}
+        value={getStringAnswer(answers["ai_scaling"])}
         onChange={(val) => onAnswer("ai_scaling", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "review_processes", label: "We review risk at the use-case level" },
           { value: "formal_governance", label: "We have formalized risk management as part of governance" },
         ]}
-        value={answers["ai_risk_management"] || ""}
+        value={getStringAnswer(answers["ai_risk_management"])}
         onChange={(val) => onAnswer("ai_risk_management", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "formal_alignment", label: "Formally aligned with strategic goals" },
           { value: "tightly_integrated", label: "Tightly integrated into our business strategy" },
         ]}
-        value={answers["ai_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["ai_strategy_alignment"])}
         onChange={(val) => onAnswer("ai_strategy_alignment", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "department_level", label: "Department-level budgets or pilots" },
           { value: "central_funding", label: "Central funding and long-term allocation" },
         ]}
-        value={answers["ai_budget_allocation"] || ""}
+        value={getStringAnswer(answers["ai_budget_allocation"])}
         onChange={(val) => onAnswer("ai_budget_allocation", val)}
       />
     </div>

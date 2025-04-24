@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import OpenAI from "openai";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -109,8 +110,8 @@ Return JSON:
     }
 
     return NextResponse.json({ success: true, ...parsed });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("❌ Profile update error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) }, { status: 500 });
   }
 }

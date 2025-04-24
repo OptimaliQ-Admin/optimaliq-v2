@@ -4,6 +4,7 @@ import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export async function POST(req: Request) {
   try {
     const { u_id } = await req.json();
@@ -103,8 +104,8 @@ export async function POST(req: Request) {
     console.info("📦 Dashboard & profile saved for:", u_id);
 
     return NextResponse.json({ ...payload, promptRetake: false });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🔥 Dashboard API error:", err);
-    return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
+    return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
 }

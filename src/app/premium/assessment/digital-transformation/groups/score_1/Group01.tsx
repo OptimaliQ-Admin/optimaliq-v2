@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["digital_priority"] === "string" &&
     typeof answers["tech_stack_age"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "basic_initiatives", label: "We’ve launched some basic initiatives" },
           { value: "actively_planning", label: "We’re actively planning or investing in digital change" },
         ]}
-        value={answers["digital_priority"] || ""}
+        value={getStringAnswer(answers["digital_priority"])}
         onChange={(val) => onAnswer("digital_priority", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "moderately_modern", label: "Moderately modern — a few strong tools" },
           { value: "very_modern", label: "Very modern — we’re well-equipped" },
         ]}
-        value={answers["tech_stack_age"] || ""}
+        value={getStringAnswer(answers["tech_stack_age"])}
         onChange={(val) => onAnswer("tech_stack_age", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "legacy_systems", label: "Legacy systems or technical debt" },
           { value: "change_resistance", label: "Team adoption or resistance to change" },
         ]}
-        value={answers["current_challenges"] || ""}
+        value={getStringAnswer(answers["current_challenges"])}
         onChange={(val) => onAnswer("current_challenges", val)}
       />
     </div>

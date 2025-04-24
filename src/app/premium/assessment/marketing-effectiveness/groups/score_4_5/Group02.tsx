@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["persona_revision"] === "string" &&
     typeof answers["marketing_confidence"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — based on new data" },
           { value: "continuous", label: "Continuously — it’s part of our GTM strategy" }
         ]}
-        value={answers["persona_revision"] || ""}
+        value={getStringAnswer(answers["persona_revision"])}
         onChange={(val) => onAnswer("persona_revision", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "high_confidence", label: "High — we can estimate impact per program" },
           { value: "full_confidence", label: "Very high — our forecasts inform strategic decisions" }
         ]}
-        value={answers["marketing_confidence"] || ""}
+        value={getStringAnswer(answers["marketing_confidence"])}
         onChange={(val) => onAnswer("marketing_confidence", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "consistent_experimentation", label: "We regularly run experiments alongside core campaigns" },
           { value: "innovation_driven", label: "We intentionally fund innovation and track ROI" }
         ]}
-        value={answers["innovation_balance"] || ""}
+        value={getStringAnswer(answers["innovation_balance"])}
         onChange={(val) => onAnswer("innovation_balance", val)}
       />
     </div>

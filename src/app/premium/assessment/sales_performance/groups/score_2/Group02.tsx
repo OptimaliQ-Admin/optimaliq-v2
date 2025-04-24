@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_a76658"] === "string" &&
     answers["how_a76658"].trim().length > 0 &&
@@ -18,8 +22,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -37,7 +41,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "We have tasks inside our CRM", label: "We have tasks inside our CRM" },
           { value: "We use automation or sequences to manage follow-ups", label: "We use automation or sequences to manage follow-ups" },
         ]}
-        value={answers["how_a76658"] || ""}
+        value={getStringAnswer(answers["how_a76658"])}
         onChange={(val) => onAnswer("how_a76658", val)}
       />
 
@@ -65,7 +69,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "We follow a checklist or sales script", label: "We follow a checklist or sales script" },
           { value: "We prep with research, context, and a discovery framework", label: "We prep with research, context, and a discovery framework" },
         ]}
-        value={answers["how_5589a0"] || ""}
+        value={getStringAnswer(answers["how_5589a0"])}
         onChange={(val) => onAnswer("how_5589a0", val)}
       />
 
@@ -78,7 +82,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "Most calls are noted in the CRM", label: "Most calls are noted in the CRM" },
           { value: "Every interaction is logged and searchable", label: "Every interaction is logged and searchable" },
         ]}
-        value={answers["how_92a11d"] || ""}
+        value={getStringAnswer(answers["how_92a11d"])}
         onChange={(val) => onAnswer("how_92a11d", val)}
       />
     </div>

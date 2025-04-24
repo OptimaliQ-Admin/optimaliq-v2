@@ -2,6 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -22,8 +23,8 @@ export async function GET() {
     }
 
     return NextResponse.json(data);
-  } catch (err: any) {
-    console.error("🔥 Business Trends API error:", err.message);
-    return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error("🔥 Business Trends API error:", getErrorMessage(err));
+    return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
 }

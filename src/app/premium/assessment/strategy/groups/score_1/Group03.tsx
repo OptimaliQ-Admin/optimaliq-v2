@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_consistency"] === "string" &&
     typeof answers["alignment_across_teams"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "general_consistency", label: "Generally consistent with occasional changes" },
           { value: "very_consistent", label: "Very consistent with a clear long-term direction" },
         ]}
-        value={answers["strategic_consistency"] || ""}
+        value={getStringAnswer(answers["strategic_consistency"])}
         onChange={(val) => onAnswer("strategic_consistency", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned, but not perfectly synced" },
           { value: "fully_aligned", label: "Fully aligned — goals cascade across departments" },
         ]}
-        value={answers["alignment_across_teams"] || ""}
+        value={getStringAnswer(answers["alignment_across_teams"])}
         onChange={(val) => onAnswer("alignment_across_teams", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "annual_cycle", label: "We plan annually and track progress" },
           { value: "ongoing_process", label: "We plan with flexibility and review regularly" },
         ]}
-        value={answers["long_term_planning"] || ""}
+        value={getStringAnswer(answers["long_term_planning"])}
         onChange={(val) => onAnswer("long_term_planning", val)}
       />
     </div>

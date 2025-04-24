@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["team_digital_skills"] === "string" &&
     typeof answers["data_visibility"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "functional", label: "Functional — most people can navigate modern systems" },
           { value: "proficient", label: "Proficient — we are confident with modern digital tools" },
         ]}
-        value={answers["team_digital_skills"] || ""}
+        value={getStringAnswer(answers["team_digital_skills"])}
         onChange={(val) => onAnswer("team_digital_skills", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "occasional_reports", label: "Occasional reports or usage checks" },
           { value: "centralized_dashboard", label: "Yes, we have centralized dashboards or monitoring" },
         ]}
-        value={answers["data_visibility"] || ""}
+        value={getStringAnswer(answers["data_visibility"])}
         onChange={(val) => onAnswer("data_visibility", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "most_integrated", label: "Most of our core tools are integrated" },
           { value: "fully_connected", label: "Fully connected — data flows across systems" },
         ]}
-        value={answers["tool_fragmentation"] || ""}
+        value={getStringAnswer(answers["tool_fragmentation"])}
         onChange={(val) => onAnswer("tool_fragmentation", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "mostly", label: "Mostly — our teams work together fairly well using tools" },
           { value: "completely", label: "Completely — our tools are built for collaboration" },
         ]}
-        value={answers["alignment_efficiency"] || ""}
+        value={getStringAnswer(answers["alignment_efficiency"])}
         onChange={(val) => onAnswer("alignment_efficiency", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["data_utilization"] === "string" &&
     typeof answers["project_prioritization"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "insights_for_optimization", label: "We use insights to adjust or improve" },
           { value: "real_time_analytics", label: "We use real-time data to drive changes" },
         ]}
-        value={answers["data_utilization"] || ""}
+        value={getStringAnswer(answers["data_utilization"])}
         onChange={(val) => onAnswer("data_utilization", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "value_alignment", label: "Based on value alignment or potential impact" },
           { value: "formal_frameworks", label: "We use a scoring or prioritization framework" },
         ]}
-        value={answers["project_prioritization"] || ""}
+        value={getStringAnswer(answers["project_prioritization"])}
         onChange={(val) => onAnswer("project_prioritization", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "annual_review", label: "We review tools at least annually" },
           { value: "continuous_improvement", label: "We continuously evaluate and optimize our stack" },
         ]}
-        value={answers["tool_evaluation"] || ""}
+        value={getStringAnswer(answers["tool_evaluation"])}
         onChange={(val) => onAnswer("tool_evaluation", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "guided_learning", label: "We offer guided training and documentation" },
           { value: "continuous_learning", label: "We provide continuous enablement and certifications" },
         ]}
-        value={answers["tech_training"] || ""}
+        value={getStringAnswer(answers["tech_training"])}
         onChange={(val) => onAnswer("tech_training", val)}
       />
     </div>

@@ -11,8 +11,8 @@ import Group07_Final from "./groups/Group07_Final";
 
 type Props = {
   step: number;
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {

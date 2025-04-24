@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isGroup04Complete(answers: Record<string, any>): boolean {
+export function isGroup04Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["acquisition_channels"]) &&
     answers["acquisition_channels"].length > 0 &&
@@ -21,8 +25,8 @@ export function isGroup04Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
@@ -57,7 +61,7 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the acquisition channels that are driving meaningful results"
           placeholder="Describe the acquisition channels..."
-          value={answers["acquisition_channels_other"] || ""}
+          value={getStringAnswer(answers["acquisition_channels_other"])}
           onChange={(val) => onAnswer("acquisition_channels_other", val)}
           maxLength={50}
         />
@@ -74,7 +78,7 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
           { value: "early_stage", label: "We’re still selecting or onboarding core platforms" },
           { value: "unsure", label: "Unsure / Other" },
         ]}
-        value={answers["tech_maturity"] || ""}
+        value={getStringAnswer(answers["tech_maturity"])}
         onChange={(val) => onAnswer("tech_maturity", val)}
       />
 
@@ -83,7 +87,7 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
         question="What are your current retention levers?"
         description="How do you keep customers coming back? What’s your hook or lifecycle play?"
         placeholder="E.g., Email drip campaigns, customer success outreach, loyalty programs..."
-        value={answers["retention_strategy"] || ""}
+        value={getStringAnswer(answers["retention_strategy"])}
         onChange={(val) => onAnswer("retention_strategy", val)}
         maxLength={300}
       />

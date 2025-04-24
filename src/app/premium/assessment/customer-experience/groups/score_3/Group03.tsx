@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_tools_alignment"] === "string" &&
     typeof answers["customer_feedback_channels"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — insights inform some actions" },
           { value: "fully_aligned", label: "Fully aligned — drives strategy and improvements" },
         ]}
-        value={answers["cx_tools_alignment"] || ""}
+        value={getStringAnswer(answers["cx_tools_alignment"])}
         onChange={(val) => onAnswer("cx_tools_alignment", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "proactive_requests", label: "We proactively request and analyze feedback" },
           { value: "omnichannel_feedback", label: "Omnichannel feedback integrated into systems" },
         ]}
-        value={answers["customer_feedback_channels"] || ""}
+        value={getStringAnswer(answers["customer_feedback_channels"])}
         onChange={(val) => onAnswer("customer_feedback_channels", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly or after major feedback" },
           { value: "continuous", label: "Continuously — part of ongoing improvement" },
         ]}
-        value={answers["experience_evolution"] || ""}
+        value={getStringAnswer(answers["experience_evolution"])}
         onChange={(val) => onAnswer("experience_evolution", val)}
       />
     </div>

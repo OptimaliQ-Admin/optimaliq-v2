@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["team_alignment"] === "string" &&
     typeof answers["role_clarity"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned with occasional gaps" },
           { value: "fully_aligned", label: "Fully aligned and regularly updated" },
         ]}
-        value={answers["team_alignment"] || ""}
+        value={getStringAnswer(answers["team_alignment"])}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_clear", label: "Mostly clear with a few gray areas" },
           { value: "very_clear", label: "Very clear and documented" },
         ]}
-        value={answers["role_clarity"] || ""}
+        value={getStringAnswer(answers["role_clarity"])}
         onChange={(val) => onAnswer("role_clarity", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — collaboration is encouraged" },
           { value: "always", label: "Always — cross-functional collaboration is the norm" },
         ]}
-        value={answers["collaboration_frequency"] || ""}
+        value={getStringAnswer(answers["collaboration_frequency"])}
         onChange={(val) => onAnswer("collaboration_frequency", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "Collaborative — decisions are discussed openly" },
           { value: "empowered", label: "Empowered — teams have decision-making autonomy" },
         ]}
-        value={answers["decision_making"] || ""}
+        value={getStringAnswer(answers["decision_making"])}
         onChange={(val) => onAnswer("decision_making", val)}
       />
     </div>

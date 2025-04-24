@@ -4,23 +4,28 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-import { PremiumUser } from "@/context/PremiumUserContext";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer";
+import type {
+  AssessmentAnswers,
+  AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export default function CompetitiveBenchmarkingAssessmentPage() {
   const router = useRouter();
-  const { user } = PremiumUser();
+  const { user } = usePremiumUser();
   const [step, setStep] = useState(0);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
-  const stripUnusedOtherFields = (answers: Record<string, any>) => {
-    const result: Record<string, any> = {};
+  const stripUnusedOtherFields = (answers: AssessmentAnswers) => {
+    const result: AssessmentAnswers = {};
     for (const key in answers) {
       if (key.endsWith("_other")) continue;
       result[key] = answers[key];
@@ -146,9 +151,9 @@ export default function CompetitiveBenchmarkingAssessmentPage() {
       }
 
       router.push("/tier2/assessment");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("❌ Unexpected error:", err);
-      alert(`Unexpected error: ${err.message}`);
+      alert(`Unexpected error: ${getErrorMessage(err)}`);
     }
   };
 
@@ -156,15 +161,22 @@ export default function CompetitiveBenchmarkingAssessmentPage() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (key: string, value: any) => {
+  const handleAnswer = (key: string, value: AssessmentAnswerValue) => {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
 
       if (key.endsWith("_other")) {
         const baseKey = key.replace("_other", "");
         const baseValue = prev[baseKey] || [];
-        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-        if (value.trim()) cleaned.push(`Other: ${value.trim()}`);
+      
+        const cleaned = Array.isArray(baseValue)
+          ? baseValue.filter((item: string) => !item.startsWith("Other:"))
+          : [];
+      
+        if (typeof value === "string" && value.trim()) {
+          cleaned.push(`Other: ${value.trim()}`);
+        }
+      
         updated[baseKey] = cleaned;
       }
 

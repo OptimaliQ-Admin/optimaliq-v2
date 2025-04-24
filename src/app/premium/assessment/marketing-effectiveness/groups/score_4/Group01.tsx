@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["marketing_strategy_alignment"] === "string" &&
     typeof answers["marketing_evolution"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "quarterly_review", label: "It’s part of quarterly or planning cycles" },
           { value: "real_time_feedback", label: "It drives real-time adjustments to priorities" }
         ]}
-        value={answers["marketing_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["marketing_strategy_alignment"])}
         onChange={(val) => onAnswer("marketing_strategy_alignment", val)}
       />
 
@@ -46,7 +50,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "proactive_testing", label: "Proactive — based on customer feedback and insights" },
           { value: "dedicated_innovation", label: "We have a dedicated innovation/research process" }
         ]}
-        value={answers["marketing_evolution"] || ""}
+        value={getStringAnswer(answers["marketing_evolution"])}
         onChange={(val) => onAnswer("marketing_evolution", val)}
       />
 

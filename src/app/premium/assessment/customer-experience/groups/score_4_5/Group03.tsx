@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_predictive_insights"] === "string" &&
     typeof answers["cx_experience_testing"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "predictive_modeling", label: "We use some predictive modeling" },
           { value: "ai_driven_experience", label: "Yes — AI actively drives CX decisions" },
         ]}
-        value={answers["cx_predictive_insights"] || ""}
+        value={getStringAnswer(answers["cx_predictive_insights"])}
         onChange={(val) => onAnswer("cx_predictive_insights", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "regular_testing", label: "We run regular tests across touchpoints" },
           { value: "embedded_optimization", label: "Optimization is embedded into our workflows" },
         ]}
-        value={answers["cx_experience_testing"] || ""}
+        value={getStringAnswer(answers["cx_experience_testing"])}
         onChange={(val) => onAnswer("cx_experience_testing", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "monitored_journey", label: "We monitor journey stages across touchpoints" },
           { value: "live_journey_orchestration", label: "We orchestrate and optimize the full journey in real-time" },
         ]}
-        value={answers["cx_journey_mapping"] || ""}
+        value={getStringAnswer(answers["cx_journey_mapping"])}
         onChange={(val) => onAnswer("cx_journey_mapping", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["team_skill_gap"] === "string" &&
     typeof answers["data_accessibility"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_ready", label: "Mostly ready — basic proficiency exists" },
           { value: "fully_capable", label: "Fully capable — we’re confident and capable" },
         ]}
-        value={answers["team_skill_gap"] || ""}
+        value={getStringAnswer(answers["team_skill_gap"])}
         onChange={(val) => onAnswer("team_skill_gap", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_accessible", label: "Most data is accessible with effort" },
           { value: "fully_accessible", label: "Fully accessible via integrated platforms or dashboards" },
         ]}
-        value={answers["data_accessibility"] || ""}
+        value={getStringAnswer(answers["data_accessibility"])}
         onChange={(val) => onAnswer("data_accessibility", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "working_well", label: "They mostly work well together" },
           { value: "seamless", label: "Seamlessly integrated with real-time syncing" },
         ]}
-        value={answers["integration_quality"] || ""}
+        value={getStringAnswer(answers["integration_quality"])}
         onChange={(val) => onAnswer("integration_quality", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "documented_roles", label: "We have documented roles and rules" },
           { value: "formal_governance", label: "Yes — full governance model in place" },
         ]}
-        value={answers["data_governance"] || ""}
+        value={getStringAnswer(answers["data_governance"])}
         onChange={(val) => onAnswer("data_governance", val)}
       />
     </div>

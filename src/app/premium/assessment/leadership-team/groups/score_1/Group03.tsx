@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["values_alignment"] === "string" &&
     typeof answers["team_recognition"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — behavior reflects the values" },
           { value: "fully_embodied", label: "Fully embodied — values drive our culture" },
         ]}
-        value={answers["values_alignment"] || ""}
+        value={getStringAnswer(answers["values_alignment"])}
         onChange={(val) => onAnswer("values_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — leaders call out wins often" },
           { value: "systematically", label: "We have structured recognition systems" },
         ]}
-        value={answers["team_recognition"] || ""}
+        value={getStringAnswer(answers["team_recognition"])}
         onChange={(val) => onAnswer("team_recognition", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "structured_support", label: "We offer structured support or mentorship" },
           { value: "clear_pathways", label: "Clear development pathways for all roles" },
         ]}
-        value={answers["growth_opportunity"] || ""}
+        value={getStringAnswer(answers["growth_opportunity"])}
         onChange={(val) => onAnswer("growth_opportunity", val)}
       />
     </div>

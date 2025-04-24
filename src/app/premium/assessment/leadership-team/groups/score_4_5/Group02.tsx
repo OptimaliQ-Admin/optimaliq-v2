@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["coaching_rhythm"] === "string" &&
     typeof answers["employee_autonomy"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "structured", label: "We have a structured cadence of coaching" },
           { value: "embedded", label: "It’s embedded into daily leadership practices" },
         ]}
-        value={answers["coaching_rhythm"] || ""}
+        value={getStringAnswer(answers["coaching_rhythm"])}
         onChange={(val) => onAnswer("coaching_rhythm", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "balanced_approach", label: "Leaders give autonomy with clear expectations" },
           { value: "empowered_frameworks", label: "Autonomy is empowered through frameworks and metrics" },
         ]}
-        value={answers["employee_autonomy"] || ""}
+        value={getStringAnswer(answers["employee_autonomy"])}
         onChange={(val) => onAnswer("employee_autonomy", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "present_and_available", label: "They’re present and available" },
           { value: "consistently_engaged", label: "Leaders consistently engage with teams across levels" },
         ]}
-        value={answers["leader_visibility"] || ""}
+        value={getStringAnswer(answers["leader_visibility"])}
         onChange={(val) => onAnswer("leader_visibility", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "focused_adaptation", label: "We adapt with focus and communication" },
           { value: "decisive_and_empowering", label: "Leaders are decisive and empower others to act" },
         ]}
-        value={answers["crisis_leadership"] || ""}
+        value={getStringAnswer(answers["crisis_leadership"])}
         onChange={(val) => onAnswer("crisis_leadership", val)}
       />
     </div>

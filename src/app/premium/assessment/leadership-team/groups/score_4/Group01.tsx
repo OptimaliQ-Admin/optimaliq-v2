@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["feedback_frequency"] === "string" &&
     typeof answers["leadership_scaling_strategy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly feedback is standard" },
           { value: "regular_feedback", label: "We use real-time or monthly feedback loops" },
         ]}
-        value={answers["feedback_frequency"] || ""}
+        value={getStringAnswer(answers["feedback_frequency"])}
         onChange={(val) => onAnswer("feedback_frequency", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "intentional_scaling", label: "We have intentional plans for scaling leadership" },
           { value: "scalable_frameworks", label: "Our leadership development is built to scale" },
         ]}
-        value={answers["leadership_scaling_strategy"] || ""}
+        value={getStringAnswer(answers["leadership_scaling_strategy"])}
         onChange={(val) => onAnswer("leadership_scaling_strategy", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "strong_alignment", label: "We align during planning sessions or all-hands" },
           { value: "continuous_alignment", label: "We have structured rituals to maintain alignment" },
         ]}
-        value={answers["cross_team_alignment"] || ""}
+        value={getStringAnswer(answers["cross_team_alignment"])}
         onChange={(val) => onAnswer("cross_team_alignment", val)}
       />
     </div>

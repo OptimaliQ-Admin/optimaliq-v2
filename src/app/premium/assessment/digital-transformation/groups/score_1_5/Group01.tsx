@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["digital_leadership"] === "string" &&
     typeof answers["tech_stack_review"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "internal_owner", label: "There’s a clear internal owner" },
           { value: "dedicated_team", label: "There’s a dedicated digital or innovation team" },
         ]}
-        value={answers["digital_leadership"] || ""}
+        value={getStringAnswer(answers["digital_leadership"])}
         onChange={(val) => onAnswer("digital_leadership", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "within_year", label: "Within the past year" },
           { value: "ongoing", label: "We review it regularly or continuously" },
         ]}
-        value={answers["tech_stack_review"] || ""}
+        value={getStringAnswer(answers["tech_stack_review"])}
         onChange={(val) => onAnswer("tech_stack_review", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "basic_snapshot", label: "We’ve captured a basic snapshot of key areas" },
           { value: "full_baseline", label: "Yes — we track and compare it over time" },
         ]}
-        value={answers["digital_baseline"] || ""}
+        value={getStringAnswer(answers["digital_baseline"])}
         onChange={(val) => onAnswer("digital_baseline", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_skill_depth"] === "string" &&
     typeof answers["ai_experimentation"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "functional", label: "Functional — can build and test simple models" },
           { value: "specialized", label: "Specialized — deep expertise on staff or via partners" },
         ]}
-        value={answers["ai_skill_depth"] || ""}
+        value={getStringAnswer(answers["ai_skill_depth"])}
         onChange={(val) => onAnswer("ai_skill_depth", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "multiple_pilots", label: "Multiple pilots across teams" },
           { value: "ongoing_experiments", label: "Ongoing experiments tied to business goals" },
         ]}
-        value={answers["ai_experimentation"] || ""}
+        value={getStringAnswer(answers["ai_experimentation"])}
         onChange={(val) => onAnswer("ai_experimentation", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — most use cases tie into operations" },
           { value: "fully_aligned", label: "Fully aligned — AI supports core strategy and goals" },
         ]}
-        value={answers["ops_alignment"] || ""}
+        value={getStringAnswer(answers["ops_alignment"])}
         onChange={(val) => onAnswer("ops_alignment", val)}
       />
     </div>

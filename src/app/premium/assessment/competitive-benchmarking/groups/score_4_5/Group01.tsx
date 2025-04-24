@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_frequency"] === "string" &&
     typeof answers["competitive_data_depth"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_4_9_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_4_9_Step01({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly — part of regular review" },
           { value: "continuous", label: "Continuously — always monitoring and comparing" },
         ]}
-        value={answers["benchmarking_frequency"] || ""}
+        value={getStringAnswer(answers["benchmarking_frequency"])}
         onChange={(val) => onAnswer("benchmarking_frequency", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_4_9_Step01({ answers, onAnswer }: Props) {
           { value: "functional_differentiation", label: "Functional — features and capabilities" },
           { value: "strategic_insight", label: "Strategic — we understand their moves and weaknesses" },
         ]}
-        value={answers["competitive_data_depth"] || ""}
+        value={getStringAnswer(answers["competitive_data_depth"])}
         onChange={(val) => onAnswer("competitive_data_depth", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_4_9_Step01({ answers, onAnswer }: Props) {
           { value: "benchmarking_platforms", label: "Benchmarking platforms or services (e.g., Similarweb, Crayon)" },
           { value: "custom_dashboard", label: "Custom dashboards or BI integration" },
         ]}
-        value={answers["benchmarking_tools"] || ""}
+        value={getStringAnswer(answers["benchmarking_tools"])}
         onChange={(val) => onAnswer("benchmarking_tools", val)}
       />
     </div>

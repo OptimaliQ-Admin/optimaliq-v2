@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["kpi_transparency"] === "string" &&
     typeof answers["empowerment_level"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "available_on_request", label: "Available on request or in dashboards" },
           { value: "fully_transparent", label: "Fully transparent and discussed regularly" },
         ]}
-        value={answers["kpi_transparency"] || ""}
+        value={getStringAnswer(answers["kpi_transparency"])}
         onChange={(val) => onAnswer("kpi_transparency", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "clear_guidance", label: "They follow clear guidance to make decisions" },
           { value: "fully_empowered", label: "They’re fully empowered within strategic boundaries" },
         ]}
-        value={answers["empowerment_level"] || ""}
+        value={getStringAnswer(answers["empowerment_level"])}
         onChange={(val) => onAnswer("empowerment_level", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "balanced_focus", label: "A good balance of short- and long-term" },
           { value: "long_term_driven", label: "Strategy is long-term driven with short-term milestones" },
         ]}
-        value={answers["long_term_focus"] || ""}
+        value={getStringAnswer(answers["long_term_focus"])}
         onChange={(val) => onAnswer("long_term_focus", val)}
       />
     </div>

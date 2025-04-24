@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_enablement"] === "string" &&
     typeof answers["digital_resilience"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "integrated", label: "Integrated into multiple workflows" },
           { value: "core_capability", label: "It’s a core capability — built into strategy and delivery" },
         ]}
-        value={answers["ai_enablement"] || ""}
+        value={getStringAnswer(answers["ai_enablement"])}
         onChange={(val) => onAnswer("ai_enablement", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "resilient", label: "Resilient — we have systems and redundancies in place" },
           { value: "highly_resilient", label: "Highly resilient — we handle disruptions with minimal impact" },
         ]}
-        value={answers["digital_resilience"] || ""}
+        value={getStringAnswer(answers["digital_resilience"])}
         onChange={(val) => onAnswer("digital_resilience", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — shared priorities exist" },
           { value: "fully_aligned", label: "Fully aligned — cross-functional goals and KPIs" },
         ]}
-        value={answers["cross_functional_alignment"] || ""}
+        value={getStringAnswer(answers["cross_functional_alignment"])}
         onChange={(val) => onAnswer("cross_functional_alignment", val)}
       />
     </div>

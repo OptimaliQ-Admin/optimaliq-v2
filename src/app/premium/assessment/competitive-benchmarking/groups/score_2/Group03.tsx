@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitive_tools"] === "string" &&
     typeof answers["positioning_consistency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "internal_tracking", label: "Internal tracking or shared docs" },
           { value: "dedicated_platforms", label: "Dedicated platforms and subscriptions" },
         ]}
-        value={answers["competitive_tools"] || ""}
+        value={getStringAnswer(answers["competitive_tools"])}
         onChange={(val) => onAnswer("competitive_tools", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent with occasional drift" },
           { value: "fully_aligned", label: "Fully aligned and reinforced across all channels" },
         ]}
-        value={answers["positioning_consistency"] || ""}
+        value={getStringAnswer(answers["positioning_consistency"])}
         onChange={(val) => onAnswer("positioning_consistency", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "fairly_informed", label: "Fairly informed on key developments" },
           { value: "very_confident", label: "Very confident — we track and share insights regularly" },
         ]}
-        value={answers["market_awareness"] || ""}
+        value={getStringAnswer(answers["market_awareness"])}
         onChange={(val) => onAnswer("market_awareness", val)}
       />
     </div>

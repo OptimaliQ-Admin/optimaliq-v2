@@ -1,12 +1,14 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_integration"] === "string" &&
     answers["cx_integration"].trim().length > 0 &&
@@ -22,8 +24,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -41,7 +43,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
     { value: "Often", label: "Often, as part of updates" },
     { value: "Always", label: "Always — experience is a design priority" },
   ]}
-  value={answers["cx_integration"] || ""}
+  value={getStringAnswer(answers["cx_integration"])}
   onChange={(val) => onAnswer("cx_integration", val)}
 />
 
@@ -70,7 +72,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
     { value: "Moderately", label: "Moderately — through conditional logic" },
     { value: "Yes", label: "Yes — dynamic, rule-based, or AI-driven" },
   ]}
-  value={answers["adaptive_processes"] || ""}
+  value={getStringAnswer(answers["adaptive_processes"])}
   onChange={(val) => onAnswer("adaptive_processes", val)}
 />
 

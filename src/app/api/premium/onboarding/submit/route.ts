@@ -6,6 +6,7 @@ import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export async function POST(req: Request) {
   try {
     const { formAnswers } = await req.json();
@@ -81,8 +82,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("❌ Unexpected error:", err);
-    return NextResponse.json({ error: err.message || "Server error" }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) || "Server error" }, { status: 500 });
   }
 }

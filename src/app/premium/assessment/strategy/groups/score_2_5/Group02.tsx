@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["goal_tracking"] === "string" &&
     typeof answers["strategic_reporting"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "dashboard_visibility", label: "We track them on a dashboard" },
           { value: "formal_review_cycle", label: "We review them on a formal cadence" },
         ]}
-        value={answers["goal_tracking"] || ""}
+        value={getStringAnswer(answers["goal_tracking"])}
         onChange={(val) => onAnswer("goal_tracking", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "exec_summary", label: "We publish executive summaries regularly" },
           { value: "integrated_reporting", label: "We use structured reporting across levels" },
         ]}
-        value={answers["strategic_reporting"] || ""}
+        value={getStringAnswer(answers["strategic_reporting"])}
         onChange={(val) => onAnswer("strategic_reporting", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "review_lessons", label: "We review and learn what went wrong" },
           { value: "structured_pivot", label: "We use structured criteria to revise plans" },
         ]}
-        value={answers["adjustment_process"] || ""}
+        value={getStringAnswer(answers["adjustment_process"])}
         onChange={(val) => onAnswer("adjustment_process", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Yes — most work is aligned" },
           { value: "fully_aligned", label: "Yes — it’s clear how daily work supports strategy" },
         ]}
-        value={answers["project_alignment"] || ""}
+        value={getStringAnswer(answers["project_alignment"])}
         onChange={(val) => onAnswer("project_alignment", val)}
       />
     </div>

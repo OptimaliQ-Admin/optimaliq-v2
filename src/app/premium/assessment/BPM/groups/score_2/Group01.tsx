@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["consistency"]) &&
     answers["consistency"].length > 0 &&
@@ -24,8 +26,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -62,7 +64,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
     { value: "Annually", label: "Annually or as part of planning cycles" },
     { value: "Quarterly", label: "Quarterly or more frequently" },
   ]}
-  value={answers["review_frequency"] || ""}
+  value={getStringAnswer(answers["review_frequency"])}
   onChange={(val) => onAnswer("review_frequency", val)}
 />
 
@@ -76,7 +78,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
     { value: "team lead or department manager", label: "A team lead or department manager" },
     { value: "dedicated operations/process owner", label: "A dedicated operations/process owner" },
   ]}
-  value={answers["ownership"] || ""}
+  value={getStringAnswer(answers["ownership"])}
   onChange={(val) => onAnswer("ownership", val)}
 />
     </div>

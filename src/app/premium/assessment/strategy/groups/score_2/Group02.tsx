@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_communication"] === "string" &&
     typeof answers["initiative_tracking"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "mentioned_regularly", label: "It’s mentioned in meetings or updates" },
           { value: "deeply_embedded", label: "It’s deeply embedded in team workflows" },
         ]}
-        value={answers["strategic_communication"] || ""}
+        value={getStringAnswer(answers["strategic_communication"])}
         onChange={(val) => onAnswer("strategic_communication", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "team_reports", label: "Teams report progress manually" },
           { value: "real_time_tracking", label: "We have dashboards or OKRs in real time" },
         ]}
-        value={answers["initiative_tracking"] || ""}
+        value={getStringAnswer(answers["initiative_tracking"])}
         onChange={(val) => onAnswer("initiative_tracking", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "agile", label: "We adapt monthly or quarterly" },
           { value: "highly_agile", label: "We pivot quickly as needed with minimal disruption" },
         ]}
-        value={answers["agility_to_shift"] || ""}
+        value={getStringAnswer(answers["agility_to_shift"])}
         onChange={(val) => onAnswer("agility_to_shift", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_tied", label: "Most KPIs map to strategic goals" },
           { value: "fully_tied", label: "KPIs are fully aligned and tracked" },
         ]}
-        value={answers["kpi_alignment"] || ""}
+        value={getStringAnswer(answers["kpi_alignment"])}
         onChange={(val) => onAnswer("kpi_alignment", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_process"] === "string" &&
     typeof answers["market_data_frequency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "structured_process", label: "Yes — we have a structured benchmarking process" },
           { value: "integrated_benchmarking", label: "Benchmarking is fully integrated into planning" },
         ]}
-        value={answers["benchmarking_process"] || ""}
+        value={getStringAnswer(answers["benchmarking_process"])}
         onChange={(val) => onAnswer("benchmarking_process", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Quarterly or monthly" },
           { value: "frequently", label: "Weekly or in real-time" },
         ]}
-        value={answers["market_data_frequency"] || ""}
+        value={getStringAnswer(answers["market_data_frequency"])}
         onChange={(val) => onAnswer("market_data_frequency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "in_depth", label: "In-depth — we break down their performance drivers" },
           { value: "comprehensive", label: "Comprehensive — we compare across key dimensions with insights" },
         ]}
-        value={answers["competitor_review_depth"] || ""}
+        value={getStringAnswer(answers["competitor_review_depth"])}
         onChange={(val) => onAnswer("competitor_review_depth", val)}
       />
     </div>

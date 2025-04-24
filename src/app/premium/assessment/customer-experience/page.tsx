@@ -9,6 +9,7 @@ import StepGroupRenderer from "./StepGroupRenderer";
 import { PremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export default function CustomerExperienceAssessmentPage() {
   const router = useRouter();
   const { user } = PremiumUser();
@@ -16,11 +17,11 @@ export default function CustomerExperienceAssessmentPage() {
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
-  const stripUnusedOtherFields = (answers: Record<string, any>) => {
-    const result: Record<string, any> = {};
+  const stripUnusedOtherFields = (answers: AssessmentAnswers) => {
+    const result: AssessmentAnswers = {};
     for (const key in answers) {
       if (key.endsWith("_other")) continue;
       result[key] = answers[key];
@@ -146,9 +147,9 @@ export default function CustomerExperienceAssessmentPage() {
       }
 
       router.push("/tier2/assessment");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("❌ Unexpected error:", err);
-      alert(`Unexpected error: ${err.message}`);
+      alert(`Unexpected error: ${getErrorMessage(err)}`);
     }
   };
 
@@ -156,7 +157,7 @@ export default function CustomerExperienceAssessmentPage() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (key: string, value: any) => {
+  const handleAnswer = (key: string, value: AssessmentAnswerValue) => {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
 

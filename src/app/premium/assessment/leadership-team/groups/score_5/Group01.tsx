@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["executive_coaching"] === "string" &&
     typeof answers["succession_planning"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "actively_used", label: "Actively used across our leadership team" },
           { value: "strategic_coaching", label: "It’s a core element of our leadership development strategy" },
         ]}
-        value={answers["executive_coaching"] || ""}
+        value={getStringAnswer(answers["executive_coaching"])}
         onChange={(val) => onAnswer("executive_coaching", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "documented", label: "It’s documented with plans for key roles" },
           { value: "well_defined", label: "There’s a well-defined and tested succession process" },
         ]}
-        value={answers["succession_planning"] || ""}
+        value={getStringAnswer(answers["succession_planning"])}
         onChange={(val) => onAnswer("succession_planning", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "integrated_with_growth", label: "Talent strategy is integrated with growth plans" },
           { value: "future_workforce_ready", label: "We plan for future workforce needs and evolving roles" },
         ]}
-        value={answers["talent_strategy"] || ""}
+        value={getStringAnswer(answers["talent_strategy"])}
         onChange={(val) => onAnswer("talent_strategy", val)}
       />
     </div>

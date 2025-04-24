@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["testing_methodology"] === "string" &&
     typeof answers["customer_journey_map"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
@@ -27,7 +30,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "organized", label: "Organized — we test with defined hypotheses" },
           { value: "ongoing", label: "Ongoing — it's embedded in every campaign" },
         ]}
-        value={answers["testing_methodology"] || ""}
+        value={getStringAnswer(answers["testing_methodology"])}
         onChange={(val) => onAnswer("testing_methodology", val)}
       />
 
@@ -39,7 +42,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "detailed", label: "Detailed — journeys are mapped across channels" },
           { value: "optimized", label: "Optimized — we constantly improve based on journeys" },
         ]}
-        value={answers["customer_journey_map"] || ""}
+        value={getStringAnswer(answers["customer_journey_map"])}
         onChange={(val) => onAnswer("customer_journey_map", val)}
       />
 
@@ -51,7 +54,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "targeted_content", label: "Targeted — content aligns to personas" },
           { value: "integrated_strategy", label: "Integrated — content is tied to funnel and measurement" },
         ]}
-        value={answers["content_strategy_maturity"] || ""}
+        value={getStringAnswer(answers["content_strategy_maturity"])}
         onChange={(val) => onAnswer("content_strategy_maturity", val)}
       />
     </div>

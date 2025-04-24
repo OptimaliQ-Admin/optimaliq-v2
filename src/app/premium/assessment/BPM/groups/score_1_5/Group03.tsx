@@ -1,13 +1,13 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
 
 import React from "react";
 import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "src/components/questions/DragSortQuestion";
 import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
 
 
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["workflow_tools"]) &&
     answers["workflow_tools"].length > 0 &&
@@ -26,8 +26,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -62,7 +62,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "documents or checklists", label: "We give them documents or checklists" },
           { value: "structured onboarding plan", label: "We follow a structured onboarding plan" },
         ]}
-        value={answers["training"] || ""}
+        value={getStringAnswer(answers["training"])}
         onChange={(val) => onAnswer("training", val)}
       />
 
@@ -70,7 +70,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question=" What’s one process you wish was more efficient or reliable in your business right now? "
         placeholder="E.g.,"
-        value={answers["self_insight"] || ""}
+        value={getStringAnswer(answers["self_insight"])}
         onChange={(val) => onAnswer("self_insight", val)}
         maxLength={300}
       />
@@ -86,7 +86,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly standardized", label: "Mostly standardized in key areas" },
           { value: "Well-defined", label: "Well-defined and reliable across the board" },
         ]}
-        value={answers["discipline"] || ""}
+        value={getStringAnswer(answers["discipline"])}
         onChange={(val) => onAnswer("discipline", val)}
       />
 

@@ -1,9 +1,13 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; 
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["task_automation"] === "string" &&
     typeof answers["ai_data_sources"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +33,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "Yes — we’ve started identifying them", label: "Yes — we’ve started identifying them" },
           { value: "Yes — we have a clear automation plan", label: "Yes — we have a clear automation plan" },
         ]}
-        value={answers["task_automation"] || ""}
+        value={getStringAnswer(answers["task_automation"])}
         onChange={(val) => onAnswer("task_automation", val)}
       />
 
@@ -42,7 +46,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "Yes — we’ve identified some sources", label: "Yes — we’ve identified some sources" },
           { value: "Yes — our data is already organized and accessible", label: "Yes — our data is already organized and accessible" },
         ]}
-        value={answers["ai_data_sources"] || ""}
+        value={getStringAnswer(answers["ai_data_sources"])}
         onChange={(val) => onAnswer("ai_data_sources", val)}
       />
 
@@ -55,7 +59,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "Some experience", label: "Some experience" },
           { value: "Yes — we have in-house expertise", label: "Yes — we have in-house expertise" },
         ]}
-        value={answers["internal_ai_experience"] || ""}
+        value={getStringAnswer(answers["internal_ai_experience"])}
         onChange={(val) => onAnswer("internal_ai_experience", val)}
       />
 
@@ -68,7 +72,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "We’ve assigned someone to research it", label: "We’ve assigned someone to research it" },
           { value: "We have a dedicated owner or team", label: "We have a dedicated owner or team" },
         ]}
-        value={answers["ai_initiative_owner"] || ""}
+        value={getStringAnswer(answers["ai_initiative_owner"])}
         onChange={(val) => onAnswer("ai_initiative_owner", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tech_stack_confidence"] === "string" &&
     typeof answers["system_redundancy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly confident — we’ve vetted our tools" },
           { value: "very_confident", label: "Very confident — our stack is strategic and robust" },
         ]}
-        value={answers["tech_stack_confidence"] || ""}
+        value={getStringAnswer(answers["tech_stack_confidence"])}
         onChange={(val) => onAnswer("tech_stack_confidence", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "some_overlap", label: "Some tools overlap but we’re managing it" },
           { value: "fully_streamlined", label: "No — we’ve streamlined everything" },
         ]}
-        value={answers["system_redundancy"] || ""}
+        value={getStringAnswer(answers["system_redundancy"])}
         onChange={(val) => onAnswer("system_redundancy", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_unified", label: "Mostly unified — just a few gaps" },
           { value: "fully_unified", label: "Fully unified — our data works across systems" },
         ]}
-        value={answers["data_unification"] || ""}
+        value={getStringAnswer(answers["data_unification"])}
         onChange={(val) => onAnswer("data_unification", val)}
       />
     </div>

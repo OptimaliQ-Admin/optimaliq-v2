@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["market_awareness"] === "string" &&
     typeof answers["competitive_tracking"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "somewhat_informed", label: "We stay somewhat informed through industry news" },
           { value: "actively_monitored", label: "We actively monitor market and competitor signals" },
         ]}
-        value={answers["market_awareness"] || ""}
+        value={getStringAnswer(answers["market_awareness"])}
         onChange={(val) => onAnswer("market_awareness", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "ad_hoc_tools", label: "We use tools for ad hoc tracking" },
           { value: "dedicated_system", label: "We have a dedicated system or process for it" },
         ]}
-        value={answers["competitive_tracking"] || ""}
+        value={getStringAnswer(answers["competitive_tracking"])}
         onChange={(val) => onAnswer("competitive_tracking", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "somewhat_clear", label: "Somewhat clear — we communicate it internally" },
           { value: "very_clear", label: "Very clear — we lead with it in marketing and sales" },
         ]}
-        value={answers["differentiation_clarity"] || ""}
+        value={getStringAnswer(answers["differentiation_clarity"])}
         onChange={(val) => onAnswer("differentiation_clarity", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "calculated_once", label: "We’ve calculated it once or twice" },
           { value: "actively_tracked", label: "Yes — we track and optimize against it" },
         ]}
-        value={answers["market_share_insight"] || ""}
+        value={getStringAnswer(answers["market_share_insight"])}
         onChange={(val) => onAnswer("market_share_insight", val)}
       />
     </div>

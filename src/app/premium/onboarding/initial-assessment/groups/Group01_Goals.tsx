@@ -1,14 +1,13 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 //src/app/tier2/onboarding/Page2_Initial_Assessment/Page1/groups/Group01_Goals.tsx
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isGroup01Complete(answers: Record<string, any>): boolean {
+export function isGroup01Complete(answers: AssessmentAnswers): boolean {
   const hasGrowthMetrics =
     Array.isArray(answers["growth_metrics"]) &&
     answers["growth_metrics"].length > 0;
@@ -27,8 +26,8 @@ export function isGroup01Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group01_Goals({ answers, onAnswer }: Props) {
@@ -65,7 +64,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the other metric(s) you track"
           placeholder="Describe any additional metrics you use to measure growth..."
-          value={answers["growth_metrics_other"] || ""}
+          value={getStringAnswer(answers["growth_metrics_other"])}
           onChange={(val) => onAnswer("growth_metrics_other", val)}
           maxLength={50}
         />
@@ -77,7 +76,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         question="In one or two sentences, describe your go-to-market strategy."
         description="How do you attract, convert, and retain customers?"
         placeholder="E.g., We drive traffic through paid and organic channels and convert through personalized onboarding flows..."
-        value={answers["gtm_strategy"] || ""}
+        value={getStringAnswer(answers["gtm_strategy"])}
         onChange={(val) => onAnswer("gtm_strategy", val)}
         maxLength={300}
       />
@@ -110,7 +109,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the other friction point(s)"
           placeholder="E.g., Internal delays, market confusion, etc."
-          value={answers["friction_points_other"] || ""}
+          value={getStringAnswer(answers["friction_points_other"])}
           onChange={(val) => onAnswer("friction_points_other", val)}
           maxLength={50}
         />

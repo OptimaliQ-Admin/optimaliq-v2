@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export const dynamic = "force-dynamic";
 
 const supabase = createClient(
@@ -24,8 +25,8 @@ export async function GET() {
     }
 
     return NextResponse.json(data);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🔥 Error fetching marketing playbook:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) }, { status: 500 });
   }
 }

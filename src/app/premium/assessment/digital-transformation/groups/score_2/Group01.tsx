@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["digital_strategy"] === "string" &&
     typeof answers["platform_usage"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_0_Step01({ answers, onAnswer }: Props) {
           { value: "partial_strategy", label: "Yes — we’ve defined a few goals or themes" },
           { value: "clear_strategy", label: "Yes — we have a clearly defined strategy" },
         ]}
-        value={answers["digital_strategy"] || ""}
+        value={getStringAnswer(answers["digital_strategy"])}
         onChange={(val) => onAnswer("digital_strategy", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_0_Step01({ answers, onAnswer }: Props) {
           { value: "core_features", label: "We use the core features effectively" },
           { value: "fully_leveraged", label: "We fully leverage platform capabilities" },
         ]}
-        value={answers["platform_usage"] || ""}
+        value={getStringAnswer(answers["platform_usage"])}
         onChange={(val) => onAnswer("platform_usage", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_0_Step01({ answers, onAnswer }: Props) {
           { value: "lack_resources", label: "Lack of people or capacity" },
           { value: "not_prioritized", label: "It’s not prioritized by leadership" },
         ]}
-        value={answers["current_limitations"] || ""}
+        value={getStringAnswer(answers["current_limitations"])}
         onChange={(val) => onAnswer("current_limitations", val)}
       />
     </div>

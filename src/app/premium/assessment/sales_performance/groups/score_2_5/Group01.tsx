@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_61a52a"] === "string" &&
     typeof answers["how_9e698a"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "historical_avg", label: "Based on past performance averages" },
           { value: "modeled", label: "Modeled through CRM tools or formulas" },
         ]}
-        value={answers["how_61a52a"] || ""}
+        value={getStringAnswer(answers["how_61a52a"])}
         onChange={(val) => onAnswer("how_61a52a", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "crm_tasks", label: "Tasks/reminders are assigned in the CRM" },
           { value: "workflows", label: "We have workflows or sequences to enforce follow-ups" },
         ]}
-        value={answers["how_9e698a"] || ""}
+        value={getStringAnswer(answers["how_9e698a"])}
         onChange={(val) => onAnswer("how_9e698a", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "training", label: "We use objection-handling training or scripts" },
           { value: "proactive", label: "We anticipate objections and proactively address them" },
         ]}
-        value={answers["how_e2391b"] || ""}
+        value={getStringAnswer(answers["how_e2391b"])}
         onChange={(val) => onAnswer("how_e2391b", val)}
       />
     </div>

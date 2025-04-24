@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitor_selection"] === "string" &&
     Array.isArray(answers["benchmark_metrics"]) &&
@@ -13,8 +17,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "specific_criteria", label: "We use specific criteria like market share, product overlap" },
           { value: "strategic_focus", label: "We choose competitors based on strategic focus or opportunity" },
         ]}
-        value={answers["competitor_selection"] || ""}
+        value={getStringAnswer(answers["competitor_selection"])}
         onChange={(val) => onAnswer("competitor_selection", val)}
       />
 
@@ -58,7 +62,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "internal_notes", label: "We gather intel from sales/marketing conversations" },
           { value: "formal_process", label: "We use a formal process or tool for tracking competitors" },
         ]}
-        value={answers["data_collection_method"] || ""}
+        value={getStringAnswer(answers["data_collection_method"])}
         onChange={(val) => onAnswer("data_collection_method", val)}
       />
     </div>

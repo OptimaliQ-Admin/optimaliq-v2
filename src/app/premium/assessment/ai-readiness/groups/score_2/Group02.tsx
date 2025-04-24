@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_sponsorship"] === "string" &&
     typeof answers["data_integration"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "cross_functional", label: "A cross-functional working group" },
           { value: "executive_sponsor", label: "An executive sponsor or leadership team" },
         ]}
-        value={answers["ai_sponsorship"] || ""}
+        value={getStringAnswer(answers["ai_sponsorship"])}
         onChange={(val) => onAnswer("ai_sponsorship", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "etl_pipelines", label: "ETL pipelines feed our reporting system" },
           { value: "real_time", label: "Real-time data sync across platforms" },
         ]}
-        value={answers["data_integration"] || ""}
+        value={getStringAnswer(answers["data_integration"])}
         onChange={(val) => onAnswer("data_integration", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "prioritized_list", label: "We’ve identified and prioritized use cases" },
           { value: "deep_alignment", label: "AI opportunities are tied to core KPIs" },
         ]}
-        value={answers["ai_use_cases"] || ""}
+        value={getStringAnswer(answers["ai_use_cases"])}
         onChange={(val) => onAnswer("ai_use_cases", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "supportive", label: "Generally supportive with the right enablement" },
           { value: "proactive", label: "Proactively seeking new AI capabilities" },
         ]}
-        value={answers["change_management"] || ""}
+        value={getStringAnswer(answers["change_management"])}
         onChange={(val) => onAnswer("change_management", val)}
       />
     </div>

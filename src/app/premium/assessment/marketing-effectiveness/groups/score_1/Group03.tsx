@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_acquisition_cost"] === "string" &&
     answers["customer_acquisition_cost"].trim().length > 0 &&
@@ -16,8 +20,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "Yes, but not sure it’s accurate", label: "Yes, but not sure it’s accurate" },
           { value: "Yes, we track CAC regularly", label: "Yes, we track CAC regularly" },
         ]}
-        value={answers["customer_acquisition_cost"] || ""}
+        value={getStringAnswer(answers["customer_acquisition_cost"])}
         onChange={(val) => onAnswer("customer_acquisition_cost", val)}
       />
 
@@ -40,7 +44,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the biggest challenge you face with marketing right now?"
         placeholder="E.g., generating leads, measuring performance, content creation..."
-        value={answers["marketing_challenge"] || ""}
+        value={getStringAnswer(answers["marketing_challenge"])}
         onChange={(val) => onAnswer("marketing_challenge", val)}
         maxLength={300}
       />
@@ -49,7 +53,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="If you could improve one part of your marketing in the next 30 days, what would it be?"
         placeholder="E.g., ad performance, customer targeting, campaign frequency..."
-        value={answers["marketing_improvement"] || ""}
+        value={getStringAnswer(answers["marketing_improvement"])}
         onChange={(val) => onAnswer("marketing_improvement", val)}
         maxLength={300}
       />

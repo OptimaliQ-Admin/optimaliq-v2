@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_reporting"] === "string" &&
     typeof answers["feedback_channel_diversity"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly team-level dashboards" },
           { value: "real_time", label: "Real-time metrics and regular reviews" },
         ]}
-        value={answers["cx_reporting"] || ""}
+        value={getStringAnswer(answers["cx_reporting"])}
         onChange={(val) => onAnswer("cx_reporting", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "few_channels", label: "2–3 channels across lifecycle" },
           { value: "many_channels", label: "4+ channels (e.g. survey, NPS, social, reviews)" },
         ]}
-        value={answers["feedback_channel_diversity"] || ""}
+        value={getStringAnswer(answers["feedback_channel_diversity"])}
         onChange={(val) => onAnswer("feedback_channel_diversity", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "role_based_training", label: "Role-based training exists" },
           { value: "cx_certified", label: "All teams are CX-certified or trained regularly" },
         ]}
-        value={answers["employee_training"] || ""}
+        value={getStringAnswer(answers["employee_training"])}
         onChange={(val) => onAnswer("employee_training", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "moderate", label: "Moderate — we fix things within weeks" },
           { value: "fast_response", label: "Fast — we update experiences in days" },
         ]}
-        value={answers["cx_adjustments"] || ""}
+        value={getStringAnswer(answers["cx_adjustments"])}
         onChange={(val) => onAnswer("cx_adjustments", val)}
       />
     </div>

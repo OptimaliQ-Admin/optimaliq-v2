@@ -1,14 +1,12 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 //src/app/tier2/assessment/BPM/groups/score_1/Group01.tsx
 "use client";
 
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "src/components/questions/DropdownQuestion";
 
 
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["consistency"] === "string" &&
     answers["consistency"].trim().length > 0 &&
@@ -22,8 +20,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -42,7 +40,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
     { value: "checklisr", label: "There’s a checklist or basic notes" },
     { value: "software", label: "We use software or formal instructions" },
   ]}
-  value={answers["consistency"] || ""}
+  value={getStringAnswer(answers["consistency"])}
   onChange={(val) => onAnswer("consistency", val)}
 />
 
@@ -57,7 +55,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
     { value: "most", label: "Most core processes are documented" },
     { value: "everything", label: "Everything is clearly documented and stored" },
   ]}
-  value={answers["documentation"] || ""}
+  value={getStringAnswer(answers["documentation"])}
   onChange={(val) => onAnswer("documentation", val)}
 />
 
@@ -71,7 +69,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
     { value: "tips", label: "We'd give them a few tips or notes" },
     { value: "training", label: "They’d receive a clear training or guide" },
   ]}
-  value={answers["onboarding"] || ""}
+  value={getStringAnswer(answers["onboarding"])}
   onChange={(val) => onAnswer("onboarding", val)}
 />
 

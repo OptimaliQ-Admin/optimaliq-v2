@@ -1,9 +1,10 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
 
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_feedback_loop"] === "string" &&
     typeof answers["data_centralization"] === "string" &&
@@ -12,8 +13,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_2_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +29,7 @@ export default function Score_2_0_Step01({ answers, onAnswer }: Props) {
           { value: "regular_surveys", label: "Regular surveys or feedback forms" },
           { value: "integrated_feedback_loop", label: "Integrated feedback loop across touchpoints" },
         ]}
-        value={answers["customer_feedback_loop"] || ""}
+        value={getStringAnswer(answers["customer_feedback_loop"])}
         onChange={(val) => onAnswer("customer_feedback_loop", val)}
       />
 
@@ -41,7 +42,7 @@ export default function Score_2_0_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_centralized", label: "Mostly centralized in a single tool or database" },
           { value: "fully_integrated", label: "Fully integrated and available to teams in real time" },
         ]}
-        value={answers["data_centralization"] || ""}
+        value={getStringAnswer(answers["data_centralization"])}
         onChange={(val) => onAnswer("data_centralization", val)}
       />
 
@@ -54,7 +55,7 @@ export default function Score_2_0_Step01({ answers, onAnswer }: Props) {
           { value: "standardized", label: "Standardized CX metrics reported regularly" },
           { value: "real_time_reporting", label: "Real-time dashboards with CX insights" },
         ]}
-        value={answers["cx_reporting"] || ""}
+        value={getStringAnswer(answers["cx_reporting"])}
         onChange={(val) => onAnswer("cx_reporting", val)}
       />
     </div>

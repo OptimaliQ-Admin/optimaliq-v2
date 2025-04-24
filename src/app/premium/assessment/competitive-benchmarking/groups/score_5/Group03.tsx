@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_culture"] === "string" &&
     typeof answers["benchmarking_strategic_impact"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "embedded", label: "Embedded in product, sales, and marketing discussions" },
           { value: "strategic_norm", label: "A strategic norm that shapes decisions company-wide" },
         ]}
-        value={answers["benchmarking_culture"] || ""}
+        value={getStringAnswer(answers["benchmarking_culture"])}
         onChange={(val) => onAnswer("benchmarking_culture", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "influential", label: "It helps prioritize or shape key decisions" },
           { value: "core_to_strategy", label: "It’s a core input to annual and quarterly planning" },
         ]}
-        value={answers["benchmarking_strategic_impact"] || ""}
+        value={getStringAnswer(answers["benchmarking_strategic_impact"])}
         onChange={(val) => onAnswer("benchmarking_strategic_impact", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly — we know our unique differentiators" },
           { value: "fully_confident", label: "Fully — we have clear and defensible advantages" },
         ]}
-        value={answers["competitive_edge_confidence"] || ""}
+        value={getStringAnswer(answers["competitive_edge_confidence"])}
         onChange={(val) => onAnswer("competitive_edge_confidence", val)}
       />
     </div>

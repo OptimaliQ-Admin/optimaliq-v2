@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_team_integration"] === "string" &&
     typeof answers["ai_model_monitoring"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "embedded_teams", label: "They are embedded in major workflows or teams" },
           { value: "fully_integrated", label: "Fully integrated into day-to-day decision-making" },
         ]}
-        value={answers["ai_team_integration"] || ""}
+        value={getStringAnswer(answers["ai_team_integration"])}
         onChange={(val) => onAnswer("ai_team_integration", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "active_monitoring", label: "Active monitoring by a data/engineering team" },
           { value: "automated_and_alerted", label: "Automated with alerts and retraining logic" },
         ]}
-        value={answers["ai_model_monitoring"] || ""}
+        value={getStringAnswer(answers["ai_model_monitoring"])}
         onChange={(val) => onAnswer("ai_model_monitoring", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "bias_audit_process", label: "We follow a defined audit process" },
           { value: "ethics_framework", label: "We have ethics frameworks and governance in place" },
         ]}
-        value={answers["ai_bias_mitigation"] || ""}
+        value={getStringAnswer(answers["ai_bias_mitigation"])}
         onChange={(val) => onAnswer("ai_bias_mitigation", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "team_level_focus", label: "Targeted training for certain roles or teams" },
           { value: "org_wide_initiative", label: "Company-wide initiative with goals and tracking" },
         ]}
-        value={answers["ai_training_uptake"] || ""}
+        value={getStringAnswer(answers["ai_training_uptake"])}
         onChange={(val) => onAnswer("ai_training_uptake", val)}
       />
     </div>

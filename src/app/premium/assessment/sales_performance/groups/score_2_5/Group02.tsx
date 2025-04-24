@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["which_96e79e"]) &&
     answers["which_96e79e"].length > 0 &&
@@ -15,8 +19,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -50,7 +54,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "regular_1on1s", label: "We provide regular 1:1s or call feedback" },
           { value: "structured_program", label: "We have a structured coaching and training program" },
         ]}
-        value={answers["how_18d03b"] || ""}
+        value={getStringAnswer(answers["how_18d03b"])}
         onChange={(val) => onAnswer("how_18d03b", val)}
       />
 
@@ -63,7 +67,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "aging_or_inactive", label: "We check for deal aging or low activity" },
           { value: "automated_scoring", label: "We use reports and scoring to flag risks automatically" },
         ]}
-        value={answers["what’s_f1fd32"] || ""}
+        value={getStringAnswer(answers["what’s_f1fd32"])}
         onChange={(val) => onAnswer("what’s_f1fd32", val)}
       />
 
@@ -76,7 +80,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly" },
           { value: "built_in", label: "Built into every deal close and team review" },
         ]}
-        value={answers["how_86d3d9"] || ""}
+        value={getStringAnswer(answers["how_86d3d9"])}
         onChange={(val) => onAnswer("how_86d3d9", val)}
       />
     </div>

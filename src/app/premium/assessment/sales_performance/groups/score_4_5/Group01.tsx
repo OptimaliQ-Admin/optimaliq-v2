@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_18515e"] === "string" &&
     Array.isArray(answers["which_117dee"]) &&
@@ -14,8 +18,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "quarterly_reviews", label: "We run quarterly reviews" },
           { value: "monthly_models", label: "Capacity models are updated monthly and tied to forecasting" },
         ]}
-        value={answers["how_18515e"] || ""}
+        value={getStringAnswer(answers["how_18515e"])}
         onChange={(val) => onAnswer("how_18515e", val)}
       />
 
@@ -61,7 +65,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "pilot_segments", label: "We pilot changes in segments or teams" },
           { value: "strategic_experimentation", label: "We run strategic experimentation and track impact" },
         ]}
-        value={answers["how_70b7b8"] || ""}
+        value={getStringAnswer(answers["how_70b7b8"])}
         onChange={(val) => onAnswer("how_70b7b8", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cross_functional_alignment"] === "string" &&
     typeof answers["strategic_vision_cascading"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "regular_meetings", label: "We have regular cross-functional meetings" },
           { value: "fully_integrated", label: "Teams are fully integrated with shared goals and KPIs" },
         ]}
-        value={answers["cross_functional_alignment"] || ""}
+        value={getStringAnswer(answers["cross_functional_alignment"])}
         onChange={(val) => onAnswer("cross_functional_alignment", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "shared_and_measured", label: "Shared and measured across levels" },
           { value: "embedded_in_teams", label: "Cascaded effectively and embedded into team goals" },
         ]}
-        value={answers["strategic_vision_cascading"] || ""}
+        value={getStringAnswer(answers["strategic_vision_cascading"])}
         onChange={(val) => onAnswer("strategic_vision_cascading", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "frequent_data_use", label: "Frequent use of dashboards and KPIs" },
           { value: "real_time_insights", label: "Leaders use real-time insights to adjust strategy" },
         ]}
-        value={answers["data_driven_decisions"] || ""}
+        value={getStringAnswer(answers["data_driven_decisions"])}
         onChange={(val) => onAnswer("data_driven_decisions", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "recognized_as_issue", label: "Recognized and occasionally discussed" },
           { value: "proactively_owned", label: "Owned by leadership with proactive initiatives" },
         ]}
-        value={answers["employee_retention_focus"] || ""}
+        value={getStringAnswer(answers["employee_retention_focus"])}
         onChange={(val) => onAnswer("employee_retention_focus", val)}
       />
     </div>

@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["process_redesign"] === "string" &&
     answers["process_redesign"].trim().length > 0 &&
@@ -23,8 +23,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step01({ answers, onAnswer }: Props) {
@@ -41,7 +41,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
     { value: "Quarterly", label: "Quarterly based on metrics" },
     { value: "Continuously", label: "Continuously, as part of operations" },
   ]}
-  value={answers["process_redesign"] || ""}
+  value={getStringAnswer(answers["process_redesign"])}
   onChange={(val) => onAnswer("process_redesign", val)}
 />
 
@@ -56,7 +56,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
     { value: "KPIs are process-based", label: "Some KPIs are process-based" },
     { value: "Yes", label: "Yes — directly accountable to metrics" },
   ]}
-  value={answers["owner_accountability"] || ""}
+  value={getStringAnswer(answers["owner_accountability"])}
   onChange={(val) => onAnswer("owner_accountability", val)}
 />
 
@@ -70,7 +70,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
     { value: "Regular syncs to maintain alignment", label: "Regular syncs to maintain alignment" },
     { value: "Full alignment strategy and governance", label: "Full alignment strategy and governance" },
   ]}
-  value={answers["tool_alignment"] || ""}
+  value={getStringAnswer(answers["tool_alignment"])}
   onChange={(val) => onAnswer("tool_alignment", val)}
 />
     </div>

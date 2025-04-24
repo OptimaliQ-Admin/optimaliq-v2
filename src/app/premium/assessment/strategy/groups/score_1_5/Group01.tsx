@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_visibility"] === "string" &&
     typeof answers["team_understanding"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "visible_in_some_places", label: "It’s in presentations or documents" },
           { value: "actively_referenced", label: "It’s visible and referenced often by leadership" },
         ]}
-        value={answers["strategy_visibility"] || ""}
+        value={getStringAnswer(answers["strategy_visibility"])}
         onChange={(val) => onAnswer("strategy_visibility", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "somewhat_clear", label: "It’s mostly clear, but not specific" },
           { value: "very_clear", label: "Very clear — people understand how their work connects" },
         ]}
-        value={answers["team_understanding"] || ""}
+        value={getStringAnswer(answers["team_understanding"])}
         onChange={(val) => onAnswer("team_understanding", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Most major workstreams align with strategic goals" },
           { value: "fully_aligned", label: "Everything is driven by strategic priorities" },
         ]}
-        value={answers["priority_alignment"] || ""}
+        value={getStringAnswer(answers["priority_alignment"])}
         onChange={(val) => onAnswer("priority_alignment", val)}
       />
     </div>

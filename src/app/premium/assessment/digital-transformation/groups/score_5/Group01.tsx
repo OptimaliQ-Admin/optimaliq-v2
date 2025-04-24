@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["transformational_mindset"] === "string" &&
     typeof answers["innovation_leadership"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "bold_changes", label: "We pursue bold, disruptive changes when needed" },
           { value: "transformation_leader", label: "We are seen as a leader in transformation" },
         ]}
-        value={answers["transformational_mindset"] || ""}
+        value={getStringAnswer(answers["transformational_mindset"])}
         onChange={(val) => onAnswer("transformational_mindset", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "champions", label: "Leaders actively champion innovation" },
           { value: "strategic_innovation", label: "Innovation is embedded in leadership strategy" },
         ]}
-        value={answers["innovation_leadership"] || ""}
+        value={getStringAnswer(answers["innovation_leadership"])}
         onChange={(val) => onAnswer("innovation_leadership", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "peer_comparison", label: "We compare to similar companies" },
           { value: "industry_leading", label: "We benchmark against industry leaders and best practices" },
         ]}
-        value={answers["benchmarking_practice"] || ""}
+        value={getStringAnswer(answers["benchmarking_practice"])}
         onChange={(val) => onAnswer("benchmarking_practice", val)}
       />
     </div>

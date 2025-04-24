@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -26,8 +27,8 @@ export async function GET() {
       insight: data.gpt_summary,
       createdat: data.created_at,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🚨 Error in trends endpoint:", err);
-    return NextResponse.json({ error: err.message || "Unexpected error" }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) || "Unexpected error" }, { status: 500 });
   }
 }

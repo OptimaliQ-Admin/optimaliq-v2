@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_retention_focus"] === "string" &&
     typeof answers["loyalty_initiatives"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "consistent", label: "Consistent retention efforts exist" },
           { value: "strategic_priority", label: "Retention is a strategic priority with clear KPIs" },
         ]}
-        value={answers["customer_retention_focus"] || ""}
+        value={getStringAnswer(answers["customer_retention_focus"])}
         onChange={(val) => onAnswer("customer_retention_focus", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "tiered_programs", label: "Yes — we have a tiered or gamified program" },
           { value: "fully_integrated", label: "Yes — loyalty is deeply integrated with the brand" },
         ]}
-        value={answers["loyalty_initiatives"] || ""}
+        value={getStringAnswer(answers["loyalty_initiatives"])}
         onChange={(val) => onAnswer("loyalty_initiatives", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "survey_scores", label: "Driven by NPS or CSAT scores" },
           { value: "kpi_driven", label: "Clearly defined KPIs aligned to growth and retention" },
         ]}
-        value={answers["cx_success_definition"] || ""}
+        value={getStringAnswer(answers["cx_success_definition"])}
         onChange={(val) => onAnswer("cx_success_definition", val)}
       />
     </div>

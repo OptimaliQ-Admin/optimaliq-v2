@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_671b3b"] === "string" &&
     typeof answers["how_27f529"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "dashboards_and_kpis", label: "We use dashboards and KPIs" },
           { value: "auto_detection", label: "Our systems surface performance deviations automatically" },
         ]}
-        value={answers["how_671b3b"] || ""}
+        value={getStringAnswer(answers["how_671b3b"])}
         onChange={(val) => onAnswer("how_671b3b", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "partially_aligned", label: "Partially aligned for handoff or funnel goals" },
           { value: "fully_aligned", label: "Fully aligned and measured across the customer lifecycle" },
         ]}
-        value={answers["how_27f529"] || ""}
+        value={getStringAnswer(answers["how_27f529"])}
         onChange={(val) => onAnswer("how_27f529", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly_review", label: "GTM teams review data together quarterly" },
           { value: "core_driver", label: "Sales data is a core driver of GTM evolution" },
         ]}
-        value={answers["how_0f6cf0"] || ""}
+        value={getStringAnswer(answers["how_0f6cf0"])}
         onChange={(val) => onAnswer("how_0f6cf0", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "bottom_up", label: "Reps contribute to bottom-up planning" },
           { value: "full_cycle", label: "We run a full-cycle planning process across roles and data" },
         ]}
-        value={answers["what’s_b04f69"] || ""}
+        value={getStringAnswer(answers["what’s_b04f69"])}
         onChange={(val) => onAnswer("what’s_b04f69", val)}
       />
     </div>

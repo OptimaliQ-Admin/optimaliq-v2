@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_usage"] === "string" &&
     typeof answers["marketing_innovation"] === "string" &&
@@ -15,8 +19,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -31,7 +35,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "embedded_some_areas", label: "Embedded into select areas like targeting or send time" },
           { value: "fully_automated", label: "Fully automated / optimized across channels" }
         ]}
-        value={answers["ai_usage"] || ""}
+        value={getStringAnswer(answers["ai_usage"])}
         onChange={(val) => onAnswer("ai_usage", val)}
       />
 
@@ -44,7 +48,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "ongoing_testing", label: "We run ongoing experiments with clear KPIs" },
           { value: "innovation_culture", label: "Innovation is a core part of our marketing culture" }
         ]}
-        value={answers["marketing_innovation"] || ""}
+        value={getStringAnswer(answers["marketing_innovation"])}
         onChange={(val) => onAnswer("marketing_innovation", val)}
       />
 
@@ -57,7 +61,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "internal_benchmarking", label: "Internal benchmarking against past performance" },
           { value: "industry_metrics", label: "Regular benchmarking using industry metrics" }
         ]}
-        value={answers["benchmarking"] || ""}
+        value={getStringAnswer(answers["benchmarking"])}
         onChange={(val) => onAnswer("benchmarking", val)}
       />
 
@@ -65,7 +69,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the next big thing you want to accomplish in your marketing strategy?"
         placeholder="E.g., Integrate more AI, test new acquisition channels, improve nurture journeys..."
-        value={answers["next_priority"] || ""}
+        value={getStringAnswer(answers["next_priority"])}
         onChange={(val) => onAnswer("next_priority", val)}
         maxLength={300}
       />

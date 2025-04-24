@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_feedback_channels"] === "string" &&
     typeof answers["cx_adaptation"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "analyzed_periodically", label: "We analyze feedback and review it periodically" },
           { value: "real_time_loops", label: "We use real-time feedback loops to guide action" },
         ]}
-        value={answers["cx_feedback_channels"] || ""}
+        value={getStringAnswer(answers["cx_feedback_channels"])}
         onChange={(val) => onAnswer("cx_feedback_channels", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "moderately_fast", label: "Moderately fast — a few weeks" },
           { value: "very_fast", label: "Very fast — days or real-time changes" },
         ]}
-        value={answers["cx_adaptation"] || ""}
+        value={getStringAnswer(answers["cx_adaptation"])}
         onChange={(val) => onAnswer("cx_adaptation", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "active_support", label: "It’s actively supported by leadership" },
           { value: "executive_ownership", label: "It has executive sponsorship and clear goals" },
         ]}
-        value={answers["cx_leadership_alignment"] || ""}
+        value={getStringAnswer(answers["cx_leadership_alignment"])}
         onChange={(val) => onAnswer("cx_leadership_alignment", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "retention_and_loyalty", label: "Retention, NPS, or loyalty indicators" },
           { value: "roi_and_impact", label: "ROI, growth impact, and customer lifetime value" },
         ]}
-        value={answers["cx_success_criteria"] || ""}
+        value={getStringAnswer(answers["cx_success_criteria"])}
         onChange={(val) => onAnswer("cx_success_criteria", val)}
       />
     </div>

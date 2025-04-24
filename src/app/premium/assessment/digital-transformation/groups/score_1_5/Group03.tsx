@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tool_adoption"] === "string" &&
     typeof answers["roadmap_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_used", label: "Mostly adopted — some gaps remain" },
           { value: "fully_adopted", label: "Fully adopted — it’s part of daily work" },
         ]}
-        value={answers["tool_adoption"] || ""}
+        value={getStringAnswer(answers["tool_adoption"])}
         onChange={(val) => onAnswer("tool_adoption", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "aligned", label: "Yes — we connect projects to strategic goals" },
           { value: "deeply_aligned", label: "Deeply aligned — digital is core to our roadmap" },
         ]}
-        value={answers["roadmap_alignment"] || ""}
+        value={getStringAnswer(answers["roadmap_alignment"])}
         onChange={(val) => onAnswer("roadmap_alignment", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "metrics_reviewed", label: "Yes — we review success regularly" },
           { value: "impact_driven", label: "Yes — results guide future investments" },
         ]}
-        value={answers["digital_metrics"] || ""}
+        value={getStringAnswer(answers["digital_metrics"])}
         onChange={(val) => onAnswer("digital_metrics", val)}
       />
     </div>

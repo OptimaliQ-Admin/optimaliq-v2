@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cross_team_collaboration"] === "string" &&
     typeof answers["leadership_alignment"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "some_structure", label: "Some structured collaboration and updates" },
           { value: "high_alignment", label: "Strong alignment with shared priorities" },
         ]}
-        value={answers["cross_team_collaboration"] || ""}
+        value={getStringAnswer(answers["cross_team_collaboration"])}
         onChange={(val) => onAnswer("cross_team_collaboration", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned with occasional gaps" },
           { value: "fully_aligned", label: "Fully aligned — decisions and messaging are unified" },
         ]}
-        value={answers["leadership_alignment"] || ""}
+        value={getStringAnswer(answers["leadership_alignment"])}
         onChange={(val) => onAnswer("leadership_alignment", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "some_structure", label: "Some structure for follow-up" },
           { value: "clear_ownership", label: "Clear ownership and resolution processes" },
         ]}
-        value={answers["team_accountability"] || ""}
+        value={getStringAnswer(answers["team_accountability"])}
         onChange={(val) => onAnswer("team_accountability", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "monthly", label: "At least monthly with some structure" },
           { value: "weekly_development", label: "Weekly or structured around growth" },
         ]}
-        value={answers["manager_1on1s"] || ""}
+        value={getStringAnswer(answers["manager_1on1s"])}
         onChange={(val) => onAnswer("manager_1on1s", val)}
       />
     </div>

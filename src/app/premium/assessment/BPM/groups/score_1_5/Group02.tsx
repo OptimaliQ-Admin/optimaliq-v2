@@ -1,12 +1,11 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
 
 
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["process_definition"] === "string" &&
     answers["process_definition"].trim().length > 0 &&
@@ -22,8 +21,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -40,7 +39,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
     { value: "loosely defined by a manager", label: "It’s loosely defined by a manager" },
     { value: "clear owner for each process", label: "There’s a clear owner for each process" },
   ]}
-  value={answers["process_definition"] || ""}
+  value={getStringAnswer(answers["process_definition"])}
   onChange={(val) => onAnswer("process_definition", val)}
 />
 
@@ -53,7 +52,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
     { value: "Rarely", label: "Rarely" },
     { value: "Almost never", label: "Almost never" },
   ]}
-  value={answers["knowledge_transfer"] || ""}
+  value={getStringAnswer(answers["knowledge_transfer"])}
   onChange={(val) => onAnswer("knowledge_transfer", val)}
 />
 
@@ -66,7 +65,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly confident" },
     { value: "Very confident", label: "Very confident" },
   ]}
-  value={answers["consistency"] || ""}
+  value={getStringAnswer(answers["consistency"])}
   onChange={(val) => onAnswer("consistency", val)}
 />
     </div>

@@ -3,9 +3,12 @@
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["what_fed657"]) &&
     answers["what_fed657"].length > 0 &&
@@ -17,8 +20,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -46,7 +49,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one area of your sales process you’d automate or streamline next?"
         placeholder="E.g., follow-ups, stage updates, reminders"
-        value={answers["what’s_4abcc8"] || ""}
+        value={getStringAnswer(answers["what’s_4abcc8"])}
         onChange={(val) => onAnswer("what’s_4abcc8", val)}
         maxLength={300}
       />
@@ -60,7 +63,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "confident", label: "Confident — we have the pipeline and systems" },
           { value: "very_confident", label: "Very confident — we’re already forecasting upside" },
         ]}
-        value={answers["how_8e4ef6"] || ""}
+        value={getStringAnswer(answers["how_8e4ef6"])}
         onChange={(val) => onAnswer("how_8e4ef6", val)}
       />
     </div>

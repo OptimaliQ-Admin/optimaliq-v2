@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["kpi_review"] === "string" &&
     typeof answers["impact"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step02({ answers, onAnswer }: Props) {
@@ -31,7 +35,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly — tied to business reviews" },
           { value: "monthly", label: "Monthly or more — as part of operations" },
         ]}
-        value={answers["kpi_review"] || ""}
+        value={getStringAnswer(answers["kpi_review"])}
         onChange={(val) => onAnswer("kpi_review", val)}
       />
 
@@ -44,7 +48,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "enable_convenience", label: "They enable new conveniences or self-service" },
           { value: "transform_journey", label: "They transform the customer journey" },
         ]}
-        value={answers["impact"] || ""}
+        value={getStringAnswer(answers["impact"])}
         onChange={(val) => onAnswer("impact", val)}
       />
 

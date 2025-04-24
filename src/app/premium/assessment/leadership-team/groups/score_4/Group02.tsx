@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["talent_retention"] === "string" &&
     typeof answers["executive_communication"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "strong_retention", label: "We retain top talent with intention" },
           { value: "high_retention_culture", label: "Retention is part of our leadership culture" },
         ]}
-        value={answers["talent_retention"] || ""}
+        value={getStringAnswer(answers["talent_retention"])}
         onChange={(val) => onAnswer("talent_retention", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "frequent_updates", label: "They provide regular company-wide updates" },
           { value: "transparent_accessibility", label: "They are accessible and transparent" },
         ]}
-        value={answers["executive_communication"] || ""}
+        value={getStringAnswer(answers["executive_communication"])}
         onChange={(val) => onAnswer("executive_communication", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "development_programs", label: "We have some development programs" },
           { value: "succession_ready", label: "We have formal pipelines and backups in place" },
         ]}
-        value={answers["leadership_bench_strength"] || ""}
+        value={getStringAnswer(answers["leadership_bench_strength"])}
         onChange={(val) => onAnswer("leadership_bench_strength", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_0_Step02({ answers, onAnswer }: Props) {
           { value: "balanced_autonomy", label: "Leads have freedom within defined frameworks" },
           { value: "fully_empowered", label: "Leads are fully empowered and accountable" },
         ]}
-        value={answers["team_autonomy"] || ""}
+        value={getStringAnswer(answers["team_autonomy"])}
         onChange={(val) => onAnswer("team_autonomy", val)}
       />
     </div>

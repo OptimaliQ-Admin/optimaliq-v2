@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_1e24f7"] === "string" &&
     answers["how_1e24f7"].trim().length > 0 &&
@@ -16,8 +20,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_smooth", label: "It’s mostly smooth, but has gaps" },
           { value: "standardized", label: "It’s standardized and clearly defined" },
         ]}
-        value={answers["how_1e24f7"] || ""}
+        value={getStringAnswer(answers["how_1e24f7"])}
         onChange={(val) => onAnswer("how_1e24f7", val)}
       />
 
@@ -41,7 +45,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the biggest friction point in your current sales cycle?"
         placeholder="E.g., qualification, follow-ups, deal progression"
-        value={answers["whats_59e9f8"] || ""}
+        value={getStringAnswer(answers["whats_59e9f8"])}
         onChange={(val) => onAnswer("whats_59e9f8", val)}
         maxLength={300}
       />
@@ -50,7 +54,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one improvement you’d make to your sales process if you could implement it today?"
         placeholder="E.g., automation, coaching, process clarity"
-        value={answers["whats_840187"] || ""}
+        value={getStringAnswer(answers["whats_840187"])}
         onChange={(val) => onAnswer("whats_840187", val)}
         maxLength={300}
       />

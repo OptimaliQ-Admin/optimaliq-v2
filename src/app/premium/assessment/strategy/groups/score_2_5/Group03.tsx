@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_reflection"] === "string" &&
     typeof answers["cross_team_visibility"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "regular_review", label: "Regularly — part of our operating rhythm" },
           { value: "continuous", label: "Continuously — strategy is always evolving" },
         ]}
-        value={answers["strategy_reflection"] || ""}
+        value={getStringAnswer(answers["strategy_reflection"])}
         onChange={(val) => onAnswer("strategy_reflection", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "general_alignment", label: "Mostly — teams know the strategic goals" },
           { value: "full_alignment", label: "Yes — there's strong cross-team visibility" },
         ]}
-        value={answers["cross_team_visibility"] || ""}
+        value={getStringAnswer(answers["cross_team_visibility"])}
         onChange={(val) => onAnswer("cross_team_visibility", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly — we’ve validated parts of it" },
           { value: "very_confident", label: "Very — it’s backed by data and tested regularly" },
         ]}
-        value={answers["strategic_confidence"] || ""}
+        value={getStringAnswer(answers["strategic_confidence"])}
         onChange={(val) => onAnswer("strategic_confidence", val)}
       />
     </div>

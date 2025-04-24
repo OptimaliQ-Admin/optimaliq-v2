@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tool_integration"] === "string" &&
     answers["tool_integration"].trim().length > 0 &&
@@ -24,8 +24,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -42,7 +42,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
     { value: "Most processes", label: "Most processes live inside the tools" },
     { value: "Yes", label: "Yes — fully integrated workflows" },
   ]}
-  value={answers["tool_integration"] || ""}
+  value={getStringAnswer(answers["tool_integration"])}
   onChange={(val) => onAnswer("tool_integration", val)}
 />
 
@@ -58,7 +58,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
     { value: "Monthly", label: "Monthly" },
     { value: "Weekly", label: "Weekly or in real-time" },
   ]}
-  value={answers["metrics_review"] || ""}
+  value={getStringAnswer(answers["metrics_review"])}
   onChange={(val) => onAnswer("metrics_review", val)}
 />
 
@@ -72,7 +72,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
     { value: "Mostly standardized", label: "Mostly standardized" },
     { value: "Fully standardized and enforced", label: "Fully standardized and enforced" },
   ]}
-  value={answers["standardization"] || ""}
+  value={getStringAnswer(answers["standardization"])}
   onChange={(val) => onAnswer("standardization", val)}
 />
     </div>

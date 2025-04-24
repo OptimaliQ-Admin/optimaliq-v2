@@ -3,11 +3,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isGroup02Complete(answers: Record<string, any>): boolean {
+export function isGroup02Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["differentiator"] === "string" &&
     answers["differentiator"].trim().length > 0 &&
@@ -22,8 +24,8 @@ export function isGroup02Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -35,7 +37,7 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
         question="What makes your business hard to compete with?"
         description="What do you do better, faster, or differently than others in your space? Be specific."
         placeholder="E.g., We own a proprietary data model that predicts churn 90 days in advance..."
-        value={answers["differentiator"] || ""}
+        value={getStringAnswer(answers["differentiator"])}
         onChange={(val) => onAnswer("differentiator", val)}
         maxLength={300}
       />
@@ -45,7 +47,7 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
   question="How would your customers describe your brand in one sentence?"
   description="Imagine you're reading an online review or hearing feedback—what would they say?"
   placeholder="E.g., A scrappy but responsive team that delivers results quickly."
-  value={answers["brand_perception"] || ""}
+  value={getStringAnswer(answers["brand_perception"])}
   onChange={(val) => onAnswer("brand_perception", val)}
   maxLength={300}
 />
@@ -63,7 +65,7 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
     { value: "board_pressure", label: "Board or investor direction" },
     { value: "mixed", label: "A mix of the above" },
   ]}
-  value={answers["strategy_decision_method"] || ""}
+  value={getStringAnswer(answers["strategy_decision_method"])}
   onChange={(val) => onAnswer("strategy_decision_method", val)}
 />
 

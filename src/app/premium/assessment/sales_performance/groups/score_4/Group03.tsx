@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_03fce6"] === "string" &&
     typeof answers["what’s_4c7c04"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "monthly_leadership", label: "Monthly with leadership" },
           { value: "shared_across_org", label: "Regular insights shared across teams, segments, and channels" },
         ]}
-        value={answers["how_03fce6"] || ""}
+        value={getStringAnswer(answers["how_03fce6"])}
         onChange={(val) => onAnswer("how_03fce6", val)}
       />
 
@@ -38,7 +42,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one future GTM capability you’re planning to build?"
         placeholder="E.g., self-serve funnel, ABM, vertical specialization, etc."
-        value={answers["what’s_4c7c04"] || ""}
+        value={getStringAnswer(answers["what’s_4c7c04"])}
         onChange={(val) => onAnswer("what’s_4c7c04", val)}
         maxLength={300}
       />
@@ -52,7 +56,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "defined_model", label: "We have a defined model" },
           { value: "dynamic_modeling", label: "We model capacity dynamically across segments and reps" },
         ]}
-        value={answers["how_4633fe"] || ""}
+        value={getStringAnswer(answers["how_4633fe"])}
         onChange={(val) => onAnswer("how_4633fe", val)}
       />
     </div>

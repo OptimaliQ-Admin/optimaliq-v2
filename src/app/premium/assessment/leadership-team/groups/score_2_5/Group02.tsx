@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cross_team_collaboration"] === "string" &&
     typeof answers["feedback_frequency"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "encouraged", label: "Encouraged but not always followed" },
           { value: "strong_cross_team", label: "Strong cross-team alignment and workflows" },
         ]}
-        value={answers["cross_team_collaboration"] || ""}
+        value={getStringAnswer(answers["cross_team_collaboration"])}
         onChange={(val) => onAnswer("cross_team_collaboration", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly_checkins", label: "Quarterly check-ins or surveys" },
           { value: "ongoing_feedback", label: "Ongoing feedback is part of the culture" },
         ]}
-        value={answers["feedback_frequency"] || ""}
+        value={getStringAnswer(answers["feedback_frequency"])}
         onChange={(val) => onAnswer("feedback_frequency", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "formal_plans", label: "Formal growth plans and check-ins" },
           { value: "embedded_in_processes", label: "Embedded into HR processes and systems" },
         ]}
-        value={answers["employee_development"] || ""}
+        value={getStringAnswer(answers["employee_development"])}
         onChange={(val) => onAnswer("employee_development", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "basic_metrics", label: "We track a few basic metrics" },
           { value: "formal_leadership_kpis", label: "We have formal KPIs and reviews" },
         ]}
-        value={answers["leadership_metrics"] || ""}
+        value={getStringAnswer(answers["leadership_metrics"])}
         onChange={(val) => onAnswer("leadership_metrics", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_expansion_strategy"] === "string" &&
     typeof answers["ai_cost_benefit_clarity"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "roadmap_exists", label: "We have a roadmap but it’s not fully funded or aligned" },
           { value: "well_defined_strategy", label: "Yes — we have a well-defined and resourced strategy" },
         ]}
-        value={answers["ai_expansion_strategy"] || ""}
+        value={getStringAnswer(answers["ai_expansion_strategy"])}
         onChange={(val) => onAnswer("ai_expansion_strategy", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "clear_impact", label: "We have a clear sense of impact in specific areas" },
           { value: "quantified_and_tracked", label: "We quantify and regularly track cost/benefit" },
         ]}
-        value={answers["ai_cost_benefit_clarity"] || ""}
+        value={getStringAnswer(answers["ai_cost_benefit_clarity"])}
         onChange={(val) => onAnswer("ai_cost_benefit_clarity", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "partially_mapped", label: "Partially mapped to business unit OKRs" },
           { value: "directly_integrated", label: "Directly integrated into strategy and measurement" },
         ]}
-        value={answers["ai_alignment_with_goals"] || ""}
+        value={getStringAnswer(answers["ai_alignment_with_goals"])}
         onChange={(val) => onAnswer("ai_alignment_with_goals", val)}
       />
     </div>

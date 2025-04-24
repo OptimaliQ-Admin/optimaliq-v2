@@ -1,3 +1,4 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 //src/app/tier2/assessment/BPM/groups/score_1/Group02.tsx
 "use client";
 
@@ -7,7 +8,7 @@ import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
 
 
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["error_handling"] === "string" &&
     answers["error_handling"].trim().length > 0 &&
@@ -21,8 +22,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -41,7 +42,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
     { value: "Rarely", label: "Rarely" },
     { value: "Never", label: "Never" },
   ]}
-  value={answers["error_handling"] || ""}
+  value={getStringAnswer(answers["error_handling"])}
   onChange={(val) => onAnswer("error_handling", val)}
 />
 
@@ -49,7 +50,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
 <TextAreaQuestion
   question=" What’s one area of your business that often feels inconsistent or disorganized? "
   placeholder="E.g., documentation."
-  value={answers["reflection"] || ""}
+  value={getStringAnswer(answers["reflection"])}
   onChange={(val) => onAnswer("reflection", val)}
   maxLength={300}
 />
@@ -64,7 +65,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
     { value: "manually", label: "We review manually" },
     { value: "reports", label: "We use reports or systems" },
   ]}
-  value={answers["issue_detection"] || ""}
+  value={getStringAnswer(answers["issue_detection"])}
   onChange={(val) => onAnswer("issue_detection", val)}
 />
 

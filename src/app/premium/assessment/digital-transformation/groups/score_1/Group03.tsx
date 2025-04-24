@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tech_confidence"] === "string" &&
     typeof answers["change_resistance"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "evaluated_decisions", label: "We evaluate based on needs and fit" },
           { value: "strategic_alignment", label: "Tech choices are aligned with strategy and vetted" },
         ]}
-        value={answers["tech_confidence"] || ""}
+        value={getStringAnswer(answers["tech_confidence"])}
         onChange={(val) => onAnswer("tech_confidence", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "open", label: "Open — willing to try new things if justified" },
           { value: "embracing", label: "Embracing — innovation is part of the culture" },
         ]}
-        value={answers["change_resistance"] || ""}
+        value={getStringAnswer(answers["change_resistance"])}
         onChange={(val) => onAnswer("change_resistance", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "defined_goals", label: "Yes — we’ve defined objectives for most projects" },
           { value: "measurable_goals", label: "Yes — we have measurable goals and track them" },
         ]}
-        value={answers["digital_goals_clarity"] || ""}
+        value={getStringAnswer(answers["digital_goals_clarity"])}
         onChange={(val) => onAnswer("digital_goals_clarity", val)}
       />
     </div>

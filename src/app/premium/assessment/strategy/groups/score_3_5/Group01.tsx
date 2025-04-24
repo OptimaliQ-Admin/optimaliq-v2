@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cross_functional_strategy"] === "string" &&
     typeof answers["strategic_priorities_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "often", label: "Often — we bring in different teams for big initiatives" },
           { value: "always", label: "Always — cross-functional collaboration is standard" },
         ]}
-        value={answers["cross_functional_strategy"] || ""}
+        value={getStringAnswer(answers["cross_functional_strategy"])}
         onChange={(val) => onAnswer("cross_functional_strategy", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — we’re moving in the same direction" },
           { value: "fully_aligned", label: "Fully aligned — goals are tightly connected across teams" },
         ]}
-        value={answers["strategic_priorities_alignment"] || ""}
+        value={getStringAnswer(answers["strategic_priorities_alignment"])}
         onChange={(val) => onAnswer("strategic_priorities_alignment", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "departmental_goals", label: "Departments set clear goals independently" },
           { value: "org_wide_goals", label: "We use company-wide goals cascaded across teams" },
         ]}
-        value={answers["goal_setting_approach"] || ""}
+        value={getStringAnswer(answers["goal_setting_approach"])}
         onChange={(val) => onAnswer("goal_setting_approach", val)}
       />
     </div>

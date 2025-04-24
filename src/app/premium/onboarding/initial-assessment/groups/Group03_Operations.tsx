@@ -3,12 +3,16 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import DragSortQuestion from "@/components/questions/DragSortQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isGroup03Complete(answers: Record<string, any>): boolean {
+export function isGroup03Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["tech_stack"]) && answers["tech_stack"].length > 0 &&
 
@@ -20,8 +24,8 @@ export function isGroup03Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group03_Operations({ answers, onAnswer }: Props) {
@@ -63,7 +67,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the other platforms or tools that are central to your operations"
           placeholder="Describe any additional platforms or tools used..."
-          value={answers["tech_stack_other"] || ""}
+          value={getStringAnswer(answers["tech_stack_other"])}
           onChange={(val) => onAnswer("tech_stack_other", val)}
           maxLength={50}
         />
@@ -89,7 +93,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
           { value: "4", label: "Most departments follow documented processes" },
           { value: "5", label: "Processes are standardized, automated, and continuously optimized" },
         ]}
-        value={answers["process_discipline"] || ""}
+        value={getStringAnswer(answers["process_discipline"])}
         onChange={(val) => onAnswer("process_discipline", val)}
       />
 

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_budget"] === "string" &&
     typeof answers["data_accessibility"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "initial_funding", label: "We’ve allocated initial funding for AI projects" },
           { value: "dedicated_investment", label: "We have a dedicated AI budget and roadmap" },
         ]}
-        value={answers["ai_budget"] || ""}
+        value={getStringAnswer(answers["ai_budget"])}
         onChange={(val) => onAnswer("ai_budget", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "well_structured", label: "Most data is well-structured and accessible" },
           { value: "ai_ready", label: "Our data is AI-ready — structured, labeled, and accessible" },
         ]}
-        value={answers["data_accessibility"] || ""}
+        value={getStringAnswer(answers["data_accessibility"])}
         onChange={(val) => onAnswer("data_accessibility", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "moderate_support", label: "Moderate support for AI integration" },
           { value: "fully_ready", label: "Fully ready — we’ve built for AI use cases" },
         ]}
-        value={answers["tool_readiness"] || ""}
+        value={getStringAnswer(answers["tool_readiness"])}
         onChange={(val) => onAnswer("tool_readiness", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "discussed_internally", label: "We’ve discussed them internally" },
           { value: "formal_policies", label: "We have or are developing formal policies" },
         ]}
-        value={answers["ai_ethics"] || ""}
+        value={getStringAnswer(answers["ai_ethics"])}
         onChange={(val) => onAnswer("ai_ethics", val)}
       />
     </div>

@@ -3,11 +3,15 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isGroup06Complete(answers: Record<string, any>): boolean {
+export function isGroup06Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["benchmark_preferences"]) &&
     answers["benchmark_preferences"].length > 0 &&
@@ -22,8 +26,8 @@ export function isGroup06Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
@@ -57,7 +61,7 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the other insights or benchmarks"
           placeholder="Describe any additional insights or benchmarks..."
-          value={answers["benchmark_preferences_other"] || ""}
+          value={getStringAnswer(answers["benchmark_preferences_other"])}
           onChange={(val) => onAnswer("benchmark_preferences_other", val)}
           maxLength={50}
         />
@@ -82,7 +86,7 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the other ways you are currently raising capital or preparing for an exit"
           placeholder="Describe any how you are preparing..."
-          value={answers["funding_status_other"] || ""}
+          value={getStringAnswer(answers["funding_status_other"])}
           onChange={(val) => onAnswer("funding_status_other", val)}
           maxLength={50}
         />
@@ -99,7 +103,7 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "3x_plus", label: "3x+" },
           { value: "unsure", label: "Unsure" },
         ]}
-        value={answers["growth_pace"] || ""}
+        value={getStringAnswer(answers["growth_pace"])}
         onChange={(val) => onAnswer("growth_pace", val)}
       />
     </div>

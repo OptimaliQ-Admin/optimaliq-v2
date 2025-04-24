@@ -2,11 +2,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["culture_alignment"] === "string" &&
     answers["culture_alignment"].trim().length > 0 &&
@@ -22,8 +24,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -40,7 +42,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
     { value: "Core part of operational training", label: "Core part of operational training" },
     { value: "Baked into cultural values and rituals", label: "Baked into cultural values and rituals" },
   ]}
-  value={answers["culture_alignment"] || ""}
+  value={getStringAnswer(answers["culture_alignment"])}
   onChange={(val) => onAnswer("culture_alignment", val)}
 />
 
@@ -53,7 +55,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
     { value: "Integrated with audits/reviews", label: "Integrated with audits/reviews" },
     { value: "Drives automated compliance enforcement", label: "Drives automated compliance enforcement" },
   ]}
-  value={answers["compliance_integration"] || ""}
+  value={getStringAnswer(answers["compliance_integration"])}
   onChange={(val) => onAnswer("compliance_integration", val)}
 />
 
@@ -62,7 +64,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
 <TextAreaQuestion
         question="What is the biggest process innovation your organization has implemented in the last 12 months?"
         placeholder="E.g.,"
-        value={answers["recent_innovation"] || ""}
+        value={getStringAnswer(answers["recent_innovation"])}
         onChange={(val) => onAnswer("recent_innovation", val)}
         maxLength={300}
       />

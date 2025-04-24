@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["performance_vs_competitors"] === "string" &&
     typeof answers["competitive_edge_source"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_1_9_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_5_1_9_Step02({ answers, onAnswer }: Props) {
           { value: "basic_metrics", label: "We consider a few basic benchmarks" },
           { value: "comprehensive", label: "We use comprehensive benchmarking data" },
         ]}
-        value={answers["performance_vs_competitors"] || ""}
+        value={getStringAnswer(answers["performance_vs_competitors"])}
         onChange={(val) => onAnswer("performance_vs_competitors", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_5_1_9_Step02({ answers, onAnswer }: Props) {
           { value: "product_quality", label: "Product or service quality" },
           { value: "not_sure", label: "Not sure or nothing stands out" },
         ]}
-        value={answers["competitive_edge_source"] || ""}
+        value={getStringAnswer(answers["competitive_edge_source"])}
         onChange={(val) => onAnswer("competitive_edge_source", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_5_1_9_Step02({ answers, onAnswer }: Props) {
           { value: "usually_clear", label: "Usually clear in most materials" },
           { value: "very_clear", label: "Very clear and aligned across channels" },
         ]}
-        value={answers["market_position_clarity"] || ""}
+        value={getStringAnswer(answers["market_position_clarity"])}
         onChange={(val) => onAnswer("market_position_clarity", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_5_1_9_Step02({ answers, onAnswer }: Props) {
           { value: "periodically", label: "Yes, we collect some data periodically" },
           { value: "consistently", label: "Yes, with consistent reputation metrics" },
         ]}
-        value={answers["brand_perception_tracking"] || ""}
+        value={getStringAnswer(answers["brand_perception_tracking"])}
         onChange={(val) => onAnswer("brand_perception_tracking", val)}
       />
     </div>

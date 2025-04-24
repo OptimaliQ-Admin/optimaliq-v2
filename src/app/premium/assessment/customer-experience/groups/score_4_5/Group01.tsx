@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_real_time_orchestration"] === "string" &&
     typeof answers["cx_feedback_system"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "triggered_in_real_time", label: "Real-time triggers in some flows" },
           { value: "fully_real_time", label: "Fully real-time and context-aware" },
         ]}
-        value={answers["cx_real_time_orchestration"] || ""}
+        value={getStringAnswer(answers["cx_real_time_orchestration"])}
         onChange={(val) => onAnswer("cx_real_time_orchestration", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "structured_feedback_loops", label: "Structured feedback loops with improvements" },
           { value: "closed_loop_feedback", label: "Closed-loop systems with CX performance tracking" },
         ]}
-        value={answers["cx_feedback_system"] || ""}
+        value={getStringAnswer(answers["cx_feedback_system"])}
         onChange={(val) => onAnswer("cx_feedback_system", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "persistent_profiles", label: "Persistent profiles used in multiple channels" },
           { value: "omnichannel_memory", label: "Omnichannel memory drives seamless CX" },
         ]}
-        value={answers["cx_customer_memory"] || ""}
+        value={getStringAnswer(answers["cx_customer_memory"])}
         onChange={(val) => onAnswer("cx_customer_memory", val)}
       />
     </div>

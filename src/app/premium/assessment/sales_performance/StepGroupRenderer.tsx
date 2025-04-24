@@ -79,8 +79,8 @@ import { isScore_5Group3Complete } from "./groups/score_5/Group03";
 type Props = {
   step: number;
   score: number;
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 // Renderer
@@ -121,7 +121,7 @@ export function normalizeScore(score: number): string {
 }
 
 // Step validators
-export const validatorSets: Record<string, Record<number, (answers: Record<string, any>) => boolean>> = {
+export const validatorSets: Record<string, Record<number, (answers: AssessmentAnswers) => boolean>> = {
   score_1: { 0: isScore_1Group1Complete, 1: isScore_1Group2Complete, 2: isScore_1Group3Complete },
   score_1_5: { 0: isScore_1_5Group1Complete, 1: isScore_1_5Group2Complete, 2: isScore_1_5Group3Complete },
   score_2: { 0: isScore_2Group1Complete, 1: isScore_2Group2Complete, 2: isScore_2Group3Complete },

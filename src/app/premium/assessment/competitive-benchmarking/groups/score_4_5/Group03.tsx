@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["category_leadership"] === "string" &&
     typeof answers["benchmarking_limitations"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_4_9_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_4_9_Step03({ answers, onAnswer }: Props) {
           { value: "top_3", label: "We’re in the top 3 or close to it" },
           { value: "category_leader", label: "We are the category leader" },
         ]}
-        value={answers["category_leadership"] || ""}
+        value={getStringAnswer(answers["category_leadership"])}
         onChange={(val) => onAnswer("category_leadership", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_4_9_Step03({ answers, onAnswer }: Props) {
           { value: "not_prioritized", label: "It’s not prioritized across teams" },
           { value: "actionable_confusion", label: "We don’t know how to make it actionable" },
         ]}
-        value={answers["benchmarking_limitations"] || ""}
+        value={getStringAnswer(answers["benchmarking_limitations"])}
         onChange={(val) => onAnswer("benchmarking_limitations", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_4_9_Step03({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly — based on changing needs" },
           { value: "ongoing", label: "Ongoing — we’re always experimenting and iterating" },
         ]}
-        value={answers["benchmarking_tools_review"] || ""}
+        value={getStringAnswer(answers["benchmarking_tools_review"])}
         onChange={(val) => onAnswer("benchmarking_tools_review", val)}
       />
     </div>

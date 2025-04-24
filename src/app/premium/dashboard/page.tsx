@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import axios from "axios";
 import InsightLoading from "@/components/dashboard/InsightLoading";

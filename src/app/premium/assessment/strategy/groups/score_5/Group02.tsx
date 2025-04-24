@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_initiatives"] === "string" &&
     typeof answers["cross_functional_alignment"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "program_management", label: "Managed as formal programs" },
           { value: "integrated_portfolio", label: "Integrated portfolio with executive steering" },
         ]}
-        value={answers["strategic_initiatives"] || ""}
+        value={getStringAnswer(answers["strategic_initiatives"])}
         onChange={(val) => onAnswer("strategic_initiatives", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "generally_aligned", label: "Generally aligned with shared objectives" },
           { value: "fully_integrated", label: "Fully integrated with joint ownership" },
         ]}
-        value={answers["cross_functional_alignment"] || ""}
+        value={getStringAnswer(answers["cross_functional_alignment"])}
         onChange={(val) => onAnswer("cross_functional_alignment", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "regularly_with_input", label: "Regularly with cross-team input" },
           { value: "dynamic_adjustments", label: "Dynamically based on data and feedback" },
         ]}
-        value={answers["goal_evaluation"] || ""}
+        value={getStringAnswer(answers["goal_evaluation"])}
         onChange={(val) => onAnswer("goal_evaluation", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "reviewed_with_goals", label: "Reviewed and tied to some goals" },
           { value: "fully_integrated", label: "Fully integrated into performance reviews" },
         ]}
-        value={answers["kpi_integration"] || ""}
+        value={getStringAnswer(answers["kpi_integration"])}
         onChange={(val) => onAnswer("kpi_integration", val)}
       />
     </div>

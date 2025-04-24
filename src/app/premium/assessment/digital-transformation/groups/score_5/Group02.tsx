@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["data_governance"] === "string" &&
     typeof answers["ai_infrastructure"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "formalized", label: "We have formalized governance processes" },
           { value: "advanced_governance", label: "It’s embedded in operations with defined owners and policies" },
         ]}
-        value={answers["data_governance"] || ""}
+        value={getStringAnswer(answers["data_governance"])}
         onChange={(val) => onAnswer("data_governance", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "integrated", label: "We have integrated some automation and AI" },
           { value: "core_capability", label: "It’s a core capability built into our architecture" },
         ]}
-        value={answers["ai_infrastructure"] || ""}
+        value={getStringAnswer(answers["ai_infrastructure"])}
         onChange={(val) => onAnswer("ai_infrastructure", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "journey_mapping", label: "We use journey mapping and feedback loops" },
           { value: "cx_design", label: "Customer experience is at the center of every initiative" },
         ]}
-        value={answers["customer_centricity"] || ""}
+        value={getStringAnswer(answers["customer_centricity"])}
         onChange={(val) => onAnswer("customer_centricity", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "scalable_with_effort", label: "Scalable with effort — we’ve planned for growth" },
           { value: "highly_scalable", label: "Highly scalable — designed with flexibility and scale in mind" },
         ]}
-        value={answers["scalability_maturity"] || ""}
+        value={getStringAnswer(answers["scalability_maturity"])}
         onChange={(val) => onAnswer("scalability_maturity", val)}
       />
     </div>

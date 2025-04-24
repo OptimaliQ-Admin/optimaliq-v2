@@ -1,4 +1,6 @@
-// 📁 refactor/src/utils/initialAssessmentValidators.ts
+import {
+  type AssessmentAnswers,
+} from "@/lib/types/AssessmentAnswers";// 📁 refactor/src/utils/initialAssessmentValidators.ts
 
 import Group01_Goals, { isGroup01Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group01_Goals";
 import Group02_Positioning, { isGroup02Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group02_Positioning";
@@ -8,7 +10,7 @@ import Group05_Clarity, { isGroup05Complete } from "@/app/premium/onboarding/ini
 import Group06_Benchmarks, { isGroup06Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group06_Benchmarks";
 import Group07_Final, { isGroup07Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group07_Final";
 
-export const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
+export const stepValidators: Record<number, (answers: AssessmentAnswers) => boolean> = {
   0: isGroup01Complete,
   1: isGroup02Complete,
   2: isGroup03Complete,

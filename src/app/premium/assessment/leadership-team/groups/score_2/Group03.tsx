@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["role_modeling"] === "string" &&
     typeof answers["alignment_routines"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "generally", label: "Generally — leaders try to set an example" },
           { value: "always", label: "Always — role modeling is a clear expectation" },
         ]}
-        value={answers["role_modeling"] || ""}
+        value={getStringAnswer(answers["role_modeling"])}
         onChange={(val) => onAnswer("role_modeling", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "structured_syncs", label: "We hold structured syncs or huddles" },
           { value: "clear_goals_and_checkins", label: "We use clear goals, metrics, and check-ins" },
         ]}
-        value={answers["alignment_routines"] || ""}
+        value={getStringAnswer(answers["alignment_routines"])}
         onChange={(val) => onAnswer("alignment_routines", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "incentives", label: "We use performance incentives or goals" },
           { value: "tailored", label: "We tailor motivation to each team member" },
         ]}
-        value={answers["motivation_strategy"] || ""}
+        value={getStringAnswer(answers["motivation_strategy"])}
         onChange={(val) => onAnswer("motivation_strategy", val)}
       />
     </div>

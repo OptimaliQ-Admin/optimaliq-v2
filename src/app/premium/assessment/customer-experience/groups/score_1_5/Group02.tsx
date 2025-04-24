@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_follow_up"] === "string" &&
     typeof answers["customer_journey_mapping"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
           { value: "some_guidelines", label: "We have guidelines but no automation" },
           { value: "proactive_recovery", label: "We follow structured recovery workflows" },
         ]}
-        value={answers["customer_follow_up"] || ""}
+        value={getStringAnswer(answers["customer_follow_up"])}
         onChange={(val) => onAnswer("customer_follow_up", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
           { value: "basic_map", label: "We’ve mapped a basic journey with key touchpoints" },
           { value: "full_map", label: "Yes — we have a detailed, strategic customer journey map" },
         ]}
-        value={answers["customer_journey_mapping"] || ""}
+        value={getStringAnswer(answers["customer_journey_mapping"])}
         onChange={(val) => onAnswer("customer_journey_mapping", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
           { value: "basic_surveys", label: "We run surveys or feedback forms occasionally" },
           { value: "ongoing_tracking", label: "We track satisfaction consistently and review it regularly" },
         ]}
-        value={answers["satisfaction_insights"] || ""}
+        value={getStringAnswer(answers["satisfaction_insights"])}
         onChange={(val) => onAnswer("satisfaction_insights", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score_1_5_Step02({ answers, onAnswer }: Props) {
           { value: "surveys_or_nps", label: "We send surveys or track NPS after interactions" },
           { value: "multiple_feedback_loops", label: "We gather feedback through multiple structured methods" },
         ]}
-        value={answers["customer_feedback_channel"] || ""}
+        value={getStringAnswer(answers["customer_feedback_channel"])}
         onChange={(val) => onAnswer("customer_feedback_channel", val)}
       />
     </div>

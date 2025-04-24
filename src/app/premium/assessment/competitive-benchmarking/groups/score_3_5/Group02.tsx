@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_process"] === "string" &&
     typeof answers["industry_comparison_frequency"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "defined_process", label: "We have a defined process we revisit periodically" },
           { value: "ongoing_benchmarking", label: "We run continuous benchmarking" },
         ]}
-        value={answers["benchmarking_process"] || ""}
+        value={getStringAnswer(answers["benchmarking_process"])}
         onChange={(val) => onAnswer("benchmarking_process", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "annually", label: "Annually" },
           { value: "quarterly", label: "Quarterly or more often" },
         ]}
-        value={answers["industry_comparison_frequency"] || ""}
+        value={getStringAnswer(answers["industry_comparison_frequency"])}
         onChange={(val) => onAnswer("industry_comparison_frequency", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "reasonably_reliable", label: "Reasonably reliable with periodic updates" },
           { value: "highly_trusted", label: "Highly trusted and frequently refreshed" },
         ]}
-        value={answers["competitive_intel_accuracy"] || ""}
+        value={getStringAnswer(answers["competitive_intel_accuracy"])}
         onChange={(val) => onAnswer("competitive_intel_accuracy", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "some_surveys", label: "We conduct surveys and try to compare where possible" },
           { value: "formal_benchmarking", label: "Yes, we benchmark regularly with formal methods" },
         ]}
-        value={answers["customer_feedback_benchmarking"] || ""}
+        value={getStringAnswer(answers["customer_feedback_benchmarking"])}
         onChange={(val) => onAnswer("customer_feedback_benchmarking", val)}
       />
     </div>

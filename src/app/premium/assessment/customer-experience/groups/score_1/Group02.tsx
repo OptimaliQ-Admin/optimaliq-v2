@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["response_time_expectation"] === "string" &&
     typeof answers["channel_consistency"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "few_hours", label: "Within a few hours" },
           { value: "real_time", label: "We aim for real-time responses" },
         ]}
-        value={answers["response_time_expectation"] || ""}
+        value={getStringAnswer(answers["response_time_expectation"])}
         onChange={(val) => onAnswer("response_time_expectation", val)}
       />
 
@@ -43,7 +47,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "very_similar", label: "Very similar, customers feel the same regardless of channel" },
           { value: "fully_integrated", label: "Fully integrated, seamless omnichannel experience" },
         ]}
-        value={answers["channel_consistency"] || ""}
+        value={getStringAnswer(answers["channel_consistency"])}
         onChange={(val) => onAnswer("channel_consistency", val)}
       />
 
@@ -56,7 +60,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "some_process", label: "There’s some process to review it" },
           { value: "actively_applied", label: "We regularly use it to improve experiences" },
         ]}
-        value={answers["customer_feedback_use"] || ""}
+        value={getStringAnswer(answers["customer_feedback_use"])}
         onChange={(val) => onAnswer("customer_feedback_use", val)}
       />
 
@@ -64,7 +68,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one area of the customer experience that feels the most broken or confusing today?"
         placeholder="E.g., onboarding emails, support handoffs, checkout flow..."
-        value={answers["customer_experience_gap"] || ""}
+        value={getStringAnswer(answers["customer_experience_gap"])}
         onChange={(val) => onAnswer("customer_experience_gap", val)}
         maxLength={300}
       />

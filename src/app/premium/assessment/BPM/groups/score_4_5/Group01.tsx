@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["insight_to_strategy"] === "string" &&
     answers["insight_to_strategy"].trim().length > 0 &&
@@ -24,8 +26,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -44,7 +46,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
     { value: "Frequently", label: "Frequently" },
     { value: "Always", label: "Always — insights are tightly linked to strategy" },
   ]}
-  value={answers["insight_to_strategy"] || ""}
+  value={getStringAnswer(answers["insight_to_strategy"])}
   onChange={(val) => onAnswer("insight_to_strategy", val)}
 />
 
@@ -60,7 +62,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
     { value: "Frequently", label: "Frequently, with good accuracy" },
     { value: "Yes", label: "Yes — it’s a core capability" },
   ]}
-  value={answers["predictive_analytics"] || ""}
+  value={getStringAnswer(answers["predictive_analytics"])}
   onChange={(val) => onAnswer("predictive_analytics", val)}
 />
 

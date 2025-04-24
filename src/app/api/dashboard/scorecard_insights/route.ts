@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export async function POST(req: NextRequest) {
   try {
     const { category, industry, score } = await req.json();
@@ -31,8 +32,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("❌ Scorecard Insights API Error:", err);
-    return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
+    return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
 }

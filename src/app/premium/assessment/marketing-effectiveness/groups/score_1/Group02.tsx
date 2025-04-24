@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["marketing_content_frequency"] === "string" &&
     typeof answers["marketing_strategy"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "At least monthly", label: "At least monthly" },
           { value: "Weekly or more", label: "Weekly or more" },
         ]}
-        value={answers["marketing_content_frequency"] || ""}
+        value={getStringAnswer(answers["marketing_content_frequency"])}
         onChange={(val) => onAnswer("marketing_content_frequency", val)}
       />
 
@@ -43,7 +47,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "It’s lightly documented", label: "It’s lightly documented" },
           { value: "It’s clearly defined and shared with the team", label: "It’s clearly defined and shared with the team" },
         ]}
-        value={answers["marketing_strategy"] || ""}
+        value={getStringAnswer(answers["marketing_strategy"])}
         onChange={(val) => onAnswer("marketing_strategy", val)}
       />
 
@@ -71,7 +75,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "We have reports on campaign performance", label: "We have reports on campaign performance" },
           { value: "We track ROI and revenue impact", label: "We track ROI and revenue impact" },
         ]}
-        value={answers["marketing_tracking"] || ""}
+        value={getStringAnswer(answers["marketing_tracking"])}
         onChange={(val) => onAnswer("marketing_tracking", val)}
       />
     </div>

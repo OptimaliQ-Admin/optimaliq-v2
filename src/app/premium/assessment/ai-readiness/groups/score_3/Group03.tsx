@@ -2,8 +2,14 @@
 
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+// ✅ Validator function
+export function isGroupComplete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["collaboration_model"] === "string" &&
     typeof answers["tool_initiatives"] === "string" &&
@@ -12,8 +18,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +34,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "Collaborative during planning and testing" },
           { value: "fully_integrated", label: "Fully integrated teams working together throughout" },
         ]}
-        value={answers["collaboration_model"] || ""}
+        value={getStringAnswer(answers["collaboration_model"])}
         onChange={(val) => onAnswer("collaboration_model", val)}
       />
 
@@ -41,7 +47,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "pilot_then_expand", label: "We pilot new tools, then expand adoption" },
           { value: "strategic_evaluation", label: "Strategic evaluation with cross-team rollout" },
         ]}
-        value={answers["tool_initiatives"] || ""}
+        value={getStringAnswer(answers["tool_initiatives"])}
         onChange={(val) => onAnswer("tool_initiatives", val)}
       />
 
@@ -54,7 +60,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "measured_outcomes", label: "Measured outcomes tied to KPIs" },
           { value: "business_value", label: "Direct business impact (revenue, cost, satisfaction)" },
         ]}
-        value={answers["success_definition"] || ""}
+        value={getStringAnswer(answers["success_definition"])}
         onChange={(val) => onAnswer("success_definition", val)}
       />
     </div>

@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_journey_understanding"] === "string" &&
     typeof answers["cx_success_definition"] === "string" &&
@@ -13,8 +15,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +31,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "mapped", label: "We’ve mapped it, but not fully optimized it" },
           { value: "clear_and_optimized", label: "It’s clear and continuously optimized" },
         ]}
-        value={answers["customer_journey_understanding"] || ""}
+        value={getStringAnswer(answers["customer_journey_understanding"])}
         onChange={(val) => onAnswer("customer_journey_understanding", val)}
       />
 
@@ -42,7 +44,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "some_metrics", label: "We use basic metrics like NPS or reviews" },
           { value: "data_driven", label: "We use data and track CX performance regularly" },
         ]}
-        value={answers["cx_success_definition"] || ""}
+        value={getStringAnswer(answers["cx_success_definition"])}
         onChange={(val) => onAnswer("cx_success_definition", val)}
       />
 
@@ -55,7 +57,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "cx_leader", label: "We have someone focused on it part-time or as part of a larger role" },
           { value: "dedicated_team", label: "We have a dedicated CX leader or team" },
         ]}
-        value={answers["customer_success_ownership"] || ""}
+        value={getStringAnswer(answers["customer_success_ownership"])}
         onChange={(val) => onAnswer("customer_success_ownership", val)}
       />
     </div>

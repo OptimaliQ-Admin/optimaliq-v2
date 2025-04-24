@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["leadership_structure"] === "string" &&
     typeof answers["manager_expectations"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "functional_leads", label: "We have leads by function but it’s not fully consistent" },
           { value: "clear_structure", label: "We have a clearly defined leadership structure" },
         ]}
-        value={answers["leadership_structure"] || ""}
+        value={getStringAnswer(answers["leadership_structure"])}
         onChange={(val) => onAnswer("leadership_structure", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_clear", label: "They’re mostly documented and aligned" },
           { value: "very_clear", label: "Very clear with documented responsibilities and training" },
         ]}
-        value={answers["manager_expectations"] || ""}
+        value={getStringAnswer(answers["manager_expectations"])}
         onChange={(val) => onAnswer("manager_expectations", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly or during project check-ins" },
           { value: "regularly", label: "Regularly — structured feedback is part of our process" },
         ]}
-        value={answers["feedback_frequency"] || ""}
+        value={getStringAnswer(answers["feedback_frequency"])}
         onChange={(val) => onAnswer("feedback_frequency", val)}
       />
     </div>

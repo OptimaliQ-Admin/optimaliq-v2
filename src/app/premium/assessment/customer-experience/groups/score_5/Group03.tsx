@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_roiexpectations"] === "string" &&
     typeof answers["cx_ethics_privacy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "measured_against_goals", label: "We measure impact against customer and business goals" },
           { value: "modeled_and_tracked", label: "ROI is modeled and tracked across key CX metrics" },
         ]}
-        value={answers["cx_roiexpectations"] || ""}
+        value={getStringAnswer(answers["cx_roiexpectations"])}
         onChange={(val) => onAnswer("cx_roiexpectations", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "included_in_design", label: "It’s part of design and content guidelines" },
           { value: "core_principle", label: "It’s a core principle in our CX design and messaging" },
         ]}
-        value={answers["cx_ethics_privacy"] || ""}
+        value={getStringAnswer(answers["cx_ethics_privacy"])}
         onChange={(val) => onAnswer("cx_ethics_privacy", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "broad_alignment", label: "Broad alignment with CX viewed as a growth lever" },
           { value: "full_alignment", label: "Full alignment — CX is part of strategic planning" },
         ]}
-        value={answers["cx_leadership_alignment"] || ""}
+        value={getStringAnswer(answers["cx_leadership_alignment"])}
         onChange={(val) => onAnswer("cx_leadership_alignment", val)}
       />
     </div>

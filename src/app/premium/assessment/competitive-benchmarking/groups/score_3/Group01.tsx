@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["market_share_tracking"] === "string" &&
     typeof answers["competitive_visibility"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "informal_metrics", label: "We use informal metrics or sales trends" },
           { value: "formal_analysis", label: "We use formal competitive research or analytics" },
         ]}
-        value={answers["market_share_tracking"] || ""}
+        value={getStringAnswer(answers["market_share_tracking"])}
         onChange={(val) => onAnswer("market_share_tracking", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "moderate_visibility", label: "We have moderate visibility into competitor performance" },
           { value: "high_visibility", label: "We have high visibility via benchmarking or analyst data" },
         ]}
-        value={answers["competitive_visibility"] || ""}
+        value={getStringAnswer(answers["competitive_visibility"])}
         onChange={(val) => onAnswer("competitive_visibility", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly" },
           { value: "monthly", label: "Monthly or more frequently" },
         ]}
-        value={answers["benchmark_frequency"] || ""}
+        value={getStringAnswer(answers["benchmark_frequency"])}
         onChange={(val) => onAnswer("benchmark_frequency", val)}
       />
     </div>

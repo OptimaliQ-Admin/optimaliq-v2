@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_2c42b7"] === "string" &&
     typeof answers["how_79028c"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "Each_rep_manages_their_own_leads_independently", label: "Each rep manages their own leads independently" },
           { value: "Leads_are_routed_based_on_role_territory_or_fit", label: "Leads are routed based on role, territory, or fit" },
         ]}
-        value={answers["how_2c42b7"] || ""}
+        value={getStringAnswer(answers["how_2c42b7"])}
         onChange={(val) => onAnswer("how_2c42b7", val)}
       />
 
@@ -45,7 +49,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "Mostly___we_track_some_metrics", label: "Mostly — we track some metrics" },
           { value: "Very_confident___we_forecast_based_on_deal_data", label: "Very confident — we forecast based on deal data" },
         ]}
-        value={answers["how_79028c"] || ""}
+        value={getStringAnswer(answers["how_79028c"])}
         onChange={(val) => onAnswer("how_79028c", val)}
       />
 

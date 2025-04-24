@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["marketing_success_metrics"] === "string" &&
     typeof answers["customer_journey_definition"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "We look at conversions or leads", label: "We look at conversions or leads" },
           { value: "We measure ROI and pipeline contribution", label: "We measure ROI and pipeline contribution" },
         ]}
-        value={answers["marketing_success_metrics"] || ""}
+        value={getStringAnswer(answers["marketing_success_metrics"])}
         onChange={(val) => onAnswer("marketing_success_metrics", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "Funnel by channel or team", label: "We have a funnel by channel or team" },
           { value: "Documented funnel with clear conversion goals", label: "Documented funnel with clear conversion goals" },
         ]}
-        value={answers["customer_journey_definition"] || ""}
+        value={getStringAnswer(answers["customer_journey_definition"])}
         onChange={(val) => onAnswer("customer_journey_definition", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "We segment by behavior or engagement", label: "We segment by behavior or engagement" },
           { value: "Always — every campaign has targeting logic", label: "Always — every campaign has targeting logic" },
         ]}
-        value={answers["audience_segmentation_frequency"] || ""}
+        value={getStringAnswer(answers["audience_segmentation_frequency"])}
         onChange={(val) => onAnswer("audience_segmentation_frequency", val)}
       />
     </div>

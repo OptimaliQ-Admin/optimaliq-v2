@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_b5d8e7"] === "string" &&
     typeof answers["do_b7cc0a"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "Website_or_social_media_inquiries", label: "Website or social media inquiries" },
           { value: "We_dont_have_a_consistent_method", label: "We don’t have a consistent method" },
         ]}
-        value={answers["how_b5d8e7"] || ""}
+        value={getStringAnswer(answers["how_b5d8e7"])}
         onChange={(val) => onAnswer("how_b5d8e7", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "We_have_a_few_key_steps_we_try_to_follow", label: "We have a few key steps we try to follow" },
           { value: "Yes___we_use_a_defined_process_from_lead_to_close", label: "Yes — we use a defined process from lead to close" },
         ]}
-        value={answers["do_b7cc0a"] || ""}
+        value={getStringAnswer(answers["do_b7cc0a"])}
         onChange={(val) => onAnswer("do_b7cc0a", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "In_a_basic_CRM_eg_HubSpot_Salesforce", label: "In a basic CRM (e.g. HubSpot, Salesforce)" },
           { value: "In_a_structured_system_with_deal_stages_and_forecasts", label: "In a structured system with deal stages and forecasts" },
         ]}
-        value={answers["how_fee95e"] || ""}
+        value={getStringAnswer(answers["how_fee95e"])}
         onChange={(val) => onAnswer("how_fee95e", val)}
       />
     </div>

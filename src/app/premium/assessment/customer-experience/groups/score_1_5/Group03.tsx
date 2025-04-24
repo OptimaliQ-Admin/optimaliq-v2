@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["support_team_consistency"] === "string" &&
     typeof answers["customer_data_access"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_1_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score_1_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent, with occasional breakdowns" },
           { value: "very_consistent", label: "Very consistent — we follow unified guidelines and tone" },
         ]}
-        value={answers["support_team_consistency"] || ""}
+        value={getStringAnswer(answers["support_team_consistency"])}
         onChange={(val) => onAnswer("support_team_consistency", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score_1_5_Step03({ answers, onAnswer }: Props) {
           { value: "integrated_data", label: "Most teams can access core data across tools" },
           { value: "real_time_personalization", label: "Yes — data is integrated and accessible in real time" },
         ]}
-        value={answers["customer_data_access"] || ""}
+        value={getStringAnswer(answers["customer_data_access"])}
         onChange={(val) => onAnswer("customer_data_access", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score_1_5_Step03({ answers, onAnswer }: Props) {
           { value: "some_strategic_initiatives", label: "We’ve started a few initiatives around CX" },
           { value: "proactive_cx_strategy", label: "CX is a key strategic priority with active initiatives" },
         ]}
-        value={answers["cx_initiatives"] || ""}
+        value={getStringAnswer(answers["cx_initiatives"])}
         onChange={(val) => onAnswer("cx_initiatives", val)}
       />
     </div>

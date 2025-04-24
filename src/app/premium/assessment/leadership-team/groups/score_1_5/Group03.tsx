@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["feedback_frequency"] === "string" &&
     typeof answers["conflict_resolution"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly or during key projects" },
           { value: "continuous", label: "Continuously — part of our culture" },
         ]}
-        value={answers["feedback_frequency"] || ""}
+        value={getStringAnswer(answers["feedback_frequency"])}
         onChange={(val) => onAnswer("feedback_frequency", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "structured", label: "Handled with structured discussions or mediation" },
           { value: "proactive", label: "Handled proactively with team norms and open dialogue" },
         ]}
-        value={answers["conflict_resolution"] || ""}
+        value={getStringAnswer(answers["conflict_resolution"])}
         onChange={(val) => onAnswer("conflict_resolution", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "frequently_visible", label: "Frequently visible — regular updates and touchpoints" },
           { value: "fully_accessible", label: "Fully accessible and actively engaged with teams" },
         ]}
-        value={answers["leadership_visibility"] || ""}
+        value={getStringAnswer(answers["leadership_visibility"])}
         onChange={(val) => onAnswer("leadership_visibility", val)}
       />
     </div>

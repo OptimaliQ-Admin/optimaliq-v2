@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["channel_coordination"] === "string" &&
     typeof answers["ltv_tracking"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "campaign_based", label: "Channels follow a shared campaign plan" },
           { value: "fully_integrated", label: "Fully integrated with shared goals, timing, and creative" },
         ]}
-        value={answers["channel_coordination"] || ""}
+        value={getStringAnswer(answers["channel_coordination"])}
         onChange={(val) => onAnswer("channel_coordination", val)}
       />
 
@@ -45,7 +49,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "segment_level", label: "We track at a segment or cohort level" },
           { value: "individual_level", label: "We measure at the individual contact level" },
         ]}
-        value={answers["ltv_tracking"] || ""}
+        value={getStringAnswer(answers["ltv_tracking"])}
         onChange={(val) => onAnswer("ltv_tracking", val)}
       />
 

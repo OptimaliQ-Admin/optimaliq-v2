@@ -3,9 +3,12 @@
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["which_4b594c"]) &&
     answers["which_4b594c"].length > 0 &&
@@ -17,8 +20,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -46,7 +49,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one part of your pipeline that feels unpredictable or messy?"
         placeholder="E.g., qualification, handoffs, or late-stage follow-ups"
-        value={answers["what’s_a7967d"] || ""}
+        value={getStringAnswer(answers["what’s_a7967d"])}
         onChange={(val) => onAnswer("what’s_a7967d", val)}
         maxLength={300}
       />
@@ -60,7 +63,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "We_schedule_follow_ups", label: "We schedule follow-ups" },
           { value: "We_place_them_into_nurture_or_remarketing_flows", label: "We place them into nurture or remarketing flows" },
         ]}
-        value={answers["how_c8eb2a"] || ""}
+        value={getStringAnswer(answers["how_c8eb2a"])}
         onChange={(val) => onAnswer("how_c8eb2a", val)}
       />
     </div>

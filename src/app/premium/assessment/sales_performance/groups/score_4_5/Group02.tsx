@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_15ad3d"] === "string" &&
     typeof answers["how_7e00a0"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "guided_prompts", label: "It guides reps with prompts or scoring" },
           { value: "real_time_assistant", label: "It acts as a real-time assistant with recommendations and automation" },
         ]}
-        value={answers["how_15ad3d"] || ""}
+        value={getStringAnswer(answers["how_15ad3d"])}
         onChange={(val) => onAnswer("how_15ad3d", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "scorecards", label: "Using team-wide scorecards and dashboards" },
           { value: "patterns_and_outcomes", label: "By monitoring patterns, ramp, enablement, and buyer outcomes" },
         ]}
-        value={answers["how_7e00a0"] || ""}
+        value={getStringAnswer(answers["how_7e00a0"])}
         onChange={(val) => onAnswer("how_7e00a0", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly_review", label: "Reviewed and realigned quarterly" },
           { value: "dynamic_modeling", label: "Adjusted dynamically with shared input and data modeling" },
         ]}
-        value={answers["what’s_2e8609"] || ""}
+        value={getStringAnswer(answers["what’s_2e8609"])}
         onChange={(val) => onAnswer("what’s_2e8609", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "forecast_and_coverage", label: "Forecasts and pipeline coverage" },
           { value: "full_cycle", label: "Full-cycle metrics and performance models" },
         ]}
-        value={answers["what_ada360"] || ""}
+        value={getStringAnswer(answers["what_ada360"])}
         onChange={(val) => onAnswer("what_ada360", val)}
       />
     </div>

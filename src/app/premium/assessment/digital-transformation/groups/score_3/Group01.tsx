@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["integration_depth"] === "string" &&
     typeof answers["governance_process"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "connected_workflows", label: "Connected workflows across multiple systems" },
           { value: "fully_integrated", label: "Fully integrated — data flows seamlessly across tools" },
         ]}
-        value={answers["integration_depth"] || ""}
+        value={getStringAnswer(answers["integration_depth"])}
         onChange={(val) => onAnswer("integration_depth", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "defined_roles", label: "Yes — roles and decision-making are defined" },
           { value: "cross_functional_review", label: "Yes — includes cross-functional review and accountability" },
         ]}
-        value={answers["governance_process"] || ""}
+        value={getStringAnswer(answers["governance_process"])}
         onChange={(val) => onAnswer("governance_process", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "user_friendly", label: "User-friendly — most find them easy to use" },
           { value: "delightful", label: "Delightful — systems are intuitive and boost productivity" },
         ]}
-        value={answers["system_usability"] || ""}
+        value={getStringAnswer(answers["system_usability"])}
         onChange={(val) => onAnswer("system_usability", val)}
       />
     </div>

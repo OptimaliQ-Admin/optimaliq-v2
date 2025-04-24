@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_cross_team_execution"] === "string" &&
     typeof answers["cx_scalability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "collaborative_initiatives", label: "We run some joint CX initiatives" },
           { value: "fully_coordinated", label: "Efforts are fully coordinated and shared" },
         ]}
-        value={answers["cx_cross_team_execution"] || ""}
+        value={getStringAnswer(answers["cx_cross_team_execution"])}
         onChange={(val) => onAnswer("cx_cross_team_execution", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "scalable_frameworks", label: "We’ve built repeatable frameworks" },
           { value: "scales_freely", label: "Highly scalable — it evolves as we grow" },
         ]}
-        value={answers["cx_scalability"] || ""}
+        value={getStringAnswer(answers["cx_scalability"])}
         onChange={(val) => onAnswer("cx_scalability", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_0_Step03({ answers, onAnswer }: Props) {
           { value: "integrated_predictions", label: "Predictions are integrated into strategy" },
           { value: "real_time_adaptation", label: "Real-time predictions drive CX decisions" },
         ]}
-        value={answers["cx_predictive_capabilities"] || ""}
+        value={getStringAnswer(answers["cx_predictive_capabilities"])}
         onChange={(val) => onAnswer("cx_predictive_capabilities", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_review_frequency"] === "string" &&
     typeof answers["decision_framework_usage"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "semi_annually", label: "Semi-annually or quarterly" },
           { value: "frequently", label: "Frequently — we continuously adapt" },
         ]}
-        value={answers["strategic_review_frequency"] || ""}
+        value={getStringAnswer(answers["strategic_review_frequency"])}
         onChange={(val) => onAnswer("strategic_review_frequency", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "consistent", label: "We use a consistent scoring system or playbook" },
           { value: "robust", label: "We use robust frameworks tied to business goals" },
         ]}
-        value={answers["decision_framework_usage"] || ""}
+        value={getStringAnswer(answers["decision_framework_usage"])}
         onChange={(val) => onAnswer("decision_framework_usage", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Most team goals map to strategy" },
           { value: "fully_aligned", label: "Every team’s goals are fully aligned" },
         ]}
-        value={answers["team_objectives_alignment"] || ""}
+        value={getStringAnswer(answers["team_objectives_alignment"])}
         onChange={(val) => onAnswer("team_objectives_alignment", val)}
       />
     </div>

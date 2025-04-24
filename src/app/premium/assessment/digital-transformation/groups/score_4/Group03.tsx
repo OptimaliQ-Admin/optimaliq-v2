@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["scaling_strategy"] === "string" &&
     typeof answers["platform_consolidation"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "coordinated_scaling", label: "We coordinate across teams during scale-up" },
           { value: "enterprise_scaling", label: "We scale enterprise-wide with dedicated rollout teams" },
         ]}
-        value={answers["scaling_strategy"] || ""}
+        value={getStringAnswer(answers["scaling_strategy"])}
         onChange={(val) => onAnswer("scaling_strategy", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "scheduled_audits", label: "Audits or reviews happen on a scheduled basis" },
           { value: "consolidation_goals", label: "Yes — we proactively consolidate based on goals" },
         ]}
-        value={answers["platform_consolidation"] || ""}
+        value={getStringAnswer(answers["platform_consolidation"])}
         onChange={(val) => onAnswer("platform_consolidation", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "proactively_explore", label: "We proactively explore and test new tech" },
           { value: "strategic_initiative", label: "It’s part of our core innovation strategy" },
         ]}
-        value={answers["emerging_tech_adoption"] || ""}
+        value={getStringAnswer(answers["emerging_tech_adoption"])}
         onChange={(val) => onAnswer("emerging_tech_adoption", val)}
       />
     </div>

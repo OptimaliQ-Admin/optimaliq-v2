@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ecosystem_partnerships"] === "string" &&
     typeof answers["tech_risk_management"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "strategic_partnerships", label: "We have strategic partnerships in place" },
           { value: "ecosystem_driven", label: "We rely on a robust ecosystem to drive innovation and scale" },
         ]}
-        value={answers["ecosystem_partnerships"] || ""}
+        value={getStringAnswer(answers["ecosystem_partnerships"])}
         onChange={(val) => onAnswer("ecosystem_partnerships", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "risk_framework", label: "We use a formal risk framework for new tech" },
           { value: "proactive_management", label: "Risks are proactively assessed and mitigated before adoption" },
         ]}
-        value={answers["tech_risk_management"] || ""}
+        value={getStringAnswer(answers["tech_risk_management"])}
         onChange={(val) => onAnswer("tech_risk_management", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "business_outcomes", label: "We track high-level business outcomes" },
           { value: "roi_and_efficiency", label: "We use clear KPIs, ROI, and efficiency gains" },
         ]}
-        value={answers["digital_impact"] || ""}
+        value={getStringAnswer(answers["digital_impact"])}
         onChange={(val) => onAnswer("digital_impact", val)}
       />
     </div>

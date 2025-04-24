@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_136dcf"] === "string" &&
     Array.isArray(answers["which_68025d"]) &&
@@ -14,8 +18,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "gtm_collaboration", label: "Sales participates in GTM or product strategy" },
           { value: "co_owns_innovation", label: "Sales co-owns innovation planning based on buyer intelligence" },
         ]}
-        value={answers["how_136dcf"] || ""}
+        value={getStringAnswer(answers["how_136dcf"])}
         onChange={(val) => onAnswer("how_136dcf", val)}
       />
 
@@ -61,7 +65,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "growth_supported", label: "We support growth through feedback and enablement" },
           { value: "learning_norm", label: "Learning is a cultural norm tied to performance and growth metrics" },
         ]}
-        value={answers["how_e9af60"] || ""}
+        value={getStringAnswer(answers["how_e9af60"])}
         onChange={(val) => onAnswer("how_e9af60", val)}
       />
     </div>

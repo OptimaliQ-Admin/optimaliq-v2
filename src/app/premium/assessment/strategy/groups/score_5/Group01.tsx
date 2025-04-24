@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_evolution"] === "string" &&
     typeof answers["market_responsiveness"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly, with data and input" },
           { value: "continuously", label: "Continuously — it’s part of our DNA" },
         ]}
-        value={answers["strategy_evolution"] || ""}
+        value={getStringAnswer(answers["strategy_evolution"])}
         onChange={(val) => onAnswer("strategy_evolution", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "actively_scan", label: "We actively scan and adapt" },
           { value: "proactively_shape", label: "We proactively shape and lead" },
         ]}
-        value={answers["market_responsiveness"] || ""}
+        value={getStringAnswer(answers["market_responsiveness"])}
         onChange={(val) => onAnswer("market_responsiveness", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "aligned_with_metrics", label: "It’s aligned and tied to key metrics" },
           { value: "deeply_embedded", label: "It’s deeply embedded in how we operate" },
         ]}
-        value={answers["vision_cascade"] || ""}
+        value={getStringAnswer(answers["vision_cascade"])}
         onChange={(val) => onAnswer("vision_cascade", val)}
       />
     </div>

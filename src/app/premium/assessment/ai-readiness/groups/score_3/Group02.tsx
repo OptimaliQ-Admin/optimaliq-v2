@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tool_consistency"] === "string" &&
     typeof answers["training_access"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "standardized", label: "Standardized tools across most teams" },
           { value: "integrated_stack", label: "Fully integrated and aligned tool stack" },
         ]}
-        value={answers["tool_consistency"] || ""}
+        value={getStringAnswer(answers["tool_consistency"])}
         onChange={(val) => onAnswer("tool_consistency", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "some_training", label: "Some structured training programs available" },
           { value: "strong_focus", label: "Yes — training is a strategic focus" },
         ]}
-        value={answers["training_access"] || ""}
+        value={getStringAnswer(answers["training_access"])}
         onChange={(val) => onAnswer("training_access", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "metrics_and_logs", label: "We track performance via logs or metrics" },
           { value: "real_time_monitoring", label: "We use real-time monitoring and alerts" },
         ]}
-        value={answers["model_monitoring"] || ""}
+        value={getStringAnswer(answers["model_monitoring"])}
         onChange={(val) => onAnswer("model_monitoring", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_0_Step02({ answers, onAnswer }: Props) {
           { value: "scalable_with_effort", label: "Scalable, but requires coordination" },
           { value: "highly_scalable", label: "Highly scalable by design" },
         ]}
-        value={answers["ai_scaling"] || ""}
+        value={getStringAnswer(answers["ai_scaling"])}
         onChange={(val) => onAnswer("ai_scaling", val)}
       />
     </div>

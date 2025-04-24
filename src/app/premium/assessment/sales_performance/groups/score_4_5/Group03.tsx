@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_229086"] === "string" &&
     typeof answers["what’s_30c935"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "structured_plans", label: "Structured coaching and development plans" },
           { value: "kpi_tied_enablement", label: "Performance-based enablement tied to KPIs and growth goals" },
         ]}
-        value={answers["how_229086"] || ""}
+        value={getStringAnswer(answers["how_229086"])}
         onChange={(val) => onAnswer("how_229086", val)}
       />
 
@@ -38,7 +42,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the most valuable insight your sales org has uncovered in the past quarter?"
         placeholder="E.g., reps winning faster when demo is skipped, churn risk linked to missed onboarding step"
-        value={answers["what’s_30c935"] || ""}
+        value={getStringAnswer(answers["what’s_30c935"])}
         onChange={(val) => onAnswer("what’s_30c935", val)}
         maxLength={300}
       />
@@ -52,7 +56,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly", label: "Mostly — we’re building toward it" },
           { value: "very_confident", label: "Very confident — our system is ready for that level of growth" },
         ]}
-        value={answers["how_a07904"] || ""}
+        value={getStringAnswer(answers["how_a07904"])}
         onChange={(val) => onAnswer("how_a07904", val)}
       />
     </div>

@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["agility"] === "string" &&
     answers["agility"].trim().length > 0 &&
@@ -26,8 +28,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -44,7 +46,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "It supports agile process improvement", label: "It supports agile process improvement" },
           { value: "Experimentation is built into the system", label: "Experimentation is built into the system" },
         ]}
-        value={answers["agility"] || ""}
+        value={getStringAnswer(answers["agility"])}
         onChange={(val) => onAnswer("agility", val)}
       />
 
@@ -58,7 +60,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "In most core functions", label: "In most core functions" },
           { value: "AI is embedded across all major processes", label: "AI is embedded across all major processes" },
         ]}
-        value={answers["ai_driven_processes"] || ""}
+        value={getStringAnswer(answers["ai_driven_processes"])}
         onChange={(val) => onAnswer("ai_driven_processes", val)}
       />
 
@@ -71,7 +73,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "Structured internal benchmarking", label: "Structured internal benchmarking" },
           { value: "Ongoing external benchmarking with industry metrics", label: "Ongoing external benchmarking with industry metrics" },
         ]}
-        value={answers["benchmarking"] || ""}
+        value={getStringAnswer(answers["benchmarking"])}
         onChange={(val) => onAnswer("benchmarking", val)}
       />
 
@@ -81,7 +83,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What is your BPM North Star for the next 12 months?"
         placeholder="E.g.,"
-        value={answers["north_star"] || ""}
+        value={getStringAnswer(answers["north_star"])}
         onChange={(val) => onAnswer("north_star", val)}
         maxLength={300}
       />

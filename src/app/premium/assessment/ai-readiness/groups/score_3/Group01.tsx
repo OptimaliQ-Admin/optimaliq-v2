@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_initiative_ownership"] === "string" &&
     typeof answers["governance_maturity"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "single_owner", label: "One clear owner or team" },
           { value: "centralized_leadership", label: "A centralized AI or innovation team" },
         ]}
-        value={answers["ai_initiative_ownership"] || ""}
+        value={getStringAnswer(answers["ai_initiative_ownership"])}
         onChange={(val) => onAnswer("ai_initiative_ownership", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "formal_policies", label: "Formal policies are in place" },
           { value: "proactive_governance", label: "Proactive governance with regular updates" },
         ]}
-        value={answers["governance_maturity"] || ""}
+        value={getStringAnswer(answers["governance_maturity"])}
         onChange={(val) => onAnswer("governance_maturity", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "tracked_as_projects", label: "Tracked as part of formal initiatives" },
           { value: "central_to_strategy", label: "It’s central to strategic planning" },
         ]}
-        value={answers["ai_visibility"] || ""}
+        value={getStringAnswer(answers["ai_visibility"])}
         onChange={(val) => onAnswer("ai_visibility", val)}
       />
     </div>

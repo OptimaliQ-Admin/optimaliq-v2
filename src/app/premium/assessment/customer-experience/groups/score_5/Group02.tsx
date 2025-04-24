@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_metrics_leadership"] === "string" &&
     typeof answers["cx_decision_framework"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "regular_checkins", label: "Regular check-ins (monthly or OKRs)" },
           { value: "embedded_in_strategy", label: "CX metrics are embedded in strategic reviews" },
         ]}
-        value={answers["cx_metrics_leadership"] || ""}
+        value={getStringAnswer(answers["cx_metrics_leadership"])}
         onChange={(val) => onAnswer("cx_metrics_leadership", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "formal_framework", label: "We use a formal framework to score ideas" },
           { value: "data_driven_prioritization", label: "We use data, models, and CX value scores" },
         ]}
-        value={answers["cx_decision_framework"] || ""}
+        value={getStringAnswer(answers["cx_decision_framework"])}
         onChange={(val) => onAnswer("cx_decision_framework", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "journey_maps", label: "We use journey maps and integrated reporting" },
           { value: "cross_channel_ai", label: "Cross-channel orchestration with AI optimization" },
         ]}
-        value={answers["cx_journey_optimization"] || ""}
+        value={getStringAnswer(answers["cx_journey_optimization"])}
         onChange={(val) => onAnswer("cx_journey_optimization", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "cx_platforms", label: "Integrated platforms for CX delivery" },
           { value: "ai_and_platforms", label: "AI-enabled platforms powering real-time CX" },
         ]}
-        value={answers["cx_technology_scaling"] || ""}
+        value={getStringAnswer(answers["cx_technology_scaling"])}
         onChange={(val) => onAnswer("cx_technology_scaling", val)}
       />
     </div>

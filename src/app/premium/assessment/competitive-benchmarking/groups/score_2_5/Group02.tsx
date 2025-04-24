@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitor_focus"] === "string" &&
     typeof answers["win_loss_feedback"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "aligned_on_competitors", label: "Most teams are aligned on top competitors" },
           { value: "shared_internal_docs", label: "We have shared internal docs and training" },
         ]}
-        value={answers["competitor_focus"] || ""}
+        value={getStringAnswer(answers["competitor_focus"])}
         onChange={(val) => onAnswer("competitor_focus", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "occasional_surveys", label: "Occasional win/loss surveys or notes" },
           { value: "systematic_tracking", label: "Systematic tracking and reporting" },
         ]}
-        value={answers["win_loss_feedback"] || ""}
+        value={getStringAnswer(answers["win_loss_feedback"])}
         onChange={(val) => onAnswer("win_loss_feedback", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "tracked_manually", label: "Tracked manually on a few channels" },
           { value: "monitored_analytics", label: "Monitored with analytics or third-party tools" },
         ]}
-        value={answers["category_ranking_tracking"] || ""}
+        value={getStringAnswer(answers["category_ranking_tracking"])}
         onChange={(val) => onAnswer("category_ranking_tracking", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "limited_tools", label: "We use 1-2 basic tools (e.g. SimilarWeb)" },
           { value: "integrated_stack", label: "Yes — we use a full stack for tracking" },
         ]}
-        value={answers["competitive_tools_usage"] || ""}
+        value={getStringAnswer(answers["competitive_tools_usage"])}
         onChange={(val) => onAnswer("competitive_tools_usage", val)}
       />
     </div>

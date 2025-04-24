@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_governance"] === "string" &&
     typeof answers["ai_change_management"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "formal_review", label: "Formal review and approval process" },
           { value: "comprehensive_framework", label: "Comprehensive, org-wide governance framework" },
         ]}
-        value={answers["ai_governance"] || ""}
+        value={getStringAnswer(answers["ai_governance"])}
         onChange={(val) => onAnswer("ai_governance", val)}
       />
     </div>

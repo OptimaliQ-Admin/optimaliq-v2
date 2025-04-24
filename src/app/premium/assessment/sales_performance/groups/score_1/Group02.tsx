@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["who_5d9558"] === "string" &&
     typeof answers["how_454fc5"] === "string" &&
@@ -15,8 +19,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -34,7 +38,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "A_small_team", label: "A small team" },
           { value: "A_dedicated_structured_sales_department", label: "A dedicated, structured sales department" },
         ]}
-        value={answers["who_5d9558"] || ""}
+        value={getStringAnswer(answers["who_5d9558"])}
         onChange={(val) => onAnswer("who_5d9558", val)}
       />
 
@@ -47,7 +51,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "We_have_a_basic_reminder_system", label: "We have a basic reminder system" },
           { value: "We_have_automated_or_scheduled_follow_ups", label: "We have automated or scheduled follow-ups" },
         ]}
-        value={answers["how_454fc5"] || ""}
+        value={getStringAnswer(answers["how_454fc5"])}
         onChange={(val) => onAnswer("how_454fc5", val)}
       />
 
@@ -60,7 +64,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "We_use_basic_criteria_eg_budget_need", label: "We use basic criteria (e.g. budget, need)" },
           { value: "We_follow_a_lead_scoring_or_qualification_framework", label: "We follow a lead scoring or qualification framework" },
         ]}
-        value={answers["which_01150c"] || ""}
+        value={getStringAnswer(answers["which_01150c"])}
         onChange={(val) => onAnswer("which_01150c", val)}
       />
 

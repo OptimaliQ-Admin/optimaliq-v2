@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["campaign_personalization"] === "string" &&
     typeof answers["team_enablement"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "basic_segmentation", label: "Yes — we use personas or segment rules" },
           { value: "advanced_personalization", label: "Advanced — we use behavioral data and dynamic content" },
         ]}
-        value={answers["campaign_personalization"] || ""}
+        value={getStringAnswer(answers["campaign_personalization"])}
         onChange={(val) => onAnswer("campaign_personalization", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_enabled", label: "They review and discuss reports regularly" },
           { value: "fully_enabled", label: "They self-serve and use insights to adjust tactics" },
         ]}
-        value={answers["team_enablement"] || ""}
+        value={getStringAnswer(answers["team_enablement"])}
         onChange={(val) => onAnswer("team_enablement", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "performance_tracked", label: "Spend and performance are tracked together" },
           { value: "fully_attributed", label: "We use attribution modeling or ROI frameworks" },
         ]}
-        value={answers["budget_visibility"] || ""}
+        value={getStringAnswer(answers["budget_visibility"])}
         onChange={(val) => onAnswer("budget_visibility", val)}
       />
     </div>

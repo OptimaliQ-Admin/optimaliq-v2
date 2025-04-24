@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_strategy_alignment"] === "string" &&
     typeof answers["data_availability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "moderate_alignment", label: "Moderately aligned — AI supports select business priorities" },
           { value: "strong_alignment", label: "Strongly aligned — AI is core to our business roadmap" },
         ]}
-        value={answers["ai_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["ai_strategy_alignment"])}
         onChange={(val) => onAnswer("ai_strategy_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "centralized_reporting", label: "Centralized for reporting, not automation" },
           { value: "structured", label: "Structured, unified, and ready for AI use cases" },
         ]}
-        value={answers["data_availability"] || ""}
+        value={getStringAnswer(answers["data_availability"])}
         onChange={(val) => onAnswer("data_availability", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
           { value: "departmental", label: "Departmental-level workflows automated" },
           { value: "cross_functional", label: "Cross-functional automation across systems" },
         ]}
-        value={answers["automation_scope"] || ""}
+        value={getStringAnswer(answers["automation_scope"])}
         onChange={(val) => onAnswer("automation_scope", val)}
       />
     </div>

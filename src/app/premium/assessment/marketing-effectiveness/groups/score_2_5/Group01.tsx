@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["marketing_roi"] === "string" &&
     typeof answers["campaign_testing"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "We use UTM tracking and attribution", label: "We use UTM tracking and attribution" },
           { value: "We have defined ROI targets and dashboards", label: "We have defined ROI targets and dashboards" },
         ]}
-        value={answers["marketing_roi"] || ""}
+        value={getStringAnswer(answers["marketing_roi"])}
         onChange={(val) => onAnswer("marketing_roi", val)}
       />
 
@@ -45,7 +49,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "Frequently — we review and iterate weekly", label: "Frequently — we review and iterate weekly" },
           { value: "Continuously — using AI, scripts, or live testing", label: "Continuously — using AI, scripts, or live testing" },
         ]}
-        value={answers["campaign_testing"] || ""}
+        value={getStringAnswer(answers["campaign_testing"])}
         onChange={(val) => onAnswer("campaign_testing", val)}
       />
 

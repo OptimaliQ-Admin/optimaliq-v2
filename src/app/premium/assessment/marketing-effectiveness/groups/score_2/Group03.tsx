@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["confidence_in_marketing_roi"] === "string" &&
     answers["confidence_in_marketing_roi"].trim().length > 0 &&
@@ -16,8 +20,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "Good — we track conversions and pipeline", label: "Good — we track conversions and pipeline" },
           { value: "High — we forecast and measure ROI confidently", label: "High — we forecast and measure ROI confidently" },
         ]}
-        value={answers["confidence_in_marketing_roi"] || ""}
+        value={getStringAnswer(answers["confidence_in_marketing_roi"])}
         onChange={(val) => onAnswer("confidence_in_marketing_roi", val)}
       />
 
@@ -40,7 +44,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one marketing experiment or test you’ve tried in the past 6 months?"
         placeholder="E.g., new email format, A/B test, landing page, ad channel"
-        value={answers["recent_experiment"] || ""}
+        value={getStringAnswer(answers["recent_experiment"])}
         onChange={(val) => onAnswer("recent_experiment", val)}
         maxLength={300}
       />
@@ -49,7 +53,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What part of your marketing do you think has the most untapped potential right now?"
         placeholder="E.g., nurturing, conversion, messaging, new audiences"
-        value={answers["marketing_impact_opportunity"] || ""}
+        value={getStringAnswer(answers["marketing_impact_opportunity"])}
         onChange={(val) => onAnswer("marketing_impact_opportunity", val)}
         maxLength={300}
       />

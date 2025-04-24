@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_journey_mapping"] === "string" &&
     typeof answers["channel_consistency"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
           { value: "comprehensive_map", label: "We have a comprehensive journey map" },
           { value: "used_for_decision_making", label: "Yes, and it informs our decision-making" },
         ]}
-        value={answers["customer_journey_mapping"] || ""}
+        value={getStringAnswer(answers["customer_journey_mapping"])}
         onChange={(val) => onAnswer("customer_journey_mapping", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent with a unified approach" },
           { value: "fully_consistent", label: "Fully consistent — it's intentionally designed" },
         ]}
-        value={answers["channel_consistency"] || ""}
+        value={getStringAnswer(answers["channel_consistency"])}
         onChange={(val) => onAnswer("channel_consistency", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_documented", label: "Mostly documented and referenced" },
           { value: "fully_documented", label: "Fully documented with regular updates" },
         ]}
-        value={answers["cx_process_documentation"] || ""}
+        value={getStringAnswer(answers["cx_process_documentation"])}
         onChange={(val) => onAnswer("cx_process_documentation", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score_2_0_Step02({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly — feedback informs process or product changes" },
           { value: "systematic", label: "Systematic — feedback drives continuous improvement" },
         ]}
-        value={answers["feedback_action"] || ""}
+        value={getStringAnswer(answers["feedback_action"])}
         onChange={(val) => onAnswer("feedback_action", val)}
       />
     </div>

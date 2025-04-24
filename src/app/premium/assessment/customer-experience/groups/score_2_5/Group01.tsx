@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["touchpoint_clarity"] === "string" &&
     typeof answers["ownership_clarity"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "documented", label: "Documented — we’ve mapped the journey" },
           { value: "optimized_map", label: "Optimized — clear touchpoints aligned to lifecycle" },
         ]}
-        value={answers["touchpoint_clarity"] || ""}
+        value={getStringAnswer(answers["touchpoint_clarity"])}
         onChange={(val) => onAnswer("touchpoint_clarity", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "individuals", label: "Assigned — individuals own certain steps" },
           { value: "role_based", label: "Role-based — clearly defined ownership by role" },
         ]}
-        value={answers["ownership_clarity"] || ""}
+        value={getStringAnswer(answers["ownership_clarity"])}
         onChange={(val) => onAnswer("ownership_clarity", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "standard_metrics", label: "Standard metrics in place" },
           { value: "integrated_tracking", label: "Fully integrated tracking system" },
         ]}
-        value={answers["tracking_consistency"] || ""}
+        value={getStringAnswer(answers["tracking_consistency"])}
         onChange={(val) => onAnswer("tracking_consistency", val)}
       />
     </div>

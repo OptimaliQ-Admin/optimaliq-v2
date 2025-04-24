@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_alignment"] === "string" &&
     typeof answers["initiative_planning"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — our goals are generally consistent" },
           { value: "fully_aligned", label: "Fully aligned — strategy drives cross-functional focus" },
         ]}
-        value={answers["strategic_alignment"] || ""}
+        value={getStringAnswer(answers["strategic_alignment"])}
         onChange={(val) => onAnswer("strategic_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "aligned_with_goals", label: "We prioritize based on goal alignment" },
           { value: "prioritized_framework", label: "We use a formal prioritization framework" },
         ]}
-        value={answers["initiative_planning"] || ""}
+        value={getStringAnswer(answers["initiative_planning"])}
         onChange={(val) => onAnswer("initiative_planning", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "team_based_roadmaps", label: "Each team maintains its own roadmap" },
           { value: "shared_roadmap", label: "Yes — we maintain a shared, strategic roadmap" },
         ]}
-        value={answers["cross_functional_roadmap"] || ""}
+        value={getStringAnswer(answers["cross_functional_roadmap"])}
         onChange={(val) => onAnswer("cross_functional_roadmap", val)}
       />
     </div>

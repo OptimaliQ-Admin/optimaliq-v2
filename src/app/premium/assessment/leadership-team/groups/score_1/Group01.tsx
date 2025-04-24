@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["alignment_visibility"] === "string" &&
     typeof answers["strategy_consistency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "moderate_visibility", label: "Mostly aligned, but not always communicated" },
           { value: "high_alignment", label: "Fully aligned and clearly communicated" },
         ]}
-        value={answers["alignment_visibility"] || ""}
+        value={getStringAnswer(answers["alignment_visibility"])}
         onChange={(val) => onAnswer("alignment_visibility", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent with shared practices" },
           { value: "fully_consistent", label: "Fully consistent — we operate from the same playbook" },
         ]}
-        value={answers["strategy_consistency"] || ""}
+        value={getStringAnswer(answers["strategy_consistency"])}
         onChange={(val) => onAnswer("strategy_consistency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "clear_for_some", label: "Clear for some roles or teams" },
           { value: "fully_aligned", label: "Fully aligned — everyone understands the connection" },
         ]}
-        value={answers["team_direction"] || ""}
+        value={getStringAnswer(answers["team_direction"])}
         onChange={(val) => onAnswer("team_direction", val)}
       />
     </div>

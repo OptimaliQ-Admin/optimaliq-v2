@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_focus"] === "string" &&
     typeof answers["planning_frequency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "basic_plan", label: "Basic plan in place, but not consistently used" },
           { value: "clear_direction", label: "We have a clear direction and mission" },
         ]}
-        value={answers["strategic_focus"] || ""}
+        value={getStringAnswer(answers["strategic_focus"])}
         onChange={(val) => onAnswer("strategic_focus", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "semi_annually", label: "Semi-annually with some follow-through" },
           { value: "quarterly", label: "Quarterly or more, with consistent updates" },
         ]}
-        value={answers["planning_frequency"] || ""}
+        value={getStringAnswer(answers["planning_frequency"])}
         onChange={(val) => onAnswer("planning_frequency", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "mostly", label: "Most teams know the high-level strategy" },
           { value: "fully", label: "We’re all aligned and committed to the vision" },
         ]}
-        value={answers["vision_alignment"] || ""}
+        value={getStringAnswer(answers["vision_alignment"])}
         onChange={(val) => onAnswer("vision_alignment", val)}
       />
     </div>

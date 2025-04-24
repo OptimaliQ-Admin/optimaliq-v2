@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_feedback_loops"] === "string" &&
     typeof answers["cx_innovation"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "ongoing_cx_loops", label: "We have ongoing feedback loops" },
           { value: "feedback_drives_change", label: "Feedback directly drives roadmap or strategy" },
         ]}
-        value={answers["cx_feedback_loops"] || ""}
+        value={getStringAnswer(answers["cx_feedback_loops"])}
         onChange={(val) => onAnswer("cx_feedback_loops", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — part of experimentation" },
           { value: "cx_innovation_culture", label: "CX innovation is a continuous process" },
         ]}
-        value={answers["cx_innovation"] || ""}
+        value={getStringAnswer(answers["cx_innovation"])}
         onChange={(val) => onAnswer("cx_innovation", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "cross_functional_support", label: "Cross-functional support for CX" },
           { value: "full_alignment", label: "Everyone is aligned with shared CX goals and metrics" },
         ]}
-        value={answers["cx_alignment"] || ""}
+        value={getStringAnswer(answers["cx_alignment"])}
         onChange={(val) => onAnswer("cx_alignment", val)}
       />
     </div>

@@ -1,11 +1,13 @@
-// File: refactor/src/utils/stripOtherFields.ts
+import {
+  type AssessmentAnswers,
+} from "@/lib/types/AssessmentAnswers";// File: refactor/src/utils/stripOtherFields.ts
 
 /**
  * Removes any *_other keys and appends cleaned "Other" values to base field.
  * This ensures only meaningful user responses are stored/submitted.
  */
-export function stripOtherFields(answers: Record<string, any>): Record<string, any> {
-    const result: Record<string, any> = {};
+export function stripOtherFields(answers: AssessmentAnswers): AssessmentAnswers {
+    const result: AssessmentAnswers = {};
   
     for (const key in answers) {
       if (key.endsWith("_other")) continue; // skip _other fields

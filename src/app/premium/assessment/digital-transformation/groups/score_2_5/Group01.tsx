@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["goals_linked_to_tech"] === "string" &&
     typeof answers["change_readiness"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_linked", label: "Mostly — most initiatives have tech KPIs" },
           { value: "fully_linked", label: "Yes — every project has aligned metrics and tech outcomes" },
         ]}
-        value={answers["goals_linked_to_tech"] || ""}
+        value={getStringAnswer(answers["goals_linked_to_tech"])}
         onChange={(val) => onAnswer("goals_linked_to_tech", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "some_preparedness", label: "Some preparedness — we provide training or support" },
           { value: "proactive", label: "Proactive — change is expected and planned for" },
         ]}
-        value={answers["change_readiness"] || ""}
+        value={getStringAnswer(answers["change_readiness"])}
         onChange={(val) => onAnswer("change_readiness", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "clear_visibility", label: "Yes — we know how data moves between tools" },
           { value: "documented_maps", label: "Yes — we have documentation and process maps" },
         ]}
-        value={answers["integration_visibility"] || ""}
+        value={getStringAnswer(answers["integration_visibility"])}
         onChange={(val) => onAnswer("integration_visibility", val)}
       />
     </div>

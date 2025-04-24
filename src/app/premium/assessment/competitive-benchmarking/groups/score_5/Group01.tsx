@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_strategy_integration"] === "string" &&
     typeof answers["benchmarking_scope"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "informs_choices", label: "It informs key choices and priorities" },
           { value: "core_input", label: "It’s a core input to planning and forecasting" },
         ]}
-        value={answers["benchmarking_strategy_integration"] || ""}
+        value={getStringAnswer(answers["benchmarking_strategy_integration"])}
         onChange={(val) => onAnswer("benchmarking_strategy_integration", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "mix_methods", label: "We mix public data, research, and performance" },
           { value: "full_scope", label: "We include customer, product, pricing, and brand-level insights" },
         ]}
-        value={answers["benchmarking_scope"] || ""}
+        value={getStringAnswer(answers["benchmarking_scope"])}
         onChange={(val) => onAnswer("benchmarking_scope", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "pretty_confident", label: "We’re pretty confident in the number" },
           { value: "data_backed", label: "We use external benchmarks and track it quarterly" },
         ]}
-        value={answers["market_share_accuracy"] || ""}
+        value={getStringAnswer(answers["market_share_accuracy"])}
         onChange={(val) => onAnswer("market_share_accuracy", val)}
       />
     </div>

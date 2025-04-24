@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["performance_reviews"] === "string" &&
     typeof answers["employee_recognition"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "some_structure", label: "Some structure, not always followed" },
           { value: "consistent_reviews", label: "Consistent and tied to expectations and development" },
         ]}
-        value={answers["performance_reviews"] || ""}
+        value={getStringAnswer(answers["performance_reviews"])}
         onChange={(val) => onAnswer("performance_reviews", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "structured", label: "Structured programs (bonuses, awards, etc.)" },
           { value: "embedded", label: "Embedded in culture — part of how we operate" },
         ]}
-        value={answers["employee_recognition"] || ""}
+        value={getStringAnswer(answers["employee_recognition"])}
         onChange={(val) => onAnswer("employee_recognition", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_0_Step03({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "Collaborative with shared ownership" },
           { value: "data_and_insight_driven", label: "Data- and insight-driven with cross-team alignment" },
         ]}
-        value={answers["decision_making_style"] || ""}
+        value={getStringAnswer(answers["decision_making_style"])}
         onChange={(val) => onAnswer("decision_making_style", val)}
       />
     </div>

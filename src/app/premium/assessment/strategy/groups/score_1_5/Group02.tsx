@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_communication"] === "string" &&
     typeof answers["data_usage"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "sometimes_discussed", label: "Discussed in planning sessions or team meetings" },
           { value: "ongoing_narrative", label: "It’s an ongoing story reinforced by leadership" },
         ]}
-        value={answers["strategy_communication"] || ""}
+        value={getStringAnswer(answers["strategy_communication"])}
         onChange={(val) => onAnswer("strategy_communication", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "some_analysis", label: "We use reports or dashboards to guide major decisions" },
           { value: "data_driven", label: "Strategy is built around insights and clear signals" },
         ]}
-        value={answers["data_usage"] || ""}
+        value={getStringAnswer(answers["data_usage"])}
         onChange={(val) => onAnswer("data_usage", val)}
       />
 
@@ -53,7 +56,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "key_metrics", label: "We use specific KPIs tied to initiatives" },
           { value: "performance_feedback", label: "We track KPIs and gather feedback regularly" },
         ]}
-        value={answers["success_measurement"] || ""}
+        value={getStringAnswer(answers["success_measurement"])}
         onChange={(val) => onAnswer("success_measurement", val)}
       />
 
@@ -65,7 +68,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly — every quarter or month" },
           { value: "frequently", label: "Frequently — we have a cadence to check alignment" },
         ]}
-        value={answers["strategic_meetings"] || ""}
+        value={getStringAnswer(answers["strategic_meetings"])}
         onChange={(val) => onAnswer("strategic_meetings", val)}
       />
     </div>

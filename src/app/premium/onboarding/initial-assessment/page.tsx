@@ -7,14 +7,18 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "@/components/shared/StepGroupRenderer";
 import { stepValidators } from "@/utils/initialAssessmentValidators";
+import type {
+  AssessmentAnswers,
+  AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import { stripOtherFields } from "@/utils/stripOtherFields";
-
+import { getErrorMessage } from "@/utils/errorHandler";
 export default function InitialAssessmentPage() {
   const router = useRouter();
   const { user } = usePremiumUser();
 
   const [step, setStep] = useState(0);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -64,8 +68,8 @@ export default function InitialAssessmentPage() {
       }
   
       router.push("/premium/dashboard");
-    } catch (err: any) {
-      alert("Unexpected error occurred: " + err.message);
+    } catch (err: unknown) {
+      alert("Unexpected error occurred: " + getErrorMessage(err));
     }
   };  
 
@@ -73,15 +77,22 @@ export default function InitialAssessmentPage() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (key: string, value: any) => {
+  const handleAnswer = (key: string, value: AssessmentAnswerValue) => {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
 
       if (key.endsWith("_other")) {
         const baseKey = key.replace("_other", "");
         const baseValue = prev[baseKey] || [];
-        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-        if (value.trim()) cleaned.push(`Other: ${value.trim()}`);
+      
+        const cleaned = Array.isArray(baseValue)
+          ? baseValue.filter((item: string) => !item.startsWith("Other:"))
+          : [];
+      
+        if (typeof value === "string" && value.trim()) {
+          cleaned.push(`Other: ${value.trim()}`);
+        }
+      
         updated[baseKey] = cleaned;
       }
 

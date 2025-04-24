@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["lifecycle_strategy"] === "string" &&
     typeof answers["exploratory_channel"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +33,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "segmented_automation", label: "We have segmented automation by stage or persona" },
           { value: "full_lifecycle", label: "We orchestrate a full lifecycle strategy across teams" },
         ]}
-        value={answers["lifecycle_strategy"] || ""}
+        value={getStringAnswer(answers["lifecycle_strategy"])}
         onChange={(val) => onAnswer("lifecycle_strategy", val)}
       />
 
@@ -37,7 +41,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one marketing channel you’ve been curious about exploring but haven’t tried yet?"
         placeholder="E.g. TikTok, podcasts, SMS, affiliate marketing, etc."
-        value={answers["exploratory_channel"] || ""}
+        value={getStringAnswer(answers["exploratory_channel"])}
         onChange={(val) => onAnswer("exploratory_channel", val)}
         maxLength={300}
       />
@@ -51,7 +55,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly confident" },
           { value: "very_confident", label: "Very confident — it’s a strength" },
         ]}
-        value={answers["scalability_confidence"] || ""}
+        value={getStringAnswer(answers["scalability_confidence"])}
         onChange={(val) => onAnswer("scalability_confidence", val)}
       />
     </div>

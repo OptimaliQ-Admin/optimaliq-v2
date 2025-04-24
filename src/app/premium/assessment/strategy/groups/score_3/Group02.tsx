@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["messaging_consistency"] === "string" &&
     typeof answers["team_collab"] === "string" &&
@@ -13,8 +15,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValueessmentAnswerValue) => void;
 };
 
 export default function Score3_Step02({ answers, onAnswer }: Props) {
@@ -28,7 +30,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly — a central message is used" },
           { value: "fully_consistent", label: "Fully consistent — we use unified messaging" },
         ]}
-        value={answers["messaging_consistency"] || ""}
+        value={getStringAnswer(answers["messaging_consistency"])}
         onChange={(val) => onAnswer("messaging_consistency", val)}
       />
 
@@ -40,7 +42,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "We collaborate on goals and priorities" },
           { value: "fully_integrated", label: "We're fully integrated into cross-functional teams" },
         ]}
-        value={answers["team_collab"] || ""}
+        value={getStringAnswer(answers["team_collab"])}
         onChange={(val) => onAnswer("team_collab", val)}
       />
 
@@ -52,7 +54,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "regularly", label: "Regularly — structured insight collection" },
           { value: "real_time", label: "In real-time — voice of customer systems in place" },
         ]}
-        value={answers["customer_insights"] || ""}
+        value={getStringAnswer(answers["customer_insights"])}
         onChange={(val) => onAnswer("customer_insights", val)}
       />
 
@@ -64,7 +66,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "often", label: "Often — we review after most campaigns" },
           { value: "always", label: "Always — it's part of our workflow" },
         ]}
-        value={answers["campaign_review_cycle"] || ""}
+        value={getStringAnswer(answers["campaign_review_cycle"])}
         onChange={(val) => onAnswer("campaign_review_cycle", val)}
       />
     </div>

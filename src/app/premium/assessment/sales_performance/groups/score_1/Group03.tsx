@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_142ca2"] === "string" &&
     typeof answers["what’s_3164b1"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "We_use_a_templated_proposal_or_quote", label: "We use a templated proposal or quote" },
           { value: "We_tailor_pricing_with_a_defined_structure", label: "We tailor pricing with a defined structure" },
         ]}
-        value={answers["how_142ca2"] || ""}
+        value={getStringAnswer(answers["how_142ca2"])}
         onChange={(val) => onAnswer("how_142ca2", val)}
       />
 
@@ -38,7 +42,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s the biggest obstacle you face when trying to close more deals?"
         placeholder="E.g., high CAC, unclear process, lead quality"
-        value={answers["what’s_3164b1"] || ""}
+        value={getStringAnswer(answers["what’s_3164b1"])}
         onChange={(val) => onAnswer("what’s_3164b1", val)}
         maxLength={300}
       />
@@ -47,7 +51,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="If you could improve one part of your sales process today, what would it be and why?"
         placeholder="E.g., improve discovery, track deals better, reduce no-shows"
-        value={answers["if_4526b6"] || ""}
+        value={getStringAnswer(answers["if_4526b6"])}
         onChange={(val) => onAnswer("if_4526b6", val)}
         maxLength={300}
       />

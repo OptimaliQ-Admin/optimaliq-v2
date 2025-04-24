@@ -3,10 +3,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isGroup05Complete(answers: Record<string, any>): boolean {
+export function isGroup05Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["decision_bottlenecks"] === "string" &&
     answers["decision_bottlenecks"].trim().length > 0 &&
@@ -21,8 +24,8 @@ export function isGroup05Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Group05_Clarity({ answers, onAnswer }: Props) {
@@ -34,7 +37,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         question="What kind of business decisions are hardest for you to make right now?"
         description="Hiring? Prioritization? Marketing spend? Pricing? Something else?"
         placeholder="Be honest. What’s slowing you down the most right now?"
-        value={answers["decision_bottlenecks"] || ""}
+        value={getStringAnswer(answers["decision_bottlenecks"])}
         onChange={(val) => onAnswer("decision_bottlenecks", val)}
         maxLength={300}
       />
@@ -58,7 +61,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         <TextAreaQuestion
           question="Please describe the alignment of your team"
           placeholder="Describe the alignment of your team..."
-          value={answers["team_alignment_other"] || ""}
+          value={getStringAnswer(answers["team_alignment_other"])}
           onChange={(val) => onAnswer("team_alignment_other", val)}
           maxLength={50}
         />
@@ -69,7 +72,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
         question="What would a wildly successful next 12 months look like for your business?"
         description="Revenue, people, customers, product—describe your future state vividly."
         placeholder="Paint the picture: What does success look like in 12 months?"
-        value={answers["future_success"] || ""}
+        value={getStringAnswer(answers["future_success"])}
         onChange={(val) => onAnswer("future_success", val)}
         maxLength={300}
       />

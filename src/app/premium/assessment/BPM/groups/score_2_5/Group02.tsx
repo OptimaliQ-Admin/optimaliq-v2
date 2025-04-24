@@ -2,11 +2,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["role_clarity"] === "string" &&
     answers["role_clarity"].trim().length > 0 &&
@@ -25,8 +27,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -43,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly — key roles are documented" },
     { value: "Very clearly", label: "Very clearly — with RACI or equivalent models" },
   ]}
-  value={answers["role_clarity"] || ""}
+  value={getStringAnswer(answers["role_clarity"])}
   onChange={(val) => onAnswer("role_clarity", val)}
 />
 
@@ -56,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
     { value: "Rarely", label: "Rarely" },
     { value: "Almost never", label: "Almost never" },
   ]}
-  value={answers["workflow_disruption"] || ""}
+  value={getStringAnswer(answers["workflow_disruption"])}
   onChange={(val) => onAnswer("workflow_disruption", val)}
 />
 
@@ -65,7 +67,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
       <TextAreaQuestion
   question="What would you say is the biggest source of friction in your current operational processes?"
   placeholder="E.g., documentation."
-  value={answers["friction"] || ""}
+  value={getStringAnswer(answers["friction"])}
   onChange={(val) => onAnswer("friction", val)}
   maxLength={300}
 />
@@ -79,7 +81,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly manageable with instructions" },
     { value: "Easy", label: "Easy — the process is documented and repeatable" },
   ]}
-  value={answers["resiliency"] || ""}
+  value={getStringAnswer(answers["resiliency"])}
   onChange={(val) => onAnswer("resiliency", val)}
 />
     </div>

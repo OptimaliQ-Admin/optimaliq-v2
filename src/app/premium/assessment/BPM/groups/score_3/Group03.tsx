@@ -2,13 +2,15 @@
 "use client";
 
 import React from "react";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["adaptability"] === "string" &&
     answers["adaptability"].trim().length > 0 &&
@@ -24,8 +26,8 @@ export function isScore_3Group3Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step03({ answers, onAnswer }: Props) {
@@ -43,7 +45,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "within a few months", label: "Usually within a few months" },
           { value: "Yes", label: "Yes — we’re proactive and flexible" },
         ]}
-        value={answers["adaptability"] || ""}
+        value={getStringAnswer(answers["adaptability"])}
         onChange={(val) => onAnswer("adaptability", val)}
       />
 
@@ -56,7 +58,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
           { value: "track performance in most areas", label: "We track performance in most areas" },
           { value: "full visibility with clear KPIs", label: "We have full visibility with clear KPIs" },
         ]}
-        value={answers["process_visibility"] || ""}
+        value={getStringAnswer(answers["process_visibility"])}
         onChange={(val) => onAnswer("process_visibility", val)}
       />
 
@@ -66,7 +68,7 @@ export default function Score3_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one process that could benefit most from a formal review or redesign this quarter?"
         placeholder="E.g.,"
-        value={answers["optimization_opportunity"] || ""}
+        value={getStringAnswer(answers["optimization_opportunity"])}
         onChange={(val) => onAnswer("optimization_opportunity", val)}
         maxLength={300}
       />

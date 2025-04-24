@@ -1,13 +1,12 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
 
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "src/components/questions/DropdownQuestion";
 
 
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["coverage"]) &&
     answers["coverage"].length > 0 &&
@@ -23,8 +22,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -61,7 +60,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
     { value: "shared folders", label: "We use shared folders or Google Docs" },
     { value: "playbook system", label: "Yes, we use a wiki or playbook system" },
   ]}
-  value={answers["documentation_storage"] || ""}
+  value={getStringAnswer(answers["documentation_storage"])}
   onChange={(val) => onAnswer("documentation_storage", val)}
 />
 
@@ -75,7 +74,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
     { value: " try to understand why it happened", label: "We try to understand why it happened" },
     { value: "update the process to prevent it", label: "We update the process to prevent it" },
   ]}
-  value={answers["error_response"] || ""}
+  value={getStringAnswer(answers["error_response"])}
   onChange={(val) => onAnswer("error_response", val)}
 />
 

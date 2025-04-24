@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_model_monitoring"] === "string" &&
     typeof answers["ai_skill_development"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "structured_reviews", label: "Structured reviews and alerts for drift or errors" },
           { value: "continuous_monitoring", label: "Continuous monitoring with dashboards and alerts" },
         ]}
-        value={answers["ai_model_monitoring"] || ""}
+        value={getStringAnswer(answers["ai_model_monitoring"])}
         onChange={(val) => onAnswer("ai_model_monitoring", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "internal_programs", label: "Internal programs for specific roles or teams" },
           { value: "org_wide_enablement", label: "Ongoing org-wide enablement with certifications or learning paths" },
         ]}
-        value={answers["ai_skill_development"] || ""}
+        value={getStringAnswer(answers["ai_skill_development"])}
         onChange={(val) => onAnswer("ai_skill_development", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "proactive", label: "We proactively explore and trial new AI capabilities" },
           { value: "innovation_leader", label: "We are seen as an innovation leader in our space" },
         ]}
-        value={answers["ai_innovation"] || ""}
+        value={getStringAnswer(answers["ai_innovation"])}
         onChange={(val) => onAnswer("ai_innovation", val)}
       />
     </div>

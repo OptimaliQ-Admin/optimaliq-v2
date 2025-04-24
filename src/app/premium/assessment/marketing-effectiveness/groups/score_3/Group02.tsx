@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["reengagement_strategy"] === "string" &&
     Array.isArray(answers["measurement_dashboards"]) &&
@@ -15,8 +19,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step02({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "automated_winback", label: "We have automated winback or retargeting flows" },
           { value: "personalized_reactivation", label: "We use behavior-based, personalized reactivation strategies" },
         ]}
-        value={answers["reengagement_strategy"] || ""}
+        value={getStringAnswer(answers["reengagement_strategy"])}
         onChange={(val) => onAnswer("reengagement_strategy", val)}
       />
 
@@ -61,7 +65,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "mql_sla", label: "We have a defined MQL with an SLA to sales" },
           { value: "mql_qc_review", label: "We use a QA or qualification review before handoff" },
         ]}
-        value={answers["mql_definition"] || ""}
+        value={getStringAnswer(answers["mql_definition"])}
         onChange={(val) => onAnswer("mql_definition", val)}
       />
 
@@ -74,7 +78,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "frequent_testing", label: "We run frequent A/B tests" },
           { value: "systematic_testing", label: "We have a systematic testing process" },
         ]}
-        value={answers["creative_testing"] || ""}
+        value={getStringAnswer(answers["creative_testing"])}
         onChange={(val) => onAnswer("creative_testing", val)}
       />
     </div>

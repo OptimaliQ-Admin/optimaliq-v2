@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["internal_vs_external_positioning"] === "string" &&
     typeof answers["benchmarking_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly consistent with some misalignment" },
           { value: "fully_aligned", label: "Fully aligned and intentional" },
         ]}
-        value={answers["internal_vs_external_positioning"] || ""}
+        value={getStringAnswer(answers["internal_vs_external_positioning"])}
         onChange={(val) => onAnswer("internal_vs_external_positioning", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "included_in_some_goals", label: "Included in some team goals" },
           { value: "fully_integrated", label: "Fully integrated into strategic planning" },
         ]}
-        value={answers["benchmarking_alignment"] || ""}
+        value={getStringAnswer(answers["benchmarking_alignment"])}
         onChange={(val) => onAnswer("benchmarking_alignment", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "clearly_different", label: "Clearly different in messaging and offer" },
           { value: "highly_distinct", label: "Highly distinct — we lead with uniqueness" },
         ]}
-        value={answers["differentiation_strength"] || ""}
+        value={getStringAnswer(answers["differentiation_strength"])}
         onChange={(val) => onAnswer("differentiation_strength", val)}
       />
     </div>

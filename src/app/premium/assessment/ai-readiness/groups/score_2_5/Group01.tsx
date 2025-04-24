@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_initiatives"] === "string" &&
     typeof answers["ai_skill_gap"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "departmental_use", label: "We use AI in some departments or functions" },
           { value: "company_wide_strategy", label: "We have a company-wide AI strategy and roadmap" },
         ]}
-        value={answers["ai_initiatives"] || ""}
+        value={getStringAnswer(answers["ai_initiatives"])}
         onChange={(val) => onAnswer("ai_initiatives", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "growing_team", label: "We have a growing team with AI experience" },
           { value: "mature_expertise", label: "We have mature teams with hands-on AI capabilities" },
         ]}
-        value={answers["ai_skill_gap"] || ""}
+        value={getStringAnswer(answers["ai_skill_gap"])}
         onChange={(val) => onAnswer("ai_skill_gap", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "departmental_goals", label: "We’ve set goals at the team or department level" },
           { value: "strategic_goals", label: "Yes — we have strategic goals tied to business outcomes" },
         ]}
-        value={answers["ai_goal_clarity"] || ""}
+        value={getStringAnswer(answers["ai_goal_clarity"])}
         onChange={(val) => onAnswer("ai_goal_clarity", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["industry_comparison"] === "string" &&
     typeof answers["performance_visibility"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "some_benchmarking", label: "We have some benchmarks or anecdotal comparisons" },
           { value: "data_driven", label: "We use data or reports to compare ourselves" },
         ]}
-        value={answers["industry_comparison"] || ""}
+        value={getStringAnswer(answers["industry_comparison"])}
         onChange={(val) => onAnswer("industry_comparison", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "some_data", label: "We track some data consistently" },
           { value: "strong_visibility", label: "We have strong visibility into core KPIs" },
         ]}
-        value={answers["performance_visibility"] || ""}
+        value={getStringAnswer(answers["performance_visibility"])}
         onChange={(val) => onAnswer("performance_visibility", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "internal_reviews", label: "Yes, as part of internal reviews or planning" },
           { value: "ongoing_benchmarking", label: "Yes, ongoing benchmarking is part of our process" },
         ]}
-        value={answers["benchmark_tracking"] || ""}
+        value={getStringAnswer(answers["benchmark_tracking"])}
         onChange={(val) => onAnswer("benchmark_tracking", val)}
       />
     </div>

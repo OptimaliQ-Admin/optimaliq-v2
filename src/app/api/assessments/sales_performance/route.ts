@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   }
 
   const bracketKey = getBracket(score);
-  const scoringConfig = (salesScoringMap as Record<string, any>)[bracketKey];
+  const scoringConfig = (salesScoringMap as AssessmentAnswers)[bracketKey];
 
   if (!scoringConfig) {
     return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });

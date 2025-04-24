@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_multichannel_vs_omnichannel"] === "string" &&
     typeof answers["cx_data_consolidation"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "unified_experience", label: "Unified experience across most touchpoints" },
           { value: "seamless_omnichannel", label: "Seamless omnichannel experience — consistent and connected" },
         ]}
-        value={answers["cx_multichannel_vs_omnichannel"] || ""}
+        value={getStringAnswer(answers["cx_multichannel_vs_omnichannel"])}
         onChange={(val) => onAnswer("cx_multichannel_vs_omnichannel", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "centralized_customer_view", label: "We have a centralized customer view" },
           { value: "customer_data_platform", label: "CDP or equivalent consolidates and activates data" },
         ]}
-        value={answers["cx_data_consolidation"] || ""}
+        value={getStringAnswer(answers["cx_data_consolidation"])}
         onChange={(val) => onAnswer("cx_data_consolidation", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "automated_triggers", label: "We use triggers to re-engage based on behaviors" },
           { value: "proactive_and_predictive", label: "Yes — predictive outreach to improve experience" },
         ]}
-        value={answers["cx_proactive_support"] || ""}
+        value={getStringAnswer(answers["cx_proactive_support"])}
         onChange={(val) => onAnswer("cx_proactive_support", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "multiple_metrics", label: "We use multiple metrics across channels" },
           { value: "cx_scorecard", label: "We track against a unified CX scorecard tied to revenue" },
         ]}
-        value={answers["cx_kpis_measured"] || ""}
+        value={getStringAnswer(answers["cx_kpis_measured"])}
         onChange={(val) => onAnswer("cx_kpis_measured", val)}
       />
     </div>

@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["post_engagement_action"] === "string" &&
     Array.isArray(answers["marketing_assets"]) && answers["marketing_assets"].length > 0 &&
@@ -14,8 +18,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "Partial", label: "Some leads go to sales or email nurturing" },
           { value: "Automated", label: "We have a defined, automated follow-up process" },
         ]}
-        value={answers["post_engagement_action"] || ""}
+        value={getStringAnswer(answers["post_engagement_action"])}
         onChange={(val) => onAnswer("post_engagement_action", val)}
       />
 
@@ -60,7 +64,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "Monthly", label: "Monthly or during campaigns" },
           { value: "Regularly", label: "Regularly with data and reports" },
         ]}
-        value={answers["performance_review_frequency"] || ""}
+        value={getStringAnswer(answers["performance_review_frequency"])}
         onChange={(val) => onAnswer("performance_review_frequency", val)}
       />
 
@@ -73,7 +77,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "Occasionally coordinated", label: "We occasionally coordinate with sales" },
           { value: "Aligned", label: "They’re aligned with shared goals and metrics" },
         ]}
-        value={answers["alignment_with_sales"] || ""}
+        value={getStringAnswer(answers["alignment_with_sales"])}
         onChange={(val) => onAnswer("alignment_with_sales", val)}
       />
     </div>

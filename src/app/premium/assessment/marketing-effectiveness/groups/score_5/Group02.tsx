@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["lifecycle_personalization"] === "string" &&
     Array.isArray(answers["team_model"]) &&
@@ -14,8 +18,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "persona_personalized", label: "Personalized by persona, behavior, and timing" },
           { value: "ai_optimized", label: "AI-optimized for channel, time, and message" }
         ]}
-        value={answers["lifecycle_personalization"] || ""}
+        value={getStringAnswer(answers["lifecycle_personalization"])}
         onChange={(val) => onAnswer("lifecycle_personalization", val)}
       />
 
@@ -62,7 +66,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "performance_based", label: "Resources shift based on performance" },
           { value: "fully_optimized", label: "We reallocate budget in near real-time based on impact" }
         ]}
-        value={answers["budget_optimization"] || ""}
+        value={getStringAnswer(answers["budget_optimization"])}
         onChange={(val) => onAnswer("budget_optimization", val)}
       />
     </div>

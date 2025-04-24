@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["channel_scalability"] === "string" &&
     typeof answers["ai_usage"] === "string" &&
@@ -15,8 +19,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -32,7 +36,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "repeatable_systems", label: "We have repeatable systems for growth" },
           { value: "scalable_foundation", label: "We’ve built a scalable, multi-channel foundation" }
         ]}
-        value={answers["channel_scalability"] || ""}
+        value={getStringAnswer(answers["channel_scalability"])}
         onChange={(val) => onAnswer("channel_scalability", val)}
       />
 
@@ -45,7 +49,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "embedded_in_ops", label: "It’s embedded in campaign operations" },
           { value: "strategic_driver", label: "AI is a strategic driver of marketing performance" }
         ]}
-        value={answers["ai_usage"] || ""}
+        value={getStringAnswer(answers["ai_usage"])}
         onChange={(val) => onAnswer("ai_usage", val)}
       />
 
@@ -58,7 +62,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "pipeline", label: "We track influence on pipeline and revenue" },
           { value: "roi", label: "We measure ROI and customer lifetime value" }
         ]}
-        value={answers["campaign_measurement"] || ""}
+        value={getStringAnswer(answers["campaign_measurement"])}
         onChange={(val) => onAnswer("campaign_measurement", val)}
       />
 
@@ -66,7 +70,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one marketing experiment you’d like to try next?"
         placeholder="E.g., test a new acquisition channel, launch a lifecycle journey, etc."
-        value={answers["next_experiment"] || ""}
+        value={getStringAnswer(answers["next_experiment"])}
         onChange={(val) => onAnswer("next_experiment", val)}
         maxLength={300}
       />

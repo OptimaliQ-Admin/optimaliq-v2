@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_alignment_method"] === "string" &&
     typeof answers["goal_communication"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "scorecards", label: "We use scorecards and KPIs for alignment" },
           { value: "embedded_in_ops", label: "Strategic goals are embedded in daily operations" },
         ]}
-        value={answers["strategic_alignment_method"] || ""}
+        value={getStringAnswer(answers["strategic_alignment_method"])}
         onChange={(val) => onAnswer("strategic_alignment_method", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "included_in_team_goals", label: "Included in department or team goals" },
           { value: "cascaded_and_tracked", label: "Cascaded across levels and tracked regularly" },
         ]}
-        value={answers["goal_communication"] || ""}
+        value={getStringAnswer(answers["goal_communication"])}
         onChange={(val) => onAnswer("goal_communication", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "decision_frameworks", label: "We use defined decision frameworks" },
           { value: "strategy_in_tooling", label: "Strategic logic is built into tooling and workflows" },
         ]}
-        value={answers["decision_alignment"] || ""}
+        value={getStringAnswer(answers["decision_alignment"])}
         onChange={(val) => onAnswer("decision_alignment", val)}
       />
     </div>

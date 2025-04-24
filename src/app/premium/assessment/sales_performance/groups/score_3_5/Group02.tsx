@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_05b3d7"] === "string" &&
     typeof answers["how_5d49b3"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "dashboards", label: "We use dashboards or CRM reports" },
           { value: "modeled_by_stage", label: "Coverage is monitored proactively and modeled by stage" },
         ]}
-        value={answers["how_05b3d7"] || ""}
+        value={getStringAnswer(answers["how_05b3d7"])}
         onChange={(val) => onAnswer("how_05b3d7", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "lead_fit", label: "We use scoring or lead fit logic" },
           { value: "multi_factor", label: "We use multi-factor scoring and sales insights tools" },
         ]}
-        value={answers["how_5d49b3"] || ""}
+        value={getStringAnswer(answers["how_5d49b3"])}
         onChange={(val) => onAnswer("how_5d49b3", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "best_practice_reviews", label: "We run playbook or best-practice reviews" },
           { value: "documented_and_trained", label: "Top plays and behaviors are documented, trained, and tracked" },
         ]}
-        value={answers["how_b650ca"] || ""}
+        value={getStringAnswer(answers["how_b650ca"])}
         onChange={(val) => onAnswer("how_b650ca", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "weekly", label: "Weekly" },
           { value: "operating_cadence", label: "Part of a structured weekly operating cadence" },
         ]}
-        value={answers["how_152df3"] || ""}
+        value={getStringAnswer(answers["how_152df3"])}
         onChange={(val) => onAnswer("how_152df3", val)}
       />
     </div>

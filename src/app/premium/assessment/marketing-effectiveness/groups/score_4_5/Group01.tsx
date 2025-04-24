@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["campaign_adaptability"] === "string" &&
     typeof answers["goal_alignment"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "real_time_signals", label: "We use real-time signals to adapt creative" },
           { value: "continuously_optimized", label: "Continuously optimized using dynamic inputs" }
         ]}
-        value={answers["campaign_adaptability"] || ""}
+        value={getStringAnswer(answers["campaign_adaptability"])}
         onChange={(val) => onAnswer("campaign_adaptability", val)}
       />
 
@@ -46,7 +50,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "informed_by_strategy", label: "They’re informed by strategic direction" },
           { value: "co_created", label: "They’re co-created with leadership and revenue teams" }
         ]}
-        value={answers["goal_alignment"] || ""}
+        value={getStringAnswer(answers["goal_alignment"])}
         onChange={(val) => onAnswer("goal_alignment", val)}
       />
 

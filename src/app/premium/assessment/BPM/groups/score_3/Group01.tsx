@@ -2,13 +2,15 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["review_frequency"] === "string" &&
     answers["review_frequency"].trim().length > 0 &&
@@ -25,8 +27,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
@@ -44,7 +46,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
     { value: "Once per quarter", label: "Once per quarter" },
     { value: "Reviewed regularly", label: "Reviewed regularly as part of operations" },
   ]}
-  value={answers["review_frequency"] || ""}
+  value={getStringAnswer(answers["review_frequency"])}
   onChange={(val) => onAnswer("review_frequency", val)}
 />
 
@@ -60,7 +62,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
     { value: "Annually", label: "Most major processes are mapped" },
     { value: "Quarterly", label: "Yes, every process is visually documented" },
   ]}
-  value={answers["visual_mapping"] || ""}
+  value={getStringAnswer(answers["visual_mapping"])}
   onChange={(val) => onAnswer("visual_mapping", val)}
 />
 

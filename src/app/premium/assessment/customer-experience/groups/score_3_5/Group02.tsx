@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_metric_tracking"] === "string" &&
     typeof answers["cx_data_access"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "blended", label: "Blended CX + operational data" },
           { value: "real_time", label: "Real-time CX metrics by touchpoint" },
         ]}
-        value={answers["cx_metric_tracking"] || ""}
+        value={getStringAnswer(answers["cx_metric_tracking"])}
         onChange={(val) => onAnswer("cx_metric_tracking", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "self_service", label: "Self-serve dashboards available" },
           { value: "embedded", label: "Embedded in team workflows and tools" },
         ]}
-        value={answers["cx_data_access"] || ""}
+        value={getStringAnswer(answers["cx_data_access"])}
         onChange={(val) => onAnswer("cx_data_access", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "planned_in_advance", label: "Planned as part of team OKRs or goals" },
           { value: "aligned_with_strategy", label: "Tied to company-wide strategic priorities" },
         ]}
-        value={answers["cx_prioritization"] || ""}
+        value={getStringAnswer(answers["cx_prioritization"])}
         onChange={(val) => onAnswer("cx_prioritization", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "shared_across_teams", label: "Shared across multiple teams" },
           { value: "dedicated_team", label: "Dedicated CX team or leadership role" },
         ]}
-        value={answers["cx_accountability"] || ""}
+        value={getStringAnswer(answers["cx_accountability"])}
         onChange={(val) => onAnswer("cx_accountability", val)}
       />
     </div>

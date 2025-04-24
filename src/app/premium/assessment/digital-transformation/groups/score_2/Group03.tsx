@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["system_documentation"] === "string" &&
     typeof answers["data_redundancy"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_0_Step03({ answers, onAnswer }: Props) {
           { value: "structured_docs", label: "We maintain structured documentation for key tools" },
           { value: "full_training", label: "Yes — we have full onboarding and training resources" },
         ]}
-        value={answers["system_documentation"] || ""}
+        value={getStringAnswer(answers["system_documentation"])}
         onChange={(val) => onAnswer("system_documentation", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_0_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_clean", label: "Mostly clean — only a few instances" },
           { value: "single_source", label: "No — we maintain a single source of truth" },
         ]}
-        value={answers["data_redundancy"] || ""}
+        value={getStringAnswer(answers["data_redundancy"])}
         onChange={(val) => onAnswer("data_redundancy", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_0_Step03({ answers, onAnswer }: Props) {
           { value: "some_integrations", label: "Some tools are connected with middleware or APIs" },
           { value: "fully_integrated", label: "Fully integrated with real-time data flow" },
         ]}
-        value={answers["integration_maturity"] || ""}
+        value={getStringAnswer(answers["integration_maturity"])}
         onChange={(val) => onAnswer("integration_maturity", val)}
       />
     </div>

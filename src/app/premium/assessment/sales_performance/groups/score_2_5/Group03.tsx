@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_d30c39"] === "string" &&
     typeof answers["what’s_9266fd"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -30,7 +34,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly", label: "Mostly — we use criteria or scoring" },
           { value: "very", label: "Very — we rigorously prioritize our pipeline" },
         ]}
-        value={answers["how_d30c39"] || ""}
+        value={getStringAnswer(answers["how_d30c39"])}
         onChange={(val) => onAnswer("how_d30c39", val)}
       />
 
@@ -38,7 +42,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one sales behavior or process you’d want your team to do more consistently?"
         placeholder="E.g., follow-ups, demo delivery, deal qualification"
-        value={answers["what’s_9266fd"] || ""}
+        value={getStringAnswer(answers["what’s_9266fd"])}
         onChange={(val) => onAnswer("what’s_9266fd", val)}
         maxLength={300}
       />
@@ -52,7 +56,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_scalable", label: "Mostly scalable with adjustments" },
           { value: "fully_scalable", label: "Fully scalable — we’re built to grow" },
         ]}
-        value={answers["how_4a7d74"] || ""}
+        value={getStringAnswer(answers["how_4a7d74"])}
         onChange={(val) => onAnswer("how_4a7d74", val)}
       />
     </div>

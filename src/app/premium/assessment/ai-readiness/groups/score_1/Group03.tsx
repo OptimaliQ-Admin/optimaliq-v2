@@ -1,9 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/utils/validateAnswer";
 
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_expectations"] === "string" &&
     typeof answers["ai_timeframe"] === "string" &&
@@ -12,8 +17,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +33,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "Improve decisions", label: "Help us make smarter business decisions" },
           { value: "Transform our business model", label: "Transform our business model" },
         ]}
-        value={answers["ai_expectations"] || ""}
+        value={getStringAnswer(answers["ai_expectations"])}
         onChange={(val) => onAnswer("ai_expectations", val)}
       />
 
@@ -41,7 +46,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "3-6 months", label: "3–6 months" },
           { value: "Next 90 days", label: "Next 90 days" },
         ]}
-        value={answers["ai_timeframe"] || ""}
+        value={getStringAnswer(answers["ai_timeframe"])}
         onChange={(val) => onAnswer("ai_timeframe", val)}
       />
 
@@ -54,7 +59,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "Some agreement", label: "Some agreement on where to start" },
           { value: "Clear shared vision", label: "We have a clear, shared vision and roadmap" },
         ]}
-        value={answers["ai_alignment"] || ""}
+        value={getStringAnswer(answers["ai_alignment"])}
         onChange={(val) => onAnswer("ai_alignment", val)}
       />
     </div>

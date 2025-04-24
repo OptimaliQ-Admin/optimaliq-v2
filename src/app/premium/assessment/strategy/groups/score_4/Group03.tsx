@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategy_course_correction"] === "string" &&
     typeof answers["market_signal_tracking"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -27,7 +30,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "review_cycle", label: "We adjust during regular review cycles" },
           { value: "proactive_pivot", label: "We proactively course-correct using metrics and insights" },
         ]}
-        value={answers["strategy_course_correction"] || ""}
+        value={getStringAnswer(answers["strategy_course_correction"])}
         onChange={(val) => onAnswer("strategy_course_correction", val)}
       />
 
@@ -39,7 +42,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "trends_and_feedback", label: "Yes — we gather trends and customer feedback" },
           { value: "structured_monitoring", label: "Yes — through structured competitive and market monitoring" },
         ]}
-        value={answers["market_signal_tracking"] || ""}
+        value={getStringAnswer(answers["market_signal_tracking"])}
         onChange={(val) => onAnswer("market_signal_tracking", val)}
       />
 
@@ -51,7 +54,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "alignment_in_most_teams", label: "Alignment in most teams — they understand how they contribute" },
           { value: "fully_embedded", label: "Fully embedded — strategy drives day-to-day decisions" },
         ]}
-        value={answers["vision_buy_in"] || ""}
+        value={getStringAnswer(answers["vision_buy_in"])}
         onChange={(val) => onAnswer("vision_buy_in", val)}
       />
     </div>

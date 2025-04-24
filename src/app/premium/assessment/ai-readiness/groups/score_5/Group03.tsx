@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_leadership_alignment"] === "string" &&
     typeof answers["ai_global_scalability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "strategic_focus", label: "AI is a key part of our strategic roadmap" },
           { value: "core_foundation", label: "AI is considered foundational to our future success" },
         ]}
-        value={answers["ai_leadership_alignment"] || ""}
+        value={getStringAnswer(answers["ai_leadership_alignment"])}
         onChange={(val) => onAnswer("ai_leadership_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "scalable_with_effort", label: "They are scalable with some effort" },
           { value: "highly_scalable", label: "Our AI systems are designed to scale enterprise-wide" },
         ]}
-        value={answers["ai_global_scalability"] || ""}
+        value={getStringAnswer(answers["ai_global_scalability"])}
         onChange={(val) => onAnswer("ai_global_scalability", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score5_0_Step03({ answers, onAnswer }: Props) {
           { value: "proactive", label: "We actively explore and experiment with new AI tools" },
           { value: "pioneer", label: "We aim to be early adopters or pioneers in AI innovation" },
         ]}
-        value={answers["ai_future_outlook"] || ""}
+        value={getStringAnswer(answers["ai_future_outlook"])}
         onChange={(val) => onAnswer("ai_future_outlook", val)}
       />
     </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["decision_making_style"] === "string" &&
     typeof answers["communication_frequency"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_1Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "Collaborative — input shapes decisions" },
           { value: "empowered", label: "Empowered — teams own decisions within guardrails" },
         ]}
-        value={answers["decision_making_style"] || ""}
+        value={getStringAnswer(answers["decision_making_style"])}
         onChange={(val) => onAnswer("decision_making_style", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "scheduled", label: "On a regular cadence (monthly or quarterly)" },
           { value: "ongoing", label: "Ongoing, transparent, and frequent communication" },
         ]}
-        value={answers["communication_frequency"] || ""}
+        value={getStringAnswer(answers["communication_frequency"])}
         onChange={(val) => onAnswer("communication_frequency", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "approachable", label: "Approachable — people feel comfortable raising ideas" },
           { value: "very_accessible", label: "Very accessible — leaders make time regularly" },
         ]}
-        value={answers["leader_visibility"] || ""}
+        value={getStringAnswer(answers["leader_visibility"])}
         onChange={(val) => onAnswer("leader_visibility", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "team_based", label: "Regular within teams, but not across departments" },
           { value: "continuous_feedback", label: "Continuous — up, down, and across the org" },
         ]}
-        value={answers["feedback_culture"] || ""}
+        value={getStringAnswer(answers["feedback_culture"])}
         onChange={(val) => onAnswer("feedback_culture", val)}
       />
     </div>

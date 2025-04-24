@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LabeledInput from "@/components/shared/LabeledInput";
 import LabeledSelect from "@/components/shared/LabeledSelect";

@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["marketing_influence"] === "string" &&
     Array.isArray(answers["lead_sources"]) &&
@@ -15,8 +17,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +35,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "co_driver", label: "Co-driver alongside sales and product" },
           { value: "primary_growth_engine", label: "Primary engine of predictable, scalable growth" }
         ]}
-        value={answers["marketing_influence"] || ""}
+        value={getStringAnswer(answers["marketing_influence"])}
         onChange={(val) => onAnswer("marketing_influence", val)}
       />
 
@@ -61,7 +63,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "connected_data", label: "Most funnel stages are tracked and connected" },
           { value: "real_time_attribution", label: "Full-funnel performance with real-time attribution" }
         ]}
-        value={answers["performance_visibility"] || ""}
+        value={getStringAnswer(answers["performance_visibility"])}
         onChange={(val) => onAnswer("performance_visibility", val)}
       />
     </div>

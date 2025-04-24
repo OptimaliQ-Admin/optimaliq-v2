@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_budget_allocation"] === "string" &&
     typeof answers["ai_oversight"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "functional_investment", label: "Functional teams receive AI funding" },
           { value: "strategic_funding", label: "AI is funded as a strategic priority" },
         ]}
-        value={answers["ai_budget_allocation"] || ""}
+        value={getStringAnswer(answers["ai_budget_allocation"])}
         onChange={(val) => onAnswer("ai_budget_allocation", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "designated_lead", label: "A designated lead or committee exists" },
           { value: "cross_functional_board", label: "A cross-functional board oversees AI ethics and risk" },
         ]}
-        value={answers["ai_oversight"] || ""}
+        value={getStringAnswer(answers["ai_oversight"])}
         onChange={(val) => onAnswer("ai_oversight", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "basic_logging", label: "Basic logging and alerting in place" },
           { value: "automated_monitoring", label: "Automated monitoring with KPIs and thresholds" },
         ]}
-        value={answers["ai_model_monitoring"] || ""}
+        value={getStringAnswer(answers["ai_model_monitoring"])}
         onChange={(val) => onAnswer("ai_model_monitoring", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "standard_checks", label: "We follow standards for quality checks" },
           { value: "governed_framework", label: "Governed framework with owners and audits" },
         ]}
-        value={answers["data_quality_management"] || ""}
+        value={getStringAnswer(answers["data_quality_management"])}
         onChange={(val) => onAnswer("data_quality_management", val)}
       />
     </div>

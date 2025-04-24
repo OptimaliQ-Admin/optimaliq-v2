@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["team_feedback"] === "string" &&
     answers["team_feedback"].trim().length > 0 &&
@@ -22,8 +23,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -40,7 +41,7 @@ export default function Group02_PositiScore3_5_Step02oning({ answers, onAnswer }
     { value: "use forms or surveys occasionally", label: "We use forms or surveys occasionally" },
     { value: "structured feedback loops", label: "We have structured feedback loops" },
   ]}
-  value={answers["team_feedback"] || ""}
+  value={getStringAnswer(answers["team_feedback"])}
   onChange={(val) => onAnswer("team_feedback", val)}
 />
 
@@ -53,7 +54,7 @@ export default function Group02_PositiScore3_5_Step02oning({ answers, onAnswer }
     { value: "Frequently, but not always implemented", label: "Frequently, but not always implemented" },
     { value: "Frequently, with follow-through", label: "Frequently, with follow-through" },
   ]}
-  value={answers["improvement_input"] || ""}
+  value={getStringAnswer(answers["improvement_input"])}
   onChange={(val) => onAnswer("improvement_input", val)}
 />
 
@@ -67,7 +68,7 @@ export default function Group02_PositiScore3_5_Step02oning({ answers, onAnswer }
     { value: "Sometimes", label: "Sometimes" },
     { value: "Always", label: "Always — it’s part of our culture" },
   ]}
-  value={answers["incident_review"] || ""}
+  value={getStringAnswer(answers["incident_review"])}
   onChange={(val) => onAnswer("incident_review", val)}
 />
 

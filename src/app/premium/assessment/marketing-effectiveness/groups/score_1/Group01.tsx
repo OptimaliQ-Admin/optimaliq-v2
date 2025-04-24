@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["often_marketing_campaigns"] === "string" &&
     answers["often_marketing_campaigns"].trim().length > 0 &&
@@ -15,8 +18,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -31,7 +34,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "A few times a year", label: "A few times a year" },
           { value: "We run them monthly or more", label: "We run them monthly or more" }
         ]}
-        value={answers["often_marketing_campaigns"] || ""}
+        value={getStringAnswer(answers["often_marketing_campaigns"])}
         onChange={(val) => onAnswer("often_marketing_campaigns", val)}
       />
 
@@ -44,7 +47,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "Paid ads or promotions", label: "Paid ads or promotions" },
           { value: "Organic search or inbound content", label: "Organic search or inbound content" }
         ]}
-        value={answers["customers_find_business"] || ""}
+        value={getStringAnswer(answers["customers_find_business"])}
         onChange={(val) => onAnswer("customers_find_business", val)}
       />
 
@@ -57,7 +60,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "We have some customer personas", label: "We have some customer personas" },
           { value: "Yes, we've documented and validated them", label: "Yes, we've documented and validated them" }
         ]}
-        value={answers["ideal_customer_picture"] || ""}
+        value={getStringAnswer(answers["ideal_customer_picture"])}
         onChange={(val) => onAnswer("ideal_customer_picture", val)}
       />
     </div>

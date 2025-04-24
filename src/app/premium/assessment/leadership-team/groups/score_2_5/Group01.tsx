@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["manager_training"] === "string" &&
     typeof answers["meeting_culture"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "internal_training", label: "Internal training or onboarding" },
           { value: "ongoing_programs", label: "Ongoing development programs" },
         ]}
-        value={answers["manager_training"] || ""}
+        value={getStringAnswer(answers["manager_training"])}
         onChange={(val) => onAnswer("manager_training", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "structured_and_goal_oriented", label: "Structured and goal-oriented" },
           { value: "streamlined_and_purposeful", label: "Streamlined and highly purposeful" },
         ]}
-        value={answers["meeting_culture"] || ""}
+        value={getStringAnswer(answers["meeting_culture"])}
         onChange={(val) => onAnswer("meeting_culture", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "frequent_sync", label: "Teams sync goals frequently" },
           { value: "tight_alignment", label: "Goals are tightly aligned and tracked" },
         ]}
-        value={answers["goal_alignment"] || ""}
+        value={getStringAnswer(answers["goal_alignment"])}
         onChange={(val) => onAnswer("goal_alignment", val)}
       />
     </div>

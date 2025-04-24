@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["feedback_adoption"] === "string" &&
     typeof answers["trend_analysis_depth"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "proactively", label: "Proactively — we apply it to planning and roadmaps" },
           { value: "always", label: "Always — feedback loops directly inform execution" },
         ]}
-        value={answers["feedback_adoption"] || ""}
+        value={getStringAnswer(answers["feedback_adoption"])}
         onChange={(val) => onAnswer("feedback_adoption", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "formal_tracking", label: "We track trends quarterly or in strategy cycles" },
           { value: "real_time_tracking", label: "We monitor and analyze trends in real time" },
         ]}
-        value={answers["trend_analysis_depth"] || ""}
+        value={getStringAnswer(answers["trend_analysis_depth"])}
         onChange={(val) => onAnswer("trend_analysis_depth", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "moderate", label: "Moderate — we adapt within a quarter" },
           { value: "agile", label: "Agile — we shift priorities within weeks" },
         ]}
-        value={answers["competitive_reaction_time"] || ""}
+        value={getStringAnswer(answers["competitive_reaction_time"])}
         onChange={(val) => onAnswer("competitive_reaction_time", val)}
       />
     </div>

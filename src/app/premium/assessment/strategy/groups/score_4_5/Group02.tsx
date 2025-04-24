@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["strategic_kpi_review"] === "string" &&
     typeof answers["team_strategy_understanding"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly_check_ins", label: "Quarterly check-ins" },
           { value: "monthly_tracking", label: "Monthly or more frequent tracking" },
         ]}
-        value={answers["strategic_kpi_review"] || ""}
+        value={getStringAnswer(answers["strategic_kpi_review"])}
         onChange={(val) => onAnswer("strategic_kpi_review", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned" },
           { value: "fully_aligned", label: "Fully aligned and purpose-driven" },
         ]}
-        value={answers["team_strategy_understanding"] || ""}
+        value={getStringAnswer(answers["team_strategy_understanding"])}
         onChange={(val) => onAnswer("team_strategy_understanding", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "twice_per_year", label: "Twice per year" },
           { value: "frequent", label: "Frequently — it’s a core practice" },
         ]}
-        value={answers["scenario_planning_frequency"] || ""}
+        value={getStringAnswer(answers["scenario_planning_frequency"])}
         onChange={(val) => onAnswer("scenario_planning_frequency", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — we adapt based on input" },
           { value: "continuous_loop", label: "Always — feedback loops are built in" },
         ]}
-        value={answers["feedback_to_strategy"] || ""}
+        value={getStringAnswer(answers["feedback_to_strategy"])}
         onChange={(val) => onAnswer("feedback_to_strategy", val)}
       />
     </div>

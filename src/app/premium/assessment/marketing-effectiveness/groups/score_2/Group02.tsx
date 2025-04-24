@@ -2,9 +2,12 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["marketing_tools"]) &&
     answers["marketing_tools"].length > 0 &&
@@ -15,8 +18,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -48,7 +51,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "Some are integrated", label: "Some are integrated" },
           { value: "Fully integrated with automation", label: "Fully integrated with automation" },
         ]}
-        value={answers["tools_integration"] || ""}
+        value={getStringAnswer(answers["tools_integration"])}
         onChange={(val) => onAnswer("tools_integration", val)}
       />
 
@@ -61,7 +64,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "Blog, social, and email campaigns", label: "Blog, social, and email campaigns" },
           { value: "Consistent multi-channel campaigns", label: "Consistent multi-channel campaigns" },
         ]}
-        value={answers["content_types"] || ""}
+        value={getStringAnswer(answers["content_types"])}
         onChange={(val) => onAnswer("content_types", val)}
       />
 
@@ -74,7 +77,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "Consistent tone and visuals", label: "Consistent tone and visuals" },
           { value: "Fully consistent and on-brand everywhere", label: "Fully consistent and on-brand everywhere" },
         ]}
-        value={answers["brand_consistency"] || ""}
+        value={getStringAnswer(answers["brand_consistency"])}
         onChange={(val) => onAnswer("brand_consistency", val)}
       />
     </div>

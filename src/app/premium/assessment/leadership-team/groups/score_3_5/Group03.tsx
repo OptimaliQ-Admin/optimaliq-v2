@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["team_empowerment"] === "string" &&
     typeof answers["leadership_scalability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_empowered", label: "Mostly — teams can act within boundaries" },
           { value: "fully_empowered", label: "Fully — ownership and autonomy are encouraged" },
         ]}
-        value={answers["team_empowerment"] || ""}
+        value={getStringAnswer(answers["team_empowerment"])}
         onChange={(val) => onAnswer("team_empowerment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_scalable", label: "Mostly scalable — ready for moderate growth" },
           { value: "fully_scalable", label: "Fully scalable — built for long-term growth" },
         ]}
-        value={answers["leadership_scalability"] || ""}
+        value={getStringAnswer(answers["leadership_scalability"])}
         onChange={(val) => onAnswer("leadership_scalability", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "coordinated", label: "Coordinated — teams align regularly" },
           { value: "integrated", label: "Integrated — leadership collaborates on strategy and execution" },
         ]}
-        value={answers["cross_functional_leadership"] || ""}
+        value={getStringAnswer(answers["cross_functional_leadership"])}
         onChange={(val) => onAnswer("cross_functional_leadership", val)}
       />
     </div>

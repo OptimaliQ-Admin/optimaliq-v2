@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["long_term_planning"] === "string" &&
     typeof answers["cross_function_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "some_long_term", label: "We create 1–2 year plans" },
           { value: "multi_year", label: "We have 3+ year roadmaps tied to strategy" },
         ]}
-        value={answers["long_term_planning"] || ""}
+        value={getStringAnswer(answers["long_term_planning"])}
         onChange={(val) => onAnswer("long_term_planning", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_coordinated", label: "They coordinate fairly well" },
           { value: "fully_aligned", label: "They’re fully aligned and collaborative" },
         ]}
-        value={answers["cross_function_alignment"] || ""}
+        value={getStringAnswer(answers["cross_function_alignment"])}
         onChange={(val) => onAnswer("cross_function_alignment", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "regular_checkins", label: "They review metrics in regular meetings" },
           { value: "real_time_visibility", label: "They have real-time dashboards or alerts" },
         ]}
-        value={answers["executive_visibility"] || ""}
+        value={getStringAnswer(answers["executive_visibility"])}
         onChange={(val) => onAnswer("executive_visibility", val)}
       />
     </div>

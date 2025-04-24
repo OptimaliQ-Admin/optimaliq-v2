@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["documentation_access"] === "string" &&
     answers["documentation_access"].trim().length > 0 &&
@@ -24,8 +24,8 @@ export function isScore_2_5Group1Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step01({ answers, onAnswer }: Props) {
@@ -44,7 +44,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
     { value: "workflow/project management tools", label: "Inside workflow/project management tools" },
     { value: "Centrally documented", label: "Centrally documented and linked to operations" },
   ]}
-  value={answers["documentation_access"] || ""}
+  value={getStringAnswer(answers["documentation_access"])}
   onChange={(val) => onAnswer("documentation_access", val)}
 />
 
@@ -60,7 +60,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
     { value: "update documentation and notify the team", label: "We update documentation and notify the team" },
     { value: "track changes and confirm everyone has adopted them", label: "We track changes and confirm everyone has adopted them" },
   ]}
-  value={answers["change_communication"] || ""}
+  value={getStringAnswer(answers["change_communication"])}
   onChange={(val) => onAnswer("change_communication", val)}
 />
 
@@ -74,7 +74,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
     { value: "working to document those", label: "We’re working to document those" },
     { value: "No", label: "No — everything is documented or trained" },
   ]}
-  value={answers["knowledge_gap"] || ""}
+  value={getStringAnswer(answers["knowledge_gap"])}
   onChange={(val) => onAnswer("knowledge_gap", val)}
 />
     </div>

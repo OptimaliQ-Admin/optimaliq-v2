@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["decision_making"] === "string" &&
     typeof answers["trust_level"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "collaborative", label: "Collaboratively — we make decisions together" },
           { value: "empowered", label: "Empowered — individuals are trusted to decide" },
         ]}
-        value={answers["decision_making"] || ""}
+        value={getStringAnswer(answers["decision_making"])}
         onChange={(val) => onAnswer("decision_making", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "moderate_trust", label: "Moderate — we’re open but cautious" },
           { value: "high_trust", label: "High — we’re honest, transparent, and supportive" },
         ]}
-        value={answers["trust_level"] || ""}
+        value={getStringAnswer(answers["trust_level"])}
         onChange={(val) => onAnswer("trust_level", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "structured", label: "We use structured conversations or tools" },
           { value: "proactive", label: "We proactively surface and resolve issues" },
         ]}
-        value={answers["conflict_resolution"] || ""}
+        value={getStringAnswer(answers["conflict_resolution"])}
         onChange={(val) => onAnswer("conflict_resolution", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "metrics", label: "We tie accountability to goals or metrics" },
           { value: "peer_expectations", label: "We build a culture of peer expectations and ownership" },
         ]}
-        value={answers["accountability_culture"] || ""}
+        value={getStringAnswer(answers["accountability_culture"])}
         onChange={(val) => onAnswer("accountability_culture", val)}
       />
     </div>

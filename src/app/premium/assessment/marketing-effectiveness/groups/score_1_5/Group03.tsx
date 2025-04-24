@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["intentionality"] === "string" &&
     typeof answers["what_performs_best"] === "string" &&
@@ -13,8 +17,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +33,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly intentional", label: "Mostly intentional" },
           { value: "Very intentional with clear strategy", label: "Very intentional with clear strategy" },
         ]}
-        value={answers["intentionality"] || ""}
+        value={getStringAnswer(answers["intentionality"])}
         onChange={(val) => onAnswer("intentionality", val)}
       />
 
@@ -37,7 +41,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What type of content or campaigns do you feel perform best?"
         placeholder="Describe formats, offers, or tactics that tend to work well."
-        value={answers["what_performs_best"] || ""}
+        value={getStringAnswer(answers["what_performs_best"])}
         onChange={(val) => onAnswer("what_performs_best", val)}
         maxLength={300}
       />
@@ -46,7 +50,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="If you had 20% more budget or time for marketing, how would you use it?"
         placeholder="Describe where you’d invest your extra resources."
-        value={answers["if_more_budget_or_time"] || ""}
+        value={getStringAnswer(answers["if_more_budget_or_time"])}
         onChange={(val) => onAnswer("if_more_budget_or_time", val)}
         maxLength={300}
       />

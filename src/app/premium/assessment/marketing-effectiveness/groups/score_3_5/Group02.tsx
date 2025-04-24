@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ab_testing"] === "string" &&
     typeof answers["conversion_monitoring"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "frequent_testing", label: "Yes — we test monthly or more" },
           { value: "automated_testing", label: "Yes — we have automated testing frameworks" },
         ]}
-        value={answers["ab_testing"] || ""}
+        value={getStringAnswer(answers["ab_testing"])}
         onChange={(val) => onAnswer("ab_testing", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "dashboard_review", label: "We review dashboards and KPIs regularly" },
           { value: "alert_triggers", label: "We have alerts or automated reporting when metrics drop" },
         ]}
-        value={answers["conversion_monitoring"] || ""}
+        value={getStringAnswer(answers["conversion_monitoring"])}
         onChange={(val) => onAnswer("conversion_monitoring", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "occasional_surveys", label: "We occasionally survey or review with stakeholders" },
           { value: "structured_review", label: "We do structured campaign debriefs or retrospectives" },
         ]}
-        value={answers["campaign_feedback"] || ""}
+        value={getStringAnswer(answers["campaign_feedback"])}
         onChange={(val) => onAnswer("campaign_feedback", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_confident", label: "Mostly confident — we get reliable insights" },
           { value: "very_confident", label: "Very confident — reporting drives decisions" },
         ]}
-        value={answers["reporting_confidence"] || ""}
+        value={getStringAnswer(answers["reporting_confidence"])}
         onChange={(val) => onAnswer("reporting_confidence", val)}
       />
     </div>

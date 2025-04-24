@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_strategic_initiatives"] === "string" &&
     typeof answers["cx_personalization_maturity"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "cx_initiatives_included", label: "CX initiatives are included in planning" },
           { value: "cx_strategic_driver", label: "CX is a core driver of strategy and investment" },
         ]}
-        value={answers["cx_strategic_initiatives"] || ""}
+        value={getStringAnswer(answers["cx_strategic_initiatives"])}
         onChange={(val) => onAnswer("cx_strategic_initiatives", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "coordinated", label: "Coordinated — we personalize by journey stage" },
           { value: "dynamic", label: "Dynamic — personalization adapts in real time" },
         ]}
-        value={answers["cx_personalization_maturity"] || ""}
+        value={getStringAnswer(answers["cx_personalization_maturity"])}
         onChange={(val) => onAnswer("cx_personalization_maturity", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score4_0_Step01({ answers, onAnswer }: Props) {
           { value: "linked_to_kpis", label: "They’re linked to some key KPIs" },
           { value: "fully_integrated", label: "They’re fully integrated with business metrics" },
         ]}
-        value={answers["cx_metrics_alignment"] || ""}
+        value={getStringAnswer(answers["cx_metrics_alignment"])}
         onChange={(val) => onAnswer("cx_metrics_alignment", val)}
       />
     </div>

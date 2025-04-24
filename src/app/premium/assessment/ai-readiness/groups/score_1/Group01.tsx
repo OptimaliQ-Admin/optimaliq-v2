@@ -1,9 +1,16 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_familiarity"] === "string" &&
     typeof answers["current_ai_usage"] === "string" &&
@@ -12,8 +19,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +35,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "Somewhat familiar", label: "Somewhat familiar" },
           { value: "Very familiar or experienced", label: "Very familiar or experienced" },
         ]}
-        value={answers["ai_familiarity"] || ""}
+        value={getStringAnswer(answers["ai_familiarity"])}
         onChange={(val) => onAnswer("ai_familiarity", val)}
       />
 
@@ -41,7 +48,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "We’re experimenting with some", label: "We’re experimenting with some" },
           { value: "Yes — they’re part of our daily operations", label: "Yes — they’re part of our daily operations" },
         ]}
-        value={answers["current_ai_usage"] || ""}
+        value={getStringAnswer(answers["current_ai_usage"])}
         onChange={(val) => onAnswer("current_ai_usage", val)}
       />
 
@@ -54,7 +61,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "Not sure where to start", label: "Not sure where to start" },
           { value: "Security or data concerns", label: "Security or data concerns" },
         ]}
-        value={answers["ai_hesitation"] || ""}
+        value={getStringAnswer(answers["ai_hesitation"])}
         onChange={(val) => onAnswer("ai_hesitation", val)}
       />
     </div>

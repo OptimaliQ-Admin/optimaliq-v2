@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["competitive_positioning_maturity"] === "string" &&
     typeof answers["benchmarking_investment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "clear_differentiation", label: "We have clear differentiation and messaging" },
           { value: "proven_positioning", label: "We track and prove differentiation with metrics" },
         ]}
-        value={answers["competitive_positioning_maturity"] || ""}
+        value={getStringAnswer(answers["competitive_positioning_maturity"])}
         onChange={(val) => onAnswer("competitive_positioning_maturity", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "moderate_investment", label: "Moderate — we dedicate team time or tools" },
           { value: "significant_investment", label: "Significant — it’s a core part of strategy" },
         ]}
-        value={answers["benchmarking_investment"] || ""}
+        value={getStringAnswer(answers["benchmarking_investment"])}
         onChange={(val) => onAnswer("benchmarking_investment", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "dedicated_tools", label: "Dedicated platforms or databases" },
           { value: "integrated_stack", label: "Tools are integrated into our GTM stack" },
         ]}
-        value={answers["benchmarking_tools_usage"] || ""}
+        value={getStringAnswer(answers["benchmarking_tools_usage"])}
         onChange={(val) => onAnswer("benchmarking_tools_usage", val)}
       />
     </div>

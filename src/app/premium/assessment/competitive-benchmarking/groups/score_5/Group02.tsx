@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_regular_reporting"] === "string" &&
     typeof answers["benchmarking_insights_action"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "monthly", label: "Monthly or tied to KPIs" },
           { value: "real_time", label: "Real-time dashboards and executive summaries" },
         ]}
-        value={answers["benchmarking_regular_reporting"] || ""}
+        value={getStringAnswer(answers["benchmarking_regular_reporting"])}
         onChange={(val) => onAnswer("benchmarking_regular_reporting", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "often", label: "Often — they lead to adjustments" },
           { value: "always", label: "Always — they shape our go-to-market motion" },
         ]}
-        value={answers["benchmarking_insights_action"] || ""}
+        value={getStringAnswer(answers["benchmarking_insights_action"])}
         onChange={(val) => onAnswer("benchmarking_insights_action", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "platforms", label: "Dedicated platforms with dashboards" },
           { value: "integrated", label: "Fully integrated into BI and planning tools" },
         ]}
-        value={answers["competitive_tooling"] || ""}
+        value={getStringAnswer(answers["competitive_tooling"])}
         onChange={(val) => onAnswer("competitive_tooling", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "weekly_review", label: "Weekly or monthly review process" },
           { value: "real_time_signals", label: "Real-time signal tracking and alerts" },
         ]}
-        value={answers["competitive_trend_tracking"] || ""}
+        value={getStringAnswer(answers["competitive_trend_tracking"])}
         onChange={(val) => onAnswer("competitive_trend_tracking", val)}
       />
     </div>

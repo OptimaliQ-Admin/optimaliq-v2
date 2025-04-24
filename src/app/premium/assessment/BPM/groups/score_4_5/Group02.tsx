@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["remote_visibility"] === "string" &&
     answers["remote_visibility"].trim().length > 0 &&
@@ -22,8 +23,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -40,7 +41,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
     { value: "Digital compliance and reporting", label: "Digital compliance and reporting" },
     { value: "Real-time dashboards and alerts", label: "Real-time dashboards and alerts" },
   ]}
-  value={answers["remote_visibility"] || ""}
+  value={getStringAnswer(answers["remote_visibility"])}
   onChange={(val) => onAnswer("remote_visibility", val)}
 />
 
@@ -53,7 +54,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
     { value: "newly formed", label: "Yes — newly formed" },
     { value: "active and well-established", label: "Yes — active and well-established" },
   ]}
-  value={answers["coe_structure"] || ""}
+  value={getStringAnswer(answers["coe_structure"])}
   onChange={(val) => onAnswer("coe_structure", val)}
 />
 
@@ -67,7 +68,7 @@ export default function Score4_5_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly confident" },
     { value: "Fully confident", label: "Fully confident — proven track record" },
   ]}
-  value={answers["scalability_confidence"] || ""}
+  value={getStringAnswer(answers["scalability_confidence"])}
   onChange={(val) => onAnswer("scalability_confidence", val)}
 />
 

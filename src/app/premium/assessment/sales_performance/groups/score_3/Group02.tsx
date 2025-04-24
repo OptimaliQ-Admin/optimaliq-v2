@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_dcff82"] === "string" &&
     typeof answers["how_9d44c5"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "manager_audit", label: "Managers audit and review weekly" },
           { value: "automation", label: "We use automation, alerts, and scheduled check-ins" },
         ]}
-        value={answers["how_dcff82"] || ""}
+        value={getStringAnswer(answers["how_dcff82"])}
         onChange={(val) => onAnswer("how_dcff82", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "multi_kpi", label: "Based on multiple KPIs" },
           { value: "insights", label: "Using dashboards, benchmarks, and insights" },
         ]}
-        value={answers["how_9d44c5"] || ""}
+        value={getStringAnswer(answers["how_9d44c5"])}
         onChange={(val) => onAnswer("how_9d44c5", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "structured_reviews", label: "Structured pipeline reviews" },
           { value: "combo", label: "Combination of 1:1s, team reviews, and deal desk" },
         ]}
-        value={answers["what_cdbbe6"] || ""}
+        value={getStringAnswer(answers["what_cdbbe6"])}
         onChange={(val) => onAnswer("what_cdbbe6", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "semiannual", label: "Every 6–12 months" },
           { value: "continuous", label: "Regularly based on data, feedback, or win/loss" },
         ]}
-        value={answers["how_3d4d34"] || ""}
+        value={getStringAnswer(answers["how_3d4d34"])}
         onChange={(val) => onAnswer("how_3d4d34", val)}
       />
     </div>

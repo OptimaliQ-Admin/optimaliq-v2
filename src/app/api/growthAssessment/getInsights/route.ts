@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { generatePrompt, generateIndustryOneHot } from "@/lib/ai/generatePrompt";
+import { generatePrompt } from "@/lib/ai/generatePrompt";
 import { callOpenAI } from "@/lib/ai/callOpenAI";
 import { callSageMaker } from "@/lib/ai/callSageMaker";
 

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["modernization_strategy"] === "string" &&
     typeof answers["workflow_efficiency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "actively_modernizing", label: "We’re actively replacing legacy systems" },
           { value: "fully_modern", label: "Our stack is modern and continuously improved" },
         ]}
-        value={answers["modernization_strategy"] || ""}
+        value={getStringAnswer(answers["modernization_strategy"])}
         onChange={(val) => onAnswer("modernization_strategy", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_automated", label: "Mostly automated — strong internal systems" },
           { value: "streamlined_and_scalable", label: "Streamlined and scalable — very few bottlenecks" },
         ]}
-        value={answers["workflow_efficiency"] || ""}
+        value={getStringAnswer(answers["workflow_efficiency"])}
         onChange={(val) => onAnswer("workflow_efficiency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "structured_reviews", label: "We have structured reviews and process owners" },
           { value: "fully_mature", label: "Continuous optimization is built into our operations" },
         ]}
-        value={answers["optimization_maturity"] || ""}
+        value={getStringAnswer(answers["optimization_maturity"])}
         onChange={(val) => onAnswer("optimization_maturity", val)}
       />
     </div>

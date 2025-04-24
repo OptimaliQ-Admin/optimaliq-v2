@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["attribution_tracking"] === "string" &&
     typeof answers["audience_segmentation"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "automated_model", label: "We use an automated attribution model" },
           { value: "holistic", label: "We look at contribution holistically (influenced revenue, lift, etc.)" },
         ]}
-        value={answers["attribution_tracking"] || ""}
+        value={getStringAnswer(answers["attribution_tracking"])}
         onChange={(val) => onAnswer("attribution_tracking", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "deep_segmenting", label: "We use persona-based or multi-dimensional segmentation" },
           { value: "advanced_models", label: "We use lookalikes, predictive models, or AI segmentation" },
         ]}
-        value={answers["audience_segmentation"] || ""}
+        value={getStringAnswer(answers["audience_segmentation"])}
         onChange={(val) => onAnswer("audience_segmentation", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "intent_messaging", label: "Tailored messages by intent or segment" },
           { value: "personalized_by_stage", label: "Personalized messages by both stage and persona" },
         ]}
-        value={answers["message_alignment"] || ""}
+        value={getStringAnswer(answers["message_alignment"])}
         onChange={(val) => onAnswer("message_alignment", val)}
       />
     </div>

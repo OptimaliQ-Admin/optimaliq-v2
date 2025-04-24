@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["automated_journeys"] === "string" &&
     typeof answers["sales_alignment"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_2_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "Segmented nurture tracks based on behaviors", label: "Segmented nurture tracks based on behaviors" },
           { value: "Advanced journeys triggered by real-time data", label: "Advanced journeys triggered by real-time data" },
         ]}
-        value={answers["automated_journeys"] || ""}
+        value={getStringAnswer(answers["automated_journeys"])}
         onChange={(val) => onAnswer("automated_journeys", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "They review funnel and performance together", label: "They review funnel and performance together" },
           { value: "They collaborate deeply on goals and messaging", label: "They collaborate deeply on goals and messaging" },
         ]}
-        value={answers["sales_alignment"] || ""}
+        value={getStringAnswer(answers["sales_alignment"])}
         onChange={(val) => onAnswer("sales_alignment", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "Mostly good quality", label: "Mostly good quality" },
           { value: "Very confident", label: "Very confident" },
         ]}
-        value={answers["lead_quality"] || ""}
+        value={getStringAnswer(answers["lead_quality"])}
         onChange={(val) => onAnswer("lead_quality", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
           { value: "We have a nurture strategy but it’s not consistent", label: "We have a nurture strategy but it’s not consistent" },
           { value: "We have a documented, consistent nurture strategy", label: "We have a documented, consistent nurture strategy" },
         ]}
-        value={answers["lead_nurture_strategy"] || ""}
+        value={getStringAnswer(answers["lead_nurture_strategy"])}
         onChange={(val) => onAnswer("lead_nurture_strategy", val)}
       />
     </div>

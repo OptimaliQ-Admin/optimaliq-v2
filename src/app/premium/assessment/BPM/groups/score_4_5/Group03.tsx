@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["adaptive_governance"] === "string" &&
     answers["adaptive_governance"].trim().length > 0 &&
@@ -26,8 +28,8 @@ export function isScore_4_5Group3Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step03({ answers, onAnswer }: Props) {
@@ -44,7 +46,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "We monitor signals and review quarterly", label: "We monitor signals and review quarterly" },
           { value: "We have adaptive frameworks built into governance", label: "We have adaptive frameworks built into governance" },
         ]}
-        value={answers["adaptive_governance"] || ""}
+        value={getStringAnswer(answers["adaptive_governance"])}
         onChange={(val) => onAnswer("adaptive_governance", val)}
       />
 
@@ -58,7 +60,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "Actively expanding across departments", label: "Actively expanding across departments" },
           { value: "Deeply integrated into all core processes", label: "Deeply integrated into all core processes" },
         ]}
-        value={answers["ai_automation"] || ""}
+        value={getStringAnswer(answers["ai_automation"])}
         onChange={(val) => onAnswer("ai_automation", val)}
       />
 
@@ -71,7 +73,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
           { value: "Processes are built to flex", label: "Processes are built to flex" },
           { value: "Fully modular and scalable by design", label: "Fully modular and scalable by design" },
         ]}
-        value={answers["adaptability"] || ""}
+        value={getStringAnswer(answers["adaptability"])}
         onChange={(val) => onAnswer("adaptability", val)}
       />
 
@@ -81,7 +83,7 @@ export default function Score4_5_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What is your greatest challenge in sustaining high BPM performance across the organization?"
         placeholder="E.g.,"
-        value={answers["sustainability_challenge"] || ""}
+        value={getStringAnswer(answers["sustainability_challenge"])}
         onChange={(val) => onAnswer("sustainability_challenge", val)}
         maxLength={300}
       />

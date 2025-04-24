@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_scalability"] === "string" &&
     typeof answers["data_interoperability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "shared_platform", label: "Shared platforms are emerging" },
           { value: "fully_scalable", label: "Fully scalable architecture across org" },
         ]}
-        value={answers["ai_scalability"] || ""}
+        value={getStringAnswer(answers["ai_scalability"])}
         onChange={(val) => onAnswer("ai_scalability", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "partial_integration", label: "Partially integrated — some automation" },
           { value: "fully_interoperable", label: "Fully interoperable — real-time flow across systems" },
         ]}
-        value={answers["data_interoperability"] || ""}
+        value={getStringAnswer(answers["data_interoperability"])}
         onChange={(val) => onAnswer("data_interoperability", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "basic_kpis", label: "Basic KPIs are tracked occasionally" },
           { value: "measured_and_tracked", label: "We measure and report outcomes consistently" },
         ]}
-        value={answers["ai_outcomes"] || ""}
+        value={getStringAnswer(answers["ai_outcomes"])}
         onChange={(val) => onAnswer("ai_outcomes", val)}
       />
     </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export const dynamic = "force-dynamic";
 
 const supabase = createClient(
@@ -118,7 +119,7 @@ ${topHeadlines}
     }
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    return NextResponse.json({ error: "Server error", detail: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
 }

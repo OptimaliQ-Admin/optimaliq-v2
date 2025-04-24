@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["cx_strategy_alignment"] === "string" &&
     typeof answers["cx_team_model"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "strong_alignment", label: "Strong — CX initiatives support key priorities" },
           { value: "fully_integrated", label: "Fully aligned — CX is embedded in our strategic roadmap" },
         ]}
-        value={answers["cx_strategy_alignment"] || ""}
+        value={getStringAnswer(answers["cx_strategy_alignment"])}
         onChange={(val) => onAnswer("cx_strategy_alignment", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "centralized_team", label: "Centralized CX team with dedicated leads" },
           { value: "distributed_excellence", label: "CX embedded across functions with CoE support" },
         ]}
-        value={answers["cx_team_model"] || ""}
+        value={getStringAnswer(answers["cx_team_model"])}
         onChange={(val) => onAnswer("cx_team_model", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "dynamic_journeys", label: "Dynamic journeys based on behavior and attributes" },
           { value: "real_time_activation", label: "Real-time, AI-driven personalization at scale" },
         ]}
-        value={answers["cx_data_activation"] || ""}
+        value={getStringAnswer(answers["cx_data_activation"])}
         onChange={(val) => onAnswer("cx_data_activation", val)}
       />
     </div>

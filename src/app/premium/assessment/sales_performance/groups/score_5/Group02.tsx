@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["what’s_21b168"] === "string" &&
     typeof answers["how_faf5c1"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step02({ answers, onAnswer }: Props) {
@@ -26,7 +30,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one transformational change your sales org has made in the last 6–12 months?"
         placeholder="E.g., RevOps centralization, ICP refinement, AI rollout"
-        value={answers["what’s_21b168"] || ""}
+        value={getStringAnswer(answers["what’s_21b168"])}
         onChange={(val) => onAnswer("what’s_21b168", val)}
         maxLength={300}
       />
@@ -40,7 +44,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "analyze_trends", label: "We analyze trends across deals" },
           { value: "operationalized", label: "We operationalize buyer insights into GTM execution" },
         ]}
-        value={answers["how_faf5c1"] || ""}
+        value={getStringAnswer(answers["how_faf5c1"])}
         onChange={(val) => onAnswer("how_faf5c1", val)}
       />
 
@@ -53,7 +57,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "strategic_sprints", label: "We run strategic sprints with target metrics" },
           { value: "predictive_modeling", label: "We manage bets through predictive modeling and cross-functional plans" },
         ]}
-        value={answers["how_4e7ac1"] || ""}
+        value={getStringAnswer(answers["how_4e7ac1"])}
         onChange={(val) => onAnswer("how_4e7ac1", val)}
       />
 
@@ -66,7 +70,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "guided_actions", label: "They guide actions and engagement" },
           { value: "intelligent_copilot", label: "They act as intelligent copilots with context and automation" },
         ]}
-        value={answers["how_1d2529"] || ""}
+        value={getStringAnswer(answers["how_1d2529"])}
         onChange={(val) => onAnswer("how_1d2529", val)}
       />
     </div>

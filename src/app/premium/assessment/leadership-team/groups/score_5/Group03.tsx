@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["innovation_support"] === "string" &&
     typeof answers["leadership_development"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step03({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "structured_programs", label: "We have programs or time allocated for innovation" },
           { value: "embedded_in_strategy", label: "Innovation is a core pillar of leadership strategy" },
         ]}
-        value={answers["innovation_support"] || ""}
+        value={getStringAnswer(answers["innovation_support"])}
         onChange={(val) => onAnswer("innovation_support", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "internal_programs", label: "We provide internal training or mentorship" },
           { value: "structured_pathways", label: "We have structured development pathways and succession planning" },
         ]}
-        value={answers["leadership_development"] || ""}
+        value={getStringAnswer(answers["leadership_development"])}
         onChange={(val) => onAnswer("leadership_development", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "transparent_guidance", label: "Provide transparent guidance and next steps" },
           { value: "proactive_and_unifying", label: "Lead with calm, proactivity, and alignment across teams" },
         ]}
-        value={answers["crisis_response"] || ""}
+        value={getStringAnswer(answers["crisis_response"])}
         onChange={(val) => onAnswer("crisis_response", val)}
       />
     </div>

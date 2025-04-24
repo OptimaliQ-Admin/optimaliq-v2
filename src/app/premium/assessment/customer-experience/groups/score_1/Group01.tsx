@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["understand_customer_needs"] === "string" &&
     typeof answers["customer_feedback_frequency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "general_idea", label: "We have a general idea based on interactions" },
           { value: "deep_insight", label: "We actively collect and analyze customer feedback" },
         ]}
-        value={answers["understand_customer_needs"] || ""}
+        value={getStringAnswer(answers["understand_customer_needs"])}
         onChange={(val) => onAnswer("understand_customer_needs", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "sometimes", label: "We collect it from time to time" },
           { value: "regularly", label: "We collect feedback regularly and systematically" },
         ]}
-        value={answers["customer_feedback_frequency"] || ""}
+        value={getStringAnswer(answers["customer_feedback_frequency"])}
         onChange={(val) => onAnswer("customer_feedback_frequency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_consistent", label: "Mostly — we aim for consistency" },
           { value: "very_consistent", label: "Yes — we’ve built consistent service standards" },
         ]}
-        value={answers["consistent_experience"] || ""}
+        value={getStringAnswer(answers["consistent_experience"])}
         onChange={(val) => onAnswer("consistent_experience", val)}
       />
     </div>

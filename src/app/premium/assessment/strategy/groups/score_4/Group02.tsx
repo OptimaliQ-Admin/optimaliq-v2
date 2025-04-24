@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["leadership_accountability"] === "string" &&
     typeof answers["risk_management"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "reviewed_quarterly", label: "Reviewed quarterly or in planning cycles" },
           { value: "built_into_kpis", label: "Yes — built into KPIs and performance reviews" },
         ]}
-        value={answers["leadership_accountability"] || ""}
+        value={getStringAnswer(answers["leadership_accountability"])}
         onChange={(val) => onAnswer("leadership_accountability", val)}
       />
 
@@ -40,7 +43,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "reviewed_routinely", label: "Reviewed routinely as part of decision-making" },
           { value: "proactive", label: "Proactively modeled and built into strategy" },
         ]}
-        value={answers["risk_management"] || ""}
+        value={getStringAnswer(answers["risk_management"])}
         onChange={(val) => onAnswer("risk_management", val)}
       />
 
@@ -52,7 +55,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "aligned", label: "Yes — documented and aligned to strategy" },
           { value: "tracked_and_measured", label: "Yes — with clear ownership and metrics" },
         ]}
-        value={answers["mid_term_goals"] || ""}
+        value={getStringAnswer(answers["mid_term_goals"])}
         onChange={(val) => onAnswer("mid_term_goals", val)}
       />
 
@@ -64,7 +67,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly or semi-annually" },
           { value: "continuously", label: "Continuously — it informs go-to-market moves" },
         ]}
-        value={answers["market_positioning"] || ""}
+        value={getStringAnswer(answers["market_positioning"])}
         onChange={(val) => onAnswer("market_positioning", val)}
       />
     </div>

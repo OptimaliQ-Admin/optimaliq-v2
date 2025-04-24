@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_governance_maturity"] === "string" &&
     typeof answers["ai_scalability"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "cross_functional", label: "Cross-functional policies and controls are established" },
           { value: "enterprise_governance", label: "We have enterprise-level governance integrated into strategy" },
         ]}
-        value={answers["ai_governance_maturity"] || ""}
+        value={getStringAnswer(answers["ai_governance_maturity"])}
         onChange={(val) => onAnswer("ai_governance_maturity", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "shared_infrastructure", label: "Shared infrastructure is in place for multiple teams" },
           { value: "fully_scalable", label: "AI is deployed at scale with centralized services and global reach" },
         ]}
-        value={answers["ai_scalability"] || ""}
+        value={getStringAnswer(answers["ai_scalability"])}
         onChange={(val) => onAnswer("ai_scalability", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score5_0_Step01({ answers, onAnswer }: Props) {
           { value: "dedicated_roles", label: "We’ve created dedicated AI roles or teams" },
           { value: "ai_embedded_org", label: "AI is embedded throughout our org design and decision-making" },
         ]}
-        value={answers["ai_org_design"] || ""}
+        value={getStringAnswer(answers["ai_org_design"])}
         onChange={(val) => onAnswer("ai_org_design", val)}
       />
     </div>

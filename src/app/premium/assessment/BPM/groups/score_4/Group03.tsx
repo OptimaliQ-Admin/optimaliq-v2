@@ -2,12 +2,15 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
 
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     Array.isArray(answers["knowledge_sharing"]) &&
     answers["knowledge_sharing"].length > 0 &&
@@ -26,8 +29,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -61,7 +64,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly aligned", label: "Mostly aligned" },
           { value: "Fully aligned and designed with strategy in mind", label: "Fully aligned and designed with strategy in mind" },
         ]}
-        value={answers["strategic_alignment"] || ""}
+        value={getStringAnswer(answers["strategic_alignment"])}
         onChange={(val) => onAnswer("strategic_alignment", val)}
       />
 
@@ -74,7 +77,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "Improve experience", label: "Improve experience (customer or team)" },
           { value: "Enable scale or innovation", label: "Enable scale or innovation" },
         ]}
-        value={answers["goal_focus"] || ""}
+        value={getStringAnswer(answers["goal_focus"])}
         onChange={(val) => onAnswer("goal_focus", val)}
       />
 
@@ -84,7 +87,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one area where your process still feels “manual” or outdated — even at your current maturity?"
         placeholder="E.g.,"
-        value={answers["process_gap"] || ""}
+        value={getStringAnswer(answers["process_gap"])}
         onChange={(val) => onAnswer("process_gap", val)}
         maxLength={300}
       />

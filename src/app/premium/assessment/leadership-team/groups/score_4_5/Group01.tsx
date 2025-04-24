@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["leader_alignment"] === "string" &&
     typeof answers["culture_catalyst"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "aligned_shared_narrative", label: "We’re aligned and have a shared narrative" },
           { value: "fully_synced", label: "We’re fully synced with strategic clarity and buy-in" },
         ]}
-        value={answers["leader_alignment"] || ""}
+        value={getStringAnswer(answers["leader_alignment"])}
         onChange={(val) => onAnswer("leader_alignment", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "intentional", label: "We intentionally model and reinforce our values" },
           { value: "strategic_driver", label: "Leadership is a catalyst — culture is a strategic driver" },
         ]}
-        value={answers["culture_catalyst"] || ""}
+        value={getStringAnswer(answers["culture_catalyst"])}
         onChange={(val) => onAnswer("culture_catalyst", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "strong_presence", label: "Leaders have a strong presence across teams" },
           { value: "orchestrated", label: "Leadership orchestrates collaboration and alignment" },
         ]}
-        value={answers["cross_functional_influence"] || ""}
+        value={getStringAnswer(answers["cross_functional_influence"])}
         onChange={(val) => onAnswer("cross_functional_influence", val)}
       />
     </div>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { scrapeHeadlinesFromUrls } from "src/lib/scrapeSources";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export const dynamic = "force-dynamic";
 
 const supabase = createClient(
@@ -90,8 +91,8 @@ ${contentChunk}
 
     console.log("✅ Tactical Marketing Playbook saved.");
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🔥 Cron Job Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) }, { status: 500 });
   }
 }

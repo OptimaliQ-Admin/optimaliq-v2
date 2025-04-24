@@ -2,6 +2,7 @@
 
 import { supabase } from "@/lib/supabase";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 export async function saveProfileScores(u_id: string, scores: {
   strategyScore: number,
   processScore: number,
@@ -27,8 +28,8 @@ export async function saveProfileScores(u_id: string, scores: {
 
     console.log("✅ Profile successfully updated for user:", u_id);
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("❌ Unexpected error saving profile:", err);
-    return { success: false, error: err.message };
+    return { success: false, error: getErrorMessage(err) };
   }
 }

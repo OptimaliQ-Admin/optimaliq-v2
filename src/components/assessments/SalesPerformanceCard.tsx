@@ -4,7 +4,6 @@
 import React from "react";
 import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
-import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
 
 const salesDescriptions: Record<number, string> = {
   1: "Sales efforts are reactive with minimal structure. Establishing clear pipeline stages and priorities is key.",

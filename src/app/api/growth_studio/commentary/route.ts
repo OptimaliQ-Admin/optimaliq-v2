@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: Request) {
@@ -33,8 +34,8 @@ Insight:
 
     const summary = completion.choices[0]?.message?.content?.trim();
     return NextResponse.json({ summary });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🔥 Commentary error:", err);
-    return NextResponse.json({ error: err.message || "Failed to generate insight" }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) || "Failed to generate insight" }, { status: 500 });
   }
 }

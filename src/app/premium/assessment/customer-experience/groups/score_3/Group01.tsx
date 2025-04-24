@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["insight_sharing"] === "string" &&
     typeof answers["feedback_loop"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_Step01({ answers, onAnswer }: Props) {
@@ -27,7 +30,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "frequently_shared", label: "Frequently shared with key teams" },
           { value: "fully_integrated", label: "Fully integrated into team workflows" },
         ]}
-        value={answers["insight_sharing"] || ""}
+        value={getStringAnswer(answers["insight_sharing"])}
         onChange={(val) => onAnswer("insight_sharing", val)}
       />
 
@@ -39,7 +42,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "structured", label: "Structured — regular reviews and analysis" },
           { value: "strategic", label: "Strategic — insights shape priorities" },
         ]}
-        value={answers["feedback_loop"] || ""}
+        value={getStringAnswer(answers["feedback_loop"])}
         onChange={(val) => onAnswer("feedback_loop", val)}
       />
 
@@ -51,7 +54,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — shared goals and priorities" },
           { value: "fully_aligned", label: "Fully aligned — strong CX culture" },
         ]}
-        value={answers["team_alignment"] || ""}
+        value={getStringAnswer(answers["team_alignment"])}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
     </div>

@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+import { getErrorMessage } from "@/utils/errorHandler";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -30,8 +31,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(data);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("🚨 API Error:", err);
-    return NextResponse.json({ error: err.message || "Unexpected error" }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(err) || "Unexpected error" }, { status: 500 });
   }
 }

@@ -1,14 +1,13 @@
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 //src/app/tier2/assessment/BPM/groups/score_1/Group03.tsx
 "use client";
 
 import React from "react";
-import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "src/components/questions/DragSortQuestion";
 import TextAreaQuestion from "src/components/questions/TextAreaQuestion";
 
 
-export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ownership"] === "string" &&
     answers["ownership"].trim().length > 0 &&
@@ -23,8 +22,8 @@ export function isScore_1Group3Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_Step03({ answers, onAnswer }: Props) {
@@ -42,7 +41,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly", label: "Mostly clear roles" },
           { value: "exactly", label: "Everyone knows exactly what they own" },
         ]}
-        value={answers["ownership"] || ""}
+        value={getStringAnswer(answers["ownership"])}
         onChange={(val) => onAnswer("ownership", val)}
       />
 
@@ -50,7 +49,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="If you wanted to improve how something gets done in your business, where would you start?"
         placeholder="E.g.,"
-        value={answers["self_diagnosis"] || ""}
+        value={getStringAnswer(answers["self_diagnosis"])}
         onChange={(val) => onAnswer("self_diagnosis", val)}
         maxLength={300}
       />
@@ -66,7 +65,7 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "Organized_informal", label: "Organized, but informal" },
           { value: "structured", label: "Very structured and proactive" },
         ]}
-        value={answers["operations_maturity"] || ""}
+        value={getStringAnswer(answers["operations_maturity"])}
         onChange={(val) => onAnswer("operations_maturity", val)}
       />
 

@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["channel_strategy"] === "string" &&
     typeof answers["agile_campaigns"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "planned_tests", label: "We plan tests based on data" },
           { value: "data_driven_prioritization", label: "Data-driven prioritization with spend modeling" }
         ]}
-        value={answers["channel_strategy"] || ""}
+        value={getStringAnswer(answers["channel_strategy"])}
         onChange={(val) => onAnswer("channel_strategy", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "tactical_changes", label: "We make tactical changes within a few days" },
           { value: "real_time_adapt", label: "We adapt in near real-time with automated triggers" }
         ]}
-        value={answers["agile_campaigns"] || ""}
+        value={getStringAnswer(answers["agile_campaigns"])}
         onChange={(val) => onAnswer("agile_campaigns", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "share_goals", label: "We share goals and campaign themes" },
           { value: "fully_integrated", label: "We’re fully integrated on shared KPIs" }
         ]}
-        value={answers["cross_team_alignment"] || ""}
+        value={getStringAnswer(answers["cross_team_alignment"])}
         onChange={(val) => onAnswer("cross_team_alignment", val)}
       />
     </div>

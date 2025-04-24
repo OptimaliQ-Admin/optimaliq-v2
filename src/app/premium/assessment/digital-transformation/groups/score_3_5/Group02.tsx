@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["tech_stack_evaluation"] === "string" &&
     typeof answers["platform_utilization"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "annually", label: "Annually — part of a regular review cycle" },
           { value: "quarterly", label: "Quarterly or more often — we stay proactive" },
         ]}
-        value={answers["tech_stack_evaluation"] || ""}
+        value={getStringAnswer(answers["tech_stack_evaluation"])}
         onChange={(val) => onAnswer("tech_stack_evaluation", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "well_utilized", label: "Well utilized — we take advantage of key features" },
           { value: "fully_maximized", label: "Fully maximized — tools are deeply embedded in operations" },
         ]}
-        value={answers["platform_utilization"] || ""}
+        value={getStringAnswer(answers["platform_utilization"])}
         onChange={(val) => onAnswer("platform_utilization", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "broad_adoption", label: "Broad adoption — most teams use the same core stack" },
           { value: "full_alignment", label: "Full alignment — tools support seamless collaboration" },
         ]}
-        value={answers["cross_team_adoption"] || ""}
+        value={getStringAnswer(answers["cross_team_adoption"])}
         onChange={(val) => onAnswer("cross_team_adoption", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "aligned", label: "Aligned — we make tech choices with strategy in mind" },
           { value: "fully_aligned", label: "Fully aligned — technology is a key growth enabler" },
         ]}
-        value={answers["internal_alignment"] || ""}
+        value={getStringAnswer(answers["internal_alignment"])}
         onChange={(val) => onAnswer("internal_alignment", val)}
       />
     </div>

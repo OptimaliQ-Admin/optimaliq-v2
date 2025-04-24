@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["standardization"] === "string" &&
     answers["standardization"].trim().length > 0 &&
@@ -23,8 +23,8 @@ export function isScore_2_5Group3Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score2_5_Step03({ answers, onAnswer }: Props) {
@@ -41,7 +41,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "standard template", label: "We have a standard template" },
           { value: "Yes", label: "Yes — all teams follow the same structure" },
         ]}
-        value={answers["standardization"] || ""}
+        value={getStringAnswer(answers["standardization"])}
         onChange={(val) => onAnswer("standardization", val)}
       />
 
@@ -54,7 +54,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "Usually", label: "Usually" },
           { value: "Always", label: "Always" },
         ]}
-        value={answers["success_criteria"] || ""}
+        value={getStringAnswer(answers["success_criteria"])}
         onChange={(val) => onAnswer("success_criteria", val)}
       />
 
@@ -69,7 +69,7 @@ export default function Score2_5_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly confident", label: "Mostly confident" },
           { value: "Fully confident", label: "Fully confident" },
         ]}
-        value={answers["consistency_enforcement"] || ""}
+        value={getStringAnswer(answers["consistency_enforcement"])}
         onChange={(val) => onAnswer("consistency_enforcement", val)}
       />
 

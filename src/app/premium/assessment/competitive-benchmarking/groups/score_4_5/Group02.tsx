@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["benchmarking_team_structure"] === "string" &&
     typeof answers["competitive_alerts"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_5_4_9_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_5_4_9_Step02({ answers, onAnswer }: Props) {
           { value: "dedicated_person", label: "One person owns it as part of their role" },
           { value: "dedicated_team", label: "We have a dedicated competitive intelligence function" },
         ]}
-        value={answers["benchmarking_team_structure"] || ""}
+        value={getStringAnswer(answers["benchmarking_team_structure"])}
         onChange={(val) => onAnswer("benchmarking_team_structure", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_5_4_9_Step02({ answers, onAnswer }: Props) {
           { value: "platform_monitoring", label: "We use platforms that track this for us" },
           { value: "realtime_signals", label: "We monitor real-time digital signals and market shifts" },
         ]}
-        value={answers["competitive_alerts"] || ""}
+        value={getStringAnswer(answers["competitive_alerts"])}
         onChange={(val) => onAnswer("competitive_alerts", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_5_4_9_Step02({ answers, onAnswer }: Props) {
           { value: "quarterly", label: "Quarterly — as part of GTM optimization" },
           { value: "ongoing", label: "Ongoing — we continuously evolve positioning" },
         ]}
-        value={answers["market_positioning_review"] || ""}
+        value={getStringAnswer(answers["market_positioning_review"])}
         onChange={(val) => onAnswer("market_positioning_review", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_5_4_9_Step02({ answers, onAnswer }: Props) {
           { value: "optimize_tactics", label: "We use them to optimize campaigns or messaging" },
           { value: "shape_strategy", label: "They help shape our broader product and growth strategy" },
         ]}
-        value={answers["benchmarking_success_use"] || ""}
+        value={getStringAnswer(answers["benchmarking_success_use"])}
         onChange={(val) => onAnswer("benchmarking_success_use", val)}
       />
     </div>

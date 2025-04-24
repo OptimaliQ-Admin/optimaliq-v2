@@ -8,11 +8,13 @@ import Group04_GrowthStack from "./groups/Group04_GrowthStack";
 import Group05_Clarity from "./groups/Group05_Clarity";
 import Group06_Benchmarks from "./groups/Group06_Benchmarks";
 import Group07_Final from "./groups/Group07_Final";
+import type { AssessmentAnswers } from "@/types/AssessmentAnswers";
+
 
 type Props = {
   step: number;
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {

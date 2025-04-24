@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["goal_alignment"] === "string" &&
     typeof answers["feedback_loops"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_3_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — there’s effort to cascade goals" },
           { value: "fully_aligned", label: "Fully aligned — everyone connects their work to company OKRs" },
         ]}
-        value={answers["goal_alignment"] || ""}
+        value={getStringAnswer(answers["goal_alignment"])}
         onChange={(val) => onAnswer("goal_alignment", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "frequently", label: "Frequently — through surveys and retrospectives" },
           { value: "continuously", label: "Continuously — feedback drives real-time improvements" },
         ]}
-        value={answers["feedback_loops"] || ""}
+        value={getStringAnswer(answers["feedback_loops"])}
         onChange={(val) => onAnswer("feedback_loops", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "structured", label: "Structured — through mediation or HR" },
           { value: "proactive", label: "Proactive — through open dialogue and team norms" },
         ]}
-        value={answers["conflict_resolution"] || ""}
+        value={getStringAnswer(answers["conflict_resolution"])}
         onChange={(val) => onAnswer("conflict_resolution", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score3_5_Step02({ answers, onAnswer }: Props) {
           { value: "clear_metrics", label: "Clear metrics — leadership is evaluated on KPIs" },
           { value: "multi_layered", label: "Multi-layered — including peer, team, and outcome feedback" },
         ]}
-        value={answers["leader_accountability"] || ""}
+        value={getStringAnswer(answers["leader_accountability"])}
         onChange={(val) => onAnswer("leader_accountability", val)}
       />
     </div>

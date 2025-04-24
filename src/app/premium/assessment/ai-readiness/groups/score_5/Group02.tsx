@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_performance_metrics"] === "string" &&
     typeof answers["ai_training_governance"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_5Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_0_Step02({ answers, onAnswer }: Props) {
@@ -29,7 +32,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "business_alignment", label: "Metrics are aligned with business goals" },
           { value: "dynamic_feedback_loops", label: "Performance is tracked in real-time with feedback loops" },
         ]}
-        value={answers["ai_performance_metrics"] || ""}
+        value={getStringAnswer(answers["ai_performance_metrics"])}
         onChange={(val) => onAnswer("ai_performance_metrics", val)}
       />
 
@@ -42,7 +45,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "standards_for_bias", label: "We enforce standards for data bias and quality" },
           { value: "centralized_curation", label: "We have centralized data curation and approval processes" },
         ]}
-        value={answers["ai_training_governance"] || ""}
+        value={getStringAnswer(answers["ai_training_governance"])}
         onChange={(val) => onAnswer("ai_training_governance", val)}
       />
 
@@ -55,7 +58,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "performance_triggered", label: "Based on model performance metrics" },
           { value: "continuous_monitoring", label: "We use continuous monitoring and retraining" },
         ]}
-        value={answers["ai_model_evolution"] || ""}
+        value={getStringAnswer(answers["ai_model_evolution"])}
         onChange={(val) => onAnswer("ai_model_evolution", val)}
       />
 
@@ -68,7 +71,7 @@ export default function Score5_0_Step02({ answers, onAnswer }: Props) {
           { value: "multi_model_design", label: "We use multi-model approaches or ensembles" },
           { value: "automated_failover", label: "We use automated failover and impact analysis systems" },
         ]}
-        value={answers["ai_operational_resilience"] || ""}
+        value={getStringAnswer(answers["ai_operational_resilience"])}
         onChange={(val) => onAnswer("ai_operational_resilience", val)}
       />
     </div>

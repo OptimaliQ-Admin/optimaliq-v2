@@ -8,11 +8,15 @@ import Group04_GrowthStack from "@/app/premium/onboarding/initial-assessment/gro
 import Group05_Clarity from "@/app/premium/onboarding/initial-assessment/groups/Group05_Clarity";
 import Group06_Benchmarks from "@/app/premium/onboarding/initial-assessment/groups/Group06_Benchmarks";
 import Group07_Final from "@/app/premium/onboarding/initial-assessment/groups/Group07_Final";
+import {
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 type Props = {
   step: number;
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {

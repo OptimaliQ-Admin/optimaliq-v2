@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
-export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_4d1ff3"] === "string" &&
     typeof answers["how_fe4a96"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_3_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step01({ answers, onAnswer }: Props) {
@@ -33,7 +37,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "in_reporting", label: "It’s reviewed in performance reporting" },
           { value: "rep_stage_level", label: "We track accuracy at rep and stage level" },
         ]}
-        value={answers["how_4d1ff3"] || ""}
+        value={getStringAnswer(answers["how_4d1ff3"])}
         onChange={(val) => onAnswer("how_4d1ff3", val)}
       />
 
@@ -46,7 +50,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "structured_quarterly", label: "Structured onboarding + quarterly enablement" },
           { value: "ongoing_enablement", label: "Ongoing enablement with tools, metrics, and coaching" },
         ]}
-        value={answers["how_fe4a96"] || ""}
+        value={getStringAnswer(answers["how_fe4a96"])}
         onChange={(val) => onAnswer("how_fe4a96", val)}
       />
 

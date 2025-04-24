@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["campaign_prioritization"] === "string" &&
     typeof answers["marketing_consistency"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group1Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "We look at available data and goals", label: "We look at available data and goals" },
           { value: "We follow a strategic roadmap or calendar", label: "We follow a strategic roadmap or calendar" },
         ]}
-        value={answers["campaign_prioritization"] || ""}
+        value={getStringAnswer(answers["campaign_prioritization"])}
         onChange={(val) => onAnswer("campaign_prioritization", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "Some consistency, especially in 1–2 channels", label: "Some consistency, especially in 1–2 channels" },
           { value: "Consistent multi-channel efforts", label: "Consistent multi-channel efforts" },
         ]}
-        value={answers["marketing_consistency"] || ""}
+        value={getStringAnswer(answers["marketing_consistency"])}
         onChange={(val) => onAnswer("marketing_consistency", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "It’s documented but not consistently used", label: "It’s documented but not consistently used" },
           { value: "Yes — we have clear messaging used across channels", label: "Yes — we have clear messaging used across channels" },
         ]}
-        value={answers["defined_messaging"] || ""}
+        value={getStringAnswer(answers["defined_messaging"])}
         onChange={(val) => onAnswer("defined_messaging", val)}
       />
     </div>

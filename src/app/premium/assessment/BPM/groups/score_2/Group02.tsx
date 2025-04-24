@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_2Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["compliance"] === "string" &&
     answers["compliance"].trim().length > 0 &&
@@ -22,8 +23,8 @@ export function isScore_2Group2Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -40,7 +41,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
     { value: "review it during team syncs", label: "We review it during team syncs" },
     { value: "tracking tools and reporting", label: "We use tracking tools and reporting" },
   ]}
-  value={answers["compliance"] || ""}
+  value={getStringAnswer(answers["compliance"])}
   onChange={(val) => onAnswer("compliance", val)}
 />
 
@@ -53,7 +54,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly — they’re detailed but not always used" },
     { value: "Yes", label: "Yes — they’re fully defined and referenced" },
   ]}
-  value={answers["clarity"] || ""}
+  value={getStringAnswer(answers["clarity"])}
   onChange={(val) => onAnswer("clarity", val)}
 />
 
@@ -67,7 +68,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
     { value: "discuss it as a team", label: "We discuss it as a team" },
     { value: "We adjust the process to prevent recurrence", label: "We adjust the process to prevent recurrence" },
   ]}
-  value={answers["issue_response"] || ""}
+  value={getStringAnswer(answers["issue_response"])}
   onChange={(val) => onAnswer("issue_response", val)}
 />
 

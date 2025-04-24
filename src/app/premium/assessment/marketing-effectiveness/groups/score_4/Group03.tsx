@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["kpi_health_monitoring"] === "string" &&
     typeof answers["scalability_confidence"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_4Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {
@@ -31,7 +35,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "automated_dashboards", label: "Automated dashboards with alerts" },
           { value: "real_time_forecasting", label: "Real-time and forecasting models" }
         ]}
-        value={answers["kpi_health_monitoring"] || ""}
+        value={getStringAnswer(answers["kpi_health_monitoring"])}
         onChange={(val) => onAnswer("kpi_health_monitoring", val)}
       />
 
@@ -44,7 +48,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "confident_with_investment", label: "Confident with additional investment" },
           { value: "fully_confident", label: "Fully confident — it’s already designed for scale" }
         ]}
-        value={answers["scalability_confidence"] || ""}
+        value={getStringAnswer(answers["scalability_confidence"])}
         onChange={(val) => onAnswer("scalability_confidence", val)}
       />
 
@@ -52,7 +56,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What’s one experiment or innovative idea you’d love to try in your marketing but haven’t yet?"
         placeholder="E.g., Launch a viral TikTok campaign, implement a predictive lead scoring model..."
-        value={answers["marketing_innovation_idea"] || ""}
+        value={getStringAnswer(answers["marketing_innovation_idea"])}
         onChange={(val) => onAnswer("marketing_innovation_idea", val)}
         maxLength={500}
       />

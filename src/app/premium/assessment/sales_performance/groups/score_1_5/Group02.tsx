@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 
-export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_47b050"] === "string" &&
     typeof answers["how_12d26c"] === "string" &&
@@ -14,8 +18,8 @@ export function isScore_1_5Group2Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step02({ answers, onAnswer }: Props) {
@@ -31,7 +35,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "Weekly", label: "Weekly" },
           { value: "Daily_or_during_structured_reviews", label: "Daily or during structured reviews" },
         ]}
-        value={answers["how_47b050"] || ""}
+        value={getStringAnswer(answers["how_47b050"])}
         onChange={(val) => onAnswer("how_47b050", val)}
       />
 
@@ -44,7 +48,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "We_use_a_checklist_or_structured_discovery", label: "We use a checklist or structured discovery" },
           { value: "We_use_a_formal_framework_eg_MEDDIC_BANT", label: "We use a formal framework (e.g. MEDDIC, BANT)" },
         ]}
-        value={answers["how_12d26c"] || ""}
+        value={getStringAnswer(answers["how_12d26c"])}
         onChange={(val) => onAnswer("how_12d26c", val)}
       />
 
@@ -52,7 +56,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
       <TextAreaQuestion
         question="What sales metrics are most important to you right now?"
         placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
-        value={answers["what_89a231"] || ""}
+        value={getStringAnswer(answers["what_89a231"])}
         onChange={(val) => onAnswer("what_89a231", val)}
         maxLength={300}
       />
@@ -66,7 +70,7 @@ export default function Score1_5_Step02({ answers, onAnswer }: Props) {
           { value: "We_track_movement_but_not_always_accurately", label: "We track movement but not always accurately" },
           { value: "We_move_deals_methodically_through_stages", label: "We move deals methodically through stages" },
         ]}
-        value={answers["how_1f869b"] || ""}
+        value={getStringAnswer(answers["how_1f869b"])}
         onChange={(val) => onAnswer("how_1f869b", val)}
       />
     </div>

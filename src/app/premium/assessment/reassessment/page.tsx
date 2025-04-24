@@ -4,19 +4,23 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-import Group01_Goals, { isGroup01Complete } from "./groups/Group01_Goals"
-import Group02_Goals, { isGroup02Complete } from "./groups/Group02_Positioning"
-import Group03_Goals, { isGroup03Complete } from "./groups/Group03_Operations"
-import Group04_Goals, { isGroup04Complete } from "./groups/Group04_GrowthStack"
-import Group05_Goals, { isGroup05Complete } from "./groups/Group05_Clarity"
-import Group06_Goals, { isGroup06Complete } from "./groups/Group06_Benchmarks"
-import Group07_Goals, { isGroup07Complete } from "./groups/Group07_Final"
+import { isGroup01Complete } from "./groups/Group01_Goals"
+import { isGroup02Complete } from "./groups/Group02_Positioning"
+import { isGroup03Complete } from "./groups/Group03_Operations"
+import { isGroup04Complete } from "./groups/Group04_GrowthStack"
+import { isGroup05Complete } from "./groups/Group05_Clarity"
+import { isGroup06Complete } from "./groups/Group06_Benchmarks"
+import { isGroup07Complete } from "./groups/Group07_Final"
+import type {
+  AssessmentAnswers,
+  AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+import { getErrorMessage } from "@/utils/errorHandler";
 
 
-
-const stepValidators: Record<number, (answers: Record<string, any>) => boolean> = {
+const stepValidators: Record<number, (answers: AssessmentAnswers) => boolean> = {
   0: isGroup01Complete,
   1: isGroup02Complete,
   2: isGroup03Complete,
@@ -32,15 +36,15 @@ export default function OnboardingAssessmentPage() {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
   const validator = stepValidators[step];
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   
-  const stripUnusedOtherFields = (answers: Record<string, any>) => {
-    const result: Record<string, any> = {};
+  const stripUnusedOtherFields = (answers: AssessmentAnswers) => {
+    const result: AssessmentAnswers = {};
   
     for (const key in answers) {
       if (key.endsWith("_other")) continue; // don't save _other fields
@@ -113,9 +117,9 @@ export default function OnboardingAssessmentPage() {
   
         console.log("✅ Submission successful:", data);
         router.push("/dashboard/insights");
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("❌ Unexpected error:", err);
-        alert(`Unexpected error: ${err.message}`);
+        alert(`Unexpected error: ${getErrorMessage(err)}`);
       }
     }
   };
@@ -127,23 +131,28 @@ export default function OnboardingAssessmentPage() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (key: string, value: any) => {
+  const handleAnswer = (key: string, value: AssessmentAnswerValue) => {
     setFormAnswers((prev) => {
       const updated = { ...prev, [key]: value };
   
-      // 🔁 For any "other" text field
-      if (key.endsWith("_other")) {
-        const baseKey = key.replace("_other", "");
-        const baseValue = prev[baseKey] || [];
-  
-        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-  
-        if (value.trim()) {
-          cleaned.push(`Other: ${value.trim()}`);
-        }
-  
-        updated[baseKey] = cleaned;
-      }
+     // 🔁 For any "other" text field
+if (key.endsWith("_other")) {
+  const baseKey = key.replace("_other", "");
+  const baseValue = prev[baseKey];
+
+  // Ensure baseValue is an array before calling .filter
+  const cleaned =
+    Array.isArray(baseValue)
+      ? baseValue.filter((item: string) => !item.startsWith("Other:"))
+      : [];
+
+  // Ensure value is a string before using .trim()
+  if (typeof value === "string" && value.trim()) {
+    cleaned.push(`Other: ${value.trim()}`);
+  }
+
+  updated[baseKey] = cleaned;
+}
   
       // 🔁 If a select field is updated and "other" was removed, clear its _other input
       if (Array.isArray(value) && key && !value.includes("other")) {

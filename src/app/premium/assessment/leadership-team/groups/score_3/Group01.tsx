@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_3Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["decision_framework"] === "string" &&
     typeof answers["team_self_management"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_3Group1Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_0_Step01({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "criteria_based", label: "Uses some criteria or templates" },
           { value: "data_driven", label: "Data-driven with clear alignment to goals" },
         ]}
-        value={answers["decision_framework"] || ""}
+        value={getStringAnswer(answers["decision_framework"])}
         onChange={(val) => onAnswer("decision_framework", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "moderate_autonomy", label: "Moderately — teams manage most execution" },
           { value: "high_autonomy", label: "Highly — empowered to own outcomes" },
         ]}
-        value={answers["team_self_management"] || ""}
+        value={getStringAnswer(answers["team_self_management"])}
         onChange={(val) => onAnswer("team_self_management", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score3_0_Step01({ answers, onAnswer }: Props) {
           { value: "dashboard_view", label: "Some dashboards or reports" },
           { value: "real_time_transparency", label: "Clear, real-time transparency" },
         ]}
-        value={answers["visibility_into_progress"] || ""}
+        value={getStringAnswer(answers["visibility_into_progress"])}
         onChange={(val) => onAnswer("visibility_into_progress", val)}
       />
     </div>

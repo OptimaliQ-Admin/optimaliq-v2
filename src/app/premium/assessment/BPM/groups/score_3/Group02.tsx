@@ -3,11 +3,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
+export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["handoffs"] === "string" &&
     answers["handoffs"].trim().length > 0 &&
@@ -26,8 +28,8 @@ export function isScore_3Group2Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 
@@ -45,7 +47,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
     { value: "Mostly", label: "Mostly documented" },
     { value: "Clearly defined", label: "Clearly defined with owners and SLAs" },
   ]}
-  value={answers["handoffs"] || ""}
+  value={getStringAnswer(answers["handoffs"])}
   onChange={(val) => onAnswer("handoffs", val)}
 />
 
@@ -58,7 +60,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
     { value: "Yes — we have alert systems", label: "Yes — we have alert systems in place" },
     { value: "Yes — alerts are automated", label: "Yes — alerts are automated and acted on" },
   ]}
-  value={answers["alerts"] || ""}
+  value={getStringAnswer(answers["alerts"])}
   onChange={(val) => onAnswer("alerts", val)}
 />
 
@@ -67,7 +69,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
 <TextAreaQuestion
   question="How do you measure the success of a process (beyond just “it got done”) today?"
   placeholder="E.g., "
-  value={answers["success_measurement"] || ""}
+  value={getStringAnswer(answers["success_measurement"])}
   onChange={(val) => onAnswer("success_measurement", val)}
   maxLength={300}
 />
@@ -81,7 +83,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
     { value: "hold coordination meetings", label: "We hold coordination meetings" },
     { value: "formal review with all stakeholders", label: "Changes go through formal review with all stakeholders" },
   ]}
-  value={answers["change_management"] || ""}
+  value={getStringAnswer(answers["change_management"])}
   onChange={(val) => onAnswer("change_management", val)}
 />
     </div>

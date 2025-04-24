@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["customer_retention_focus"] === "string" &&
     typeof answers["team_cx_alignment"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_2Group3Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score_2_0_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score_2_0_Step03({ answers, onAnswer }: Props) {
           { value: "dedicated_efforts", label: "Dedicated efforts — we track retention and take action" },
           { value: "strategic_retention", label: "It’s a strategic priority with campaigns and KPIs" },
         ]}
-        value={answers["customer_retention_focus"] || ""}
+        value={getStringAnswer(answers["customer_retention_focus"])}
         onChange={(val) => onAnswer("customer_retention_focus", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score_2_0_Step03({ answers, onAnswer }: Props) {
           { value: "mostly_aligned", label: "Mostly aligned — some shared goals or processes" },
           { value: "fully_aligned", label: "Fully aligned — we collaborate closely on CX delivery" },
         ]}
-        value={answers["team_cx_alignment"] || ""}
+        value={getStringAnswer(answers["team_cx_alignment"])}
         onChange={(val) => onAnswer("team_cx_alignment", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score_2_0_Step03({ answers, onAnswer }: Props) {
           { value: "basic_reporting", label: "Basic reporting — some metrics reviewed regularly" },
           { value: "advanced_reporting", label: "Advanced — clear KPIs tracked across the journey" },
         ]}
-        value={answers["cx_reporting"] || ""}
+        value={getStringAnswer(answers["cx_reporting"])}
         onChange={(val) => onAnswer("cx_reporting", val)}
       />
     </div>

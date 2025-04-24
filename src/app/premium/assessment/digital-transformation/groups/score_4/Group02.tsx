@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_4Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["department_alignment"] === "string" &&
     typeof answers["data_flow_integration"] === "string" &&
@@ -13,8 +16,8 @@ export function isScore_4Group2Complete(answers: Record<string, any>): boolean {
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step02({ answers, onAnswer }: Props) {
@@ -30,7 +33,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "cross_dept_planning", label: "Joint planning and coordination is common" },
           { value: "fully_integrated", label: "Fully aligned with cross-functional ownership" },
         ]}
-        value={answers["department_alignment"] || ""}
+        value={getStringAnswer(answers["department_alignment"])}
         onChange={(val) => onAnswer("department_alignment", val)}
       />
 
@@ -43,7 +46,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "central_data_layer", label: "We have a central data layer or warehouse" },
           { value: "real_time_flow", label: "Data flows automatically across all core systems" },
         ]}
-        value={answers["data_flow_integration"] || ""}
+        value={getStringAnswer(answers["data_flow_integration"])}
         onChange={(val) => onAnswer("data_flow_integration", val)}
       />
 
@@ -56,7 +59,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "innovation_labs", label: "Dedicated innovation lab or task force" },
           { value: "embedded_in_teams", label: "Innovation is embedded in day-to-day execution" },
         ]}
-        value={answers["innovation_process"] || ""}
+        value={getStringAnswer(answers["innovation_process"])}
         onChange={(val) => onAnswer("innovation_process", val)}
       />
 
@@ -69,7 +72,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
           { value: "scheduled_reviews", label: "We have scheduled ROI reviews" },
           { value: "real_time_tracking", label: "ROI is monitored in real time" },
         ]}
-        value={answers["investment_impact_review"] || ""}
+        value={getStringAnswer(answers["investment_impact_review"])}
         onChange={(val) => onAnswer("investment_impact_review", val)}
       />
     </div>

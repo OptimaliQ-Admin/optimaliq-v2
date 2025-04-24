@@ -2,12 +2,13 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-import DragSortQuestion from "@/components/questions/DragSortQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-
-export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean {
+export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["adoption"] === "string" &&
     answers["adoption"].trim().length > 0 &&
@@ -26,8 +27,8 @@ export function isScore_3_5Group3Complete(answers: Record<string, any>): boolean
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score3_5_Step03({ answers, onAnswer }: Props) {
@@ -45,7 +46,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "Mostly", label: "Mostly confident" },
           { value: "Fully confident", label: "Fully confident with audit trails" },
         ]}
-        value={answers["adoption"] || ""}
+        value={getStringAnswer(answers["adoption"])}
         onChange={(val) => onAnswer("adoption", val)}
       />
 
@@ -59,7 +60,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "Widespread use in certain teams", label: "Widespread use in certain teams" },
           { value: "Automation is deeply embedded across functions", label: "Automation is deeply embedded across functions" },
         ]}
-        value={answers["automation"] || ""}
+        value={getStringAnswer(answers["automation"])}
         onChange={(val) => onAnswer("automation", val)}
       />
 
@@ -88,7 +89,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "centralized ops or enablement function", label: "A centralized ops or enablement function" },
           { value: "dedicated BPM, RevOps, or process team", label: "A dedicated BPM, RevOps, or process team" },
         ]}
-        value={answers["ownership_model"] || ""}
+        value={getStringAnswer(answers["ownership_model"])}
         onChange={(val) => onAnswer("ownership_model", val)}
       />
 

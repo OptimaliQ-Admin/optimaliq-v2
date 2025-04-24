@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_tools_used"] === "string" &&
     typeof answers["risk_concern"] === "string" &&
@@ -12,8 +15,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +31,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "business_apps", label: "Tools integrated into business apps (e.g. HubSpot AI)" },
           { value: "dedicated_platforms", label: "Dedicated AI platforms or automation systems" },
         ]}
-        value={answers["ai_tools_used"] || ""}
+        value={getStringAnswer(answers["ai_tools_used"])}
         onChange={(val) => onAnswer("ai_tools_used", val)}
       />
 
@@ -41,7 +44,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "actively_considering", label: "Actively considering — we’re cautious" },
           { value: "have_policies", label: "We’ve developed internal guidelines or policies" },
         ]}
-        value={answers["risk_concern"] || ""}
+        value={getStringAnswer(answers["risk_concern"])}
         onChange={(val) => onAnswer("risk_concern", val)}
       />
 
@@ -54,7 +57,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "low_confidence", label: "We’re unsure what’s possible or where to start" },
           { value: "other_priorities", label: "Other initiatives are higher priority" },
         ]}
-        value={answers["adoption_barrier"] || ""}
+        value={getStringAnswer(answers["adoption_barrier"])}
         onChange={(val) => onAnswer("adoption_barrier", val)}
       />
     </div>

@@ -1,13 +1,16 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import DropdownQuestion from "@/components/questions/DropdownQuestion";
 
 
-export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
+export function isScore_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["bpm_strategy_alignment"] === "string" &&
     answers["bpm_strategy_alignment"].trim().length > 0 &&
@@ -24,8 +27,8 @@ export function isScore_5Group1Complete(answers: Record<string, any>): boolean {
 
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score5_Step01({ answers, onAnswer }: Props) {
@@ -38,7 +41,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
       <TextAreaQuestion
               question="How does BPM influence your company’s competitive positioning or go-to-market strategy?"
               placeholder="E.g.,"
-              value={answers["bpm_strategy_alignment"] || ""}
+              value={getStringAnswer(answers["bpm_strategy_alignment"])}
               onChange={(val) => onAnswer("bpm_strategy_alignment", val)}
               maxLength={300}
             />
@@ -72,7 +75,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
     { value: "Yes — partially self-tuning", label: "Yes — partially self-tuning" },
     { value: "Yes — dynamic and responsive at scale", label: "Yes — dynamic and responsive at scale" },
   ]}
-  value={answers["self_optimizing_processes"] || ""}
+  value={getStringAnswer(answers["self_optimizing_processes"])}
   onChange={(val) => onAnswer("self_optimizing_processes", val)}
 />
     </div>

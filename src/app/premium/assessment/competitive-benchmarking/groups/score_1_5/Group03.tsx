@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
-
-export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+  getStringAnswer,
+  type AssessmentAnswers,
+} from "@/lib/types/AssessmentAnswers";
+export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["industry_benchmark_usage"] === "string" &&
     typeof answers["market_awareness_level"] === "string" &&
@@ -12,8 +14,8 @@ export function isScore_1_5Group3Complete(answers: Record<string, any>): boolean
 }
 
 type Props = {
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValuealue) => void;
 };
 
 export default function Score1_5_1_9_Step03({ answers, onAnswer }: Props) {
@@ -28,7 +30,7 @@ export default function Score1_5_1_9_Step03({ answers, onAnswer }: Props) {
           { value: "sometimes", label: "Sometimes during planning cycles" },
           { value: "regularly", label: "Regularly — it’s part of strategy" },
         ]}
-        value={answers["industry_benchmark_usage"] || ""}
+        value={getStringAnswer(answers["industry_benchmark_usage"])}
         onChange={(val) => onAnswer("industry_benchmark_usage", val)}
       />
 
@@ -41,7 +43,7 @@ export default function Score1_5_1_9_Step03({ answers, onAnswer }: Props) {
           { value: "solid", label: "Solid — we understand our space well" },
           { value: "leading", label: "Leading — we set trends others follow" },
         ]}
-        value={answers["market_awareness_level"] || ""}
+        value={getStringAnswer(answers["market_awareness_level"])}
         onChange={(val) => onAnswer("market_awareness_level", val)}
       />
 
@@ -54,7 +56,7 @@ export default function Score1_5_1_9_Step03({ answers, onAnswer }: Props) {
           { value: "some_tools", label: "We use some tools occasionally (e.g. SEMrush, SimilarWeb)" },
           { value: "dedicated_platform", label: "We have dedicated benchmarking tools or dashboards" },
         ]}
-        value={answers["benchmarking_tools_usage"] || ""}
+        value={getStringAnswer(answers["benchmarking_tools_usage"])}
         onChange={(val) => onAnswer("benchmarking_tools_usage", val)}
       />
     </div>
