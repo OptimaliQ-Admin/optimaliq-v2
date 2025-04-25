@@ -1,3 +1,4 @@
+//src/components/home/HowItWorks.tsx
 "use client";
 
 import Image from "next/image";

@@ -1,3 +1,4 @@
+//src/components/home/FaqSection.tsx
 "use client";
 
 const faqs = [

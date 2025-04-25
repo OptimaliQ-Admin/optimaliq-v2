@@ -1,3 +1,4 @@
+//src/app/page.tsx
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorks from "@/components/home/HowItWorks";
 import KeyFeatures from "@/components/home/KeyFeatures";
