@@ -43,72 +43,67 @@ export default function SubscribeForm() {
     e.preventDefault();
     if (!captchaToken) return alert("⚠️ Please complete the captcha.");
     setLoading(true);
-
+  
+    // 1. Insert into leads (if not already exists)
+    await supabase.from("leads").upsert([{ 
+      email: userInfo.email,
+      first_name: userInfo.first_name,
+      last_name: userInfo.last_name,
+      company: userInfo.company,
+      phone: userInfo.phone,
+      title: userInfo.title,
+    }]);
+  
+    // 2. Check if user already exists in tier2_users
     const { data: existingUser, error: fetchError } = await supabase
       .from("tier2_users")
       .select("u_id")
       .eq("email", userInfo.email)
       .maybeSingle();
-
-    let user_id;
-
+  
     if (fetchError) {
       alert("❌ Failed to check existing user.");
       setLoading(false);
       return;
     }
-
+  
+    // 3. If user exists, check subscription status
     if (existingUser) {
-      user_id = existingUser.u_id;
-      const { error: updateError } = await supabase
-        .from("tier2_users")
-        .update({ ...userInfo })
-        .eq("u_id", user_id);
-
-      if (updateError) {
-        alert("❌ Failed to update user info.");
+      const { data: subscription, error: subError } = await supabase
+        .from("subscriptions")
+        .select("status")
+        .eq("u_id", existingUser.u_id)
+        .maybeSingle();
+  
+      if (subError) {
+        alert("❌ Failed to check subscription status.");
         setLoading(false);
         return;
       }
-    } else {
-      const { data: newUser, error: insertError } = await supabase
-        .from("tier2_users")
-        .insert([{ ...userInfo }])
-        .select("u_id")
-        .single();
-
-      if (insertError || !newUser?.u_id) {
-        alert("❌ Failed to create user.");
-        setLoading(false);
+  
+      if (subscription?.status === "active") {
+        // 4a. Has active subscription — go to login
+        router.push("/subscribe/login");
         return;
       }
-      user_id = newUser.u_id;
     }
-
-    localStorage.setItem("tier2_user_id", user_id);
+  
+    // 4b. Proceed to payment (New user or existing without active subscription)
+    localStorage.setItem("tier2_user_id", existingUser?.u_id || crypto.randomUUID());
     localStorage.setItem("tier2_email", userInfo.email);
-
-    const sub_id = crypto.randomUUID();
-    await supabase.from("subscriptions").upsert([
-      {
-        sub_id,
-        u_id: user_id,
-        plan: "accelerator",
-        status: "pending",
-      },
-    ]);
-
+    localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo)); // save full form
+  
     const res = await fetch("/api/stripe/createCheckoutSession", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: userInfo.email,
         plan: "accelerator",
-        user_id,
+        user_id: existingUser?.u_id || null, // Pass null if truly new
         billingCycle: "annual",
       }),
     });
-
+  
     const { url } = await res.json();
     if (url) {
       window.location.href = url;
@@ -116,7 +111,7 @@ export default function SubscribeForm() {
       alert("❌ Failed to create Stripe session.");
       setLoading(false);
     }
-  };
+  };  
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-xl">
