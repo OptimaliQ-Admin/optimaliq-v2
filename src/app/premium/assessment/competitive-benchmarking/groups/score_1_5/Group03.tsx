@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; 
+import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
+  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
@@ -15,7 +18,7 @@ export function isScore_1_5Group3Complete(answers: AssessmentAnswers): boolean {
 
 type Props = {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValuealue) => void;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score1_5_1_9_Step03({ answers, onAnswer }: Props) {

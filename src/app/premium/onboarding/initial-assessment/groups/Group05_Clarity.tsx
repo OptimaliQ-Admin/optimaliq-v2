@@ -44,28 +44,28 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
       />
 
       {/* Question 14: Team Alignment */}
-      <MultipleChoiceQuestion
-        question="How aligned is your team on company goals and direction?"
-        options={[
-          { value: "fully_aligned", label: "Fully aligned and collaborative" },
-          { value: "mostly_aligned", label: "Mostly aligned, occasional friction" },
-          { value: "some_misalignment", label: "Some misalignment across departments" },
-          { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
-          { value: "other", label: "Other (please describe)" },
-        ]}
-        value={teamSelected}
-        onChange={(val) => onAnswer("team_alignment", val)}
-      />
+<MultipleChoiceQuestion
+  question="How aligned is your team on company goals and direction?"
+  options={[
+    { value: "fully_aligned", label: "Fully aligned and collaborative" },
+    { value: "mostly_aligned", label: "Mostly aligned, occasional friction" },
+    { value: "some_misalignment", label: "Some misalignment across departments" },
+    { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
+    { value: "other", label: "Other (please describe)" },
+  ]}
+  value={typeof teamSelected === "string" ? teamSelected : ""}
+  onChange={(val) => onAnswer("team_alignment", val)}
+/>
 
-      {/* Conditionally show "Other" field */}
-      {teamSelected.includes("other") && (
-        <TextAreaQuestion
-          question="Please describe the alignment of your team"
-          placeholder="Describe the alignment of your team..."
-          value={getStringAnswer(answers["team_alignment_other"])}
-          onChange={(val) => onAnswer("team_alignment_other", val)}
-          maxLength={50}
-        />
+{/* Conditionally show "Other" field */}
+{typeof teamSelected === "string" && teamSelected.includes("other") && (
+  <TextAreaQuestion
+    question="Please describe the alignment of your team"
+    placeholder="Describe the alignment of your team..."
+    value={getStringAnswer(answers["team_alignment_other"])}
+    onChange={(val) => onAnswer("team_alignment_other", val)}
+    maxLength={50}
+  />
       )}
 
       {/* Question 15: Future State */}

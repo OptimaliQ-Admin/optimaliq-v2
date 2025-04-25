@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "@/components/shared/ProgressBar";
-import StepGroupRenderer from "@/components/assessments/StepGroupRenderer";
+import StepGroupRenderer from "./StepGroupRenderer";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import { normalizeScore, validatorSets } from "@/components/assessments/StepGroupRenderer";
+import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 import {
   getStringAnswer,
   getArrayAnswer,

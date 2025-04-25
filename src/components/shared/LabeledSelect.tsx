@@ -1,15 +1,22 @@
 // 📁 refactor/src/components/shared/LabeledSelect.tsx
 import { ChangeEvent } from "react";
 
+type Option = { label: string; value: string };
+
 type Props = {
   label: string;
   name: string;
   value: string;
   onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
-  options: { label: string; value: string }[];
+  options: Option[] | string[];
 };
 
 export default function LabeledSelect({ label, name, value, onChange, options }: Props) {
+  // Auto-wrap string[] into { label, value }[]
+  const normalizedOptions: Option[] = options.map((opt) =>
+    typeof opt === "string" ? { label: opt, value: opt } : opt
+  );
+
   return (
     <label className="block">
       <span className="text-gray-700">{label}</span>
@@ -21,7 +28,7 @@ export default function LabeledSelect({ label, name, value, onChange, options }:
         required
       >
         <option value="">Select</option>
-        {options.map((opt) => (
+        {normalizedOptions.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

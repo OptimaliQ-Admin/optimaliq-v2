@@ -10,7 +10,7 @@ import {
 } from "@/lib/types/AssessmentAnswers";
 
 // ✅ Validator function
-export function isGroupComplete(answers: AssessmentAnswers): boolean {
+export function isScore_3Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["collaboration_model"] === "string" &&
     typeof answers["tool_initiatives"] === "string" &&

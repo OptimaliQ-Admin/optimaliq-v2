@@ -6,11 +6,6 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
   getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers"; import {
-  getStringAnswer,
-  getArrayAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (

@@ -6,6 +6,7 @@ type Props = {
   name: string;
   value: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
   type?: string;
   readOnly?: boolean;
 };

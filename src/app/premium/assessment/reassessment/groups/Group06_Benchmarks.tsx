@@ -77,7 +77,7 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "not_planned", label: "No, not on the roadmap" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={getStringAnswer({fundingSelected})}
+        value={getStringAnswer(fundingSelected)}
         onChange={(val) => onAnswer("funding_status", val)}
       />
 

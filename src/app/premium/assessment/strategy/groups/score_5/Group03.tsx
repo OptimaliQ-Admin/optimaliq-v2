@@ -33,7 +33,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "proactive_playbooks", label: "We have proactive playbooks in place" },
           { value: "resilience_embedded", label: "Resilience is embedded in strategy design" },
         ]}
-        value={answers["strategic_resilience"] || ""}
+        value={getStringAnswer(answers["strategic_resilience"] || "")}
         onChange={(val) => onAnswer("strategic_resilience", val)}
       />
 
@@ -46,7 +46,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "aligned_investments", label: "We fund aligned innovation projects" },
           { value: "fully_synchronized", label: "Fully synchronized with strategic outcomes" },
         ]}
-        value={answers["innovation_alignment"] || ""}
+        value={getStringAnswer(answers["innovation_alignment"] || "")}
         onChange={(val) => onAnswer("innovation_alignment", val)}
       />
 
@@ -59,7 +59,7 @@ export default function Score5_Step03({ answers, onAnswer }: Props) {
           { value: "differentiated", label: "We differentiate through value or experience" },
           { value: "market_leadership", label: "We’re aiming to shape or lead the category" },
         ]}
-        value={answers["external_positioning"] || ""}
+        value={getStringAnswer(answers["external_positioning"] || "")}
         onChange={(val) => onAnswer("external_positioning", val)}
       />
     </div>

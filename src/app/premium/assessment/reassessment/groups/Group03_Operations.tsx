@@ -63,7 +63,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
       />
 
       {/* Conditionally show "Other" field */}
-      {getArrayAnswer(techSelected).includes.includes("Other") && (
+      {getArrayAnswer(techSelected).includes("Other") && (
         <TextAreaQuestion
           question="Please describe the other platforms or tools that are central to your operations"
           placeholder="Describe any additional platforms or tools used..."
@@ -74,12 +74,17 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
       )}
 
       {/* Question 2: Rank Business Priorities */}
-      <DragSortQuestion
+<DragSortQuestion
   question="Rank the following priorities from most to least important to your business right now."
   description="Drag to reorder. Top = most important."
-  items={answers["business_priorities"] || ["Growth", "Profitability", "Efficiency", "Innovation", "Brand Equity"]}
+  items={
+    Array.isArray(answers["business_priorities"])
+      ? answers["business_priorities"]
+      : ["Growth", "Profitability", "Efficiency", "Innovation", "Brand Equity"]
+  }
   onChange={(val) => onAnswer("business_priorities", val)}
 />
+
 
 
       {/* Question 3: Process Maturity */}

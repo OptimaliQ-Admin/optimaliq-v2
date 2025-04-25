@@ -7,8 +7,6 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
-import { getStringAnswer } from "@/lib/utils/validateAnswer";
-
 export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["ai_expectations"] === "string" &&

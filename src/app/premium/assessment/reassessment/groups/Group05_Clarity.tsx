@@ -52,7 +52,7 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
           { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={getStringAnswer({teamSelected})}
+        value={getStringAnswer(teamSelected)}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
 
