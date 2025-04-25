@@ -107,7 +107,7 @@ export default function TrendInsightCard() {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
                 <Dialog.Title className="text-lg font-bold text-red-600 mb-4">
-                  🔥 This Week's Feed
+                  🔥 This Week&#39;s Feed
                 </Dialog.Title>
 
                 {insight && formatModalContent(insight)}

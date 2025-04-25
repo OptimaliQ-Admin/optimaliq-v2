@@ -130,7 +130,7 @@ export default function CreateAccountPage() {
           </div>
           <div className="flex items-center space-x-2">
             <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-            <label className="text-sm text-gray-700">I'd like to receive helpful insights and updates</label>
+            <label className="text-sm text-gray-700">I&#39;d like to receive helpful insights and updates</label>
           </div>
 
           <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
