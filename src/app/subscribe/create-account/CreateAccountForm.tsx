@@ -56,7 +56,10 @@ export default function CreateAccountForm() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const searchParams = useSearchParams();
-  const emailFromQuery = searchParams.get("email") || "";
+  const emailFromQuery =
+  searchParams.get("email") ||
+  (typeof window !== "undefined" ? localStorage.getItem("tier2_email") || "" : "");
+
 
   const [formState, setFormState] = useState({
     email: emailFromQuery,
@@ -103,11 +106,12 @@ export default function CreateAccountForm() {
       })
       .eq("u_id", signUpData.user.id);
 
-    if (updateError) {
-      alert("Account created, but failed to update user profile");
-    } else {
-      setShowModal(true);
-    }
+      if (updateError) {
+        alert("Account created, but failed to update user profile");
+      } else {
+        localStorage.removeItem("tier2_email"); // ✅ Clear it after use
+        setShowModal(true); // ✅ Show modal after success
+      }      
   };
 
   return (
