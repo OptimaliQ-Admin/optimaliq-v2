@@ -89,20 +89,23 @@ export default function SubscribeForm() {
     }
   
     // 4b. Proceed to payment (New user or existing without active subscription)
-    localStorage.setItem("tier2_user_id", existingUser?.u_id || crypto.randomUUID());
+    const newUserId = existingUser?.u_id || crypto.randomUUID();
+    localStorage.setItem("tier2_user_id", newUserId);
     localStorage.setItem("tier2_email", userInfo.email);
-    localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo)); // save full form
-  
+    localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
+    
+    // ⬇️ Send the same real user_id to Stripe
     const res = await fetch("/api/stripe/createCheckoutSession", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: userInfo.email,
         plan: "accelerator",
-        user_id: existingUser?.u_id || null, // Pass null if truly new
+        user_id: newUserId, // ✅ Always a real value
         billingCycle: "annual",
       }),
     });
+    
   
     const { url } = await res.json();
     if (url) {
