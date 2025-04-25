@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -52,7 +53,7 @@ export default function Score5_Step02({ answers, onAnswer }: Props) {
           { value: "creative", label: "Creative / design" },
           { value: "none", label: "None of these today" }
         ]}
-        selected={teamModel}
+        selected={Array.isArray(getArrayAnswer(teamModel)) ? getArrayAnswer(teamModel) : []}
         onChange={(val) => onAnswer("team_model", val)}
         maxSelect={6}
       />

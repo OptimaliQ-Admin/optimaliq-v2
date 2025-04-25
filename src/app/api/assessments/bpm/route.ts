@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import bpmScoringMap from "../data/bpm_scoring_map.json";
 import { createClient } from "@supabase/supabase-js";
+import type { BpmScoringMap } from "@/lib/types/AssessmentAnswers";
 
 // Init Supabase service client
 const supabase = createClient(
@@ -30,7 +31,8 @@ export async function POST(req: Request) {
   }
 
   const bracketKey = getBracket(score);
-  const scoringConfig = (bpmScoringMap as AssessmentAnswers)[bracketKey];
+  const scoringMap = bpmScoringMap as BpmScoringMap;
+const scoringConfig = scoringMap[bracketKey];
 
   if (!scoringConfig) {
     return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });

@@ -2,8 +2,10 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion";
+import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -49,7 +51,7 @@ export default function Score2_Step03({ answers, onAnswer }: Props) {
           { value: "Email", label: "Custom dashboards or trackers" },
           { value: "workflow software", label: "We don’t track task status formally" },
         ]}
-        selected={task_tracking}
+        selected={Array.isArray(getArrayAnswer(task_tracking)) ? getArrayAnswer(task_tracking) : []}
               onChange={(val) => onAnswer("task_tracking", val)}
               maxSelect={5}
             />

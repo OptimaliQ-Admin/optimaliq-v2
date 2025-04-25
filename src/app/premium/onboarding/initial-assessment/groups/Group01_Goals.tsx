@@ -5,6 +5,7 @@ import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";

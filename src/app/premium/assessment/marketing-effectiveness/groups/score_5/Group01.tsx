@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -49,7 +50,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "partner_referrals", label: "Partner referrals or reseller network" },
           { value: "sales_outreach", label: "Sales outbound / prospecting" }
         ]}
-        selected={sources}
+        selected={Array.isArray(getArrayAnswer(sources)) ? getArrayAnswer(sources) : []}
         onChange={(val) => onAnswer("lead_sources", val)}
         maxSelect={5}
       />

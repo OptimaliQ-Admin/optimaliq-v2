@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -51,7 +52,7 @@ export default function Score3_Step02({ answers, onAnswer }: Props) {
           { value: "lifetime_value", label: "Customer lifetime value (LTV)" },
           { value: "none", label: "We don’t currently use dashboards" },
         ]}
-        selected={selectedDashboards}
+        selected={Array.isArray(getArrayAnswer(selectedDashboards)) ? getArrayAnswer(selectedDashboards) : []}
         onChange={(val) => onAnswer("measurement_dashboards", val)}
         maxSelect={5}
       />

@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -60,7 +61,7 @@ export default function Score5_Step01({ answers, onAnswer }: Props) {
           { value: "M&A integration", label: "M&A integration" },
           { value: "None", label: "None of these" },
         ]}
-        selected={bpm_scope}
+        selected={Array.isArray(getArrayAnswer(bpm_scope)) ? getArrayAnswer(bpm_scope) : []}
               onChange={(val) => onAnswer("bpm_scope", val)}
               maxSelect={5}
             />

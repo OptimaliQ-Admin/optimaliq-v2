@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -63,7 +64,7 @@ export default function Score2_5_Step01({ answers, onAnswer }: Props) {
           { value: "Revenue attribution", label: "Revenue attribution" },
           { value: "Customer lifetime value (LTV)", label: "Customer lifetime value (LTV)" },
         ]}
-        selected={metrics}
+        selected={Array.isArray(getArrayAnswer(metrics)) ? getArrayAnswer(metrics) : []}
         onChange={(val) => onAnswer("performance_metrics", val)}
         maxSelect={5}
       />

@@ -1,5 +1,10 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 import React from "react";
 import MultiSelectQuestion from "src/components/questions/MultiSelectQuestion";
@@ -47,7 +52,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "workflow software", label: "Dedicated workflow software" },
           { value: "None", label: "None currently" }
         ]}
-        selected={workflow_tools}
+        selected={Array.isArray(getArrayAnswer(workflow_tools)) ? getArrayAnswer(workflow_tools) : []}
               onChange={(val) => onAnswer("workflow_tools", val)}
               maxSelect={5}
             />

@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -50,13 +51,13 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "funnel_analysis", label: "Marketing & sales funnel analysis" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={benchmarkSelected}
+        selected={Array.isArray(getArrayAnswer(benchmarkSelected)) ? getArrayAnswer(benchmarkSelected) : []}
         onChange={(val) => onAnswer("benchmark_preferences", val)}
         maxSelect={6}
       />
 
       {/* Conditionally show "Other" field */}
-      {benchmarkSelected.includes("other") && (
+      {getArrayAnswer(benchmarkSelected).includes("other") && (
         <TextAreaQuestion
           question="Please describe the other insights or benchmarks"
           placeholder="Describe any additional insights or benchmarks..."
@@ -76,12 +77,12 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
           { value: "not_planned", label: "No, not on the roadmap" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={fundingSelected}
+        value={getStringAnswer({fundingSelected})}
         onChange={(val) => onAnswer("funding_status", val)}
       />
 
       {/* Conditionally show "Other" field */}
-      {fundingSelected.includes("other") && (
+      {getArrayAnswer(fundingSelected).includes("other") && (
         <TextAreaQuestion
           question="Please describe the other ways you are currently raising capital or preparing for an exit"
           placeholder="Describe any how you are preparing..."

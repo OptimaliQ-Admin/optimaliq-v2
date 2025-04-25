@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -57,7 +58,7 @@ export default function Score4_Step02({ answers, onAnswer }: Props) {
                 { value: "Automation review", label: "Automation review" },
                 { value: "None of these", label: "None of these" },
               ]}
-              selected={improvement_cycle}
+              selected={Array.isArray(getArrayAnswer(improvement_cycle)) ? getArrayAnswer(improvement_cycle) : []}
                     onChange={(val) => onAnswer("improvement_cycle", val)}
                     maxSelect={5}
                   />

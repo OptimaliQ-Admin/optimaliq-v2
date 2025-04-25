@@ -3,10 +3,9 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";  AssessmentAnswers,
-  AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (

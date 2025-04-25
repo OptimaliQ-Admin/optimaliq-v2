@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -74,7 +75,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "Email", label: "Team feedback" },
           { value: "workflow software", label: "We don’t currently monitor health" },
         ]}
-        selected={monitoring}
+        selected={Array.isArray(getArrayAnswer(monitoring)) ? getArrayAnswer(monitoring) : []}
               onChange={(val) => onAnswer("monitoring", val)}
               maxSelect={5}
             />

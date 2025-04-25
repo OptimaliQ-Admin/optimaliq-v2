@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -63,7 +64,7 @@ export default function Score3_5_Step01({ answers, onAnswer }: Props) {
           { value: "Winback", label: "Winback" },
           { value: "Advocacy", label: "Advocacy" },
         ]}
-        selected={selectedStages}
+        selected={Array.isArray(getArrayAnswer(selectedStages)) ? getArrayAnswer(selectedStages) : []}
         onChange={(val) => onAnswer("lifecycle_stages", val)}
         maxSelect={5}
       />

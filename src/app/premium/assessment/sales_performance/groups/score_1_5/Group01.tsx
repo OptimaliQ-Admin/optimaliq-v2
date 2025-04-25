@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -63,7 +64,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
           { value: "Calendar_email_integrations", label: "Calendar/email integrations" },
           { value: "Automated_follow_up_or_cadence_tools", label: "Automated follow-up or cadence tools" },
         ]}
-        selected={selectedTools}
+        selected={Array.isArray(getArrayAnswer(selectedTools)) ? getArrayAnswer(selectedTools) : []}
         onChange={(val) => onAnswer("what_dcd0de", val)}
         maxSelect={5}
       />

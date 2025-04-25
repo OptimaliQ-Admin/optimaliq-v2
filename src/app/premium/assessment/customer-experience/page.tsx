@@ -4,21 +4,29 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "./StepGroupRenderer";
-import { PremiumUser } from "@/context/PremiumUserContext";
-import { normalizeScore, validatorSets } from "./StepGroupRenderer";
+import { usePremiumUser } from "@/context/PremiumUserContext";
+import { normalizeScore, validatorSets } from "./StepGroupRenderer"; 
+import { getErrorMessage } from "@/utils/errorHandler";// adjust path if needed
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
-import { getErrorMessage } from "@/utils/errorHandler";
-export default function CustomerExperienceAssessmentPage() {
-  const router = useRouter();
-  const { user } = PremiumUser();
-  const [step, setStep] = useState(0);
-  const [score, setScore] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
-  const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
+export default function OnboardingAssessmentPage() {
+    const router = useRouter();
+    const { user } = usePremiumUser();
+    const userEmail = user?.email;
+    const [step, setStep] = useState(0);
+    const [score, setScore] = useState<number | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
+  
+    const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   const stripUnusedOtherFields = (answers: AssessmentAnswers) => {
     const result: AssessmentAnswers = {};
@@ -164,12 +172,19 @@ export default function CustomerExperienceAssessmentPage() {
       if (key.endsWith("_other")) {
         const baseKey = key.replace("_other", "");
         const baseValue = prev[baseKey] || [];
-        const cleaned = baseValue.filter((item: string) => !item.startsWith("Other:"));
-        if (value.trim()) cleaned.push(`Other: ${value.trim()}`);
+      
+        const cleaned = Array.isArray(baseValue)
+          ? baseValue.filter((item: string) => !item.startsWith("Other:"))
+          : [];
+      
+        if (typeof value === "string" && value.trim()) {
+          cleaned.push(`Other: ${value.trim()}`);
+        }
+      
         updated[baseKey] = cleaned;
       }
 
-      if (Array.isArray(value) && key && !value.includes("other")) {
+      if (Array.isArray(value) && key && !getArrayAnswer(value).includes("other")) {
         updated[`${key}_other`] = "";
         updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }

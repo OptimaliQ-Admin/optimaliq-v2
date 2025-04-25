@@ -2,8 +2,10 @@
 
 import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; 
+import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -56,13 +58,13 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
           { value: "Intercom", label: "Intercom (Support)" },
           { value: "Other", label: "Other (please describe)" },
         ]}
-        selected={techSelected}
+        selected={Array.isArray(getArrayAnswer(techSelected)) ? getArrayAnswer(techSelected) : []}
         onChange={(val) => onAnswer("tech_stack", val)}
         maxSelect={10}
       />
 
       {/* Conditionally show "Other" field */}
-      {techSelected.includes("Other") && (
+      {getArrayAnswer(techSelected).includes.includes("Other") && (
         <TextAreaQuestion
           question="Please describe the other platforms or tools that are central to your operations"
           placeholder="Describe any additional platforms or tools used..."

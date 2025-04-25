@@ -5,6 +5,7 @@ import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";

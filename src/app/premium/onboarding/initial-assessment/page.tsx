@@ -7,9 +7,11 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "@/components/shared/StepGroupRenderer";
 import { stepValidators } from "@/utils/initialAssessmentValidators";
-import type {
-  AssessmentAnswers,
-  AssessmentAnswerValue,
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 import { stripOtherFields } from "@/utils/stripOtherFields";
 import { getErrorMessage } from "@/utils/errorHandler";

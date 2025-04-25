@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -50,7 +51,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "change_management_plans", label: "Change management plans" },
           { value: "none", label: "None of the above" },
         ]}
-        selected={selected}
+        selected={Array.isArray(getArrayAnswer(selected)) ? getArrayAnswer(selected) : []}
         onChange={(val) => onAnswer("strategy_execution_components", val)}
         maxSelect={5}
       />

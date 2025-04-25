@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -61,7 +62,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           { value: "SEO or content marketing", label: "SEO or content marketing" },
           { value: "We don’t actively market", label: "We don’t actively market" },
         ]}
-        selected={answers["marketing_channels"] || []}
+        selected={Array.isArray(getArrayAnswer(answers["marketing_channels"] || [])) ? getArrayAnswer(answers["marketing_channels"] || []) : []}
         onChange={(val) => onAnswer("marketing_channels", val)}
         maxSelect={5}
       />

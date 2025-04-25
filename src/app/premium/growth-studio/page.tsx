@@ -3,7 +3,7 @@
 
 import { Suspense, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { useTier2User } from "@/context/PremiumUserContext";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
@@ -12,7 +12,7 @@ import SectionHeader from "@/components/growthstudio/SectionHeader";
 import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 
 function GrowthStudioComponent() {
-  const { user } = useTier2User();
+  const { user } = usePremiumUser();
   const email = user?.email;
   const userId = user?.u_id;
 

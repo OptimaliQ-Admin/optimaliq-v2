@@ -1,5 +1,10 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
@@ -53,13 +58,13 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
     { value: "net_promoter_score", label: "Net Promoter Score (NPS)" },
     { value: "other", label: "Other (please describe)" },
   ]}
-  selected={growthSelected}
+  selected={Array.isArray(getArrayAnswer(growthSelected)) ? getArrayAnswer(growthSelected) : []}
         onChange={(val) => onAnswer("growth_metrics", val)}
         maxSelect={5}
       />
 
       {/* Conditionally show "Other" field for growth_metrics */}
-      {growthSelected.includes("other") && (
+      {getArrayAnswer(growthSelected).includes("other") && (
         <TextAreaQuestion
           question="Please describe the other metric(s) you track"
           placeholder="Describe any additional metrics you use to measure growth..."
@@ -98,13 +103,13 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
           { value: "regulatory_issues", label: "Regulatory or compliance issues" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        selected={frictionSelected}
+        selected={Array.isArray(getArrayAnswer(frictionSelected)) ? getArrayAnswer(frictionSelected) : []}
         onChange={(val) => onAnswer("friction_points", val)}
         maxSelect={3}
       />
 
       {/* Conditionally show "Other" field for friction_points */}
-      {frictionSelected.includes("other") && (
+      {getArrayAnswer(frictionSelected).includes("other") && (
         <TextAreaQuestion
           question="Please describe the other friction point(s)"
           placeholder="E.g., Internal delays, market confusion, etc."

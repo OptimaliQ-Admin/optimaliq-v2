@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "@/components/shared/ProgressBar";
-import StepGroupRenderer from "./StepGroupRenderer";
+import StepGroupRenderer from "@/components/assessments/StepGroupRenderer";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import { normalizeScore, validatorSets } from "./StepGroupRenderer";
-import type {
-  AssessmentAnswers,
-  AssessmentAnswerValue,
+import { normalizeScore, validatorSets } from "@/components/assessments/StepGroupRenderer";
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -180,7 +182,7 @@ export default function CompetitiveBenchmarkingAssessmentPage() {
         updated[baseKey] = cleaned;
       }
 
-      if (Array.isArray(value) && key && !value.includes("other")) {
+      if (Array.isArray(value) && key && !getArrayAnswer(value).includes("other")) {
         updated[`${key}_other`] = "";
         updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }

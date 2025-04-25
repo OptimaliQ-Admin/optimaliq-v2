@@ -5,6 +5,7 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -40,7 +41,7 @@ export default function Score1_5_Step03({ answers, onAnswer }: Props) {
           { value: "Pricing_objections", label: "Pricing objections" },
           { value: "Internal_delays_or_handoffs", label: "Internal delays or handoffs" },
         ]}
-        selected={bottlenecks}
+        selected={Array.isArray(getArrayAnswer(bottlenecks)) ? getArrayAnswer(bottlenecks) : []}
         onChange={(val) => onAnswer("which_4b594c", val)}
         maxSelect={5}
       />

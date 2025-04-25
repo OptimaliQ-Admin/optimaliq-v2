@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import salesScoringMap from "../data/sales_scoring_map.json";
 import { createClient } from "@supabase/supabase-js";
+import type { SalesScoringMap } from "@/lib/types/AssessmentAnswers";
 
 // Init Supabase service client
 const supabase = createClient(
@@ -28,9 +29,9 @@ export async function POST(req: Request) {
   if (!answers || typeof score !== "number" || !userId) {
     return NextResponse.json({ error: "Missing answers, score, or userId" }, { status: 400 });
   }
-
   const bracketKey = getBracket(score);
-  const scoringConfig = (salesScoringMap as AssessmentAnswers)[bracketKey];
+  const scoringMap = salesScoringMap as SalesScoringMap;
+const scoringConfig = scoringMap[bracketKey];
 
   if (!scoringConfig) {
     return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });

@@ -1,5 +1,10 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";

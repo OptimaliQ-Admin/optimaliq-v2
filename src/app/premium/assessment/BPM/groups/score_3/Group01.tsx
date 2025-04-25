@@ -4,6 +4,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -77,7 +78,7 @@ export default function Score3_Step01({ answers, onAnswer }: Props) {
     { value: "Whiteboards or paper", label: "Whiteboards or paper" },
     { value: "We don’t currently map processes", label: "We don’t currently map processes" },
   ]}
-  selected={mapping_tools}
+  selected={Array.isArray(getArrayAnswer(mapping_tools)) ? getArrayAnswer(mapping_tools) : []}
         onChange={(val) => onAnswer("mapping_tools", val)}
         maxSelect={5}
       />

@@ -1,4 +1,3 @@
-//src/app/tier2/assessment/BPM/StepGroupRenderer.tsx
 "use client";
 
 import React from "react";
@@ -82,8 +81,8 @@ import {isScore_5Group3Complete} from "./groups/score_5/Group03";
 type Props = {
   step: number;
   score: number;
-  answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
+  answers: Record<string, any>;
+  onAnswer: (key: string, value: any) => void;
 };
 
 export default function StepGroupRenderer({ step, score, answers, onAnswer }: Props) {
@@ -121,7 +120,7 @@ export function normalizeScore(score: number): string {
   return "score_5";
 }
 
-export const validatorSets: Record<string, Record<number, (answers: AssessmentAnswers) => boolean>> = {
+export const validatorSets: Record<string, Record<number, (answers: Record<string, any>) => boolean>> = {
   score_1: { 0: isScore_1Group1Complete, 1: isScore_1Group2Complete, 2: isScore_1Group3Complete },
   score_1_5: { 0: isScore_1_5Group1Complete, 1: isScore_1_5Group2Complete, 2: isScore_1_5Group3Complete },
   score_2: { 0: isScore_2Group1Complete, 1: isScore_2Group2Complete, 2: isScore_2Group3Complete },

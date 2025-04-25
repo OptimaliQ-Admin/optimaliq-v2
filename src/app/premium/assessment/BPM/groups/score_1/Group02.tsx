@@ -1,6 +1,7 @@
 "use client";
 import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -81,7 +82,7 @@ export default function Score1_Step02({ answers, onAnswer }: Props) {
           },
           { value: "None", label: "None right now" },
         ]}
-        selected={tools}
+        selected={Array.isArray(getArrayAnswer(tools)) ? getArrayAnswer(tools) : []}
         onChange={(val) => onAnswer("tools", val)}
         maxSelect={5}
       />

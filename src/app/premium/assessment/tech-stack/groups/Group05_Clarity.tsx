@@ -2,12 +2,13 @@
 
 import React from "react";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; 
+import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
-
 export function isGroup05Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["decision_bottlenecks"] === "string" &&
@@ -51,12 +52,12 @@ export default function Group05_Clarity({ answers, onAnswer }: Props) {
           { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
           { value: "other", label: "Other (please describe)" },
         ]}
-        value={teamSelected}
+        value={getStringAnswer(teamSelected)}
         onChange={(val) => onAnswer("team_alignment", val)}
       />
 
       {/* Conditionally show "Other" field */}
-      {teamSelected.includes("other") && (
+      {getArrayAnswer(teamSelected).includes("other") && (
         <TextAreaQuestion
           question="Please describe the alignment of your team"
           placeholder="Describe the alignment of your team..."

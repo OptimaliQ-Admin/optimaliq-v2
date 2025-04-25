@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -64,7 +65,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "cross_channel_attribution", label: "Cross-channel attribution" },
           { value: "none", label: "None of these" }
         ]}
-        selected={selectedAnalytics}
+        selected={Array.isArray(getArrayAnswer(selectedAnalytics)) ? getArrayAnswer(selectedAnalytics) : []}
         onChange={(val) => onAnswer("marketing_analytics", val)}
         maxSelect={5}
       />

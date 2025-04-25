@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -64,7 +65,7 @@ export default function Score4_5_Step01({ answers, onAnswer }: Props) {
           { value: "ai_testing_optimization", label: "AI for testing or optimization" },
           { value: "none", label: "None of these" }
         ]}
-        selected={selectedCapabilities}
+        selected={Array.isArray(getArrayAnswer(selectedCapabilities)) ? getArrayAnswer(selectedCapabilities) : []}
         onChange={(val) => onAnswer("forward_capabilities", val)}
         maxSelect={5}
       />

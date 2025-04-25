@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -37,7 +38,7 @@ export default function Score2_Step02({ answers, onAnswer }: Props) {
           { value: "Customer data platform (CDP)", label: "Customer data platform (CDP)" },
           { value: "None of these", label: "None of these" },
         ]}
-        selected={selectedTools}
+        selected={Array.isArray(getArrayAnswer(selectedTools)) ? getArrayAnswer(selectedTools) : []}
         onChange={(val) => onAnswer("marketing_tools", val)}
         maxSelect={5}
       />

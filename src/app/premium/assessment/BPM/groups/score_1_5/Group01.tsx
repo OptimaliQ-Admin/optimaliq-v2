@@ -1,5 +1,10 @@
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 "use client";
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
@@ -43,7 +48,7 @@ export default function Score1_5_Step01({ answers, onAnswer }: Props) {
     { value: "Marketing_campaigns", label: "Marketing campaigns" },
     { value: "None", label: "None of the above" },
   ]}
-  selected={coverage}
+  selected={Array.isArray(coverage) ? coverage : []}
         onChange={(val) => onAnswer("coverage", val)}
         maxSelect={5}
       />

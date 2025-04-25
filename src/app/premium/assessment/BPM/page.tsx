@@ -10,12 +10,12 @@ import StepGroupRenderer from "./StepGroupRenderer";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer"; 
 import { getErrorMessage } from "@/utils/errorHandler";// adjust path if needed
-import type {
-  AssessmentAnswers,
-  AssessmentAnswerValue,
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
-
-
 
 export default function OnboardingAssessmentPage() {
     const router = useRouter();
@@ -209,7 +209,7 @@ router.push("/tier2/assessment");
         updated[baseKey] = cleaned;
       }
 
-      if (Array.isArray(value) && key && !value.includes("other")) {
+      if (Array.isArray(value) && key && !getArrayAnswer(value).includes("other")) {
         updated[`${key}_other`] = "";
         updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }

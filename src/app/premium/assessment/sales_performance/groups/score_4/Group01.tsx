@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -64,7 +65,7 @@ export default function Score4_Step01({ answers, onAnswer }: Props) {
           { value: "handoff", label: "Handoff to Customer Success" },
           { value: "forecast_rollups", label: "Forecast roll-ups" },
         ]}
-        selected={automation}
+        selected={Array.isArray(getArrayAnswer(automation)) ? getArrayAnswer(automation) : []}
         onChange={(val) => onAnswer("which_549cbb", val)}
         maxSelect={5}
       />

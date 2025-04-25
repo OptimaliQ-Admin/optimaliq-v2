@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
+import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; 
+import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -47,7 +49,7 @@ export default function Score2_Step01({ answers, onAnswer }: Props) {
     { value: "customer_acquisition_cost", label: "Customer support" },
     { value: "churn_rate", label: "None — it still depends on who’s doing the work" },
   ]}
-  selected={consistency}
+  selected={Array.isArray(getArrayAnswer(consistency)) ? getArrayAnswer(consistency) : []}
         onChange={(val) => onAnswer("consistency", val)}
         maxSelect={5}
       />

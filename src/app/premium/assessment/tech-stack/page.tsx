@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import ProgressBar from "@/components/shared/ProgressBar";
-import StepGroupRenderer from "./StepGroupRenderer";
+import StepGroupRenderer from "@/components/shared/StepGroupRenderer";
 import { isGroup01Complete } from "./groups/Group01_Goals"
 import { isGroup02Complete } from "./groups/Group02_Positioning"
 import { isGroup03Complete } from "./groups/Group03_Operations"
@@ -13,9 +13,11 @@ import { isGroup04Complete } from "./groups/Group04_GrowthStack"
 import { isGroup05Complete } from "./groups/Group05_Clarity"
 import { isGroup06Complete } from "./groups/Group06_Benchmarks"
 import { isGroup07Complete } from "./groups/Group07_Final"
-import type {
-  AssessmentAnswers,
-  AssessmentAnswerValue,
+import {
+  getStringAnswer,
+  getArrayAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 
@@ -155,7 +157,7 @@ if (key.endsWith("_other")) {
 }
   
       // 🔁 If a select field is updated and "other" was removed, clear its _other input
-      if (Array.isArray(value) && key && !value.includes("other")) {
+      if (Array.isArray(value) && key && !getArrayAnswer(value).includes("other")) {
         updated[`${key}_other`] = "";
         updated[key] = value.filter((item: string) => !item.startsWith("Other:"));
       }

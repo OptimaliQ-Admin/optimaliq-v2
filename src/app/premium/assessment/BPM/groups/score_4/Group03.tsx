@@ -4,6 +4,7 @@ import React from "react";
 import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -49,7 +50,7 @@ export default function Score4_Step03({ answers, onAnswer }: Props) {
           { value: "Structured onboarding and documentation", label: "Structured onboarding and documentation" },
           { value: "Embedded in daily systems and training", label: "Embedded in daily systems and training" },
         ]}
-        selected={knowledge_sharing}
+        selected={Array.isArray(getArrayAnswer(knowledge_sharing)) ? getArrayAnswer(knowledge_sharing) : []}
               onChange={(val) => onAnswer("knowledge_sharing", val)}
               maxSelect={5}
             />

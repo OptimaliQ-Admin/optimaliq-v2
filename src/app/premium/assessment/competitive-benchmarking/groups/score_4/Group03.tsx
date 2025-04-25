@@ -3,6 +3,7 @@
 import React from "react";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -16,7 +17,7 @@ export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
 
 type Props = {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue void;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 export default function Score4_Step03({ answers, onAnswer }: Props) {

@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useTier2User } from "@/context/PremiumUserContext";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import BPMCard from "@/components/assessments/BPMCard";
 import SalesPerformanceCard from "@/components/assessments/SalesPerformanceCard";
@@ -11,7 +11,7 @@ import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
 import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
 
 function AssessmentComponent() {
-  const { user } = useTier2User();
+  const { user } = usePremiumUser();
   const router = useRouter();
 
   const email = user?.email;

@@ -5,6 +5,7 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
 import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
   getStringAnswer,
+  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
@@ -40,7 +41,7 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
           { value: "coaching_platforms", label: "Coaching platforms or frameworks" },
           { value: "sales_scorecards", label: "Sales scorecards" },
         ]}
-        selected={tools}
+        selected={Array.isArray(getArrayAnswer(tools)) ? getArrayAnswer(tools) : []}
         onChange={(val) => onAnswer("what_fed657", val)}
         maxSelect={5}
       />
