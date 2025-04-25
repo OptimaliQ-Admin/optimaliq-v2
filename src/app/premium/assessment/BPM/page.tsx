@@ -11,7 +11,6 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer"; 
 import { getErrorMessage } from "@/utils/errorHandler";// adjust path if needed
 import {
-  getStringAnswer,
   getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,

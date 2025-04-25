@@ -9,8 +9,6 @@ import Group05_Clarity from "@/app/premium/onboarding/initial-assessment/groups/
 import Group06_Benchmarks from "@/app/premium/onboarding/initial-assessment/groups/Group06_Benchmarks";
 import Group07_Final from "@/app/premium/onboarding/initial-assessment/groups/Group07_Final";
 import {
-  getStringAnswer,
-  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";

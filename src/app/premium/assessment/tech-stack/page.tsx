@@ -14,7 +14,6 @@ import { isGroup05Complete } from "./groups/Group05_Clarity"
 import { isGroup06Complete } from "./groups/Group06_Benchmarks"
 import { isGroup07Complete } from "./groups/Group07_Final"
 import {
-  getStringAnswer,
   getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,

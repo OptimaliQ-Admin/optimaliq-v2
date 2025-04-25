@@ -9,7 +9,6 @@ import StepGroupRenderer from "./StepGroupRenderer";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { normalizeScore, validatorSets } from "./StepGroupRenderer";
 import {
-  getStringAnswer,
   getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,

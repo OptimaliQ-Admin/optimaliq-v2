@@ -8,8 +8,6 @@ import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "@/components/shared/StepGroupRenderer";
 import { stepValidators } from "@/utils/initialAssessmentValidators";
 import {
-  getStringAnswer,
-  getArrayAnswer,
   type AssessmentAnswers,
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
