@@ -28,7 +28,7 @@ export default function LabeledInput({
         value={value}
         onChange={onChange}
         readOnly={readOnly}
-        className="block w-full mt-1 border border-gray-300 rounded p-2"
+        className="block w-full mt-1 border border-gray-300 rounded p-2 text-black bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         required
       />
     </label>
