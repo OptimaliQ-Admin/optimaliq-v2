@@ -9,6 +9,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "How It Works", href: "/#how-it-works" },
     { label: "Features", href: "/#key-features" },
+    { label: "Pricing", href: "/Pricing" },
     { label: "FAQ", href: "/#faq" },
     { label: "Subscribe", href: "/subscribe" },
   ];
@@ -37,7 +38,7 @@ export default function Navbar() {
           href="/subscribe/login"
           className="hidden md:inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm transition"
         >
-          Launch Audit
+          Sign In
         </Link>
       </div>
     </nav>

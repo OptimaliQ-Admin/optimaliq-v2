@@ -27,7 +27,7 @@ export default function HeroSection() {
         </p>
         <div className="mt-6 flex flex-col sm:flex-row gap-4">
           <Link
-            href="/dashboard/Page1"
+            href="/growthAssessment"
             className="px-6 py-3 text-center bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-transform transform hover:scale-105"
           >
             Start Your Free Growth Audit

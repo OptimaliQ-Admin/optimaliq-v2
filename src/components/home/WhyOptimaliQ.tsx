@@ -54,7 +54,7 @@ export default function WhyOptimaliQ() {
 
         {/* CTA */}
         <div className="mt-12">
-          <Link href="/dashboard/Page1">
+          <Link href="/growthAssessment">
             <button className="bg-blue-600 text-white text-lg px-6 py-3 rounded-lg shadow-md hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition">
               Try OptimaliQ Now
             </button>

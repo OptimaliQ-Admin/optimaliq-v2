@@ -1,9 +1,7 @@
-//src/components/subscribe/SubscribeForm.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import ReCAPTCHA from "react-google-recaptcha";
 import { IconInput } from "@/components/shared/IconInput";
 import { IconSelect } from "@/components/shared/IconSelect";
@@ -21,6 +19,7 @@ export default function SubscribeForm() {
   const router = useRouter();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
   const [userInfo, setUserInfo] = useState({
     first_name: "",
     last_name: "",
@@ -39,83 +38,27 @@ export default function SubscribeForm() {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!captchaToken) return alert("⚠️ Please complete the captcha.");
-    setLoading(true);
 
-    const { data: existingUser, error: fetchError } = await supabase
-      .from("tier2_users")
-      .select("u_id")
-      .eq("email", userInfo.email)
-      .maybeSingle();
-
-    let user_id;
-
-    if (fetchError) {
-      alert("❌ Failed to check existing user.");
-      setLoading(false);
+    if (!captchaToken) {
+      alert("⚠️ Please complete the captcha.");
       return;
     }
 
-    if (existingUser) {
-      user_id = existingUser.u_id;
-      const { error: updateError } = await supabase
-        .from("tier2_users")
-        .update({ ...userInfo })
-        .eq("u_id", user_id);
-
-      if (updateError) {
-        alert("❌ Failed to update user info.");
-        setLoading(false);
-        return;
-      }
-    } else {
-      const { data: newUser, error: insertError } = await supabase
-        .from("tier2_users")
-        .insert([{ ...userInfo }])
-        .select("u_id")
-        .single();
-
-      if (insertError || !newUser?.u_id) {
-        alert("❌ Failed to create user.");
-        setLoading(false);
-        return;
-      }
-      user_id = newUser.u_id;
+    if (!userInfo.email || !userInfo.email.includes("@")) {
+      alert("❌ Please enter a valid email.");
+      return;
     }
 
-    localStorage.setItem("tier2_user_id", user_id);
+    setLoading(true);
+
+    // Save to localStorage
     localStorage.setItem("tier2_email", userInfo.email);
+    localStorage.setItem("tier2_subscription_form", JSON.stringify(userInfo));
 
-    const sub_id = crypto.randomUUID();
-    await supabase.from("subscriptions").upsert([
-      {
-        sub_id,
-        u_id: user_id,
-        plan: "accelerator",
-        status: "pending",
-      },
-    ]);
-
-    const res = await fetch("/api/stripe/createCheckoutSession", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: userInfo.email,
-        plan: "accelerator",
-        user_id,
-        billingCycle: "annual",
-      }),
-    });
-
-    const { url } = await res.json();
-    if (url) {
-      window.location.href = url;
-    } else {
-      alert("❌ Failed to create Stripe session.");
-      setLoading(false);
-    }
+    // Route to next step
+    router.push("/subscribe/create-account");
   };
 
   return (
@@ -174,7 +117,6 @@ export default function SubscribeForm() {
           onChange={handleChange}
           placeholder="Company Name"
         />
-
         <IconSelect
           icon={FaBuilding}
           name="company_size"
@@ -219,7 +161,7 @@ export default function SubscribeForm() {
           disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          {loading ? "Redirecting..." : "Continue to Payment"}
+          {loading ? "Redirecting..." : "Continue"}
         </button>
 
         <p className="text-sm text-gray-500 text-center mt-3">
