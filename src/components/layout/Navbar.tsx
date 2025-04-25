@@ -34,7 +34,7 @@ export default function Navbar() {
           ))}
         </ul>
         <Link
-          href="/dashboard/Page1"
+          href="/subscribe/login"
           className="hidden md:inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm transition"
         >
           Launch Audit
