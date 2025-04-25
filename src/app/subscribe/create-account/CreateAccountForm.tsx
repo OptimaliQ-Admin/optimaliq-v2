@@ -80,39 +80,71 @@ export default function CreateAccountForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
+    // ✅ Basic input validation
+    if (!formState.email || !formState.email.includes("@")) {
+      alert("❌ Please enter a valid email address.");
+      return;
+    }
+  
+    if (formState.password.length < 12) {
+      alert("❌ Password must be at least 12 characters.");
+      return;
+    }
+  
+    const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
+    if (!passwordStrengthRegex.test(formState.password)) {
+      alert("❌ Password must include uppercase, lowercase, a number, and a symbol.");
+      return;
+    }
+  
     if (formState.password !== formState.confirmPassword) {
       alert("❌ Passwords do not match");
       return;
     }
-
+  
+    // ✅ Check if user already exists in Supabase Auth (approximate workaround)
+    const { data: existingUser, error: existingError } = await supabase
+      .from("tier2_users")
+      .select("u_id")
+      .eq("email", formState.email)
+      .maybeSingle();
+  
+    if (existingUser) {
+      alert("❌ An account with this email already exists. Please log in instead.");
+      return;
+    }
+  
+    // ✅ Proceed with Supabase signup
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: formState.email,
       password: formState.password,
     });
-
+  
     if (signUpError || !signUpData?.user?.id) {
-      alert("Failed to create auth account");
+      alert("❌ Failed to create auth account. Please check your input or try a different email.");
       return;
     }
+    console.log("Supabase UID:", signUpData.user.id);
+    const userId = localStorage.getItem("tier2_user_id");
 
-    const { error: updateError } = await supabase
-      .from("tier2_users")
-      .update({
-        timezone_offset: formState.timezone,
-        linkedin_url: formState.linkedIn,
-        agreed_terms: formState.termsAgreed,
-        agreed_marketing: formState.marketingOptIn,
-      })
-      .eq("u_id", signUpData.user.id);
-
-      if (updateError) {
-        alert("Account created, but failed to update user profile");
-      } else {
-        localStorage.removeItem("tier2_email"); // ✅ Clear it after use
-        setShowModal(true); // ✅ Show modal after success
-      }      
-  };
+const { error: updateError } = await supabase
+  .from("tier2_users")
+  .update({
+    timezone: formState.timezone,
+    linkedin_url: formState.linkedIn,
+    agreed_terms: formState.termsAgreed,
+    agreed_marketing: formState.marketingOptIn,
+  })
+  .eq("u_id", userId);
+  
+    if (updateError) {
+      alert("✅ Account created, but we couldn’t complete your profile update.");
+    } else {
+      localStorage.removeItem("tier2_email");
+      setShowModal(true);
+    }
+  };  
 
   return (
     <>
