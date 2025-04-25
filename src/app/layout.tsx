@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Inter } from "next/font/google";
-//import "@/app/globals.css";
+import "@/app/globals.css";
 import RootLayoutWrapper from "@/components/layout/RootLayoutWrapper";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
