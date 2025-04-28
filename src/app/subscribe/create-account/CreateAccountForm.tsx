@@ -115,21 +115,24 @@ const timezoneOptions = [
       }
   
       // Update tier2_users using the ID we already stored
-      const { error: updateError } = await supabase.from("tier2_users").update({
-        first_name: parsedUserInfo.first_name || null,
-        last_name: parsedUserInfo.last_name || null,
-        email: parsedUserInfo.email || formState.email, // fallback
-        phone: parsedUserInfo.phone || null,
-        title: parsedUserInfo.title || null,
-        company: parsedUserInfo.company || null,
-        company_size: parsedUserInfo.company_size || null,
-        revenue_range: parsedUserInfo.revenue_range || null,
-        industry: parsedUserInfo.industry || null,
-        timezone: formState.timezone,
-        linkedin_url: formState.linkedIn,
-        agreed_terms: formState.termsAgreed,
-        agreed_marketing: formState.marketingOptIn,
-      }).eq("u_id", storedUserId);
+      const { error: updateError } = await supabase
+  .from("tier2_users")
+  .update({
+    first_name: parsedUserInfo.first_name || null,
+    last_name: parsedUserInfo.last_name || null,
+    email: parsedUserInfo.email || formState.email, // fallback
+    phone: parsedUserInfo.phone || null,
+    title: parsedUserInfo.title || null,
+    company: parsedUserInfo.company || null,
+    company_size: parsedUserInfo.company_size || null,
+    revenue_range: parsedUserInfo.revenue_range || null,
+    industry: parsedUserInfo.industry || null,
+    timezone: formState.timezone,
+    linkedin_url: formState.linkedIn,
+    agreed_terms: formState.termsAgreed,
+    agreed_marketing: formState.marketingOptIn,
+  })
+  .eq("email", formState.email);
   
       if (updateError) {
         alert("✅ Account created, but we couldn’t complete your profile update.");
