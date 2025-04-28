@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { getErrorMessage } from "@/utils/errorHandler";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  // apiVersion omitted as discussed
+  // apiVersion omitted
 });
 
 export async function POST(req: Request) {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: unknown) {
-    console.error("⚠️ Webhook signature verification failed.", getErrorMessage(err));
+    console.error("⚠️ Webhook signature verification failed:", getErrorMessage(err));
     return new Response(`Webhook Error: ${getErrorMessage(err)}`, { status: 400 });
   }
 
@@ -32,10 +32,11 @@ export async function POST(req: Request) {
     const user_id = session.metadata?.user_id;
     const plan = session.metadata?.plan;
     const billingCycle = session.metadata?.billingCycle;
+    const customer_email = session.customer_email;
 
-    if (!user_id) {
-      console.error("❌ Missing user_id in metadata.");
-      return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
+    if (!user_id || !customer_email) {
+      console.error("❌ Missing user_id or customer_email in metadata.");
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     // 1. Check if user exists in tier2_users
@@ -50,30 +51,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to check user existence" }, { status: 500 });
     }
 
-    // 2. If not exists, insert user record with just the u_id and email if available
+    // 2. If not exists, insert basic user record
     if (!existingUser) {
-      const fallbackEmail = session.customer_email || null;
-      if (!fallbackEmail) {
-        console.error("❌ No email found to create fallback user.");
-        return NextResponse.json({ error: "Missing fallback email" }, { status: 400 });
-      }
-
-      const { error: insertUserError } = await supabase.from("tier2_users").insert([
-        {
+      const { error: insertUserError } = await supabase
+        .from("tier2_users")
+        .insert([{ 
           u_id: user_id,
-          email: fallbackEmail,
-        }
-      ]);
+          email: customer_email,
+        }]);
 
       if (insertUserError) {
         console.error("❌ Failed to insert fallback user:", insertUserError);
         return NextResponse.json({ error: "Failed to create fallback user" }, { status: 500 });
       }
 
-      console.log("✅ Fallback user created:", user_id);
+      console.log("✅ Fallback tier2_user created:", user_id);
     }
 
-    // 3. Now safe to upsert into subscriptions
+    // 3. Upsert into subscriptions
     const { error: subscriptionError } = await supabase
       .from("subscriptions")
       .upsert([
@@ -92,6 +87,34 @@ export async function POST(req: Request) {
     }
 
     console.log("✅ Subscription updated for user:", user_id);
+
+    // 4. Check if auth user exists
+const { data: authListData, error: listError } = await supabase.auth.admin.listUsers();
+
+if (listError) {
+  console.error("❌ Failed to fetch auth users:", listError);
+  return NextResponse.json({ error: "Failed to check auth users" }, { status: 500 });
+}
+
+// ✅ Manually search for the user
+const authUserExists = authListData?.users?.some((user) => user.email?.toLowerCase() === customer_email?.toLowerCase());
+
+// 5. If no auth user, create one
+if (!authUserExists) {
+  const { error: createAuthError } = await supabase.auth.admin.createUser({
+    email: customer_email,
+    email_confirm: true, // Optional: auto-confirm email
+  });
+
+  if (createAuthError) {
+    console.error("❌ Failed to create auth user:", createAuthError);
+    return NextResponse.json({ error: "Failed to create auth user" }, { status: 500 });
+  }
+
+  console.log("✅ Auth user created for:", customer_email);
+} else {
+  console.log("✅ Auth user already exists for:", customer_email);
+}
   }
 
   return NextResponse.json({ received: true });

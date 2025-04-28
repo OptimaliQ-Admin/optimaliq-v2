@@ -9,23 +9,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // 1. List all users
-    const { data: userData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+    // ✅ List all users (no filters)
+    const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
 
     if (listError) {
       console.error("❌ Failed to list users:", listError);
-      return NextResponse.json({ error: "User list failed" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
     }
 
-    // 2. Find the user by email manually
-    const user = userData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+    // ✅ Find user manually by email
+    const user = listData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
 
     if (!user) {
       console.error("❌ No user found with email:", email);
       return NextResponse.json({ error: "No user found" }, { status: 404 });
     }
 
-    // 3. Update the user's password
+    // ✅ Update user's password
     const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
       password,
     });
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to set password" }, { status: 500 });
     }
 
+    console.log(`✅ Password successfully set for ${email}`);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("❌ Unexpected server error:", error);

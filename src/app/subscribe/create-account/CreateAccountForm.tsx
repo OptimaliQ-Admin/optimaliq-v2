@@ -107,10 +107,7 @@ const timezoneOptions = [
 const res = await fetch("/api/admin/setPassword", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    email: formState.email,
-    password: formState.password,
-  }),
+  body: JSON.stringify({ email: formState.email, password: formState.password }),
 });
 
 const result = await res.json();
