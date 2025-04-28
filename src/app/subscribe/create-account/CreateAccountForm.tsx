@@ -1,3 +1,4 @@
+//src/app/subscribe/create-account/CreateAccountForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -79,34 +80,34 @@ const timezoneOptions = [
   
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-  
+    
       if (!formState.email || !formState.email.includes("@")) {
         alert("❌ Please enter a valid email address.");
         return;
       }
-  
+    
       if (formState.password.length < 12) {
         alert("❌ Password must be at least 12 characters.");
         return;
       }
-  
+    
       const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
       if (!passwordStrengthRegex.test(formState.password)) {
         alert("❌ Password must include uppercase, lowercase, a number, and a symbol.");
         return;
       }
-  
+    
       if (formState.password !== formState.confirmPassword) {
         alert("❌ Passwords do not match");
         return;
       }
-  
-      // ✅ Create Supabase Auth user
+    
+      // ✅ 1. Create Supabase Auth user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: formState.email,
         password: formState.password,
       });
-  
+    
       if (signUpError) {
         if (signUpError.status === 422) {
           alert("❌ An account already exists. Please log in.");
@@ -116,8 +117,8 @@ const timezoneOptions = [
         }
         return;
       }
-  
-      // ✅ After auth is created, update tier2_users
+    
+      // ✅ 2. After auth signup succeeds, update tier2_users
       const { error: updateError } = await supabase
         .from("tier2_users")
         .update({
@@ -135,43 +136,44 @@ const timezoneOptions = [
           agreed_terms: formState.termsAgreed,
           agreed_marketing: formState.marketingOptIn,
         })
-        .eq("u_id", storedUserId); // ✅ safer match by u_id
-  
+        .eq("u_id", storedUserId); // ✅ Update safely by u_id
+    
       if (updateError) {
-        alert("✅ Auth account created, but we couldn’t complete your profile update.");
-      } else {
-        localStorage.removeItem("tier2_email");
-        localStorage.removeItem("tier2_user_id");
-        localStorage.removeItem("tier2_full_user_info");
-        setShowModal(true);
+        console.error("⚠️ Profile update failed after auth creation:", updateError);
+        alert("✅ Account created, but we couldn’t complete your profile update.");
       }
-    };
-    return (
-      <>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
-        <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
-        <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
-        <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
-        <LabeledInput label="LinkedIn URL (optional)" name="linkedIn" value={formState.linkedIn} onChange={handleChange} />
-        
-        <div className="flex items-center space-x-2">
-          <input type="checkbox" name="termsAgreed" checked={formState.termsAgreed} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-          <label className="text-sm text-gray-700">
-            I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a>
-          </label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-          <label className="text-sm text-gray-700">
-            I&#39;d like to receive helpful insights and updates
-          </label>
-        </div>
+    
+      // ✅ 3. Clean up and send to Login
+    localStorage.removeItem("tier2_email");
+    localStorage.removeItem("tier2_user_id");
+    localStorage.removeItem("tier2_full_user_info");
 
-        <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
-      </form>
+    router.push("/subscribe/login");
+  };
 
-      <AssessmentIntroModal isOpen={showModal} onClose={() => setShowModal(false)} />
-    </>
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
+      <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
+      <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
+      <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
+      <LabeledInput label="LinkedIn URL (optional)" name="linkedIn" value={formState.linkedIn} onChange={handleChange} />
+
+      <div className="flex items-center space-x-2">
+        <input type="checkbox" name="termsAgreed" checked={formState.termsAgreed} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+        <label className="text-sm text-gray-700">
+          I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a>
+        </label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+        <label className="text-sm text-gray-700">
+          I&#39;d like to receive helpful insights and updates
+        </label>
+      </div>
+
+      <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
+    </form>
   );
 }
