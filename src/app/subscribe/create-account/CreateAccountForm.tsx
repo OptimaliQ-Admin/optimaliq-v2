@@ -124,24 +124,12 @@ if (!res.ok) {
 }
     
       // ✅ 2. After auth signup succeeds, update tier2_users
-      const { error: updateError } = await supabase
-        .from("tier2_users")
-        .update({
-          first_name: parsedUserInfo.first_name || null,
-          last_name: parsedUserInfo.last_name || null,
-          email: parsedUserInfo.email || formState.email,
-          phone: parsedUserInfo.phone || null,
-          title: parsedUserInfo.title || null,
-          company: parsedUserInfo.company || null,
-          company_size: parsedUserInfo.company_size || null,
-          revenue_range: parsedUserInfo.revenue_range || null,
-          industry: parsedUserInfo.industry || null,
-          timezone: formState.timezone,
-          linkedin_url: formState.linkedin_url,
-          agreed_terms: formState.agreed_terms,
-          agreed_marketing: formState.agreed_marketing,
-        })
-        .eq("u_id", storedUserId); // ✅ Update safely by u_id
+      const { error: updateError } = await supabase.from("tier2_users").update({
+        timezone: formState.timezone,
+        linkedin_url: formState.linkedin_url,
+        agreed_terms: formState.agreed_terms,
+        agreed_marketing: formState.agreed_marketing,
+      }).eq("u_id", storedUserId);
     
       if (updateError) {
         console.error("⚠️ Profile update failed after auth creation:", updateError);
