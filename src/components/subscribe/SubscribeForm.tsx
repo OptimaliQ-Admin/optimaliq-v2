@@ -44,7 +44,7 @@ export default function SubscribeForm() {
     if (!captchaToken) return alert("⚠️ Please complete the captcha.");
     setLoading(true);
   
-    // 1. Insert into leads (if not already exists)
+    // 1. Insert into leads
     await supabase.from("leads").upsert([{ 
       email: userInfo.email,
       first_name: userInfo.first_name,
@@ -67,12 +67,32 @@ export default function SubscribeForm() {
       return;
     }
   
-    // 3. If user exists, check subscription status
+    let userId = existingUser?.u_id;
+  
+    // 3. If no existing user, create one
+    if (!userId) {
+      userId = crypto.randomUUID(); // make new ID
+  
+      const { error: insertUserError } = await supabase
+        .from("tier2_users")
+        .insert([{ 
+          u_id: userId,
+          email: userInfo.email,
+        }]);
+  
+      if (insertUserError) {
+        alert("❌ Failed to create preliminary user record.");
+        setLoading(false);
+        return;
+      }
+    }
+  
+    // 4. Check subscription status (if existed)
     if (existingUser) {
       const { data: subscription, error: subError } = await supabase
         .from("subscriptions")
         .select("status")
-        .eq("u_id", existingUser.u_id)
+        .eq("u_id", userId)
         .maybeSingle();
   
       if (subError) {
@@ -82,30 +102,27 @@ export default function SubscribeForm() {
       }
   
       if (subscription?.status === "active") {
-        // 4a. Has active subscription — go to login
         router.push("/subscribe/login");
         return;
       }
     }
   
-    // 4b. Proceed to payment (New user or existing without active subscription)
-    const newUserId = existingUser?.u_id || crypto.randomUUID();
-    localStorage.setItem("tier2_user_id", newUserId);
+    // 5. Save locally
+    localStorage.setItem("tier2_user_id", userId);
     localStorage.setItem("tier2_email", userInfo.email);
     localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
-    
-    // ⬇️ Send the same real user_id to Stripe
+  
+    // 6. Send to Stripe
     const res = await fetch("/api/stripe/createCheckoutSession", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: userInfo.email,
         plan: "accelerator",
-        user_id: newUserId, // ✅ Always a real value
+        user_id: userId,
         billingCycle: "annual",
       }),
     });
-    
   
     const { url } = await res.json();
     if (url) {

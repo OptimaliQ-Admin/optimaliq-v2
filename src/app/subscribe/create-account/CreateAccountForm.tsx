@@ -1,12 +1,11 @@
-// File: src/app/subscribe/create-account/CreateAccountForm.tsx
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import LabeledInput from "@/components/shared/LabeledInput";
 import LabeledSelect from "@/components/shared/LabeledSelect";
 import SubmitButton from "@/components/shared/SubmitButton";
-import { supabase } from "@/lib/supabase";
 import AssessmentIntroModal from "@/components/modals/AssessmentIntroModal";
 
 const timezoneOptions = [
@@ -52,121 +51,171 @@ const timezoneOptions = [
     { value: "+14:00", label: "(GMT +14:00) Line Islands, Tokelau" },
   ];
 
-  export default function CreateAccountForm() {
-    const router = useRouter();
-    const [showModal, setShowModal] = useState(false);
-    
-    const storedUserInfo = typeof window !== "undefined" ? localStorage.getItem("tier2_full_user_info") : null;
-    const storedEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : "";
-    const storedUserId = typeof window !== "undefined" ? localStorage.getItem("tier2_user_id") : "";
-  
-    const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : {};
-  
-    const [formState, setFormState] = useState({
-      email: storedEmail || "",
-      password: "",
-      confirmPassword: "",
-      timezone: "",
-      linkedIn: "",
-      termsAgreed: false,
-      marketingOptIn: false,
+export default function CreateAccountForm() {
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+
+  const storedEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") || "" : "";
+  const storedUserInfo = typeof window !== "undefined" ? localStorage.getItem("tier2_full_user_info") : null;
+  const storedUserId = typeof window !== "undefined" ? localStorage.getItem("tier2_user_id") || "" : "";
+
+  const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : {};
+
+  const [formState, setFormState] = useState({
+    email: storedEmail,
+    password: "",
+    confirmPassword: "",
+    timezone: "",
+    linkedIn: "",
+    termsAgreed: false,
+    marketingOptIn: false,
+  });
+
+  useEffect(() => {
+    const verifyEligibility = async () => {
+      if (!storedEmail) {
+        router.push("/subscribe");
+        return;
+      }
+
+      // Check if user exists
+      const { data: userData } = await supabase
+        .from("tier2_users")
+        .select("u_id")
+        .eq("email", storedEmail)
+        .maybeSingle();
+
+      if (!userData) {
+        router.push("/subscribe");
+        return;
+      }
+
+      // Check if subscription is active
+      const { data: subscriptionData } = await supabase
+        .from("subscriptions")
+        .select("status")
+        .eq("u_id", userData.u_id)
+        .maybeSingle();
+
+      if (!subscriptionData || subscriptionData.status !== "active") {
+        router.push("/subscribe");
+        return;
+      }
+
+      // Check if Auth already exists
+      const { data: authCheck } = await supabase.auth.admin.getUserById(storedEmail);
+
+      if (authCheck?.user) {
+        router.push("/subscribe/login");
+        return;
+      }
+    };
+
+    verifyEligibility();
+  }, [router, storedEmail]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, type } = e.target;
+    const value = type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formState.email || !formState.email.includes("@")) {
+      alert("❌ Please enter a valid email address.");
+      return;
+    }
+
+    if (formState.password.length < 12) {
+      alert("❌ Password must be at least 12 characters.");
+      return;
+    }
+
+    const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
+    if (!passwordStrengthRegex.test(formState.password)) {
+      alert("❌ Password must include uppercase, lowercase, a number, and a symbol.");
+      return;
+    }
+
+    if (formState.password !== formState.confirmPassword) {
+      alert("❌ Passwords do not match");
+      return;
+    }
+
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: formState.email,
+      password: formState.password,
     });
-  
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, type } = e.target;
-      const value = type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value;
-      setFormState((prev) => ({ ...prev, [name]: value }));
-    };
-  
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-  
-      // Basic validation
-      if (!formState.email || !formState.email.includes("@")) {
-        alert("❌ Please enter a valid email address.");
-        return;
-      }
-  
-      if (formState.password.length < 12) {
-        alert("❌ Password must be at least 12 characters.");
-        return;
-      }
-  
-      const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
-      if (!passwordStrengthRegex.test(formState.password)) {
-        alert("❌ Password must include uppercase, lowercase, a number, and a symbol.");
-        return;
-      }
-  
-      if (formState.password !== formState.confirmPassword) {
-        alert("❌ Passwords do not match");
-        return;
-      }
-  
-      // Create Supabase Auth user
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: formState.email,
-        password: formState.password,
-      });
-  
-      if (signUpError || !signUpData?.user?.id) {
-        alert("❌ Failed to create auth account. Please check your input or try a different email.");
-        return;
-      }
-  
-      // Update tier2_users using the ID we already stored
-      const { error: updateError } = await supabase
-  .from("tier2_users")
-  .update({
-    first_name: parsedUserInfo.first_name || null,
-    last_name: parsedUserInfo.last_name || null,
-    email: parsedUserInfo.email || formState.email, // fallback
-    phone: parsedUserInfo.phone || null,
-    title: parsedUserInfo.title || null,
-    company: parsedUserInfo.company || null,
-    company_size: parsedUserInfo.company_size || null,
-    revenue_range: parsedUserInfo.revenue_range || null,
-    industry: parsedUserInfo.industry || null,
-    timezone: formState.timezone,
-    linkedin_url: formState.linkedIn,
-    agreed_terms: formState.termsAgreed,
-    agreed_marketing: formState.marketingOptIn,
-  })
-  .eq("email", formState.email);
-  
-      if (updateError) {
-        alert("✅ Account created, but we couldn’t complete your profile update.");
+
+    if (signUpError) {
+      if (signUpError.status === 422) {
+        alert("❌ An account already exists. Please log in.");
+        router.push("/subscribe/login");
       } else {
-        // ✅ Clean up
-        localStorage.removeItem("tier2_email");
-        localStorage.removeItem("tier2_user_id");
-        localStorage.removeItem("tier2_full_user_info");
-        setShowModal(true);
+        alert(`❌ Failed to create auth account: ${signUpError.message}`);
       }
-    };
-  
-    return (
-      <>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <LabeledInput label="Email" name="email" value={formState.email} readOnly={true} type="email" />
-          <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
-          <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
-          <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
-          <LabeledInput label="LinkedIn URL (optional)" name="linkedIn" value={formState.linkedIn} onChange={handleChange} />
-  
-          <div className="flex items-center space-x-2">
-            <input type="checkbox" name="termsAgreed" checked={formState.termsAgreed} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-            <label className="text-sm text-gray-700">I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a></label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-            <label className="text-sm text-gray-700">I&#39;d like to receive helpful insights and updates</label>
-          </div>
-  
-          <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
-        </form>
-  
-        <AssessmentIntroModal isOpen={showModal} onClose={() => setShowModal(false)} />
-      </>
-    );
-  }
+      return;
+    }
+
+    // Update the user's profile now
+    const { error: updateError } = await supabase
+      .from("tier2_users")
+      .update({
+        first_name: parsedUserInfo.first_name || null,
+        last_name: parsedUserInfo.last_name || null,
+        email: parsedUserInfo.email || formState.email,
+        phone: parsedUserInfo.phone || null,
+        title: parsedUserInfo.title || null,
+        company: parsedUserInfo.company || null,
+        company_size: parsedUserInfo.company_size || null,
+        revenue_range: parsedUserInfo.revenue_range || null,
+        industry: parsedUserInfo.industry || null,
+        timezone: formState.timezone,
+        linkedin_url: formState.linkedIn,
+        agreed_terms: formState.termsAgreed,
+        agreed_marketing: formState.marketingOptIn,
+      })
+      .eq("email", formState.email);
+
+    if (updateError) {
+      alert("✅ Auth account created, but we couldn’t complete your profile update.");
+    } else {
+      // Clean up local storage
+      localStorage.removeItem("tier2_email");
+      localStorage.removeItem("tier2_user_id");
+      localStorage.removeItem("tier2_full_user_info");
+      setShowModal(true);
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
+        <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
+        <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
+        <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
+        <LabeledInput label="LinkedIn URL (optional)" name="linkedIn" value={formState.linkedIn} onChange={handleChange} />
+        
+        <div className="flex items-center space-x-2">
+          <input type="checkbox" name="termsAgreed" checked={formState.termsAgreed} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+          <label className="text-sm text-gray-700">
+            I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a>
+          </label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+          <label className="text-sm text-gray-700">
+            I'd like to receive helpful insights and updates
+          </label>
+        </div>
+
+        <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
+      </form>
+
+      <AssessmentIntroModal isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
+}
