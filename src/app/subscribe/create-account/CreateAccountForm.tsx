@@ -7,6 +7,8 @@ import { supabase } from "@/lib/supabase";
 import LabeledInput from "@/components/shared/LabeledInput";
 import LabeledSelect from "@/components/shared/LabeledSelect";
 import SubmitButton from "@/components/shared/SubmitButton";
+import { toast } from "react-hot-toast";
+
 
 const timezoneOptions = [
     { value: "-12:00", label: "(GMT -12:00) Eniwetok, Kwajalein" },
@@ -102,47 +104,68 @@ const timezoneOptions = [
         return;
       }
     
-      // ✅ 1. Create Supabase Auth user
-      // 1. Set password using admin API (works even if user already exists)
-const res = await fetch("/api/admin/setPassword", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email: formState.email, password: formState.password }),
-});
-
-const result = await res.json();
-
-if (!res.ok) {
-  if (res.status === 404) {
-    alert("❌ No user record found. Please start subscription again.");
-    router.push("/subscribe");
-    return;
-  } else {
-    alert(`❌ Failed to set password: ${result.error || "Unknown error"}`);
-    return;
-  }
-}
+      // ✅ 1. Set password using admin API
+      const res = await fetch("/api/admin/setPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formState.email, password: formState.password }),
+      });
     
-      // ✅ 2. After auth signup succeeds, update tier2_users
-      const { error: updateError } = await supabase.from("tier2_users").update({
-        timezone: formState.timezone,
-        linkedin_url: formState.linkedin_url,
-        agreed_terms: formState.agreed_terms,
-        agreed_marketing: formState.agreed_marketing,
-      }).eq("u_id", storedUserId);
+      const result = await res.json();
+    
+      if (!res.ok) {
+        if (res.status === 404) {
+          alert("❌ No user record found. Please start subscription again.");
+          router.push("/subscribe");
+          return;
+        } else {
+          alert(`❌ Failed to set password: ${result.error || "Unknown error"}`);
+          return;
+        }
+      }
+    
+      // ✅ 2. Lookup the real Supabase Auth user by email
+      const { data: userList, error: listError } = await supabase.auth.admin.listUsers();
+      if (listError || !userList) {
+        alert("❌ Failed to fetch auth users.");
+        return;
+      }
+    
+      const matchedUser = userList.users.find((user) => user.email?.toLowerCase() === formState.email.toLowerCase());
+    
+      if (!matchedUser) {
+        alert("❌ Failed to find created auth user.");
+        return;
+      }
+    
+      // ✅ 3. Update tier2_users record: update u_id + fields
+      const { error: updateError } = await supabase
+        .from("tier2_users")
+        .update({
+          u_id: matchedUser.id, // 🧠 real auth uid
+          timezone: formState.timezone,
+          linkedin_url: formState.linkedin_url,
+          agreed_terms: formState.agreed_terms,
+          agreed_marketing: formState.agreed_marketing,
+        })
+        .eq("email", formState.email); // ✅ now match by email, not temp id
     
       if (updateError) {
-        console.error("⚠️ Profile update failed after auth creation:", updateError);
+        console.error("⚠️ Profile update failed:", updateError);
         alert("✅ Account created, but we couldn’t complete your profile update.");
       }
     
-      // ✅ 3. Clean up and send to Login
-    localStorage.removeItem("tier2_email");
-    localStorage.removeItem("tier2_user_id");
-    localStorage.removeItem("tier2_full_user_info");
-
-    router.push("/subscribe/login");
-  };
+      // ✅ 4. Clean up and send to Login
+      localStorage.removeItem("tier2_email");
+      localStorage.removeItem("tier2_user_id");
+      localStorage.removeItem("tier2_full_user_info");
+    
+      toast.success("🎉 Account created! Redirecting you to login...");
+    
+      setTimeout(() => {
+        router.push("/subscribe/login");
+      }, 2000);
+    };    
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
