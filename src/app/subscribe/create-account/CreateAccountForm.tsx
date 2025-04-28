@@ -7,7 +7,6 @@ import { supabase } from "@/lib/supabase";
 import LabeledInput from "@/components/shared/LabeledInput";
 import LabeledSelect from "@/components/shared/LabeledSelect";
 import SubmitButton from "@/components/shared/SubmitButton";
-import AssessmentIntroModal from "@/components/modals/AssessmentIntroModal";
 
 const timezoneOptions = [
     { value: "-12:00", label: "(GMT -12:00) Eniwetok, Kwajalein" },
@@ -67,10 +66,11 @@ const timezoneOptions = [
       password: "",
       confirmPassword: "",
       timezone: "",
-      linkedIn: "",
-      termsAgreed: false,
-      marketingOptIn: false,
+      linkedin_url: "",
+      agreed_terms: false,
+      agreed_marketing: false, 
     });
+    
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, type } = e.target;
@@ -137,9 +137,9 @@ if (!res.ok) {
           revenue_range: parsedUserInfo.revenue_range || null,
           industry: parsedUserInfo.industry || null,
           timezone: formState.timezone,
-          linkedin_url: formState.linkedIn,
-          agreed_terms: formState.termsAgreed,
-          agreed_marketing: formState.marketingOptIn,
+          linkedin_url: formState.linkedin_url,
+          agreed_terms: formState.agreed_terms,
+          agreed_marketing: formState.agreed_marketing,
         })
         .eq("u_id", storedUserId); // ✅ Update safely by u_id
     
@@ -158,25 +158,37 @@ if (!res.ok) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
-      <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
-      <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
-      <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
-      <LabeledInput label="LinkedIn URL (optional)" name="linkedIn" value={formState.linkedIn} onChange={handleChange} />
-
+    <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
+    <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
+    <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
+    <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
+    <LabeledInput label="LinkedIn URL (optional)" name="linkedin_url" value={formState.linkedin_url} onChange={handleChange} /> {/* ✅ fixed here */}
+    
       <div className="flex items-center space-x-2">
-        <input type="checkbox" name="termsAgreed" checked={formState.termsAgreed} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-        <label className="text-sm text-gray-700">
-          I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a>
-        </label>
-      </div>
+  <input
+    type="checkbox"
+    name="agreed_terms" // ✅ corrected
+    checked={formState.agreed_terms}
+    onChange={handleChange}
+    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+  />
+  <label className="text-sm text-gray-700">
+    I agree to the <a href="#" className="text-blue-600 underline">terms and conditions</a>
+  </label>
+</div>
 
-      <div className="flex items-center space-x-2">
-        <input type="checkbox" name="marketingOptIn" checked={formState.marketingOptIn} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-        <label className="text-sm text-gray-700">
-          I&#39;d like to receive helpful insights and updates
-        </label>
-      </div>
+<div className="flex items-center space-x-2">
+  <input
+    type="checkbox"
+    name="agreed_marketing" // ✅ corrected
+    checked={formState.agreed_marketing}
+    onChange={handleChange}
+    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+  />
+  <label className="text-sm text-gray-700">
+    I&#39;d like to receive helpful insights and updates
+  </label>
+</div>
 
       <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
     </form>
