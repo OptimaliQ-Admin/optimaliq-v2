@@ -103,20 +103,28 @@ const timezoneOptions = [
       }
     
       // ✅ 1. Create Supabase Auth user
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: formState.email,
-        password: formState.password,
-      });
-    
-      if (signUpError) {
-        if (signUpError.status === 422) {
-          alert("❌ An account already exists. Please log in.");
-          router.push("/subscribe/login");
-        } else {
-          alert(`❌ Failed to create auth account: ${signUpError.message}`);
-        }
-        return;
-      }
+      // 1. Set password using admin API (works even if user already exists)
+const res = await fetch("/api/admin/setPassword", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email: formState.email,
+    password: formState.password,
+  }),
+});
+
+const result = await res.json();
+
+if (!res.ok) {
+  if (res.status === 404) {
+    alert("❌ No user record found. Please start subscription again.");
+    router.push("/subscribe");
+    return;
+  } else {
+    alert(`❌ Failed to set password: ${result.error || "Unknown error"}`);
+    return;
+  }
+}
     
       // ✅ 2. After auth signup succeeds, update tier2_users
       const { error: updateError } = await supabase

@@ -54,7 +54,7 @@ export default function SubscribeForm() {
       title: userInfo.title,
     }]);
   
-    // 2. Check if user already exists in tier2_users
+    // 2. Check if user exists in tier2_users
     const { data: existingUser, error: fetchError } = await supabase
       .from("tier2_users")
       .select("u_id")
@@ -69,7 +69,7 @@ export default function SubscribeForm() {
   
     let userId = existingUser?.u_id;
   
-    // 3. If no existing user, create one
+    // 3. If no existing user, create one (INSERT full record not just email)
     if (!userId) {
       userId = crypto.randomUUID(); // make new ID
   
@@ -78,6 +78,14 @@ export default function SubscribeForm() {
         .insert([{ 
           u_id: userId,
           email: userInfo.email,
+          first_name: userInfo.first_name,
+          last_name: userInfo.last_name,
+          company: userInfo.company,
+          phone: userInfo.phone,
+          title: userInfo.title,
+          company_size: userInfo.company_size,
+          revenue_range: userInfo.revenue_range,
+          industry: userInfo.industry,
         }]);
   
       if (insertUserError) {
@@ -87,7 +95,7 @@ export default function SubscribeForm() {
       }
     }
   
-    // 4. Check subscription status (if existed)
+    // 4. Check subscription status
     if (existingUser) {
       const { data: subscription, error: subError } = await supabase
         .from("subscriptions")
@@ -112,7 +120,7 @@ export default function SubscribeForm() {
     localStorage.setItem("tier2_email", userInfo.email);
     localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
   
-    // 6. Send to Stripe
+    // 6. Create Stripe checkout session
     const res = await fetch("/api/stripe/createCheckoutSession", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
