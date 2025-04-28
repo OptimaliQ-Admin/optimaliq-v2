@@ -1,7 +1,10 @@
+// src/app/api/stripe/webhook/route.ts
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";  // for DB inserts
+import { supabaseAdmin } from "@/lib/supabaseAdmin"; // for auth user creation
 import { getErrorMessage } from "@/utils/errorHandler";
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // apiVersion omitted
@@ -89,21 +92,20 @@ export async function POST(req: Request) {
     console.log("✅ Subscription updated for user:", user_id);
 
     // 4. Check if auth user exists
-const { data: authListData, error: listError } = await supabase.auth.admin.listUsers();
+const { data: authListData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
 
 if (listError) {
   console.error("❌ Failed to fetch auth users:", listError);
   return NextResponse.json({ error: "Failed to check auth users" }, { status: 500 });
 }
 
-// ✅ Manually search for the user
 const authUserExists = authListData?.users?.some((user) => user.email?.toLowerCase() === customer_email?.toLowerCase());
 
 // 5. If no auth user, create one
 if (!authUserExists) {
-  const { error: createAuthError } = await supabase.auth.admin.createUser({
+  const { error: createAuthError } = await supabaseAdmin.auth.admin.createUser({
     email: customer_email,
-    email_confirm: true, // Optional: auto-confirm email
+    email_confirm: true,
   });
 
   if (createAuthError) {
