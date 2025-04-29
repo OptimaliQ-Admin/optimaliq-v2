@@ -1,14 +1,8 @@
-//src/lib/supabase.ts
-import { createClient } from "@supabase/supabase-js";
+// src/lib/supabase.ts
+"use client"; // Important because this is client-side code
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true, // 🔥 critical
-    autoRefreshToken: true, // 🔥 critical
-    detectSessionInUrl: true,
-  },
-});
+// ✅ No need to manually specify URL and Key unless you want to override defaults
 
+export const supabase = createBrowserSupabaseClient();

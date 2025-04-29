@@ -63,6 +63,8 @@ export default function LoginPage() {
       }
 
       setUser(profile); // ✅ set context
+      const { data: sessionData } = await supabase.auth.getSession();
+console.log("🧠 Session after login:", sessionData);
 
       if (hasCompletedOnboarding) {
         router.push("/premium/dashboard");
