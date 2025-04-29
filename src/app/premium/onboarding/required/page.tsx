@@ -1,3 +1,4 @@
+//src/app/premium/onboarding/required/page.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
