@@ -8,8 +8,9 @@ import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { getErrorMessage } from "@/utils/errorHandler";
 
-const supabase = createServerComponentClient({ cookies });
+
 export async function POST(req: Request) {
+  const supabase = createServerComponentClient({ cookies });
   try {
     const { formAnswers } = await req.json();
 
