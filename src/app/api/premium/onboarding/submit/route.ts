@@ -1,7 +1,8 @@
 // File: src/app/api/premium/onboarding/submit/route.ts
 
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
@@ -12,10 +13,12 @@ export async function POST(req: Request) {
     const { formAnswers } = await req.json();
 
     // ✅ Get the currently logged-in user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const supabase = createServerComponentClient({ cookies });
+
+const {
+  data: { user },
+  error: authError,
+} = await supabase.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
