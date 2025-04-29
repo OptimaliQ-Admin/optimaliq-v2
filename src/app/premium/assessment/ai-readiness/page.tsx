@@ -18,7 +18,7 @@ import {
 import { getErrorMessage } from "@/utils/errorHandler";
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
-  const { user } = usePremiumUser();
+  const { user, isUserLoaded } = usePremiumUser(); // ✅ Get isUserLoaded
   const [step, setStep] = useState(0);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);

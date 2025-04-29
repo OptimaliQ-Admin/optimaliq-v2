@@ -17,7 +17,7 @@ import {
 
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
-  const { user } = usePremiumUser();
+  const { user, isUserLoaded } = usePremiumUser(); // ✅ Get isUserLoaded
   const userEmail = user?.email;
   const [step, setStep] = useState(0);
   const [score, setScore] = useState<number | null>(null);

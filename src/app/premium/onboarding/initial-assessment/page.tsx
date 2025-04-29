@@ -1,9 +1,9 @@
+//src/app/premium/onboarding/initial-assessment/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePremiumUser } from "@/context/PremiumUserContext";
 import ProgressBar from "@/components/shared/ProgressBar";
 import StepGroupRenderer from "@/components/shared/StepGroupRenderer";
 import { stepValidators } from "@/utils/initialAssessmentValidators";
@@ -13,9 +13,11 @@ import {
 } from "@/lib/types/AssessmentAnswers";
 import { stripOtherFields } from "@/utils/stripOtherFields";
 import { getErrorMessage } from "@/utils/errorHandler";
+import { usePremiumUser } from "@/context/PremiumUserContext";
+
 export default function InitialAssessmentPage() {
   const router = useRouter();
-  const { user } = usePremiumUser();
+  const { user, isUserLoaded } = usePremiumUser(); // ✅ Get isUserLoaded
 
   const [step, setStep] = useState(0);
   const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
@@ -23,13 +25,15 @@ export default function InitialAssessmentPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (!isUserLoaded) return; // ⏳ Wait until we know
+
     if (!user?.u_id) {
       alert("User not authenticated. Please log in again.");
       router.push("/subscribe/create-account");
     } else {
       setLoading(false);
     }
-  }, [user?.u_id, router]);
+  }, [user?.u_id, isUserLoaded, router]); 
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });

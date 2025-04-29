@@ -1,4 +1,3 @@
-//src/context/PremiumUserContext.tsx
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -23,15 +22,18 @@ export type PremiumUser = {
 type ContextType = {
   user: PremiumUser | null;
   setUser: (user: PremiumUser | null) => void;
+  isUserLoaded: boolean; // ✅ add this
 };
 
 const PremiumUserContext = createContext<ContextType>({
   user: null,
   setUser: () => {},
+  isUserLoaded: false, // ✅ default false
 });
 
 export const PremiumUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<PremiumUser | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false); // ✅ new
 
   // ✅ Load user from localStorage once on initial render
   useEffect(() => {
@@ -42,6 +44,8 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
       }
     } catch (err) {
       console.warn("❌ Failed to load cached Premium user.");
+    } finally {
+      setIsUserLoaded(true); // ✅ mark as loaded no matter what
     }
   }, []);
 
@@ -55,7 +59,7 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
   }, [user]);
 
   return (
-    <PremiumUserContext.Provider value={{ user, setUser }}>
+    <PremiumUserContext.Provider value={{ user, setUser, isUserLoaded }}>
       {children}
     </PremiumUserContext.Provider>
   );
