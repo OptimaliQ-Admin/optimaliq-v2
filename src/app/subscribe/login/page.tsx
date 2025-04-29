@@ -7,6 +7,7 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
 import { toast } from "react-hot-toast";
+import AssessmentIntroModal from "@/components/modals/AssessmentIntroModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,45 +62,57 @@ export default function LoginPage() {
     if (hasCompletedOnboarding) {
       router.push("/premium/dashboard");
     } else {
-      toast.success("Complete your onboarding to unlock your dashboard!");
-      router.push("/premium/onboarding/initial-assessment");
+      setShowAssessmentModal(true); // ✅ Correct modal triggered
     }
   };
 
+  const handleStartAssessment = () => {
+    setShowAssessmentModal(false);
+    router.push("/premium/onboarding/initial-assessment");
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
-        <h1 className="text-2xl font-bold text-center text-gray-800">Welcome Back</h1>
-        <p className="text-center text-sm text-gray-600 mb-6">Log in to access your dashboard</p>
+    <>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
+          <h1 className="text-2xl font-bold text-center text-gray-800">Welcome Back</h1>
+          <p className="text-center text-sm text-gray-600 mb-6">Log in to access your dashboard</p>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <LabeledInput
-            label="Email"
-            name="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <form onSubmit={handleLogin} className="space-y-4">
+            <LabeledInput
+              label="Email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-          <LabeledInput
-            label="Password"
-            name="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <LabeledInput
+              label="Password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-          <div className="text-right text-sm">
-            <a href="/subscribe/forgot-password" className="text-blue-600 hover:underline">
-              Forgot your password?
-            </a>
-          </div>
+            <div className="text-right text-sm">
+              <a href="/subscribe/forgot-password" className="text-blue-600 hover:underline">
+                Forgot your password?
+              </a>
+            </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <SubmitButton text="Log In" isSubmitting={false} cooldown={0} />
-        </form>
+            <SubmitButton text="Log In" isSubmitting={false} cooldown={0} />
+          </form>
+        </div>
       </div>
-    </div>
+
+      {/* ✅ Modal to prompt onboarding if not yet done */}
+      <AssessmentIntroModal
+        isOpen={showAssessmentModal}
+        onClose={handleStartAssessment} // closes + navigates
+      />
+    </>
   );
 }
