@@ -38,7 +38,7 @@ export default function OnboardingRequiredPage() {
             onClick={handleStart}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
           >
-            Let's Get Started
+            Let&#39;s Get Started
           </button>
         </div>
 
