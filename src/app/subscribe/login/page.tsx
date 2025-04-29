@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
+import { toast } from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,29 +20,49 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
 
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+    // ✅ 1. Try login
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (signInError || !data?.user?.id) {
+    if (signInError || !signInData?.user?.id) {
       setError("Invalid credentials or user not found.");
       return;
     }
 
-    const { data: profile, error: profileError } = await supabase
-      .from("tier2_users")
-      .select("*")
-      .eq("u_id", data.user.id)
-      .single();
+    const authUserId = signInData.user.id;
 
-    if (profileError || !profile) {
-      setError("Failed to load user profile.");
+    // ✅ 2. One API call to check everything
+    const res = await fetch("/api/premium/auth/checkUserStatus", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: authUserId }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setError(result.error || "Failed to verify account.");
       return;
     }
 
-    setUser(profile);
-    router.push("/premium/dashboard");
+    const { hasActiveSubscription, hasCompletedOnboarding, profile } = result;
+
+    setUser(profile); // ✅ Set context
+
+    if (!hasActiveSubscription) {
+      toast.error("Your subscription is inactive. Please subscribe.");
+      router.push("/Pricing");
+      return;
+    }
+
+    if (hasCompletedOnboarding) {
+      router.push("/premium/dashboard");
+    } else {
+      toast.success("Complete your onboarding to unlock your dashboard!");
+      router.push("/premium/onboarding/initial-assessment");
+    }
   };
 
   return (
