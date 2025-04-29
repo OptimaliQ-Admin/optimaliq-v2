@@ -1,8 +1,6 @@
 // src/lib/supabase.ts
-"use client"; // Important because this is client-side code
+"use client";
 
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 
-// ✅ No need to manually specify URL and Key unless you want to override defaults
-
-export const supabase = createBrowserSupabaseClient();
+export const supabase = createPagesBrowserClient();

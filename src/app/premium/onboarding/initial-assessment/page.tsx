@@ -25,15 +25,18 @@ export default function InitialAssessmentPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isUserLoaded) return; // ⏳ Wait until we know
-
+    if (!isUserLoaded) return;
+  
+    console.log("🧠 isUserLoaded =", isUserLoaded);
+    console.log("🧠 user =", user);
+  
     if (!user?.u_id) {
       alert("User not authenticated. Please log in again.");
       router.push("/subscribe/create-account");
     } else {
       setLoading(false);
     }
-  }, [user?.u_id, isUserLoaded, router]); 
+  }, [user?.u_id, isUserLoaded, router]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
