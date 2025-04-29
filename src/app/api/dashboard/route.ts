@@ -91,7 +91,8 @@ export async function POST(req: Request) {
     };
 
     // Save insights
-    await saveDashboardInsights(payload);
+    await saveDashboardInsights(supabase, payload);
+
 
     // Save summary to profile
     await saveProfileScores(u_id, {

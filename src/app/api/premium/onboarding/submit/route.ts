@@ -6,19 +6,18 @@ import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
-
 import { getErrorMessage } from "@/utils/errorHandler";
+
+const supabase = createServerComponentClient({ cookies });
 export async function POST(req: Request) {
   try {
     const { formAnswers } = await req.json();
 
     // ✅ Get the currently logged-in user
-    const supabase = createServerComponentClient({ cookies });
-
-const {
-  data: { user },
-  error: authError,
-} = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -62,7 +61,7 @@ const {
     });
 
     // ✅ Update dashboard insights
-    await saveDashboardInsights({
+    await saveDashboardInsights(supabase, {
       u_id: userId,
       strategyScore: aiScores.strategyScore,
       processScore: aiScores.processScore,

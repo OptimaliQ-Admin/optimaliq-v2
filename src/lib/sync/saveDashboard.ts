@@ -1,6 +1,6 @@
-// /lib/sync/saveDashboard.ts
+// src/lib/sync/saveDashboard.ts
 
-import { supabase } from "@/lib/supabase";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 type DashboardInsightPayload = {
   u_id: string;
@@ -19,7 +19,11 @@ type DashboardInsightPayload = {
   industry?: string;
 };
 
-export async function saveDashboardInsights(payload: DashboardInsightPayload): Promise<boolean> {
+// ✅ Now accept supabase client as a parameter
+export async function saveDashboardInsights(
+  supabase: SupabaseClient,
+  payload: DashboardInsightPayload
+): Promise<boolean> {
   try {
     const { error } = await supabase
       .from("tier2_dashboard_insights")
