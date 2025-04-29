@@ -62,7 +62,7 @@ export default function InitialAssessmentPage() {
   
     try {
       const sanitized = stripOtherFields(formAnswers);
-      const response = await fetch("/api/premium/onboarding/initial-assessment", {
+      const response = await fetch("/api/premium/onboarding/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ u_id: user.u_id, formAnswers: sanitized }),

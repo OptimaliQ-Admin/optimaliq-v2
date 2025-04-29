@@ -1,4 +1,4 @@
-// File: /refactor/src/app/api/premium/onboarding/submit/route.ts
+// File: src/app/api/premium/onboarding/submit/route.ts
 
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";

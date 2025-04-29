@@ -1,4 +1,4 @@
-// refactor/src/lib/ai/generatePrompt.ts
+// src/lib/ai/generatePrompt.ts
 
 type Assessment = {
     obstacles: string;

@@ -1,4 +1,4 @@
-// refactor/src/lib/ai/callOpenAI.ts
+// src/lib/ai/callOpenAI.ts
 
 import OpenAI from "openai";
 
