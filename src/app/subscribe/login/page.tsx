@@ -6,10 +6,8 @@ import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
+import LoadingSpinner from "@/components/shared/LoadingSpinner"; // ✅ Make sure you have this
 import { toast } from "react-hot-toast";
-import dynamic from "next/dynamic";
-
-const AssessmentIntroModal = dynamic(() => import("@/components/modals/AssessmentIntroModal"), { ssr: false });
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,60 +16,64 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
-  const [pendingUserProfile, setPendingUserProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // ✅ new
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true); // ✅ show spinner
 
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // ✅ 1. Try login
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (signInError || !signInData?.user?.id) {
-      setError("Invalid credentials or user not found.");
-      return;
+      if (signInError || !signInData?.user?.id) {
+        setError("Invalid credentials or user not found.");
+        setIsLoading(false);
+        return;
+      }
+
+      const authUserId = signInData.user.id;
+
+      // ✅ 2. Check user status
+      const res = await fetch("/api/premium/auth/checkUserStatus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: authUserId }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setError(result.error || "Failed to verify account.");
+        setIsLoading(false);
+        return;
+      }
+
+      const { hasActiveSubscription, hasCompletedOnboarding, profile } = result;
+
+      if (!hasActiveSubscription) {
+        toast.error("Your subscription is inactive. Please subscribe.");
+        router.push("/Pricing");
+        return;
+      }
+
+      setUser(profile); // ✅ set context
+
+      if (hasCompletedOnboarding) {
+        router.push("/premium/dashboard");
+      } else {
+        router.push("/premium/onboarding/required");
+      }
+    } catch (error) {
+      console.error("❌ Unexpected login error:", error);
+      setError("Unexpected error. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-
-    const authUserId = signInData.user.id;
-
-    const res = await fetch("/api/premium/auth/checkUserStatus", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: authUserId }),
-    });
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      setError(result.error || "Failed to verify account.");
-      return;
-    }
-
-    const { hasActiveSubscription, hasCompletedOnboarding, profile } = result;
-
-    if (!hasActiveSubscription) {
-      toast.error("Your subscription is inactive. Please subscribe.");
-      router.push("/Pricing");
-      return;
-    }
-
-    if (hasCompletedOnboarding) {
-      setUser(profile);
-      router.push("/premium/dashboard");
-    } else {
-      setPendingUserProfile(profile);
-      setShowAssessmentModal(true);
-    }
-  };
-
-  const handleStartAssessment = () => {
-    if (pendingUserProfile) {
-      setUser(pendingUserProfile);
-    }
-    router.push("/premium/onboarding/initial-assessment");
   };
 
   return (
@@ -105,17 +107,13 @@ export default function LoginPage() {
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <SubmitButton text="Log In" isSubmitting={false} cooldown={0} />
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <SubmitButton text="Log In" isSubmitting={false} cooldown={0} />
+          )}
         </form>
       </div>
-
-      {/* ✅ Proper Modal */}
-      {showAssessmentModal && (
-        <AssessmentIntroModal
-          isOpen={showAssessmentModal}
-          onClose={() => setShowAssessmentModal(false)}
-        />
-      )}
     </div>
   );
 }
