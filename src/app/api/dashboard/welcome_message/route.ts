@@ -1,13 +1,15 @@
 // File: refactor/src/app/api/dashboard/route.ts
 
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 
 import { getErrorMessage } from "@/utils/errorHandler";
 export async function POST(req: Request) {
+  const supabase = createServerComponentClient({ cookies });
   try {
     const { u_id } = await req.json();
     if (!u_id || typeof u_id !== "string") {
@@ -97,7 +99,7 @@ export async function POST(req: Request) {
 
 
     // Save summary to profile
-    await saveProfileScores(u_id, {
+    await saveProfileScores(supabase, u_id, {
       strategyScore: aiScores.strategyScore,
       processScore: aiScores.processScore,
       technologyScore: aiScores.technologyScore,
