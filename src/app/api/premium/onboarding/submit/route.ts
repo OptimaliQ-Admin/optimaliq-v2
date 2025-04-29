@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ Update profile scores
-    await saveProfileScores(userId, {
+    await saveProfileScores(supabase, userId, {
       strategyScore: aiScores.strategyScore,
       processScore: aiScores.processScore,
       technologyScore: aiScores.technologyScore,

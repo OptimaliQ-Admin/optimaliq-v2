@@ -1,14 +1,17 @@
 // File: /lib/sync/saveProfile.ts
 
-import { supabase } from "@/lib/supabase";
-
+import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { getErrorMessage } from "@/utils/errorHandler";
-export async function saveProfileScores(u_id: string, scores: {
-  strategyScore: number,
-  processScore: number,
-  technologyScore: number,
-  overallScore: number
-}): Promise<{ success: boolean; error?: string }> {
+
+export async function saveProfileScores(
+  supabase: SupabaseClient<any>, // ✅ Pass client
+  u_id: string,
+  scores: {
+    strategyScore: number,
+    processScore: number,
+    technologyScore: number,
+    overallScore: number
+  }): Promise<{ success: boolean; error?: string }> {
   try {
     const { error } = await supabase
       .from("tier2_profiles")
