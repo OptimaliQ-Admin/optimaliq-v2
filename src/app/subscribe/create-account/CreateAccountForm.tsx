@@ -84,89 +84,58 @@ const timezoneOptions = [
       e.preventDefault();
     
       if (!formState.email || !formState.email.includes("@")) {
-        alert("❌ Please enter a valid email address.");
+        toast.error("❌ Please enter a valid email address.");
         return;
       }
     
       if (formState.password.length < 12) {
-        alert("❌ Password must be at least 12 characters.");
+        toast.error("❌ Password must be at least 12 characters.");
         return;
       }
     
       const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
       if (!passwordStrengthRegex.test(formState.password)) {
-        alert("❌ Password must include uppercase, lowercase, a number, and a symbol.");
+        toast.error("❌ Password must include uppercase, lowercase, number, and symbol.");
         return;
       }
     
       if (formState.password !== formState.confirmPassword) {
-        alert("❌ Passwords do not match");
+        toast.error("❌ Passwords do not match.");
         return;
       }
     
-      // ✅ 1. Set password using admin API
-      const res = await fetch("/api/admin/setPassword", {
+      // ✅ 1. Call the new API that handles everything
+      const res = await fetch("/api/admin/finalizeSignup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formState.email, password: formState.password }),
+        body: JSON.stringify({
+          email: formState.email,
+          password: formState.password,
+          timezone: formState.timezone,
+          linkedin_url: formState.linkedin_url,
+          agreed_terms: formState.agreed_terms,
+          agreed_marketing: formState.agreed_marketing,
+        }),
       });
     
       const result = await res.json();
     
       if (!res.ok) {
-        if (res.status === 404) {
-          alert("❌ No user record found. Please start subscription again.");
-          router.push("/subscribe");
-          return;
-        } else {
-          alert(`❌ Failed to set password: ${result.error || "Unknown error"}`);
-          return;
-        }
-      }
-    
-      // ✅ 2. Lookup the real Supabase Auth user by email
-      const { data: userList, error: listError } = await supabase.auth.admin.listUsers();
-      if (listError || !userList) {
-        alert("❌ Failed to fetch auth users.");
+        toast.error(`❌ ${result.error || "Failed to create account"}`);
         return;
       }
     
-      const matchedUser = userList.users.find((user) => user.email?.toLowerCase() === formState.email.toLowerCase());
-    
-      if (!matchedUser) {
-        alert("❌ Failed to find created auth user.");
-        return;
-      }
-    
-      // ✅ 3. Update tier2_users record: update u_id + fields
-      const { error: updateError } = await supabase
-        .from("tier2_users")
-        .update({
-          u_id: matchedUser.id, // 🧠 real auth uid
-          timezone: formState.timezone,
-          linkedin_url: formState.linkedin_url,
-          agreed_terms: formState.agreed_terms,
-          agreed_marketing: formState.agreed_marketing,
-        })
-        .eq("email", formState.email); // ✅ now match by email, not temp id
-    
-      if (updateError) {
-        console.error("⚠️ Profile update failed:", updateError);
-        alert("✅ Account created, but we couldn’t complete your profile update.");
-      }
-    
-      // ✅ 4. Clean up and send to Login
+      // ✅ 2. Clean up localStorage
       localStorage.removeItem("tier2_email");
       localStorage.removeItem("tier2_user_id");
       localStorage.removeItem("tier2_full_user_info");
     
-      toast.success("🎉 Account created! Redirecting you to login...");
-    
+      toast.success("🎉 Account created! Redirecting to login...");
       setTimeout(() => {
         router.push("/subscribe/login");
       }, 2000);
-    };    
-
+    };
+    
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
     <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
