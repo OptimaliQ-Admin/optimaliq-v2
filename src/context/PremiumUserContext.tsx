@@ -1,8 +1,8 @@
-// File: refactor/src/context/PremiumUserContext.tsx
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+// Types from your tier2_users table
 export type PremiumUser = {
   u_id: string;
   email: string;
@@ -13,12 +13,18 @@ export type PremiumUser = {
   industry: string;
   company_size: string;
   revenue_range: string;
+  timezone?: string;
+  linkedin_url?: string;
+  agreed_terms?: boolean;
+  agreed_marketing?: boolean;
 };
 
-const PremiumUserContext = createContext<{
+type ContextType = {
   user: PremiumUser | null;
-  setUser: React.Dispatch<React.SetStateAction<PremiumUser | null>>;
-}>({
+  setUser: (user: PremiumUser | null) => void;
+};
+
+const PremiumUserContext = createContext<ContextType>({
   user: null,
   setUser: () => {},
 });
@@ -26,13 +32,19 @@ const PremiumUserContext = createContext<{
 export const PremiumUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<PremiumUser | null>(null);
 
+  // ✅ Load user from localStorage once on initial render
   useEffect(() => {
-    const storedUser = localStorage.getItem("tier2_user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const stored = localStorage.getItem("tier2_user");
+      if (stored) {
+        setUser(JSON.parse(stored));
+      }
+    } catch (err) {
+      console.warn("❌ Failed to load cached Premium user.");
     }
   }, []);
 
+  // ✅ Keep user cached in localStorage when it changes
   useEffect(() => {
     if (user) {
       localStorage.setItem("tier2_user", JSON.stringify(user));
@@ -48,4 +60,5 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
   );
 };
 
+// ✅ Use in components
 export const usePremiumUser = () => useContext(PremiumUserContext);
