@@ -81,16 +81,16 @@ export default function OnboardingAssessmentPage() {
       try {
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
-          .select("score")
+          .select("overall_score")
           .eq("u_id", user?.u_id)
           .single();
 
-        if (error || !data?.score) {
+        if (error || !data?.overall_score) {
           setError("Unable to load assessment score.");
           return;
         }
 
-        setScore(data.score);
+        setScore(data.overall_score);
         setLoading(false);
       } catch (err) {
         console.error("❌ Unexpected error:", err);
