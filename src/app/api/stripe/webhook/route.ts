@@ -32,13 +32,13 @@ export async function POST(req: Request) {
 
     console.log("📦 Stripe metadata received:", session.metadata);
 
-    const user_id = session.metadata?.u_id;
+    const u_id = session.metadata?.u_id;
     const plan = session.metadata?.plan;
     const billingCycle = session.metadata?.billingCycle;
     const customer_email = session.customer_email;
 
-    if (!user_id || !customer_email) {
-      console.error("❌ Missing user_id or customer_email in metadata.");
+    if (!u_id || !customer_email) {
+      console.error("❌ Missing u_id or customer_email in metadata.");
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const { data: existingUser, error: userCheckError } = await supabase
       .from("tier2_users")
       .select("u_id")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     if (userCheckError) {
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       const { error: insertUserError } = await supabase
         .from("tier2_users")
         .insert([{ 
-          u_id: user_id,
+          u_id: u_id,
           email: customer_email,
         }]);
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Failed to create fallback user" }, { status: 500 });
       }
 
-      console.log("✅ Fallback tier2_user created:", user_id);
+      console.log("✅ Fallback tier2_user created:", u_id);
     }
 
     // 3. Upsert into subscriptions
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       .from("subscriptions")
       .upsert([
         {
-          u_id: user_id,
+          u_id: u_id,
           status: "active",
           plan,
           billingCycle,
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to update subscription" }, { status: 500 });
     }
 
-    console.log("✅ Subscription updated for user:", user_id);
+    console.log("✅ Subscription updated for user:", u_id);
 
     // 4. Check if auth user exists
 const { data: authListData, error: listError } = await supabaseAdmin.auth.admin.listUsers();

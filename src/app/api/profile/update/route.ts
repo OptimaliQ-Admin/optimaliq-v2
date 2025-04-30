@@ -11,14 +11,14 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { user_id } = await req.json();
-    if (!user_id) return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
+    const { u_id } = await req.json();
+    if (!u_id) return NextResponse.json({ error: "Missing u_id" }, { status: 400 });
 
     // 🔍 Pull most recent onboarding assessment
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
       .select("*")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     const { data: user, error: userError } = await supabase
       .from("tier2_users")
       .select("*")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .single();
 
     if (userError || !user) {
@@ -95,7 +95,7 @@ Return JSON:
 
     // ✅ Update tier2_profiles with scores
     const { error: profileError } = await supabase.from("tier2_profiles").upsert({
-      u_id: user_id,
+      u_id: u_id,
       strategy_score: parsed.strategyScore,
       process_score: parsed.processScore,
       technology_score: parsed.technologyScore,

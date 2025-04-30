@@ -10,10 +10,10 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
   try {
-    const { user_id } = await req.json();
+    const { u_id } = await req.json();
 
-    if (!user_id) {
-      return NextResponse.json({ error: "user_id is required" }, { status: 400 });
+    if (!u_id) {
+      return NextResponse.json({ error: "u_id is required" }, { status: 400 });
     }
 
     // ✅ Fetch all dummy company quadrant data
@@ -30,7 +30,7 @@ return NextResponse.json({ error: "Failed to fetch quadrant data" }, { status: 5
 const { data: userData, error: userError } = await supabase
 .from("tier2_dashboard_insights")
 .select("strategyScore, processScore, technologyScore, score")
-.eq("u_id", user_id)
+.eq("u_id", u_id)
 .single();
 
 if (userError || !userData) {

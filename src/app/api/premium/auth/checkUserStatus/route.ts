@@ -1,19 +1,20 @@
+//src/app/api/premium/auth/checkUserStatus/route.ts
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin"; // Use admin client for speed
 
 export async function POST(req: Request) {
   try {
-    const { user_id } = await req.json();
+    const { u_id } = await req.json();
 
-    if (!user_id) {
-      return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
+    if (!u_id) {
+      return NextResponse.json({ error: "Missing u_id" }, { status: 400 });
     }
 
     // Fetch user profile
     const { data: profile, error: profileError } = await supabaseAdmin
       .from("tier2_users")
       .select("*")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     if (profileError || !profile) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
     const { data: subscription, error: subscriptionError } = await supabaseAdmin
       .from("subscriptions")
       .select("status")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     const hasActiveSubscription = subscription?.status === "active";
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
     const { data: onboarding, error: onboardingError } = await supabaseAdmin
       .from("onboarding_assessments")
       .select("id")
-      .eq("u_id", user_id)
+      .eq("u_id", u_id)
       .maybeSingle();
 
     const hasCompletedOnboarding = Boolean(onboarding);
