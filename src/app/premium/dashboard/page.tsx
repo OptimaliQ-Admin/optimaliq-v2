@@ -34,7 +34,7 @@ export default function PremiumDashboardPage() {
 
     const fetchData = async () => {
       try {
-        const res = await axios.post("/api/dashboard", { user_id: u_id });
+        const res = await axios.post("/api/dashboard", { u_id });
         if (res.data.error) {
           setError(res.data.error);
         } else {
@@ -53,7 +53,7 @@ export default function PremiumDashboardPage() {
 
   useEffect(() => {
     if (!u_id) return;
-    axios.post("/api/dashboard/welcome_message", { user_id: u_id })
+    axios.post("/api/dashboard/welcome_message", { u_id })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',

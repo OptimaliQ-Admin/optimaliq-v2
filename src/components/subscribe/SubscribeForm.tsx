@@ -127,7 +127,7 @@ export default function SubscribeForm() {
       body: JSON.stringify({
         email: userInfo.email,
         plan: "accelerator",
-        user_id: userId,
+        u_id: userId,
         billingCycle: "annual",
       }),
     });

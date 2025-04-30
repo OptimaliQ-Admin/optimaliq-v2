@@ -43,7 +43,7 @@ export default function LoginPage() {
       const res = await fetch("/api/premium/auth/checkUserStatus", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: authUserId }),
+        body: JSON.stringify({ u_id: authUserId }),
       });
 
       const result = await res.json();

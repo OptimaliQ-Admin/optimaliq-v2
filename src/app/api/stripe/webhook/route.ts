@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     console.log("📦 Stripe metadata received:", session.metadata);
 
-    const user_id = session.metadata?.user_id;
+    const user_id = session.metadata?.u_id;
     const plan = session.metadata?.plan;
     const billingCycle = session.metadata?.billingCycle;
     const customer_email = session.customer_email;
