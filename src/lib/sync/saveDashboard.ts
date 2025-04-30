@@ -5,7 +5,7 @@ type DashboardInsightPayload = {
   strategy_score: number;
   process_score: number;
   technology_score: number;
-  score: number;
+  overall_score: number;
   industryAvgScore: number;
   topPerformerScore: number;
   benchmarking: Record<string, string>;

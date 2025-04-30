@@ -84,7 +84,7 @@ console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(
       strategy_score: aiScores.strategy_score,
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
-      score: aiScores.score,
+      overall_score: aiScores.score,
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
       benchmarking: JSON.parse(JSON.stringify(aiScores.benchmarking || {})),
