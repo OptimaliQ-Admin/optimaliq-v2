@@ -1,5 +1,3 @@
-// File: /lib/sync/saveDashboard.ts
-
 import { SupabaseClient } from "@supabase/supabase-js";
 
 type DashboardInsightPayload = {
@@ -24,9 +22,21 @@ export async function saveDashboardInsights(
   payload: DashboardInsightPayload
 ): Promise<boolean> {
   try {
+    // 🧼 Defensive JSON cleanup for all jsonb fields
+    const safePayload = {
+      ...payload,
+      benchmarking: JSON.parse(JSON.stringify(payload.benchmarking || {})),
+      strengths: JSON.parse(JSON.stringify(payload.strengths || [])),
+      weaknesses: JSON.parse(JSON.stringify(payload.weaknesses || [])),
+      roadmap: JSON.parse(JSON.stringify(payload.roadmap || [])),
+      chartData: JSON.parse(JSON.stringify(payload.chartData || [])),
+    };
+
+    console.log("💾 About to save insights:", JSON.stringify(safePayload, null, 2));
+
     const { error } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert([payload], { onConflict: "u_id" });
+      .upsert([safePayload], { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save dashboard insights:", error);
@@ -36,7 +46,7 @@ export async function saveDashboardInsights(
     console.log("✅ Dashboard insights updated successfully.");
     return true;
   } catch (err: unknown) {
-    console.error("❌ Unexpected error saving dashboard:", err);
+    console.error("🔥 Unexpected error saving dashboard:", err);
     return false;
   }
 }
