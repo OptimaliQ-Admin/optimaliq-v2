@@ -1,4 +1,4 @@
-
+//src/app/api/dashboard/route.ts
 import { NextResponse } from "next/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
