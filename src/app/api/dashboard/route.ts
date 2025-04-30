@@ -82,16 +82,16 @@ export async function POST(req: Request) {
       processScore: aiScores.processScore,
       technologyScore: aiScores.technologyScore,
       score: aiScores.score,
-      industryAvgScore: 3.2,
-      topPerformerScore: 4.5,
-      benchmarking: {},
-      strengths: [],
-      weaknesses: [],
-      roadmap: [],
+      industryAvgScore: aiScores.industryAvgScore,
+      topPerformerScore: aiScores.topPerformerScore,
+      benchmarking: aiScores.benchmarking,
+      strengths: aiScores.strengths,
+      weaknesses: aiScores.weaknesses,
+      roadmap: aiScores.roadmap,
       chartData,
       updated_at: now.toISOString(),
       industry: user.industry?.trim().toLowerCase(),
-    };
+    };    
 
     // Save insights
     await saveDashboardInsights(supabase, payload);
