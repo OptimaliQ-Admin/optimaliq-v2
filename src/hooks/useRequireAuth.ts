@@ -3,11 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 
 export function useRequireAuth() {
   const router = useRouter();
-  const supabase = createBrowserSupabaseClient();
+  const supabase = createPagesBrowserClient();
   const [checking, setChecking] = useState(true); // 🌀 optional loading
 
   useEffect(() => {

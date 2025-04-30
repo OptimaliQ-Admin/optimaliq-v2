@@ -1,4 +1,4 @@
-// File: refactor/src/app/premium/dashboard/page.tsx
+// File: src/app/premium/dashboard/page.tsx
 
 "use client";
 

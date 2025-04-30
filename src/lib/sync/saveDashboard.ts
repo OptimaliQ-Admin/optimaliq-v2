@@ -1,4 +1,4 @@
-// src/lib/sync/saveDashboard.ts
+// File: /lib/sync/saveDashboard.ts
 
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -19,7 +19,6 @@ type DashboardInsightPayload = {
   industry?: string;
 };
 
-// ✅ Now accept supabase client as a parameter
 export async function saveDashboardInsights(
   supabase: SupabaseClient,
   payload: DashboardInsightPayload
@@ -27,7 +26,7 @@ export async function saveDashboardInsights(
   try {
     const { error } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert(payload, { onConflict: "u_id" });
+      .upsert([payload], { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save dashboard insights:", error);
@@ -36,7 +35,7 @@ export async function saveDashboardInsights(
 
     console.log("✅ Dashboard insights updated successfully.");
     return true;
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("❌ Unexpected error saving dashboard:", err);
     return false;
   }
