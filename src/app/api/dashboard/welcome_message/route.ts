@@ -100,10 +100,10 @@ export async function POST(req: Request) {
 
     // Save summary to profile
     await saveProfileScores(supabase, u_id, {
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      overallScore: aiScores.score,
+      strategy_score: aiScores.strategyScore,
+      process_score: aiScores.processScore,
+      technology_score: aiScores.technologyScore,
+      overall_score: aiScores.score,
     });
 
     console.info("📦 Dashboard & profile saved for:", u_id);
