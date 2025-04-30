@@ -107,21 +107,21 @@ export default function PremiumDashboardPage() {
         />
         <ScoreCard
           title="Strategy"
-          score={insights.strategyScore}
+          score={insights.strategy_score}
           description="Clarity, positioning, and strategic alignment."
-          onLearnMore={() => handleScoreClick("strategy", insights.strategyScore)}
+          onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
         />
         <ScoreCard
           title="Process"
-          score={insights.processScore}
+          score={insights.process_score}
           description="Consistency, execution, and scalability."
-          onLearnMore={() => handleScoreClick("process", insights.processScore)}
+          onLearnMore={() => handleScoreClick("process", insights.process_score)}
         />
         <ScoreCard
           title="Technology"
-          score={insights.technologyScore}
+          score={insights.technology_score}
           description="Growth, automation, and efficiency."
-          onLearnMore={() => handleScoreClick("technology", insights.technologyScore)}
+          onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
         />
       </div>
 
@@ -129,9 +129,9 @@ export default function PremiumDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ExecutiveRadarChart
-          strategy={insights.strategyScore}
-          process={insights.processScore}
-          technology={insights.technologyScore}
+          strategy={insights.strategy_score}
+          process={insights.process_score}
+          technology={insights.technology_score}
           industryAvg={insights.industryAvgScore}
           topPerformer={insights.topPerformerScore}
         />

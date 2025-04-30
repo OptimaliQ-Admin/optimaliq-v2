@@ -72,10 +72,10 @@ Assessment:
 
 Return JSON:
 {
-  "strategyScore": 1-5,
-  "processScore": 1-5,
-  "technologyScore": 1-5,
-  "overallScore": 1-5
+  "strategy_score": 1-5,
+  "process_score": 1-5,
+  "technology_score": 1-5,
+  "overall_score": 1-5
 }
 `;
 
@@ -96,11 +96,11 @@ Return JSON:
     // ✅ Update tier2_profiles with scores
     const { error: profileError } = await supabase.from("tier2_profiles").upsert({
       u_id: u_id,
-      strategy_score: parsed.strategyScore,
-      process_score: parsed.processScore,
-      technology_score: parsed.technologyScore,
-      overall_score: parsed.overallScore,
-      reassessment_score: parsed.overallScore,
+      strategy_score: parsed.strategy_score,
+      process_score: parsed.process_score,
+      technology_score: parsed.technology_score,
+      overall_score: parsed.overall_score,
+      reassessment_score: parsed.overall_score,
       reassessment_last_taken: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     }, { onConflict: "u_id" });

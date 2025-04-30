@@ -26,9 +26,9 @@ export interface BenchmarkingData {
   export interface DashboardInsights {
     u_id: string;
     score: number;
-    strategyScore: number;
-    processScore: number;
-    technologyScore: number;
+    strategy_score: number;
+    process_score: number;
+    technology_score: number;
     industryAvgScore: number;
     topPerformerScore: number;
     benchmarking: BenchmarkingData;

@@ -81,9 +81,9 @@ console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(
 
     const payload = {
       u_id,
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
       score: aiScores.score,
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
@@ -102,9 +102,9 @@ console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(
 
     // Save summary to profile
     await saveProfileScores(supabase, u_id, {
-      strategy_score: aiScores.strategyScore,
-      process_score: aiScores.processScore,
-      technology_score: aiScores.technologyScore,
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
       overall_score: aiScores.score,
     });
 

@@ -7,9 +7,9 @@ const openai = new OpenAI({
 });
 
 export type DashboardScores = {
-  strategyScore: number;
-  processScore: number;
-  technologyScore: number;
+  strategy_score: number;
+  process_score: number;
+  technology_score: number;
   score: number;
   industryAvgScore: number;
   topPerformerScore: number;
@@ -74,9 +74,9 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
     Return a structured JSON object like:
     
     {
-      "strategyScore": 3.5,
-      "processScore": 3.0,
-      "technologyScore": 4.0,
+      "strategy_score": 3.5,
+      "process_score": 3.0,
+      "technology_score": 4.0,
       "score": 3.5,
       "industryAvgScore": 3.2,
       "topPerformerScore": 4.5,
@@ -111,9 +111,9 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
   // 🧪 Log parsed object
   console.log("🧪 Parsed AI response object:", JSON.stringify(parsed, null, 2));
       if (
-        !parsed.strategyScore ||
-        !parsed.processScore ||
-        !parsed.technologyScore ||
+        !parsed.strategy_score ||
+        !parsed.process_score ||
+        !parsed.technology_score ||
         !parsed.score ||
         !parsed.benchmarking ||
         !Array.isArray(parsed.strengths) ||
@@ -125,9 +125,9 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
       }
       
       return {
-        strategyScore: parsed.strategyScore,
-        processScore: parsed.processScore,
-        technologyScore: parsed.technologyScore,
+        strategy_score: parsed.strategy_score,
+        process_score: parsed.process_score,
+        technology_score: parsed.technology_score,
         score: parsed.score,
         industryAvgScore: parsed.industryAvgScore,
         topPerformerScore: parsed.topPerformerScore,

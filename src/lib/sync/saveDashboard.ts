@@ -2,9 +2,9 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 type DashboardInsightPayload = {
   u_id: string;
-  strategyScore: number;
-  processScore: number;
-  technologyScore: number;
+  strategy_score: number;
+  process_score: number;
+  technology_score: number;
   score: number;
   industryAvgScore: number;
   topPerformerScore: number;

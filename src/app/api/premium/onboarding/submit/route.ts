@@ -55,18 +55,18 @@ export async function POST(req: Request) {
 
     // ✅ Update profile scores
     await saveProfileScores(supabase, userId, {
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      overallScore: aiScores.score,
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
+      overall_score: aiScores.score,
     });
 
     // ✅ Update dashboard insights
     await saveDashboardInsights(supabase, {
       u_id: userId,
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
       score: aiScores.score,
       industryAvgScore: 3.2,
       topPerformerScore: 4.5,
