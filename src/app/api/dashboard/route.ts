@@ -5,8 +5,8 @@ import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
-
 import { getErrorMessage } from "@/utils/errorHandler";
+
 export async function POST(req: Request) {
   const supabase = createServerComponentClient({ cookies });
   try {

@@ -110,19 +110,22 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
       const parsed = JSON.parse(content);
   // 🧪 Log parsed object
   console.log("🧪 Parsed AI response object:", JSON.stringify(parsed, null, 2));
-      if (
-        !parsed.strategy_score ||
-        !parsed.process_score ||
-        !parsed.technology_score ||
-        !parsed.score ||
-        !parsed.benchmarking ||
-        !Array.isArray(parsed.strengths) ||
-        !Array.isArray(parsed.weaknesses) ||
-        !Array.isArray(parsed.roadmap)
-      ) {
-        console.error("❌ Missing expected fields in parsed OpenAI response:", parsed);
-        return null;
-      }
+  if (
+    typeof parsed.strategy_score !== "number" ||
+    typeof parsed.process_score !== "number" ||
+    typeof parsed.technology_score !== "number" ||
+    typeof parsed.score !== "number" ||
+    typeof parsed.industryAvgScore !== "number" ||
+    typeof parsed.topPerformerScore !== "number" ||
+    typeof parsed.benchmarking !== "object" ||
+    !Array.isArray(parsed.strengths) ||
+    !Array.isArray(parsed.weaknesses) ||
+    !Array.isArray(parsed.roadmap)
+  ) {
+    console.error("❌ Missing or invalid expected fields in parsed OpenAI response:", parsed);
+    return null;
+  }
+  
       
       return {
         strategy_score: parsed.strategy_score,
