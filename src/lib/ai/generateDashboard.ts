@@ -108,6 +108,20 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
   
       const parsed = JSON.parse(content);
   
+      if (
+        !parsed.strategyScore ||
+        !parsed.processScore ||
+        !parsed.technologyScore ||
+        !parsed.score ||
+        !parsed.benchmarking ||
+        !Array.isArray(parsed.strengths) ||
+        !Array.isArray(parsed.weaknesses) ||
+        !Array.isArray(parsed.roadmap)
+      ) {
+        console.error("❌ Missing expected fields in parsed OpenAI response:", parsed);
+        return null;
+      }
+      
       return {
         strategyScore: parsed.strategyScore,
         processScore: parsed.processScore,
@@ -120,6 +134,7 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
         weaknesses: parsed.weaknesses,
         roadmap: parsed.roadmap,
       };
+      
     } catch (error) {
       console.error("❌ Failed to generate dashboard scores:", error);
       return null;
