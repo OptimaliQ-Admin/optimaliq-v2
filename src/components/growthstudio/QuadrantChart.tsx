@@ -18,16 +18,16 @@ import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 interface CompanyPoint {
   label: string;
-  strategy_score: number;
-  process_score: number;
-  technology_score: number;
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
   score: number;
 }
 
 interface UserPoint {
-  strategy_score: number;
-  process_score: number;
-  technology_score: number;
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
   score: number;
 }
 
@@ -62,16 +62,16 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   // Normalize data
   const normalizedCompanies = data.companies.map((company) => ({
     name: company.label,
-    strategy_score: company.strategy_score,
-    process_score: company.process_score,
-    technology_score: company.technology_score,
+    strategy_score: company.strategyScore,
+    process_score: company.processScore,
+    technology_score: company.technologyScore,
   }));
 
   const normalizedUser = {
     name: "You",
-    strategy_score: data.user.strategy_score,
-    process_score: data.user.process_score,
-    technology_score: data.user.technology_score,
+    strategy_score: data.user.strategyScore,
+    process_score: data.user.processScore,
+    technology_score: data.user.technologyScore,
   };
 
   const allData = [...normalizedCompanies, normalizedUser];

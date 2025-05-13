@@ -65,6 +65,14 @@ export async function POST(req: Request) {
     const aiScores = await generateDashboardScores(user, assessment);
 
 console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(aiScores, null, 2));
+if (aiScores) {
+  console.log("🧪 Types:", {
+    benchmarking: typeof aiScores.benchmarking,
+    strengths: Array.isArray(aiScores.strengths),
+    weaknesses: Array.isArray(aiScores.weaknesses),
+    roadmap: Array.isArray(aiScores.roadmap),
+  });
+}
 
     if (!aiScores) {
       return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });
@@ -87,14 +95,14 @@ console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(
       overall_score: aiScores.score,
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
-      benchmarking: JSON.parse(JSON.stringify(aiScores.benchmarking || {})),
-      strengths: JSON.parse(JSON.stringify(aiScores.strengths || [])),
-      weaknesses: JSON.parse(JSON.stringify(aiScores.weaknesses || [])),
-      roadmap: JSON.parse(JSON.stringify(aiScores.roadmap || [])),
+      benchmarking: aiScores.benchmarking || {},
+      strengths: aiScores.strengths || [],
+      weaknesses: aiScores.weaknesses || [],
+      roadmap: aiScores.roadmap || [],
       chartData,
       updated_at: now.toISOString(),
       industry: user.industry?.trim().toLowerCase(),
-    };       
+    };      
 
     // Save insights
     await saveDashboardInsights(supabase, payload);

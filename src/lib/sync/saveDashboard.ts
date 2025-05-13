@@ -22,14 +22,19 @@ export async function saveDashboardInsights(
   payload: DashboardInsightPayload
 ): Promise<boolean> {
   try {
-    // 🧼 Defensive JSON cleanup for all jsonb fields
+    // 🧪 Log if any fields are unexpectedly empty before cleaning
+    if (!payload.strengths?.length) console.warn("⚠️ strengths array is empty or missing");
+    if (!payload.weaknesses?.length) console.warn("⚠️ weaknesses array is empty or missing");
+    if (!payload.roadmap?.length) console.warn("⚠️ roadmap array is empty or missing");
+    if (!payload.benchmarking || !payload.benchmarking.strategy) console.warn("⚠️ benchmarking object is empty or incomplete");
+
     const safePayload = {
       ...payload,
-      benchmarking: JSON.parse(JSON.stringify(payload.benchmarking || {})),
-      strengths: JSON.parse(JSON.stringify(payload.strengths || [])),
-      weaknesses: JSON.parse(JSON.stringify(payload.weaknesses || [])),
-      roadmap: JSON.parse(JSON.stringify(payload.roadmap || [])),
-      chartData: JSON.parse(JSON.stringify(payload.chartData || [])),
+      benchmarking: payload.benchmarking || {},
+      strengths: payload.strengths || [],
+      weaknesses: payload.weaknesses || [],
+      roadmap: payload.roadmap || [],
+      chartData: payload.chartData || [],
     };
 
     console.log("💾 About to save insights:", JSON.stringify(safePayload, null, 2));
@@ -50,3 +55,4 @@ export async function saveDashboardInsights(
     return false;
   }
 }
+

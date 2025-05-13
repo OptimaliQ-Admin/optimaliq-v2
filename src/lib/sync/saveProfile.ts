@@ -13,27 +13,27 @@ export async function saveProfileScores(
   scores: ProfileScores
 ): Promise<boolean> {
   try {
-    const updatePayload = {
+    const payload = {
+      u_id, // 👈 ensure this is part of the payload
       strategy_score: scores.strategy_score,
       process_score: scores.process_score,
       technology_score: scores.technology_score,
       overall_score: scores.overall_score,
-      updated_at: new Date().toISOString(), // Optional: track updates
+      updated_at: new Date().toISOString(),
     };
 
-    console.log(`📝 Saving profile scores for ${u_id}:`, updatePayload);
+    console.log(`📝 Upserting profile scores for ${u_id}:`, payload);
 
     const { error } = await supabase
       .from("tier2_profiles")
-      .update(updatePayload)
-      .eq("u_id", u_id);
+      .upsert(payload, { onConflict: "u_id" }); // 👈 key change here
 
     if (error) {
       console.error("❌ Failed to save profile scores:", error);
       return false;
     }
 
-    console.log("✅ Profile scores updated successfully.");
+    console.log("✅ Profile scores saved (inserted or updated) successfully.");
     return true;
   } catch (err: unknown) {
     console.error("🔥 Unexpected error saving profile scores:", err);

@@ -99,11 +99,11 @@ export default function PremiumDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <ScoreCard
           title="Overall Score"
-          score={insights.score}
+          score={insights.overall_score}
           industryAvg={insights.industryAvgScore}
           topPerformer={insights.topPerformerScore}
           description="Maturity across strategy, process, and technology."
-          onLearnMore={() => handleScoreClick("overall", insights.score)}
+          onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
         />
         <ScoreCard
           title="Strategy"

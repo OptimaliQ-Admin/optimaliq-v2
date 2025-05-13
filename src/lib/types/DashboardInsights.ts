@@ -1,4 +1,4 @@
-// refactor/src/lib/types/DashboardInsights.ts
+// src/lib/types/DashboardInsights.ts
 
 export interface BenchmarkingData {
     strategy: string;
@@ -25,7 +25,7 @@ export interface BenchmarkingData {
   
   export interface DashboardInsights {
     u_id: string;
-    score: number;
+    overall_score: number;
     strategy_score: number;
     process_score: number;
     technology_score: number;
