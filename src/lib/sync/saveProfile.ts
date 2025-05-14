@@ -1,35 +1,42 @@
-// File: /lib/sync/saveProfile.ts
+import { SupabaseClient } from "@supabase/supabase-js";
 
-import { supabase } from "@/lib/supabase";
+type ProfileScores = {
+  strategy_score: number;
+  process_score: number;
+  technology_score: number;
+  overall_score: number;
+};
 
-import { getErrorMessage } from "@/utils/errorHandler";
-export async function saveProfileScores(u_id: string, scores: {
-  strategyScore: number,
-  processScore: number,
-  technologyScore: number,
-  overallScore: number
-}): Promise<{ success: boolean; error?: string }> {
+export async function saveProfileScores(
+  supabase: SupabaseClient,
+  u_id: string,
+  scores: ProfileScores
+): Promise<boolean> {
   try {
+    const payload = {
+      u_id, // 👈 ensure this is part of the payload
+      strategy_score: scores.strategy_score,
+      process_score: scores.process_score,
+      technology_score: scores.technology_score,
+      overall_score: scores.overall_score,
+      updated_at: new Date().toISOString(),
+    };
+
+    console.log(`📝 Upserting profile scores for ${u_id}:`, payload);
+
     const { error } = await supabase
       .from("tier2_profiles")
-      .update({
-        strategy_score: scores.strategyScore,
-        process_score: scores.processScore,
-        technology_score: scores.technologyScore,
-        overall_score: scores.overallScore,
-        updated_at: new Date().toISOString()
-      })
-      .eq("u_id", u_id);
+      .upsert(payload, { onConflict: "u_id" }); // 👈 key change here
 
     if (error) {
-      console.error("❌ Failed to update profile:", error);
-      return { success: false, error: error.message };
+      console.error("❌ Failed to save profile scores:", error);
+      return false;
     }
 
-    console.log("✅ Profile successfully updated for user:", u_id);
-    return { success: true };
+    console.log("✅ Profile scores saved (inserted or updated) successfully.");
+    return true;
   } catch (err: unknown) {
-    console.error("❌ Unexpected error saving profile:", err);
-    return { success: false, error: getErrorMessage(err) };
+    console.error("🔥 Unexpected error saving profile scores:", err);
+    return false;
   }
 }

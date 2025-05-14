@@ -1,13 +1,11 @@
-// /lib/sync/saveDashboard.ts
-
-import { supabase } from "@/lib/supabase";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 type DashboardInsightPayload = {
   u_id: string;
-  strategyScore: number;
-  processScore: number;
-  technologyScore: number;
-  score: number;
+  strategy_score: number;
+  process_score: number;
+  technology_score: number;
+  overall_score: number;
   industryAvgScore: number;
   topPerformerScore: number;
   benchmarking: Record<string, string>;
@@ -19,11 +17,31 @@ type DashboardInsightPayload = {
   industry?: string;
 };
 
-export async function saveDashboardInsights(payload: DashboardInsightPayload): Promise<boolean> {
+export async function saveDashboardInsights(
+  supabase: SupabaseClient,
+  payload: DashboardInsightPayload
+): Promise<boolean> {
   try {
+    // 🧪 Log if any fields are unexpectedly empty before cleaning
+    if (!payload.strengths?.length) console.warn("⚠️ strengths array is empty or missing");
+    if (!payload.weaknesses?.length) console.warn("⚠️ weaknesses array is empty or missing");
+    if (!payload.roadmap?.length) console.warn("⚠️ roadmap array is empty or missing");
+    if (!payload.benchmarking || !payload.benchmarking.strategy) console.warn("⚠️ benchmarking object is empty or incomplete");
+
+    const safePayload = {
+      ...payload,
+      benchmarking: payload.benchmarking || {},
+      strengths: payload.strengths || [],
+      weaknesses: payload.weaknesses || [],
+      roadmap: payload.roadmap || [],
+      chartData: payload.chartData || [],
+    };
+
+    console.log("💾 About to save insights:", JSON.stringify(safePayload, null, 2));
+
     const { error } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert(payload, { onConflict: "u_id" });
+      .upsert([safePayload], { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save dashboard insights:", error);
@@ -32,8 +50,9 @@ export async function saveDashboardInsights(payload: DashboardInsightPayload): P
 
     console.log("✅ Dashboard insights updated successfully.");
     return true;
-  } catch (err) {
-    console.error("❌ Unexpected error saving dashboard:", err);
+  } catch (err: unknown) {
+    console.error("🔥 Unexpected error saving dashboard:", err);
     return false;
   }
 }
+

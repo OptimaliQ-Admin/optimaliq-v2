@@ -1,13 +1,16 @@
-// File: /refactor/src/app/api/premium/onboarding/submit/route.ts
+// File: src/app/api/premium/onboarding/submit/route.ts
 
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
-
 import { getErrorMessage } from "@/utils/errorHandler";
+
+
 export async function POST(req: Request) {
+  const supabase = createServerComponentClient({ cookies });
   try {
     const { formAnswers } = await req.json();
 
@@ -51,20 +54,20 @@ export async function POST(req: Request) {
     }
 
     // ✅ Update profile scores
-    await saveProfileScores(userId, {
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      overallScore: aiScores.score,
+    await saveProfileScores(supabase, userId, {
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
+      overall_score: aiScores.score,
     });
 
     // ✅ Update dashboard insights
-    await saveDashboardInsights({
+    await saveDashboardInsights(supabase, {
       u_id: userId,
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      score: aiScores.score,
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
+      overall_score: aiScores.score,
       industryAvgScore: 3.2,
       topPerformerScore: 4.5,
       benchmarking: {},

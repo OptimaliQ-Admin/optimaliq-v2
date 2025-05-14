@@ -82,13 +82,13 @@ export async function POST(req: Request) {
       
       **Example Output Format (strict JSON, no extra text):**
       {
-        "strategyScore": 4,
+        "strategy_score": 4,
         "strategyInsight": "Your innovative solution is differentiated, but the market entry strategy lacks precision. Focus on refining your ideal customer profile (ICP) and developing a multi-channel acquisition strategy that includes strategic partnerships, outbound targeting, and conversion-optimized landing pages.",
         
-        "processScore": 3,
+        "process_score": 3,
         "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
         
-        "technologyScore": 5,
+        "technology_score": 5,
         "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
       }
     `;
@@ -141,9 +141,9 @@ export async function POST(req: Request) {
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
     // ✅ Extract OpenAI scores to use in SageMaker input
-    const strategyScore = parsedResponse.strategyScore || 0;
-    const processScore = parsedResponse.processScore || 0;
-    const technologyScore = parsedResponse.technologyScore || 0;
+    const strategy_score = parsedResponse.strategy_score || 0;
+    const process_score = parsedResponse.process_score || 0;
+    const technology_score = parsedResponse.technology_score || 0;
 
     // ✅ Build SageMaker input vector using the OpenAI scores
     const industryOneHot = [
@@ -154,9 +154,9 @@ export async function POST(req: Request) {
     ].map((industry) => (user.industry === industry ? 1 : 0));
 
     const sageInput = [
-      strategyScore,
-      processScore,
-      technologyScore,
+      strategy_score,
+      process_score,
+      technology_score,
       ...industryOneHot,
     ];
 
@@ -218,11 +218,11 @@ export async function POST(req: Request) {
     // ✅ Insert AI insights into Supabase
     const insightsData = {
       u_id,
-      strategyscore: parsedResponse.strategyScore,
+      strategyscore: parsedResponse.strategy_score,
       strategyinsight: parsedResponse.strategyInsight,
-      processscore: parsedResponse.processScore,
+      processscore: parsedResponse.process_score,
       processinsight: parsedResponse.processInsight,
-      technologyscore: parsedResponse.technologyScore,
+      technologyscore: parsedResponse.technology_score,
       technologyinsight: parsedResponse.technologyInsight,
       generatedat: new Date().toISOString(),
       overallscore: sageMakerScore,

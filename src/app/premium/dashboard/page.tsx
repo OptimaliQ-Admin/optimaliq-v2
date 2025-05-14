@@ -1,4 +1,4 @@
-// File: refactor/src/app/premium/dashboard/page.tsx
+// File: src/app/premium/dashboard/page.tsx
 
 "use client";
 
@@ -34,7 +34,7 @@ export default function PremiumDashboardPage() {
 
     const fetchData = async () => {
       try {
-        const res = await axios.post("/api/dashboard", { user_id: u_id });
+        const res = await axios.post("/api/dashboard", { u_id });
         if (res.data.error) {
           setError(res.data.error);
         } else {
@@ -53,7 +53,7 @@ export default function PremiumDashboardPage() {
 
   useEffect(() => {
     if (!u_id) return;
-    axios.post("/api/dashboard/welcome_message", { user_id: u_id })
+    axios.post("/api/dashboard/welcome_message", { u_id })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',
@@ -99,29 +99,29 @@ export default function PremiumDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <ScoreCard
           title="Overall Score"
-          score={insights.score}
+          score={insights.overall_score}
           industryAvg={insights.industryAvgScore}
           topPerformer={insights.topPerformerScore}
           description="Maturity across strategy, process, and technology."
-          onLearnMore={() => handleScoreClick("overall", insights.score)}
+          onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
         />
         <ScoreCard
           title="Strategy"
-          score={insights.strategyScore}
+          score={insights.strategy_score}
           description="Clarity, positioning, and strategic alignment."
-          onLearnMore={() => handleScoreClick("strategy", insights.strategyScore)}
+          onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
         />
         <ScoreCard
           title="Process"
-          score={insights.processScore}
+          score={insights.process_score}
           description="Consistency, execution, and scalability."
-          onLearnMore={() => handleScoreClick("process", insights.processScore)}
+          onLearnMore={() => handleScoreClick("process", insights.process_score)}
         />
         <ScoreCard
           title="Technology"
-          score={insights.technologyScore}
+          score={insights.technology_score}
           description="Growth, automation, and efficiency."
-          onLearnMore={() => handleScoreClick("technology", insights.technologyScore)}
+          onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
         />
       </div>
 
@@ -129,9 +129,9 @@ export default function PremiumDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ExecutiveRadarChart
-          strategy={insights.strategyScore}
-          process={insights.processScore}
-          technology={insights.technologyScore}
+          strategy={insights.strategy_score}
+          process={insights.process_score}
+          technology={insights.technology_score}
           industryAvg={insights.industryAvgScore}
           topPerformer={insights.topPerformerScore}
         />

@@ -42,7 +42,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/tier2/growth_studio/quadrant", {
+        const res = await fetch("/api/growth_studio/quadrant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ u_id: userId }),

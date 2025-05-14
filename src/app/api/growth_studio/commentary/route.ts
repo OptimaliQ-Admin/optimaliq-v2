@@ -1,4 +1,4 @@
-// File: /src/app/api/tier2/growth_studio/commentary/route.ts
+// File: /src/app/api/growth_studio/commentary/route.ts
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 

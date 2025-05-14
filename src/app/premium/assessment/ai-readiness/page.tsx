@@ -18,7 +18,7 @@ import {
 import { getErrorMessage } from "@/utils/errorHandler";
 export default function OnboardingAssessmentPage() {
   const router = useRouter();
-  const { user } = usePremiumUser();
+  const { user, isUserLoaded } = usePremiumUser(); // ✅ Get isUserLoaded
   const [step, setStep] = useState(0);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -81,16 +81,16 @@ export default function OnboardingAssessmentPage() {
       try {
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
-          .select("score")
+          .select("overall_score")
           .eq("u_id", user?.u_id)
           .single();
 
-        if (error || !data?.score) {
+        if (error || !data?.overall_score) {
           setError("Unable to load assessment score.");
           return;
         }
 
-        setScore(data.score);
+        setScore(data.overall_score);
         setLoading(false);
       } catch (err) {
         console.error("❌ Unexpected error:", err);

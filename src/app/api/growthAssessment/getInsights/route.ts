@@ -1,4 +1,4 @@
-// 📁 refactor/src/app/api/growthAssessment/getInsights/route.ts
+// src/app/api/growthAssessment/getInsights/route.ts
 
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
@@ -36,9 +36,9 @@ export async function POST(req: Request) {
     
     // ✅ Extract `scores` and `insights` from parsed
     const scores = {
-      strategyScore: parsed.strategyScore || 0,
-      processScore: parsed.processScore || 0,
-      technologyScore: parsed.technologyScore || 0,
+      strategy_score: parsed.strategy_score || 0,
+      process_score: parsed.process_score || 0,
+      technology_score: parsed.technology_score || 0,
     };
     
     const insights = {
@@ -48,9 +48,9 @@ export async function POST(req: Request) {
     };    
 
     const sageInput = [
-      scores.strategyScore,
-      scores.processScore,
-      scores.technologyScore,
+      scores.strategy_score,
+      scores.process_score,
+      scores.technology_score,
       ...["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
         "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
         "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
@@ -62,11 +62,11 @@ export async function POST(req: Request) {
 
     const insertPayload = {
       u_id,
-      strategyscore: scores.strategyScore,
+      strategyscore: scores.strategy_score,
       strategyinsight: insights.strategyInsight,
-      processscore: scores.processScore,
+      processscore: scores.process_score,
       processinsight: insights.processInsight,
-      technologyscore: scores.technologyScore,
+      technologyscore: scores.technology_score,
       technologyinsight: insights.technologyInsight,
       generatedat: new Date().toISOString(),
       overallscore: sageMakerScore,

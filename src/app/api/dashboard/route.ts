@@ -1,11 +1,14 @@
+//src/app/api/dashboard/route.ts
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
-
 import { getErrorMessage } from "@/utils/errorHandler";
+
 export async function POST(req: Request) {
+  const supabase = createServerComponentClient({ cookies });
   try {
     const { u_id } = await req.json();
     if (!u_id || typeof u_id !== "string") {
@@ -60,6 +63,17 @@ export async function POST(req: Request) {
 
     // Generate AI scores
     const aiScores = await generateDashboardScores(user, assessment);
+
+console.log("🧪 Final AI scores returned to dashboard route:", JSON.stringify(aiScores, null, 2));
+if (aiScores) {
+  console.log("🧪 Types:", {
+    benchmarking: typeof aiScores.benchmarking,
+    strengths: Array.isArray(aiScores.strengths),
+    weaknesses: Array.isArray(aiScores.weaknesses),
+    roadmap: Array.isArray(aiScores.roadmap),
+  });
+}
+
     if (!aiScores) {
       return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });
     }
@@ -75,30 +89,36 @@ export async function POST(req: Request) {
 
     const payload = {
       u_id,
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      score: aiScores.score,
-      industryAvgScore: 3.2,
-      topPerformerScore: 4.5,
-      benchmarking: {},
-      strengths: [],
-      weaknesses: [],
-      roadmap: [],
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
+      overall_score: aiScores.score,
+      industryAvgScore: aiScores.industryAvgScore,
+      topPerformerScore: aiScores.topPerformerScore,
+      benchmarking: aiScores.benchmarking || {},
+      strengths: aiScores.strengths || [],
+      weaknesses: aiScores.weaknesses || [],
+      roadmap: aiScores.roadmap || [],
       chartData,
       updated_at: now.toISOString(),
       industry: user.industry?.trim().toLowerCase(),
-    };
+    };      
 
     // Save insights
-    await saveDashboardInsights(payload);
+    console.log("🧪 Payload Field Checks:");
+console.log("benchmarking:", payload.benchmarking);
+console.log("strengths:", payload.strengths);
+console.log("weaknesses:", payload.weaknesses);
+console.log("roadmap:", payload.roadmap);
+    await saveDashboardInsights(supabase, payload);
+
 
     // Save summary to profile
-    await saveProfileScores(u_id, {
-      strategyScore: aiScores.strategyScore,
-      processScore: aiScores.processScore,
-      technologyScore: aiScores.technologyScore,
-      overallScore: aiScores.score,
+    await saveProfileScores(supabase, u_id, {
+      strategy_score: aiScores.strategy_score,
+      process_score: aiScores.process_score,
+      technology_score: aiScores.technology_score,
+      overall_score: aiScores.score,
     });
 
     console.info("📦 Dashboard & profile saved for:", u_id);

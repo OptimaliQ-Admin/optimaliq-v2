@@ -14,7 +14,7 @@ export default function BusinessTrendCard() {
   useEffect(() => {
     const fetchTrend = async () => {
       try {
-        const res = await fetch("/api/dashboard/insight/business_trends");
+        const res = await fetch("/api/dashboard/business_trends");
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {
@@ -36,7 +36,7 @@ export default function BusinessTrendCard() {
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
       <SectionTitleBar
-        title="\ud83d\udd25 Business Trend Predictions"
+        title="🔥 Business Trend Predictions"
         tooltip="Strategic market guidance pulled from real-time data and headlines. Updated weekly."
       />
 
@@ -60,7 +60,7 @@ export default function BusinessTrendCard() {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
                 <Dialog.Title className="text-lg font-bold text-gray-800 mb-2">
-                  \ud83d\udd25 Full Business Trend Prediction
+                  🔥 Full Business Trend Prediction
                 </Dialog.Title>
                 <p className="text-gray-700 whitespace-pre-line max-h-[70vh] overflow-y-auto">
                   {trend}
@@ -78,7 +78,7 @@ export default function BusinessTrendCard() {
           </Dialog>
         </>
       ) : (
-        <p className="text-red-500 mt-2">\u26a0\ufe0f No business trend available</p>
+        <p className="text-red-500 mt-2">⚠️ No business trend available</p>
       )}
     </div>
   );

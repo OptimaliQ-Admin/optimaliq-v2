@@ -15,7 +15,7 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch(`/api/tier2/dashboard/insight/market_trends?industry=${encodeURIComponent(industry)}`);
+        const res = await fetch(`/api/dashboard/market_trends?industry=${encodeURIComponent(industry)}`);
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {

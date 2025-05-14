@@ -1,3 +1,5 @@
+//src/app/api/growth_studio/simulation/route.ts
+
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

@@ -1,4 +1,4 @@
-// refactor/src/lib/ai/callSageMaker.ts
+// src/lib/ai/callSageMaker.ts
 
 import AWS from "aws-sdk";
 

@@ -15,7 +15,7 @@ function AssessmentComponent() {
   const router = useRouter();
 
   const email = user?.email;
-  const user_id = user?.u_id;
+  const u_id = user?.u_id;
 
   const [bpmScore, setBpmScore] = useState<number | null>(null);
   const [bpmLastTaken, setBpmLastTaken] = useState<string | null>(null);
@@ -23,25 +23,25 @@ function AssessmentComponent() {
   const [salesLastTaken, setSalesLastTaken] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user_id) return;
+    if (!u_id) return;
 
     const fetchBPM = async () => {
-      const result = await getLatestBPMScore(user_id);
+      const result = await getLatestBPMScore(u_id);
       setBpmScore(result?.score ?? null);
       setBpmLastTaken(result?.takenAt ?? null);
     };
 
     const fetchSales = async () => {
-      const result = await getLatestSalesScore(user_id);
+      const result = await getLatestSalesScore(u_id);
       setSalesScore(result?.score ?? null);
       setSalesLastTaken(result?.takenAt ?? null);
     };
 
     fetchBPM();
     fetchSales();
-  }, [user_id]);
+  }, [u_id]);
 
-  if (!email || !user_id) {
+  if (!email || !u_id) {
     return <p className="text-center text-red-600">⚠️ Email and User ID required.</p>;
   }
 
@@ -56,10 +56,10 @@ function AssessmentComponent() {
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
   {/* Inject BPMCard */}
-  <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={user_id} />
+  <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={u_id} />
 
   {/* Inject SalesPerformanceCard */}
-  <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={user_id} />
+  <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={u_id} />
 
   {[
     {
