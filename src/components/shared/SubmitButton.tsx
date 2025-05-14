@@ -1,20 +1,30 @@
 "use client";
 
 type Props = {
-  text: string;
+  text?: string;
   isSubmitting: boolean;
+  cooldown?: number;
   disabled?: boolean;
-  type?: "button" | "submit" | "reset"; // ✅ Add this here
+  type?: "button" | "submit" | "reset";
 };
 
-
-export default function SubmitButton({ isSubmitting, cooldown, text = "Submit" }: Props) {
-  const isDisabled = isSubmitting || cooldown > 0;
-  const label = isSubmitting ? "Submitting..." : cooldown > 0 ? `Please wait (${cooldown}s)` : text;
+export default function SubmitButton({
+  text = "Submit",
+  isSubmitting,
+  cooldown = 0,
+  disabled = false,
+  type = "button",
+}: Props) {
+  const isDisabled = isSubmitting || cooldown > 0 || disabled;
+  const label = isSubmitting
+    ? "Submitting..."
+    : cooldown > 0
+    ? `Please wait (${cooldown}s)`
+    : text;
 
   return (
-     <button
-      type={type} // ✅ Now uses the passed-in type (e.g. "submit")
+    <button
+      type={type}
       disabled={isDisabled}
       className={`w-full py-3 rounded-md text-lg font-semibold transition ${
         isDisabled
