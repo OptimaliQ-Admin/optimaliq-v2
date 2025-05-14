@@ -113,7 +113,13 @@ console.log("🧠 Session after login:", sessionData);
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <SubmitButton text="Log In" isSubmitting={false} cooldown={0} />
+            <SubmitButton
+  text="Log In"
+  isSubmitting={isLoading}
+  type="submit" // ✅ Ensure it's type submit
+  disabled={isLoading}
+/>
+
           )}
         </form>
       </div>
