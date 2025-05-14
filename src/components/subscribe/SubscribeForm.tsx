@@ -14,6 +14,8 @@ import {
   FaDollarSign,
   FaIndustry,
 } from "react-icons/fa";
+import { supabase } from "@/lib/supabase";
+
 
 export default function SubscribeForm() {
   const router = useRouter();
