@@ -38,10 +38,10 @@ export default function SubscribeForm() {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!captchaToken) return alert("⚠️ Please complete the captcha.");
-    setLoading(true);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  if (!captchaToken) return alert("⚠️ Please complete the captcha.");
+  setLoading(true);
   
     // 1. Insert into leads
     await supabase.from("leads").upsert([{ 
