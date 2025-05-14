@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 import { getErrorMessage } from "@/utils/errorHandler";
 export async function POST(req: NextRequest) {
+  const supabase = createServerComponentClient({ cookies });
   try {
     const body = await req.json();
     console.log("📨 Incoming POST payload:", body);

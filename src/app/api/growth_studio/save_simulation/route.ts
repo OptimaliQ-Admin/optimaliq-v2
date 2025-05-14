@@ -1,4 +1,4 @@
-//src/app/api/tier2/growth_studio/save_simulation/route.ts
+//src/app/api/growth_studio/save_simulation/route.ts
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";

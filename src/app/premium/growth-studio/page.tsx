@@ -1,4 +1,4 @@
-// /src/app/tier2/growth-studio/page.tsx
+//src/app/premium/growth-studio/page.tsx
 "use client";
 
 import { Suspense, useState } from "react";
@@ -27,7 +27,7 @@ function GrowthStudioComponent() {
     setShowModal(true);
 
     try {
-      const res = await fetch("/api/tier2/growth_studio/commentary", {
+      const res = await fetch("/api/growth_studio/commentary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result),

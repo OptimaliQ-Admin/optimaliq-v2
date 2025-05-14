@@ -16,7 +16,7 @@ export default function MarketingPlaybookCard() {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch("/api/tier2/dashboard/insight/marketing_playbook");
+        const res = await fetch("/api/dashboard/marketing_playbook");
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {

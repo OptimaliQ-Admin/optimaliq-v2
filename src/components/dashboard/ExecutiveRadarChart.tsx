@@ -1,3 +1,4 @@
+//src/components/dashboard/ExecutiveRadarChart.tsx
 "use client";
 
 import React from "react";
@@ -110,9 +111,9 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       </ResponsiveContainer>
 
       <div className="flex justify-around text-sm text-gray-700 font-medium pt-4 mt-1">
-        <span>\ud83d\udd66 You</span>
-        <span>\u2b1b Industry Avg</span>
-        <span>\ud83d\udfe9 Top Performers</span>
+      <span>🟦 You</span>
+        <span>⬛ Industry Avg</span>
+        <span>🟩 Top Performers</span>
       </div>
     </div>
   );

@@ -105,6 +105,11 @@ if (aiScores) {
     };      
 
     // Save insights
+    console.log("🧪 Payload Field Checks:");
+console.log("benchmarking:", payload.benchmarking);
+console.log("strengths:", payload.strengths);
+console.log("weaknesses:", payload.weaknesses);
+console.log("roadmap:", payload.roadmap);
     await saveDashboardInsights(supabase, payload);
 
 

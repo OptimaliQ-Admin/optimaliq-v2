@@ -1,4 +1,4 @@
-// File: /src/app/api/tier2/growth_studio/quadrant/route.ts
+// src/app/api/growth_studio/quadrant/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
