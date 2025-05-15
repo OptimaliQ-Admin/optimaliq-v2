@@ -85,7 +85,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
           onClose={() => setShowIntro(false)}
           onStart={() => {
             setShowIntro(false);
-            router.push("\premium\assessment\tech-stack");
+            router.push("/premium/assessment/tech-stack");
           }}
           assessmentType="tech"
         />
