@@ -13,6 +13,8 @@ import TechCard from "@/components/assessments/TechCard";
 import { getLatestTechScore } from "@/lib/queries/getLatestTechScore";
 import StrategicCard from "@/components/assessments/StrategicCard";
 import { getLatestStrategicScore } from "@/lib/queries/getLatestStrategicScore";
+import Business_ReassessmentCard from "@/components/assessments/Business_ReassessmentCard";
+import { getLatestReassessmentScore } from "@/lib/queries/getLatestReassessmentScore";
 import MarketingCard from "@/components/assessments/MarketingCard";
 import CustomerCard from "@/components/assessments/CustomerCard";
 import AICard from "@/components/assessments/AICard";
@@ -36,6 +38,9 @@ function AssessmentComponent() {
   const [techLastTaken, settechLastTaken] = useState<string | null>(null);
   const [StrategicScore, setStrategicScore] = useState<number | null>(null);
   const [StrategicLastTaken, setStrategicLastTaken] = useState<string | null>(null);
+  const [reassessment_score, setreassessmentScore] = useState<number | null>(null);
+  const [reassessmentLastTaken, setreassessmentLastTaken] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (!u_id) return;
@@ -63,10 +68,17 @@ function AssessmentComponent() {
       setStrategicLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchReassessment = async () => {
+      const result = await getLatestReassessmentScore(u_id);
+      setreassessmentScore(result?.score ?? null);
+      setreassessmentLastTaken(result?.takenAt ?? null);
+    };
+
     fetchBPM();
     fetchSales();
     fetchTech();
     fetchStrategic();
+    fetchReassessment();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -94,15 +106,12 @@ function AssessmentComponent() {
   
 {/* Inject StrategicCard */}
   <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
+
+  {/* Inject ReassessmentCard */}
+  <Business_ReassessmentCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
   
 
   {[
-    {
-      id: "reassessment",
-      title: "📊 Business Reassessment",
-      description:
-        "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
-    },
     
   
     {
