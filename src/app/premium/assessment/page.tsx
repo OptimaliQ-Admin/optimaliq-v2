@@ -108,7 +108,7 @@ function AssessmentComponent() {
   <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
 
   {/* Inject ReassessmentCard */}
-  <Business_ReassessmentCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
+  <Business_ReassessmentCard score={reassessment_score} lastTakenDate={reassessmentLastTaken} userId={u_id} />
   
 
   {[
