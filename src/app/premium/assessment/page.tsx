@@ -89,12 +89,12 @@ function AssessmentComponent() {
       description:
         "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
     },
-    {
+    /*{
       id: "tech-stack",
       title: "🛠 Tech Stack Assessment",
       description:
         "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations.",
-    },
+    },*/
     {
       id: "strategy",
       title: "🎯 Strategic Maturity Assessment",

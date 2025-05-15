@@ -38,12 +38,12 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   return (
     <>
       <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
-        <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
+        <h2 className="text-xl font-semibold text-gray-800">🛠 Tech Stack Assessment</h2>
 
         {!hasTaken && (
           <>
             <p className="text-gray-600">
-              Analyze the efficiency of your internal processes and identify automation opportunities.
+              Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations.
             </p>
             <button
               onClick={handleStart}
@@ -85,7 +85,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
           onClose={() => setShowIntro(false)}
           onStart={() => {
             setShowIntro(false);
-            router.push("/tier2/assessment/tech-stack");
+            router.push("\premium\assessment\tech-stack");
           }}
           assessmentType="tech"
         />
