@@ -53,8 +53,6 @@ const timezoneOptions = [
   { value: "+14:00", label: "(GMT +14:00) Line Islands, Tokelau" },
 ];
 
-const [isLoading, setIsLoading] = useState(false);
-
 
   export default function CreateAccountForm() {
     const router = useRouter();
@@ -66,6 +64,8 @@ const [isLoading, setIsLoading] = useState(false);
   
     const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : {};
   
+   const [isLoading, setIsLoading] = useState(false);
+
     const [formState, setFormState] = useState({
       email: storedEmail,
       password: "",
