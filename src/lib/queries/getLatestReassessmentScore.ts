@@ -12,7 +12,7 @@ export type reassessmentScoreResult = {
 export async function getLatestReassessmentScore(u_id: string): Promise<reassessmentScoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
-    .select("reassessment_score, reassessment")
+    .select("reassessment_score, reassessment_last_taken")
     .eq("u_id", u_id)
     .maybeSingle();
 
