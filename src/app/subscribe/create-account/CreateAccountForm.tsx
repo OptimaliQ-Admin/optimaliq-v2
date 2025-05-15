@@ -170,7 +170,12 @@ const timezoneOptions = [
   </label>
 </div>
 
-      <SubmitButton isSubmitting={false} cooldown={0} text="Create My Account" />
+      <SubmitButton
+        text="Log In"
+        isSubmitting={isLoading}
+        type="submit" // ✅ Ensure it's type submit
+        disabled={isLoading}
+      />
     </form>
   );
 }
