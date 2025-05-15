@@ -10,6 +10,7 @@ import SalesPerformanceCard from "@/components/assessments/SalesPerformanceCard"
 import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
 import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
 import TechCard from "@/components/assessments/TechCard";
+import { getLatestTechScore } from "@/lib/queries/getLatestTechScore";
 import StrategicCard from "@/components/assessments/StrategicCard";
 import MarketingCard from "@/components/assessments/MarketingCard";
 import CustomerCard from "@/components/assessments/CustomerCard";
