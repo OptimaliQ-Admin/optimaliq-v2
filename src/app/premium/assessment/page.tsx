@@ -93,7 +93,7 @@ function AssessmentComponent() {
   <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
   
 {/* Inject StrategicCard */}
-  <TechCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
+  <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
   
 
   {[
