@@ -12,7 +12,8 @@ export type AssessmentType =
   | "ai"
   | "digital"
   | "leadership"
-  | "benchmarking";
+  | "benchmarking"
+  | "reassessment";
 
 export const assessmentIntros: Record<
   AssessmentType,
@@ -62,6 +63,11 @@ export const assessmentIntros: Record<
     title: "📊 Competitive Benchmarking Assessment",
     description:
       "See how your business stacks up against industry peers. Honest inputs generate the most actionable positioning recommendations.",
+  },
+  reassessment: {
+title: "📊 Business Reassessment",
+    description:
+      " Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
   },
 };
 
