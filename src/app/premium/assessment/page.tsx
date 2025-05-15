@@ -16,6 +16,7 @@ import { getLatestStrategicScore } from "@/lib/queries/getLatestStrategicScore";
 import Business_ReassessmentCard from "@/components/assessments/Business_ReassessmentCard";
 import { getLatestReassessmentScore } from "@/lib/queries/getLatestReassessmentScore";
 import MarketingCard from "@/components/assessments/MarketingCard";
+import { getLatestMarketingScore } from "@/lib/queries/getLatestMarketingScore";
 import CustomerCard from "@/components/assessments/CustomerCard";
 import AICard from "@/components/assessments/AICard";
 import DigitalCard from "@/components/assessments/DigitalCard";
@@ -40,6 +41,8 @@ function AssessmentComponent() {
   const [StrategicLastTaken, setStrategicLastTaken] = useState<string | null>(null);
   const [reassessment_score, setreassessmentScore] = useState<number | null>(null);
   const [reassessmentLastTaken, setreassessmentLastTaken] = useState<string | null>(null);
+  const [marketing_score, setmarketingScore] = useState<number | null>(null);
+  const [marketingLastTaken, setmarketingLastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -74,11 +77,19 @@ function AssessmentComponent() {
       setreassessmentLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchMarketing = async () => {
+      const result = await getLatestMarketingScore(u_id);
+      setreassessmentScore(result?.score ?? null);
+      setreassessmentLastTaken(result?.takenAt ?? null);
+    };
+
+
     fetchBPM();
     fetchSales();
     fetchTech();
     fetchStrategic();
     fetchReassessment();
+    fetchMarketing();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -109,18 +120,13 @@ function AssessmentComponent() {
 
   {/* Inject ReassessmentCard */}
   <Business_ReassessmentCard score={reassessment_score} lastTakenDate={reassessmentLastTaken} userId={u_id} />
+
+  {/* Inject MarketingCard */}
+  <MarketingCard score={marketing_score} lastTakenDate={marketingLastTaken} userId={u_id} />
   
 
   {[
     
-  
-    {
-      id: "marketing-effectiveness",
-      title: "📢 Marketing Effectiveness Assessment",
-      description:
-        "Analyze your marketing performance and receive recommendations to optimize efforts.",
-    },
-    // Remove sales-performance from this map
     {
       id: "customer-experience",
       title: "👥 Customer Experience Assessment",

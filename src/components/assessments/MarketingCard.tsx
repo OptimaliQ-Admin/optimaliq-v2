@@ -1,11 +1,13 @@
 "use client";
 
+
 import React, { useState } from "react";
 import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
 import AssessmentIntroModal from "./AssessmentIntroModal";
 
-const bpmDescriptions: Record<number, string> = {
+
+const marketingDescriptions: Record<number, string> = {
   1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
   1.5: "Some structure exists, but it's inconsistent and mostly ad hoc.",
   2: "You’re making progress toward defined processes but lack scalability.",
@@ -17,33 +19,40 @@ const bpmDescriptions: Record<number, string> = {
   5: "Your BPM capabilities are world-class. Use them to drive competitive advantage."
 };
 
+
 type Props = {
   score: number | null;
   lastTakenDate: string | null;
   userId: string;
 };
 
-export default function BPMCard({ score, lastTakenDate, userId }: Props) {
+
+export default function MarketingCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
 
+
   const handleStart = () => setShowIntro(true);
+
 
   const daysSinceLast = lastTakenDate ? differenceInDays(new Date(), new Date(lastTakenDate)) : null;
   const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;
 
+
   const needsRetake = daysSinceLast !== null && daysSinceLast > 30;
   const hasTaken = score !== null && lastTakenDate !== null;
+
 
   return (
     <>
       <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
-        <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
+        <h2 className="text-xl font-semibold text-gray-800">📢 Marketing Effectiveness Assessment</h2>
+
 
         {!hasTaken && (
           <>
             <p className="text-gray-600">
-              Analyze the efficiency of your internal processes and identify automation opportunities.
+              Analyze your marketing performance and receive recommendations to optimize efforts.
             </p>
             <button
               onClick={handleStart}
@@ -54,13 +63,15 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
           </>
         )}
 
+
         {hasTaken && (
           <>
             <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
-            <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
+            <p className="text-gray-600">{marketingDescriptions[roundedScore ?? 1]}</p>
             <p className="text-sm text-gray-500">
               Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
             </p>
+
 
             {needsRetake && (
               <div className="mt-4 border-t pt-4">
@@ -79,15 +90,16 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
         )}
       </div>
 
+
       {showIntro && (
         <AssessmentIntroModal
           isOpen={showIntro}
           onClose={() => setShowIntro(false)}
           onStart={() => {
             setShowIntro(false);
-            router.push("/tier2/assessment/BPM");
+            router.push("/premium/assessment/marketing-effectiveness");
           }}
-          assessmentType="BPM"
+          assessmentType="marketing"
         />
       )}
     </>

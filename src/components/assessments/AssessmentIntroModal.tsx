@@ -13,7 +13,8 @@ export type AssessmentType =
   | "digital"
   | "leadership"
   | "benchmarking"
-  | "reassessment";
+  | "reassessment"
+  | "marketing";
 
 export const assessmentIntros: Record<
   AssessmentType,
@@ -68,6 +69,11 @@ export const assessmentIntros: Record<
 title: "📊 Business Reassessment",
     description:
       " Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
+  },
+  marketing: {
+title: "📢 Marketing Effectiveness Assessment",
+    description:
+      "Analyze your marketing performance and receive recommendations to optimize efforts.",
   },
 };
 
