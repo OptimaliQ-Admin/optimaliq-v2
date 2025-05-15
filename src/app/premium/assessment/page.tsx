@@ -9,6 +9,15 @@ import BPMCard from "@/components/assessments/BPMCard";
 import SalesPerformanceCard from "@/components/assessments/SalesPerformanceCard";
 import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
 import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
+import TechCard from "@/components/assessments/TechCard";
+import StrategicCard from "@/components/assessments/StrategicCard";
+import MarketingCard from "@/components/assessments/MarketingCard";
+import CustomerCard from "@/components/assessments/CustomerCard";
+import AICard from "@/components/assessments/AICard";
+import DigitalCard from "@/components/assessments/DigitalCard";
+import LeadershipCard from "@/components/assessments/LeadershipCard";
+import GrowthCard from "@/components/assessments/GrowthCard";
+
 
 function AssessmentComponent() {
   const { user } = usePremiumUser();
@@ -21,6 +30,8 @@ function AssessmentComponent() {
   const [bpmLastTaken, setBpmLastTaken] = useState<string | null>(null);
   const [salesScore, setSalesScore] = useState<number | null>(null);
   const [salesLastTaken, setSalesLastTaken] = useState<string | null>(null);
+  const [techScore, settechScore] = useState<number | null>(null);
+  const [techLastTaken, settechLastTaken] = useState<string | null>(null);
 
   useEffect(() => {
     if (!u_id) return;
@@ -36,9 +47,15 @@ function AssessmentComponent() {
       setSalesScore(result?.score ?? null);
       setSalesLastTaken(result?.takenAt ?? null);
     };
+    const fetchTech = async () => {
+      const result = await getLatestTechScore(u_id);
+      settechScore(result?.score ?? null);
+      settechLastTaken(result?.takenAt ?? null);
+    };
 
     fetchBPM();
     fetchSales();
+    fetchTech();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -60,6 +77,9 @@ function AssessmentComponent() {
 
   {/* Inject SalesPerformanceCard */}
   <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={u_id} />
+
+{/* Inject TechCard */}
+  <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
 
   {[
     {
