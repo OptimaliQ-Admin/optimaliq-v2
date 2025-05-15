@@ -12,6 +12,7 @@ import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
 import TechCard from "@/components/assessments/TechCard";
 import { getLatestTechScore } from "@/lib/queries/getLatestTechScore";
 import StrategicCard from "@/components/assessments/StrategicCard";
+import { getLatestStrategicScore } from "@/lib/queries/getLatestStrategicScore";
 import MarketingCard from "@/components/assessments/MarketingCard";
 import CustomerCard from "@/components/assessments/CustomerCard";
 import AICard from "@/components/assessments/AICard";
@@ -33,6 +34,8 @@ function AssessmentComponent() {
   const [salesLastTaken, setSalesLastTaken] = useState<string | null>(null);
   const [techScore, settechScore] = useState<number | null>(null);
   const [techLastTaken, settechLastTaken] = useState<string | null>(null);
+  const [StrategicScore, setStrategicScore] = useState<number | null>(null);
+  const [StrategicLastTaken, setStrategicLastTaken] = useState<string | null>(null);
 
   useEffect(() => {
     if (!u_id) return;
@@ -54,9 +57,16 @@ function AssessmentComponent() {
       settechLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchStrategic = async () => {
+      const result = await getLatestStrategicScore(u_id);
+      setStrategicScore(result?.score ?? null);
+      setStrategicLastTaken(result?.takenAt ?? null);
+    };
+
     fetchBPM();
     fetchSales();
     fetchTech();
+    fetchStrategic();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -81,6 +91,10 @@ function AssessmentComponent() {
 
 {/* Inject TechCard */}
   <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
+  
+{/* Inject StrategicCard */}
+  <TechCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
+  
 
   {[
     {
@@ -89,18 +103,8 @@ function AssessmentComponent() {
       description:
         "Re-evaluate your business using the same questions from your initial assessment and track progress over time.",
     },
-    /*{
-      id: "tech-stack",
-      title: "🛠 Tech Stack Assessment",
-      description:
-        "Identify and analyze the software solutions used across different business channels and receive AI-driven recommendations.",
-    },*/
-    {
-      id: "strategy",
-      title: "🎯 Strategic Maturity Assessment",
-      description:
-        "Evaluate your business strategy and receive insights to refine and strengthen it.",
-    },
+    
+  
     {
       id: "marketing-effectiveness",
       title: "📢 Marketing Effectiveness Assessment",
