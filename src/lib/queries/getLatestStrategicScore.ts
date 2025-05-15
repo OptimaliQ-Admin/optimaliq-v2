@@ -23,7 +23,7 @@ export async function getLatestStrategicScore(u_id: string): Promise<StrategicSc
   }
 
 
-  if (!data?.Strategic_score || !data?.Strategic_last_taken {
+  if (!data?.Strategic_score || !data?.Strategic_last_taken) {
     return null;
   }
 
