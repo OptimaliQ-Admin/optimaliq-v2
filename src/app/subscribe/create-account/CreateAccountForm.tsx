@@ -53,6 +53,9 @@ const timezoneOptions = [
   { value: "+14:00", label: "(GMT +14:00) Line Islands, Tokelau" },
 ];
 
+const [isLoading, setIsLoading] = useState(false);
+
+
   export default function CreateAccountForm() {
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
@@ -171,7 +174,7 @@ const timezoneOptions = [
 </div>
 
       <SubmitButton
-        text="Log In"
+        text="Create Account"
         isSubmitting={isLoading}
         type="submit" // ✅ Ensure it's type submit
         disabled={isLoading}
