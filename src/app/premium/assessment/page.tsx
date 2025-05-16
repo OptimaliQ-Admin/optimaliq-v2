@@ -20,6 +20,7 @@ import { getLatestMarketingScore } from "@/lib/queries/getLatestMarketingScore";
 import CustomerCard from "@/components/assessments/CustomerCard";
 import { getLatestCustomerScore } from "@/lib/queries/getLatestCustomerScore";
 import AICard from "@/components/assessments/AICard";
+import { getLatestAIScore } from "@/lib/queries/getLatestAIScore";
 import DigitalCard from "@/components/assessments/DigitalCard";
 import LeadershipCard from "@/components/assessments/LeadershipCard";
 import GrowthCard from "@/components/assessments/GrowthCard";
@@ -46,6 +47,8 @@ function AssessmentComponent() {
   const [marketingLastTaken, setmarketingLastTaken] = useState<string | null>(null);
   const [Customer_score, setCustomerScore] = useState<number | null>(null);
   const [CustomerLastTaken, setCustomerLastTaken] = useState<string | null>(null);
+  const [AI_score, setAIScore] = useState<number | null>(null);
+  const [AILastTaken, setAILastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -92,6 +95,12 @@ function AssessmentComponent() {
       setCustomerLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchAI = async () => {
+      const result = await getLatestAIScore(u_id);
+      setAIScore(result?.score ?? null);
+      setAILastTaken(result?.takenAt ?? null);
+    };
+
 
     fetchBPM();
     fetchSales();
@@ -100,6 +109,7 @@ function AssessmentComponent() {
     fetchReassessment();
     fetchMarketing();
     fetchCustomer();
+    fetchAI();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -136,17 +146,15 @@ function AssessmentComponent() {
 
    {/* Inject CustomerCard */}
   <CustomerCard score={Customer_score} lastTakenDate={CustomerLastTaken} userId={u_id} />
+
+  {/* Inject AICard */}
+  <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
   
 
   {[
     
    
-    {
-      id: "ai-readiness",
-      title: "🚀 AI & Automation Readiness",
-      description:
-        "Measure how well your business is leveraging AI and automation.",
-    },
+  
     {
       id: "digital-transformation",
       title: "📡 Digital Transformation Readiness",
