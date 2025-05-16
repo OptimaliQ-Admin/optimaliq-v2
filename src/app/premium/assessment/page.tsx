@@ -26,6 +26,7 @@ import { getLatestDigitalScore } from "@/lib/queries/getLatestDigitalScore";
 import LeadershipCard from "@/components/assessments/LeadershipCard";
 import { getLatestLeadershipScore } from "@/lib/queries/getLatestLeadershipScore";
 import GrowthCard from "@/components/assessments/GrowthCard";
+import { getLatestGrowthScore } from "@/lib/queries/getLatestGrowthScore";
 
 
 function AssessmentComponent() {
@@ -55,6 +56,8 @@ function AssessmentComponent() {
   const [DigitalLastTaken, setDigitalLastTaken] = useState<string | null>(null);
   const [Leadership_score, setLeadershipScore] = useState<number | null>(null);
   const [LeadershipLastTaken, setLeadershipLastTaken] = useState<string | null>(null);
+  const [Growth_score, setGrowthScore] = useState<number | null>(null);
+  const [GrowthLastTaken, setGrowthLastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -119,6 +122,12 @@ function AssessmentComponent() {
       setLeadershipLastTaken(result?.takenAt ?? null);
     };
 
+    const fetchGrowth = async () => {
+      const result = await getLatestGrowthScore(u_id);
+      setGrowthScore(result?.score ?? null);
+      setGrowthLastTaken(result?.takenAt ?? null);
+    };
+
 
     fetchBPM();
     fetchSales();
@@ -130,6 +139,7 @@ function AssessmentComponent() {
     fetchAI();
     fetchDigital();
     fetchLeadership();
+    fetchGrowth();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -175,16 +185,13 @@ function AssessmentComponent() {
 
   {/* Inject LeadershipCard */}
   <LeadershipCard score={Leadership_score} lastTakenDate={LeadershipLastTaken} userId={u_id} />
+
+  {/* Inject GrowthCard */}
+  <GrowthCard score={Growth_score} lastTakenDate={GrowthLastTaken} userId={u_id} />
   
 
   {[
-    
-    {
-      id: "competitive-benchmarking",
-      title: "📊 Growth & Benchmarking Intake",
-      description:
-        "Provide key business metrics and competitive insights to personalize your roadmap and compare your performance to industry benchmarks.",
-    },
+   
   ].map((assessment) => (
     <div
       key={assessment.id}
