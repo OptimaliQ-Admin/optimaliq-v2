@@ -18,6 +18,7 @@ import { getLatestReassessmentScore } from "@/lib/queries/getLatestReassessmentS
 import MarketingCard from "@/components/assessments/MarketingCard";
 import { getLatestMarketingScore } from "@/lib/queries/getLatestMarketingScore";
 import CustomerCard from "@/components/assessments/CustomerCard";
+import { getLatestCustomerScore } from "@/lib/queries/getLatestCustomerScore";
 import AICard from "@/components/assessments/AICard";
 import DigitalCard from "@/components/assessments/DigitalCard";
 import LeadershipCard from "@/components/assessments/LeadershipCard";
@@ -43,6 +44,8 @@ function AssessmentComponent() {
   const [reassessmentLastTaken, setreassessmentLastTaken] = useState<string | null>(null);
   const [marketing_score, setmarketingScore] = useState<number | null>(null);
   const [marketingLastTaken, setmarketingLastTaken] = useState<string | null>(null);
+  const [Customer_score, setCustomerScore] = useState<number | null>(null);
+  const [CustomerLastTaken, setCustomerLastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -79,8 +82,14 @@ function AssessmentComponent() {
 
     const fetchMarketing = async () => {
       const result = await getLatestMarketingScore(u_id);
-      setreassessmentScore(result?.score ?? null);
-      setreassessmentLastTaken(result?.takenAt ?? null);
+      setmarketingScore(result?.score ?? null);
+      setmarketingLastTaken(result?.takenAt ?? null);
+    };
+
+     const fetchCustomer = async () => {
+      const result = await getLatestCustomerScore(u_id);
+      setCustomerScore(result?.score ?? null);
+      setCustomerLastTaken(result?.takenAt ?? null);
     };
 
 
@@ -90,6 +99,7 @@ function AssessmentComponent() {
     fetchStrategic();
     fetchReassessment();
     fetchMarketing();
+    fetchCustomer();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -123,16 +133,14 @@ function AssessmentComponent() {
 
   {/* Inject MarketingCard */}
   <MarketingCard score={marketing_score} lastTakenDate={marketingLastTaken} userId={u_id} />
+
+   {/* Inject CustomerCard */}
+  <CustomerCard score={Customer_score} lastTakenDate={CustomerLastTaken} userId={u_id} />
   
 
   {[
     
-    {
-      id: "customer-experience",
-      title: "👥 Customer Experience Assessment",
-      description:
-        "Understand satisfaction levels and discover retention and engagement opportunities.",
-    },
+   
     {
       id: "ai-readiness",
       title: "🚀 AI & Automation Readiness",
