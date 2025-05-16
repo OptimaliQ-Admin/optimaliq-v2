@@ -24,7 +24,7 @@ export default function LabeledSelect({ label, name, value, onChange, options }:
         name={name}
         value={value}
         onChange={onChange}
-        className="block w-full mt-1 border border-gray-300 rounded p-2"
+        className="block w-full mt-1 border border-gray-300 rounded p-2 text-black"
         required
       >
         <option value="">Select</option>

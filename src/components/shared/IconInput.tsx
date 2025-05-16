@@ -31,7 +31,7 @@ export function IconInput({
         placeholder={placeholder}
         maxLength={maxLength} // ✅ Use it here
         type={type}
-        className="block w-full pl-10 border border-gray-300 rounded p-2"
+        className="block w-full pl-10 border border-gray-300 rounded p-2 text-black"
         required
       />
     </div>
