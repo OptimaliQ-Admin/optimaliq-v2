@@ -2,14 +2,14 @@ import { supabase } from "@/lib/supabase";
 import { differenceInDays, parseISO } from "date-fns";
 
 
-export type GrowtheResult = {
+export type GrowthScoreResult = {
   score: number;
   takenAt: string;
   isExpired: boolean;
 } | null;
 
 
-export async function getLatestTechScore(u_id: string): Promise<GrowthScoreResult> {
+export async function getLatestGrowthScore (u_id: string): Promise<GrowthScoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
     .select("Growth_score, Growth_last_taken")
