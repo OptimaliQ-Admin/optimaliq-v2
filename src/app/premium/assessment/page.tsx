@@ -190,18 +190,6 @@ function AssessmentComponent() {
   <GrowthCard score={Growth_score} lastTakenDate={GrowthLastTaken} userId={u_id} />
   
 
-  {[
-   
-  ].map((assessment) => (
-    <div
-      key={assessment.id}
-      className="bg-white p-6 shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition"
-      onClick={() => router.push(`/tier2/assessment/${assessment.id}`)}
-    >
-      <h2 className="text-xl font-bold text-gray-800">{assessment.title}</h2>
-      <p className="text-gray-600 mt-2">{assessment.description}</p>
-    </div>
-  ))}
 </div>
 
       </div>
