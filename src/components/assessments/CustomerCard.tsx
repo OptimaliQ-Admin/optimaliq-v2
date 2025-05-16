@@ -87,7 +87,7 @@ export default function CustomerCard({ score, lastTakenDate, userId }: Props) {
             setShowIntro(false);
             router.push("/tier2/assessment/BPM");
           }}
-          assessmentType="BPM"
+          assessmentType="cx"
         />
       )}
     </>
