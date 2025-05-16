@@ -22,6 +22,7 @@ import { getLatestCustomerScore } from "@/lib/queries/getLatestCustomerScore";
 import AICard from "@/components/assessments/AICard";
 import { getLatestAIScore } from "@/lib/queries/getLatestAIScore";
 import DigitalCard from "@/components/assessments/DigitalCard";
+import { getLatestDigitalScore } from "@/lib/queries/getLatestDigitalScore";
 import LeadershipCard from "@/components/assessments/LeadershipCard";
 import GrowthCard from "@/components/assessments/GrowthCard";
 
@@ -49,6 +50,8 @@ function AssessmentComponent() {
   const [CustomerLastTaken, setCustomerLastTaken] = useState<string | null>(null);
   const [AI_score, setAIScore] = useState<number | null>(null);
   const [AILastTaken, setAILastTaken] = useState<string | null>(null);
+  const [Digital_score, setDigitalScore] = useState<number | null>(null);
+  const [DigitalLastTaken, setDigitalLastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -101,6 +104,12 @@ function AssessmentComponent() {
       setAILastTaken(result?.takenAt ?? null);
     };
 
+    const fetchDigital = async () => {
+      const result = await getLatestDigitalScore(u_id);
+      setDigitalScore(result?.score ?? null);
+      setDigitalLastTaken(result?.takenAt ?? null);
+    };
+
 
     fetchBPM();
     fetchSales();
@@ -110,6 +119,7 @@ function AssessmentComponent() {
     fetchMarketing();
     fetchCustomer();
     fetchAI();
+    fetchDigital();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -149,18 +159,14 @@ function AssessmentComponent() {
 
   {/* Inject AICard */}
   <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
+
+  {/* Inject AICard */}
+  <DigitalCard score={Digital_score} lastTakenDate={DigitalLastTaken} userId={u_id} />
   
 
   {[
     
    
-  
-    {
-      id: "digital-transformation",
-      title: "📡 Digital Transformation Readiness",
-      description:
-        "Evaluate your preparedness for digital transformation and modern tech adoption.",
-    },
     {
       id: "leadership-team",
       title: "🏢 Leadership & Team Assessment",

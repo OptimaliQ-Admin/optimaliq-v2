@@ -5,7 +5,7 @@ import { format, differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
 import AssessmentIntroModal from "./AssessmentIntroModal";
 
-const bpmDescriptions: Record<number, string> = {
+const DigitalDescriptions: Record<number, string> = {
   1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
   1.5: "Some structure exists, but it's inconsistent and mostly ad hoc.",
   2: "You’re making progress toward defined processes but lack scalability.",
@@ -23,7 +23,7 @@ type Props = {
   userId: string;
 };
 
-export default function BPMCard({ score, lastTakenDate, userId }: Props) {
+export default function DigitalCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
 
@@ -38,12 +38,12 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
   return (
     <>
       <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 transition hover:shadow-xl">
-        <h2 className="text-xl font-semibold text-gray-800">⚙️ Business Process Management Assessment</h2>
+        <h2 className="text-xl font-semibold text-gray-800">📡 Digital Transformation Readiness</h2>
 
         {!hasTaken && (
           <>
             <p className="text-gray-600">
-              Analyze the efficiency of your internal processes and identify automation opportunities.
+              Evaluate your preparedness for digital transformation and modern tech adoption.
             </p>
             <button
               onClick={handleStart}
@@ -57,7 +57,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
         {hasTaken && (
           <>
             <div className="text-3xl font-bold text-blue-700">Score = {roundedScore}</div>
-            <p className="text-gray-600">{bpmDescriptions[roundedScore ?? 1]}</p>
+            <p className="text-gray-600">{DigitalDescriptions[roundedScore ?? 1]}</p>
             <p className="text-sm text-gray-500">
               Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
             </p>
@@ -87,7 +87,7 @@ export default function BPMCard({ score, lastTakenDate, userId }: Props) {
             setShowIntro(false);
             router.push("/tier2/assessment/BPM");
           }}
-          assessmentType="BPM"
+          assessmentType="digital"
         />
       )}
     </>
