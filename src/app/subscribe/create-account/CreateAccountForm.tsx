@@ -57,13 +57,13 @@ const timezoneOptions = [
   export default function CreateAccountForm() {
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
-  
+
     const storedEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") || "" : "";
     const storedUserInfo = typeof window !== "undefined" ? localStorage.getItem("tier2_full_user_info") : null;
     const storedUserId = typeof window !== "undefined" ? localStorage.getItem("tier2_user_id") || "" : "";
-  
+
     const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : {};
-  
+
    const [isLoading, setIsLoading] = useState(false);
 
     const [formState, setFormState] = useState({
@@ -73,72 +73,67 @@ const timezoneOptions = [
       timezone: "",
       linkedin_url: "",
       agreed_terms: false,
-      agreed_marketing: false, 
+      agreed_marketing: false,
     });
-    
-  
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, type } = e.target;
       const value = type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value;
       setFormState((prev) => ({ ...prev, [name]: value }));
     };
-  
+
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-    
+
       if (!formState.email || !formState.email.includes("@")) {
         toast.error("❌ Please enter a valid email address.");
         return;
       }
-    
+
       if (formState.password.length < 12) {
         toast.error("❌ Password must be at least 12 characters.");
         return;
       }
-    
+
       const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/;
       if (!passwordStrengthRegex.test(formState.password)) {
         toast.error("❌ Password must include uppercase, lowercase, number, and symbol.");
         return;
       }
-    
+
       if (formState.password !== formState.confirmPassword) {
         toast.error("❌ Passwords do not match.");
         return;
       }
-    
+
       // ✅ 1. Call the new API that handles everything
       const res = await fetch("/api/admin/finalizeSignup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: formState.email,
-          password: formState.password,
-          timezone: formState.timezone,
-          linkedin_url: formState.linkedin_url,
-          agreed_terms: formState.agreed_terms,
-          agreed_marketing: formState.agreed_marketing,
+          ...formState,
+          confirmPassword: undefined
         }),
       });
-    
+
       const result = await res.json();
-    
+
       if (!res.ok) {
         toast.error(`❌ ${result.error || "Failed to create account"}`);
         return;
       }
-    
+
       // ✅ 2. Clean up localStorage
       localStorage.removeItem("tier2_email");
       localStorage.removeItem("tier2_user_id");
       localStorage.removeItem("tier2_full_user_info");
-    
+
       toast.success("🎉 Account created! Redirecting to login...");
       setTimeout(() => {
         router.push("/subscribe/login");
       }, 2000);
     };
-    
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
     <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
@@ -146,7 +141,7 @@ const timezoneOptions = [
     <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
     <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
     <LabeledInput label="LinkedIn URL (optional)" name="linkedin_url" value={formState.linkedin_url} onChange={handleChange} /> {/* ✅ fixed here */}
-    
+
       <div className="flex items-center space-x-2">
   <input
     type="checkbox"
