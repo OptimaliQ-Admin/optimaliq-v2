@@ -24,6 +24,7 @@ import { getLatestAIScore } from "@/lib/queries/getLatestAIScore";
 import DigitalCard from "@/components/assessments/DigitalCard";
 import { getLatestDigitalScore } from "@/lib/queries/getLatestDigitalScore";
 import LeadershipCard from "@/components/assessments/LeadershipCard";
+import { getLatestLeadershipScore } from "@/lib/queries/getLatestLeadershipScore";
 import GrowthCard from "@/components/assessments/GrowthCard";
 
 
@@ -52,6 +53,8 @@ function AssessmentComponent() {
   const [AILastTaken, setAILastTaken] = useState<string | null>(null);
   const [Digital_score, setDigitalScore] = useState<number | null>(null);
   const [DigitalLastTaken, setDigitalLastTaken] = useState<string | null>(null);
+  const [Leadership_score, setLeadershipScore] = useState<number | null>(null);
+  const [LeadershipLastTaken, setLeadershipLastTaken] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -110,6 +113,12 @@ function AssessmentComponent() {
       setDigitalLastTaken(result?.takenAt ?? null);
     };
 
+     const fetchLeadership = async () => {
+      const result = await getLatestLeadershipScore(u_id);
+      setLeadershipScore(result?.score ?? null);
+      setLeadershipLastTaken(result?.takenAt ?? null);
+    };
+
 
     fetchBPM();
     fetchSales();
@@ -120,6 +129,7 @@ function AssessmentComponent() {
     fetchCustomer();
     fetchAI();
     fetchDigital();
+    fetchLeadership();
   }, [u_id]);
 
   if (!email || !u_id) {
@@ -160,19 +170,15 @@ function AssessmentComponent() {
   {/* Inject AICard */}
   <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
 
-  {/* Inject AICard */}
+  {/* Inject DigitalCard */}
   <DigitalCard score={Digital_score} lastTakenDate={DigitalLastTaken} userId={u_id} />
+
+  {/* Inject LeadershipCard */}
+  <LeadershipCard score={Leadership_score} lastTakenDate={LeadershipLastTaken} userId={u_id} />
   
 
   {[
     
-   
-    {
-      id: "leadership-team",
-      title: "🏢 Leadership & Team Assessment",
-      description:
-        "Assess leadership effectiveness and alignment to improve culture and execution.",
-    },
     {
       id: "competitive-benchmarking",
       title: "📊 Growth & Benchmarking Intake",

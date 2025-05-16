@@ -85,7 +85,7 @@ export default function DigitalCard({ score, lastTakenDate, userId }: Props) {
           onClose={() => setShowIntro(false)}
           onStart={() => {
             setShowIntro(false);
-            router.push("/tier2/assessment/BPM");
+            router.push("/premium/assessment/digital-transformation");
           }}
           assessmentType="digital"
         />
