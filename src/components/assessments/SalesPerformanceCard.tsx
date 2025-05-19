@@ -90,7 +90,7 @@ export default function SalesPerformanceCard({ score, lastTakenDate, userId }: P
             setShowIntro(false);
             router.push("/premium/assessment/sales_performance");
           }}
-          assessmentType="Sales"
+          assessmentType="sales"
         />
       )}
     </>
