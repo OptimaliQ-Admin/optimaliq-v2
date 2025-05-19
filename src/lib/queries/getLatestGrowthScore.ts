@@ -23,13 +23,13 @@ export async function getLatestGrowthScore (u_id: string): Promise<GrowthScoreRe
   }
 
 
-  if (!data?.Growth_score || !data?.Growth_last_taken) {
+  if (!data?.benchmarking_score || !data?.benchmarking_last_taken) {
     return null;
   }
 
 
-  const takenAt = data.Growth_last_taken;
-  const score = data.Growth_score;
+  const takenAt = data.benchmarking_last_taken;
+  const score = data.benchmarking_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 

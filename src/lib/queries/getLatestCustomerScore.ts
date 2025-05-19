@@ -19,12 +19,12 @@ export async function getLatestCustomerScore(u_id: string): Promise<Customercore
     return null;
   }
 
-  if (!data?.customer_score || !data?.customer_last_taken) {
+  if (!data?.cx_score || !data?.cx_last_taken) {
     return null;
   }
 
-  const takenAt = data.customer_last_taken;
-  const score = data.customer_score;
+  const takenAt = data.cx_last_taken;
+  const score = data.cx_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 

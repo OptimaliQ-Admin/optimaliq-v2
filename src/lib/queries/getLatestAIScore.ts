@@ -19,12 +19,12 @@ export async function getLatestAIScore(u_id: string): Promise<AIScoreResult> {
     return null;
   }
 
-  if (!data?.AI_score || !data?.AI_last_taken) {
+  if (!data?.ai_score || !data?.ai_last_taken) {
     return null;
   }
 
-  const takenAt = data.AI_last_taken;
-  const score = data.AI_score;
+  const takenAt = data.ai_last_taken;
+  const score = data.ai_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 

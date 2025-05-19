@@ -23,13 +23,13 @@ export async function getLatestLeadershipScore(u_id: string): Promise<Leadership
   }
 
 
-  if (!data?.Leadership_score || !data?.Leadership_last_taken) {
+  if (!data?.leadership_score || !data?.leadership_last_taken) {
     return null;
   }
 
 
-  const takenAt = data.Leadership_last_taken;
-  const score = data.Leadership_score;
+  const takenAt = data.leadership_last_taken;
+  const score = data.leadership_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 

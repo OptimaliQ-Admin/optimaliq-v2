@@ -23,13 +23,13 @@ export async function getLatestStrategicScore(u_id: string): Promise<StrategicSc
   }
 
 
-  if (!data?.Strategic_score || !data?.Strategic_last_taken) {
+  if (!data?.strategy_score || !data?.strategy_last_taken) {
     return null;
   }
 
 
-  const takenAt = data.Strategic_last_taken;
-  const score = data.Strategic_score;
+  const takenAt = data.strategy_last_taken;
+  const score = data.strategy_score;
   const daysOld = differenceInDays(new Date(), parseISO(takenAt));
   const isExpired = daysOld > 30;
 
