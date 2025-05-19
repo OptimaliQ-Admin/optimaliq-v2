@@ -12,7 +12,7 @@ export type LeadershipScoreResult = {
 export async function getLatestLeadershipScore(u_id: string): Promise<LeadershipScoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
-    .select("Leadership_score, Leadership_last_taken")
+    .select("leadership_score, leadership_last_taken")
     .eq("u_id", u_id)
     .maybeSingle();
 

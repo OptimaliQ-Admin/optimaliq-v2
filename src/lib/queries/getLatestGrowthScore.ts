@@ -12,7 +12,7 @@ export type GrowthScoreResult = {
 export async function getLatestGrowthScore (u_id: string): Promise<GrowthScoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
-    .select("Growth_score, Growth_last_taken")
+    .select("benchmarking_score, benchmarking_last_taken")
     .eq("u_id", u_id)
     .maybeSingle();
 

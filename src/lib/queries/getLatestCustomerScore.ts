@@ -10,7 +10,7 @@ export type CustomercoreResult = {
 export async function getLatestCustomerScore(u_id: string): Promise<CustomercoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
-    .select("customer_score, customer_last_taken")
+    .select("cx_score, cx_last_taken")
     .eq("u_id", u_id)
     .maybeSingle();
 

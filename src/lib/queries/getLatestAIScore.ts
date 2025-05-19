@@ -10,7 +10,7 @@ export type AIScoreResult = {
 export async function getLatestAIScore(u_id: string): Promise<AIScoreResult> {
   const { data, error } = await supabase
     .from("tier2_profiles")
-    .select("AI_score, AI_last_taken")
+    .select("ai_score, ai_last_taken")
     .eq("u_id", u_id)
     .maybeSingle();
 
