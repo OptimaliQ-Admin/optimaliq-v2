@@ -1,4 +1,4 @@
-//src/app/api/tier2/assessments/sales_performance/route.ts
+//src/app/api//premium/assessment/sales_performance/route.ts
 import { NextResponse } from "next/server";
 import salesScoringMap from "../data/sales_scoring_map.json";
 import { createClient } from "@supabase/supabase-js";

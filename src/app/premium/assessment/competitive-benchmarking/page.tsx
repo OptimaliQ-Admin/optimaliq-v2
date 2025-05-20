@@ -120,7 +120,7 @@ export default function CompetitiveBenchmarkingAssessmentPage() {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
 
       // ✅ Step 1: Call scoring API
-      const response = await fetch("/api/tier2/assessments/competitive_benchmarking", {
+      const response = await fetch("/api/assessments/competitive_benchmarking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

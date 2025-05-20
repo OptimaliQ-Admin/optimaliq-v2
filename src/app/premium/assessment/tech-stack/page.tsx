@@ -13,6 +13,7 @@ import { isGroup04Complete } from "./groups/Group04_GrowthStack"
 import { isGroup05Complete } from "./groups/Group05_Clarity"
 import { isGroup06Complete } from "./groups/Group06_Benchmarks"
 import { isGroup07Complete } from "./groups/Group07_Final"
+import { isGroup08Complete } from "./groups/Group08_TechTools"
 import {
   getArrayAnswer,
   type AssessmentAnswers,
@@ -29,6 +30,7 @@ const stepValidators: Record<number, (answers: AssessmentAnswers) => boolean> = 
   4: isGroup05Complete,
   5: isGroup06Complete,
   6: isGroup07Complete,
+  7: isGroup08Complete,
 };
 
 
@@ -38,9 +40,9 @@ export default function OnboardingAssessmentPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
+  const [userId, setUserId] = useState<string | null>(null);
   const validator = stepValidators[step];
 
-  const userEmail = typeof window !== "undefined" ? localStorage.getItem("tier2_email") : null;
   const skipCheck = process.env.NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK === "true";
 
   
@@ -64,15 +66,19 @@ export default function OnboardingAssessmentPage() {
         return;
       }
 
-      if (!userEmail) {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
         router.push("/pricing");
         return;
       }
 
+      setUserId(user.id);
+
       const { data, error } = await supabase
         .from("tier2_users")
         .select("subscription_status")
-        .eq("email", userEmail)
+        .eq("id", user.id)
         .single();
 
       if (error || !data || data.subscription_status !== "active") {
@@ -85,7 +91,7 @@ export default function OnboardingAssessmentPage() {
     };
 
     checkSubscription();
-  }, [router, userEmail, skipCheck]);
+  }, [router, skipCheck]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -98,7 +104,7 @@ export default function OnboardingAssessmentPage() {
       return;
     }
   
-    if (step < 6) {
+    if (step < 7) {
       setStep((prev) => prev + 1);
     } else {
       try {
@@ -106,17 +112,54 @@ export default function OnboardingAssessmentPage() {
   
         const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
   
-        const { data, error } = await supabase
+        // Save main assessment data
+        const { data: assessmentData, error: assessmentError } = await supabase
           .from("tech_stack_assessment")
           .insert([{ ...sanitizedAnswers }]);
   
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          alert(`Something went wrong: ${error.message}`);
+        if (assessmentError) {
+          console.error("❌ Supabase error:", assessmentError);
+          alert(`Something went wrong: ${assessmentError.message}`);
           return;
         }
+
+        // Save tech tools data
+        const techToolsData = [
+          ...(Array.isArray(sanitizedAnswers.tech_tools_crm) ? sanitizedAnswers.tech_tools_crm : []).map((tool: string) => ({
+            u_id: userId,
+            category: 'crm',
+            tool_name: tool
+          })),
+          ...(Array.isArray(sanitizedAnswers.tech_tools_esp) ? sanitizedAnswers.tech_tools_esp : []).map((tool: string) => ({
+            u_id: userId,
+            category: 'esp',
+            tool_name: tool
+          })),
+          ...(Array.isArray(sanitizedAnswers.tech_tools_analytics) ? sanitizedAnswers.tech_tools_analytics : []).map((tool: string) => ({
+            u_id: userId,
+            category: 'analytics',
+            tool_name: tool
+          })),
+          ...(Array.isArray(sanitizedAnswers.tech_tools_cms) ? sanitizedAnswers.tech_tools_cms : []).map((tool: string) => ({
+            u_id: userId,
+            category: 'cms',
+            tool_name: tool
+          }))
+        ];
+
+        if (techToolsData.length > 0) {
+          const { error: toolsError } = await supabase
+            .from("tech_stack_tools")
+            .insert(techToolsData);
+
+          if (toolsError) {
+            console.error("❌ Supabase error saving tools:", toolsError);
+            alert(`Something went wrong saving tools: ${toolsError.message}`);
+            return;
+          }
+        }
   
-        console.log("✅ Submission successful:", data);
+        console.log("✅ Submission successful:", assessmentData);
         router.push("/dashboard/insights");
       } catch (err: unknown) {
         console.error("❌ Unexpected error:", err);
@@ -173,7 +216,7 @@ if (key.endsWith("_other")) {
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-4xl mx-auto">
-        <ProgressBar current={step} total={7} />
+        <ProgressBar current={step} total={8} />
 
         <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
           <AnimatePresence mode="wait">
@@ -200,7 +243,7 @@ if (key.endsWith("_other")) {
               onClick={handleNext}
               className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
             >
-              {step === 6 ? "Submit" : "Next"}
+              {step === 7 ? "Submit" : "Next"}
             </button>
           </div>
         </div>

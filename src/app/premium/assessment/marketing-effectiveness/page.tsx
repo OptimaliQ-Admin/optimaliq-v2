@@ -134,7 +134,7 @@ export default function OnboardingAssessmentPage() {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
 
       // Step 1: Call scoring API
-      const response = await fetch("/api/tier2/assessments/marketing_effectiveness", {
+      const response = await fetch("/api/assessments/marketing_effectiveness", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

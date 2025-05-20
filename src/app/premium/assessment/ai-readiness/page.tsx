@@ -135,7 +135,7 @@ export default function OnboardingAssessmentPage() {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
 
       // ✅ Step 1: Call AI Readiness scoring API
-      const response = await fetch("/api/tier2/assessments/ai_readiness", {
+      const response = await fetch("/api/assessments/ai_readiness", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

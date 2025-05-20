@@ -1,4 +1,4 @@
-//src/app/api/tier2/assessments/bpm/route.ts
+//src/app/api//premium/assessment/bpm/route.ts
 import { NextResponse } from "next/server";
 import bpmScoringMap from "../data/bpm_scoring_map.json";
 import { createClient } from "@supabase/supabase-js";
