@@ -4,15 +4,21 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 
-interface PremiumUser extends User {
+export interface PremiumUser extends User {
   u_id: string;
   first_name?: string;
   last_name?: string;
   title?: string;
   company?: string;
+  company_size?: string;
+  industry?: string;
   profile_pic_url?: string;
   phone?: string;
+  linkedin_url?: string;
+  timezone?: string;
   subscription_status?: string;
+  agreed_marketing?: boolean;
+  agreed_terms?: boolean;
 }
 
 interface PremiumUserContextType {
