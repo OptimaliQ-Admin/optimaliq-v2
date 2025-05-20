@@ -22,13 +22,13 @@ export interface Notification {
 }
 
 export interface NotificationPreferences {
-  assessmentReminders: boolean;
-  systemUpdates: boolean;
-  subscriptionUpdates: boolean;
-  profileUpdates: boolean;
-  emailNotifications: boolean;
-  quietHoursStart?: string;
-  quietHoursEnd?: string;
+  assessment_reminders: boolean;
+  system_updates: boolean;
+  subscription_updates: boolean;
+  profile_updates: boolean;
+  email_notifications: boolean;
+  quiet_hours_start?: string;
+  quiet_hours_end?: string;
 }
 
 export interface NotificationState {

@@ -47,15 +47,15 @@ export default function NotificationsPage() {
                 <p className="text-sm text-gray-500">Get notified about upcoming assessments</p>
               </div>
               <Switch
-                checked={state.preferences.assessmentReminders}
-                onChange={(checked) => updatePreferences({ assessmentReminders: checked })}
+                checked={state.preferences.assessment_reminders}
+                onChange={(checked) => updatePreferences({ assessment_reminders: checked })}
                 className={`${
-                  state.preferences.assessmentReminders ? 'bg-blue-600' : 'bg-gray-200'
+                  state.preferences.assessment_reminders ? 'bg-blue-600' : 'bg-gray-200'
                 } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
               >
                 <span
                   className={`${
-                    state.preferences.assessmentReminders ? 'translate-x-6' : 'translate-x-1'
+                    state.preferences.assessment_reminders ? 'translate-x-6' : 'translate-x-1'
                   } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </Switch>
@@ -67,15 +67,15 @@ export default function NotificationsPage() {
                 <p className="text-sm text-gray-500">Receive updates about system changes</p>
               </div>
               <Switch
-                checked={state.preferences.systemUpdates}
-                onChange={(checked) => updatePreferences({ systemUpdates: checked })}
+                checked={state.preferences.system_updates}
+                onChange={(checked) => updatePreferences({ system_updates: checked })}
                 className={`${
-                  state.preferences.systemUpdates ? 'bg-blue-600' : 'bg-gray-200'
+                  state.preferences.system_updates ? 'bg-blue-600' : 'bg-gray-200'
                 } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
               >
                 <span
                   className={`${
-                    state.preferences.systemUpdates ? 'translate-x-6' : 'translate-x-1'
+                    state.preferences.system_updates ? 'translate-x-6' : 'translate-x-1'
                   } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </Switch>
@@ -87,15 +87,15 @@ export default function NotificationsPage() {
                 <p className="text-sm text-gray-500">Receive notifications via email</p>
               </div>
               <Switch
-                checked={state.preferences.emailNotifications}
-                onChange={(checked) => updatePreferences({ emailNotifications: checked })}
+                checked={state.preferences.email_notifications}
+                onChange={(checked) => updatePreferences({ email_notifications: checked })}
                 className={`${
-                  state.preferences.emailNotifications ? 'bg-blue-600' : 'bg-gray-200'
+                  state.preferences.email_notifications ? 'bg-blue-600' : 'bg-gray-200'
                 } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
               >
                 <span
                   className={`${
-                    state.preferences.emailNotifications ? 'translate-x-6' : 'translate-x-1'
+                    state.preferences.email_notifications ? 'translate-x-6' : 'translate-x-1'
                   } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </Switch>
@@ -149,11 +149,15 @@ export default function NotificationsPage() {
                 }`}
               >
                 <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{notification.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                    <p className="text-xs text-gray-400 mt-2">
-                      {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {notification.title}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {notification.message}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(notification.created_at).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -173,14 +177,15 @@ export default function NotificationsPage() {
                     </button>
                   </div>
                 </div>
-                {notification.actionUrl && (
-                  <Link
-                    href={notification.actionUrl}
-                    onClick={() => markAsRead(notification.id)}
-                    className="mt-2 text-sm text-blue-600 hover:text-blue-800 inline-block"
-                  >
-                    View details →
-                  </Link>
+                {notification.action_url && (
+                  <div className="ml-4 flex-shrink-0">
+                    <Link
+                      href={notification.action_url}
+                      className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      View
+                    </Link>
+                  </div>
                 )}
               </div>
             ))
