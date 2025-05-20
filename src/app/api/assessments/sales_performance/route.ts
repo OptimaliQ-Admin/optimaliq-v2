@@ -73,7 +73,7 @@ const scoringConfig = scoringMap[bracketKey];
   const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
   // ✅ Insert into score_SalesPerformance table
-  const { error: insertError } = await supabase.from("score_SalesPerformance").insert([
+  const { error: insertError } = await supabase.from("score_salesperformance").insert([
     {
       u_id: userId,
       gmf_score: score,
