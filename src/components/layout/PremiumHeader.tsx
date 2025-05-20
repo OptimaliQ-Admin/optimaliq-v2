@@ -4,9 +4,10 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { supabase } from "@/lib/supabase";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function PremiumHeader() {
   const { user } = usePremiumUser();
@@ -45,9 +46,7 @@ export default function PremiumHeader() {
 
       {/* Actions */}
       <div className="flex items-center space-x-6">
-        <button className="relative">
-          <BellIcon className="h-5 w-5 text-gray-600 hover:text-blue-600 transition" />
-        </button>
+        <NotificationBell />
 
         {/* Profile Dropdown */}
         <div className="relative" ref={dropdownRef}>
@@ -55,15 +54,22 @@ export default function PremiumHeader() {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center space-x-2 hover:opacity-80 transition"
           >
-          <UserCircleIcon className="h-6 w-6 text-gray-600" />
-          <span className="text-sm text-gray-700 font-medium">
-            {user?.email || "User"}
-          </span>
+            {user?.profile_pic_url ? (
+              <img src={user.profile_pic_url} alt="Profile" className="h-6 w-6 rounded-full object-cover" />
+            ) : (
+              <UserCircleIcon className="h-6 w-6 text-gray-600" />
+            )}
+            <span className="text-sm text-gray-700 font-medium">
+              {user?.email || "User"}
+            </span>
           </button>
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+              <Link href="/premium/account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                Account Settings
+              </Link>
               <button
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
