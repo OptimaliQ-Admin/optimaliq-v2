@@ -169,7 +169,7 @@ if (error) {
   return;
 }
 
-router.push("/tier2/assessment");
+router.push("/premium/assessment");
 
       if (error) {
         console.error("❌ Supabase error:", error);
@@ -177,7 +177,7 @@ router.push("/tier2/assessment");
         return;
       }
 
-      router.push("/tier2/assessment");
+      router.push("/premium/assessment");
     } catch (err: unknown) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${getErrorMessage(err)}`);
