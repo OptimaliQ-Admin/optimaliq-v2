@@ -15,10 +15,6 @@
     {
       "path": "/api/cron/strategic-trends",
       "schedule": "0 2 */14 * *"
-    },
-    {
-      "path": "/api/notifications/assessment-reminders",
-      "schedule": "0 9 * * *"
     }
   ]
 }

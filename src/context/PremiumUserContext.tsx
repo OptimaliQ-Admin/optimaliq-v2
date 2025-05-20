@@ -1,98 +1,71 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { User } from "@supabase/supabase-js";
 
-export interface PremiumUser extends User {
+// Types from your tier2_users table
+export type PremiumUser = {
   u_id: string;
-  first_name?: string;
-  last_name?: string;
-  title?: string;
-  company?: string;
-  company_size?: string;
-  industry?: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  title: string;
+  company: string;
+  industry: string;
+  company_size: string;
+  revenue_range: string;
+  timezone?: string;
+  linkedin_url?: string;
+  agreed_terms?: boolean;
+  agreed_marketing?: boolean;
   profile_pic_url?: string;
   phone?: string;
-  linkedin_url?: string;
-  timezone?: string;
-  subscription_status?: string;
-  agreed_marketing?: boolean;
-  agreed_terms?: boolean;
-}
+};
 
-interface PremiumUserContextType {
+type ContextType = {
   user: PremiumUser | null;
-  loading: boolean;
-  error: string | null;
-}
+  setUser: (user: PremiumUser | null) => void;
+  isUserLoaded: boolean; // ✅ add this
+};
 
-const PremiumUserContext = createContext<PremiumUserContextType | null>(null);
+const PremiumUserContext = createContext<ContextType>({
+  user: null,
+  setUser: () => {},
+  isUserLoaded: false, // ✅ default false
+});
 
-export function PremiumUserProvider({ children }: { children: React.ReactNode }) {
+export const PremiumUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<PremiumUser | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false); // ✅ new
 
+  // ✅ Load user from localStorage once on initial render
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        // Fetch additional user data from tier2_users table
-        supabase
-          .from('tier2_users')
-          .select('*')
-          .eq('u_id', session.user.id)
-          .single()
-          .then(({ data, error }) => {
-            if (error) {
-              console.error('Error fetching user data:', error);
-              setError(error.message);
-            } else if (data) {
-              setUser({ ...session.user, ...data } as PremiumUser);
-            }
-          });
+    try {
+      const stored = localStorage.getItem("tier2_user");
+      if (stored) {
+        setUser(JSON.parse(stored));
       }
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        // Fetch additional user data from tier2_users table
-        const { data, error } = await supabase
-          .from('tier2_users')
-          .select('*')
-          .eq('u_id', session.user.id)
-          .single();
-
-        if (error) {
-          console.error('Error fetching user data:', error);
-          setError(error.message);
-        } else if (data) {
-          setUser({ ...session.user, ...data } as PremiumUser);
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    } catch (err) {
+      console.warn("❌ Failed to load cached Premium user.");
+    } finally {
+      setIsUserLoaded(true); // ✅ mark as loaded no matter what
+    }
   }, []);
 
+  // ✅ Keep user cached in localStorage when it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("tier2_user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("tier2_user");
+    }
+  }, [user]);
+
   return (
-    <PremiumUserContext.Provider value={{ user, loading, error }}>
+    <PremiumUserContext.Provider value={{ user, setUser, isUserLoaded }}>
       {children}
     </PremiumUserContext.Provider>
   );
-}
-
-export { PremiumUserContext };
+};
 
 // ✅ Use in components
 export const usePremiumUser = () => useContext(PremiumUserContext);

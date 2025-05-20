@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "@/app/globals.css";
 import RootLayoutWrapper from "@/components/layout/RootLayoutWrapper";
 import { Toaster } from "react-hot-toast";
-import { NotificationProvider } from "@/contexts/NotificationContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -18,11 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>
-        <NotificationProvider>
-          <RootLayoutWrapper>
-            {children}
-          </RootLayoutWrapper>
-        </NotificationProvider>
+        {/* Only wrap "normal" pages in RootLayoutWrapper. 
+            /premium and /subscribe will have their own layout wrappers. */}
+        <RootLayoutWrapper>
+          {children}
+        </RootLayoutWrapper>
 
         <Toaster
           position="top-center"

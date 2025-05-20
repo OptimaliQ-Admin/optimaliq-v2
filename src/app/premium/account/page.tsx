@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { usePremiumUser, PremiumUser } from "@/context/PremiumUserContext";
+import { usePremiumUser } from "@/context/PremiumUserContext";
+import { PremiumUser } from "@/context/PremiumUserContext";
 
 export default function AccountPage() {
-  const premiumUser = usePremiumUser();
+  const { user } = usePremiumUser();
   const [form, setForm] = useState<Partial<PremiumUser>>({});
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -14,11 +15,11 @@ export default function AccountPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (premiumUser?.user) {
-      setForm(premiumUser.user);
-      setProfilePic(premiumUser.user.profile_pic_url || null);
+    if (user) {
+      setForm(user);
+      setProfilePic(user.profile_pic_url || null);
     }
-  }, [premiumUser?.user]);
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,12 +31,12 @@ export default function AccountPage() {
     setUploading(true);
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${premiumUser?.user?.u_id}-${Date.now()}.${fileExt}`;
+      const fileName = `${user?.u_id}-${Date.now()}.${fileExt}`;
       const { data, error } = await supabase.storage.from('profile-pics').upload(fileName, file);
       if (error) throw error;
       const { data: { publicUrl } } = supabase.storage.from('profile-pics').getPublicUrl(fileName);
       setProfilePic(publicUrl);
-      setForm((prev: Partial<PremiumUser>) => ({ ...prev, profile_pic_url: publicUrl }));
+      setForm(prev => ({ ...prev, profile_pic_url: publicUrl }));
     } catch (err) {
       console.error('Error uploading profile picture:', err);
       setError('Failed to upload profile picture.');
@@ -53,7 +54,7 @@ export default function AccountPage() {
       const response = await fetch('/api/premium/account/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ u_id: premiumUser?.user?.u_id, ...form }),
+        body: JSON.stringify({ u_id: user?.u_id, ...form }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -129,21 +130,11 @@ export default function AccountPage() {
         </div>
         <div className="flex items-center gap-4">
           <label className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
-              name="agreed_marketing" 
-              checked={!!form.agreed_marketing} 
-              onChange={e => setForm((f: Partial<PremiumUser>) => ({ ...f, agreed_marketing: e.target.checked }))} 
-            />
+            <input type="checkbox" name="agreed_marketing" checked={!!form.agreed_marketing} onChange={e => setForm(f => ({ ...f, agreed_marketing: e.target.checked }))} />
             Receive marketing emails
           </label>
           <label className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
-              name="agreed_terms" 
-              checked={!!form.agreed_terms} 
-              onChange={e => setForm((f: Partial<PremiumUser>) => ({ ...f, agreed_terms: e.target.checked }))} 
-            />
+            <input type="checkbox" name="agreed_terms" checked={!!form.agreed_terms} onChange={e => setForm(f => ({ ...f, agreed_terms: e.target.checked }))} />
             Agree to terms
           </label>
         </div>
