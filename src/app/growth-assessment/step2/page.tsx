@@ -54,7 +54,7 @@ export default function GrowthAssessmentStep2() {
     }
 
     try {
-      const { error } = await supabase.from("assessment").upsert(
+      const { error } = await supabase.from("growth_assessment").upsert(
         [
           {
             u_id: userId,
@@ -68,7 +68,7 @@ export default function GrowthAssessmentStep2() {
       if (error) {
         alert(`❌ Failed to save responses. ${error.message}`);
       } else {
-        router.push("/growth-assessment/analyzing");
+        router.push("/growth-assessment/step3");
       }
     } catch {
       alert("❌ Unexpected error. Please try again.");

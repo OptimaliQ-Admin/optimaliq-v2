@@ -29,7 +29,7 @@ export default function PremiumHeader() {
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       console.error("Error signing out:", error);
     }
