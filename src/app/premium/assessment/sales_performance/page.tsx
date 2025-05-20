@@ -138,7 +138,7 @@ const handleNext = async () => {
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       // Step 1: Call your scoring API
-      const response = await fetch("/premium/assessment/sales_performance", {
+      const response = await fetch("/api/assessments/sales_performance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
