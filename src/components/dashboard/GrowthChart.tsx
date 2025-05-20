@@ -82,7 +82,7 @@ export default function GrowthChart({ data }: GrowthChartProps) {
                 fontSize: "0.875rem",
               }}
               formatter={(value: number, name: string) => [
-                <span className="font-semibold">{value.toFixed(1)}</span>,
+                <span key="value" className="font-semibold">{value.toFixed(1)}</span>,
                 name
               ]}
               labelStyle={{ fontWeight: 600, marginBottom: "0.5rem" }}
