@@ -57,7 +57,7 @@ export default function PremiumDashboardPage() {
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',
-        quote: "Welcome back! Let’s grow your business today.",
+        quote: "Welcome back! Let's grow your business today.",
         author: "OptimaliQ"
       }));
   }, [u_id]);
@@ -80,76 +80,112 @@ export default function PremiumDashboardPage() {
   if (!insights) return null;
 
   return (
-    <div className="p-8 space-y-6">
-      <SectionHeader title="🏆 Business Score Overview" />
-
-      {insights.promptRetake && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md mb-4">
-          <p className="font-semibold">🕒 Time to retake your assessment.</p>
-          <p className="text-sm">
-            Your last assessment was over 30 days ago. Please {" "}
-            <a href="/premium/onboarding/initial-assessment" className="underline font-semibold text-yellow-700 hover:text-yellow-900">
-              retake your assessment
-            </a>
-            .
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-[1920px] mx-auto p-6 space-y-8">
+        {/* Welcome Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Welcome back, {welcomeData.firstName || 'there'}!
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 italic">
+            "{welcomeData.quote}" - {welcomeData.author}
           </p>
         </div>
-      )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <ScoreCard
-          title="Overall Score"
-          score={insights.overall_score}
-          industryAvg={insights.industryAvgScore}
-          topPerformer={insights.topPerformerScore}
-          description="Maturity across strategy, process, and technology."
-          onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
-        />
-        <ScoreCard
-          title="Strategy"
-          score={insights.strategy_score}
-          description="Clarity, positioning, and strategic alignment."
-          onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
-        />
-        <ScoreCard
-          title="Process"
-          score={insights.process_score}
-          description="Consistency, execution, and scalability."
-          onLearnMore={() => handleScoreClick("process", insights.process_score)}
-        />
-        <ScoreCard
-          title="Technology"
-          score={insights.technology_score}
-          description="Growth, automation, and efficiency."
-          onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
-        />
-      </div>
+        {/* Assessment Reminder */}
+        {insights.promptRetake && (
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 p-4 rounded-lg">
+            <p className="font-semibold">🕒 Time to retake your assessment</p>
+            <p className="text-sm mt-1">
+              Your last assessment was over 30 days ago. Please {" "}
+              <a href="/premium/onboarding/initial-assessment" className="underline font-semibold text-yellow-700 dark:text-yellow-300 hover:text-yellow-900 dark:hover:text-yellow-100">
+                retake your assessment
+              </a>
+              {" "}to keep your insights current.
+            </p>
+          </div>
+        )}
 
-      <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ExecutiveRadarChart
-          strategy={insights.strategy_score}
-          process={insights.process_score}
-          technology={insights.technology_score}
-          industryAvg={insights.industryAvgScore}
-          topPerformer={insights.topPerformerScore}
-        />
-        <div className="space-y-4">
-          <InsightCard title="🚀 30-Day Growth Plan" items={insights.roadmap.map(item => ({ label: item.task, detail: item.expectedImpact }))} />
-          <GrowthChart data={insights.chartData} />
+        {/* Score Overview Section */}
+        <div className="space-y-6">
+          <SectionHeader title="🏆 Business Score Overview" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ScoreCard
+              title="Overall Score"
+              score={insights.overall_score}
+              industryAvg={insights.industryAvgScore}
+              topPerformer={insights.topPerformerScore}
+              description="Maturity across strategy, process, and technology."
+              onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
+            />
+            <ScoreCard
+              title="Strategy"
+              score={insights.strategy_score}
+              description="Clarity, positioning, and strategic alignment."
+              onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
+            />
+            <ScoreCard
+              title="Process"
+              score={insights.process_score}
+              description="Consistency, execution, and scalability."
+              onLearnMore={() => handleScoreClick("process", insights.process_score)}
+            />
+            <ScoreCard
+              title="Technology"
+              score={insights.technology_score}
+              description="Growth, automation, and efficiency."
+              onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <InsightCard title="✅ Strengths" items={insights.strengths.map(item => ({ label: item.title, detail: item.impact }))} />
-        <InsightCard title="🚨 Weaknesses" items={insights.weaknesses.map(item => ({ label: item.title, detail: item.impact }))} />
-      </div>
+        <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
-        <BusinessTrendCard />
-        <MarketingPlaybookCard />
+        {/* Analysis Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ExecutiveRadarChart
+            strategy={insights.strategy_score}
+            process={insights.process_score}
+            technology={insights.technology_score}
+            industryAvg={insights.industryAvgScore}
+            topPerformer={insights.topPerformerScore}
+          />
+          <div className="space-y-6">
+            <InsightCard 
+              title="🚀 30-Day Growth Plan" 
+              items={insights.roadmap.map(item => ({ 
+                label: item.task, 
+                detail: item.expectedImpact 
+              }))} 
+            />
+            <GrowthChart data={insights.chartData} />
+          </div>
+        </div>
+
+        {/* Strengths & Weaknesses Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InsightCard 
+            title="✅ Key Strengths" 
+            items={insights.strengths.map(item => ({ 
+              label: item.title, 
+              detail: item.impact 
+            }))} 
+          />
+          <InsightCard 
+            title="🚨 Areas for Improvement" 
+            items={insights.weaknesses.map(item => ({ 
+              label: item.title, 
+              detail: item.impact 
+            }))} 
+          />
+        </div>
+
+        {/* Market Insights Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
+          <BusinessTrendCard />
+          <MarketingPlaybookCard />
+        </div>
       </div>
     </div>
   );
