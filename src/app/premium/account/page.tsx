@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { usePremiumUser, PremiumUser } from "@/contexts/PremiumUserContext";
+import { usePremiumUser, PremiumUser } from "@/context/PremiumUserContext";
 
 export default function AccountPage() {
   const premiumUser = usePremiumUser();
