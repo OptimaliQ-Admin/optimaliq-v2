@@ -9,14 +9,14 @@ export type NotificationPriority = 'high' | 'medium' | 'low';
 
 export interface Notification {
   id: string;
-  userId: string;
+  user_id: string;
   type: NotificationType;
   title: string;
   message: string;
   read: boolean;
-  createdAt: string;
-  expiresAt?: string;
-  actionUrl?: string;
+  created_at: string;
+  expires_at?: string;
+  action_url?: string;
   priority: NotificationPriority;
   metadata?: Record<string, any>;
 }
@@ -37,5 +37,5 @@ export interface NotificationState {
   preferences: NotificationPreferences;
   loading: boolean;
   error: string | null;
-  userId: string;
+  u_id: string;
 } 

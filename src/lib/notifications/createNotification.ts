@@ -2,24 +2,24 @@ import { supabase } from '@/lib/supabase';
 import { NotificationType, NotificationPriority } from '@/lib/types/Notification';
 
 interface CreateNotificationParams {
-  userId: string;
+  u_id: string;
   type: NotificationType;
   title: string;
   message: string;
   priority?: NotificationPriority;
-  actionUrl?: string;
-  expiresAt?: Date;
+  action_url?: string;
+  expires_at?: Date;
   metadata?: Record<string, any>;
 }
 
 export async function createNotification({
-  userId,
+  u_id,
   type,
   title,
   message,
   priority = 'medium',
-  actionUrl,
-  expiresAt,
+  action_url,
+  expires_at,
   metadata = {},
 }: CreateNotificationParams) {
   try {
@@ -27,13 +27,13 @@ export async function createNotification({
       .from('notifications')
       .insert([
         {
-          user_id: userId,
+          user_id: u_id,
           type,
           title,
           message,
           priority,
-          action_url: actionUrl,
-          expires_at: expiresAt?.toISOString(),
+          action_url,
+          expires_at: expires_at?.toISOString(),
           metadata,
         },
       ])
@@ -50,17 +50,17 @@ export async function createNotification({
 
 // Helper function to create assessment reminder notifications
 export async function createAssessmentReminder(
-  userId: string,
+  u_id: string,
   assessmentName: string,
   daysUntilDue: number
 ) {
   return createNotification({
-    userId,
+    u_id,
     type: 'assessment_reminder',
     title: 'Assessment Reminder',
     message: `Your ${assessmentName} assessment is due in ${daysUntilDue} days.`,
     priority: 'high',
-    actionUrl: `/premium/assessment/${assessmentName.toLowerCase().replace(/\s+/g, '-')}`,
+    action_url: `/premium/assessment/${assessmentName.toLowerCase().replace(/\s+/g, '-')}`,
     metadata: {
       assessmentName,
       daysUntilDue,
@@ -70,13 +70,13 @@ export async function createAssessmentReminder(
 
 // Helper function to create system update notifications
 export async function createSystemUpdate(
-  userId: string,
+  u_id: string,
   title: string,
   message: string,
   priority: NotificationPriority = 'medium'
 ) {
   return createNotification({
-    userId,
+    u_id,
     type: 'system_update',
     title,
     message,
@@ -86,29 +86,29 @@ export async function createSystemUpdate(
 
 // Helper function to create subscription notifications
 export async function createSubscriptionNotification(
-  userId: string,
+  u_id: string,
   title: string,
   message: string,
-  actionUrl?: string
+  action_url?: string
 ) {
   return createNotification({
-    userId,
+    u_id,
     type: 'subscription',
     title,
     message,
     priority: 'high',
-    actionUrl,
+    action_url,
   });
 }
 
 // Helper function to create profile update notifications
 export async function createProfileUpdateNotification(
-  userId: string,
+  u_id: string,
   title: string,
   message: string
 ) {
   return createNotification({
-    userId,
+    u_id,
     type: 'profile_update',
     title,
     message,

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { supabase } from '@/lib/supabase';
 import { usePremiumUser } from '@/hooks/usePremiumUser';
@@ -12,7 +14,8 @@ type NotificationAction =
   | { type: 'DELETE_NOTIFICATION'; payload: string }
   | { type: 'SET_PREFERENCES'; payload: NotificationPreferences }
   | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string };
+  | { type: 'SET_ERROR'; payload: string }
+  | { type: 'SET_U_ID'; payload: string };
 
 const initialState: NotificationState = {
   notifications: [],
@@ -26,6 +29,7 @@ const initialState: NotificationState = {
   },
   loading: false,
   error: null,
+  u_id: '',
 };
 
 function notificationReducer(state: NotificationState, action: NotificationAction): NotificationState {
@@ -77,6 +81,11 @@ function notificationReducer(state: NotificationState, action: NotificationActio
         ...state,
         error: action.payload,
       };
+    case 'SET_U_ID':
+      return {
+        ...state,
+        u_id: action.payload,
+      };
     default:
       return state;
   }
@@ -93,6 +102,13 @@ const NotificationContext = createContext<{
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(notificationReducer, initialState);
   const { user } = usePremiumUser();
+
+  // Set user ID when user is available
+  useEffect(() => {
+    if (user?.u_id) {
+      dispatch({ type: 'SET_U_ID', payload: user.u_id });
+    }
+  }, [user?.u_id]);
 
   // Fetch initial notifications and preferences
   useEffect(() => {

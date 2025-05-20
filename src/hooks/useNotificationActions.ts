@@ -11,16 +11,16 @@ export function useNotificationActions() {
     title,
     message,
     priority = 'medium',
-    actionUrl,
-    expiresAt,
+    action_url,
+    expires_at,
     metadata = {},
   }: {
     type: NotificationType;
     title: string;
     message: string;
     priority?: NotificationPriority;
-    actionUrl?: string;
-    expiresAt?: Date;
+    action_url?: string;
+    expires_at?: Date;
     metadata?: Record<string, any>;
   }) => {
     // Check user preferences before creating notification
@@ -30,16 +30,16 @@ export function useNotificationActions() {
     }
 
     return createNotification({
-      userId: state.userId,
+      user_id: state.u_id,
       type,
       title,
       message,
       priority,
-      actionUrl,
-      expiresAt,
+      action_url,
+      expires_at,
       metadata,
     });
-  }, [state.preferences, state.userId]);
+  }, [state.preferences, state.u_id]);
 
   const createAssessmentReminderWithPreferences = useCallback(async (
     assessmentName: string,
@@ -50,11 +50,11 @@ export function useNotificationActions() {
     }
 
     return createAssessmentReminder(
-      state.userId,
+      state.u_id,
       assessmentName,
       daysUntilDue
     );
-  }, [state.preferences.assessmentReminders, state.userId]);
+  }, [state.preferences.assessmentReminders, state.u_id]);
 
   const createSystemUpdateWithPreferences = useCallback(async (
     title: string,
@@ -66,29 +66,29 @@ export function useNotificationActions() {
     }
 
     return createSystemUpdate(
-      state.userId,
+      state.u_id,
       title,
       message,
       priority
     );
-  }, [state.preferences.systemUpdates, state.userId]);
+  }, [state.preferences.systemUpdates, state.u_id]);
 
   const createSubscriptionNotificationWithPreferences = useCallback(async (
     title: string,
     message: string,
-    actionUrl?: string
+    action_url?: string
   ) => {
     if (!state.preferences.subscriptionUpdates) {
       return null;
     }
 
     return createSubscriptionNotification(
-      state.userId,
+      state.u_id,
       title,
       message,
-      actionUrl
+      action_url
     );
-  }, [state.preferences.subscriptionUpdates, state.userId]);
+  }, [state.preferences.subscriptionUpdates, state.u_id]);
 
   const createProfileUpdateNotificationWithPreferences = useCallback(async (
     title: string,
@@ -99,11 +99,11 @@ export function useNotificationActions() {
     }
 
     return createProfileUpdateNotification(
-      state.userId,
+      state.u_id,
       title,
       message
     );
-  }, [state.preferences.profileUpdates, state.userId]);
+  }, [state.preferences.profileUpdates, state.u_id]);
 
   return {
     createNotification: createNotificationWithPreferences,
