@@ -138,7 +138,7 @@ const handleNext = async () => {
     try {
       const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
       // Step 1: Call your scoring API
-      const response = await fetch("/api/tier2/assessments/sales_performance", {
+      const response = await fetch("/premium/assessment/sales_performance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -169,7 +169,7 @@ if (error) {
   return;
 }
 
-router.push("/tier2/assessment");
+router.push("/premium/assessment");
 
       if (error) {
         console.error("❌ Supabase error:", error);
@@ -177,7 +177,7 @@ router.push("/tier2/assessment");
         return;
       }
 
-      router.push("/tier2/assessment");
+      router.push("/premium/assessment");
     } catch (err: unknown) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${getErrorMessage(err)}`);
