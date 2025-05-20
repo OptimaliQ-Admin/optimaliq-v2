@@ -26,6 +26,7 @@ export default function PremiumDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
+  const [showWelcome, setShowWelcome] = useState(true);
   const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,6 +63,16 @@ export default function PremiumDashboardPage() {
       }));
   }, [u_id]);
 
+  // Auto-dismiss welcome message after 5 minutes
+  useEffect(() => {
+    if (showWelcome) {
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+      }, 5 * 60 * 1000); // 5 minutes
+      return () => clearTimeout(timer);
+    }
+  }, [showWelcome]);
+
   const handleScoreClick = async (category: string, score: number) => {
     try {
       const res = await axios.post("/api/dashboard/scorecard_insights", {
@@ -81,17 +92,33 @@ export default function PremiumDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-[1920px] mx-auto p-6 space-y-8">
-        {/* Welcome Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome back, {welcomeData.firstName || 'there'}!
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 italic">
-            "{welcomeData.quote}" - {welcomeData.author}
-          </p>
+      {/* Welcome Toast */}
+      {showWelcome && (
+        <div className="fixed top-4 right-4 z-50 animate-fade-in">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 border border-gray-100 dark:border-gray-700 max-w-sm">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Welcome back, {welcomeData.firstName || 'there'}!
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 italic mt-1">
+                  &ldquo;{welcomeData.quote}&rdquo; - {welcomeData.author}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowWelcome(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
+      <div className="max-w-[1920px] mx-auto p-6 space-y-8">
         {/* Assessment Reminder */}
         {insights.promptRetake && (
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 p-4 rounded-lg">
