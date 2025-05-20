@@ -133,10 +133,6 @@ export default function AccountPage() {
             <input type="checkbox" name="agreed_marketing" checked={!!form.agreed_marketing} onChange={e => setForm(f => ({ ...f, agreed_marketing: e.target.checked }))} />
             Receive marketing emails
           </label>
-          <label className="flex items-center gap-2">
-            <input type="checkbox" name="agreed_terms" checked={!!form.agreed_terms} onChange={e => setForm(f => ({ ...f, agreed_terms: e.target.checked }))} />
-            Agree to terms
-          </label>
         </div>
         <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded font-semibold disabled:opacity-50" disabled={saving || uploading}>
           {saving ? "Saving..." : "Save Changes"}
