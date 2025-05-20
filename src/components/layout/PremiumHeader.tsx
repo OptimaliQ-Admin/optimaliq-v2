@@ -55,10 +55,10 @@ export default function PremiumHeader() {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center space-x-2 hover:opacity-80 transition"
           >
-            <UserCircleIcon className="h-6 w-6 text-gray-600" />
-            <span className="text-sm text-gray-700 font-medium">
-              {user?.email || "User"}
-            </span>
+          <UserCircleIcon className="h-6 w-6 text-gray-600" />
+          <span className="text-sm text-gray-700 font-medium">
+            {user?.email || "User"}
+          </span>
           </button>
 
           {/* Dropdown Menu */}

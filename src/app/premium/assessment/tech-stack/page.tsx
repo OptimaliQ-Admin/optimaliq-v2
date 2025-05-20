@@ -122,7 +122,7 @@ export default function OnboardingAssessmentPage() {
           alert(`Something went wrong: ${assessmentError.message}`);
           return;
         }
-
+  
         // Save tech tools data
         const techToolsData = [
           ...(Array.isArray(sanitizedAnswers.tech_tools_crm) ? sanitizedAnswers.tech_tools_crm : []).map((tool: string) => ({

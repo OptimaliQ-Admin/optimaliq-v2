@@ -17,6 +17,8 @@ export type PremiumUser = {
   linkedin_url?: string;
   agreed_terms?: boolean;
   agreed_marketing?: boolean;
+  profile_pic_url?: string;
+  phone?: string;
 };
 
 type ContextType = {
