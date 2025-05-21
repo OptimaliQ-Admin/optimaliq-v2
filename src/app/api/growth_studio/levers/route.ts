@@ -11,6 +11,23 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const scoreLabels = {
+  strategy_score: "Strategy",
+  process_score: "Process",
+  technology_score: "Technology",
+  bpm_score: "Business Process",
+  tech_stack_score: "Tech Stack",
+  strategic_maturity_score: "Strategic Maturity",
+  marketing_score: "Marketing",
+  sales_score: "Sales",
+  cx_score: "Customer Experience",
+  ai_score: "AI & Automation",
+  digital_score: "Digital Transformation",
+  leadership_score: "Leadership & Team",
+  benchmarking_score: "Benchmarking",
+  reassessment_score: "Reassessment",
+};
+
 export async function POST(request: Request) {
   try {
     const { u_id } = await request.json();
@@ -21,6 +38,52 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Fetch user's industry from tier2_users
+    const { data: userData, error: userError } = await supabase
+      .from("tier2_users")
+      .select("industry")
+      .eq("u_id", u_id)
+      .single();
+
+    if (userError && userError.code !== "PGRST116") {
+      throw userError;
+    }
+
+    const industry = userData?.industry || "general business";
+
+    // Fetch profile scores
+    const { data: profile, error: profileError } = await supabase
+      .from("tier2_profiles")
+      .select("*")
+      .eq("u_id", u_id)
+      .single();
+
+    if (profileError && profileError.code !== "PGRST116") {
+      throw profileError;
+    }
+
+    // Build score prompt from all non-null fields
+    const includedScores = [];
+    const missingScores = [];
+
+    for (const [key, label] of Object.entries(scoreLabels)) {
+      const value = profile?.[key as keyof typeof profile];
+      if (value !== null && value !== undefined) {
+        includedScores.push(`${label}: ${value}`);
+      } else {
+        missingScores.push(label);
+      }
+    }
+
+    const scorePrompt = `The user has the following business scores:\n${includedScores
+      .map((s) => `- ${s}`)
+      .join("\n")}\n\n` +
+      (missingScores.length > 0
+        ? `The following assessments have not been completed: ${missingScores.join(
+            ", "
+          )}. If appropriate, suggest that the user take these assessments.`
+        : "");
 
     // Check for existing levers
     const { data: existingLevers, error: fetchError } = await supabase
@@ -44,7 +107,16 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "system",
-            content: "You are a growth strategy expert. Generate 5 specific, actionable growth levers that a business can implement. Each lever should be a single sentence starting with a verb. Make them practical and measurable. Format your response as a numbered list."
+            content: `You are a growth strategy expert for the ${industry} industry.
+
+${scorePrompt}
+
+Based on this data, generate 5 high-impact growth levers the business should focus on. Each lever should be:
+- One actionable sentence starting with a verb
+- Practical and measurable
+- Either based on the provided scores or suggesting assessments if relevant
+
+Return the levers as a numbered list.`
           }
         ],
         temperature: 0.7,
@@ -75,6 +147,7 @@ export async function POST(request: Request) {
           u_id,
           levers: leversText,
           generated_at: new Date().toISOString(),
+          industry,
         });
 
       if (upsertError) {
