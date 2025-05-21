@@ -7,6 +7,12 @@ import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 interface Lever {
   text: string;
@@ -63,18 +69,20 @@ export default function GrowthLeversCard() {
         setTimeout(() => setShowConfetti(false), 3000);
       }
 
-      const response = await fetch("/api/growth_studio/levers/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      // Upsert the progress directly with Supabase
+      const { error: upsertError } = await supabase
+        .from("growth_lever_progress")
+        .upsert({
           u_id: user?.u_id,
           lever_text: updatedLevers[index].text,
           is_completed: newStatus,
-        }),
-      });
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'u_id,lever_text'
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to update lever progress");
+      if (upsertError) {
+        throw upsertError;
       }
     } catch (err) {
       console.error("Error updating lever:", err);

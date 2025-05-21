@@ -64,15 +64,7 @@ function GrowthStudioComponent() {
         <div className="space-y-8">
           <QuadrantChart userId={userId} />
 
-          <div className="bg-white rounded-lg border border-gray-200 shadow-md p-6">
-            <SectionTitleBar
-              title="🚀 Growth Levers"
-              tooltip="Key actions to accelerate your growth. Check them off as you complete them."
-            />
-            <div className="mt-4">
-              <GrowthLeversCard />
-            </div>
-          </div>
+          <GrowthLeversCard />
         </div>
 
         <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
