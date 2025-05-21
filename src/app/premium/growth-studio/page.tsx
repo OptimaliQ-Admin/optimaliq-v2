@@ -1,9 +1,10 @@
 //src/app/premium/growth-studio/page.tsx
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import InsightLoading from "@/components/dashboard/InsightLoading";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
@@ -17,6 +18,7 @@ function GrowthStudioComponent() {
   const { user } = usePremiumUser();
   const email = user?.email;
   const userId = user?.u_id;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -43,8 +45,21 @@ function GrowthStudioComponent() {
     }
   };
 
+  useEffect(() => {
+    // Simulate loading time for data fetching
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   if (!email || !userId) {
     return <p className="text-center text-red-600">⚠️ Email and User ID are required to access the Growth Studio.</p>;
+  }
+
+  if (isLoading) {
+    return <InsightLoading />;
   }
 
   return (
@@ -107,7 +122,7 @@ function GrowthStudioComponent() {
 
 export default function GrowthStudioPage() {
   return (
-    <Suspense fallback={<p>Loading Growth Studio...</p>}>
+    <Suspense fallback={<InsightLoading />}>
       <GrowthStudioComponent />
     </Suspense>
   );

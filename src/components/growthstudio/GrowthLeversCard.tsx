@@ -3,163 +3,127 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import ReactConfetti from "react-confetti";
-import { useWindowSize } from "react-use";
 import { createClient } from "@supabase/supabase-js";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-interface Lever {
-  text: string;
-  isCompleted: boolean;
-}
-
 export default function GrowthLeversCard() {
   const { user } = usePremiumUser();
-  const [levers, setLevers] = useState<Lever[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const { width, height } = useWindowSize();
+  const [levers, setLevers] = useState<string[]>([]);
+  const [completedLevers, setCompletedLevers] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.u_id) {
-      fetchLevers();
-    }
+    if (!user?.u_id) return;
+
+    const fetchLevers = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch("/api/growth_studio/levers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ u_id: user.u_id }),
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch levers");
+
+        const data = await res.json();
+        if (data.levers) {
+          setLevers(data.levers);
+        }
+      } catch (err) {
+        console.error("Error fetching levers:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const fetchCompletedLevers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("growth_lever_progress")
+          .select("lever_text")
+          .eq("u_id", user.u_id)
+          .eq("is_completed", true);
+
+        if (error) throw error;
+        setCompletedLevers(new Set(data.map(item => item.lever_text)));
+      } catch (err) {
+        console.error("Error fetching completed levers:", err);
+      }
+    };
+
+    fetchLevers();
+    fetchCompletedLevers();
   }, [user?.u_id]);
 
-  const fetchLevers = async () => {
+  const handleLeverToggle = async (lever: string) => {
     try {
-      setLoading(true);
-      const response = await fetch("/api/growth_studio/levers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ u_id: user?.u_id }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch growth levers");
-      }
-
-      const data = await response.json();
-      setLevers(data.levers);
-    } catch (err) {
-      console.error("Error fetching levers:", err);
-      setError(err instanceof Error ? err.message : "Failed to load growth levers");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLeverToggle = async (index: number) => {
-    try {
-      const updatedLevers = [...levers];
-      const newStatus = !updatedLevers[index].isCompleted;
-      updatedLevers[index].isCompleted = newStatus;
-      setLevers(updatedLevers);
-
-      // If completing a lever, show confetti
-      if (newStatus) {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 3000);
-      }
-
-      // Upsert the progress directly with Supabase
+      const newStatus = !completedLevers.has(lever);
+      
       const { error: upsertError } = await supabase
         .from("growth_lever_progress")
         .upsert({
           u_id: user?.u_id,
-          lever_text: updatedLevers[index].text,
+          lever_text: lever,
           is_completed: newStatus,
           updated_at: new Date().toISOString(),
         }, {
-          onConflict: 'u_id,lever_text'
+          onConflict: "u_id,lever_text"
         });
 
-      if (upsertError) {
-        throw upsertError;
-      }
+      if (upsertError) throw upsertError;
+
+      setCompletedLevers(prev => {
+        const newSet = new Set(prev);
+        if (newStatus) {
+          newSet.add(lever);
+        } else {
+          newSet.delete(lever);
+        }
+        return newSet;
+      });
     } catch (err) {
       console.error("Error updating lever:", err);
-      // Revert the change if the update failed
-      const updatedLevers = [...levers];
-      updatedLevers[index].isCompleted = !updatedLevers[index].isCompleted;
-      setLevers(updatedLevers);
     }
   };
 
-  if (loading) {
-    return (
-      <Card className="p-6">
-        <CardContent>
-          <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card className="p-6">
-        <CardContent>
-          <div className="text-center text-red-600">
-            <p className="font-semibold mb-2">⚠️ Error Loading Growth Levers</p>
-            <p className="text-sm">{error}</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
-    <Card className="p-6">
-      <CardContent>
-        <SectionTitleBar
-          title="🚀 Growth Levers"
-          tooltip="Key actions to accelerate your growth. Check them off as you complete them."
-        />
-
-        <div className="mt-4 space-y-3">
-          {levers.map((lever, index) => (
-            <div key={index} className="flex items-start gap-3">
-              <Checkbox
-                id={`lever-${index}`}
-                checked={lever.isCompleted}
-                onCheckedChange={() => handleLeverToggle(index)}
-                className="mt-1"
-              />
-              <label
-                htmlFor={`lever-${index}`}
-                className={`text-sm leading-tight ${
-                  lever.isCompleted ? "text-gray-500 line-through" : "text-gray-700"
-                }`}
-              >
-                {lever.text}
-              </label>
-            </div>
-          ))}
-        </div>
-
-        {showConfetti && (
-          <ReactConfetti
-            width={width}
-            height={height}
-            recycle={false}
-            numberOfPieces={200}
-            gravity={0.3}
-          />
+    <Card className="w-full">
+      <CardContent className="pt-6">
+        <h3 className="text-xl font-semibold mb-4">🚀 Growth Levers</h3>
+        {isLoading ? (
+          <div className="space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-4">
+                <Skeleton className="h-4 w-4 rounded" />
+                <Skeleton className="h-4 flex-1" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {levers.map((lever, index) => (
+              <div key={index} className="flex items-center space-x-4">
+                <Checkbox
+                  id={`lever-${index}`}
+                  checked={completedLevers.has(lever)}
+                  onCheckedChange={() => handleLeverToggle(lever)}
+                />
+                <label
+                  htmlFor={`lever-${index}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {lever}
+                </label>
+              </div>
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>

@@ -27,11 +27,13 @@ import LeadershipCard from "@/components/assessments/LeadershipCard";
 import { getLatestLeadershipScore } from "@/lib/queries/getLatestLeadershipScore";
 import GrowthCard from "@/components/assessments/GrowthCard";
 import { getLatestGrowthScore } from "@/lib/queries/getLatestGrowthScore";
+import InsightLoading from "@/components/dashboard/InsightLoading";
 
 
 function AssessmentComponent() {
   const { user } = usePremiumUser();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   const email = user?.email;
   const u_id = user?.u_id;
@@ -128,6 +130,10 @@ function AssessmentComponent() {
       setGrowthLastTaken(result?.takenAt ?? null);
     };
 
+    // Simulate loading time for data fetching
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
     fetchBPM();
     fetchSales();
@@ -140,10 +146,16 @@ function AssessmentComponent() {
     fetchDigital();
     fetchLeadership();
     fetchGrowth();
+
+    return () => clearTimeout(timer);
   }, [u_id]);
 
   if (!email || !u_id) {
     return <p className="text-center text-red-600">⚠️ Email and User ID required.</p>;
+  }
+
+  if (isLoading) {
+    return <InsightLoading />;
   }
 
   return (
@@ -199,7 +211,7 @@ function AssessmentComponent() {
 
 export default function AssessmentPage() {
   return (
-    <Suspense fallback={<p>Loading assessment...</p>}>
+    <Suspense fallback={<InsightLoading />}>
       <AssessmentComponent />
     </Suspense>
   );
