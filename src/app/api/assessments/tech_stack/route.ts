@@ -106,6 +106,8 @@ export async function POST(request: Request) {
         u_id: userId,
         tech_stack_score: normalizedScore,
         tech_stack_last_taken: new Date().toISOString(),
+      }, {
+        onConflict: "u_id"
       });
 
     if (updateError) {

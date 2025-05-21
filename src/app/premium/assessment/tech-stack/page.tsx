@@ -10,6 +10,8 @@ import {
   type AssessmentAnswerValue,
 } from "@/lib/types/AssessmentAnswers";
 import { stripUnusedOtherFields } from "@/lib/utils/assessmentUtils";
+import { AnimatePresence, motion } from "framer-motion";
+import ProgressBar from "@/components/shared/ProgressBar";
 
 // Score 1.0 Group
 import Score1_Step01 from "./groups/score_1/Group01";
@@ -295,49 +297,66 @@ export default function TechStackAssessment() {
     }
   };
 
+  const handleBack = () => {
+    if (step > 0) {
+      setStep((prev) => prev - 1);
+    }
+  };
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="p-10 text-center">Loading your assessment...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="p-10 text-center text-red-600">{error}</div>;
   }
 
   if (score === null) {
-    return <div>No score available</div>;
+    return <div className="p-10 text-center">Still waiting for your score...</div>;
   }
 
   const normalized = normalizeScore(score);
-  const CurrentStep = {
-    score_1: [Score1_Step01, Score1_Step02, Score1_Step03, Group04],
-    score_1_5: [Score1_5_Step01, Score1_5_Step02, Score1_5_Step03, Group04],
-    score_2: [Score2_Step01, Score2_Step02, Group04],
-    score_2_5: [Score2_5_Step01, Score2_5_Step02, Score2_5_Step03, Group04],
-    score_3: [Score3_Step01, Score3_Step02, Score3_Step03, Group04],
-    score_3_5: [Score3_5_Step01, Score3_5_Step02, Score3_5_Step03, Group04],
-    score_4: [Score4_Step01, Score4_Step02, Score4_Step03, Group04],
-    score_4_5: [Score4_5_Step01, Score4_5_Step02, Score4_5_Step03, Group04],
-    score_5: [Score5_Step01, Score5_Step02, Score5_Step03, Group04],
-  }[normalized]?.[step];
-
-  if (!CurrentStep) {
-    return <div>Invalid score or step</div>;
-  }
+  const totalSteps = normalized === "score_2" ? 3 : 4;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white shadow sm:rounded-lg">
-            <CurrentStep answers={formAnswers} onAnswer={handleAnswer} />
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 sm:px-6">
-              <button
-                onClick={handleNext}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {step >= 3 ? "Submit Assessment" : "Next"}
-              </button>
-            </div>
+    <div className="min-h-screen bg-gray-50 px-6 py-10">
+      <div className="max-w-4xl mx-auto">
+        <ProgressBar current={step} total={totalSteps} />
+
+        <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.4 }}
+            >
+              {score !== null && (
+                <StepGroupRenderer
+                  step={step}
+                  score={score}
+                  answers={formAnswers}
+                  onAnswer={handleAnswer}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="mt-6 flex justify-between">
+            <button
+              disabled={step === 0}
+              onClick={handleBack}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded disabled:opacity-50"
+            >
+              Back
+            </button>
+            <button
+              onClick={handleNext}
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            >
+              {step === totalSteps - 1 ? "Submit" : "Next"}
+            </button>
           </div>
         </div>
       </div>
