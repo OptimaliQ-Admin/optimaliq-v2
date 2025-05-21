@@ -1,125 +1,136 @@
 //src/app/api//premium/assessment/sales_performance/route.ts
 import { NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { type ScoringMap } from "@/lib/types/ScoringMap";
 import salesScoringMap from "../data/sales_scoring_map.json";
-import { createClient } from "@supabase/supabase-js";
-import type { SalesScoringMap } from "@/lib/types/AssessmentAnswers";
 
-// Init Supabase service client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const scoringMap = salesScoringMap as ScoringMap;
 
-// Bracket selector logic based on GMF+ score
-function getBracket(score: number): string {
-  if (score < 1.5) return "score_1_1_4";
-  if (score < 2.0) return "score_1_5_1_9";
-  if (score < 2.5) return "score_2_0_2_4";
-  if (score < 3.0) return "score_2_5_2_9";
-  if (score < 3.5) return "score_3_3_4";
-  if (score < 4.0) return "score_3_5_3_9";
-  if (score < 4.5) return "score_4_4_4";
-  if (score < 5.0) return "score_4_5_4_9";
+function getBracket(score: number): keyof ScoringMap {
+  if (score >= 1 && score <= 1.4) return "score_1_1_4";
+  if (score >= 1.5 && score <= 1.9) return "score_1_5_1_9";
+  if (score >= 2 && score <= 2.4) return "score_2_0_2_4";
+  if (score >= 2.5 && score <= 2.9) return "score_2_5_2_9";
+  if (score >= 3 && score <= 3.4) return "score_3_3_4";
+  if (score >= 3.5 && score <= 3.9) return "score_3_5_3_9";
+  if (score >= 4 && score <= 4.4) return "score_4_4_4";
+  if (score >= 4.5 && score <= 4.9) return "score_4_5_4_9";
   return "score_5_0";
 }
 
-export async function POST(req: Request) {
-  const { answers, score, userId } = await req.json();
+export async function POST(request: Request) {
+  try {
+    const { answers, score, userId } = await request.json();
 
-  if (!answers || typeof score !== "number" || !userId) {
-    return NextResponse.json({ error: "Missing answers, score, or userId" }, { status: 400 });
-  }
-
-  const bracketKey = getBracket(score);
-  const scoringMap = salesScoringMap as SalesScoringMap;
-  const scoringConfig = scoringMap[bracketKey];
-
-  if (!scoringConfig) {
-    return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });
-  }
-
-  let total = 0;
-  let weightSum = 0;
-
-  for (const key in answers) {
-    const q = scoringConfig[key];
-    if (!q) continue;
-
-    const answer = answers[key];
-    let valScore = 0;
-
-    if (q.type === "multiple_choice") {
-      valScore = q.values[answer] || 0;
+    if (!answers || !score || !userId) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
-    if (q.type === "multi_select") {
-      try {
-        const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer);
-        const scores = selections.map((s) => q.values[s] || 0);
-        valScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-      } catch {
-        valScore = 0;
+    const bracket = getBracket(score);
+    const bracketScoring = scoringMap[bracket];
+
+    if (!bracketScoring) {
+      return NextResponse.json(
+        { error: "Invalid score bracket" },
+        { status: 400 }
+      );
+    }
+
+    let totalScore = 0;
+    let totalWeight = 0;
+
+    // Calculate score based on answers
+    for (const [key, entry] of Object.entries(bracketScoring)) {
+      // Skip if not a multiple choice question
+      if (entry.type !== "multiple_choice") continue;
+
+      const answer = answers[key];
+      if (!answer) continue;
+
+      // Skip array answers
+      if (Array.isArray(answer)) continue;
+
+      const value = entry.values[answer];
+      if (value) {
+        totalScore += value * entry.weight;
+        totalWeight += entry.weight;
       }
     }
 
-    if (valScore > 0) {
-      total += valScore * q.weight;
-      weightSum += q.weight;
-    } else {
-      console.warn(`Unscored answer for '${key}':`, answer);
+    const normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0;
+
+    const supabase = createRouteHandlerClient({ cookies });
+
+    // Upsert into sales_performance_assessment table
+    const { error: assessmentError } = await supabase
+      .from("sales_performance_assessment")
+      .upsert({
+        u_id: userId,
+        ...answers,
+        score: normalizedScore,
+        created_at: new Date().toISOString()
+      }, {
+        onConflict: "u_id"
+      });
+
+    if (assessmentError) {
+      console.error("Error upserting assessment:", assessmentError);
+      return NextResponse.json(
+        { error: "Failed to save assessment" },
+        { status: 500 }
+      );
     }
-  }
 
-  const raw = weightSum ? total / weightSum : 0;
-  const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
-
-  // ✅ Insert into sales_performance_assessment table
-  const { error: assessmentError } = await supabase
-    .from("sales_performance_assessment")
-    .insert([{ ...answers, u_id: userId }]);
-
-  if (assessmentError) {
-    console.error("❌ Failed to store assessment:", assessmentError);
-    return NextResponse.json({ error: "Failed to store assessment." }, { status: 500 });
-  }
-
-  // ✅ Insert into score_salesperformance table
-  const { error: scoreError } = await supabase
-    .from("score_salesperformance")
-    .insert([
-      {
+    // Insert into score_salesperformance table
+    const { error: scoreError } = await supabase
+      .from("score_salesperformance")
+      .insert({
         u_id: userId,
         gmf_score: score,
-        bracket_key: bracketKey,
-        score: normalized,
+        bracket_key: bracket,
+        score: normalizedScore,
         answers,
         version: "v1",
-      },
-    ]);
+      });
 
-  if (scoreError) {
-    console.error("❌ Failed to store score:", scoreError);
-    return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
-  }
+    if (scoreError) {
+      console.error("Error inserting score:", scoreError);
+      return NextResponse.json(
+        { error: "Failed to save score" },
+        { status: 500 }
+      );
+    }
 
-  // ✅ Update tier2_profiles table
-  const { error: profileError } = await supabase
-    .from("tier2_profiles")
-    .upsert(
-      {
+    // Update tier2_profiles table
+    const { error: profileError } = await supabase
+      .from("tier2_profiles")
+      .upsert({
         u_id: userId,
-        sales_performance_score: normalized,
+        sales_performance_score: normalizedScore,
         sales_performance_last_taken: new Date().toISOString(),
-      },
-      {
-        onConflict: "u_id",
-      }
+      }, {
+        onConflict: "u_id"
+      });
+
+    if (profileError) {
+      console.error("Error updating profile:", profileError);
+      return NextResponse.json(
+        { error: "Failed to update profile" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ salesScore: normalizedScore });
+  } catch (error) {
+    console.error("Error processing assessment:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
     );
-
-  if (profileError) {
-    console.error("❌ Failed to update profile:", profileError);
-    return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
   }
-
-  return NextResponse.json({ salesScore: normalized });
 }

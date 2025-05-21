@@ -43,11 +43,18 @@ export async function POST(request: Request) {
     let totalScore = 0;
     let totalWeight = 0;
 
+    // Calculate score based on answers
     for (const [key, entry] of Object.entries(bracketScoring)) {
+      // Skip if not a multiple choice question
+      if (entry.type !== "multiple_choice") continue;
+
       const answer = answers[key];
       if (!answer) continue;
 
-      const value = entry.values[answer as string];
+      // Skip array answers
+      if (Array.isArray(answer)) continue;
+
+      const value = entry.values[answer];
       if (value) {
         totalScore += value * entry.weight;
         totalWeight += entry.weight;
@@ -58,10 +65,10 @@ export async function POST(request: Request) {
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Insert into tech_stack_assessment table
+    // Upsert into tech_stack_assessment table
     const { error: assessmentError } = await supabase
       .from("tech_stack_assessment")
-      .insert({
+      .upsert({
         u_id: userId,
         // Score 1.0 questions
         tech_infrastructure: answers.tech_infrastructure,
@@ -107,10 +114,12 @@ export async function POST(request: Request) {
         // Metadata
         score: normalizedScore,
         created_at: new Date().toISOString()
+      }, {
+        onConflict: "u_id"
       });
 
     if (assessmentError) {
-      console.error("Error inserting assessment:", assessmentError);
+      console.error("Error upserting assessment:", assessmentError);
       return NextResponse.json(
         { error: "Failed to save assessment" },
         { status: 500 }
