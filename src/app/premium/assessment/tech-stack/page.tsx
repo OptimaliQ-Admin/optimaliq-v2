@@ -160,31 +160,36 @@ export default function TechStackAssessment() {
   const router = useRouter();
   const { user } = usePremiumUser();
   const supabase = createClientComponentClient();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [skipCheck, setSkipCheck] = useState(true);
 
   useEffect(() => {
     const fetchScore = async () => {
-      if (!user?.u_id) return;
+      if (!user?.u_id && !skipCheck) return;
 
-      const { data, error } = await supabase
-        .from("score_TechStack")
-        .select("score, gmf_score, bracket_key")
-        .eq("u_id", user.u_id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from("tier2_dashboard_insights")
+          .select("overall_score")
+          .eq("u_id", user?.u_id)
+          .single();
 
-      if (error) {
-        console.error("Error fetching score:", error);
-        return;
-      }
+        if (error || !data?.overall_score) {
+          setError("Unable to load assessment score.");
+          return;
+        }
 
-      if (data) {
-        setScore(data.score);
+        setScore(data.overall_score);
+        setLoading(false);
+      } catch (err) {
+        console.error("❌ Unexpected error:", err);
+        setError("An unexpected error occurred.");
       }
     };
 
     fetchScore();
-  }, [user, supabase]);
+  }, [user?.u_id, skipCheck]);
 
   const handleAnswer = (key: string, value: any) => {
     setFormAnswers((prev) => ({ ...prev, [key]: value }));
@@ -290,8 +295,16 @@ export default function TechStackAssessment() {
     }
   };
 
-  if (score === null) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (score === null) {
+    return <div>No score available</div>;
   }
 
   const normalized = normalizeScore(score);
