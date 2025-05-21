@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { motion } from "framer-motion";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CompanyPoint {
   label: string;
@@ -81,23 +82,27 @@ export default function QuadrantChart({ userId }: { userId: string }) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-          <div className="h-[460px] bg-gray-100 rounded"></div>
-        </div>
-      </div>
+      <Card className="p-6">
+        <CardContent>
+          <div className="animate-pulse space-y-4">
+            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-[460px] bg-gray-100 rounded"></div>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
-        <div className="text-center text-red-600">
-          <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
-          <p className="text-sm">{error}</p>
-        </div>
-      </div>
+      <Card className="p-6">
+        <CardContent>
+          <div className="text-center text-red-600">
+            <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
+            <p className="text-sm">{error}</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -133,45 +138,23 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   const quadrantMidY = 3;
 
   return (
-    <motion.div
-      className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="px-8 pt-8">
+    <Card className="p-6">
+      <CardContent>
         <SectionTitleBar
-          title="📊 Strategic Growth Quadrant"
-          tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
+          title="Strategic Growth Quadrant"
+          tooltip="Compare your company's performance against industry peers across strategy, process, and technology dimensions."
         />
-        <p className="text-gray-500 text-sm mt-2">
-          See where you stand compared to other businesses in terms of strategy execution and process maturity.
-          Your position helps identify your growth stage and next steps.
-        </p>
-      </div>
 
-      <div className="relative w-full h-[520px] pt-12 pb-16">
-        {/* Quadrant Labels with Icons */}
-        <div className="absolute top-8 left-8 text-[15px] font-semibold text-blue-700 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-          Strategic Builders
-        </div>
-        <div className="absolute top-8 right-8 text-[15px] font-semibold text-green-700 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          Accelerated Performers
-        </div>
-        <div className="absolute bottom-8 left-8 text-[15px] font-semibold text-yellow-700 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
-          Emerging Foundations
-        </div>
-        <div className="absolute bottom-8 right-8 text-[15px] font-semibold text-purple-700 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-          Efficient Executors
-        </div>
-
-        <div className="w-full h-full">
+        <div className="w-full h-[520px]">
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 20, right: 40, bottom: 20, left: 30 }}>
+            <ScatterChart
+              margin={{
+                top: 20,
+                right: 40,
+                bottom: 30,
+                left: 30,
+              }}
+            >
               {/* Soft quadrant backgrounds with gradients */}
               <defs>
                 <linearGradient id="quadrant1" x1="0" y1="0" x2="1" y2="1">
@@ -293,7 +276,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
             <span className="text-sm text-gray-600">Your Company</span>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </CardContent>
+    </Card>
   );
 }

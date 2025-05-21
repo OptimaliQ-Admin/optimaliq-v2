@@ -44,18 +44,25 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "system",
-            content: "You are a growth strategy expert. Generate 5 specific, actionable growth levers that a business can implement. Each lever should be a single sentence starting with a verb. Make them practical and measurable."
+            content: "You are a growth strategy expert. Generate 5 specific, actionable growth levers that a business can implement. Each lever should be a single sentence starting with a verb. Make them practical and measurable. Format your response as a numbered list."
           }
         ],
         temperature: 0.7,
         max_tokens: 500,
       });
 
-      const leversText = completion.choices[0].message.content
-        ?.split("\n")
-        .filter(line => line.trim().startsWith("-"))
-        .map(line => line.replace("-", "").trim())
-        .slice(0, 5);
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        throw new Error("No content in OpenAI response");
+      }
+
+      // Parse the response to extract levers
+      const leversText = content
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.match(/^\d+\./)) // Match numbered lines
+        .map(line => line.replace(/^\d+\.\s*/, "").trim()) // Remove numbers and extra spaces
+        .slice(0, 5); // Take first 5 levers
 
       if (!leversText || leversText.length === 0) {
         throw new Error("Failed to generate growth levers");

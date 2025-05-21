@@ -11,6 +11,7 @@ import SimulationResults, { SimulationResult } from "@/components/growthstudio/S
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 function GrowthStudioComponent() {
   const { user } = usePremiumUser();
@@ -64,14 +65,14 @@ function GrowthStudioComponent() {
           <QuadrantChart userId={userId} />
 
           <div className="bg-white rounded-lg border border-gray-200 shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">🚀 Growth Levers</h3>
-            <p className="text-sm text-gray-600">This section will help you identify specific levers to pull based on your scores.</p>
-            <p className="text-sm text-gray-400 mt-1 italic">Coming soon...</p>
+            <SectionTitleBar
+              title="🚀 Growth Levers"
+              tooltip="Key actions to accelerate your growth. Check them off as you complete them."
+            />
+            <div className="mt-4">
+              <GrowthLeversCard />
+            </div>
           </div>
-        </div>
-
-        <div className="mt-6">
-          <GrowthLeversCard />
         </div>
 
         <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
