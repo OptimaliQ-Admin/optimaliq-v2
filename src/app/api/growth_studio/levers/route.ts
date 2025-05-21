@@ -106,7 +106,7 @@ export async function POST(request: Request) {
     }
 
     // Combine existing levers with their progress
-    const levers = existingLevers.levers.map(text => ({
+    const levers = existingLevers.levers.map((text: string) => ({
       text,
       isCompleted: progressData?.some(p => p.lever_text === text && p.is_completed) || false,
     }));
