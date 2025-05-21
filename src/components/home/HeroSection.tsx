@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex flex-col lg:flex-row items-center justify-end px-6 py-16 lg:py-24 bg-white dark:bg-black">
+    <section className="relative flex flex-col lg:flex-row items-center justify-end px-6 py-16 lg:py-24 bg-white">
       {/* Hero Background Image covering 3/4 of the page */}
       <div className="absolute inset-0 lg:w-3/4 h-full left-0 z-0">
         <Image
@@ -18,25 +18,25 @@ export default function HeroSection() {
       </div>
 
       {/* Text Box */}
-      <div className="relative w-full lg:w-1/2 bg-white dark:bg-[#121212] shadow-lg border-l-4 border-r-4 border-blue-900 dark:border-blue-600 rounded-lg z-10 px-6 py-10 lg:mr-6 transition-transform duration-300 hover:scale-105">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white leading-tight">
-          Dominate Your Market with AI-Driven Strategy
+      <div className="relative w-full lg:w-1/2 bg-white shadow-lg border-l-4 border-r-4 border-blue-900 rounded-lg z-10 px-6 py-10 lg:mr-6 transition-transform duration-300 hover:scale-105">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+          Transform Your Business with AI-Powered Insights
         </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-          Leverage real-time intelligence and AI-driven insights to optimize strategy, scale faster, and dominate your industry.
+        <p className="mt-4 text-lg text-gray-600">
+          Get personalized growth strategies, market insights, and actionable recommendations to accelerate your business success.
         </p>
-        <div className="mt-6 flex flex-col sm:flex-row gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <Link
-            href="/growth-assessment"
-            className="px-6 py-3 text-center bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-transform transform hover:scale-105"
+            href="/subscribe"
+            className="px-8 py-3 bg-optimaliq text-white rounded-md hover:bg-optimaliq-dark transition-colors text-center font-semibold"
           >
-            Start Your Free Growth Audit
+            Get Started
           </Link>
           <Link
-            href="/#how-it-works"
-            className="px-6 py-3 text-center border border-blue-600 text-blue-600 text-lg rounded-lg shadow-md hover:bg-blue-600 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-transform transform hover:scale-105"
+            href="/pricing"
+            className="px-8 py-3 border-2 border-optimaliq text-optimaliq rounded-md hover:bg-optimaliq hover:text-white transition-colors text-center font-semibold"
           >
-            Learn More
+            View Pricing
           </Link>
         </div>
       </div>

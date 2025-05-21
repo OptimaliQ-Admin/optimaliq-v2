@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { createClient } from "@supabase/supabase-js";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -101,8 +100,8 @@ export default function GrowthLeversCard() {
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center space-x-4">
-                <Skeleton className="h-4 w-4 rounded" />
-                <Skeleton className="h-4 flex-1" />
+                <div className="h-4 w-4 rounded bg-gray-200 animate-pulse" />
+                <div className="h-4 flex-1 bg-gray-200 animate-pulse rounded" />
               </div>
             ))}
           </div>

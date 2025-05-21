@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,23 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        optimaliq: {
-          DEFAULT: "#1A73E8",
-          dark: "#185ABC",    
-        },
+        optimaliq: "#185ABC",
+        "optimaliq-dark": "#134A8E",
       },
-      keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        }
-      },
-      animation: {
-        'fade-in': 'fade-in 0.3s ease-out',
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+
+export default config;

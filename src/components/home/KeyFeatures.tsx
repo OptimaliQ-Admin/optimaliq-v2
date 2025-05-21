@@ -1,75 +1,48 @@
 //src/components/home/KeyFeatures.tsx
 "use client";
 
-import Link from "next/link";
+import { ChartBarIcon, RocketLaunchIcon, LightBulbIcon } from "@heroicons/react/24/outline";
 
 const features = [
   {
-    icon: "📊",
-    title: "AI-Powered Business Assessments",
-    description:
-      "Instantly analyze your business health, identify strategy gaps, and uncover optimization potential.",
+    title: "AI-Powered Insights",
+    description: "Get personalized recommendations and insights powered by advanced AI algorithms.",
+    icon: <LightBulbIcon className="w-8 h-8 text-optimaliq" />,
   },
   {
-    icon: "⚡",
-    title: "Real-Time Strategy Optimization",
-    description:
-      "Adapt dynamically with AI-driven insights, adjusting your business strategy as new data emerges.",
+    title: "Growth Analytics",
+    description: "Track your business growth with comprehensive analytics and benchmarking.",
+    icon: <ChartBarIcon className="w-8 h-8 text-optimaliq" />,
   },
   {
-    icon: "📈",
-    title: "Competitive Benchmarking",
-    description:
-      "Compare your performance with industry leaders and uncover actionable areas for growth.",
-  },
-  {
-    icon: "🔮",
-    title: "Predictive Growth Insights",
-    description:
-      "Forecast market shifts and make proactive, data-driven decisions before your competition.",
+    title: "Strategic Planning",
+    description: "Develop and execute data-driven strategies to achieve your business goals.",
+    icon: <RocketLaunchIcon className="w-8 h-8 text-optimaliq" />,
   },
 ];
 
 export default function KeyFeatures() {
   return (
-    <section id="key-features" className="py-20 bg-white dark:bg-black">
-      <div className="max-w-6xl mx-auto text-center px-4">
-        {/* Section Title */}
-        <div className="relative flex items-center justify-center mb-10">
-          <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
-          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800 dark:text-white">Key Features</h2>
-          <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
+    <section id="key-features" className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800">Key Features</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
+            Everything you need to accelerate your business growth and stay ahead of the competition.
+          </p>
         </div>
 
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">
-          The essential tools designed to accelerate growth, optimize strategy, and maximize efficiency.
-        </p>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {features.map(({ icon, title, description }) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature) => (
             <div
-              key={title}
-              className="p-8 rounded-lg shadow-lg transition-all bg-gray-50 dark:bg-gray-800 hover:shadow-xl border-l-4 border-blue-700"
+              key={feature.title}
+              className="p-8 rounded-lg shadow-lg transition-all bg-gray-50 hover:shadow-xl border-l-4 border-optimaliq"
             >
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-blue-700 text-white flex items-center justify-center rounded-full text-2xl">
-                  {icon}
-                </div>
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-white">{title}</h3>
-              </div>
-              <p className="mt-4 text-gray-600 dark:text-gray-300">{description}</p>
+              <div className="mb-4">{feature.icon}</div>
+              <h3 className="text-2xl font-bold text-gray-800">{feature.title}</h3>
+              <p className="mt-4 text-gray-600">{feature.description}</p>
             </div>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="mt-12">
-          <Link href="/growth-assessment">
-            <button className="bg-blue-700 text-white text-lg px-6 py-3 rounded-lg shadow-md hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition">
-              Get Your Free Growth Report
-            </button>
-          </Link>
         </div>
       </div>
     </section>
