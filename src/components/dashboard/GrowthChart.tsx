@@ -27,14 +27,15 @@ type GrowthChartProps = {
 
 export default function GrowthChart({ data }: GrowthChartProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-semibold">Growth Trajectory</h3>
-          <p className="text-gray-500 text-sm mt-2">
-            Projected growth based on current performance
-          </p>
-        </div>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+      <div className="mb-6">
+        <SectionTitleBar
+          title="📈 Growth Projection"
+          tooltip="Your forecasted growth based on current maturity and best practices."
+        />
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+          Track your progress against industry benchmarks and top performers over time.
+        </p>
       </div>
 
       <div className="h-[400px] w-full">
@@ -176,7 +177,7 @@ export default function GrowthChart({ data }: GrowthChartProps) {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 flex justify-between text-xs text-gray-500">
+      <div className="mt-4 flex justify-between text-xs text-gray-500 dark:text-gray-400">
         <span>Maturity Score</span>
         <span>Time Period</span>
       </div>

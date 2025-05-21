@@ -8,8 +8,11 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   const isPublicRoute = !pathname?.startsWith("/premium") && !pathname?.startsWith("/subscribe");
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      {children}
-    </div>
+    <>
+      {isPublicRoute && <Navbar />}
+      <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
+        {children}
+      </main>
+    </>
   );
 }
