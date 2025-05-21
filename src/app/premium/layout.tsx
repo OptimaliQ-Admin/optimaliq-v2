@@ -1,32 +1,47 @@
 //src/app/premium/layout.tsx
 "use client";
 
-import { PremiumUserProvider } from "@/context/PremiumUserContext";
-import PremiumHeader from "@/components/layout/PremiumHeader";
+import { Suspense } from "react";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 import PremiumSidebar from "@/components/layout/PremiumSidebar";
-import { useRequireAuth } from "@/hooks/useRequireAuth";
+import PremiumHeader from "@/components/layout/PremiumHeader";
+import { RouteLoadingProvider } from "@/context/RouteLoadingContext";
 
-export default function PremiumLayout({ children }: { children: React.ReactNode }) {
-  const { checking } = useRequireAuth(); // get checking status
+export default function PremiumLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user, isUserLoaded } = usePremiumUser();
 
-  if (checking) {
+  if (!isUserLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-600">Please log in to access premium features.</p>
       </div>
     );
   }
 
   return (
-    <PremiumUserProvider>
-      <div className="flex min-h-screen bg-gray-100 text-gray-900">
+    <RouteLoadingProvider>
+      <div className="flex h-screen bg-gray-100">
         <PremiumSidebar />
-        <div className="flex flex-col flex-1">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <PremiumHeader />
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          </main>
         </div>
       </div>
-    </PremiumUserProvider>
+    </RouteLoadingProvider>
   );
 }
 
