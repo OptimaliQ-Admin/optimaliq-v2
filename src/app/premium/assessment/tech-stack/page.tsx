@@ -167,8 +167,10 @@ export default function TechStackAssessment() {
 
       const { data, error } = await supabase
         .from("score_TechStack")
-        .select("score")
+        .select("score, gmf_score, bracket_key")
         .eq("u_id", user.u_id)
+        .order("created_at", { ascending: false })
+        .limit(1)
         .single();
 
       if (error) {
@@ -246,7 +248,14 @@ export default function TechStackAssessment() {
       // Step 3: Save the scored result
       const { error: insertError2 } = await supabase
         .from("score_TechStack")
-        .insert([{ score: techStackScore, u_id: user.u_id }]);
+        .insert([{
+          u_id: user.u_id,
+          gmf_score: score.toString(),
+          bracket_key: normalized,
+          score: techStackScore,
+          answers: sanitizedAnswers,
+          version: 'v1'
+        }]);
 
       // Step 4: Save selected tools
       const toolsToInsert = [];
