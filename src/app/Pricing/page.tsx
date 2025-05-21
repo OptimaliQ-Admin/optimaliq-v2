@@ -10,11 +10,11 @@ export default function PricingPage() {
 
   return (
     <div className="pt-20">
-      <section className="text-center py-20 bg-gray-100 dark:bg-black">
-        <h1 className="text-5xl font-bold text-gray-800 dark:text-white">
+      <section className="text-center py-20 bg-gray-100">
+        <h1 className="text-5xl font-bold text-gray-800">
           Unlock Predictable Growth with AI-Driven Strategy
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mt-4">
+        <p className="text-lg text-gray-600 mt-4">
           Get instant AI-powered insights, track your business progress, and take action with a personalized 30-day plan—every month.
         </p>
       </section>

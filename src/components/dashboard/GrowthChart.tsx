@@ -27,13 +27,13 @@ type GrowthChartProps = {
 
 export default function GrowthChart({ data }: GrowthChartProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
       <div className="mb-6">
-        <SectionTitleBar
-          title="📈 Growth Projection"
-          tooltip="Your forecasted growth based on current maturity and best practices."
-        />
-        <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+      <SectionTitleBar
+  title="📈 Growth Projection"
+  tooltip="Your forecasted growth based on current maturity and best practices."
+/>
+        <p className="text-gray-500 text-sm mt-2">
           Track your progress against industry benchmarks and top performers over time.
         </p>
       </div>
@@ -72,21 +72,21 @@ export default function GrowthChart({ data }: GrowthChartProps) {
               tickFormatter={(value) => value.toFixed(1)}
             />
 
-            <Tooltip
-              contentStyle={{
+          <Tooltip
+            contentStyle={{
                 backgroundColor: "rgba(255, 255, 255, 0.95)",
                 borderRadius: "0.75rem",
-                border: "1px solid #e5e7eb",
-                padding: "0.75rem",
+              border: "1px solid #e5e7eb",
+              padding: "0.75rem",
                 boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                 fontSize: "0.875rem",
-              }}
+            }}
               formatter={(value: number, name: string) => [
                 <span key="value" className="font-semibold">{value.toFixed(1)}</span>,
                 name
               ]}
               labelStyle={{ fontWeight: 600, marginBottom: "0.5rem" }}
-            />
+          />
 
             <Legend 
               verticalAlign="top" 
@@ -112,12 +112,12 @@ export default function GrowthChart({ data }: GrowthChartProps) {
               }}
             />
 
-            <Line
-              type="monotone"
-              dataKey="userScore"
-              name="You"
-              stroke="#3b82f6"
-              strokeWidth={3}
+          <Line
+            type="monotone"
+            dataKey="userScore"
+            name="You"
+            stroke="#3b82f6"
+            strokeWidth={3}
               dot={{ 
                 r: 4,
                 fill: "#3b82f6",
@@ -130,15 +130,15 @@ export default function GrowthChart({ data }: GrowthChartProps) {
                 strokeWidth: 2,
                 stroke: "#ffffff"
               }}
-            />
+          />
 
-            <Line
-              type="monotone"
-              dataKey="industryScore"
-              name="Industry Avg"
-              stroke="#6b7280"
-              strokeWidth={2}
-              strokeDasharray="5 5"
+          <Line
+            type="monotone"
+            dataKey="industryScore"
+            name="Industry Avg"
+            stroke="#6b7280"
+            strokeWidth={2}
+            strokeDasharray="5 5"
               dot={{ 
                 r: 3,
                 fill: "#6b7280",
@@ -151,15 +151,15 @@ export default function GrowthChart({ data }: GrowthChartProps) {
                 strokeWidth: 2,
                 stroke: "#ffffff"
               }}
-            />
+          />
 
-            <Line
-              type="monotone"
-              dataKey="topPerformerScore"
-              name="Top Performers"
-              stroke="#10b981"
-              strokeWidth={2}
-              strokeDasharray="2 2"
+          <Line
+            type="monotone"
+            dataKey="topPerformerScore"
+            name="Top Performers"
+            stroke="#10b981"
+            strokeWidth={2}
+            strokeDasharray="2 2"
               dot={{ 
                 r: 3,
                 fill: "#10b981",
@@ -172,12 +172,12 @@ export default function GrowthChart({ data }: GrowthChartProps) {
                 strokeWidth: 2,
                 stroke: "#ffffff"
               }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+          />
+        </LineChart>
+      </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+      <div className="mt-4 flex justify-between text-xs text-gray-500">
         <span>Maturity Score</span>
         <span>Time Period</span>
       </div>

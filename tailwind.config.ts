@@ -6,6 +6,7 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: false,
   theme: {
     extend: {
       colors: {
@@ -13,7 +14,6 @@ export default {
         foreground: "var(--foreground)",
         optimaliq: {
           DEFAULT: "#1A73E8",
-          dark: "#185ABC",    
         },
       },
       keyframes: {

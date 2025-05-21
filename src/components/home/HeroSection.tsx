@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex flex-col lg:flex-row items-center justify-end px-6 py-16 lg:py-24 bg-white dark:bg-black">
+    <section className="relative flex flex-col lg:flex-row items-center justify-end px-6 py-16 lg:py-24 bg-white">
       {/* Hero Background Image covering 3/4 of the page */}
       <div className="absolute inset-0 lg:w-3/4 h-full left-0 z-0">
         <Image
@@ -18,11 +18,11 @@ export default function HeroSection() {
       </div>
 
       {/* Text Box */}
-      <div className="relative w-full lg:w-1/2 bg-white dark:bg-[#121212] shadow-lg border-l-4 border-r-4 border-blue-900 dark:border-blue-600 rounded-lg z-10 px-6 py-10 lg:mr-6 transition-transform duration-300 hover:scale-105">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white leading-tight">
+      <div className="relative w-full lg:w-1/2 bg-white shadow-lg border-l-4 border-r-4 border-blue-900 rounded-lg z-10 px-6 py-10 lg:mr-6 transition-transform duration-300 hover:scale-105">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
           Dominate Your Market with AI-Driven Strategy
         </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+        <p className="mt-4 text-lg text-gray-600">
           Leverage real-time intelligence and AI-driven insights to optimize strategy, scale faster, and dominate your industry.
         </p>
         <div className="mt-6 flex flex-col sm:flex-row gap-4">

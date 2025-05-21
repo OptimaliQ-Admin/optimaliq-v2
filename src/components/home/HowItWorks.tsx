@@ -41,12 +41,12 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 bg-gray-50 dark:bg-[#111827]">
+    <section id="how-it-works" className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto text-center px-4">
         {/* Title with horizontal lines */}
         <div className="flex items-center justify-center mb-10">
           <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
-          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800 dark:text-white">How It Works</h2>
+          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800">How It Works</h2>
           <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
         </div>
 

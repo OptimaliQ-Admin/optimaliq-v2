@@ -91,23 +91,23 @@ export default function PremiumDashboardPage() {
   if (!insights) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Welcome Toast */}
       {showWelcome && (
         <div className="fixed top-4 right-4 z-50 animate-fade-in">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 border border-gray-100 dark:border-gray-700 max-w-sm">
+          <div className="bg-white rounded-lg shadow-lg p-4 border border-gray-100 max-w-sm">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900">
                   Welcome back, {welcomeData.firstName || 'there'}!
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 italic mt-1">
+                <p className="text-gray-600 italic mt-1">
                   &ldquo;{welcomeData.quote}&rdquo; - {welcomeData.author}
                 </p>
               </div>
               <button
                 onClick={() => setShowWelcome(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="text-gray-400 hover:text-gray-600"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -121,11 +121,11 @@ export default function PremiumDashboardPage() {
       <div className="max-w-[1920px] mx-auto p-6 space-y-8">
         {/* Assessment Reminder */}
         {insights.promptRetake && (
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 p-4 rounded-lg">
+          <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg">
             <p className="font-semibold">🕒 Time to retake your assessment</p>
             <p className="text-sm mt-1">
               Your last assessment was over 30 days ago. Please {" "}
-              <a href="/premium/onboarding/initial-assessment" className="underline font-semibold text-yellow-700 dark:text-yellow-300 hover:text-yellow-900 dark:hover:text-yellow-100">
+              <a href="/premium/onboarding/initial-assessment" className="underline font-semibold text-yellow-700 hover:text-yellow-900">
                 retake your assessment
               </a>
               {" "}to keep your insights current.

@@ -96,15 +96,13 @@ export default function GrowthLeversCard() {
   if (loading) {
     return (
       <Card className="p-6">
-        <CardContent>
-          <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
-              ))}
-            </div>
-          </div>
+        <CardContent className="flex flex-col items-center justify-center min-h-[200px] text-center space-y-4">
+          <h3 className="text-xl font-semibold text-gray-800">
+            🔍 Generating your personalized growth levers...
+          </h3>
+          <p className="text-gray-600 max-w-md">
+            This only happens once every 30 days and ensures your insights are based on the most current strategy, process, and technology performance.
+          </p>
         </CardContent>
       </Card>
     );

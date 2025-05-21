@@ -15,12 +15,12 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="w-full bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
+    <nav className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold text-blue-700">
           OptimaliQ
         </Link>
-        <ul className="hidden md:flex space-x-6 text-gray-800 dark:text-white text-md">
+        <ul className="hidden md:flex space-x-6 text-gray-800 text-md">
           {navItems.map(({ label, href }) => (
             <li key={label}>
               <Link

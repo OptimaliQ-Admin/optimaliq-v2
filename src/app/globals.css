@@ -13,14 +13,6 @@
   --font-mono: var(--font-geist-mono), monospace;
 }
 
-/* ✅ Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 /* ✅ Apply Global Styles */
 body {
   background: var(--color-background);

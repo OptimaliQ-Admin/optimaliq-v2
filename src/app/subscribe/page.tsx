@@ -41,14 +41,14 @@ export default function SubscribePage() {
 
   if (checkingStatus) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600 dark:text-white">
+      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
         Checking subscription status...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-black dark:to-gray-900 flex items-center justify-center px-6 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 flex items-center justify-center px-6 py-16">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="hidden md:block">
           <ValueCarousel />

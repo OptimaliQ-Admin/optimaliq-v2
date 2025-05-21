@@ -13,11 +13,9 @@ import {
   ReferenceLine,
   ReferenceArea,
   LabelList,
-  Label,
 } from "recharts";
 import { motion } from "framer-motion";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface CompanyPoint {
   label: string;
@@ -82,27 +80,23 @@ export default function QuadrantChart({ userId }: { userId: string }) {
 
   if (loading) {
     return (
-      <Card className="p-6">
-        <CardContent>
-          <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-            <div className="h-[460px] bg-gray-100 rounded"></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-[460px] bg-gray-100 rounded"></div>
+        </div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Card className="p-6">
-        <CardContent>
-          <div className="text-center text-red-600">
-            <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
-            <p className="text-sm">{error}</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="text-center text-red-600">
+          <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
     );
   }
 
@@ -138,47 +132,42 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   const quadrantMidY = 3;
 
   return (
-    <Card className="p-6">
-      <CardContent>
+    <motion.div
+      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="px-6 pt-6">
         <SectionTitleBar
-          title="Strategic Growth Quadrant"
-          tooltip="Compare your company's performance against industry peers across strategy, process, and technology dimensions."
+          title="📊 Strategic Growth Quadrant"
+          tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
         />
+      </div>
 
-        <div className="w-full h-[520px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart
-              margin={{
-                top: 20,
-                right: 40,
-                bottom: 30,
-                left: 30,
-              }}
-            >
-              {/* Soft quadrant backgrounds with gradients */}
-              <defs>
-                <linearGradient id="quadrant1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#DBEAFE" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#BFDBFE" stopOpacity={0.3} />
-                </linearGradient>
-                <linearGradient id="quadrant2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#DCFCE7" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#BBF7D0" stopOpacity={0.3} />
-                </linearGradient>
-                <linearGradient id="quadrant3" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#FEF9C3" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#FEF08A" stopOpacity={0.3} />
-                </linearGradient>
-                <linearGradient id="quadrant4" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#EDE9FE" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#DDD6FE" stopOpacity={0.3} />
-                </linearGradient>
-              </defs>
+      <div className="relative px-6 pt-10 pb-12">
+        {/* External Quadrant Labels */}
+        <div className="absolute top-6 left-6 text-[15px] font-semibold text-blue-700">
+          Strategic Builders
+        </div>
+        <div className="absolute top-6 right-6 text-[15px] font-semibold text-green-700">
+          Accelerated Performers
+        </div>
+        <div className="absolute bottom-6 left-6 text-[15px] font-semibold text-yellow-700">
+          Emerging Foundations
+        </div>
+        <div className="absolute bottom-6 right-6 text-[15px] font-semibold text-purple-700">
+          Efficient Executors
+        </div>
 
-              <ReferenceArea x1={minX} x2={quadrantMidX} y1={quadrantMidY} y2={maxY} fill="url(#quadrant1)" />
-              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={quadrantMidY} y2={maxY} fill="url(#quadrant2)" />
-              <ReferenceArea x1={minX} x2={quadrantMidX} y1={minY} y2={quadrantMidY} fill="url(#quadrant3)" />
-              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={minY} y2={quadrantMidY} fill="url(#quadrant4)" />
+        <div className="flex justify-center items-center">
+          <ResponsiveContainer width="90%" height={460}>
+            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              {/* Soft quadrant backgrounds */}
+              <ReferenceArea x1={minX} x2={quadrantMidX} y1={quadrantMidY} y2={maxY} fill="#DBEAFE" fillOpacity={0.2} />
+              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={quadrantMidY} y2={maxY} fill="#DCFCE7" fillOpacity={0.2} />
+              <ReferenceArea x1={minX} x2={quadrantMidX} y1={minY} y2={quadrantMidY} fill="#FEF9C3" fillOpacity={0.2} />
+              <ReferenceArea x1={quadrantMidX} x2={maxX} y1={minY} y2={quadrantMidY} fill="#EDE9FE" fillOpacity={0.2} />
 
               <XAxis
                 type="number"
@@ -210,41 +199,26 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                   const { name, strategy_score, process_score, technology_score } = payload[0].payload;
 
                   return (
-                    <div className="bg-white border border-gray-200 shadow-lg rounded-lg p-4 text-sm">
-                      <div className="font-semibold text-gray-900 mb-2">{name}</div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600">Strategy</span>
-                          <span className="font-medium text-gray-900">{strategy_score.toFixed(1)}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600">Process</span>
-                          <span className="font-medium text-gray-900">{process_score.toFixed(1)}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600">Technology</span>
-                          <span className="font-medium text-gray-900">{technology_score.toFixed(1)}</span>
-                        </div>
-                      </div>
+                    <div className="bg-white border border-gray-300 shadow-lg rounded-md p-3 text-sm text-gray-800">
+                      <div className="font-semibold mb-1">Company: {name}</div>
+                      <div>Strategy Score: {strategy_score}</div>
+                      <div>Process Score: {process_score}</div>
+                      <div>Technology Score: {technology_score}</div>
                     </div>
                   );
                 }}
                 cursor={{ strokeDasharray: "3 3" }}
               />
 
-              {/* Midlines with labels */}
-              <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5}>
-                <Label value="Strategy" position="top" fill="#6b7280" fontSize={12} />
-              </ReferenceLine>
-              <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5}>
-                <Label value="Process" position="right" fill="#6b7280" fontSize={12} offset={5} />
-              </ReferenceLine>
+              {/* Midlines */}
+              <ReferenceLine x={quadrantMidX} stroke="#d1d5db" strokeWidth={1.5} />
+              <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5} />
 
               {/* Companies */}
               <Scatter
                 name="Other Companies"
                 data={normalizedCompanies}
-                fill="#94A3B8"
+                fill="#CBD5E1"
                 shape="circle"
               />
 
@@ -252,31 +226,15 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <Scatter
                 name="Your Company"
                 data={[normalizedUser]}
-                fill="#1D4ED8"
+                fill="#2563eb"
                 shape="star"
               >
-                <LabelList 
-                  dataKey="name" 
-                  position="top" 
-                  style={{ fill: "#1D4ED8", fontSize: 12, fontWeight: 600 }}
-                />
+                <LabelList dataKey="name" position="top" />
               </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Legend */}
-        <div className="mt-6 flex justify-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#CBD5E1]"></div>
-            <span className="text-sm text-gray-600">Other Companies</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 text-[#2563eb]">★</div>
-            <span className="text-sm text-gray-600">Your Company</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </motion.div>
   );
 }

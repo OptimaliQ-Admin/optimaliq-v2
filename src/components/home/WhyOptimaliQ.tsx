@@ -5,25 +5,25 @@ import Link from "next/link";
 
 export default function WhyOptimaliQ() {
   return (
-    <section id="why-optimaliq" className="py-20 bg-gray-50 dark:bg-[#111827]">
+    <section id="why-optimaliq" className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto text-center px-4">
         {/* Section Header */}
         <div className="relative flex items-center justify-center mb-10">
           <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
-          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800 dark:text-white">
+          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800">
             Why <span className="text-blue-600">OptimaliQ?</span>
           </h2>
           <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
         </div>
 
         {/* Persuasive Statement */}
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Your competition is scaling faster with AI-driven strategy and real-time market intelligence. 
           Leverage data-driven decisions and dominate your industry.
         </p>
 
         {/* Comparison Table */}
-        <div className="mt-12 bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6 md:p-8 overflow-x-auto">
+        <div className="mt-12 bg-white shadow-lg rounded-lg p-6 md:p-8 overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="bg-[#0A1F44] text-white text-lg">
@@ -32,7 +32,7 @@ export default function WhyOptimaliQ() {
                 <th className="p-4 font-semibold text-center">Traditional Consulting</th>
               </tr>
             </thead>
-            <tbody className="text-gray-800 dark:text-gray-100 text-md">
+            <tbody className="text-gray-800 text-md">
               {[
                 ["Cost", "Free to Start", "$10,000+ Retainers"],
                 ["Speed", "Instant Insights", "Weeks of Analysis"],
@@ -41,11 +41,11 @@ export default function WhyOptimaliQ() {
               ].map(([label, optimaliq, consulting], i) => (
                 <tr
                   key={label}
-                  className={`border-t ${i % 2 === 1 ? "bg-gray-100 dark:bg-gray-800" : ""}`}
+                  className={`border-t ${i % 2 === 1 ? "bg-gray-100" : ""}`}
                 >
                   <td className="p-4 font-semibold">{label}</td>
                   <td className="p-4 text-blue-600 font-bold text-center">{optimaliq}</td>
-                  <td className="p-4 text-gray-600 dark:text-gray-300 text-center">{consulting}</td>
+                  <td className="p-4 text-gray-600 text-center">{consulting}</td>
                 </tr>
               ))}
             </tbody>

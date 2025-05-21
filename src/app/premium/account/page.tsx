@@ -72,7 +72,7 @@ export default function AccountPage() {
   return (
     <div className="max-w-2xl mx-auto py-12 px-4">
       <h1 className="text-2xl font-bold mb-6">Account Settings</h1>
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
         <div className="flex items-center gap-6">
           <div className="relative w-24 h-24">
             {profilePic ? (
