@@ -178,8 +178,14 @@ export default function TechStackAssessment() {
           .eq("u_id", user?.u_id)
           .single();
 
-        if (error || !data?.overall_score) {
+        if (error) {
+          console.error("❌ Failed to fetch score:", error);
           setError("Unable to load assessment score.");
+          return;
+        }
+
+        if (!data?.overall_score) {
+          setError("No score found. Please complete the GMF assessment first.");
           return;
         }
 
@@ -251,19 +257,23 @@ export default function TechStackAssessment() {
       // Step 2: Save raw answers
       const { error: insertError1 } = await supabase
         .from("tech_stack_assessment")
-        .insert([{ ...sanitizedAnswers, score: techStackScore, u_id: user.u_id }]);
+        .insert({
+          ...sanitizedAnswers,
+          score: techStackScore,
+          u_id: user.u_id
+        });
 
       // Step 3: Save the scored result
       const { error: insertError2 } = await supabase
-        .from("score_TechStack")
-        .insert([{
+        .from("score_tech_stack")
+        .insert({
           u_id: user.u_id,
           gmf_score: score.toString(),
           bracket_key: normalized,
           score: techStackScore,
           answers: sanitizedAnswers,
           version: 'v1'
-        }]);
+        });
 
       // Step 4: Save selected tools
       const toolsToInsert = [];
@@ -281,9 +291,7 @@ export default function TechStackAssessment() {
 
       const { error: insertError3 } = await supabase
         .from("tech_stack_tools")
-        .upsert(toolsToInsert, {
-          onConflict: "u_id,category,tool_name",
-        });
+        .upsert(toolsToInsert);
 
       if (insertError1 || insertError2 || insertError3) {
         console.error("❌ Database insert failed:", { insertError1, insertError2, insertError3 });

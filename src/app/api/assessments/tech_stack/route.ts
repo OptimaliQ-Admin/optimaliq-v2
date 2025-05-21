@@ -61,35 +61,53 @@ export async function POST(request: Request) {
     // Insert into tech_stack_assessment table
     const { error: insertError } = await supabase
       .from("tech_stack_assessment")
-      .insert([{
+      .insert({
         u_id: userId,
-        basic_infrastructure: answers.basic_infrastructure,
+        // Score 1.0 questions
+        tech_infrastructure: answers.tech_infrastructure,
         data_management: answers.data_management,
-        security_measures: answers.security_measures,
-        cloud_infrastructure: answers.cloud_infrastructure,
-        data_warehouse: answers.data_warehouse,
-        security_compliance: answers.security_compliance,
-        integration_platform: answers.integration_platform,
-        data_pipeline: answers.data_pipeline,
-        security_automation: answers.security_automation,
-        api_management: answers.api_management,
+        integration_status: answers.integration_status,
+        // Score 1.5 questions
+        tech_architecture: answers.tech_architecture,
         data_governance: answers.data_governance,
-        security_monitoring: answers.security_monitoring,
+        system_reliability: answers.system_reliability,
+        // Score 2.0 questions
+        enterprise_architecture: answers.enterprise_architecture,
+        data_ecosystem: answers.data_ecosystem,
+        system_resilience: answers.system_resilience,
+        // Score 2.5 questions
+        digital_transformation: answers.digital_transformation,
+        cloud_maturity: answers.cloud_maturity,
+        tech_modernization: answers.tech_modernization,
+        // Score 3.0 questions
         microservices: answers.microservices,
         data_lake: answers.data_lake,
         security_architecture: answers.security_architecture,
-        ai_infrastructure: answers.ai_infrastructure,
-        ml_platform: answers.ml_platform,
+        // Score 3.5 questions
+        ai_adoption: answers.ai_adoption,
+        tech_scalability: answers.tech_scalability,
+        future_readiness: answers.future_readiness,
+        // Score 4.0 questions
         analytics_platform: answers.analytics_platform,
+        data_warehouse: answers.data_warehouse,
+        real_time_analytics: answers.real_time_analytics,
+        // Score 4.5 questions
         innovation_platform: answers.innovation_platform,
         emerging_tech: answers.emerging_tech,
         research_dev: answers.research_dev,
+        // Score 5.0 questions
         autonomous_infrastructure: answers.autonomous_infrastructure,
         self_learning_systems: answers.self_learning_systems,
         adaptive_architecture: answers.adaptive_architecture,
+        // Tools questions
+        crm_tools: answers.crm_tools,
+        esp_tools: answers.esp_tools,
+        analytics_tools: answers.analytics_tools,
+        cms_tools: answers.cms_tools,
+        // Metadata
         score: normalizedScore,
         created_at: new Date().toISOString()
-      }]);
+      });
 
     if (insertError) {
       console.error("Error inserting assessment:", insertError);
