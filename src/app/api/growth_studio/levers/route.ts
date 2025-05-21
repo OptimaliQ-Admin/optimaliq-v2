@@ -146,8 +146,7 @@ Return the levers as a numbered list.`
         .upsert({
           u_id,
           levers: leversText,
-          generated_at: new Date().toISOString(),
-          industry,
+          generated_at: new Date().toISOString()
         });
 
       if (upsertError) {
