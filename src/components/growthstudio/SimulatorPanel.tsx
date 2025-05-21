@@ -108,16 +108,37 @@ export default function SimulatorPanel({
         {/* Inputs */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label>Revenue ($)</Label>
-            <Input type="number" value={revenue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRevenue(Number(e.target.value))} />
+            <Label className="flex items-center gap-2">
+              Revenue ($)
+              <span className="text-gray-400 text-xs" title="Your current annual revenue">ⓘ</span>
+            </Label>
+            <Input 
+              type="number" 
+              value={revenue} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRevenue(Number(e.target.value))} 
+            />
           </div>
           <div>
-            <Label>Costs ($)</Label>
-            <Input type="number" value={costs} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCosts(Number(e.target.value))} />
+            <Label className="flex items-center gap-2">
+              Expenses ($)
+              <span className="text-gray-400 text-xs" title="Your current annual operational expenses">ⓘ</span>
+            </Label>
+            <Input 
+              type="number" 
+              value={costs} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCosts(Number(e.target.value))} 
+            />
           </div>
           <div>
-            <Label>Efficiency (%)</Label>
-            <Input type="number" value={efficiency} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEfficiency(Number(e.target.value))} />
+            <Label className="flex items-center gap-2">
+              Efficiency (%)
+              <span className="text-gray-400 text-xs" title="Your current business efficiency level (0-100%)">ⓘ</span>
+            </Label>
+            <Input 
+              type="number" 
+              value={efficiency} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEfficiency(Number(e.target.value))} 
+            />
           </div>
         </div>
 

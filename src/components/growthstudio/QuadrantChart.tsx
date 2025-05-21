@@ -170,8 +170,8 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         </div>
 
         <div className="flex justify-center items-center">
-          <ResponsiveContainer width="95%" height={460}>
-            <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+          <ResponsiveContainer width="92%" height={460}>
+            <ScatterChart margin={{ top: 20, right: 40, bottom: 20, left: 30 }}>
               {/* Soft quadrant backgrounds with gradients */}
               <defs>
                 <linearGradient id="quadrant1" x1="0" y1="0" x2="1" y2="1">
@@ -254,7 +254,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
                 <Label value="Strategy" position="top" fill="#6b7280" fontSize={12} />
               </ReferenceLine>
               <ReferenceLine y={quadrantMidY} stroke="#d1d5db" strokeWidth={1.5}>
-                <Label value="Process" position="right" fill="#6b7280" fontSize={12} />
+                <Label value="Process" position="right" fill="#6b7280" fontSize={12} offset={5} />
               </ReferenceLine>
 
               {/* Companies */}
