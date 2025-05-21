@@ -1,15 +1,39 @@
 -- Create tech_stack_tools table
 CREATE TABLE IF NOT EXISTS tech_stack_tools (
     id BIGSERIAL PRIMARY KEY,
-    u_id TEXT NOT NULL,
+    u_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     category TEXT NOT NULL,
     tool_name TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    CONSTRAINT tech_stack_tools_category_check CHECK (category IN ('crm', 'esp', 'analytics', 'cms'))
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(u_id, category, tool_name)
 );
 
--- Create index on u_id for faster lookups
+-- Enable RLS
+ALTER TABLE tech_stack_tools ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Users can view their own tech stack tools"
+    ON tech_stack_tools
+    FOR SELECT
+    USING (auth.uid() = u_id);
+
+CREATE POLICY "Users can insert their own tech stack tools"
+    ON tech_stack_tools
+    FOR INSERT
+    WITH CHECK (auth.uid() = u_id);
+
+CREATE POLICY "Users can update their own tech stack tools"
+    ON tech_stack_tools
+    FOR UPDATE
+    USING (auth.uid() = u_id)
+    WITH CHECK (auth.uid() = u_id);
+
+CREATE POLICY "Users can delete their own tech stack tools"
+    ON tech_stack_tools
+    FOR DELETE
+    USING (auth.uid() = u_id);
+
+-- Create index for faster lookups
 CREATE INDEX IF NOT EXISTS tech_stack_tools_u_id_idx ON tech_stack_tools(u_id);
 
 -- Create index on category for faster filtering

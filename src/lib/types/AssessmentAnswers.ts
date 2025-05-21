@@ -7,12 +7,20 @@ export type AssessmentAnswers = Record<string, AssessmentAnswerValue>;
 export type OnAnswerHandler = (key: string, value: AssessmentAnswerValue) => void;
 
 export function getStringAnswer(value: AssessmentAnswerValue): string {
-    return typeof value === "string" ? value : "";
-  }
-  export function getArrayAnswer(value: AssessmentAnswerValue): string[] {
-    return Array.isArray(value) ? value : [];
-  }
-  export type BpmQuestionType = "multiple_choice" | "multi_select";
+  if (typeof value === "string") return value;
+  return "";
+}
+
+export function getStringArrayAnswer(value: AssessmentAnswerValue): string[] {
+  if (Array.isArray(value)) return value;
+  return [];
+}
+
+export function getArrayAnswer(value: AssessmentAnswerValue): string[] {
+  return Array.isArray(value) ? value : [];
+}
+
+export type BpmQuestionType = "multiple_choice" | "multi_select";
 
 export type BpmScoringEntry = {
   type: BpmQuestionType;
