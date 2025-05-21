@@ -114,10 +114,10 @@ export default function SimulatorPanel({
         {/* Inputs */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <SectionTitleBar
-              title="Revenue ($)"
-              tooltip="Your current annual revenue"
-            />
+            <Label className="flex items-center gap-2">
+              Revenue ($)
+              <span className="text-gray-400 text-xs" title="Your current annual revenue">ⓘ</span>
+            </Label>
             <Input 
               type="number" 
               value={revenue} 
@@ -125,10 +125,10 @@ export default function SimulatorPanel({
             />
           </div>
           <div>
-            <SectionTitleBar
-              title="Expenses ($)"
-              tooltip="Your current annual operational expenses"
-            />
+            <Label className="flex items-center gap-2">
+              Expenses ($)
+              <span className="text-gray-400 text-xs" title="Your current annual operational expenses">ⓘ</span>
+            </Label>
             <Input 
               type="number" 
               value={costs} 
@@ -136,10 +136,10 @@ export default function SimulatorPanel({
             />
           </div>
           <div>
-            <SectionTitleBar
-              title="Efficiency (%)"
-              tooltip="Your current business efficiency level (0-100%)"
-            />
+            <Label className="flex items-center gap-2">
+              Efficiency (%)
+              <span className="text-gray-400 text-xs" title="Your current business efficiency level (0-100%)">ⓘ</span>
+            </Label>
             <Input 
               type="number" 
               value={efficiency} 
