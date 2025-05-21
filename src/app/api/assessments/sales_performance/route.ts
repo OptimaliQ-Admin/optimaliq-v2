@@ -29,9 +29,10 @@ export async function POST(req: Request) {
   if (!answers || typeof score !== "number" || !userId) {
     return NextResponse.json({ error: "Missing answers, score, or userId" }, { status: 400 });
   }
+
   const bracketKey = getBracket(score);
   const scoringMap = salesScoringMap as SalesScoringMap;
-const scoringConfig = scoringMap[bracketKey];
+  const scoringConfig = scoringMap[bracketKey];
 
   if (!scoringConfig) {
     return NextResponse.json({ error: "Invalid score bracket" }, { status: 400 });
@@ -72,40 +73,53 @@ const scoringConfig = scoringMap[bracketKey];
   const raw = weightSum ? total / weightSum : 0;
   const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
-  // ✅ Insert into score_SalesPerformance table
-  const { error: insertError } = await supabase.from("score_salesperformance").insert([
-    {
-      u_id: userId,
-      gmf_score: score,
-      bracket_key: bracketKey,
-      score: normalized,
-      answers,
-      version: "v1",
-    },
-  ]);
+  // ✅ Insert into sales_performance_assessment table
+  const { error: assessmentError } = await supabase
+    .from("sales_performance_assessment")
+    .insert([{ ...answers, u_id: userId }]);
 
-  if (insertError) {
-    console.error("❌ Supabase insert error:", insertError);
+  if (assessmentError) {
+    console.error("❌ Failed to store assessment:", assessmentError);
+    return NextResponse.json({ error: "Failed to store assessment." }, { status: 500 });
+  }
+
+  // ✅ Insert into score_salesperformance table
+  const { error: scoreError } = await supabase
+    .from("score_salesperformance")
+    .insert([
+      {
+        u_id: userId,
+        gmf_score: score,
+        bracket_key: bracketKey,
+        score: normalized,
+        answers,
+        version: "v1",
+      },
+    ]);
+
+  if (scoreError) {
+    console.error("❌ Failed to store score:", scoreError);
     return NextResponse.json({ error: "Failed to store score." }, { status: 500 });
   }
 
-  // ✅ Upsert into tier2_profiles (create or update profile with sales score)
+  // ✅ Update tier2_profiles table
   const { error: profileError } = await supabase
     .from("tier2_profiles")
     .upsert(
       {
         u_id: userId,
-        sales_score: normalized,
-        sales_last_taken: new Date().toISOString(),
+        sales_performance_score: normalized,
+        sales_performance_last_taken: new Date().toISOString(),
       },
-      { onConflict: "u_id" }
+      {
+        onConflict: "u_id",
+      }
     );
 
   if (profileError) {
-    console.error("❌ Failed to update tier2_profiles:", profileError);
+    console.error("❌ Failed to update profile:", profileError);
     return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
   }
 
-  // 🎉 Return score to frontend
   return NextResponse.json({ salesScore: normalized });
 }

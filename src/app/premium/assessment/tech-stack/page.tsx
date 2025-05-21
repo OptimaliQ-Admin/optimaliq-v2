@@ -252,54 +252,7 @@ export default function TechStackAssessment() {
         return;
       }
 
-      const techStackScore = result.techStackScore;
-
-      // Step 2: Save raw answers
-      const { error: insertError1 } = await supabase
-        .from("tech_stack_assessment")
-        .insert({
-          ...sanitizedAnswers,
-          score: techStackScore,
-          u_id: user.u_id
-        });
-
-      // Step 3: Save the scored result
-      const { error: insertError2 } = await supabase
-        .from("score_tech_stack")
-        .insert({
-          u_id: user.u_id,
-          gmf_score: score.toString(),
-          bracket_key: normalized,
-          score: techStackScore,
-          answers: sanitizedAnswers,
-          version: 'v1'
-        });
-
-      // Step 4: Save selected tools
-      const toolsToInsert = [];
-      for (const category of ["crm_tools", "esp_tools", "analytics_tools", "cms_tools"]) {
-        const tools = getStringArrayAnswer(sanitizedAnswers[category]);
-        for (const tool of tools) {
-          toolsToInsert.push({
-            u_id: user.u_id,
-            category,
-            tool_name: tool,
-            updated_at: new Date().toISOString(),
-          });
-        }
-      }
-
-      const { error: insertError3 } = await supabase
-        .from("tech_stack_tools")
-        .upsert(toolsToInsert);
-
-      if (insertError1 || insertError2 || insertError3) {
-        console.error("❌ Database insert failed:", { insertError1, insertError2, insertError3 });
-        alert("Something went wrong while saving your assessment.");
-        return;
-      }
-
-      router.push("/premium/assessment/tech-stack/results");
+      router.push("/premium/assessment");
     } catch (error) {
       console.error("❌ Assessment submission failed:", error);
       alert("Something went wrong. Please try again.");

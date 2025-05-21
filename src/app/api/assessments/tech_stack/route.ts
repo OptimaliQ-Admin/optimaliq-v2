@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
 
     // Insert into tech_stack_assessment table
-    const { error: insertError } = await supabase
+    const { error: assessmentError } = await supabase
       .from("tech_stack_assessment")
       .insert({
         u_id: userId,
@@ -109,16 +109,36 @@ export async function POST(request: Request) {
         created_at: new Date().toISOString()
       });
 
-    if (insertError) {
-      console.error("Error inserting assessment:", insertError);
+    if (assessmentError) {
+      console.error("Error inserting assessment:", assessmentError);
       return NextResponse.json(
         { error: "Failed to save assessment" },
         { status: 500 }
       );
     }
 
+    // Insert into score_tech_stack table
+    const { error: scoreError } = await supabase
+      .from("score_tech_stack")
+      .insert({
+        u_id: userId,
+        gmf_score: score,
+        bracket_key: bracket,
+        score: normalizedScore,
+        answers,
+        version: "v1",
+      });
+
+    if (scoreError) {
+      console.error("Error inserting score:", scoreError);
+      return NextResponse.json(
+        { error: "Failed to save score" },
+        { status: 500 }
+      );
+    }
+
     // Update tier2_profiles table
-    const { error: updateError } = await supabase
+    const { error: profileError } = await supabase
       .from("tier2_profiles")
       .upsert({
         u_id: userId,
@@ -128,8 +148,8 @@ export async function POST(request: Request) {
         onConflict: "u_id"
       });
 
-    if (updateError) {
-      console.error("Error updating profile:", updateError);
+    if (profileError) {
+      console.error("Error updating profile:", profileError);
       return NextResponse.json(
         { error: "Failed to update profile" },
         { status: 500 }

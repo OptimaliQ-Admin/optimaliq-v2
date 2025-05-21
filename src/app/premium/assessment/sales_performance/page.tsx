@@ -135,54 +135,33 @@ const handleNext = async () => {
     return;
   }
 
-    try {
-      const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
-      // Step 1: Call your scoring API
-      const response = await fetch("/api/assessments/sales_performance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          answers: sanitizedAnswers,
-          score: score,
-          userId: user.u_id
-        }),
-      });           
+  try {
+    const sanitizedAnswers = stripUnusedOtherFields(formAnswers);
+    // Step 1: Call your scoring API
+    const response = await fetch("/api/assessments/sales_performance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        answers: sanitizedAnswers,
+        score: score,
+        userId: user.u_id
+      }),
+    });           
 
-const result = await response.json();
+    const result = await response.json();
 
-if (!response.ok || result.salesScore === undefined) {
-  console.error("❌ Scoring API failed:", result);
-  alert("Something went wrong while scoring the assessment.");
-  return;
-}
-
-const salesScore = result.salesScore;
-
-// Step 2: Insert into Supabase
-const { data, error }: { data: any; error: any } = await supabase
-  .from("sales_performance_assessment")
-  .insert([{ ...sanitizedAnswers, score: salesScore, u_id: user.u_id }]);
-
-if (error) {
-  console.error("❌ Supabase error:", error);
-  alert(`Something went wrong: ${error.message}`);
-  return;
-}
-
-router.push("/premium/assessment");
-
-      if (error) {
-        console.error("❌ Supabase error:", error);
-        alert(`Something went wrong: ${error.message}`);
-        return;
-      }
-
-      router.push("/premium/assessment");
-    } catch (err: unknown) {
-      console.error("❌ Unexpected error:", err);
-      alert(`Unexpected error: ${getErrorMessage(err)}`);
+    if (!response.ok || result.salesScore === undefined) {
+      console.error("❌ Scoring API failed:", result);
+      alert("Something went wrong while scoring the assessment.");
+      return;
     }
-  };
+
+    router.push("/premium/assessment");
+  } catch (err: unknown) {
+    console.error("❌ Unexpected error:", err);
+    alert(`Unexpected error: ${getErrorMessage(err)}`);
+  }
+};
 
 
   const handleBack = () => {
