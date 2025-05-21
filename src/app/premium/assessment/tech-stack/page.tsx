@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/lib/hooks/useUser";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   getStringArrayAnswer,
@@ -158,7 +158,7 @@ export default function TechStackAssessment() {
   const [score, setScore] = useState<number | null>(null);
   const [formAnswers, setFormAnswers] = useState<AssessmentAnswers>({});
   const router = useRouter();
-  const { user } = useUser();
+  const { user } = usePremiumUser();
   const supabase = createClientComponentClient();
 
   useEffect(() => {
