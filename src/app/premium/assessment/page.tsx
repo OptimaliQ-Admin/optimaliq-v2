@@ -1,7 +1,7 @@
 // src/app/tier2/assessment/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
@@ -28,7 +28,8 @@ import { getLatestLeadershipScore } from "@/lib/queries/getLatestLeadershipScore
 import GrowthCard from "@/components/assessments/GrowthCard";
 import { getLatestGrowthScore } from "@/lib/queries/getLatestGrowthScore";
 
-export default function AssessmentComponent() {
+
+function AssessmentComponent() {
   const { user } = usePremiumUser();
   const router = useRouter();
 
@@ -57,6 +58,7 @@ export default function AssessmentComponent() {
   const [LeadershipLastTaken, setLeadershipLastTaken] = useState<string | null>(null);
   const [Growth_score, setGrowthScore] = useState<number | null>(null);
   const [GrowthLastTaken, setGrowthLastTaken] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (!u_id) return;
@@ -126,6 +128,7 @@ export default function AssessmentComponent() {
       setGrowthLastTaken(result?.takenAt ?? null);
     };
 
+
     fetchBPM();
     fetchSales();
     fetchTech();
@@ -151,20 +154,53 @@ export default function AssessmentComponent() {
           subtitle="Choose an assessment to gain deeper insights into your business."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={u_id} />
-          <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={u_id} />
-          <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
-          <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
-          <Business_ReassessmentCard score={reassessment_score} lastTakenDate={reassessmentLastTaken} userId={u_id} />
-          <MarketingCard score={marketing_score} lastTakenDate={marketingLastTaken} userId={u_id} />
-          <CustomerCard score={Customer_score} lastTakenDate={CustomerLastTaken} userId={u_id} />
-          <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
-          <DigitalCard score={Digital_score} lastTakenDate={DigitalLastTaken} userId={u_id} />
-          <LeadershipCard score={Leadership_score} lastTakenDate={LeadershipLastTaken} userId={u_id} />
-          <GrowthCard score={Growth_score} lastTakenDate={GrowthLastTaken} userId={u_id} />
-        </div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+  {/* Inject BPMCard */}
+  <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={u_id} />
+
+  {/* Inject SalesPerformanceCard */}
+  <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={u_id} />
+
+{/* Inject TechCard */}
+  <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
+  
+{/* Inject StrategicCard */}
+  <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
+
+  {/* Inject ReassessmentCard */}
+  <Business_ReassessmentCard score={reassessment_score} lastTakenDate={reassessmentLastTaken} userId={u_id} />
+
+  {/* Inject MarketingCard */}
+  <MarketingCard score={marketing_score} lastTakenDate={marketingLastTaken} userId={u_id} />
+
+   {/* Inject CustomerCard */}
+  <CustomerCard score={Customer_score} lastTakenDate={CustomerLastTaken} userId={u_id} />
+
+  {/* Inject AICard */}
+  <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
+
+  {/* Inject DigitalCard */}
+  <DigitalCard score={Digital_score} lastTakenDate={DigitalLastTaken} userId={u_id} />
+
+  {/* Inject LeadershipCard */}
+  <LeadershipCard score={Leadership_score} lastTakenDate={LeadershipLastTaken} userId={u_id} />
+
+  {/* Inject GrowthCard */}
+  <GrowthCard score={Growth_score} lastTakenDate={GrowthLastTaken} userId={u_id} />
+  
+
+</div>
+
       </div>
     </div>
+  );
+}
+
+export default function AssessmentPage() {
+  return (
+    <Suspense fallback={<p>Loading assessment...</p>}>
+      <AssessmentComponent />
+    </Suspense>
   );
 }

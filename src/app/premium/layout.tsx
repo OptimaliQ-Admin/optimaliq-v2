@@ -1,39 +1,32 @@
 //src/app/premium/layout.tsx
 "use client";
 
-import { Suspense } from "react";
-import { usePremiumUser } from "@/context/PremiumUserContext";
-import PremiumSidebar from "@/components/layout/PremiumSidebar";
+import { PremiumUserProvider } from "@/context/PremiumUserContext";
 import PremiumHeader from "@/components/layout/PremiumHeader";
-import { RouteLoadingProvider } from "@/context/RouteLoadingContext";
+import PremiumSidebar from "@/components/layout/PremiumSidebar";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
-export default function PremiumLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { user } = usePremiumUser();
+export default function PremiumLayout({ children }: { children: React.ReactNode }) {
+  const { checking } = useRequireAuth(); // get checking status
 
-  if (!user) {
+  if (checking) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Please log in to access premium features.</p>
+        <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <RouteLoadingProvider>
-      <div className="flex h-screen bg-gray-100">
+    <PremiumUserProvider>
+      <div className="flex min-h-screen bg-gray-100 text-gray-900">
         <PremiumSidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex flex-col flex-1">
           <PremiumHeader />
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-          </main>
+          <main className="flex-1 overflow-y-auto p-6">{children}</main>
         </div>
       </div>
-    </RouteLoadingProvider>
+    </PremiumUserProvider>
   );
 }
 
