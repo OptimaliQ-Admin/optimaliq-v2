@@ -26,31 +26,43 @@ export default function SimulatorPanel({
   const [efficiency, setEfficiency] = useState(50);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<SimulationResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const runSimulation = async () => {
-    setLoading(true);
-    setResults(null);
     try {
-      const res = await fetch("/api/tier2/growth_studio/simulation", {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/growth_studio/simulation", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          strategyChange,
-          processChange,
-          techChange,
-          revenue,
-          costs,
-          efficiency,
+          strategyChange: strategyChange,
+          processChange: processChange,
+          techChange: techChange,
+          revenue: revenue,
+          costs: costs,
+          efficiency: efficiency,
         }),
       });
-      const data = await res.json();
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to run simulation");
+      }
+
+      const data = await response.json();
       setResults(data);
       onResult(data);
     } catch (err) {
-      console.error("❌ Simulation failed:", err);
+      console.error("Simulation error:", err);
+      setError(err instanceof Error ? err.message : "Failed to run simulation");
       onResult(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
   
   return (
@@ -112,6 +124,10 @@ export default function SimulatorPanel({
         <Button onClick={runSimulation} className="mt-6 w-full">
           {loading ? "Simulating..." : "Run Simulation"}
         </Button>
+
+        {error && (
+          <p className="text-red-500 mt-4">{error}</p>
+        )}
 
       </CardContent>
     </Card>

@@ -170,25 +170,25 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         </div>
 
         <div className="flex justify-center items-center">
-          <ResponsiveContainer width="90%" height={460}>
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+          <ResponsiveContainer width="95%" height={460}>
+            <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
               {/* Soft quadrant backgrounds with gradients */}
               <defs>
                 <linearGradient id="quadrant1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#DBEAFE" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#BFDBFE" stopOpacity={0.1} />
+                  <stop offset="0%" stopColor="#DBEAFE" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#BFDBFE" stopOpacity={0.3} />
                 </linearGradient>
                 <linearGradient id="quadrant2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#DCFCE7" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#BBF7D0" stopOpacity={0.1} />
+                  <stop offset="0%" stopColor="#DCFCE7" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#BBF7D0" stopOpacity={0.3} />
                 </linearGradient>
                 <linearGradient id="quadrant3" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#FEF9C3" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#FEF08A" stopOpacity={0.1} />
+                  <stop offset="0%" stopColor="#FEF9C3" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#FEF08A" stopOpacity={0.3} />
                 </linearGradient>
                 <linearGradient id="quadrant4" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#EDE9FE" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#DDD6FE" stopOpacity={0.1} />
+                  <stop offset="0%" stopColor="#EDE9FE" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#DDD6FE" stopOpacity={0.3} />
                 </linearGradient>
               </defs>
 
@@ -261,7 +261,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <Scatter
                 name="Other Companies"
                 data={normalizedCompanies}
-                fill="#CBD5E1"
+                fill="#94A3B8"
                 shape="circle"
               />
 
@@ -269,13 +269,13 @@ export default function QuadrantChart({ userId }: { userId: string }) {
               <Scatter
                 name="Your Company"
                 data={[normalizedUser]}
-                fill="#2563eb"
+                fill="#1D4ED8"
                 shape="star"
               >
                 <LabelList 
                   dataKey="name" 
                   position="top" 
-                  style={{ fill: "#2563eb", fontSize: 12, fontWeight: 600 }}
+                  style={{ fill: "#1D4ED8", fontSize: 12, fontWeight: 600 }}
                 />
               </Scatter>
             </ScatterChart>
