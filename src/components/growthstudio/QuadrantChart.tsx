@@ -169,8 +169,8 @@ export default function QuadrantChart({ userId }: { userId: string }) {
           Efficient Executors
         </div>
 
-        <div className="flex justify-center items-center">
-          <ResponsiveContainer width="92%" height={460}>
+        <div className="pl-10">
+          <ResponsiveContainer width="100%" height={520}>
             <ScatterChart margin={{ top: 20, right: 40, bottom: 20, left: 30 }}>
               {/* Soft quadrant backgrounds with gradients */}
               <defs>

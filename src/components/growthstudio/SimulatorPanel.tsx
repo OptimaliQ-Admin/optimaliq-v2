@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 interface SimulationResult {
   revenueImpact: number;
@@ -68,39 +69,44 @@ export default function SimulatorPanel({
   return (
     <Card className="p-6 w-full max-w-3xl">
       <CardContent>
-        <h2 className="text-xl font-bold mb-2 text-gray-800">🔮 What-If Scenario Simulator</h2>
-        <p className="text-gray-600 mb-4">Adjust metrics to see how improvements in strategy, process, and tech affect business outcomes.</p>
+        <SectionTitleBar
+          title="🔮 What-If Scenario Simulator"
+          tooltip="Adjust metrics to see how improvements in strategy, process, and tech affect business outcomes."
+        />
 
         {/* Sliders */}
         <div className="space-y-4">
           <div>
             <Label>Strategy Change</Label>
             <Slider 
-  min={-2} 
-  max={2} 
-  step={0.5} 
-  value={strategyChange} 
-  onValueChange={(val: number) => setStrategyChange(val)} 
-/>
-
+              min={-2} 
+              max={2} 
+              step={0.5} 
+              value={strategyChange} 
+              onValueChange={(val: number) => setStrategyChange(val)} 
+            />
             <p className="text-sm text-gray-500 mt-1">Change: {strategyChange}</p>
           </div>
           <div>
             <Label>Process Change</Label>
             <Slider 
-  min={-2} 
-  max={2} 
-  step={0.5} 
-  value={processChange} onValueChange={(val: number) => setProcessChange(val)} />
+              min={-2} 
+              max={2} 
+              step={0.5} 
+              value={processChange} 
+              onValueChange={(val: number) => setProcessChange(val)} 
+            />
             <p className="text-sm text-gray-500 mt-1">Change: {processChange}</p>
           </div>
           <div>
             <Label>Technology Change</Label>
             <Slider 
-  min={-2} 
-  max={2} 
-  step={0.5} 
-  value={techChange} onValueChange={(val: number) => setTechChange(val)} />
+              min={-2} 
+              max={2} 
+              step={0.5} 
+              value={techChange} 
+              onValueChange={(val: number) => setTechChange(val)} 
+            />
             <p className="text-sm text-gray-500 mt-1">Change: {techChange}</p>
           </div>
         </div>
@@ -108,10 +114,10 @@ export default function SimulatorPanel({
         {/* Inputs */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label className="flex items-center gap-2">
-              Revenue ($)
-              <span className="text-gray-400 text-xs" title="Your current annual revenue">ⓘ</span>
-            </Label>
+            <SectionTitleBar
+              title="Revenue ($)"
+              tooltip="Your current annual revenue"
+            />
             <Input 
               type="number" 
               value={revenue} 
@@ -119,10 +125,10 @@ export default function SimulatorPanel({
             />
           </div>
           <div>
-            <Label className="flex items-center gap-2">
-              Expenses ($)
-              <span className="text-gray-400 text-xs" title="Your current annual operational expenses">ⓘ</span>
-            </Label>
+            <SectionTitleBar
+              title="Expenses ($)"
+              tooltip="Your current annual operational expenses"
+            />
             <Input 
               type="number" 
               value={costs} 
@@ -130,10 +136,10 @@ export default function SimulatorPanel({
             />
           </div>
           <div>
-            <Label className="flex items-center gap-2">
-              Efficiency (%)
-              <span className="text-gray-400 text-xs" title="Your current business efficiency level (0-100%)">ⓘ</span>
-            </Label>
+            <SectionTitleBar
+              title="Efficiency (%)"
+              tooltip="Your current business efficiency level (0-100%)"
+            />
             <Input 
               type="number" 
               value={efficiency} 
