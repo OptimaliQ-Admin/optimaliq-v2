@@ -2,9 +2,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import AnalyzingMessage from "@/components/shared/AnalyzingMessage";
 import {
   ChartBarIcon,
   RocketLaunchIcon,
@@ -22,44 +24,68 @@ const navItems = [
 export default function PremiumSidebar() {
   const { user } = usePremiumUser();
   const [collapsed, setCollapsed] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleNavigation = (href: string) => {
+    // Don't show loading for community page
+    if (href === "/premium/community") {
+      router.push(href);
+      return;
+    }
+    
+    // Show loading overlay for other pages
+    setLoading(true);
+    setTimeout(() => {
+      router.push(href);
+      setLoading(false);
+    }, 3000);
+  };
 
   return (
-    <aside
-      onMouseEnter={() => setCollapsed(false)}
-      onMouseLeave={() => setCollapsed(true)}
-      className={cn(
-        "bg-optimaliq text-white h-screen transition-all duration-300 ease-in-out flex flex-col",
-        collapsed ? "w-16" : "w-64"
+    <>
+      {loading && (
+        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center transition-opacity">
+          <AnalyzingMessage />
+        </div>
       )}
-    >
-      <div className="p-4 flex items-center justify-between">
-        <h2
-          className={cn(
-            "font-bold text-white text-lg transition-opacity duration-200",
-            collapsed && "opacity-0 invisible"
-          )}
-        >
-          OptimaliQ
-        </h2>
-        <Menu className={cn("h-5 w-5 text-white transition-transform duration-200", collapsed && "rotate-90")} />
-      </div>
-
-      <nav className="flex-1 px-2 space-y-2">
-        {navItems.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className="flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
+      <aside
+        onMouseEnter={() => setCollapsed(false)}
+        onMouseLeave={() => setCollapsed(true)}
+        className={cn(
+          "bg-optimaliq text-white h-screen transition-all duration-300 ease-in-out flex flex-col",
+          collapsed ? "w-16" : "w-64"
+        )}
+      >
+        <div className="p-4 flex items-center justify-between">
+          <h2
+            className={cn(
+              "font-bold text-white text-lg transition-opacity duration-200",
+              collapsed && "opacity-0 invisible"
+            )}
           >
-            <span className="mr-3 text-white">{item.icon}</span>
-            <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
-          </a>
-        ))}
-      </nav>
+            OptimaliQ
+          </h2>
+          <Menu className={cn("h-5 w-5 text-white transition-transform duration-200", collapsed && "rotate-90")} />
+        </div>
 
-      <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">
-        {!collapsed && <span>{user?.email || "Logged In"}</span>}
-      </div>
-    </aside>
+        <nav className="flex-1 px-2 space-y-2">
+          {navItems.map((item) => (
+            <button
+              key={item.href}
+              onClick={() => handleNavigation(item.href)}
+              className="w-full flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
+            >
+              <span className="mr-3 text-white">{item.icon}</span>
+              <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">
+          {!collapsed && <span>{user?.email || "Logged In"}</span>}
+        </div>
+      </aside>
+    </>
   );
 }
