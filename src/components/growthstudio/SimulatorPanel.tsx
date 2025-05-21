@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import { Tooltip } from "react-tooltip";
 
 interface SimulationResult {
   revenueImpact: number;
@@ -116,7 +117,14 @@ export default function SimulatorPanel({
           <div>
             <Label className="flex items-center gap-2">
               Revenue ($)
-              <span className="text-gray-400 text-xs" title="Your current annual revenue">ⓘ</span>
+              <span 
+                className="text-gray-400 text-xs cursor-help" 
+                data-tooltip-id="revenue-tooltip"
+                data-tooltip-content="Your current annual revenue"
+              >
+                ⓘ
+              </span>
+              <Tooltip id="revenue-tooltip" />
             </Label>
             <Input 
               type="number" 
@@ -127,7 +135,14 @@ export default function SimulatorPanel({
           <div>
             <Label className="flex items-center gap-2">
               Expenses ($)
-              <span className="text-gray-400 text-xs" title="Your current annual operational expenses">ⓘ</span>
+              <span 
+                className="text-gray-400 text-xs cursor-help" 
+                data-tooltip-id="expenses-tooltip"
+                data-tooltip-content="Your current annual operational expenses"
+              >
+                ⓘ
+              </span>
+              <Tooltip id="expenses-tooltip" />
             </Label>
             <Input 
               type="number" 
@@ -138,7 +153,14 @@ export default function SimulatorPanel({
           <div>
             <Label className="flex items-center gap-2">
               Efficiency (%)
-              <span className="text-gray-400 text-xs" title="Your current business efficiency level (0-100%)">ⓘ</span>
+              <span 
+                className="text-gray-400 text-xs cursor-help" 
+                data-tooltip-id="efficiency-tooltip"
+                data-tooltip-content="Your current business efficiency level (0-100%)"
+              >
+                ⓘ
+              </span>
+              <Tooltip id="efficiency-tooltip" />
             </Label>
             <Input 
               type="number" 
