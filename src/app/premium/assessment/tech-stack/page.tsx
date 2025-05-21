@@ -85,8 +85,6 @@ import { isScore_5Group3Complete } from "./groups/score_5/Group03";
 import Group04 from "./groups/Group04";
 import { isGroup04Complete } from "./groups/Group04";
 
-// Import other score groups as needed...
-
 const validatorSets: Record<string, Record<number, (answers: AssessmentAnswers) => boolean>> = {
   score_1: {
     0: isScore_1Group1Complete,
@@ -141,10 +139,9 @@ const validatorSets: Record<string, Record<number, (answers: AssessmentAnswers) 
     2: isScore_5Group3Complete,
     3: isGroup04Complete,
   },
-  // Add other score validators as needed...
 };
 
-export function normalizeScore(score: number): string {
+function normalizeScore(score: number): keyof typeof validatorSets {
   if (score >= 1 && score <= 1.4) return "score_1";
   if (score >= 1.5 && score <= 1.9) return "score_1_5";
   if (score >= 2 && score <= 2.4) return "score_2";
