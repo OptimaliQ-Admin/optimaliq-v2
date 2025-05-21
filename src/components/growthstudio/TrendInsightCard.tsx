@@ -15,7 +15,7 @@ export default function TrendInsightCard() {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch("/api/tier2/growth_studio/trends");
+        const res = await fetch("/api/growth_studio/trends");
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {

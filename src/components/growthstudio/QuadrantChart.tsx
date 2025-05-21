@@ -39,24 +39,66 @@ interface APIResponse {
 
 export default function QuadrantChart({ userId }: { userId: string }) {
   const [data, setData] = useState<APIResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await fetch("/api/growth_studio/quadrant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ u_id: userId }),
         });
+        
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || "Failed to fetch quadrant data");
+        }
+
         const result = await res.json();
+        
+        if (!result.companies || !result.user) {
+          throw new Error("Invalid data format received");
+        }
+
         setData(result);
       } catch (err) {
         console.error("❌ Failed to load quadrant data:", err);
+        setError(err instanceof Error ? err.message : "Failed to load quadrant data");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
+    if (userId) {
+      fetchData();
+    }
   }, [userId]);
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-[460px] bg-gray-100 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="text-center text-red-600">
+          <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!data) return null;
 
@@ -82,9 +124,9 @@ export default function QuadrantChart({ userId }: { userId: string }) {
   const processValues = allData.map(d => d.process_score);
 
   const minX = Math.floor(Math.min(...strategyValues)) - .2;
-const maxX = Math.ceil(Math.max(...strategyValues)) + .2;
-const minY = Math.floor(Math.min(...processValues)) - .2;
-const maxY = Math.ceil(Math.max(...processValues)) + .2;
+  const maxX = Math.ceil(Math.max(...strategyValues)) + .2;
+  const minY = Math.floor(Math.min(...processValues)) - .2;
+  const maxY = Math.ceil(Math.max(...processValues)) + .2;
 
   const quadrantMidX = 3;
   const quadrantMidY = 3;
@@ -144,11 +186,11 @@ const maxY = Math.ceil(Math.max(...processValues)) + .2;
                 tick={false}
               />
               <ZAxis
-  type="number"
-  dataKey="technology_score"
-  range={[40, 400]}
-  name="Technology Score"
-/>
+                type="number"
+                dataKey="technology_score"
+                range={[40, 400]}
+                name="Technology Score"
+              />
 
               <Tooltip
                 content={({ payload }) => {

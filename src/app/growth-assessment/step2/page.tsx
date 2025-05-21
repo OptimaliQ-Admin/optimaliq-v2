@@ -90,7 +90,7 @@ export default function GrowthAssessmentStep2() {
           <LabeledSelect label="Are your processes optimized for efficiency?" name="process" value={businessResponses.process} onChange={handleChange} options={["Yes", "No"]} />
           <LabeledInput label="How well do you understand your customers' needs?" name="customers" maxLength={250} value={businessResponses.customers} onChange={handleChange} />
           <LabeledSelect label="Is your technology stack supporting your growth?" name="technology" value={businessResponses.technology} onChange={handleChange} options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]} />
-          <SubmitButton isSubmitting={isSubmitting} cooldown={cooldown} />
+          <SubmitButton isSubmitting={isSubmitting} cooldown={cooldown} type="submit" />
         </form>
       </div>
     </div>
