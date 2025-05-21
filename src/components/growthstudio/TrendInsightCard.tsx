@@ -32,9 +32,15 @@ export default function TrendInsightCard() {
     fetchInsight();
   }, []);
 
-  const getLeadIn = (text: string) =>
-    text.split("\n").find((line) => line.toLowerCase().includes("lead in")) ||
-    "Lead-in not found";
+  const getLeadIn = (text: string) => {
+    const lines = text.split("\n");
+    // Skip any lines that start with "Lead in" or "Headline"
+    const firstContentLine = lines.find(line => 
+      !line.toLowerCase().includes("lead in") && 
+      !line.toLowerCase().includes("headline")
+    );
+    return firstContentLine || "No content available";
+  };
 
   const getTopBullets = (text: string) =>
     text
@@ -50,17 +56,17 @@ export default function TrendInsightCard() {
       <>
         <div className="text-sm text-gray-800 leading-relaxed whitespace-pre-line space-y-4 max-h-[70vh] overflow-y-auto">
           {main
-            .replace("Lead in Statement", "🔥 Business Trend Summary:")
-            .replace(/\[Headline.*?\]/g, (match) => `🎯 ${match.replace(/[\[\]]/g, "")}`)
             .split("\n")
+            .filter(line => 
+              !line.toLowerCase().includes("lead in") && 
+              !line.toLowerCase().includes("headline")
+            )
             .map((line, idx) => (
               <p
                 key={idx}
                 className={
                   line.startsWith("•")
                     ? "ml-4 before:content-['•_']"
-                    : line.startsWith("🎯")
-                    ? "font-semibold mt-4"
                     : ""
                 }
               >

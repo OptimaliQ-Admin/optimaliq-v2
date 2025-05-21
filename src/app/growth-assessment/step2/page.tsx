@@ -13,6 +13,7 @@ export default function GrowthAssessmentStep2() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const [userId, setUserId] = useState<string | null>(null);
   const [businessResponses, setBusinessResponses] = useState({
@@ -26,7 +27,7 @@ export default function GrowthAssessmentStep2() {
   useEffect(() => {
     const u_id = localStorage.getItem("u_id");
     if (!u_id) {
-      alert("❌ User session expired. Please start again.");
+      setError("User session expired. Please start again.");
       router.push("/growth-assessment");
       return;
     }
@@ -43,35 +44,59 @@ export default function GrowthAssessmentStep2() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setBusinessResponses({ ...businessResponses, [e.target.name]: e.target.value });
+    setError(null); // Clear any previous errors when user makes changes
+  };
+
+  const validateForm = () => {
+    const requiredFields = ["obstacles", "strategy", "process", "customers", "technology"];
+    const missingFields = requiredFields.filter(field => !businessResponses[field as keyof typeof businessResponses]);
+    
+    if (missingFields.length > 0) {
+      setError(`Please fill in all required fields: ${missingFields.join(", ")}`);
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
 
     if (!userId) {
-      alert("❌ User ID is missing. Please start again.");
+      setError("User ID is missing. Please start again.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!validateForm()) {
+      setIsSubmitting(false);
       return;
     }
 
     try {
-      const { error } = await supabase.from("growth_assessment").upsert(
-        [
-          {
-            u_id: userId,
-            ...businessResponses,
-            submittedat: new Date().toISOString(),
-          },
-        ],
-        { onConflict: "u_id" }
-      );
+      const { error: upsertError } = await supabase
+        .from("growth_assessment")
+        .upsert(
+          [
+            {
+              u_id: userId,
+              ...businessResponses,
+              submittedat: new Date().toISOString(),
+            },
+          ],
+          { onConflict: "u_id" }
+        );
 
-      if (error) {
-        alert(`❌ Failed to save responses. ${error.message}`);
+      if (upsertError) {
+        console.error("Failed to save responses:", upsertError);
+        setError(`Failed to save responses: ${upsertError.message}`);
       } else {
         router.push("/growth-assessment/step3");
       }
-    } catch {
-      alert("❌ Unexpected error. Please try again.");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
       setCooldown(10);
@@ -84,12 +109,48 @@ export default function GrowthAssessmentStep2() {
         <p className="text-blue-600 text-sm font-bold mb-4 text-center">Step 2 of 2 – Business Profile</p>
         <FormSectionHeader />
 
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <LabeledInput label="What are your biggest obstacles to scaling?" name="obstacles" maxLength={250} value={businessResponses.obstacles} onChange={handleChange} />
-          <LabeledInput label="How does your strategy differentiate you?" name="strategy" maxLength={250} value={businessResponses.strategy} onChange={handleChange} />
-          <LabeledSelect label="Are your processes optimized for efficiency?" name="process" value={businessResponses.process} onChange={handleChange} options={["Yes", "No"]} />
-          <LabeledInput label="How well do you understand your customers' needs?" name="customers" maxLength={250} value={businessResponses.customers} onChange={handleChange} />
-          <LabeledSelect label="Is your technology stack supporting your growth?" name="technology" value={businessResponses.technology} onChange={handleChange} options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]} />
+          <LabeledInput 
+            label="What are your biggest obstacles to scaling?" 
+            name="obstacles" 
+            maxLength={250} 
+            value={businessResponses.obstacles} 
+            onChange={handleChange}
+          />
+          <LabeledInput 
+            label="How does your strategy differentiate you?" 
+            name="strategy" 
+            maxLength={250} 
+            value={businessResponses.strategy} 
+            onChange={handleChange}
+          />
+          <LabeledSelect 
+            label="Are your processes optimized for efficiency?" 
+            name="process" 
+            value={businessResponses.process} 
+            onChange={handleChange} 
+            options={["Yes", "No"]}
+          />
+          <LabeledInput 
+            label="How well do you understand your customers' needs?" 
+            name="customers" 
+            maxLength={250} 
+            value={businessResponses.customers} 
+            onChange={handleChange}
+          />
+          <LabeledSelect 
+            label="Is your technology stack supporting your growth?" 
+            name="technology" 
+            value={businessResponses.technology} 
+            onChange={handleChange} 
+            options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]}
+          />
           <SubmitButton isSubmitting={isSubmitting} cooldown={cooldown} type="submit" />
         </form>
       </div>
