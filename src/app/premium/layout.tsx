@@ -6,14 +6,21 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import PremiumSidebar from "@/components/layout/PremiumSidebar";
 import PremiumHeader from "@/components/layout/PremiumHeader";
 import { RouteLoadingProvider } from "@/context/RouteLoadingContext";
+import InsightLoading from "@/components/dashboard/InsightLoading";
 
 export default function PremiumLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = usePremiumUser();
+  const { user, isUserLoaded } = usePremiumUser();
 
+  // Show loading screen while user data is being loaded
+  if (!isUserLoaded) {
+    return <InsightLoading />;
+  }
+
+  // Only show login message after we've confirmed user data is loaded
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
