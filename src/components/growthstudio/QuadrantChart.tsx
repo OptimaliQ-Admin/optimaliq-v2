@@ -150,7 +150,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         </p>
       </div>
 
-      <div className="relative flex justify-center pt-12 pb-16">
+      <div className="relative w-full h-[520px] pt-12 pb-16">
         {/* Quadrant Labels with Icons */}
         <div className="absolute top-8 left-8 text-[15px] font-semibold text-blue-700 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -169,8 +169,8 @@ export default function QuadrantChart({ userId }: { userId: string }) {
           Efficient Executors
         </div>
 
-        <div>
-          <ResponsiveContainer width="100%" height={520}>
+        <div className="w-full h-full">
+          <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 40, bottom: 20, left: 30 }}>
               {/* Soft quadrant backgrounds with gradients */}
               <defs>

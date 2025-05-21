@@ -10,6 +10,7 @@ import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
 import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import QuadrantChart from "@/components/growthstudio/QuadrantChart";
+import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 
 function GrowthStudioComponent() {
   const { user } = usePremiumUser();
@@ -67,6 +68,10 @@ function GrowthStudioComponent() {
             <p className="text-sm text-gray-600">This section will help you identify specific levers to pull based on your scores.</p>
             <p className="text-sm text-gray-400 mt-1 italic">Coming soon...</p>
           </div>
+        </div>
+
+        <div className="mt-6">
+          <GrowthLeversCard />
         </div>
 
         <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
