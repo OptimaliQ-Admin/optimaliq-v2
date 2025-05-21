@@ -12,6 +12,7 @@ import {
 import { stripUnusedOtherFields } from "@/lib/utils/assessmentUtils";
 import { AnimatePresence, motion } from "framer-motion";
 import ProgressBar from "@/components/shared/ProgressBar";
+import StepGroupRenderer from "./StepGroupRenderer";
 
 // Score 1.0 Group
 import Score1_Step01 from "./groups/score_1/Group01";
