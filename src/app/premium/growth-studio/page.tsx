@@ -1,7 +1,7 @@
 //src/app/premium/growth-studio/page.tsx
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 
@@ -13,7 +13,7 @@ import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
-function GrowthStudioComponent() {
+export default function GrowthStudioComponent() {
   const { user } = usePremiumUser();
   const email = user?.email;
   const userId = user?.u_id;
@@ -102,13 +102,5 @@ function GrowthStudioComponent() {
         </Dialog>
       </div>
     </div>
-  );
-}
-
-export default function GrowthStudioPage() {
-  return (
-    <Suspense fallback={<p>Loading Growth Studio...</p>}>
-      <GrowthStudioComponent />
-    </Suspense>
   );
 }

@@ -5,7 +5,6 @@
 import { useEffect, useState } from "react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import axios from "axios";
-import InsightLoading from "@/components/dashboard/InsightLoading";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
@@ -23,7 +22,6 @@ export default function PremiumDashboardPage() {
   const { user } = usePremiumUser();
   const u_id = user?.u_id;
 
-  const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
   const [showWelcome, setShowWelcome] = useState(true);
@@ -44,8 +42,6 @@ export default function PremiumDashboardPage() {
       } catch (err) {
         console.error("Error fetching insights:", err);
         setError("Unable to fetch dashboard insights.");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -86,7 +82,7 @@ export default function PremiumDashboardPage() {
     }
   };
 
-  if (!u_id || loading) return <InsightLoading />;
+  if (!u_id) return null;
   if (error) return <p className="text-center text-red-600 p-10">{error}</p>;
   if (!insights) return null;
 
