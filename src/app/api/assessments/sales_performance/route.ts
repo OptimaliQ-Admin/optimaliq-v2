@@ -4,20 +4,20 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import salesScoringMap from "../data/sales_scoring_map.json";
+import salesScoringMap from "@/lib/scoring/sales_scoring_map.json";
 
 const scoringMap = salesScoringMap as ScoringMap;
 
 function getBracket(score: number): keyof ScoringMap {
-  if (score >= 1 && score <= 1.4) return "score_1_1_4";
-  if (score >= 1.5 && score <= 1.9) return "score_1_5_1_9";
-  if (score >= 2 && score <= 2.4) return "score_2_0_2_4";
-  if (score >= 2.5 && score <= 2.9) return "score_2_5_2_9";
-  if (score >= 3 && score <= 3.4) return "score_3_3_4";
-  if (score >= 3.5 && score <= 3.9) return "score_3_5_3_9";
-  if (score >= 4 && score <= 4.4) return "score_4_4_4";
-  if (score >= 4.5 && score <= 4.9) return "score_4_5_4_9";
-  return "score_5_0";
+  if (score >= 1 && score <= 1.4) return "score_1";
+  if (score >= 1.5 && score <= 1.9) return "score_1_5";
+  if (score >= 2 && score <= 2.4) return "score_2";
+  if (score >= 2.5 && score <= 2.9) return "score_2_5";
+  if (score >= 3 && score <= 3.4) return "score_3";
+  if (score >= 3.5 && score <= 3.9) return "score_3_5";
+  if (score >= 4 && score <= 4.4) return "score_4";
+  if (score >= 4.5 && score <= 4.9) return "score_4_5";
+  return "score_5";
 }
 
 export async function POST(request: Request) {

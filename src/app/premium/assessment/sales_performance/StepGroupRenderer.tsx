@@ -109,7 +109,7 @@ export default function StepGroupRenderer({ step, score, answers, onAnswer }: Pr
 }
 
 export function normalizeScore(score: number): string {
-  if(score >= 1 && score <= 1.4) return "score_1";
+  if (score >= 1 && score <= 1.4) return "score_1";
   if (score >= 1.5 && score <= 1.9) return "score_1_5";
   if (score >= 2 && score <= 2.4) return "score_2";
   if (score >= 2.5 && score <= 2.9) return "score_2_5";

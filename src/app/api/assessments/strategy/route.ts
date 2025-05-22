@@ -3,9 +3,9 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import techStackScoringMap from "@/lib/scoring/tech_stack_scoring_map.json";
+import strategyScoringMap from "../data/strategy_scoring_map.json";
 
-const scoringMap = techStackScoringMap as ScoringMap;
+const scoringMap = strategyScoringMap as ScoringMap;
 
 function getBracket(score: number): keyof ScoringMap {
   if (score >= 1 && score <= 1.4) return "score_1";
@@ -65,65 +65,12 @@ export async function POST(request: Request) {
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Upsert into tech_stack_assessment table
+    // Upsert into strategy_assessment table
     const { error: assessmentError } = await supabase
-      .from("tech_stack_assessment")
+      .from("strategy_assessment")
       .upsert({
         u_id: userId,
-        // Score 1.0 questions
-        tech_infrastructure: answers.tech_infrastructure,
-        data_management: answers.data_management,
-        integration_status: answers.integration_status,
-        automation_level: answers.automation_level,
-        platform_adoption: answers.platform_adoption,
-        workflow_efficiency: answers.workflow_efficiency,
-        ai_adoption_score_1: answers.ai_adoption_score_1,
-        tech_scalability_score_1: answers.tech_scalability_score_1,
-        future_readiness_score_1: answers.future_readiness_score_1,
-        // Score 1.5 questions
-        tech_architecture: answers.tech_architecture,
-        data_governance: answers.data_governance,
-        system_reliability: answers.system_reliability,
-        innovation_capability: answers.innovation_capability,
-        scalability_planning: answers.scalability_planning,
-        future_tech_strategy: answers.future_tech_strategy,
-        // Score 2.0 questions
-        enterprise_architecture: answers.enterprise_architecture,
-        data_ecosystem: answers.data_ecosystem,
-        system_resilience: answers.system_resilience,
-        // Score 2.5 questions
-        digital_transformation: answers.digital_transformation,
-        cloud_maturity: answers.cloud_maturity,
-        tech_modernization: answers.tech_modernization,
-        // Score 3.0 questions
-        microservices: answers.microservices,
-        data_lake: answers.data_lake,
-        security_architecture: answers.security_architecture,
-        // Score 3.5 questions
-        ai_infrastructure: answers.ai_infrastructure,
-        ml_platform: answers.ml_platform,
-        data_pipeline: answers.data_pipeline,
-        ai_adoption_score_3_5: answers.ai_adoption_score_3_5,
-        tech_scalability_score_3_5: answers.tech_scalability_score_3_5,
-        future_readiness_score_3_5: answers.future_readiness_score_3_5,
-        // Score 4.0 questions
-        analytics_platform: answers.analytics_platform,
-        data_warehouse: answers.data_warehouse,
-        real_time_analytics: answers.real_time_analytics,
-        // Score 4.5 questions
-        innovation_platform: answers.innovation_platform,
-        emerging_tech: answers.emerging_tech,
-        research_dev: answers.research_dev,
-        // Score 5.0 questions
-        autonomous_infrastructure: answers.autonomous_infrastructure,
-        self_learning_systems: answers.self_learning_systems,
-        adaptive_architecture: answers.adaptive_architecture,
-        // Tools questions
-        crm_tools: answers.crm_tools,
-        esp_tools: answers.esp_tools,
-        analytics_tools: answers.analytics_tools,
-        cms_tools: answers.cms_tools,
-        // Metadata
+        ...answers,
         score: normalizedScore,
         created_at: new Date().toISOString()
       }, {
@@ -138,9 +85,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Insert into score_tech_stack table
+    // Insert into score_strategy table
     const { error: scoreError } = await supabase
-      .from("score_tech_stack")
+      .from("score_strategy")
       .insert({
         u_id: userId,
         gmf_score: score,
@@ -163,8 +110,8 @@ export async function POST(request: Request) {
       .from("tier2_profiles")
       .upsert({
         u_id: userId,
-        tech_stack_score: normalizedScore,
-        tech_stack_last_taken: new Date().toISOString(),
+        strategy_score: normalizedScore,
+        strategy_last_taken: new Date().toISOString(),
       }, {
         onConflict: "u_id"
       });
@@ -177,7 +124,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ techStackScore: normalizedScore });
+    return NextResponse.json({ strategyScore: normalizedScore });
   } catch (error) {
     console.error("Error processing assessment:", error);
     return NextResponse.json(

@@ -1,0 +1,732 @@
+{
+  "score_1": {
+    "how_b5d8e7": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Referrals and word of mouth": 1,
+        "Occasional outreach or events": 2,
+        "Website or social media inquiries": 3,
+        "We don't have a consistent method": 4
+      }
+    },
+    "do_b7cc0a": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No process - each sale is different": 1,
+        "We follow a loose outline": 2,
+        "We have a few key steps we try to follow": 3,
+        "Yes - we use a defined process from lead to close": 4
+      }
+    },
+    "how_fee95e": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't track it": 1,
+        "Manually in a spreadsheet": 2,
+        "In a basic CRM (e.g. HubSpot, Salesforce)": 3,
+        "In a structured system with deal stages and forecasts": 4
+      }
+    },
+    "who_5d9558": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "The founder or owner": 1,
+        "One salesperson": 2,
+        "A small team": 3,
+        "A dedicated structured sales department": 4
+      }
+    },
+    "how_454fc5": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Inconsistently or not at all": 1,
+        "We try but sometimes forget": 2,
+        "We have a basic reminder system": 3,
+        "We have automated or scheduled follow ups": 4
+      }
+    },
+    "which_01150c": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We talk to anyone interested": 1,
+        "We ask a few questions during discovery": 2,
+        "We use basic criteria (e.g. budget, need)": 3,
+        "We follow a lead scoring or qualification framework": 4
+      }
+    },
+    "which_6a5924": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Lead sources": 1,
+        "Deal stage conversion rates": 2,
+        "Time to close": 3,
+        "Win/loss reasons": 4,
+        "Sales activity (calls, emails)": 5
+      }
+    },
+    "how_142ca2": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We make up pricing as we go": 1,
+        "We have a price list or one pager": 2,
+        "We use a templated proposal or quote": 3,
+        "We tailor pricing with a defined structure": 4
+      }
+    }
+  },
+  "score_1_5": {
+    "how_2c42b7": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Leads are unassigned or handled ad hoc": 1,
+        "They're assigned manually by the owner/leader": 2,
+        "Each rep manages their own leads independently": 3,
+        "Leads are routed based on role, territory, or fit": 4
+      }
+    },
+    "how_79028c": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not confident at all": 1,
+        "Somewhat - we have rough ideas": 2,
+        "Mostly - we track some metrics": 3,
+        "Very confident - we forecast based on deal data": 4
+      }
+    },
+    "what_dcd0de": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "CRM (HubSpot, Salesforce, etc.)": 1,
+        "Spreadsheets or Google Sheets": 2,
+        "Task or project tools (Asana, Trello)": 3,
+        "Calendar/email integrations": 4,
+        "Automated follow-up or cadence tools": 5
+      }
+    },
+    "how_47b050": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Rarely, only when needed": 1,
+        "Occasionally when checking progress": 2,
+        "Weekly": 3,
+        "Daily or during structured reviews": 4
+      }
+    },
+    "how_12d26c": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Very informal, we go with gut feel": 1,
+        "We ask some basic qualifying questions": 2,
+        "We use a checklist or structured discovery": 3,
+        "We use a formal framework (e.g. MEDDIC, BANT)": 4
+      }
+    },
+    "how_1f869b": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We skip or rush through stages": 1,
+        "We loosely follow a set of steps": 2,
+        "We track movement but not always accurately": 3,
+        "We move deals methodically through stages": 4
+      }
+    },
+    "which_4b594c": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Leads go cold": 1,
+        "Prospects ghost after demos": 2,
+        "Proposals get stuck": 3,
+        "Pricing objections": 4,
+        "Internal delays or handoffs": 5
+      }
+    },
+    "how_c8eb2a": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't follow up": 1,
+        "We manually reach out when we remember": 2,
+        "We schedule follow ups": 3,
+        "We place them into nurture or remarketing flows": 4
+      }
+    }
+  },
+  "score_2": {
+    "how_64a8d1": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not defined": 1,
+        "Some stages are loosely defined": 2,
+        "Defined, but not consistently used": 3,
+        "Clearly documented and used for tracking": 4
+      }
+    },
+    "how_7d8dcb": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not accurate at all": 1,
+        "Somewhat accurate": 2,
+        "Mostly accurate, with occasional cleanups": 3,
+        "Very accurate and regularly maintained": 4
+      }
+    },
+    "how_0fa447": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We work whatever is most recent": 1,
+        "We prioritize based on gut feel": 2,
+        "We prioritize based on deal size or engagement": 3,
+        "We use scoring or qualification criteria": 4
+      }
+    },
+    "how_a76658": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't track follow-ups well": 1,
+        "We rely on calendar or reminders": 2,
+        "We have tasks inside our CRM": 3,
+        "We use automation or sequences to manage follow-ups": 4
+      }
+    },
+    "which_045862": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Regular pipeline reviews": 1,
+        "Forecasting reports": 2,
+        "Deal stage conversion tracking": 3,
+        "Sales enablement content": 4,
+        "Performance dashboards": 5
+      }
+    },
+    "how_5589a0": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We wing it": 1,
+        "We glance at past notes or emails": 2,
+        "We follow a checklist or sales script": 3,
+        "We prep with research, context, and a discovery framework": 4
+      }
+    },
+    "how_92a11d": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Rarely": 1,
+        "Only for big deals": 2,
+        "Most calls are noted in the CRM": 3,
+        "Every interaction is logged and searchable": 4
+      }
+    },
+    "how_1e24f7": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't really have a handoff": 1,
+        "It's inconsistent": 2,
+        "It's mostly smooth, but has gaps": 3,
+        "It's standardized and clearly defined": 4
+      }
+    }
+  },
+  "score_2_5": {
+    "how_b5793e": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No one tracks them": 1,
+        "They're tracked in emails or notes": 2,
+        "We track them in a spreadsheet or tool": 3,
+        "We use a CRM that guides next steps": 4
+      }
+    },
+    "how_140f94": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't have targets": 1,
+        "Each rep tracks their own goals": 2,
+        "We set goals but don't review them often": 3,
+        "We track and review goals regularly": 4
+      }
+    },
+    "how_3a6376": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No reporting": 1,
+        "We have basic reports": 2,
+        "We track key metrics weekly": 3,
+        "We have real-time dashboards": 4
+      }
+    },
+    "how_4cd27c": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We react to issues after they occur": 1,
+        "We review metrics weekly": 2,
+        "We proactively adjust based on data": 3,
+        "We run forecasts and modeling": 4
+      }
+    },
+    "how_68cbdb": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "We don't have a pipeline review": 1,
+        "We review as needed": 2,
+        "We do regular reviews with leads": 3,
+        "We have structured weekly pipeline reviews": 4
+      }
+    },
+    "how_a4d10a": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Call recordings": 1,
+        "CRM notes": 2,
+        "Slack or chat messages": 3,
+        "Deal review meetings": 4,
+        "Rep feedback": 5
+      }
+    }
+  },
+  "score_3": {
+    "how_ed3928": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not tracked": 1,
+        "Review aging": 2,
+        "Track by stage": 3,
+        "Optimize with reports": 4
+      }
+    },
+    "what_84c5f2": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "All different": 1,
+        "Basic following": 2,
+        "Trained": 3,
+        "Standardized": 4
+      }
+    },
+    "which_e20c5f": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Pipeline coverage": 1,
+        "Deal velocity": 2,
+        "Conversion by stage": 3,
+        "Call to meeting": 4,
+        "Forecast accuracy": 5,
+        "Rep capacity": 6
+      }
+    },
+    "how_dcff82": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Manual": 1,
+        "Rep updates": 2,
+        "Manager audit": 3,
+        "Automation": 4
+      }
+    },
+    "how_9d44c5": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Revenue only": 1,
+        "Quota attainment": 2,
+        "Multi-KPI": 3,
+        "Insights": 4
+      }
+    },
+    "what_cdbbe6": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Ad hoc": 1,
+        "Weekly check-ins": 2,
+        "Structured reviews": 3,
+        "Combo": 4
+      }
+    },
+    "how_3d4d34": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No playbook": 1,
+        "Onboarding only": 2,
+        "Semi-annual": 3,
+        "Continuous": 4
+      }
+    },
+    "how_1d7838": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not aligned": 1,
+        "Some alignment": 2,
+        "Shared goals": 3,
+        "Fully integrated": 4
+      }
+    },
+    "how_de0081": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not ready": 1,
+        "Somewhat ready": 2,
+        "Mostly ready": 3,
+        "Very ready": 4
+      }
+    }
+  },
+  "score_3_5": {
+    "how_fe4a96": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Shared docs": 1,
+        "Occasional training": 2,
+        "Structured quarterly": 3,
+        "Ongoing enablement": 4
+      }
+    },
+    "which_d1a7ce": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Win/loss": 1,
+        "Stage conversion": 2,
+        "Forecast accuracy": 3,
+        "Deal quality": 4,
+        "Rep coaching": 5
+      }
+    },
+    "how_05b3d7": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Too late": 1,
+        "Manual monitoring": 2,
+        "Dashboards": 3,
+        "Modeled by stage": 4
+      }
+    },
+    "how_5d49b3": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Gut": 1,
+        "Call history": 2,
+        "Lead fit": 3,
+        "Multi-factor": 4
+      }
+    },
+    "how_b650ca": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not shared": 1,
+        "Tips informal": 2,
+        "Best practice reviews": 3,
+        "Documented and trained": 4
+      }
+    },
+    "how_152df3": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Occasionally": 1,
+        "Monthly": 2,
+        "Weekly": 3,
+        "Operating cadence": 4
+      }
+    },
+    "what_fed657": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Spreadsheets": 1,
+        "CRM dashboards": 2,
+        "Call review": 3,
+        "Coaching platforms": 4,
+        "Sales scorecards": 5
+      }
+    },
+    "how_8e4ef6": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not confident": 1,
+        "Somewhat": 2,
+        "Confident": 3,
+        "Very confident": 4
+      }
+    }
+  },
+  "score_4": {
+    "how_ed3928": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not used": 1,
+        "Shared with leadership": 2,
+        "Reviewed in ops": 3,
+        "Integrated planning": 4
+      }
+    },
+    "which_549cbb": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Lead routing": 1,
+        "Follow-ups": 2,
+        "Proposal creation": 3,
+        "Handoff": 4,
+        "Forecast rollups": 5
+      }
+    },
+    "how_671b3b": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Wait until obvious": 1,
+        "Manual review": 2,
+        "Dashboards and KPIs": 3,
+        "Auto detection": 4
+      }
+    },
+    "how_27f529": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Uncoordinated": 1,
+        "Reviewed occasionally": 2,
+        "Partially aligned": 3,
+        "Fully aligned": 4
+      }
+    },
+    "how_0f6cf0": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not strategic": 1,
+        "Feedback in meetings": 2,
+        "Quarterly review": 3,
+        "Core driver": 4
+      }
+    },
+    "whats_b04f69": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Set goals and hope": 1,
+        "Top down": 2,
+        "Bottom up": 3,
+        "Full cycle": 4
+      }
+    },
+    "how_03fce6": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Rarely": 1,
+        "Retros": 2,
+        "Monthly leadership": 3,
+        "Shared across org": 4
+      }
+    },
+    "how_4633fe": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No model": 1,
+        "Rough model": 2,
+        "Defined model": 3,
+        "Dynamic modeling": 4
+      }
+    }
+  },
+  "score_4_5": {
+    "how_70b7b8": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not monitored": 1,
+        "Manager check-ins": 2,
+        "Quarterly reviews": 3,
+        "Monthly models": 4
+      }
+    },
+    "which_117dee": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "Pipeline velocity": 1,
+        "Deal slippage": 2,
+        "Predictive close": 3,
+        "Revenue per activity": 4,
+        "Cycle benchmarking": 5
+      }
+    },
+    "how_15ad3d": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "No evolution": 1,
+        "Occasional testing": 2,
+        "Pilot segments": 3,
+        "Strategic experimentation": 4
+      }
+    },
+    "how_7e00a0": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not tracked": 1,
+        "Individual perf": 2,
+        "Scorecards": 3,
+        "Patterns and outcomes": 4
+      }
+    },
+    "whats_2e8609": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Rarely change": 1,
+        "Informal adjustments": 2,
+        "Quarterly review": 3,
+        "Dynamic modeling": 4
+      }
+    },
+    "what_ada360": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Top line only": 1,
+        "Conversion rates": 2,
+        "Forecast and coverage": 3,
+        "Full cycle": 4
+      }
+    },
+    "how_229086": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Ad hoc feedback": 1,
+        "Monthly training": 2,
+        "Structured plans": 3,
+        "KPI-tied enablement": 4
+      }
+    },
+    "how_a07904": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not confident": 1,
+        "Somewhat": 2,
+        "Mostly": 3,
+        "Very confident": 4
+      }
+    }
+  },
+  "score_5": {
+    "how_68025d": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not involved": 1,
+        "Market insights": 2,
+        "GTM collaboration": 3,
+        "Co-owns innovation": 4
+      }
+    },
+    "which_68025d": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "AI forecasting": 1,
+        "Buyer intent": 2,
+        "Real-time coaching": 3,
+        "Adaptive territory": 4,
+        "Predictive modeling": 5
+      }
+    },
+    "how_e9af60": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Performance only": 1,
+        "Informal learning": 2,
+        "Growth supported": 3,
+        "Learning norm": 4
+      }
+    },
+    "how_faf5c1": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Not tracked": 1,
+        "Review notes": 2,
+        "Analyze trends": 3,
+        "Operationalized": 4
+      }
+    },
+    "how_4e7ac1": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Launch and hope": 1,
+        "Test pilots": 2,
+        "Strategic sprints": 3,
+        "Predictive modeling": 4
+      }
+    },
+    "how_1d2529": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Activity only": 1,
+        "Visibility reminders": 2,
+        "Guided actions": 3,
+        "Intelligent copilot": 4
+      }
+    },
+    "whats_719868": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "Focused now": 1,
+        "Slow action": 2,
+        "Exploring models": 3,
+        "Reinventing proactively": 4
+      }
+    }
+  }
+} 

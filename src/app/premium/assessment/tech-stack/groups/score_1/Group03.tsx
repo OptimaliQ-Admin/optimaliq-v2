@@ -15,9 +15,9 @@ type Props = {
 
 export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["ai_adoption"] === "string" &&
-    typeof answers["tech_scalability"] === "string" &&
-    typeof answers["future_readiness"] === "string"
+    typeof answers["ai_adoption_score_1"] === "string" &&
+    typeof answers["tech_scalability_score_1"] === "string" &&
+    typeof answers["future_readiness_score_1"] === "string"
   );
 }
 
@@ -32,8 +32,8 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "implementing", label: "Implementing — piloting some solutions" },
           { value: "mature", label: "Mature — actively using AI/ML in operations" },
         ]}
-        value={getStringAnswer(answers["ai_adoption"])}
-        onChange={(val) => onAnswer("ai_adoption", val)}
+        value={getStringAnswer(answers["ai_adoption_score_1"])}
+        onChange={(val) => onAnswer("ai_adoption_score_1", val)}
       />
 
       <MultipleChoiceQuestion
@@ -44,8 +44,8 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "moderate", label: "Moderate — scales with some effort" },
           { value: "highly", label: "Highly scalable — built for growth" },
         ]}
-        value={getStringAnswer(answers["tech_scalability"])}
-        onChange={(val) => onAnswer("tech_scalability", val)}
+        value={getStringAnswer(answers["tech_scalability_score_1"])}
+        onChange={(val) => onAnswer("tech_scalability_score_1", val)}
       />
 
       <MultipleChoiceQuestion
@@ -56,8 +56,8 @@ export default function Score1_Step03({ answers, onAnswer }: Props) {
           { value: "well", label: "Well prepared — regular future planning" },
           { value: "very", label: "Very prepared — actively investing in future tech" },
         ]}
-        value={getStringAnswer(answers["future_readiness"])}
-        onChange={(val) => onAnswer("future_readiness", val)}
+        value={getStringAnswer(answers["future_readiness_score_1"])}
+        onChange={(val) => onAnswer("future_readiness_score_1", val)}
       />
     </div>
   );

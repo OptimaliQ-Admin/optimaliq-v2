@@ -9,13 +9,13 @@ import AssessmentIntroModal from "./AssessmentIntroModal";
 const salesDescriptions: Record<number, string> = {
   1: "Sales efforts are reactive with minimal structure. Establishing clear pipeline stages and priorities is key.",
   1.5: "Some sales structure exists, but processes are still inconsistent.",
-  2: "You’ve begun formalizing your pipeline, but deal tracking and follow-ups need work.",
+  2: "You've begun formalizing your pipeline, but deal tracking and follow-ups need work.",
   2.5: "Progress made—your sales workflow is evolving but lacks full consistency.",
   3: "Sales systems are mostly reliable; now focus on refining data accuracy and team alignment.",
-  3.5: "Strong pipeline hygiene and rhythm. You’re close to a high-performing sales engine.",
+  3.5: "Strong pipeline hygiene and rhythm. You're close to a high-performing sales engine.",
   4: "Well-defined, consistent, and effective sales process. Time to scale and optimize further.",
   4.5: "Advanced sales operations. Focus now on predictive insights and automation.",
-  5: "World-class sales performance. You’re ready to lead in forecasting, conversion, and sales enablement."
+  5: "World-class sales performance. You're ready to lead in forecasting, conversion, and sales enablement."
 };
 
 type Props = {

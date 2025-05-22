@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 import AssessmentIntroModal from "./AssessmentIntroModal";
 
 const TechDescriptions: Record<number, string> = {
-  1: "Your business is operating in a very reactive way. There’s a strong need for defined processes.",
+  1: "Your business is operating in a very reactive way. There's a strong need for defined processes.",
   1.5: "Some structure exists, but it's inconsistent and mostly ad hoc.",
-  2: "You’re making progress toward defined processes but lack scalability.",
-  2.5: "You’ve got some structure, but there’s room to formalize processes further.",
+  2: "You're making progress toward defined processes but lack scalability.",
+  2.5: "You've got some structure, but there's room to formalize processes further.",
   3: "Your operations are stable and somewhat consistent — keep optimizing.",
-  3.5: "You’re approaching operational excellence with scalable workflows.",
+  3.5: "You're approaching operational excellence with scalable workflows.",
   4: "You have strong process maturity — focus now on innovation.",
-  4.5: "You’re advanced — lean into automation and continuous improvement.",
+  4.5: "You're advanced — lean into automation and continuous improvement.",
   5: "Your BPM capabilities are world-class. Use them to drive competitive advantage."
 };
 
@@ -23,7 +23,7 @@ type Props = {
   userId: string;
 };
 
-export default function BPMCard({ score, lastTakenDate, userId }: Props) {
+export default function TechCard({ score, lastTakenDate, userId }: Props) {
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
 

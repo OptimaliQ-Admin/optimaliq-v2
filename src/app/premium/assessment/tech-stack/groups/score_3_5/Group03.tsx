@@ -15,9 +15,9 @@ type Props = {
 
 export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["intelligent_systems"] === "string" &&
-    typeof answers["ai_automation"] === "string" &&
-    typeof answers["cognitive_services"] === "string"
+    typeof answers["ai_adoption_score_3_5"] === "string" &&
+    typeof answers["tech_scalability_score_3_5"] === "string" &&
+    typeof answers["future_readiness_score_3_5"] === "string"
   );
 }
 
@@ -25,39 +25,39 @@ export default function Score3_5_Step03({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-8">
       <MultipleChoiceQuestion
-        question="How do you implement intelligent systems?"
+        question="How mature is your AI/ML adoption?"
         options={[
-          { value: "basic", label: "Basic — rule-based systems" },
-          { value: "learning", label: "Learning — adaptive systems" },
-          { value: "intelligent", label: "Intelligent — cognitive systems" },
-          { value: "autonomous", label: "Autonomous — self-learning systems" },
+          { value: "none", label: "None — not using AI/ML technologies" },
+          { value: "exploring", label: "Exploring — evaluating potential use cases" },
+          { value: "implementing", label: "Implementing — piloting some solutions" },
+          { value: "mature", label: "Mature — actively using AI/ML in operations" },
         ]}
-        value={getStringAnswer(answers["intelligent_systems"])}
-        onChange={(val) => onAnswer("intelligent_systems", val)}
+        value={getStringAnswer(answers["ai_adoption_score_3_5"])}
+        onChange={(val) => onAnswer("ai_adoption_score_3_5", val)}
       />
 
       <MultipleChoiceQuestion
-        question="How do you use AI for automation?"
+        question="How scalable is your current technology infrastructure?"
         options={[
-          { value: "manual", label: "Manual — basic automation" },
-          { value: "automated", label: "Automated — task automation" },
-          { value: "intelligent", label: "Intelligent — process automation" },
-          { value: "autonomous", label: "Autonomous — end-to-end automation" },
+          { value: "not_scalable", label: "Not scalable — struggles with growth" },
+          { value: "limited", label: "Limited — can handle some growth" },
+          { value: "moderate", label: "Moderate — scales with some effort" },
+          { value: "highly", label: "Highly scalable — built for growth" },
         ]}
-        value={getStringAnswer(answers["ai_automation"])}
-        onChange={(val) => onAnswer("ai_automation", val)}
+        value={getStringAnswer(answers["tech_scalability_score_3_5"])}
+        onChange={(val) => onAnswer("tech_scalability_score_3_5", val)}
       />
 
       <MultipleChoiceQuestion
-        question="How do you leverage cognitive services?"
+        question="How prepared is your tech stack for future needs?"
         options={[
-          { value: "none", label: "None — no cognitive services" },
-          { value: "basic", label: "Basic — essential services" },
-          { value: "integrated", label: "Integrated — multiple services" },
-          { value: "advanced", label: "Advanced — custom cognitive services" },
+          { value: "not_prepared", label: "Not prepared — focused on current needs only" },
+          { value: "somewhat", label: "Somewhat — basic future planning" },
+          { value: "well", label: "Well prepared — regular future planning" },
+          { value: "very", label: "Very prepared — actively investing in future tech" },
         ]}
-        value={getStringAnswer(answers["cognitive_services"])}
-        onChange={(val) => onAnswer("cognitive_services", val)}
+        value={getStringAnswer(answers["future_readiness_score_3_5"])}
+        onChange={(val) => onAnswer("future_readiness_score_3_5", val)}
       />
     </div>
   );
