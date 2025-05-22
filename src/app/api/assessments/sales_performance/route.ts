@@ -4,9 +4,10 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import salesScoringMap from "@/lib/scoring/sales_scoring_map.json";
+import salesPerformanceScoringMap from "../data/sales_performance_scoring_map.json";
+import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
-const scoringMap = salesScoringMap as ScoringMap;
+const scoringMap = salesPerformanceScoringMap as ScoringMap;
 
 function getBracket(score: number): keyof ScoringMap {
   if (score >= 1 && score <= 1.4) return "score_1";
@@ -24,21 +25,25 @@ export async function POST(request: Request) {
   try {
     const { answers, score, userId } = await request.json();
 
+    // Log incoming request data
+    logAssessmentInput('sales_performance', { userId, score, answers });
+
     if (!answers || !score || !userId) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      const error = { error: "Missing required fields", details: { answers, score, userId } };
+      logAssessmentError('sales_performance', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     const bracket = getBracket(score);
     const bracketScoring = scoringMap[bracket];
 
+    // Log selected bracket
+    logAssessmentDebug('sales_performance', { bracket, bracketScoring });
+
     if (!bracketScoring) {
-      return NextResponse.json(
-        { error: "Invalid score bracket" },
-        { status: 400 }
-      );
+      const error = { error: "Invalid score bracket", details: { bracket, score } };
+      logAssessmentError('sales_performance', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     let totalScore = 0;
@@ -64,7 +69,27 @@ export async function POST(request: Request) {
 
     const normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0;
 
+    // Log computed score
+    logAssessmentScore('sales_performance', { 
+      bracket,
+      totalScore,
+      totalWeight,
+      normalizedScore
+    });
+
     const supabase = createRouteHandlerClient({ cookies });
+
+    // Log the data we're about to upsert
+    logAssessmentDebug('sales_performance', {
+      type: 'upsert_data',
+      table: 'sales_performance_assessment',
+      data: {
+        u_id: userId,
+        ...answers,
+        score: normalizedScore,
+        created_at: new Date().toISOString()
+      }
+    });
 
     // Upsert into sales_performance_assessment table
     const { error: assessmentError } = await supabase
@@ -79,16 +104,24 @@ export async function POST(request: Request) {
       });
 
     if (assessmentError) {
-      console.error("Error upserting assessment:", assessmentError);
+      logAssessmentError('sales_performance', {
+        error: "Failed to save assessment",
+        details: assessmentError,
+        attemptedData: {
+          u_id: userId,
+          ...answers,
+          score: normalizedScore
+        }
+      });
       return NextResponse.json(
-        { error: "Failed to save assessment" },
+        { error: "Failed to save assessment", details: assessmentError },
         { status: 500 }
       );
     }
 
-    // Insert into score_salesperformance table
+    // Insert into score_sales_performance table
     const { error: scoreError } = await supabase
-      .from("score_salesperformance")
+      .from("score_sales_performance")
       .insert({
         u_id: userId,
         gmf_score: score,
@@ -99,9 +132,12 @@ export async function POST(request: Request) {
       });
 
     if (scoreError) {
-      console.error("Error inserting score:", scoreError);
+      logAssessmentError('sales_performance', {
+        error: "Failed to save score",
+        details: scoreError
+      });
       return NextResponse.json(
-        { error: "Failed to save score" },
+        { error: "Failed to save score", details: scoreError },
         { status: 500 }
       );
     }
@@ -118,18 +154,24 @@ export async function POST(request: Request) {
       });
 
     if (profileError) {
-      console.error("Error updating profile:", profileError);
+      logAssessmentError('sales_performance', {
+        error: "Failed to update profile",
+        details: profileError
+      });
       return NextResponse.json(
-        { error: "Failed to update profile" },
+        { error: "Failed to update profile", details: profileError },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ salesScore: normalizedScore });
+    return NextResponse.json({ salesPerformanceScore: normalizedScore });
   } catch (error) {
-    console.error("Error processing assessment:", error);
+    logAssessmentError('sales_performance', {
+      error: "Internal server error",
+      details: error
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error },
       { status: 500 }
     );
   }

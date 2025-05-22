@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
 import techStackScoringMap from "@/lib/scoring/tech_stack_scoring_map.json";
+import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
 const scoringMap = techStackScoringMap as ScoringMap;
 
@@ -23,21 +24,25 @@ export async function POST(request: Request) {
   try {
     const { answers, score, userId } = await request.json();
 
+    // Log incoming request data
+    logAssessmentInput('tech_stack', { userId, score, answers });
+
     if (!answers || !score || !userId) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      const error = { error: "Missing required fields", details: { answers, score, userId } };
+      logAssessmentError('tech_stack', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     const bracket = getBracket(score);
     const bracketScoring = scoringMap[bracket];
 
+    // Log selected bracket
+    logAssessmentDebug('tech_stack', { bracket, bracketScoring });
+
     if (!bracketScoring) {
-      return NextResponse.json(
-        { error: "Invalid score bracket" },
-        { status: 400 }
-      );
+      const error = { error: "Invalid score bracket", details: { bracket, score } };
+      logAssessmentError('tech_stack', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     let totalScore = 0;
@@ -63,7 +68,27 @@ export async function POST(request: Request) {
 
     const normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0;
 
+    // Log computed score
+    logAssessmentScore('tech_stack', { 
+      bracket,
+      totalScore,
+      totalWeight,
+      normalizedScore
+    });
+
     const supabase = createRouteHandlerClient({ cookies });
+
+    // Log the data we're about to upsert
+    logAssessmentDebug('tech_stack', {
+      type: 'upsert_data',
+      table: 'tech_stack_assessment',
+      data: {
+        u_id: userId,
+        ...answers,
+        score: normalizedScore,
+        created_at: new Date().toISOString()
+      }
+    });
 
     // Upsert into tech_stack_assessment table
     const { error: assessmentError } = await supabase
@@ -131,9 +156,17 @@ export async function POST(request: Request) {
       });
 
     if (assessmentError) {
-      console.error("Error upserting assessment:", assessmentError);
+      logAssessmentError('tech_stack', {
+        error: "Failed to save assessment",
+        details: assessmentError,
+        attemptedData: {
+          u_id: userId,
+          ...answers,
+          score: normalizedScore
+        }
+      });
       return NextResponse.json(
-        { error: "Failed to save assessment" },
+        { error: "Failed to save assessment", details: assessmentError },
         { status: 500 }
       );
     }
@@ -151,9 +184,12 @@ export async function POST(request: Request) {
       });
 
     if (scoreError) {
-      console.error("Error inserting score:", scoreError);
+      logAssessmentError('tech_stack', {
+        error: "Failed to save score",
+        details: scoreError
+      });
       return NextResponse.json(
-        { error: "Failed to save score" },
+        { error: "Failed to save score", details: scoreError },
         { status: 500 }
       );
     }
@@ -170,18 +206,24 @@ export async function POST(request: Request) {
       });
 
     if (profileError) {
-      console.error("Error updating profile:", profileError);
+      logAssessmentError('tech_stack', {
+        error: "Failed to update profile",
+        details: profileError
+      });
       return NextResponse.json(
-        { error: "Failed to update profile" },
+        { error: "Failed to update profile", details: profileError },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ techStackScore: normalizedScore });
   } catch (error) {
-    console.error("Error processing assessment:", error);
+    logAssessmentError('tech_stack', {
+      error: "Internal server error",
+      details: error
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error },
       { status: 500 }
     );
   }
