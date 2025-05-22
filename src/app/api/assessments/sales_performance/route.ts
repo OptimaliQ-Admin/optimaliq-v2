@@ -4,7 +4,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import salesPerformanceScoringMap from "../data/sales_performance_scoring_map.json";
+import salesPerformanceScoringMap from "../data/sales_scoring_map.json";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;

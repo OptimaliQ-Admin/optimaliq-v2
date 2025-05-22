@@ -3,7 +3,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import techStackScoringMap from "@/lib/scoring/tech_stack_scoring_map.json";
+import techStackScoringMap from "../data/tech_stack_scoring_map.json";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
 const scoringMap = techStackScoringMap as ScoringMap;
