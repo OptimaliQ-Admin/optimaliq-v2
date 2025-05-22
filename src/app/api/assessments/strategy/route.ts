@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
 import strategyScoringMap from "../data/strategy_scoring_map.json";
+import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
 const scoringMap = strategyScoringMap as ScoringMap;
 
@@ -23,21 +24,25 @@ export async function POST(request: Request) {
   try {
     const { answers, score, userId } = await request.json();
 
+    // Log incoming request data
+    logAssessmentInput('strategy', { userId, score, answers });
+
     if (!answers || !score || !userId) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      const error = { error: "Missing required fields", details: { answers, score, userId } };
+      logAssessmentError('strategy', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     const bracket = getBracket(score);
     const bracketScoring = scoringMap[bracket];
 
+    // Log selected bracket
+    logAssessmentDebug('strategy', { bracket, bracketScoring });
+
     if (!bracketScoring) {
-      return NextResponse.json(
-        { error: "Invalid score bracket" },
-        { status: 400 }
-      );
+      const error = { error: "Invalid score bracket", details: { bracket, score } };
+      logAssessmentError('strategy', error);
+      return NextResponse.json(error, { status: 400 });
     }
 
     let totalScore = 0;
@@ -63,6 +68,14 @@ export async function POST(request: Request) {
 
     const normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0;
 
+    // Log computed score
+    logAssessmentScore('strategy', { 
+      bracket,
+      totalScore,
+      totalWeight,
+      normalizedScore
+    });
+
     const supabase = createRouteHandlerClient({ cookies });
 
     // Upsert into strategy_assessment table
@@ -78,9 +91,12 @@ export async function POST(request: Request) {
       });
 
     if (assessmentError) {
-      console.error("Error upserting assessment:", assessmentError);
+      logAssessmentError('strategy', {
+        error: "Failed to save assessment",
+        details: assessmentError
+      });
       return NextResponse.json(
-        { error: "Failed to save assessment" },
+        { error: "Failed to save assessment", details: assessmentError },
         { status: 500 }
       );
     }
@@ -98,9 +114,12 @@ export async function POST(request: Request) {
       });
 
     if (scoreError) {
-      console.error("Error inserting score:", scoreError);
+      logAssessmentError('strategy', {
+        error: "Failed to save score",
+        details: scoreError
+      });
       return NextResponse.json(
-        { error: "Failed to save score" },
+        { error: "Failed to save score", details: scoreError },
         { status: 500 }
       );
     }
@@ -110,25 +129,31 @@ export async function POST(request: Request) {
       .from("tier2_profiles")
       .upsert({
         u_id: userId,
-        strategy_score: normalizedScore,
-        strategy_last_taken: new Date().toISOString(),
+        strategic_maturity_score: normalizedScore,
+        strategic_maturity_last_taken: new Date().toISOString(),
       }, {
         onConflict: "u_id"
       });
 
     if (profileError) {
-      console.error("Error updating profile:", profileError);
+      logAssessmentError('strategy', {
+        error: "Failed to update profile",
+        details: profileError
+      });
       return NextResponse.json(
-        { error: "Failed to update profile" },
+        { error: "Failed to update profile", details: profileError },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ strategyScore: normalizedScore });
   } catch (error) {
-    console.error("Error processing assessment:", error);
+    logAssessmentError('strategy', {
+      error: "Internal server error",
+      details: error
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error },
       { status: 500 }
     );
   }
