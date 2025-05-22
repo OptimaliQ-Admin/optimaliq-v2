@@ -9,15 +9,15 @@ import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessme
 const scoringMap = techStackScoringMap as ScoringMap;
 
 function getBracket(score: number): keyof ScoringMap {
-  if (score < 1.5) return "score_1_1_4";
-  if (score < 2.0) return "score_1_5_1_9";
-  if (score < 2.5) return "score_2_2_4";
-  if (score < 3.0) return "score_2_5_2_9";
-  if (score < 3.5) return "score_3_3_4";
-  if (score < 4.0) return "score_3_5_3_9";
-  if (score < 4.5) return "score_4_4_4";
-  if (score < 5.0) return "score_4_5_4_9";
-  return "score_5_0";
+  if (score >= 1 && score <= 1.4) return "score_1";
+  if (score >= 1.5 && score <= 1.9) return "score_1_5";
+  if (score >= 2 && score <= 2.4) return "score_2";
+  if (score >= 2.5 && score <= 2.9) return "score_2_5";
+  if (score >= 3 && score <= 3.4) return "score_3";
+  if (score >= 3.5 && score <= 3.9) return "score_3_5";
+  if (score >= 4 && score <= 4.4) return "score_4";
+  if (score >= 4.5 && score <= 4.9) return "score_4_5";
+  return "score_5";
 }
 
 export async function POST(request: Request) {
@@ -90,24 +90,12 @@ export async function POST(request: Request) {
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Log the data we're about to upsert
-    logAssessmentDebug('tech_stack', {
-      type: 'upsert_data',
-      table: 'tech_stack_assessment',
-      data: {
-        u_id: userId,
-        ...answers,
-        score: normalized,
-        created_at: new Date().toISOString()
-      }
-    });
-
-    // Upsert into tech_stack_assessment table
+    // Create a JSONB column for answers
     const { error: assessmentError } = await supabase
       .from("tech_stack_assessment")
       .upsert({
         u_id: userId,
-        ...answers,
+        answers: answers, // Store all answers in a single JSONB column
         score: normalized,
         created_at: new Date().toISOString()
       }, {
@@ -120,7 +108,7 @@ export async function POST(request: Request) {
         details: assessmentError,
         attemptedData: {
           u_id: userId,
-          ...answers,
+          answers,
           score: normalized
         }
       });
