@@ -21,7 +21,7 @@ interface Group01Props {
   onAnswerChange: (questionKey: string, answer: string) => void;
 }
 
-export function Group01({ answers, onAnswerChange }: Group01Props) {
+export default function Group01({ answers, onAnswerChange }: Group01Props) {
   const questions = questionConfig.score_1;
 
   return (

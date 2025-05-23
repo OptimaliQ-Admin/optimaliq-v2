@@ -11,7 +11,6 @@ import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers.how_4a7d74 === "string" &&
     typeof answers["what_89a231"] === "string" &&
     typeof answers["what_3164b1"] === "string"
   );
@@ -22,7 +21,7 @@ interface Group03Props {
   onAnswerChange: (questionKey: string, answer: string) => void;
 }
 
-export function Group03({ answers, onAnswerChange }: Group03Props) {
+export default function Group03({ answers, onAnswerChange }: Group03Props) {
   const questions = questionConfig.score_2_5;
 
   return (

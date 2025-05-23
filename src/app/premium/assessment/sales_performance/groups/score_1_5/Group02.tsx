@@ -10,9 +10,9 @@ import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_1_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers.how_12d26c === "string" &&
-    typeof answers.how_1f869b === "string" &&
-    typeof answers.how_c8eb2a === "string"
+    typeof answers["how_12d26c"] === "string" &&
+    typeof answers["how_1f869b"] === "string" &&
+    typeof answers["how_c8eb2a"] === "string"
   );
 }
 
@@ -21,7 +21,7 @@ interface Group02Props {
   onAnswerChange: (questionKey: string, answer: string) => void;
 }
 
-export function Group02({ answers, onAnswerChange }: Group02Props) {
+export default function Group02({ answers, onAnswerChange }: Group02Props) {
   const questions = questionConfig.score_1_5;
 
   return (

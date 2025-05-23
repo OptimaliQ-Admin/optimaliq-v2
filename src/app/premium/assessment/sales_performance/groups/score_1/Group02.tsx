@@ -12,8 +12,7 @@ export function isScore_1Group2Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["who_5d9558"] === "string" &&
     typeof answers["how_454fc5"] === "string" &&
-    typeof answers["which_01150c"] === "string" &&
-    typeof answers["how_142ca2"] === "string"
+    typeof answers["which_01150c"] === "string"
   );
 }
 
@@ -22,7 +21,7 @@ interface Group02Props {
   onAnswerChange: (questionKey: string, answer: string) => void;
 }
 
-export function Group02({ answers, onAnswerChange }: Group02Props) {
+export default function Group02({ answers, onAnswerChange }: Group02Props) {
   const questions = questionConfig.score_1;
 
   return (
