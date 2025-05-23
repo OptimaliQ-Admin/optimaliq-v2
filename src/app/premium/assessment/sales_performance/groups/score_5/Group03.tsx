@@ -1,60 +1,79 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["what’s_719868"] === "string" &&
-    typeof answers["what_f078f0"] === "string" &&
-    typeof answers["what’s_5927ed"] === "string"
+    typeof answers.what_89a231 === "string" &&
+    typeof answers.what_3164b1 === "string" &&
+    typeof answers.what_89a231 === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score5_Step03({ answers, onAnswer }: Props) {
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_5;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 8: what’s_719868 */}
-      <MultipleChoiceQuestion
-        question="What’s your organization’s posture toward reinvention and future-proofing sales?"
-        options={[
-          { value: "focused_now", label: "We’re focused on what works now" },
-          { value: "slow_action", label: "We discuss the future but act slowly" },
-          { value: "exploring_models", label: "We actively explore new models" },
-          { value: "reinventing_proactively", label: "We continuously reinvent ahead of market shifts" },
-        ]}
-        value={getStringAnswer(answers["what’s_719868"])}
-        onChange={(val) => onAnswer("what’s_719868", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers.what_3164b1)}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: what_f078f0 */}
-      <TextAreaQuestion
-        question="What part of your sales engine do you believe gives you a competitive advantage?"
-        placeholder="E.g., discovery, product demo, outbound, customer success handoff"
-        value={getStringAnswer(answers["what_f078f0"])}
-        onChange={(val) => onAnswer("what_f078f0", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: what’s_5927ed */}
-      <TextAreaQuestion
-        question="What’s your vision for how your sales organization will evolve over the next 18–24 months?"
-        placeholder="E.g., new verticals, full lifecycle ownership, predictive tooling, etc."
-        value={getStringAnswer(answers["what’s_5927ed"])}
-        onChange={(val) => onAnswer("what’s_5927ed", val)}
-        maxLength={300}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's one sales behavior or process you'd want your team to do more consistently?
+              </Label>
+              <Textarea
+                placeholder="E.g., follow-ups, demo delivery, deal qualification"
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

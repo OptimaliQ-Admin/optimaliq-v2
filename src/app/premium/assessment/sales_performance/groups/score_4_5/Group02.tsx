@@ -1,80 +1,93 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
+
 export function isScore_4_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_15ad3d"] === "string" &&
-    typeof answers["how_7e00a0"] === "string" &&
-    typeof answers["what’s_2e8609"] === "string" &&
-    typeof answers["what_ada360"] === "string"
+    typeof answers.how_4q5r6s === "string" &&
+    typeof answers.how_7r8s9t === "string" &&
+    typeof answers.how_3t4u5v === "string"
   );
 }
 
-type Props = {
+interface Group02Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score4_5_Step02({ answers, onAnswer }: Props) {
+export function Group02({ answers, onAnswerChange }: Group02Props) {
+  const questions = questionConfig.score_4_5;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_4q5r6s.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_4q5r6s)}
+                onValueChange={(value: string) => onAnswerChange("how_4q5r6s", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_4q5r6s.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_4q5r6s-${key}`} />
+                    <Label htmlFor={`how_4q5r6s-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 4: how_15ad3d */}
-      <MultipleChoiceQuestion
-        question="How does your CRM or sales system support daily rep execution?"
-        options={[
-          { value: "log_only", label: "It’s used for logging activity only" },
-          { value: "basic_pipeline", label: "It shows basic tasks or pipeline" },
-          { value: "guided_prompts", label: "It guides reps with prompts or scoring" },
-          { value: "real_time_assistant", label: "It acts as a real-time assistant with recommendations and automation" },
-        ]}
-        value={getStringAnswer(answers["how_15ad3d"])}
-        onChange={(val) => onAnswer("how_15ad3d", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_7r8s9t.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_7r8s9t)}
+                onValueChange={(value: string) => onAnswerChange("how_7r8s9t", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_7r8s9t.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_7r8s9t-${key}`} />
+                    <Label htmlFor={`how_7r8s9t-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 5: how_7e00a0 */}
-      <MultipleChoiceQuestion
-        question="How do you track and improve team-wide sales effectiveness over time?"
-        options={[
-          { value: "not_tracked", label: "We don’t track it systematically" },
-          { value: "individual_perf", label: "Based on individual rep performance" },
-          { value: "scorecards", label: "Using team-wide scorecards and dashboards" },
-          { value: "patterns_and_outcomes", label: "By monitoring patterns, ramp, enablement, and buyer outcomes" },
-        ]}
-        value={getStringAnswer(answers["how_7e00a0"])}
-        onChange={(val) => onAnswer("how_7e00a0", val)}
-      />
-
-      {/* Question 6: what’s_2e8609 */}
-      <MultipleChoiceQuestion
-        question="What’s your process for adjusting goals or territory models in response to market changes?"
-        options={[
-          { value: "rarely_change", label: "We rarely change them mid-cycle" },
-          { value: "informal_adjustments", label: "We adjust informally as needed" },
-          { value: "quarterly_review", label: "Reviewed and realigned quarterly" },
-          { value: "dynamic_modeling", label: "Adjusted dynamically with shared input and data modeling" },
-        ]}
-        value={getStringAnswer(answers["what’s_2e8609"])}
-        onChange={(val) => onAnswer("what’s_2e8609", val)}
-      />
-
-      {/* Question 7: what_ada360 */}
-      <MultipleChoiceQuestion
-        question="What role does sales data play in your executive planning or board reporting?"
-        options={[
-          { value: "top_line_only", label: "Minimal — only top-line revenue" },
-          { value: "conversion_rates", label: "Basic conversion and win rates" },
-          { value: "forecast_and_coverage", label: "Forecasts and pipeline coverage" },
-          { value: "full_cycle", label: "Full-cycle metrics and performance models" },
-        ]}
-        value={getStringAnswer(answers["what_ada360"])}
-        onChange={(val) => onAnswer("what_ada360", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_3t4u5v.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_3t4u5v)}
+                onValueChange={(value: string) => onAnswerChange("how_3t4u5v", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_3t4u5v.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_3t4u5v-${key}`} />
+                    <Label htmlFor={`how_3t4u5v-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

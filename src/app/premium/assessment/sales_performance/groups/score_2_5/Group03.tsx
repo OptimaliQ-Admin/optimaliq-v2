@@ -1,64 +1,84 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_2_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_d30c39"] === "string" &&
-    typeof answers["what’s_9266fd"] === "string" &&
-    typeof answers["how_4a7d74"] === "string"
+    typeof answers.how_4a7d74 === "string" &&
+    typeof answers["what_89a231"] === "string" &&
+    typeof answers["what_3164b1"] === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score2_5_Step03({ answers, onAnswer }: Props) {
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_2_5;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_4a7d74.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_4a7d74)}
+                onValueChange={(value: string) => onAnswerChange("how_4a7d74", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_4a7d74.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_4a7d74-${key}`} />
+                    <Label htmlFor={`how_4a7d74-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 8: how_d30c39 */}
-      <MultipleChoiceQuestion
-        question="How confident are you that your team is pursuing the highest-value opportunities?"
-        options={[
-          { value: "not_confident", label: "Not confident — we chase everything" },
-          { value: "somewhat", label: "Somewhat — we focus on hot leads" },
-          { value: "mostly", label: "Mostly — we use criteria or scoring" },
-          { value: "very", label: "Very — we rigorously prioritize our pipeline" },
-        ]}
-        value={getStringAnswer(answers["how_d30c39"])}
-        onChange={(val) => onAnswer("how_d30c39", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers["what_89a231"])}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: what’s_9266fd */}
-      <TextAreaQuestion
-        question="What’s one sales behavior or process you’d want your team to do more consistently?"
-        placeholder="E.g., follow-ups, demo delivery, deal qualification"
-        value={getStringAnswer(answers["what’s_9266fd"])}
-        onChange={(val) => onAnswer("what’s_9266fd", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: how_4a7d74 */}
-      <MultipleChoiceQuestion
-        question="How scalable is your current sales process if you doubled your deal volume tomorrow?"
-        options={[
-          { value: "not_scalable", label: "Not scalable — we’d break down" },
-          { value: "challenging", label: "It would be a challenge" },
-          { value: "mostly_scalable", label: "Mostly scalable with adjustments" },
-          { value: "fully_scalable", label: "Fully scalable — we’re built to grow" },
-        ]}
-        value={getStringAnswer(answers["how_4a7d74"])}
-        onChange={(val) => onAnswer("how_4a7d74", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers["what_3164b1"])}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

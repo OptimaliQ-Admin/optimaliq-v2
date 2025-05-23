@@ -1,72 +1,79 @@
 "use client";
 
-import React from "react";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  getArrayAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
+
 export function isScore_3_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    Array.isArray(answers["what_fed657"]) &&
-    answers["what_fed657"].length > 0 &&
-    typeof answers["what’s_4abcc8"] === "string" &&
-    answers["what’s_4abcc8"].trim().length > 0 &&
-    typeof answers["how_8e4ef6"] === "string" &&
-    answers["how_8e4ef6"].trim().length > 0
+    typeof answers.what_89a231 === "string" &&
+    typeof answers.what_3164b1 === "string" &&
+    typeof answers.what_89a231 === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score3_5_Step03({ answers, onAnswer }: Props) {
-  const tools = answers["what_fed657"] || [];
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_3_5;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 8: what_fed657 */}
-      <MultiSelectQuestion
-        question="What systems or tools do you use to coach reps based on performance data?"
-        options={[
-          { value: "spreadsheets", label: "1:1 notes or spreadsheets" },
-          { value: "crm_dashboards", label: "CRM dashboards" },
-          { value: "call_review", label: "Call review tools (Gong, Chorus)" },
-          { value: "coaching_platforms", label: "Coaching platforms or frameworks" },
-          { value: "sales_scorecards", label: "Sales scorecards" },
-        ]}
-        selected={Array.isArray(getArrayAnswer(tools)) ? getArrayAnswer(tools) : []}
-        onChange={(val) => onAnswer("what_fed657", val)}
-        maxSelect={5}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers.what_3164b1)}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: what’s_4abcc8 */}
-      <TextAreaQuestion
-        question="What’s one area of your sales process you’d automate or streamline next?"
-        placeholder="E.g., follow-ups, stage updates, reminders"
-        value={getStringAnswer(answers["what’s_4abcc8"])}
-        onChange={(val) => onAnswer("what’s_4abcc8", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: how_8e4ef6 */}
-      <MultipleChoiceQuestion
-        question="How confident are you in your sales team’s ability to hit stretch revenue targets over the next two quarters?"
-        options={[
-          { value: "not_confident", label: "Not confident — we’re behind or unclear" },
-          { value: "somewhat", label: "Somewhat — we’re working toward it" },
-          { value: "confident", label: "Confident — we have the pipeline and systems" },
-          { value: "very_confident", label: "Very confident — we’re already forecasting upside" },
-        ]}
-        value={getStringAnswer(answers["how_8e4ef6"])}
-        onChange={(val) => onAnswer("how_8e4ef6", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's one sales behavior or process you'd want your team to do more consistently?
+              </Label>
+              <Textarea
+                placeholder="E.g., follow-ups, demo delivery, deal qualification"
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

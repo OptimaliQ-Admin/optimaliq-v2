@@ -1,64 +1,79 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_4_5Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_229086"] === "string" &&
-    typeof answers["what’s_30c935"] === "string" &&
-    typeof answers["how_a07904"] === "string"
+    typeof answers.what_89a231 === "string" &&
+    typeof answers.what_3164b1 === "string" &&
+    typeof answers.what_89a231 === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score4_5_Step03({ answers, onAnswer }: Props) {
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_4_5;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 8: how_229086 */}
-      <MultipleChoiceQuestion
-        question="How do you ensure sales reps are continuously learning and improving?"
-        options={[
-          { value: "ad_hoc_feedback", label: "Ad hoc feedback or call reviews" },
-          { value: "monthly_training", label: "Monthly enablement or training" },
-          { value: "structured_plans", label: "Structured coaching and development plans" },
-          { value: "kpi_tied_enablement", label: "Performance-based enablement tied to KPIs and growth goals" },
-        ]}
-        value={getStringAnswer(answers["how_229086"])}
-        onChange={(val) => onAnswer("how_229086", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers.what_3164b1)}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: what’s_30c935 */}
-      <TextAreaQuestion
-        question="What’s the most valuable insight your sales org has uncovered in the past quarter?"
-        placeholder="E.g., reps winning faster when demo is skipped, churn risk linked to missed onboarding step"
-        value={getStringAnswer(answers["what’s_30c935"])}
-        onChange={(val) => onAnswer("what’s_30c935", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: how_a07904 */}
-      <MultipleChoiceQuestion
-        question="How confident are you that your sales org can hit a 20–30% stretch goal next year with current systems?"
-        options={[
-          { value: "not_confident", label: "Not confident — we’d need major changes" },
-          { value: "somewhat", label: "Somewhat — we’d need better support or hiring" },
-          { value: "mostly", label: "Mostly — we’re building toward it" },
-          { value: "very_confident", label: "Very confident — our system is ready for that level of growth" },
-        ]}
-        value={getStringAnswer(answers["how_a07904"])}
-        onChange={(val) => onAnswer("how_a07904", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's one sales behavior or process you'd want your team to do more consistently?
+              </Label>
+              <Textarea
+                placeholder="E.g., follow-ups, demo delivery, deal qualification"
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

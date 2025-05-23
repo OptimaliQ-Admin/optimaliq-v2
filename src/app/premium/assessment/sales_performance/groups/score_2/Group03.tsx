@@ -1,63 +1,84 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_2Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_1e24f7"] === "string" &&
-    answers["how_1e24f7"].trim().length > 0 &&
-    typeof answers["whats_59e9f8"] === "string" &&
-    answers["whats_59e9f8"].trim().length > 0 &&
-    typeof answers["whats_840187"] === "string" &&
-    answers["whats_840187"].trim().length > 0
+    typeof answers.how_1e24f7 === "string" &&
+    typeof answers["what_89a231"] === "string" &&
+    typeof answers["what_3164b1"] === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score2_Step03({ answers, onAnswer }: Props) {
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_2;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_1e24f7.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_1e24f7)}
+                onValueChange={(value: string) => onAnswerChange("how_1e24f7", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_1e24f7.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_1e24f7-${key}`} />
+                    <Label htmlFor={`how_1e24f7-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 8: how_1e24f7 */}
-      <MultipleChoiceQuestion
-        question="How effective is your current handoff process from marketing or SDR to sales?"
-        options={[
-          { value: "no_handoff", label: "We don’t really have a handoff" },
-          { value: "inconsistent", label: "It’s inconsistent" },
-          { value: "mostly_smooth", label: "It’s mostly smooth, but has gaps" },
-          { value: "standardized", label: "It’s standardized and clearly defined" },
-        ]}
-        value={getStringAnswer(answers["how_1e24f7"])}
-        onChange={(val) => onAnswer("how_1e24f7", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers["what_89a231"])}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: whats_59e9f8 */}
-      <TextAreaQuestion
-        question="What’s the biggest friction point in your current sales cycle?"
-        placeholder="E.g., qualification, follow-ups, deal progression"
-        value={getStringAnswer(answers["whats_59e9f8"])}
-        onChange={(val) => onAnswer("whats_59e9f8", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: whats_840187 */}
-      <TextAreaQuestion
-        question="What’s one improvement you’d make to your sales process if you could implement it today?"
-        placeholder="E.g., automation, coaching, process clarity"
-        value={getStringAnswer(answers["whats_840187"])}
-        onChange={(val) => onAnswer("whats_840187", val)}
-        maxLength={300}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers["what_3164b1"])}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

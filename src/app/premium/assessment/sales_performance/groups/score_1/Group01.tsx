@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
+
 export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   return (
     typeof answers["how_b5d8e7"] === "string" &&
@@ -14,52 +16,78 @@ export function isScore_1Group1Complete(answers: AssessmentAnswers): boolean {
   );
 }
 
-type Props = {
+interface Group01Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score1_Step01({ answers, onAnswer }: Props) {
+export function Group01({ answers, onAnswerChange }: Group01Props) {
+  const questions = questionConfig.score_1;
+
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-8">
-      {/* Question 1 */}
-      <MultipleChoiceQuestion
-        question="How do you currently generate new sales leads or opportunities?"
-        options={[
-          { value: "Referrals_and_word_of_mouth", label: "Referrals and word-of-mouth" },
-          { value: "Occasional_outreach_or_events", label: "Occasional outreach or events" },
-          { value: "Website_or_social_media_inquiries", label: "Website or social media inquiries" },
-          { value: "We_dont_have_a_consistent_method", label: "We don’t have a consistent method" },
-        ]}
-        value={getStringAnswer(answers["how_b5d8e7"])}
-        onChange={(val) => onAnswer("how_b5d8e7", val)}
-      />
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_b5d8e7.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_b5d8e7)}
+                onValueChange={(value: string) => onAnswerChange("how_b5d8e7", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_b5d8e7.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_b5d8e7-${key}`} />
+                    <Label htmlFor={`how_b5d8e7-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 2 */}
-      <MultipleChoiceQuestion
-        question="Do you have a defined sales process or set of steps that your team follows?"
-        options={[
-          { value: "No_process___each_sale_is_different", label: "No process — each sale is different" },
-          { value: "We_follow_a_loose_outline", label: "We follow a loose outline" },
-          { value: "We_have_a_few_key_steps_we_try_to_follow", label: "We have a few key steps we try to follow" },
-          { value: "Yes___we_use_a_defined_process_from_lead_to_close", label: "Yes — we use a defined process from lead to close" },
-        ]}
-        value={getStringAnswer(answers["do_b7cc0a"])}
-        onChange={(val) => onAnswer("do_b7cc0a", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.do_b7cc0a.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.do_b7cc0a)}
+                onValueChange={(value: string) => onAnswerChange("do_b7cc0a", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.do_b7cc0a.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`do_b7cc0a-${key}`} />
+                    <Label htmlFor={`do_b7cc0a-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 3 */}
-      <MultipleChoiceQuestion
-        question="How do you currently track your sales pipeline?"
-        options={[
-          { value: "We_dont_track_it", label: "We don’t track it" },
-          { value: "Manually_in_a_spreadsheet", label: "Manually in a spreadsheet" },
-          { value: "In_a_basic_CRM_eg_HubSpot_Salesforce", label: "In a basic CRM (e.g. HubSpot, Salesforce)" },
-          { value: "In_a_structured_system_with_deal_stages_and_forecasts", label: "In a structured system with deal stages and forecasts" },
-        ]}
-        value={getStringAnswer(answers["how_fee95e"])}
-        onChange={(val) => onAnswer("how_fee95e", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_fee95e.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_fee95e)}
+                onValueChange={(value: string) => onAnswerChange("how_fee95e", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_fee95e.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_fee95e-${key}`} />
+                    <Label htmlFor={`how_fee95e-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

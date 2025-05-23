@@ -1,64 +1,79 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_03fce6"] === "string" &&
-    typeof answers["what’s_4c7c04"] === "string" &&
-    typeof answers["how_4633fe"] === "string"
+    typeof answers.what_89a231 === "string" &&
+    typeof answers.what_3164b1 === "string" &&
+    typeof answers.what_89a231 === "string"
   );
 }
 
-type Props = {
+interface Group03Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score4_Step03({ answers, onAnswer }: Props) {
+export function Group03({ answers, onAnswerChange }: Group03Props) {
+  const questions = questionConfig.score_4;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What sales metrics are most important to you right now?
+              </Label>
+              <Textarea
+                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 8: how_03fce6 */}
-      <MultipleChoiceQuestion
-        question="How regularly are win/loss insights shared across teams?"
-        options={[
-          { value: "rarely", label: "Rarely" },
-          { value: "retros", label: "Occasionally in retros" },
-          { value: "monthly_leadership", label: "Monthly with leadership" },
-          { value: "shared_across_org", label: "Regular insights shared across teams, segments, and channels" },
-        ]}
-        value={getStringAnswer(answers["how_03fce6"])}
-        onChange={(val) => onAnswer("how_03fce6", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's the biggest obstacle you face when trying to close more deals?
+              </Label>
+              <Textarea
+                placeholder="E.g., high CAC, unclear process, lead quality"
+                value={getStringAnswer(answers.what_3164b1)}
+                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
 
-      {/* Question 9: what’s_4c7c04 */}
-      <TextAreaQuestion
-        question="What’s one future GTM capability you’re planning to build?"
-        placeholder="E.g., self-serve funnel, ABM, vertical specialization, etc."
-        value={getStringAnswer(answers["what’s_4c7c04"])}
-        onChange={(val) => onAnswer("what’s_4c7c04", val)}
-        maxLength={300}
-      />
-
-      {/* Question 10: how_4633fe */}
-      <MultipleChoiceQuestion
-        question="How well do you understand your sales org’s capacity and coverage model?"
-        options={[
-          { value: "no_model", label: "We don’t really have one" },
-          { value: "rough_model", label: "We use rough territory or ratio models" },
-          { value: "defined_model", label: "We have a defined model" },
-          { value: "dynamic_modeling", label: "We model capacity dynamically across segments and reps" },
-        ]}
-        value={getStringAnswer(answers["how_4633fe"])}
-        onChange={(val) => onAnswer("how_4633fe", val)}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                What's one sales behavior or process you'd want your team to do more consistently?
+              </Label>
+              <Textarea
+                placeholder="E.g., follow-ups, demo delivery, deal qualification"
+                value={getStringAnswer(answers.what_89a231)}
+                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
+                maxLength={300}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

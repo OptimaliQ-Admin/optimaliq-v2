@@ -1,0 +1,533 @@
+{
+  "score_1": {
+    "how_b5d8e7": {
+      "label": "How do you currently generate new sales leads or opportunities?",
+      "options": {
+        "referrals_only": "Referrals and word of mouth",
+        "occasional_outreach": "Occasional outreach or events",
+        "website_inquiries": "Website or social media inquiries",
+        "no_consistent_method": "We don't have a consistent method"
+      }
+    },
+    "do_b7cc0a": {
+      "label": "Do you have a defined sales process or set of steps that your team follows?",
+      "options": {
+        "no_process": "No process - each sale is different",
+        "loose_outline": "We follow a loose outline",
+        "key_steps": "We have a few key steps we try to follow",
+        "defined_process": "Yes - we use a defined process from lead to close"
+      }
+    },
+    "how_fee95e": {
+      "label": "How do you currently track your sales pipeline?",
+      "options": {
+        "no_tracking": "We don't track it",
+        "manual_spreadsheet": "Manually in a spreadsheet",
+        "basic_crm": "In a basic CRM (e.g. HubSpot, Salesforce)",
+        "structured_system": "In a structured system with deal stages and forecasts"
+      }
+    },
+    "who_5d9558": {
+      "label": "Who in your organization is responsible for closing deals?",
+      "options": {
+        "founder_owner": "The founder or owner",
+        "single_rep": "One salesperson",
+        "small_team": "A small team",
+        "dedicated_dept": "A dedicated structured sales department"
+      }
+    },
+    "how_454fc5": {
+      "label": "How consistently do you follow up with leads or prospects?",
+      "options": {
+        "inconsistent": "Inconsistently or not at all",
+        "sometimes_forget": "We try but sometimes forget",
+        "basic_reminders": "We have a basic reminder system",
+        "automated_followup": "We have automated or scheduled follow ups"
+      }
+    },
+    "which_01150c": {
+      "label": "Which of the following best describes how you qualify leads?",
+      "options": {
+        "talk_to_anyone": "We talk to anyone interested",
+        "basic_questions": "We ask a few questions during discovery",
+        "basic_criteria": "We use basic criteria (e.g. budget, need)",
+        "scoring_framework": "We follow a lead scoring or qualification framework"
+      }
+    },
+    "how_142ca2": {
+      "label": "How would you describe your current approach to proposals or pricing?",
+      "options": {
+        "make_up_pricing": "We make up pricing as we go",
+        "price_list": "We have a price list or one pager",
+        "templated_proposal": "We use a templated proposal or quote",
+        "tailored_pricing": "We tailor pricing with a defined structure"
+      }
+    }
+  },
+  "score_1_5": {
+    "how_2c42b7": {
+      "label": "How are new leads currently distributed or assigned to team members?",
+      "options": {
+        "unassigned": "Leads are unassigned or handled ad hoc",
+        "manual_assignment": "They're assigned manually by the owner/leader",
+        "rep_managed": "Each rep manages their own leads independently",
+        "routed_by_criteria": "Leads are routed based on role, territory, or fit"
+      }
+    },
+    "how_79028c": {
+      "label": "How confident are you in your ability to predict how much revenue will close this month or quarter?",
+      "options": {
+        "not_confident": "Not confident at all",
+        "rough_ideas": "Somewhat - we have rough ideas",
+        "track_metrics": "Mostly - we track some metrics",
+        "forecast_data": "Very confident - we forecast based on deal data"
+      }
+    },
+    "how_47b050": {
+      "label": "How often do you review your sales pipeline or forecast?",
+      "options": {
+        "rarely": "Rarely, only when needed",
+        "occasionally": "Occasionally when checking progress",
+        "weekly": "Weekly",
+        "daily": "Daily or during structured reviews"
+      }
+    },
+    "how_12d26c": {
+      "label": "How do you qualify or evaluate new opportunities?",
+      "options": {
+        "gut_feel": "Very informal, we go with gut feel",
+        "basic_questions": "We ask some basic qualifying questions",
+        "checklist": "We use a checklist or structured discovery",
+        "formal_framework": "We use a formal framework (e.g. MEDDIC, BANT)"
+      }
+    },
+    "how_1f869b": {
+      "label": "How do you track movement of deals through your sales stages?",
+      "options": {
+        "skip_stages": "We skip or rush through stages",
+        "loose_steps": "We loosely follow a set of steps",
+        "track_movement": "We track movement but not always accurately",
+        "methodical": "We move deals methodically through stages"
+      }
+    },
+    "how_c8eb2a": {
+      "label": "How do you handle leads that aren't ready to buy?",
+      "options": {
+        "no_followup": "We don't follow up",
+        "manual_reachout": "We manually reach out when we remember",
+        "scheduled": "We schedule follow ups",
+        "nurture_flow": "We place them into nurture or remarketing flows"
+      }
+    }
+  },
+  "score_2": {
+    "how_64a8d1": {
+      "label": "How clearly are your sales stages defined?",
+      "options": {
+        "not_defined": "Not defined",
+        "loosely_defined": "Some stages are loosely defined",
+        "defined_inconsistent": "Defined, but not consistently used",
+        "clearly_documented": "Clearly documented and used for tracking"
+      }
+    },
+    "how_7d8dcb": {
+      "label": "How confident are you in the accuracy of your current pipeline data?",
+      "options": {
+        "not_accurate": "Not accurate at all",
+        "somewhat_accurate": "Somewhat accurate",
+        "mostly_accurate": "Mostly accurate, with occasional cleanups",
+        "very_accurate": "Very accurate and regularly maintained"
+      }
+    },
+    "how_0fa447": {
+      "label": "How do you prioritize leads or accounts in your pipeline?",
+      "options": {
+        "most_recent": "We work whatever is most recent",
+        "gut_feel": "We prioritize based on gut feel",
+        "deal_size": "We prioritize based on deal size or engagement",
+        "scoring_criteria": "We use scoring or qualification criteria"
+      }
+    },
+    "how_a76658": {
+      "label": "How do you track follow-ups with prospects?",
+      "options": {
+        "poor_tracking": "We don't track follow-ups well",
+        "calendar_reminders": "We rely on calendar or reminders",
+        "crm_tasks": "We have tasks inside our CRM",
+        "automation": "We use automation or sequences to manage follow-ups"
+      }
+    },
+    "how_5589a0": {
+      "label": "How do you prepare for sales calls or meetings?",
+      "options": {
+        "wing_it": "We wing it",
+        "glance_notes": "We glance at past notes or emails",
+        "checklist": "We follow a checklist or sales script",
+        "thorough_prep": "We prep with research, context, and a discovery framework"
+      }
+    },
+    "how_92a11d": {
+      "label": "How consistently do you log sales activity in your CRM?",
+      "options": {
+        "rarely": "Rarely",
+        "big_deals": "Only for big deals",
+        "most_calls": "Most calls are noted in the CRM",
+        "every_interaction": "Every interaction is logged and searchable"
+      }
+    },
+    "how_1e24f7": {
+      "label": "How do you handle the handoff from sales to implementation or customer success?",
+      "options": {
+        "no_handoff": "We don't really have a handoff",
+        "inconsistent": "It's inconsistent",
+        "mostly_smooth": "It's mostly smooth, but has gaps",
+        "standardized": "It's standardized and clearly defined"
+      }
+    }
+  },
+  "score_2_5": {
+    "how_b5793e": {
+      "label": "How are you currently tracking sales activities and next steps?",
+      "options": {
+        "no_consistent_tracking": "We don't track activities consistently",
+        "manual_spreadsheet": "We manually track in spreadsheets",
+        "basic_crm": "We use basic CRM activity tracking",
+        "automated_tracking": "We have automated activity tracking and reminders"
+      }
+    },
+    "how_140f94": {
+      "label": "How do you handle sales targets and goals?",
+      "options": {
+        "no_targets": "We don't set specific targets",
+        "basic_goals": "We have basic revenue goals",
+        "individual_team": "We track individual and team targets",
+        "detailed_kpis": "We have detailed KPIs and performance metrics"
+      }
+    },
+    "how_3a6376": {
+      "label": "How do you handle sales reporting and metrics?",
+      "options": {
+        "no_reports": "We don't generate regular reports",
+        "basic_reports": "We have basic revenue reports",
+        "monthly_metrics": "We track key metrics monthly",
+        "real_time": "We have real-time dashboards and analytics"
+      }
+    },
+    "how_4cd27c": {
+      "label": "How do you handle sales performance issues or opportunities?",
+      "options": {
+        "no_process": "We don't have a formal process",
+        "react_issues": "We address issues as they arise",
+        "regular_reviews": "We have regular performance reviews",
+        "structured_coaching": "We have structured coaching and improvement plans"
+      }
+    },
+    "how_68cbdb": {
+      "label": "How do you handle pipeline reviews?",
+      "options": {
+        "no_reviews": "We don't do regular reviews",
+        "occasional": "We review occasionally when needed",
+        "weekly": "We have weekly pipeline reviews",
+        "structured": "We have structured daily/weekly pipeline management"
+      }
+    },
+    "how_d30c39": {
+      "label": "How confident are you that your team is pursuing the highest-value opportunities?",
+      "options": {
+        "not_confident": "Not confident at all",
+        "somewhat": "Somewhat confident",
+        "mostly": "Mostly confident",
+        "very_confident": "Very confident with clear criteria"
+      }
+    },
+    "how_4a7d74": {
+      "label": "How scalable is your current sales process if you doubled your deal volume tomorrow?",
+      "options": {
+        "not_scalable": "Not scalable at all",
+        "needs_changes": "Would need significant changes",
+        "some_adjustments": "Could handle with some adjustments",
+        "fully_scalable": "Fully scalable with current process"
+      }
+    }
+  },
+  "score_3": {
+    "how_c7b9f7": {
+      "label": "How do you monitor and improve sales velocity?",
+      "options": {
+        "no_tracking": "We don't track velocity",
+        "basic_time": "We track basic time to close",
+        "stage_velocity": "We monitor stage-by-stage velocity",
+        "detailed_metrics": "We optimize based on detailed velocity metrics"
+      }
+    },
+    "what_84c5f2": {
+      "label": "What level of consistency do you see in how different reps work the same stages?",
+      "options": {
+        "very_inconsistent": "Very inconsistent",
+        "somewhat_consistent": "Somewhat consistent",
+        "mostly_consistent": "Mostly consistent",
+        "highly_consistent": "Highly consistent across team"
+      }
+    },
+    "how_8f9d2a": {
+      "label": "How do you ensure consistent deal qualification across your team?",
+      "options": {
+        "no_process": "No formal qualification process",
+        "basic_criteria": "Basic qualification criteria",
+        "structured_framework": "Structured qualification framework",
+        "advanced_scoring": "Advanced qualification with scoring"
+      }
+    },
+    "how_1a3b4c": {
+      "label": "How do you handle sales forecasting and pipeline management?",
+      "options": {
+        "basic": "Basic forecasting",
+        "monthly": "Monthly forecasts",
+        "weekly": "Weekly forecasts with reviews",
+        "real_time": "Real-time forecasting with AI/ML"
+      }
+    },
+    "how_5d6e7f": {
+      "label": "How do you track and improve win rates?",
+      "options": {
+        "no_tracking": "We don't track win rates",
+        "basic_tracking": "Basic win/loss tracking",
+        "detailed_analysis": "Detailed win/loss analysis",
+        "advanced_optimization": "Advanced win rate optimization"
+      }
+    },
+    "how_2d3e4f": {
+      "label": "How do you ensure your sales process adapts to different customer segments?",
+      "options": {
+        "one_size": "One-size-fits-all approach",
+        "basic_segmentation": "Basic segmentation",
+        "detailed_segmentation": "Detailed segmentation",
+        "dynamic_adaptation": "Dynamic process adaptation"
+      }
+    }
+  },
+  "score_3_5": {
+    "how_4d1ff3": {
+      "label": "How do you measure forecast accuracy across teams or reps?",
+      "options": {
+        "no_measurement": "We don't measure forecast accuracy",
+        "basic_tracking": "Basic accuracy tracking",
+        "detailed_analysis": "Detailed accuracy analysis",
+        "advanced_optimization": "Advanced accuracy optimization"
+      }
+    },
+    "how_fe4a96": {
+      "label": "How is sales enablement delivered across your team today?",
+      "options": {
+        "no_enablement": "No formal enablement",
+        "basic_training": "Basic training materials",
+        "structured_program": "Structured enablement program",
+        "comprehensive_platform": "Comprehensive enablement platform"
+      }
+    },
+    "how_2e3f4g": {
+      "label": "How do you ensure consistent deal qualification across your team?",
+      "options": {
+        "no_process": "No formal qualification process",
+        "basic_criteria": "Basic qualification criteria",
+        "structured_framework": "Structured qualification framework",
+        "advanced_scoring": "Advanced qualification with scoring"
+      }
+    },
+    "how_5f6g7h": {
+      "label": "How do you handle sales forecasting and pipeline management?",
+      "options": {
+        "basic": "Basic forecasting",
+        "monthly": "Monthly forecasts",
+        "weekly": "Weekly forecasts with reviews",
+        "real_time": "Real-time forecasting with AI/ML"
+      }
+    },
+    "how_8g9h0i": {
+      "label": "How do you track and improve win rates?",
+      "options": {
+        "no_tracking": "We don't track win rates",
+        "basic_tracking": "Basic win/loss tracking",
+        "detailed_analysis": "Detailed win/loss analysis",
+        "advanced_optimization": "Advanced win rate optimization"
+      }
+    },
+    "how_4i5j6k": {
+      "label": "How do you ensure your sales process adapts to different customer segments?",
+      "options": {
+        "one_size": "One-size-fits-all approach",
+        "basic_segmentation": "Basic segmentation",
+        "detailed_segmentation": "Detailed segmentation",
+        "dynamic_adaptation": "Dynamic process adaptation"
+      }
+    }
+  },
+  "score_4": {
+    "how_1579c0": {
+      "label": "How are your sales forecasts used beyond the sales team?",
+      "options": {
+        "not_used": "Not used beyond sales",
+        "basic_sharing": "Basic sharing with management",
+        "integrated_planning": "Integrated with business planning",
+        "drives_strategy": "Drives company-wide strategy"
+      }
+    },
+    "how_ed3928": {
+      "label": "How do you ensure consistent adoption of your sales methodology?",
+      "options": {
+        "no_methodology": "No formal methodology",
+        "basic_adoption": "Basic methodology adoption",
+        "structured_training": "Structured methodology training",
+        "advanced_optimization": "Advanced methodology optimization"
+      }
+    },
+    "how_6j7k8l": {
+      "label": "How do you measure and improve sales team productivity?",
+      "options": {
+        "basic_tracking": "Basic productivity tracking",
+        "activity_metrics": "Activity-based metrics",
+        "advanced_analytics": "Advanced productivity analytics",
+        "ai_optimization": "AI-driven productivity optimization"
+      }
+    },
+    "how_9k0l1m": {
+      "label": "How do you handle territory or account planning?",
+      "options": {
+        "no_planning": "No formal planning",
+        "basic_assignment": "Basic territory assignment",
+        "structured_management": "Structured territory management",
+        "dynamic_optimization": "Dynamic territory optimization"
+      }
+    },
+    "how_2l3m4n": {
+      "label": "How do you ensure consistent deal qualification?",
+      "options": {
+        "no_qualification": "No formal qualification",
+        "basic_criteria": "Basic qualification criteria",
+        "structured_process": "Structured qualification process",
+        "advanced_system": "Advanced qualification system"
+      }
+    },
+    "how_8n9o0p": {
+      "label": "How do you ensure your sales process adapts to market changes?",
+      "options": {
+        "static": "Static process",
+        "basic_monitoring": "Basic market monitoring",
+        "regular_updates": "Regular process updates",
+        "dynamic_adaptation": "Dynamic process adaptation"
+      }
+    }
+  },
+  "score_4_5": {
+    "how_18515e": {
+      "label": "How do you proactively monitor sales capacity?",
+      "options": {
+        "no_planning": "No capacity planning",
+        "basic_planning": "Basic headcount planning",
+        "detailed_modeling": "Detailed capacity modeling",
+        "advanced_optimization": "Advanced capacity optimization"
+      }
+    },
+    "how_70b7b8": {
+      "label": "How do you test and evolve your sales methodology?",
+      "options": {
+        "no_testing": "No methodology testing",
+        "basic_ab": "Basic A/B testing",
+        "structured_experiment": "Structured experimentation",
+        "advanced_optimization": "Advanced methodology optimization"
+      }
+    },
+    "how_1p2q3r": {
+      "label": "How do you measure and improve sales team productivity?",
+      "options": {
+        "basic_tracking": "Basic productivity tracking",
+        "activity_metrics": "Activity-based metrics",
+        "advanced_analytics": "Advanced productivity analytics",
+        "ai_optimization": "AI-driven productivity optimization"
+      }
+    },
+    "how_4q5r6s": {
+      "label": "How do you handle territory or account planning?",
+      "options": {
+        "no_planning": "No formal planning",
+        "basic_assignment": "Basic territory assignment",
+        "structured_management": "Structured territory management",
+        "dynamic_optimization": "Dynamic territory optimization"
+      }
+    },
+    "how_7r8s9t": {
+      "label": "How do you ensure consistent deal qualification?",
+      "options": {
+        "no_qualification": "No formal qualification",
+        "basic_criteria": "Basic qualification criteria",
+        "structured_process": "Structured qualification process",
+        "advanced_system": "Advanced qualification system"
+      }
+    },
+    "how_3t4u5v": {
+      "label": "How do you ensure your sales process adapts to market changes?",
+      "options": {
+        "static": "Static process",
+        "basic_monitoring": "Basic market monitoring",
+        "regular_updates": "Regular process updates",
+        "dynamic_adaptation": "Dynamic process adaptation"
+      }
+    }
+  },
+  "score_5": {
+    "how_136dcf": {
+      "label": "How does your sales org contribute to shaping company strategy?",
+      "options": {
+        "no_input": "No strategic input",
+        "basic_feedback": "Basic market feedback",
+        "regular_input": "Regular strategic input",
+        "drives_strategy": "Drives company strategy"
+      }
+    },
+    "how_e9af60": {
+      "label": "How do you ensure your sales culture supports learning?",
+      "options": {
+        "no_culture": "No learning culture",
+        "basic_training": "Basic training",
+        "structured_program": "Structured learning program",
+        "advanced_ecosystem": "Advanced learning ecosystem"
+      }
+    },
+    "how_6v7w8x": {
+      "label": "How do you measure and improve sales team productivity?",
+      "options": {
+        "basic_tracking": "Basic productivity tracking",
+        "activity_metrics": "Activity-based metrics",
+        "advanced_analytics": "Advanced productivity analytics",
+        "ai_optimization": "AI-driven productivity optimization"
+      }
+    },
+    "how_9w0x1y": {
+      "label": "How do you handle territory or account planning?",
+      "options": {
+        "no_planning": "No formal planning",
+        "basic_assignment": "Basic territory assignment",
+        "structured_management": "Structured territory management",
+        "dynamic_optimization": "Dynamic territory optimization"
+      }
+    },
+    "how_2x3y4z": {
+      "label": "How do you ensure consistent deal qualification?",
+      "options": {
+        "no_qualification": "No formal qualification",
+        "basic_criteria": "Basic qualification criteria",
+        "structured_process": "Structured qualification process",
+        "advanced_system": "Advanced qualification system"
+      }
+    },
+    "how_8z9a0b": {
+      "label": "How do you ensure your sales process adapts to market changes?",
+      "options": {
+        "static": "Static process",
+        "basic_monitoring": "Basic market monitoring",
+        "regular_updates": "Regular process updates",
+        "dynamic_adaptation": "Dynamic process adaptation"
+      }
+    }
+  }
+} 

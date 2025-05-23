@@ -1,74 +1,93 @@
 "use client";
 
-import React from "react";
-import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestion"; import {
-  getStringAnswer,
-  getArrayAnswer,
-  type AssessmentAnswers,
-  type AssessmentAnswerValue,
-} from "@/lib/types/AssessmentAnswers";
-import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
+import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
 
 export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_4cd27c"] === "string" &&
-    typeof answers["how_68cbdb"] === "string" &&
-    Array.isArray(answers["how_a4d10a"]) &&
-    answers["how_a4d10a"].length > 0
+    typeof answers.how_4cd27c === "string" &&
+    typeof answers.how_68cbdb === "string" &&
+    typeof answers.how_d30c39 === "string"
   );
 }
 
-type Props = {
+interface Group02Props {
   answers: AssessmentAnswers;
-  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
-};
+  onAnswerChange: (questionKey: string, answer: string) => void;
+}
 
-export default function Score2_5_Step02({ answers, onAnswer }: Props) {
-  const tracked = answers["which_96e79e"] || [];
+export function Group02({ answers, onAnswerChange }: Group02Props) {
+  const questions = questionConfig.score_2_5;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            {/* Question 1 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_4cd27c.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_4cd27c)}
+                onValueChange={(value: string) => onAnswerChange("how_4cd27c", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_4cd27c.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_4cd27c-${key}`} />
+                    <Label htmlFor={`how_4cd27c-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 4: how_4cd27c */}
-      <MultipleChoiceQuestion
-        question="How do you handle sales performance issues or opportunities?"
-        options={[
-          { value: "reactive", label: "We react to issues after they occur" },
-          { value: "weekly_review", label: "We review metrics weekly" },
-          { value: "proactive", label: "We proactively adjust based on data" },
-          { value: "forecasting", label: "We run forecasts and modeling" },
-        ]}
-        value={getStringAnswer(answers["how_4cd27c"])}
-        onChange={(val) => onAnswer("how_4cd27c", val)}
-      />
+            {/* Question 2 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_68cbdb.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_68cbdb)}
+                onValueChange={(value: string) => onAnswerChange("how_68cbdb", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_68cbdb.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_68cbdb-${key}`} />
+                    <Label htmlFor={`how_68cbdb-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
 
-      {/* Question 5: how_68cbdb */}
-      <MultipleChoiceQuestion
-        question="How do you handle pipeline reviews?"
-        options={[
-          { value: "no_review", label: "We don't have a pipeline review" },
-          { value: "as_needed", label: "We review as needed" },
-          { value: "regular_reviews", label: "We do regular reviews with leads" },
-          { value: "structured", label: "We have structured weekly pipeline reviews" },
-        ]}
-        value={getStringAnswer(answers["how_68cbdb"])}
-        onChange={(val) => onAnswer("how_68cbdb", val)}
-      />
-
-      {/* Question 6: how_a4d10a */}
-      <MultiSelectQuestion
-        question="Which of the following do you use to improve sales performance?"
-        options={[
-          { value: "call_recordings", label: "Call recordings" },
-          { value: "crm_notes", label: "CRM notes" },
-          { value: "chat_messages", label: "Slack or chat messages" },
-          { value: "deal_reviews", label: "Deal review meetings" },
-          { value: "rep_feedback", label: "Rep feedback" },
-        ]}
-        selected={Array.isArray(getArrayAnswer(answers["how_a4d10a"])) ? getArrayAnswer(answers["how_a4d10a"]) : []}
-        onChange={(val) => onAnswer("how_a4d10a", val)}
-        maxSelect={5}
-      />
+            {/* Question 3 */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                {questions.how_d30c39.label}
+              </Label>
+              <RadioGroup
+                value={getStringAnswer(answers.how_d30c39)}
+                onValueChange={(value: string) => onAnswerChange("how_d30c39", value)}
+                className="space-y-2"
+              >
+                {Object.entries(questions.how_d30c39.options).map(([key, label]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <RadioGroupItem value={key} id={`how_d30c39-${key}`} />
+                    <Label htmlFor={`how_d30c39-${key}`}>{label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
