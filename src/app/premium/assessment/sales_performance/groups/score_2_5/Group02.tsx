@@ -11,11 +11,10 @@ import MultiSelectQuestion from "@/components/questions/MultiSelectQuestion";
 
 export function isScore_2_5Group2Complete(answers: AssessmentAnswers): boolean {
   return (
-    Array.isArray(answers["which_96e79e"]) &&
-    answers["which_96e79e"].length > 0 &&
-    typeof answers["how_18d03b"] === "string" &&
-    typeof answers["what’s_f1fd32"] === "string" &&
-    typeof answers["how_86d3d9"] === "string"
+    typeof answers["how_4cd27c"] === "string" &&
+    typeof answers["how_68cbdb"] === "string" &&
+    Array.isArray(answers["how_a4d10a"]) &&
+    answers["how_a4d10a"].length > 0
   );
 }
 

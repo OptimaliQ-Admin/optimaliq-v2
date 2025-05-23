@@ -8,9 +8,9 @@ import MultipleChoiceQuestion from "@/components/questions/MultipleChoiceQuestio
 } from "@/lib/types/AssessmentAnswers";
 export function isScore_2_5Group1Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["how_61a52a"] === "string" &&
-    typeof answers["how_9e698a"] === "string" &&
-    typeof answers["how_e2391b"] === "string"
+    typeof answers["how_b5793e"] === "string" &&
+    typeof answers["how_140f94"] === "string" &&
+    typeof answers["how_3a6376"] === "string"
   );
 }
 
