@@ -150,7 +150,7 @@ const handleNext = async () => {
 
     const result = await response.json();
 
-    if (!response.ok || result.salesScore === undefined) {
+    if (!response.ok || result.salesPerformanceScore === undefined) {
       console.error("❌ Scoring API failed:", result);
       alert("Something went wrong while scoring the assessment.");
       return;
