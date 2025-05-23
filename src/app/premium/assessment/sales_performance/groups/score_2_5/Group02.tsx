@@ -30,59 +30,45 @@ export default function Score2_5_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-8">
 
-      {/* Question 4: which_96e79e */}
+      {/* Question 4: how_4cd27c */}
+      <MultipleChoiceQuestion
+        question="How do you handle sales performance issues or opportunities?"
+        options={[
+          { value: "reactive", label: "We react to issues after they occur" },
+          { value: "weekly_review", label: "We review metrics weekly" },
+          { value: "proactive", label: "We proactively adjust based on data" },
+          { value: "forecasting", label: "We run forecasts and modeling" },
+        ]}
+        value={getStringAnswer(answers["how_4cd27c"])}
+        onChange={(val) => onAnswer("how_4cd27c", val)}
+      />
+
+      {/* Question 5: how_68cbdb */}
+      <MultipleChoiceQuestion
+        question="How do you handle pipeline reviews?"
+        options={[
+          { value: "no_review", label: "We don't have a pipeline review" },
+          { value: "as_needed", label: "We review as needed" },
+          { value: "regular_reviews", label: "We do regular reviews with leads" },
+          { value: "structured", label: "We have structured weekly pipeline reviews" },
+        ]}
+        value={getStringAnswer(answers["how_68cbdb"])}
+        onChange={(val) => onAnswer("how_68cbdb", val)}
+      />
+
+      {/* Question 6: how_a4d10a */}
       <MultiSelectQuestion
-        question="Which of the following do you track to measure sales performance?"
+        question="Which of the following do you use to improve sales performance?"
         options={[
-          { value: "win_rates", label: "Win rates" },
-          { value: "avg_deal_size", label: "Average deal size" },
-          { value: "sales_cycle_length", label: "Sales cycle length" },
-          { value: "touchpoints", label: "Touchpoints per deal" },
-          { value: "forecast_accuracy", label: "Forecast accuracy" },
-          { value: "close_rate_by_stage", label: "Close rate by stage" },
+          { value: "call_recordings", label: "Call recordings" },
+          { value: "crm_notes", label: "CRM notes" },
+          { value: "chat_messages", label: "Slack or chat messages" },
+          { value: "deal_reviews", label: "Deal review meetings" },
+          { value: "rep_feedback", label: "Rep feedback" },
         ]}
-        selected={Array.isArray(getArrayAnswer(tracked)) ? getArrayAnswer(tracked) : []}
-        onChange={(val) => onAnswer("which_96e79e", val)}
-        maxSelect={6}
-      />
-
-      {/* Question 5: how_18d03b */}
-      <MultipleChoiceQuestion
-        question="How do you coach or develop sales reps or deal owners?"
-        options={[
-          { value: "no_process", label: "We don’t have a coaching process" },
-          { value: "informal_reviews", label: "We do informal deal reviews" },
-          { value: "regular_1on1s", label: "We provide regular 1:1s or call feedback" },
-          { value: "structured_program", label: "We have a structured coaching and training program" },
-        ]}
-        value={getStringAnswer(answers["how_18d03b"])}
-        onChange={(val) => onAnswer("how_18d03b", val)}
-      />
-
-      {/* Question 6: what’s_f1fd32 */}
-      <MultipleChoiceQuestion
-        question="What’s your process for identifying deals that are stuck or at risk?"
-        options={[
-          { value: "no_review", label: "We don’t review stuck deals" },
-          { value: "manual_flags", label: "Reps flag concerns manually" },
-          { value: "aging_or_inactive", label: "We check for deal aging or low activity" },
-          { value: "automated_scoring", label: "We use reports and scoring to flag risks automatically" },
-        ]}
-        value={getStringAnswer(answers["what’s_f1fd32"])}
-        onChange={(val) => onAnswer("what’s_f1fd32", val)}
-      />
-
-      {/* Question 7: how_86d3d9 */}
-      <MultipleChoiceQuestion
-        question="How often do you analyze win/loss outcomes or trends?"
-        options={[
-          { value: "never", label: "Rarely or never" },
-          { value: "sometimes", label: "Sometimes when a deal is big" },
-          { value: "monthly", label: "Monthly" },
-          { value: "built_in", label: "Built into every deal close and team review" },
-        ]}
-        value={getStringAnswer(answers["how_86d3d9"])}
-        onChange={(val) => onAnswer("how_86d3d9", val)}
+        selected={Array.isArray(getArrayAnswer(answers["how_a4d10a"])) ? getArrayAnswer(answers["how_a4d10a"]) : []}
+        onChange={(val) => onAnswer("how_a4d10a", val)}
+        maxSelect={5}
       />
     </div>
   );
