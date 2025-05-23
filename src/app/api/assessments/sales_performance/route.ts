@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       .from("sales_performance_assessment")
       .upsert({
         u_id: userId,
-        answers: answers, // Store all answers in a single JSONB column
+        ...answers, // Spread individual answer fields instead of using a JSONB column
         score: normalized,
         created_at: new Date().toISOString()
       }, {
