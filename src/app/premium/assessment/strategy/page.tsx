@@ -144,31 +144,13 @@ export default function OnboardingAssessmentPage() {
 
       const result = await response.json();
 
-      if (!response.ok || result.strategicScore === undefined) {
+      if (!response.ok || result.strategyScore === undefined) {
         console.error("❌ Scoring API failed:", result);
         alert("Something went wrong while scoring the assessment.");
         return;
       }
 
-      const strategicScore = result.strategicScore;
-
-      // Step 2: Save raw answers
-      const { error: insertError1 } = await supabase
-        .from("strategic_maturity_assessment")
-        .insert([{ ...sanitizedAnswers, score: strategicScore, u_id: user.u_id }]);
-
-      // Step 3: Save the scored result
-      const { error: insertError2 } = await supabase
-        .from("score_StrategicMaturity")
-        .insert([{ score: strategicScore, u_id: user.u_id }]);
-
-      if (insertError1 || insertError2) {
-        console.error("❌ Supabase error:", insertError1 || insertError2);
-        alert(`Something went wrong: ${(insertError1 || insertError2)?.message}`);
-        return;
-      }
-
-      router.push("/tier2/assessment");
+      router.push("/premium/assessment");
     } catch (err: unknown) {
       console.error("❌ Unexpected error:", err);
       alert(`Unexpected error: ${getErrorMessage(err)}`);

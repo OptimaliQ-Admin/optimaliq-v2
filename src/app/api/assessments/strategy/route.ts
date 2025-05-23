@@ -90,12 +90,12 @@ export async function POST(request: Request) {
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Upsert into strategy_assessment table
+    // Upsert into strategic_maturity_assessment table
     const { error: assessmentError } = await supabase
-      .from("strategy_assessment")
+      .from("strategic_maturity_assessment")
       .upsert({
         u_id: userId,
-        ...answers,
+        answers: answers,
         score: normalized,
         created_at: new Date().toISOString()
       }, {
