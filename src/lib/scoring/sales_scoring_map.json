@@ -299,6 +299,41 @@
         "deal_reviews": 4,
         "rep_feedback": 5
       }
+    },
+    "how_consistently_1a2b3c": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "skip_stages": 1,
+        "loose_steps": 2,
+        "track_movement": 3,
+        "methodical": 4
+      }
+    },
+    "which_bottlenecks_4d5e6f": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "cold_leads": 1,
+        "ghost_after_demo": 2,
+        "stuck_proposals": 3,
+        "pricing_objections": 4,
+        "internal_delays": 5
+      }
+    },
+    "unpredictable_area_7g8h9i": {
+      "type": "text_area",
+      "weight": 0.0
+    },
+    "handle_leads_0j1k2l": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_followup": 1,
+        "manual_reachout": 2,
+        "scheduled_followup": 3,
+        "automated_nurture": 4
+      }
     }
   },
   "score_3": {

@@ -51,18 +51,39 @@ export async function POST(request: Request) {
       Object.entries(answers).filter(([key]) => bracketScoringKeys.includes(key))
     );
 
+    // Log filtered answers and missing keys
+    logAssessmentDebug('sales-performance', {
+      originalAnswers: answers,
+      filteredAnswers,
+      missingKeys: Object.keys(answers).filter(key => !bracketScoringKeys.includes(key))
+    });
+
     let total = 0;
     let weightSum = 0;
 
     for (const key in filteredAnswers) {
       const q = bracketScoring[key];
-      if (!q) continue;
+      if (!q) {
+        logAssessmentDebug('sales-performance', {
+          message: `No scoring config found for key: ${key}`,
+          answer: filteredAnswers[key]
+        });
+        continue;
+      }
 
       const answer = filteredAnswers[key];
       let valScore = 0;
 
       if (q.type === "multiple_choice") {
         valScore = q.values[answer as string] || 0;
+        if (valScore === 0) {
+          logAssessmentDebug('sales-performance', {
+            message: `No score found for multiple choice answer`,
+            key,
+            answer,
+            availableValues: Object.keys(q.values)
+          });
+        }
       }
 
       if (q.type === "multi_select") {
@@ -70,7 +91,21 @@ export async function POST(request: Request) {
           const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer as string);
           const scores = selections.map((s) => q.values[s] || 0);
           valScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-        } catch {
+          if (valScore === 0) {
+            logAssessmentDebug('sales-performance', {
+              message: `No scores found for multi-select answers`,
+              key,
+              selections,
+              availableValues: Object.keys(q.values)
+            });
+          }
+        } catch (e) {
+          logAssessmentDebug('sales-performance', {
+            message: `Error processing multi-select answer`,
+            key,
+            answer,
+            error: e
+          });
           valScore = 0;
         }
       }
