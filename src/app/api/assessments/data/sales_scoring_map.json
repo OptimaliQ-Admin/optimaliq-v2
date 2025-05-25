@@ -221,70 +221,70 @@
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 3.5,
-        "manual_spreadsheet": 3.5,
-        "basic_crm": 3.5,
-        "automated": 3.5
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "automated": 4
       }
     },
     "how_140f94": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_targets": 3.5,
-        "basic_goals": 3.5,
-        "individual_targets": 3.5,
-        "detailed_kpis": 3.5
+        "no_targets": 1,
+        "basic_goals": 2,
+        "individual_targets": 3,
+        "detailed_kpis": 4
       }
     },
     "how_3a6376": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_reports": 3.5,
-        "basic_reports": 3.5,
-        "monthly_metrics": 3.5,
-        "real_time": 3.5
+        "no_reporting": 1,
+        "basic_reports": 2,
+        "monthly_metrics": 3,
+        "real_time": 4
       }
     },
     "how_4cd27c": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_process": 3.5,
-        "ad_hoc": 3.5,
-        "regular_reviews": 3.5,
-        "structured": 3.5
+        "reactive": 1,
+        "ad_hoc": 2,
+        "regular_reviews": 3,
+        "structured": 4
       }
     },
     "how_68cbdb": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_reviews": 4,
-        "occasional": 4,
-        "weekly": 4,
+        "no_review": 1,
+        "occasional": 2,
+        "weekly": 3,
         "structured": 4
       }
     },
     "how_d30c39": {
-      "type": "multiple_choice",
+      "type": "multi_select",
       "weight": 1,
       "values": {
-        "not_confident": 4,
-        "somewhat": 4,
-        "mostly": 4,
-        "very_confident": 4
+        "call_recordings": 1,
+        "chat_messages": 2,
+        "crm_notes": 3,
+        "deal_reviews": 4
       }
     },
     "how_4a7d74": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "not_scalable": 4,
-        "needs_changes": 4,
-        "some_adjustments": 4,
-        "fully_scalable": 4
+        "skip_stages": 1,
+        "some_steps": 2,
+        "track_movement": 3,
+        "stage_by_stage": 4
       }
     }
   },
