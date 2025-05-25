@@ -61,9 +61,17 @@ export async function POST(request: Request) {
     let total = 0;
     let weightSum = 0;
 
+    // Track scoring issues for debugging
+    const scoringIssues = {
+      unmatchedKeys: [] as string[],
+      typeMismatches: [] as { key: string; expected: string; received: string }[],
+      defaultedScores: [] as { key: string; answer: any; reason: string }[]
+    };
+
     for (const key in filteredAnswers) {
       const q = bracketScoring[key];
       if (!q) {
+        scoringIssues.unmatchedKeys.push(key);
         logAssessmentDebug('sales-performance', {
           message: `No scoring config found for key: ${key}`,
           answer: filteredAnswers[key]
@@ -74,9 +82,29 @@ export async function POST(request: Request) {
       const answer = filteredAnswers[key];
       let valScore = 0;
 
+      // Log type mismatches
+      if (q.type === "multiple_choice" && Array.isArray(answer)) {
+        scoringIssues.typeMismatches.push({
+          key,
+          expected: "string",
+          received: "array"
+        });
+      } else if (q.type === "multi_select" && !Array.isArray(answer) && typeof answer !== 'string') {
+        scoringIssues.typeMismatches.push({
+          key,
+          expected: "array or string",
+          received: typeof answer
+        });
+      }
+
       if (q.type === "multiple_choice") {
         valScore = q.values[answer as string] || 0;
         if (valScore === 0) {
+          scoringIssues.defaultedScores.push({
+            key,
+            answer,
+            reason: `No matching value in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
+          });
           logAssessmentDebug('sales-performance', {
             message: `No score found for multiple choice answer`,
             key,
@@ -91,7 +119,13 @@ export async function POST(request: Request) {
           const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer as string);
           const scores = selections.map((s) => q.values[s] || 0);
           valScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+          
           if (valScore === 0) {
+            scoringIssues.defaultedScores.push({
+              key,
+              answer: selections,
+              reason: `No matching values in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
+            });
             logAssessmentDebug('sales-performance', {
               message: `No scores found for multi-select answers`,
               key,
@@ -100,6 +134,11 @@ export async function POST(request: Request) {
             });
           }
         } catch (e) {
+          scoringIssues.defaultedScores.push({
+            key,
+            answer,
+            reason: `Failed to parse multi-select answer: ${e}`
+          });
           logAssessmentDebug('sales-performance', {
             message: `Error processing multi-select answer`,
             key,
@@ -118,25 +157,39 @@ export async function POST(request: Request) {
       }
     }
 
+    // Log all scoring issues at once
+    if (scoringIssues.unmatchedKeys.length > 0 || 
+        scoringIssues.typeMismatches.length > 0 || 
+        scoringIssues.defaultedScores.length > 0) {
+      logAssessmentDebug('sales-performance', {
+        message: 'Scoring issues detected',
+        issues: scoringIssues
+      });
+    }
+
     const raw = weightSum ? total / weightSum : 0;
     const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
-    // Log computed score
+    // Log computed score with scoring issues
     logAssessmentScore('sales-performance', { 
       bracket,
       totalScore: total,
       totalWeight: weightSum,
-      normalizedScore: normalized
+      normalizedScore: normalized,
+      scoringIssues
     });
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Upsert into sales_performance_assessment table
+    // Ensure answers is a plain object before upserting
+    const answersObject = typeof answers === 'string' ? JSON.parse(answers) : answers;
+
+    // Upsert into sales_performance_assessment table using the full answers object
     const { error: assessmentError } = await supabase
       .from("sales_performance_assessment")
       .upsert({
         u_id: userId,
-        answers: filteredAnswers,
+        answers: answersObject, // Ensure we're passing a plain object
         score: normalized,
         created_at: new Date().toISOString()
       }, {
@@ -146,7 +199,12 @@ export async function POST(request: Request) {
     if (assessmentError) {
       logAssessmentError('sales-performance', {
         error: "Failed to save assessment",
-        details: assessmentError
+        details: assessmentError,
+        attemptedData: {
+          u_id: userId,
+          answers: answersObject, // Log the processed answers object
+          score: normalized
+        }
       });
       return NextResponse.json(
         { error: "Failed to save assessment", details: assessmentError },
