@@ -4,7 +4,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
-import salesPerformanceScoringMap from "../data/sales_scoring_map.json";
+import salesPerformanceScoringMap from "@/app/api/assessments/data/sales_scoring_map.json";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;
@@ -46,26 +46,106 @@ export async function POST(request: Request) {
       return NextResponse.json(error, { status: 400 });
     }
 
+    // Filter answers to only include keys from the scoring map
+    const bracketScoringKeys = Object.keys(bracketScoring);
+    const filteredAnswers = Object.fromEntries(
+      Object.entries(answers).filter(([key]) => bracketScoringKeys.includes(key))
+    );
+
+    // Log filtered answers and missing keys
+    logAssessmentDebug('sales_performance', {
+      originalAnswers: answers,
+      filteredAnswers,
+      missingKeys: Object.keys(answers).filter(key => !bracketScoringKeys.includes(key))
+    });
+
     let total = 0;
     let weightSum = 0;
 
-    for (const key in answers) {
-      const q = bracketScoring[key];
-      if (!q) continue;
+    // Track scoring issues for debugging
+    const scoringIssues = {
+      unmatchedKeys: [] as string[],
+      typeMismatches: [] as { key: string; expected: string; received: string }[],
+      defaultedScores: [] as { key: string; answer: any; reason: string }[]
+    };
 
-      const answer = answers[key];
+    for (const key in filteredAnswers) {
+      const q = bracketScoring[key];
+      if (!q) {
+        scoringIssues.unmatchedKeys.push(key);
+        logAssessmentDebug('sales_performance', {
+          message: `No scoring config found for key: ${key}`,
+          answer: filteredAnswers[key]
+        });
+        continue;
+      }
+
+      const answer = filteredAnswers[key];
       let valScore = 0;
 
+      // Log type mismatches
+      if (q.type === "multiple_choice" && Array.isArray(answer)) {
+        scoringIssues.typeMismatches.push({
+          key,
+          expected: "string",
+          received: "array"
+        });
+      } else if (q.type === "multi_select" && !Array.isArray(answer) && typeof answer !== 'string') {
+        scoringIssues.typeMismatches.push({
+          key,
+          expected: "array or string",
+          received: typeof answer
+        });
+      }
+
       if (q.type === "multiple_choice") {
-        valScore = q.values[answer] || 0;
+        valScore = q.values[answer as string] || 0;
+        if (valScore === 0) {
+          scoringIssues.defaultedScores.push({
+            key,
+            answer,
+            reason: `No matching value in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
+          });
+          logAssessmentDebug('sales_performance', {
+            message: `No score found for multiple choice answer`,
+            key,
+            answer,
+            availableValues: Object.keys(q.values)
+          });
+        }
       }
 
       if (q.type === "multi_select") {
         try {
-          const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer);
+          const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer as string);
           const scores = selections.map((s) => q.values[s] || 0);
           valScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-        } catch {
+          
+          if (valScore === 0) {
+            scoringIssues.defaultedScores.push({
+              key,
+              answer: selections,
+              reason: `No matching values in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
+            });
+            logAssessmentDebug('sales_performance', {
+              message: `No scores found for multi-select answers`,
+              key,
+              selections,
+              availableValues: Object.keys(q.values)
+            });
+          }
+        } catch (e) {
+          scoringIssues.defaultedScores.push({
+            key,
+            answer,
+            reason: `Failed to parse multi-select answer: ${e}`
+          });
+          logAssessmentDebug('sales_performance', {
+            message: `Error processing multi-select answer`,
+            key,
+            answer,
+            error: e
+          });
           valScore = 0;
         }
       }
@@ -78,25 +158,39 @@ export async function POST(request: Request) {
       }
     }
 
+    // Log all scoring issues at once
+    if (scoringIssues.unmatchedKeys.length > 0 || 
+        scoringIssues.typeMismatches.length > 0 || 
+        scoringIssues.defaultedScores.length > 0) {
+      logAssessmentDebug('sales_performance', {
+        message: 'Scoring issues detected',
+        issues: scoringIssues
+      });
+    }
+
     const raw = weightSum ? total / weightSum : 0;
     const normalized = Math.round((raw + Number.EPSILON) * 2) / 2;
 
-    // Log computed score
+    // Log computed score with scoring issues
     logAssessmentScore('sales_performance', { 
       bracket,
       totalScore: total,
       totalWeight: weightSum,
-      normalizedScore: normalized
+      normalizedScore: normalized,
+      scoringIssues
     });
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Create a JSONB column for answers
+    // Ensure answers is a plain object before upserting
+    const answersObject = typeof answers === 'string' ? JSON.parse(answers) : answers;
+
+    // Upsert into sales_performance_assessment table using the full answers object
     const { error: assessmentError } = await supabase
       .from("sales_performance_assessment")
       .upsert({
         u_id: userId,
-        ...answers, // Spread individual answer fields instead of using a JSONB column
+        answers: answersObject, // Properly insert as JSONB object
         score: normalized,
         created_at: new Date().toISOString()
       }, {
@@ -109,57 +203,12 @@ export async function POST(request: Request) {
         details: assessmentError,
         attemptedData: {
           u_id: userId,
-          answers,
+          answers: answersObject,
           score: normalized
         }
       });
       return NextResponse.json(
         { error: "Failed to save assessment", details: assessmentError },
-        { status: 500 }
-      );
-    }
-
-    // Insert into score_sales_performance table
-    const { error: scoreError } = await supabase
-      .from("score_sales_performance")
-      .insert({
-        u_id: userId,
-        gmf_score: score,
-        bracket_key: bracket,
-        score: normalized,
-        answers,
-        version: "v1",
-      });
-
-    if (scoreError) {
-      logAssessmentError('sales_performance', {
-        error: "Failed to save score",
-        details: scoreError
-      });
-      return NextResponse.json(
-        { error: "Failed to save score", details: scoreError },
-        { status: 500 }
-      );
-    }
-
-    // Update tier2_profiles table
-    const { error: profileError } = await supabase
-      .from("tier2_profiles")
-      .upsert({
-        u_id: userId,
-        sales_performance_score: normalized,
-        sales_performance_last_taken: new Date().toISOString(),
-      }, {
-        onConflict: "u_id"
-      });
-
-    if (profileError) {
-      logAssessmentError('sales_performance', {
-        error: "Failed to update profile",
-        details: profileError
-      });
-      return NextResponse.json(
-        { error: "Failed to update profile", details: profileError },
         { status: 500 }
       );
     }
