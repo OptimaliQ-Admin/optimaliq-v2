@@ -153,6 +153,40 @@
           "score": 4
         }
       }
+    },
+    "which_metrics_7f8d9e": {
+      "label": "Which of the following do you currently track or measure in your sales process?",
+      "type": "multi_select",
+      "options": {
+        "lead_sources": {
+          "label": "Lead sources",
+          "score": 1
+        },
+        "conversion_rates": {
+          "label": "Deal stage conversion rates",
+          "score": 2
+        },
+        "time_to_close": {
+          "label": "Time to close",
+          "score": 3
+        },
+        "win_loss": {
+          "label": "Win/loss reasons",
+          "score": 4
+        },
+        "activity": {
+          "label": "Sales activity (calls, emails)",
+          "score": 5
+        }
+      }
+    },
+    "biggest_obstacle_9a1b2c": {
+      "label": "What's the biggest obstacle you face when trying to close more deals?",
+      "type": "text_area"
+    },
+    "improvement_priority_3d4e5f": {
+      "label": "If you could improve one part of your sales process today, what would it be and why?",
+      "type": "text_area"
     }
   },
   "score_1_5": {
@@ -248,6 +282,32 @@
       "label": "How do you track deal progression?",
       "type": "multiple_choice",
       "options": {
+        "no_tracking": {
+          "label": "We don't track it systematically",
+          "score": 1
+        },
+        "manual_notes": {
+          "label": "In notes or spreadsheets",
+          "score": 2
+        },
+        "basic_crm": {
+          "label": "In our CRM with basic stages",
+          "score": 3
+        },
+        "detailed_tracking": {
+          "label": "With detailed stages and metrics",
+          "score": 4
+        }
+      }
+    },
+    "what_metrics_8c9d0e": {
+      "label": "What sales metrics are most important to you right now?",
+      "type": "text_area"
+    },
+    "how_consistently_1a2b3c": {
+      "label": "How consistently do you move leads through each sales stage?",
+      "type": "multiple_choice",
+      "options": {
         "skip_stages": {
           "label": "We skip or rush through stages",
           "score": 1
@@ -256,7 +316,7 @@
           "label": "We loosely follow a set of steps",
           "score": 2
         },
-        "inconsistent_tracking": {
+        "track_movement": {
           "label": "We track movement but not always accurately",
           "score": 3
         },
@@ -266,23 +326,53 @@
         }
       }
     },
-    "how_c8eb2a": {
-      "label": "How do you handle follow-ups with prospects?",
+    "which_bottlenecks_4d5e6f": {
+      "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
+      "type": "multi_select",
+      "options": {
+        "cold_leads": {
+          "label": "Leads go cold",
+          "score": 1
+        },
+        "ghost_after_demo": {
+          "label": "Prospects ghost after demos",
+          "score": 2
+        },
+        "stuck_proposals": {
+          "label": "Proposals get stuck",
+          "score": 3
+        },
+        "pricing_objections": {
+          "label": "Pricing objections",
+          "score": 4
+        },
+        "internal_delays": {
+          "label": "Internal delays or handoffs",
+          "score": 5
+        }
+      }
+    },
+    "unpredictable_area_7g8h9i": {
+      "label": "What's one part of your pipeline that feels unpredictable or messy?",
+      "type": "text_area"
+    },
+    "handle_leads_0j1k2l": {
+      "label": "How do you handle leads that don't convert right away?",
       "type": "multiple_choice",
       "options": {
         "no_followup": {
           "label": "We don't follow up",
           "score": 1
         },
-        "manual": {
+        "manual_reachout": {
           "label": "We manually reach out when we remember",
           "score": 2
         },
-        "scheduled": {
-          "label": "We schedule follow ups",
+        "scheduled_followups": {
+          "label": "We schedule follow-ups",
           "score": 3
         },
-        "automated": {
+        "nurture_flows": {
           "label": "We place them into nurture or remarketing flows",
           "score": 4
         }
@@ -290,8 +380,8 @@
     }
   },
   "score_2": {
-    "how_64a8d1": {
-      "label": "How are your sales pipeline stages defined?",
+    "how_clearly_3m4n5o": {
+      "label": "How clearly are your sales stages defined (e.g. discovery, demo, proposal, negotiation)?",
       "type": "multiple_choice",
       "options": {
         "not_defined": {
@@ -302,7 +392,7 @@
           "label": "Some stages are loosely defined",
           "score": 2
         },
-        "inconsistent_use": {
+        "defined_not_used": {
           "label": "Defined, but not consistently used",
           "score": 3
         },
@@ -312,8 +402,8 @@
         }
       }
     },
-    "how_7d8dcb": {
-      "label": "How accurate is your pipeline data?",
+    "how_confident_6p7q8r": {
+      "label": "How confident are you in the accuracy of your current pipeline data?",
       "type": "multiple_choice",
       "options": {
         "not_accurate": {
@@ -334,8 +424,8 @@
         }
       }
     },
-    "how_0fa447": {
-      "label": "How do you prioritize sales opportunities?",
+    "how_prioritize_9s0t1u": {
+      "label": "How do you prioritize leads or accounts in your pipeline?",
       "type": "multiple_choice",
       "options": {
         "most_recent": {
@@ -356,8 +446,8 @@
         }
       }
     },
-    "how_a76658": {
-      "label": "How do you manage follow-ups?",
+    "how_track_followups_2v3w4x": {
+      "label": "How do you track and manage follow-ups across your deals?",
       "type": "multiple_choice",
       "options": {
         "no_tracking": {
@@ -372,14 +462,14 @@
           "label": "We have tasks inside our CRM",
           "score": 3
         },
-        "automated_sequences": {
+        "automation": {
           "label": "We use automation or sequences to manage follow-ups",
           "score": 4
         }
       }
     },
-    "which_045862": {
-      "label": "Which sales metrics do you track?",
+    "which_operations_5y6z7a": {
+      "label": "Which of the following are part of your sales operations today?",
       "type": "multi_select",
       "options": {
         "pipeline_reviews": {
@@ -394,40 +484,40 @@
           "label": "Deal stage conversion tracking",
           "score": 3
         },
-        "enablement_content": {
+        "enablement": {
           "label": "Sales enablement content",
           "score": 4
         },
-        "performance_dashboards": {
+        "dashboards": {
           "label": "Performance dashboards",
           "score": 5
         }
       }
     },
-    "how_5589a0": {
-      "label": "How do you prepare for sales calls?",
+    "how_prepare_8b9c0d": {
+      "label": "How do you typically prepare for a sales meeting or call?",
       "type": "multiple_choice",
       "options": {
-        "no_prep": {
+        "wing_it": {
           "label": "We wing it",
           "score": 1
         },
-        "basic_prep": {
+        "glance_notes": {
           "label": "We glance at past notes or emails",
           "score": 2
         },
-        "structured_prep": {
+        "checklist": {
           "label": "We follow a checklist or sales script",
           "score": 3
         },
-        "comprehensive_prep": {
+        "prep_research": {
           "label": "We prep with research, context, and a discovery framework",
           "score": 4
         }
       }
     },
-    "how_92a11d": {
-      "label": "How do you document sales interactions?",
+    "how_often_document_1e2f3g": {
+      "label": "How often are sales conversations documented or logged?",
       "type": "multiple_choice",
       "options": {
         "rarely": {
@@ -442,14 +532,14 @@
           "label": "Most calls are noted in the CRM",
           "score": 3
         },
-        "all_interactions": {
+        "every_interaction": {
           "label": "Every interaction is logged and searchable",
           "score": 4
         }
       }
     },
-    "how_1e24f7": {
-      "label": "How do you handle sales-to-delivery handoffs?",
+    "how_effective_handoff_4h5i6j": {
+      "label": "How effective is your current handoff process from marketing or SDR to sales?",
       "type": "multiple_choice",
       "options": {
         "no_handoff": {
@@ -469,6 +559,14 @@
           "score": 4
         }
       }
+    },
+    "biggest_friction_7k8l9m": {
+      "label": "What's the biggest friction point in your current sales cycle?",
+      "type": "text_area"
+    },
+    "one_improvement_0n1o2p": {
+      "label": "What's one improvement you'd make to your sales process if you could implement it today?",
+      "type": "text_area"
     }
   },
   "score_2_5": {
@@ -607,515 +705,852 @@
           "score": 5
         }
       }
+    },
+    "how_consistently_1a2b3c": {
+      "label": "How consistently do you move leads through each sales stage?",
+      "type": "multiple_choice",
+      "options": {
+        "skip_stages": {
+          "label": "We skip or rush through stages",
+          "score": 1
+        },
+        "loose_steps": {
+          "label": "We loosely follow a set of steps",
+          "score": 2
+        },
+        "track_movement": {
+          "label": "We track movement but not always accurately",
+          "score": 3
+        },
+        "methodical": {
+          "label": "We move deals methodically through stages",
+          "score": 4
+        }
+      }
+    },
+    "which_bottlenecks_4d5e6f": {
+      "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
+      "type": "multi_select",
+      "options": {
+        "cold_leads": {
+          "label": "Leads go cold",
+          "score": 1
+        },
+        "ghost_after_demo": {
+          "label": "Prospects ghost after demos",
+          "score": 2
+        },
+        "stuck_proposals": {
+          "label": "Proposals get stuck",
+          "score": 3
+        },
+        "pricing_objections": {
+          "label": "Pricing objections",
+          "score": 4
+        },
+        "internal_delays": {
+          "label": "Internal delays or handoffs",
+          "score": 5
+        }
+      }
+    },
+    "unpredictable_area_7g8h9i": {
+      "label": "What's one part of your pipeline that feels unpredictable or messy?",
+      "type": "text_area"
+    },
+    "handle_leads_0j1k2l": {
+      "label": "How do you handle leads that don't convert right away?",
+      "type": "multiple_choice",
+      "options": {
+        "no_followup": {
+          "label": "We don't follow up",
+          "score": 1
+        },
+        "manual_reachout": {
+          "label": "We manually reach out when we remember",
+          "score": 2
+        },
+        "scheduled_followups": {
+          "label": "We schedule follow-ups",
+          "score": 3
+        },
+        "nurture_flows": {
+          "label": "We place them into nurture or remarketing flows",
+          "score": 4
+        }
+      }
     }
   },
   "score_3": {
     "how_7f8e9d": {
-      "key": "how_7f8e9d",
       "label": "How do you define and track your sales pipeline stages?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "not_defined",
+      "options": {
+        "not_defined": {
           "label": "Not defined",
           "score": 1
         },
-        {
-          "key": "loosely_defined",
+        "loosely_defined": {
           "label": "Some stages are loosely defined",
           "score": 2
         },
-        {
-          "key": "inconsistent_use",
+        "inconsistent_use": {
           "label": "Defined, but not consistently used",
           "score": 3
         },
-        {
-          "key": "clearly_documented",
+        "clearly_documented": {
           "label": "Clearly documented and used for tracking",
           "score": 4
         }
-      ]
+      }
     },
     "how_1a2b3c": {
-      "key": "how_1a2b3c",
       "label": "How accurate is your pipeline data?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "not_accurate",
+      "options": {
+        "not_accurate": {
           "label": "Not accurate at all",
           "score": 1
         },
-        {
-          "key": "somewhat_accurate",
+        "somewhat_accurate": {
           "label": "Somewhat accurate",
           "score": 2
         },
-        {
-          "key": "mostly_accurate",
+        "mostly_accurate": {
           "label": "Mostly accurate, with occasional cleanups",
           "score": 3
         },
-        {
-          "key": "very_accurate",
+        "very_accurate": {
           "label": "Very accurate and regularly maintained",
           "score": 4
         }
-      ]
+      }
     },
     "how_4d5e6f": {
-      "key": "how_4d5e6f",
       "label": "How do you prioritize sales opportunities?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "most_recent",
+      "options": {
+        "most_recent": {
           "label": "We work whatever is most recent",
           "score": 1
         },
-        {
-          "key": "gut_feel",
+        "gut_feel": {
           "label": "We prioritize based on gut feel",
           "score": 2
         },
-        {
-          "key": "deal_size",
+        "deal_size": {
           "label": "We prioritize based on deal size or engagement",
           "score": 3
         },
-        {
-          "key": "scoring_criteria",
+        "scoring_criteria": {
           "label": "We use scoring or qualification criteria",
           "score": 4
         }
-      ]
+      }
     },
     "how_7g8h9i": {
-      "key": "how_7g8h9i",
       "label": "How do you manage follow-ups with prospects?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_tracking",
+      "options": {
+        "no_tracking": {
           "label": "We don't track follow-ups well",
           "score": 1
         },
-        {
-          "key": "calendar_reminders",
+        "calendar_reminders": {
           "label": "We rely on calendar or reminders",
           "score": 2
         },
-        {
-          "key": "crm_tasks",
+        "crm_tasks": {
           "label": "We have tasks inside our CRM",
           "score": 3
         },
-        {
-          "key": "automated_sequences",
+        "automated_sequences": {
           "label": "We use automation or sequences to manage follow-ups",
           "score": 4
         }
-      ]
+      }
     },
     "which_0j1k2l": {
-      "key": "which_0j1k2l",
       "label": "Which sales metrics do you track?",
       "type": "multi_select",
-      "options": [
-        {
-          "key": "pipeline_reviews",
+      "options": {
+        "pipeline_reviews": {
           "label": "Regular pipeline reviews",
           "score": 1
         },
-        {
-          "key": "forecasting",
+        "forecasting": {
           "label": "Forecasting reports",
           "score": 2
         },
-        {
-          "key": "conversion_tracking",
+        "conversion_tracking": {
           "label": "Deal stage conversion tracking",
           "score": 3
         },
-        {
-          "key": "enablement_content",
+        "enablement_content": {
           "label": "Sales enablement content",
           "score": 4
         },
-        {
-          "key": "performance_dashboards",
+        "performance_dashboards": {
           "label": "Performance dashboards",
           "score": 5
         }
-      ]
+      }
+    },
+    "how_prepare_3m4n5o": {
+      "label": "How do you prepare for sales calls?",
+      "type": "multiple_choice",
+      "options": {
+        "no_prep": {
+          "label": "We wing it",
+          "score": 1
+        },
+        "basic_prep": {
+          "label": "We glance at past notes or emails",
+          "score": 2
+        },
+        "structured_prep": {
+          "label": "We follow a checklist or sales script",
+          "score": 3
+        },
+        "comprehensive_prep": {
+          "label": "We prep with research, context, and a discovery framework",
+          "score": 4
+        }
+      }
+    },
+    "how_document_6p7q8r": {
+      "label": "How do you document sales interactions?",
+      "type": "multiple_choice",
+      "options": {
+        "rarely": {
+          "label": "Rarely",
+          "score": 1
+        },
+        "big_deals": {
+          "label": "Only for big deals",
+          "score": 2
+        },
+        "most_calls": {
+          "label": "Most calls are noted in the CRM",
+          "score": 3
+        },
+        "all_interactions": {
+          "label": "Every interaction is logged and searchable",
+          "score": 4
+        }
+      }
+    },
+    "how_handoff_9s0t1u": {
+      "label": "How do you handle sales-to-delivery handoffs?",
+      "type": "multiple_choice",
+      "options": {
+        "no_handoff": {
+          "label": "We don't really have a handoff",
+          "score": 1
+        },
+        "inconsistent": {
+          "label": "It's inconsistent",
+          "score": 2
+        },
+        "mostly_smooth": {
+          "label": "It's mostly smooth, but has gaps",
+          "score": 3
+        },
+        "standardized": {
+          "label": "It's standardized and clearly defined",
+          "score": 4
+        }
+      }
+    },
+    "biggest_challenge_2v3w4x": {
+      "label": "What's the biggest challenge you face in your sales process?",
+      "type": "text_area"
+    },
+    "improvement_priority_5y6z7a": {
+      "label": "What's one improvement you'd make to your sales process if you could implement it today?",
+      "type": "text_area"
     }
   },
   "score_3_5": {
     "how_3m4n5o": {
-      "key": "how_3m4n5o",
       "label": "How do you prepare for sales calls?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_prep",
+      "options": {
+        "no_prep": {
           "label": "We wing it",
           "score": 1
         },
-        {
-          "key": "basic_prep",
+        "basic_prep": {
           "label": "We glance at past notes or emails",
           "score": 2
         },
-        {
-          "key": "structured_prep",
+        "structured_prep": {
           "label": "We follow a checklist or sales script",
           "score": 3
         },
-        {
-          "key": "comprehensive_prep",
+        "comprehensive_prep": {
           "label": "We prep with research, context, and a discovery framework",
           "score": 4
         }
-      ]
+      }
     },
     "how_6p7q8r": {
-      "key": "how_6p7q8r",
       "label": "How do you document sales interactions?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "rarely",
+      "options": {
+        "rarely": {
           "label": "Rarely",
           "score": 1
         },
-        {
-          "key": "big_deals",
+        "big_deals": {
           "label": "Only for big deals",
           "score": 2
         },
-        {
-          "key": "most_calls",
+        "most_calls": {
           "label": "Most calls are noted in the CRM",
           "score": 3
         },
-        {
-          "key": "all_interactions",
+        "all_interactions": {
           "label": "Every interaction is logged and searchable",
           "score": 4
         }
-      ]
+      }
     },
     "how_9s0t1u": {
-      "key": "how_9s0t1u",
       "label": "How do you handle sales-to-delivery handoffs?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_handoff",
+      "options": {
+        "no_handoff": {
           "label": "We don't really have a handoff",
           "score": 1
         },
-        {
-          "key": "inconsistent",
+        "inconsistent": {
           "label": "It's inconsistent",
           "score": 2
         },
-        {
-          "key": "mostly_smooth",
+        "mostly_smooth": {
           "label": "It's mostly smooth, but has gaps",
           "score": 3
         },
-        {
-          "key": "standardized",
+        "standardized": {
           "label": "It's standardized and clearly defined",
           "score": 4
         }
-      ]
+      }
     },
     "how_2v3w4x": {
-      "key": "how_2v3w4x",
       "label": "How do you track sales activities?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_tracking",
+      "options": {
+        "no_tracking": {
           "label": "No one tracks them",
           "score": 1
         },
-        {
-          "key": "manual_tracking",
+        "manual_tracking": {
           "label": "They're tracked in emails or notes",
           "score": 2
         },
-        {
-          "key": "basic_tool",
+        "basic_tool": {
           "label": "We track them in a spreadsheet or tool",
           "score": 3
         },
-        {
-          "key": "crm_guided",
+        "crm_guided": {
           "label": "We use a CRM that guides next steps",
           "score": 4
         }
-      ]
+      }
     },
     "how_5y6z7a": {
-      "key": "how_5y6z7a",
       "label": "How do you handle sales targets and goals?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_targets",
+      "options": {
+        "no_targets": {
           "label": "We don't have targets",
           "score": 1
         },
-        {
-          "key": "rep_tracked",
+        "rep_tracked": {
           "label": "Each rep tracks their own goals",
           "score": 2
         },
-        {
-          "key": "infrequent_review",
+        "infrequent_review": {
           "label": "We set goals but don't review them often",
           "score": 3
         },
-        {
-          "key": "regular_review",
+        "regular_review": {
           "label": "We track and review goals regularly",
           "score": 4
         }
-      ]
+      }
+    },
+    "which_metrics_8b9c0d": {
+      "label": "Which sales metrics do you track?",
+      "type": "multi_select",
+      "options": {
+        "pipeline_reviews": {
+          "label": "Regular pipeline reviews",
+          "score": 1
+        },
+        "forecasting": {
+          "label": "Forecasting reports",
+          "score": 2
+        },
+        "conversion_tracking": {
+          "label": "Deal stage conversion tracking",
+          "score": 3
+        },
+        "enablement_content": {
+          "label": "Sales enablement content",
+          "score": 4
+        },
+        "performance_dashboards": {
+          "label": "Performance dashboards",
+          "score": 5
+        }
+      }
+    },
+    "how_effective_1e2f3g": {
+      "label": "How effective is your current handoff process from marketing or SDR to sales?",
+      "type": "multiple_choice",
+      "options": {
+        "no_handoff": {
+          "label": "We don't really have a handoff",
+          "score": 1
+        },
+        "inconsistent": {
+          "label": "It's inconsistent",
+          "score": 2
+        },
+        "mostly_smooth": {
+          "label": "It's mostly smooth, but has gaps",
+          "score": 3
+        },
+        "standardized": {
+          "label": "It's standardized and clearly defined",
+          "score": 4
+        }
+      }
+    },
+    "which_bottlenecks_4h5i6j": {
+      "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
+      "type": "multi_select",
+      "options": {
+        "cold_leads": {
+          "label": "Leads go cold",
+          "score": 1
+        },
+        "ghost_after_demo": {
+          "label": "Prospects ghost after demos",
+          "score": 2
+        },
+        "stuck_proposals": {
+          "label": "Proposals get stuck",
+          "score": 3
+        },
+        "pricing_objections": {
+          "label": "Pricing objections",
+          "score": 4
+        },
+        "internal_delays": {
+          "label": "Internal delays or handoffs",
+          "score": 5
+        }
+      }
+    },
+    "biggest_friction_7k8l9m": {
+      "label": "What's the biggest friction point in your current sales cycle?",
+      "type": "text_area"
+    },
+    "one_improvement_0n1o2p": {
+      "label": "What's one improvement you'd make to your sales process if you could implement it today?",
+      "type": "text_area"
     }
   },
   "score_4": {
     "how_8b9c0d": {
-      "key": "how_8b9c0d",
       "label": "How do you manage sales reporting?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_reporting",
+      "options": {
+        "no_reporting": {
           "label": "No reporting",
           "score": 1
         },
-        {
-          "key": "basic_reports",
+        "basic_reports": {
           "label": "We have basic reports",
           "score": 2
         },
-        {
-          "key": "weekly_metrics",
+        "weekly_metrics": {
           "label": "We track key metrics weekly",
           "score": 3
         },
-        {
-          "key": "real_time",
+        "real_time": {
           "label": "We have real-time dashboards",
           "score": 4
         }
-      ]
+      }
     },
     "how_1e2f3g": {
-      "key": "how_1e2f3g",
       "label": "How do you adjust sales strategies?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "reactive",
+      "options": {
+        "reactive": {
           "label": "We react to issues after they occur",
           "score": 1
         },
-        {
-          "key": "weekly_review",
+        "weekly_review": {
           "label": "We review metrics weekly",
           "score": 2
         },
-        {
-          "key": "proactive",
+        "proactive": {
           "label": "We proactively adjust based on data",
           "score": 3
         },
-        {
-          "key": "forecasting",
+        "forecasting": {
           "label": "We run forecasts and modeling",
           "score": 4
         }
-      ]
+      }
     },
     "how_4h5i6j": {
-      "key": "how_4h5i6j",
       "label": "How do you review your sales pipeline?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_review",
+      "options": {
+        "no_review": {
           "label": "We don't have a pipeline review",
           "score": 1
         },
-        {
-          "key": "as_needed",
+        "as_needed": {
           "label": "We review as needed",
           "score": 2
         },
-        {
-          "key": "regular_reviews",
+        "regular_reviews": {
           "label": "We do regular reviews with leads",
           "score": 3
         },
-        {
-          "key": "structured_reviews",
+        "structured_reviews": {
           "label": "We have structured weekly pipeline reviews",
           "score": 4
         }
-      ]
+      }
     },
     "which_7k8l9m": {
-      "key": "which_7k8l9m",
       "label": "Which deal insights do you capture?",
       "type": "multi_select",
-      "options": [
-        {
-          "key": "call_recordings",
+      "options": {
+        "call_recordings": {
           "label": "Call recordings",
           "score": 1
         },
-        {
-          "key": "crm_notes",
+        "crm_notes": {
           "label": "CRM notes",
           "score": 2
         },
-        {
-          "key": "chat_messages",
+        "chat_messages": {
           "label": "Slack or chat messages",
           "score": 3
         },
-        {
-          "key": "deal_reviews",
+        "deal_reviews": {
           "label": "Deal review meetings",
           "score": 4
         },
-        {
-          "key": "rep_feedback",
+        "rep_feedback": {
           "label": "Rep feedback",
           "score": 5
         }
-      ]
+      }
+    },
+    "how_0n1o2p": {
+      "label": "How do you handle sales enablement?",
+      "type": "multiple_choice",
+      "options": {
+        "no_enablement": {
+          "label": "No formal enablement",
+          "score": 1
+        },
+        "basic_training": {
+          "label": "Basic onboarding training",
+          "score": 2
+        },
+        "regular_training": {
+          "label": "Regular training sessions",
+          "score": 3
+        },
+        "continuous_learning": {
+          "label": "Continuous learning program",
+          "score": 4
+        }
+      }
+    },
+    "which_3q4r5s": {
+      "label": "Which sales analytics do you track?",
+      "type": "multi_select",
+      "options": {
+        "win_loss": {
+          "label": "Win/loss analysis",
+          "score": 1
+        },
+        "stage_conversion": {
+          "label": "Stage conversion rates",
+          "score": 2
+        },
+        "forecast_accuracy": {
+          "label": "Forecast accuracy",
+          "score": 3
+        },
+        "deal_quality": {
+          "label": "Deal quality metrics",
+          "score": 4
+        },
+        "rep_coaching": {
+          "label": "Rep coaching metrics",
+          "score": 5
+        }
+      }
+    },
+    "how_6t7u8v": {
+      "label": "How do you monitor deal progression?",
+      "type": "multiple_choice",
+      "options": {
+        "too_late": {
+          "label": "Too late to intervene",
+          "score": 1
+        },
+        "manual_monitoring": {
+          "label": "Manual monitoring",
+          "score": 2
+        },
+        "dashboards": {
+          "label": "Using dashboards",
+          "score": 3
+        },
+        "modeled_stages": {
+          "label": "Modeled by stage",
+          "score": 4
+        }
+      }
+    },
+    "how_9w0x1y": {
+      "label": "How do you qualify leads?",
+      "type": "multiple_choice",
+      "options": {
+        "gut_feel": {
+          "label": "Gut feel",
+          "score": 1
+        },
+        "call_history": {
+          "label": "Call history",
+          "score": 2
+        },
+        "lead_fit": {
+          "label": "Lead fit scoring",
+          "score": 3
+        },
+        "multi_factor": {
+          "label": "Multi-factor scoring",
+          "score": 4
+        }
+      }
+    },
+    "biggest_challenge_2z3a4b": {
+      "label": "What's the biggest challenge you face in your sales process?",
+      "type": "text_area"
+    },
+    "improvement_priority_5c6d7e": {
+      "label": "What's one improvement you'd make to your sales process if you could implement it today?",
+      "type": "text_area"
     }
   },
   "score_4_5": {
     "how_0n1o2p": {
-      "key": "how_0n1o2p",
       "label": "How do you handle sales enablement?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "no_enablement",
+      "options": {
+        "no_enablement": {
           "label": "No formal enablement",
           "score": 1
         },
-        {
-          "key": "basic_training",
+        "basic_training": {
           "label": "Basic onboarding training",
           "score": 2
         },
-        {
-          "key": "regular_training",
+        "regular_training": {
           "label": "Regular training sessions",
           "score": 3
         },
-        {
-          "key": "continuous_learning",
+        "continuous_learning": {
           "label": "Continuous learning program",
           "score": 4
         }
-      ]
+      }
     },
     "which_3q4r5s": {
-      "key": "which_3q4r5s",
       "label": "Which sales analytics do you track?",
       "type": "multi_select",
-      "options": [
-        {
-          "key": "win_loss",
+      "options": {
+        "win_loss": {
           "label": "Win/loss analysis",
           "score": 1
         },
-        {
-          "key": "stage_conversion",
+        "stage_conversion": {
           "label": "Stage conversion rates",
           "score": 2
         },
-        {
-          "key": "forecast_accuracy",
+        "forecast_accuracy": {
           "label": "Forecast accuracy",
           "score": 3
         },
-        {
-          "key": "deal_quality",
+        "deal_quality": {
           "label": "Deal quality metrics",
           "score": 4
         },
-        {
-          "key": "rep_coaching",
+        "rep_coaching": {
           "label": "Rep coaching metrics",
           "score": 5
         }
-      ]
+      }
     },
     "how_6t7u8v": {
-      "key": "how_6t7u8v",
       "label": "How do you monitor deal progression?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "too_late",
+      "options": {
+        "too_late": {
           "label": "Too late to intervene",
           "score": 1
         },
-        {
-          "key": "manual_monitoring",
+        "manual_monitoring": {
           "label": "Manual monitoring",
           "score": 2
         },
-        {
-          "key": "dashboards",
+        "dashboards": {
           "label": "Using dashboards",
           "score": 3
         },
-        {
-          "key": "modeled_stages",
+        "modeled_stages": {
           "label": "Modeled by stage",
           "score": 4
         }
-      ]
+      }
     },
     "how_9w0x1y": {
-      "key": "how_9w0x1y",
       "label": "How do you qualify leads?",
       "type": "multiple_choice",
-      "options": [
-        {
-          "key": "gut_feel",
+      "options": {
+        "gut_feel": {
           "label": "Gut feel",
           "score": 1
         },
-        {
-          "key": "call_history",
+        "call_history": {
           "label": "Call history",
           "score": 2
         },
-        {
-          "key": "lead_fit",
+        "lead_fit": {
           "label": "Lead fit scoring",
           "score": 3
         },
-        {
-          "key": "multi_factor",
+        "multi_factor": {
           "label": "Multi-factor scoring",
           "score": 4
         }
-      ]
+      }
+    },
+    "how_2z3a4b": {
+      "label": "How do you share best practices?",
+      "type": "multiple_choice",
+      "options": {
+        "not_shared": {
+          "label": "Not shared",
+          "score": 1
+        },
+        "tips_informal": {
+          "label": "Tips shared informally",
+          "score": 2
+        },
+        "best_practice_reviews": {
+          "label": "Best practice reviews",
+          "score": 3
+        },
+        "documented_trained": {
+          "label": "Documented and trained",
+          "score": 4
+        }
+      }
+    },
+    "how_5c6d7e": {
+      "label": "How often do you review sales performance?",
+      "type": "multiple_choice",
+      "options": {
+        "occasionally": {
+          "label": "Occasionally",
+          "score": 1
+        },
+        "monthly": {
+          "label": "Monthly",
+          "score": 2
+        },
+        "weekly": {
+          "label": "Weekly",
+          "score": 3
+        },
+        "operating_cadence": {
+          "label": "Operating cadence",
+          "score": 4
+        }
+      }
+    },
+    "what_8f9g0h": {
+      "label": "What tools do you use for sales management?",
+      "type": "multi_select",
+      "options": {
+        "spreadsheets": {
+          "label": "Spreadsheets",
+          "score": 1
+        },
+        "crm_dashboards": {
+          "label": "CRM dashboards",
+          "score": 2
+        },
+        "call_review": {
+          "label": "Call review",
+          "score": 3
+        },
+        "coaching_platforms": {
+          "label": "Coaching platforms",
+          "score": 4
+        },
+        "sales_scorecards": {
+          "label": "Sales scorecards",
+          "score": 5
+        }
+      }
+    },
+    "how_1i2j3k": {
+      "label": "How confident are you in your sales forecasts?",
+      "type": "multiple_choice",
+      "options": {
+        "not_confident": {
+          "label": "Not confident",
+          "score": 1
+        },
+        "somewhat": {
+          "label": "Somewhat",
+          "score": 2
+        },
+        "confident": {
+          "label": "Confident",
+          "score": 3
+        },
+        "very_confident": {
+          "label": "Very confident",
+          "score": 4
+        }
+      }
+    },
+    "biggest_challenge_4l5m6n": {
+      "label": "What's the biggest challenge you face in your sales process?",
+      "type": "text_area"
+    },
+    "improvement_priority_7o8p9q": {
+      "label": "What's one improvement you'd make to your sales process if you could implement it today?",
+      "type": "text_area"
     }
   },
   "score_5": {
