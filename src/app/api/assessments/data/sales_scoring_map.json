@@ -87,383 +87,383 @@
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "unassigned": 1.5,
-        "manual_assignment": 2,
-        "self_managed": 2.5,
-        "routed": 3
+        "unassigned_leads": 1,
+        "manual_assign": 2,
+        "self_service": 3,
+        "automated_routing": 4
       }
     },
     "forecast_confidence": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "not_confident": 1.5,
-        "rough_ideas": 2,
-        "some_metrics": 2.5,
-        "data_driven": 3
+        "low_confidence": 1,
+        "basic_forecast": 2,
+        "data_based": 3,
+        "high_confidence": 4
       }
     },
     "pipeline_review": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "rarely": 1.5,
-        "occasional": 2,
-        "weekly": 2.5,
-        "daily": 3
+        "infrequent_review": 1,
+        "monthly_review": 2,
+        "biweekly_review": 3,
+        "weekly_review": 4
       }
     },
     "sales_discovery": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "informal": 1.5,
-        "basic_questions": 2,
-        "structured": 2.5,
-        "formal_framework": 3
+        "casual_discovery": 1,
+        "basic_discovery": 2,
+        "guided_discovery": 3,
+        "formal_discovery": 4
       }
     },
     "deal_progression": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 1.5,
-        "manual_notes": 2,
-        "basic_crm": 2.5,
-        "detailed_tracking": 3
+        "basic_tracking": 1,
+        "manual_tracking": 2,
+        "crm_tracking": 3,
+        "advanced_tracking": 4
       }
     },
     "stage_consistency": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "skip_stages": 1.5,
-        "loose_steps": 2,
-        "track_movement": 2.5,
-        "methodical": 3
+        "inconsistent_stages": 1,
+        "basic_consistency": 2,
+        "stage_tracking": 3,
+        "strict_stages": 4
       }
     }
   },
   "score_2": {
-    "how_64a8d1": {
+    "sales_stages": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "undefined": 2.5,
-        "loose_definition": 2.5,
-        "inconsistent_use": 2.5,
-        "documented": 2.5
+        "undefined_stages": 1,
+        "loose_stages": 2,
+        "defined_stages": 3,
+        "formal_stages": 4
       }
     },
-    "how_7d8dcb": {
+    "pipeline_accuracy": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "inaccurate": 2.5,
-        "somewhat_accurate": 2.5,
-        "mostly_accurate": 2.5,
-        "very_accurate": 2.5
+        "low_accuracy": 1,
+        "partial_accuracy": 2,
+        "good_accuracy": 3,
+        "high_accuracy": 4
       }
     },
-    "how_0fa447": {
+    "lead_prioritization": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "recent_first": 2.5,
-        "gut_feel": 2.5,
-        "deal_size": 2.5,
-        "scoring": 2.5
+        "recent_first": 1,
+        "intuitive": 2,
+        "value_based": 3,
+        "scored_leads": 4
       }
     },
-    "how_a76658": {
+    "followup_management": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 3,
-        "calendar": 3,
-        "crm_tasks": 3,
-        "automated": 3
+        "manual_followup": 1,
+        "calendar_followup": 2,
+        "task_followup": 3,
+        "automated_followup": 4
       }
     },
-    "how_5589a0": {
+    "sales_preparation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_prep": 3,
-        "basic_prep": 3,
-        "scripted": 3,
-        "structured_prep": 3
+        "minimal_prep": 1,
+        "basic_prep": 2,
+        "guided_prep": 3,
+        "comprehensive_prep": 4
       }
     },
-    "how_92a11d": {
+    "call_documentation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "rarely": 3,
-        "big_deals": 3,
+        "rare_documentation": 1,
+        "key_calls": 2,
         "most_calls": 3,
-        "all_calls": 3
+        "all_calls": 4
       }
     },
-    "how_1e24f7": {
+    "handoff_process": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_handoff": 3,
-        "inconsistent": 3,
-        "mostly_smooth": 3,
-        "standardized": 3
+        "no_handoff": 1,
+        "informal_handoff": 2,
+        "standard_handoff": 3,
+        "formal_handoff": 4
       }
     }
   },
   "score_2_5": {
-    "how_b5793e": {
+    "activity_management": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 1,
-        "manual_spreadsheet": 2,
-        "basic_crm": 3,
-        "automated": 4
+        "no_activity_tracking": 1,
+        "manual_activity_log": 2,
+        "basic_activity_crm": 3,
+        "automated_activity": 4
       }
     },
-    "how_140f94": {
+    "sales_targets": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_targets": 1,
-        "basic_goals": 2,
+        "no_sales_targets": 1,
+        "basic_team_targets": 2,
         "individual_targets": 3,
-        "detailed_kpis": 4
+        "detailed_kpi_targets": 4
       }
     },
-    "how_3a6376": {
+    "reporting_system": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_reporting": 1,
-        "basic_reports": 2,
-        "monthly_metrics": 3,
-        "real_time": 4
+        "no_sales_reports": 1,
+        "basic_sales_reports": 2,
+        "monthly_sales_reports": 3,
+        "real_time_sales_reports": 4
       }
     },
-    "how_4cd27c": {
+    "strategy_adjustment": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "reactive": 1,
-        "ad_hoc": 2,
-        "regular_reviews": 3,
-        "structured": 4
+        "reactive_strategy": 1,
+        "ad_hoc_strategy": 2,
+        "regular_strategy_review": 3,
+        "structured_strategy": 4
       }
     },
-    "how_68cbdb": {
+    "performance_review": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_review": 1,
-        "occasional": 2,
-        "weekly": 3,
-        "structured": 4
+        "no_performance_review": 1,
+        "occasional_review": 2,
+        "weekly_review": 3,
+        "structured_review": 4
       }
     },
-    "how_d30c39": {
+    "sales_communication": {
       "type": "multi_select",
       "weight": 1,
       "values": {
-        "call_recordings": 1,
-        "chat_messages": 2,
-        "crm_notes": 3,
-        "deal_reviews": 4
+        "sales_call_records": 1,
+        "sales_chat_history": 2,
+        "sales_crm_notes": 3,
+        "sales_deal_reviews": 4
       }
     },
-    "how_4a7d74": {
+    "pipeline_management": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "skip_stages": 1,
-        "some_steps": 2,
-        "track_movement": 3,
+        "skip_pipeline_stages": 1,
+        "partial_pipeline": 2,
+        "track_pipeline": 3,
         "stage_by_stage": 4
       }
     }
   },
   "score_3": {
-    "how_c7b9f7": {
+    "deal_velocity": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 4,
-        "basic_tracking": 4,
-        "stage_tracking": 4,
-        "optimized": 4
+        "no_velocity_tracking": 1,
+        "basic_velocity": 2,
+        "stage_velocity": 3,
+        "optimized_velocity": 4
       }
     },
-    "what_84c5f2": {
+    "forecast_accuracy": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "inconsistent": 4.5,
-        "somewhat": 4.5,
-        "mostly": 4.5,
-        "highly": 4.5
+        "inconsistent_forecast": 1,
+        "somewhat_accurate": 2,
+        "mostly_accurate": 3,
+        "highly_accurate": 4
       }
     },
-    "how_8f9d2a": {
+    "sales_optimization": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_process": 4.5,
-        "basic": 4.5,
-        "structured": 4.5,
-        "advanced": 4.5
+        "no_optimization": 1,
+        "basic_optimization": 2,
+        "structured_optimization": 3,
+        "advanced_optimization": 4
       }
     },
-    "how_1a3b4c": {
+    "performance_analytics": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "basic": 4.5,
-        "monthly": 4.5,
-        "weekly": 4.5,
-        "real_time": 4.5
+        "basic_analytics": 1,
+        "monthly_analytics": 2,
+        "weekly_analytics": 3,
+        "real_time_analytics": 4
       }
     },
-    "how_5d6e7f": {
+    "sales_metrics": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 4.5,
-        "basic": 4.5,
-        "detailed": 4.5,
-        "advanced": 4.5
+        "no_metrics": 1,
+        "basic_metrics": 2,
+        "detailed_metrics": 3,
+        "advanced_metrics": 4
       }
     },
-    "how_2d3e4f": {
+    "pricing_strategy": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "one_size": 5,
-        "basic": 5,
-        "detailed": 5,
-        "dynamic": 5
+        "fixed_pricing": 1,
+        "basic_pricing": 2,
+        "detailed_pricing": 3,
+        "dynamic_pricing": 4
       }
     }
   },
   "score_3_5": {
-    "how_4d1ff3": {
+    "roi_measurement": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_measurement": 5,
-        "basic": 5,
-        "detailed": 5,
-        "advanced": 5
+        "no_roi_tracking": 1,
+        "basic_roi": 2,
+        "detailed_roi": 3,
+        "advanced_roi": 4
       }
     },
-    "how_fe4a96": {
+    "sales_effectiveness": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "none": 5,
-        "basic": 5,
-        "structured": 5,
-        "comprehensive": 5
+        "no_effectiveness": 1,
+        "basic_effectiveness": 2,
+        "structured_effectiveness": 3,
+        "comprehensive_effectiveness": 4
       }
     },
-    "how_2e3f4g": {
+    "sales_optimization": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "none": 5,
-        "basic": 5,
-        "structured": 5,
-        "advanced": 5
+        "no_optimization": 1,
+        "basic_optimization": 2,
+        "structured_optimization": 3,
+        "advanced_optimization": 4
       }
     },
-    "how_5f6g7h": {
+    "performance_monitoring": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "basic": 5,
-        "monthly": 5,
-        "weekly": 5,
-        "real_time": 5
+        "basic_monitoring": 1,
+        "monthly_monitoring": 2,
+        "weekly_monitoring": 3,
+        "real_time_monitoring": 4
       }
     },
-    "how_8g9h0i": {
+    "sales_analytics": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_tracking": 5,
-        "basic": 5,
-        "detailed": 5,
-        "advanced": 5
+        "no_analytics": 1,
+        "basic_analytics": 2,
+        "detailed_analytics": 3,
+        "advanced_analytics": 4
       }
     },
-    "how_4i5j6k": {
+    "pricing_optimization": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "one_size": 5,
-        "basic": 5,
-        "detailed": 5,
-        "dynamic": 5
+        "fixed_pricing": 1,
+        "basic_pricing": 2,
+        "detailed_pricing": 3,
+        "dynamic_pricing": 4
       }
     }
   },
   "score_4": {
-    "how_1579c0": {
+    "data_driven_strategy": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "not_used": 1,
-        "basic_sharing": 2,
-        "integrated": 3,
-        "drives_strategy": 4
+        "no_data_usage": 1,
+        "basic_data_sharing": 2,
+        "integrated_data": 3,
+        "data_driven_decisions": 4
       }
     },
-    "how_ed3928": {
+    "sales_methodology": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
         "no_methodology": 1,
-        "basic_adoption": 2,
-        "structured_training": 3,
-        "advanced_optimization": 4
+        "basic_methodology": 2,
+        "structured_methodology": 3,
+        "advanced_methodology": 4
       }
     },
-    "how_6j7k8l": {
+    "sales_intelligence": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "basic_productivity": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_driven_optimization": 4
+        "basic_intelligence": 1,
+        "activity_intelligence": 2,
+        "advanced_intelligence": 3,
+        "ai_intelligence": 4
       }
     },
-    "how_9k0l1m": {
+    "resource_allocation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "no_resource_planning": 1,
+        "basic_allocation": 2,
+        "structured_allocation": 3,
+        "dynamic_allocation": 4
       }
     },
-    "how_2l3m4n": {
+    "lead_scoring": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "no_lead_scoring": 1,
+        "basic_scoring": 2,
+        "structured_scoring": 3,
+        "advanced_scoring": 4
       }
     },
-    "how_8n9o0p": {
+    "process_adaptation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
@@ -475,126 +475,126 @@
     }
   },
   "score_4_5": {
-    "how_18515e": {
+    "team_capacity": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_capacity": 1,
-        "basic_headcount": 2,
-        "detailed_modeling": 3,
-        "advanced_optimization": 4
+        "no_capacity_planning": 1,
+        "basic_capacity": 2,
+        "detailed_capacity": 3,
+        "optimized_capacity": 4
       }
     },
-    "how_70b7b8": {
+    "sales_experimentation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_testing": 1,
-        "basic_ab": 2,
-        "structured_experimentation": 3,
-        "advanced_optimization": 4
+        "no_experimentation": 1,
+        "basic_testing": 2,
+        "structured_testing": 3,
+        "advanced_testing": 4
       }
     },
-    "how_1p2q3r": {
+    "sales_insights": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "basic_productivity": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_driven_optimization": 4
+        "basic_insights": 1,
+        "activity_insights": 2,
+        "advanced_insights": 3,
+        "ai_insights": 4
       }
     },
-    "how_4q5r6s": {
+    "resource_planning": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "no_resource_planning": 1,
+        "basic_planning": 2,
+        "structured_planning": 3,
+        "dynamic_planning": 4
       }
     },
-    "how_7r8s9t": {
+    "lead_evaluation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "no_evaluation": 1,
+        "basic_evaluation": 2,
+        "structured_evaluation": 3,
+        "advanced_evaluation": 4
       }
     },
-    "how_3t4u5v": {
+    "process_evolution": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
         "static_process": 1,
-        "basic_monitoring": 2,
-        "regular_updates": 3,
-        "dynamic_adaptation": 4
+        "basic_evolution": 2,
+        "regular_evolution": 3,
+        "dynamic_evolution": 4
       }
     }
   },
   "score_5": {
-    "how_136dcf": {
+    "customer_feedback": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_input": 1,
+        "no_customer_feedback": 1,
         "basic_feedback": 2,
-        "regular_input": 3,
-        "drives_strategy": 4
+        "regular_feedback": 3,
+        "strategic_feedback": 4
       }
     },
-    "how_e9af60": {
+    "sales_culture": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_culture": 1,
-        "basic_training": 2,
-        "structured_program": 3,
-        "advanced_ecosystem": 4
+        "no_sales_culture": 1,
+        "basic_culture": 2,
+        "structured_culture": 3,
+        "advanced_culture": 4
       }
     },
-    "how_6v7w8x": {
+    "sales_automation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "basic_productivity": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_driven_optimization": 4
+        "basic_automation": 1,
+        "activity_automation": 2,
+        "advanced_automation": 3,
+        "ai_automation": 4
       }
     },
-    "how_9w0x1y": {
+    "resource_strategy": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "no_resource_strategy": 1,
+        "basic_strategy": 2,
+        "structured_strategy": 3,
+        "dynamic_strategy": 4
       }
     },
-    "how_2x3y4z": {
+    "opportunity_assessment": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "no_assessment": 1,
+        "basic_assessment": 2,
+        "structured_assessment": 3,
+        "advanced_assessment": 4
       }
     },
-    "how_8z9a0b": {
+    "process_innovation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "static_process": 1,
-        "basic_monitoring": 2,
-        "regular_updates": 3,
-        "dynamic_adaptation": 4
+        "static_innovation": 1,
+        "basic_innovation": 2,
+        "regular_innovation": 3,
+        "dynamic_innovation": 4
       }
     }
   }
