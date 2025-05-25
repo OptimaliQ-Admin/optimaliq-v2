@@ -189,7 +189,7 @@ export async function POST(request: Request) {
       .from("sales_performance_assessment")
       .upsert({
         u_id: userId,
-        answers: answersObject, // Ensure we're passing a plain object
+        answers: answersObject, // Properly insert as JSONB object
         score: normalized,
         created_at: new Date().toISOString()
       }, {
