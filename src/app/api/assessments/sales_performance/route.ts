@@ -1,11 +1,15 @@
 //src/app/api//premium/assessment/sales_performance/route.ts
 import { NextResponse } from "next/server";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { type ScoringMap } from "@/lib/types/ScoringMap";
 import salesPerformanceScoringMap from "@/app/api/assessments/data/sales_scoring_map.json";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError, logAssessmentDebug } from "@/lib/utils/logger";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;
 
@@ -179,8 +183,6 @@ export async function POST(request: Request) {
       normalizedScore: normalized,
       scoringIssues
     });
-
-    const supabase = createRouteHandlerClient({ cookies });
 
     // Ensure answers is a plain object before upserting
     const answersObject = typeof answers === 'string' ? JSON.parse(answers) : answers;
