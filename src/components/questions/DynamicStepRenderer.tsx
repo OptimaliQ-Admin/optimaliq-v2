@@ -4,6 +4,23 @@ import React from "react";
 import DynamicQuestion from "./DynamicQuestion";
 import questionConfig from "@/lib/config/question_config.json";
 
+type QuestionType = "multiple_choice" | "multi_select" | "text_area";
+
+type QuestionOption = {
+  label: string;
+  score: number;
+};
+
+type Question = {
+  label: string;
+  type: QuestionType;
+  options?: Record<string, QuestionOption>;
+};
+
+type ScoreConfig = {
+  [key: string]: Question;
+};
+
 type Props = {
   score: number;
   step: number;
@@ -41,17 +58,23 @@ export default function DynamicStepRenderer({
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
-      {questions.map(([key, question]) => (
-        <DynamicQuestion
-          key={key}
-          question={question.label}
-          type={question.type}
-          options={question.options}
-          selected={answers[key]}
-          onChange={(value) => onAnswer(key, value)}
-          maxSelect={question.type === "multi_select" ? 5 : undefined}
-        />
-      ))}
+      {questions.map(([key, question]) => {
+        // Handle different question structures
+        const questionType = question.type as QuestionType;
+        const questionOptions = 'options' in question ? question.options as Record<string, QuestionOption> : undefined;
+
+        return (
+          <DynamicQuestion
+            key={key}
+            question={question.label}
+            type={questionType}
+            options={questionOptions}
+            selected={answers[key]}
+            onChange={(value) => onAnswer(key, value)}
+            maxSelect={questionType === "multi_select" ? 5 : undefined}
+          />
+        );
+      })}
     </div>
   );
 } 

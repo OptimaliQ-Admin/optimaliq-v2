@@ -3,16 +3,18 @@
 import React, { useState } from "react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
-type Option = {
-  value: string;
+type QuestionType = "multiple_choice" | "multi_select" | "text_area";
+
+type QuestionOption = {
   label: string;
+  score: number;
 };
 
 type Props = {
   question: string;
   description?: string;
-  type: "multiple_choice" | "multi_select" | "text_area";
-  options?: Record<string, { label: string; score: number }>;
+  type: QuestionType;
+  options?: Record<string, QuestionOption>;
   selected: string | string[];
   onChange: (value: string | string[]) => void;
   maxSelect?: number;
