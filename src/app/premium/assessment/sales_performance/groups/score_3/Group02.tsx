@@ -7,15 +7,16 @@ import {
 } from "@/lib/types/AssessmentAnswers";
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
+import questionConfig from "@/lib/config/sales_performance_question_config.json";
 
 export function isScore_3Group2Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["what_89a231"] === "string" &&
-    answers["what_89a231"].trim().length > 0 &&
-    typeof answers["what_3164b1"] === "string" &&
-    answers["what_3164b1"].trim().length > 0 &&
-    typeof answers["what_7f9c2d"] === "string" &&
-    answers["what_7f9c2d"].trim().length > 0
+    typeof answers["process_understanding"] === "string" &&
+    answers["process_understanding"].trim().length > 0 &&
+    typeof answers["technology_understanding"] === "string" &&
+    answers["technology_understanding"].trim().length > 0 &&
+    typeof answers["data_understanding"] === "string" &&
+    answers["data_understanding"].trim().length > 0
   );
 }
 
@@ -27,43 +28,37 @@ type Props = {
 export default function Score3_Step02({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      {/* Question 1: Process Maturity */}
+      {/* Question 1: Process Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your process maturity?"
-        options={[
-          { value: "traditional", label: "Traditional process" },
-          { value: "developing", label: "Developing process" },
-          { value: "improved", label: "Improved process" },
-          { value: "advanced", label: "Advanced process" },
-        ]}
-        value={getStringAnswer(answers["what_89a231"])}
-        onChange={(val) => onAnswer("what_89a231", val)}
+        question={questionConfig.process_understanding.label}
+        options={Object.entries(questionConfig.process_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["process_understanding"])}
+        onChange={(val) => onAnswer("process_understanding", val)}
       />
 
-      {/* Question 2: Technology Maturity */}
+      {/* Question 2: Technology Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your technology maturity?"
-        options={[
-          { value: "conventional", label: "Conventional technology" },
-          { value: "developing", label: "Developing technology" },
-          { value: "modern", label: "Modern technology" },
-          { value: "advanced", label: "Advanced technology" },
-        ]}
-        value={getStringAnswer(answers["what_3164b1"])}
-        onChange={(val) => onAnswer("what_3164b1", val)}
+        question={questionConfig.technology_understanding.label}
+        options={Object.entries(questionConfig.technology_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["technology_understanding"])}
+        onChange={(val) => onAnswer("technology_understanding", val)}
       />
 
-      {/* Question 3: Data Maturity */}
+      {/* Question 3: Data Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your data maturity?"
-        options={[
-          { value: "basic", label: "Basic data usage" },
-          { value: "developing", label: "Developing data usage" },
-          { value: "advanced", label: "Advanced data usage" },
-          { value: "predictive", label: "Predictive analytics" },
-        ]}
-        value={getStringAnswer(answers["what_7f9c2d"])}
-        onChange={(val) => onAnswer("what_7f9c2d", val)}
+        question={questionConfig.data_understanding.label}
+        options={Object.entries(questionConfig.data_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["data_understanding"])}
+        onChange={(val) => onAnswer("data_understanding", val)}
       />
     </div>
   );

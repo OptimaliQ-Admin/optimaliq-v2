@@ -7,15 +7,16 @@ import {
 } from "@/lib/types/AssessmentAnswers";
 import React from "react";
 import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
+import questionConfig from "@/lib/config/sales_performance_question_config.json";
 
 export function isScore_4Group1Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["what_89a231"] === "string" &&
-    answers["what_89a231"].trim().length > 0 &&
-    typeof answers["what_3164b1"] === "string" &&
-    answers["what_3164b1"].trim().length > 0 &&
-    typeof answers["what_7f9c2d"] === "string" &&
-    answers["what_7f9c2d"].trim().length > 0
+    typeof answers["strategy_understanding"] === "string" &&
+    answers["strategy_understanding"].trim().length > 0 &&
+    typeof answers["innovation_understanding"] === "string" &&
+    answers["innovation_understanding"].trim().length > 0 &&
+    typeof answers["market_understanding"] === "string" &&
+    answers["market_understanding"].trim().length > 0
   );
 }
 
@@ -27,43 +28,37 @@ type Props = {
 export default function Score4_Step01({ answers, onAnswer }: Props) {
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      {/* Question 1: Strategy Excellence */}
+      {/* Question 1: Strategy Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your strategy excellence?"
-        options={[
-          { value: "developing", label: "Developing strategy" },
-          { value: "good", label: "Good strategy" },
-          { value: "excellent", label: "Excellent strategy" },
-          { value: "world_class", label: "World-class strategy" },
-        ]}
-        value={getStringAnswer(answers["what_89a231"])}
-        onChange={(val) => onAnswer("what_89a231", val)}
+        question={questionConfig.strategy_understanding.label}
+        options={Object.entries(questionConfig.strategy_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["strategy_understanding"])}
+        onChange={(val) => onAnswer("strategy_understanding", val)}
       />
 
-      {/* Question 2: Innovation Excellence */}
+      {/* Question 2: Innovation Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your innovation excellence?"
-        options={[
-          { value: "developing", label: "Developing innovation" },
-          { value: "good", label: "Good innovation" },
-          { value: "excellent", label: "Excellent innovation" },
-          { value: "world_class", label: "World-class innovation" },
-        ]}
-        value={getStringAnswer(answers["what_3164b1"])}
-        onChange={(val) => onAnswer("what_3164b1", val)}
+        question={questionConfig.innovation_understanding.label}
+        options={Object.entries(questionConfig.innovation_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["innovation_understanding"])}
+        onChange={(val) => onAnswer("innovation_understanding", val)}
       />
 
-      {/* Question 3: Market Excellence */}
+      {/* Question 3: Market Understanding */}
       <MultipleChoiceQuestion
-        question="How would you rate your market excellence?"
-        options={[
-          { value: "developing", label: "Developing presence" },
-          { value: "good", label: "Good presence" },
-          { value: "excellent", label: "Excellent presence" },
-          { value: "world_class", label: "World-class presence" },
-        ]}
-        value={getStringAnswer(answers["what_7f9c2d"])}
-        onChange={(val) => onAnswer("what_7f9c2d", val)}
+        question={questionConfig.market_understanding.label}
+        options={Object.entries(questionConfig.market_understanding.options).map(([value, label]) => ({
+          value,
+          label,
+        }))}
+        value={getStringAnswer(answers["market_understanding"])}
+        onChange={(val) => onAnswer("market_understanding", val)}
       />
     </div>
   );
