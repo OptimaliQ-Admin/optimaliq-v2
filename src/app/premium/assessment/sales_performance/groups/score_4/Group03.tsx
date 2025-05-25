@@ -22,7 +22,7 @@ interface Group03Props {
   onAnswerChange: (questionKey: string, answer: string) => void;
 }
 
-export function Group03({ answers, onAnswerChange }: Group03Props) {
+export default function Group03({ answers, onAnswerChange }: Group03Props) {
   const questions = questionConfig.score_4;
 
   return (
@@ -61,7 +61,7 @@ export function Group03({ answers, onAnswerChange }: Group03Props) {
             {/* Question 3 */}
             <div className="space-y-4">
               <Label className="text-lg font-semibold">
-                What's one sales behavior or process you'd want your team to do more consistently?
+                What&apos;s one sales behavior or process you&apos;d want your team to do more consistently?
               </Label>
               <Textarea
                 placeholder="E.g., follow-ups, demo delivery, deal qualification"

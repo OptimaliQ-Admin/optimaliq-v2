@@ -25,7 +25,7 @@ type Props = {
   onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
-export default function Score3_Step03({ answers, onAnswer }: Props) {
+export default function Group03({ answers, onAnswer }: Props) {
   return (
     <div className="space-y-10">
 
