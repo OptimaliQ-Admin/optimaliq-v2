@@ -1,84 +1,70 @@
 "use client";
 
-import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
-import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+import React from "react";
+import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
 
 export function isScore_1Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["what's_3164b1"] === "string" &&
-    typeof answers["if_4526b6"] === "string" &&
-    typeof answers["how_142ca2"] === "string"
+    typeof answers["what_89a231"] === "string" &&
+    answers["what_89a231"].trim().length > 0 &&
+    typeof answers["what_3164b1"] === "string" &&
+    answers["what_3164b1"].trim().length > 0 &&
+    typeof answers["what_7f9c2d"] === "string" &&
+    answers["what_7f9c2d"].trim().length > 0
   );
 }
 
-interface Group03Props {
+type Props = {
   answers: AssessmentAnswers;
-  onAnswerChange: (questionKey: string, answer: string) => void;
-}
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
+};
 
-export default function Group03({ answers, onAnswerChange }: Group03Props) {
-  const questions = questionConfig.score_1;
-
+export default function Score1_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-6">
-            {/* Question 1 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                What&apos;s the biggest obstacle you face when trying to close more deals?
-              </Label>
-              <Textarea
-                placeholder="E.g., high CAC, unclear process, lead quality"
-                value={getStringAnswer(answers["what's_3164b1"])}
-                onChange={(e) => onAnswerChange("what's_3164b1", e.target.value)}
-                maxLength={300}
-                className="min-h-[100px]"
-              />
-            </div>
+    <div className="p-6 max-w-2xl mx-auto">
+      {/* Question 1: Customer Understanding */}
+      <MultipleChoiceQuestion
+        question="How would you rate your customer understanding?"
+        options={[
+          { value: "basic", label: "Basic customer service" },
+          { value: "developing", label: "Developing customer service" },
+          { value: "good", label: "Good customer service" },
+          { value: "advanced", label: "Advanced customer service" },
+        ]}
+        value={getStringAnswer(answers["what_89a231"])}
+        onChange={(val) => onAnswer("what_89a231", val)}
+      />
 
-            {/* Question 2 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                If you could improve one part of your sales process today, what would it be and why?
-              </Label>
-              <Textarea
-                placeholder="E.g., improve discovery, track deals better, reduce no-shows"
-                value={getStringAnswer(answers["if_4526b6"])}
-                onChange={(e) => onAnswerChange("if_4526b6", e.target.value)}
-                maxLength={300}
-                className="min-h-[100px]"
-              />
-            </div>
+      {/* Question 2: Team Understanding */}
+      <MultipleChoiceQuestion
+        question="How would you rate your team understanding?"
+        options={[
+          { value: "developing", label: "Developing team" },
+          { value: "skilled", label: "Skilled team" },
+          { value: "high_performing", label: "High-performing team" },
+          { value: "advanced", label: "Advanced team" },
+        ]}
+        value={getStringAnswer(answers["what_3164b1"])}
+        onChange={(val) => onAnswer("what_3164b1", val)}
+      />
 
-            {/* Question 3 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                {questions.how_142ca2.label}
-              </Label>
-              <RadioGroup
-                value={getStringAnswer(answers.how_142ca2)}
-                onValueChange={(value: string) => onAnswerChange("how_142ca2", value)}
-                className="space-y-2"
-              >
-                {Object.entries(questions.how_142ca2.options).map(([key, label]) => (
-                  <div key={key} className="flex items-center space-x-2">
-                    <RadioGroupItem value={key} id={`how_142ca2-${key}`} />
-                    <Label htmlFor={`how_142ca2-${key}`}>{label}</Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Question 3: Growth Understanding */}
+      <MultipleChoiceQuestion
+        question="How would you rate your growth understanding?"
+        options={[
+          { value: "steady", label: "Steady growth" },
+          { value: "developing", label: "Developing growth" },
+          { value: "accelerated", label: "Accelerated growth" },
+          { value: "advanced", label: "Advanced growth" },
+        ]}
+        value={getStringAnswer(answers["what_7f9c2d"])}
+        onChange={(val) => onAnswer("what_7f9c2d", val)}
+      />
     </div>
   );
 }

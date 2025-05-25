@@ -1,79 +1,70 @@
 "use client";
 
-import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import questionConfig from '@/app/api/assessments/data/sales_question_config.json';
-import type { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
-import { getStringAnswer } from "@/lib/types/AssessmentAnswers";
+import {
+  getStringAnswer,
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
+import React from "react";
+import MultipleChoiceQuestion from "src/components/questions/MultipleChoiceQuestion";
 
 export function isScore_4Group3Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers.what_89a231 === "string" &&
-    typeof answers.what_3164b1 === "string" &&
-    typeof answers.what_89a231 === "string"
+    typeof answers["what_89a231"] === "string" &&
+    answers["what_89a231"].trim().length > 0 &&
+    typeof answers["what_3164b1"] === "string" &&
+    answers["what_3164b1"].trim().length > 0 &&
+    typeof answers["what_7f9c2d"] === "string" &&
+    answers["what_7f9c2d"].trim().length > 0
   );
 }
 
-interface Group03Props {
+type Props = {
   answers: AssessmentAnswers;
-  onAnswerChange: (questionKey: string, answer: string) => void;
-}
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
+};
 
-export default function Group03({ answers, onAnswerChange }: Group03Props) {
-  const questions = questionConfig.score_4;
-
+export default function Score4_Step03({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-6">
-            {/* Question 1 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                What sales metrics are most important to you right now?
-              </Label>
-              <Textarea
-                placeholder="E.g., lead-to-close ratio, deal size, win rate, etc."
-                value={getStringAnswer(answers.what_89a231)}
-                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
-                maxLength={300}
-                className="min-h-[100px]"
-              />
-            </div>
+    <div className="p-6 max-w-2xl mx-auto">
+      {/* Question 1: Customer Excellence */}
+      <MultipleChoiceQuestion
+        question="How would you rate your customer excellence?"
+        options={[
+          { value: "developing", label: "Developing service" },
+          { value: "good", label: "Good service" },
+          { value: "excellent", label: "Excellent service" },
+          { value: "world_class", label: "World-class service" },
+        ]}
+        value={getStringAnswer(answers["what_89a231"])}
+        onChange={(val) => onAnswer("what_89a231", val)}
+      />
 
-            {/* Question 2 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                What&apos;s the biggest obstacle you face when trying to close more deals?
-              </Label>
-              <Textarea
-                placeholder="E.g., high CAC, unclear process, lead quality"
-                value={getStringAnswer(answers.what_3164b1)}
-                onChange={(e) => onAnswerChange("what_3164b1", e.target.value)}
-                maxLength={300}
-                className="min-h-[100px]"
-              />
-            </div>
+      {/* Question 2: Team Excellence */}
+      <MultipleChoiceQuestion
+        question="How would you rate your team excellence?"
+        options={[
+          { value: "developing", label: "Developing team" },
+          { value: "good", label: "Good team" },
+          { value: "excellent", label: "Excellent team" },
+          { value: "world_class", label: "World-class team" },
+        ]}
+        value={getStringAnswer(answers["what_3164b1"])}
+        onChange={(val) => onAnswer("what_3164b1", val)}
+      />
 
-            {/* Question 3 */}
-            <div className="space-y-4">
-              <Label className="text-lg font-semibold">
-                What&apos;s one sales behavior or process you&apos;d want your team to do more consistently?
-              </Label>
-              <Textarea
-                placeholder="E.g., follow-ups, demo delivery, deal qualification"
-                value={getStringAnswer(answers.what_89a231)}
-                onChange={(e) => onAnswerChange("what_89a231", e.target.value)}
-                maxLength={300}
-                className="min-h-[100px]"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Question 3: Growth Excellence */}
+      <MultipleChoiceQuestion
+        question="How would you rate your growth excellence?"
+        options={[
+          { value: "developing", label: "Developing growth" },
+          { value: "good", label: "Good growth" },
+          { value: "excellent", label: "Excellent growth" },
+          { value: "world_class", label: "World-class growth" },
+        ]}
+        value={getStringAnswer(answers["what_7f9c2d"])}
+        onChange={(val) => onAnswer("what_7f9c2d", val)}
+      />
     </div>
   );
 }
