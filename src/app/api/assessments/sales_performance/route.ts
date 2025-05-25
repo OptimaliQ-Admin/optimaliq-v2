@@ -85,6 +85,179 @@ const valueMapping: Record<string, Record<string, string>> = {
   // Add more mappings as needed
 };
 
+// Add value mapping for semantic answers to scoring values
+const salesAnswerValueMap: Record<string, Record<string, string>> = {
+  // Score 1 mappings
+  "how_b5d8e7": { // lead_generation
+    "no_consistent_method": "no_process",
+    "referrals_only": "referrals",
+    "occasional_outreach": "ad_hoc",
+    "digital_channels": "digital_inquiries"
+  },
+  "do_b7cc0a": { // sales_process
+    "no_process": "no_process",
+    "loose_outline": "ad_hoc",
+    "key_steps": "basic_steps",
+    "defined_process": "defined_process"
+  },
+  "how_fee95e": { // pipeline_tracking
+    "no_tracking": "no_tracking",
+    "manual_tracking": "manual_tracking",
+    "basic_crm": "basic_crm",
+    "advanced_crm": "advanced_crm"
+  },
+  "who_5d9558": { // sales_team
+    "no_team": "no_team",
+    "single_rep": "single_rep",
+    "small_team": "small_team",
+    "dedicated_team": "dedicated_team"
+  },
+  "how_454fc5": { // follow_ups
+    "no_followup": "no_followup",
+    "manual_followup": "manual_followup",
+    "basic_automation": "basic_automation",
+    "advanced_automation": "advanced_automation"
+  },
+  "which_01150c": { // lead_qualification
+    "no_qualification": "no_qualification",
+    "basic_qualification": "basic_qualification",
+    "standard_qualification": "standard_qualification",
+    "advanced_qualification": "advanced_qualification"
+  },
+  "how_142ca2": { // pricing_proposals
+    "no_process": "no_process",
+    "manual_process": "manual_process",
+    "standardized_process": "standardized_process",
+    "automated_process": "automated_process"
+  },
+
+  // Score 1.5 mappings
+  "how_2c42b7": { // lead_assignment
+    "no_assignment": "no_assignment",
+    "manual_assignment": "manual_assignment",
+    "basic_rules": "basic_rules",
+    "advanced_rules": "advanced_rules"
+  },
+  "how_79028c": { // forecast_confidence
+    "not_confident": "not_confident",
+    "somewhat_confident": "somewhat_confident",
+    "mostly_confident": "mostly_confident",
+    "very_confident": "very_confident"
+  },
+  "how_47b050": { // pipeline_review
+    "no_review": "no_review",
+    "monthly_review": "monthly_review",
+    "weekly_review": "weekly_review",
+    "daily_review": "daily_review"
+  },
+  "how_12d26c": { // sales_discovery
+    "no_process": "no_process",
+    "basic_process": "basic_process",
+    "standard_process": "standard_process",
+    "advanced_process": "advanced_process"
+  },
+  "how_1f869b": { // deal_progression
+    "no_tracking": "no_tracking",
+    "manual_tracking": "manual_tracking",
+    "basic_tracking": "basic_tracking",
+    "advanced_tracking": "advanced_tracking"
+  },
+  "how_c8eb2a": { // stage_consistency
+    "no_consistency": "no_consistency",
+    "some_consistency": "some_consistency",
+    "good_consistency": "good_consistency",
+    "excellent_consistency": "excellent_consistency"
+  },
+
+  // Score 2 mappings
+  "how_64a8d1": { // sales_stages
+    "no_stages": "no_stages",
+    "basic_stages": "basic_stages",
+    "standard_stages": "standard_stages",
+    "advanced_stages": "advanced_stages"
+  },
+  "how_7d8dcb": { // pipeline_accuracy
+    "not_accurate": "not_accurate",
+    "somewhat_accurate": "somewhat_accurate",
+    "mostly_accurate": "mostly_accurate",
+    "very_accurate": "very_accurate"
+  },
+  "how_0fa447": { // lead_prioritization
+    "no_prioritization": "no_prioritization",
+    "manual_prioritization": "manual_prioritization",
+    "basic_prioritization": "basic_prioritization",
+    "advanced_prioritization": "advanced_prioritization"
+  },
+  "how_a76658": { // followup_tracking
+    "no_tracking": "no_tracking",
+    "manual_tracking": "manual_tracking",
+    "basic_tracking": "basic_tracking",
+    "advanced_tracking": "advanced_tracking"
+  },
+  "how_5589a0": { // sales_operations
+    "no_operations": "no_operations",
+    "basic_operations": "basic_operations",
+    "standard_operations": "standard_operations",
+    "advanced_operations": "advanced_operations"
+  },
+  "how_92a11d": { // sales_preparation
+    "no_preparation": "no_preparation",
+    "basic_preparation": "basic_preparation",
+    "standard_preparation": "standard_preparation",
+    "advanced_preparation": "advanced_preparation"
+  },
+  "how_1e24f7": { // conversation_documentation
+    "no_documentation": "no_documentation",
+    "manual_documentation": "manual_documentation",
+    "basic_documentation": "basic_documentation",
+    "advanced_documentation": "advanced_documentation"
+  },
+
+  // Score 2.5 mappings
+  "how_b5793e": { // activity_tracking
+    "no_tracking": "no_tracking",
+    "manual_tracking": "manual_tracking",
+    "basic_tracking": "basic_tracking",
+    "advanced_tracking": "advanced_tracking"
+  },
+  "how_140f94": { // sales_targets
+    "no_targets": "no_targets",
+    "manual_targets": "manual_targets",
+    "basic_targets": "basic_targets",
+    "advanced_targets": "advanced_targets"
+  },
+  "how_3a6376": { // sales_reporting
+    "no_reporting": "no_reports",
+    "manual_reporting": "manual_reports",
+    "basic_reporting": "basic_reports",
+    "advanced_reporting": "advanced_reports"
+  },
+  "how_4cd27c": { // strategy_adjustment
+    "reactive": "no_process",
+    "monthly_review": "monthly_review",
+    "weekly_review": "weekly_review",
+    "continuous_review": "continuous_review"
+  },
+  "how_68cbdb": { // pipeline_review_frequency
+    "no_review": "no_review",
+    "monthly_review": "monthly_review",
+    "weekly_review": "weekly_review",
+    "daily_review": "daily_review"
+  },
+  "how_d30c39": { // deal_insights
+    "no_insights": "not_confident",
+    "basic_insights": "somewhat_confident",
+    "standard_insights": "mostly_confident",
+    "advanced_insights": "very_confident"
+  },
+  "how_4a7d74": { // stage_consistency
+    "skip_stages": "not_scalable",
+    "inconsistent_stages": "somewhat_scalable",
+    "consistent_stages": "mostly_scalable",
+    "very_consistent": "very_scalable"
+  }
+};
+
 function getBracket(score: number): keyof ScoringMap {
   if (score >= 1 && score <= 1.4) return "score_1";
   if (score >= 1.5 && score <= 1.9) return "score_1_5";
@@ -192,21 +365,22 @@ export async function POST(request: Request) {
 
       if (q.type === "multiple_choice") {
         // Map old values to new semantic values if needed
-        const valueMap = valueMapping[key];
-        const mappedValue = valueMap ? valueMap[answer as string] : answer;
+        const valueMap = salesAnswerValueMap[key];
+        const rawValue = mappedAnswers[key];
+        const mappedValue = valueMap ? valueMap[rawValue as string] : rawValue;
         valScore = q.values[mappedValue as string] || 0;
         
         if (valScore === 0) {
           scoringIssues.defaultedScores.push({
             key,
-            answer,
+            answer: rawValue,
             mappedValue,
             reason: `No matching value in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
           });
           logAssessmentDebug('sales_performance', {
             message: `No score found for multiple choice answer`,
             key,
-            answer,
+            rawValue,
             mappedValue,
             availableValues: Object.keys(q.values)
           });
@@ -215,9 +389,12 @@ export async function POST(request: Request) {
 
       if (q.type === "multi_select") {
         try {
-          const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer as string);
+          const selections: string[] = Array.isArray(mappedAnswers[key]) 
+            ? mappedAnswers[key] 
+            : JSON.parse(mappedAnswers[key] as string);
+          
           // Map old values to new semantic values if needed
-          const valueMap = valueMapping[key];
+          const valueMap = salesAnswerValueMap[key];
           const mappedSelections = valueMap 
             ? selections.map(s => valueMap[s] || s)
             : selections;
@@ -243,13 +420,13 @@ export async function POST(request: Request) {
         } catch (e) {
           scoringIssues.defaultedScores.push({
             key,
-            answer,
+            answer: mappedAnswers[key],
             reason: `Failed to parse multi-select answer: ${e}`
           });
           logAssessmentDebug('sales_performance', {
             message: `Error processing multi-select answer`,
             key,
-            answer,
+            answer: mappedAnswers[key],
             error: e
           });
           valScore = 0;
