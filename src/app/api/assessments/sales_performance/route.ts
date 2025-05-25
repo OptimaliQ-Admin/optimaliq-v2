@@ -13,24 +13,59 @@ const supabase = createClient(
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;
 
-// Add key mapping for backward compatibility
-const keyMapping: Record<string, string> = {
-  // Score 1 mappings
-  "how_b5d8e7": "lead_generation",
-  "do_b7cc0a": "sales_process",
-  "how_fee95e": "pipeline_tracking",
-  "who_5d9558": "sales_team",
-  "how_454fc5": "follow_ups",
-  "which_01150c": "lead_qualification",
-  "how_142ca2": "pricing_proposals",
-  
-  // Score 1.5 mappings
-  "how_2c42b7": "lead_assignment",
-  "how_79028c": "forecast_confidence",
-  "how_47b050": "pipeline_review",
-  "how_12d26c": "sales_discovery",
-  "how_1f869b": "deal_progression",
-  "how_c8eb2a": "stage_consistency"
+// Add semantic to obfuscated key mapping by bracket
+const salesSemanticToObfuscatedKeyMap: Record<string, Record<string, string>> = {
+  "score_1": {
+    "lead_generation": "how_b5d8e7",
+    "sales_process": "do_b7cc0a",
+    "pipeline_tracking": "how_fee95e",
+    "sales_team": "who_5d9558",
+    "follow_ups": "how_454fc5",
+    "lead_qualification": "which_01150c",
+    "pricing_proposals": "how_142ca2"
+  },
+  "score_1_5": {
+    "lead_assignment": "how_2c42b7",
+    "forecast_confidence": "how_79028c",
+    "pipeline_review": "how_47b050",
+    "sales_discovery": "how_12d26c",
+    "deal_progression": "how_1f869b",
+    "stage_consistency": "how_c8eb2a"
+  },
+  "score_2": {
+    "sales_stages": "how_64a8d1",
+    "pipeline_accuracy": "how_7d8dcb",
+    "lead_prioritization": "how_0fa447",
+    "followup_tracking": "how_a76658",
+    "sales_operations": "how_5589a0",
+    "sales_preparation": "how_92a11d",
+    "conversation_documentation": "how_1e24f7"
+  },
+  "score_2_5": {
+    "activity_tracking": "how_b5793e",
+    "sales_targets": "how_140f94",
+    "sales_reporting": "how_3a6376",
+    "strategy_adjustment": "how_4cd27c",
+    "pipeline_review_frequency": "how_68cbdb",
+    "deal_insights": "how_d30c39",
+    "stage_consistency": "how_4a7d74"
+  },
+  "score_3": {
+    "pipeline_stages": "how_c7b9f7",
+    "pipeline_accuracy": "what_84c5f2",
+    "opportunity_prioritization": "how_8f9d2a",
+    "followup_management": "how_1a3b4c",
+    "sales_metrics": "how_5d6e7f",
+    "sales_preparation": "how_2d3e4f"
+  },
+  "score_3_5": {
+    "sales_preparation": "how_4d1ff3",
+    "interaction_documentation": "how_fe4a96",
+    "delivery_handoff": "how_2e3f4g",
+    "activity_tracking": "how_5f6g7h",
+    "sales_targets": "how_8g9h0i",
+    "sales_metrics": "how_4i5j6k"
+  }
 };
 
 // Add value mapping for backward compatibility
@@ -89,8 +124,10 @@ export async function POST(request: Request) {
 
     // Map old keys to new semantic keys
     const mappedAnswers = Object.entries(answers).reduce((acc, [key, value]) => {
-      const newKey = keyMapping[key] || key;
-      acc[newKey] = value;
+      // First map semantic keys to obfuscated keys for scoring using the current bracket
+      const bracketMap = salesSemanticToObfuscatedKeyMap[bracket] || {};
+      const obfuscatedKey = bracketMap[key] || key;
+      acc[obfuscatedKey] = value;
       return acc;
     }, {} as Record<string, any>);
 
