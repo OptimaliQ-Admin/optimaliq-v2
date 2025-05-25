@@ -4,70 +4,70 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "referrals_only": 1,
-        "occasional_outreach": 2,
-        "website_inquiries": 3,
-        "no_consistent_method": 4
+        "Referrals and word of mouth": 1,
+        "Occasional outreach or events": 2,
+        "Website or social media inquiries": 3,
+        "We don't have a consistent method": 4
       }
     },
     "do_b7cc0a": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_process": 1,
-        "loose_outline": 2,
-        "key_steps": 3,
-        "defined_process": 4
+        "No process - each sale is different": 1,
+        "We follow a loose outline": 2,
+        "We have a few key steps we try to follow": 3,
+        "Yes - we use a defined process from lead to close": 4
       }
     },
     "how_fee95e": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_tracking": 1,
-        "manual_spreadsheet": 2,
-        "basic_crm": 3,
-        "structured_system": 4
+        "We don't track it": 1,
+        "Manually in a spreadsheet": 2,
+        "In a basic CRM (e.g. HubSpot, Salesforce)": 3,
+        "In a structured system with deal stages and forecasts": 4
       }
     },
     "who_5d9558": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "founder_owner": 1,
-        "single_rep": 2,
-        "small_team": 3,
-        "dedicated_dept": 4
+        "The founder or owner": 1,
+        "One salesperson": 2,
+        "A small team": 3,
+        "A dedicated structured sales department": 4
       }
     },
     "how_454fc5": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "inconsistent": 1,
-        "sometimes_forget": 2,
-        "basic_reminders": 3,
-        "automated_followup": 4
+        "Inconsistently or not at all": 1,
+        "We try but sometimes forget": 2,
+        "We have a basic reminder system": 3,
+        "We have automated or scheduled follow ups": 4
       }
     },
     "which_01150c": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "talk_to_anyone": 1,
-        "basic_questions": 2,
-        "basic_criteria": 3,
-        "scoring_framework": 4
+        "We talk to anyone interested": 1,
+        "We ask a few questions during discovery": 2,
+        "We use basic criteria (e.g. budget, need)": 3,
+        "We follow a lead scoring or qualification framework": 4
       }
     },
     "how_142ca2": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "make_up_pricing": 1,
-        "price_list": 2,
-        "templated_proposal": 3,
-        "tailored_pricing": 4
+        "We make up pricing as we go": 1,
+        "We have a price list or one pager": 2,
+        "We use a templated proposal or quote": 3,
+        "We tailor pricing with a defined structure": 4
       }
     }
   },
@@ -76,60 +76,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "unassigned": 1,
-        "manual_assignment": 2,
-        "rep_managed": 3,
-        "routed_by_criteria": 4
+        "Leads are unassigned or handled ad hoc": 1,
+        "They're assigned manually by the owner/leader": 2,
+        "Each rep manages their own leads independently": 3,
+        "Leads are routed based on role, territory, or fit": 4
       }
     },
     "how_79028c": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_confident": 1,
-        "rough_ideas": 2,
-        "track_metrics": 3,
-        "forecast_data": 4
+        "Not confident at all": 1,
+        "Somewhat - we have rough ideas": 2,
+        "Mostly - we track some metrics": 3,
+        "Very confident - we forecast based on deal data": 4
       }
     },
     "how_47b050": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "rarely": 1,
-        "occasionally": 2,
-        "weekly": 3,
-        "daily": 4
+        "Rarely, only when needed": 1,
+        "Occasionally when checking progress": 2,
+        "Weekly": 3,
+        "Daily or during structured reviews": 4
       }
     },
     "how_12d26c": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "gut_feel": 1,
-        "basic_questions": 2,
-        "checklist": 3,
-        "formal_framework": 4
+        "Very informal, we go with gut feel": 1,
+        "We ask some basic qualifying questions": 2,
+        "We use a checklist or structured discovery": 3,
+        "We use a formal framework (e.g. MEDDIC, BANT)": 4
       }
     },
     "how_1f869b": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "skip_stages": 1,
-        "loose_steps": 2,
-        "track_movement": 3,
-        "methodical": 4
+        "We skip or rush through stages": 1,
+        "We loosely follow a set of steps": 2,
+        "We track movement but not always accurately": 3,
+        "We move deals methodically through stages": 4
       }
     },
     "how_c8eb2a": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_followup": 1,
-        "manual_reachout": 2,
-        "scheduled": 3,
-        "nurture_flow": 4
+        "We don't follow up": 1,
+        "We manually reach out when we remember": 2,
+        "We schedule follow ups": 3,
+        "We place them into nurture or remarketing flows": 4
       }
     }
   },
@@ -138,70 +138,70 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_defined": 1,
-        "loosely_defined": 2,
-        "defined_inconsistent": 3,
-        "clearly_documented": 4
+        "Not defined": 1,
+        "Some stages are loosely defined": 2,
+        "Defined, but not consistently used": 3,
+        "Clearly documented and used for tracking": 4
       }
     },
     "how_7d8dcb": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_accurate": 1,
-        "somewhat_accurate": 2,
-        "mostly_accurate": 3,
-        "very_accurate": 4
+        "Not accurate at all": 1,
+        "Somewhat accurate": 2,
+        "Mostly accurate, with occasional cleanups": 3,
+        "Very accurate and regularly maintained": 4
       }
     },
     "how_0fa447": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "most_recent": 1,
-        "gut_feel": 2,
-        "deal_size": 3,
-        "scoring_criteria": 4
+        "We work whatever is most recent": 1,
+        "We prioritize based on gut feel": 2,
+        "We prioritize based on deal size or engagement": 3,
+        "We use scoring or qualification criteria": 4
       }
     },
     "how_a76658": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "poor_tracking": 1,
-        "calendar_reminders": 2,
-        "crm_tasks": 3,
-        "automation": 4
+        "We don't track follow-ups well": 1,
+        "We rely on calendar or reminders": 2,
+        "We have tasks inside our CRM": 3,
+        "We use automation or sequences to manage follow-ups": 4
       }
     },
     "how_5589a0": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "wing_it": 1,
-        "glance_notes": 2,
-        "checklist": 3,
-        "thorough_prep": 4
+        "We wing it": 1,
+        "We glance at past notes or emails": 2,
+        "We follow a checklist or sales script": 3,
+        "We prep with research, context, and a discovery framework": 4
       }
     },
     "how_92a11d": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "rarely": 1,
-        "big_deals": 2,
-        "most_calls": 3,
-        "every_interaction": 4
+        "Rarely": 1,
+        "Only for big deals": 2,
+        "Most calls are noted in the CRM": 3,
+        "Every interaction is logged and searchable": 4
       }
     },
     "how_1e24f7": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_handoff": 1,
-        "inconsistent": 2,
-        "mostly_smooth": 3,
-        "standardized": 4
+        "We don't really have a handoff": 1,
+        "It's inconsistent": 2,
+        "It's mostly smooth, but has gaps": 3,
+        "It's standardized and clearly defined": 4
       }
     }
   },
@@ -210,70 +210,70 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_consistent_tracking": 1,
-        "manual_spreadsheet": 2,
-        "basic_crm": 3,
-        "automated_tracking": 4
+        "We don't track activities consistently": 1,
+        "We manually track in spreadsheets": 2,
+        "We use basic CRM activity tracking": 3,
+        "We have automated activity tracking and reminders": 4
       }
     },
     "how_140f94": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_targets": 1,
-        "basic_goals": 2,
-        "individual_team": 3,
-        "detailed_kpis": 4
+        "We don't set specific targets": 1,
+        "We have basic revenue goals": 2,
+        "We track individual and team targets": 3,
+        "We have detailed KPIs and performance metrics": 4
       }
     },
     "how_3a6376": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_reports": 1,
-        "basic_reports": 2,
-        "monthly_metrics": 3,
-        "real_time": 4
+        "We don't generate regular reports": 1,
+        "We have basic revenue reports": 2,
+        "We track key metrics monthly": 3,
+        "We have real-time dashboards and analytics": 4
       }
     },
     "how_4cd27c": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_process": 1,
-        "react_issues": 2,
-        "regular_reviews": 3,
-        "structured_coaching": 4
+        "We don't have a formal process": 1,
+        "We address issues as they arise": 2,
+        "We have regular performance reviews": 3,
+        "We have structured coaching and improvement plans": 4
       }
     },
     "how_68cbdb": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_reviews": 1,
-        "occasional": 2,
-        "weekly": 3,
-        "structured": 4
+        "We don't do regular reviews": 1,
+        "We review occasionally when needed": 2,
+        "We have weekly pipeline reviews": 3,
+        "We have structured daily/weekly pipeline management": 4
       }
     },
     "how_d30c39": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_confident": 1,
-        "somewhat": 2,
-        "mostly": 3,
-        "very_confident": 4
+        "Not confident at all": 1,
+        "Somewhat confident": 2,
+        "Mostly confident": 3,
+        "Very confident with clear criteria": 4
       }
     },
     "how_4a7d74": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_scalable": 1,
-        "needs_changes": 2,
-        "some_adjustments": 3,
-        "fully_scalable": 4
+        "Not scalable at all": 1,
+        "Would need significant changes": 2,
+        "Could handle with some adjustments": 3,
+        "Fully scalable with current process": 4
       }
     }
   },
@@ -282,60 +282,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_tracking": 1,
-        "basic_time": 2,
-        "stage_velocity": 3,
-        "detailed_metrics": 4
+        "We don't track velocity": 1,
+        "We track basic time to close": 2,
+        "We monitor stage-by-stage velocity": 3,
+        "We optimize based on detailed velocity metrics": 4
       }
     },
     "what_84c5f2": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "very_inconsistent": 1,
-        "somewhat_consistent": 2,
-        "mostly_consistent": 3,
-        "highly_consistent": 4
+        "Very inconsistent": 1,
+        "Somewhat consistent": 2,
+        "Mostly consistent": 3,
+        "Highly consistent across team": 4
       }
     },
     "how_8f9d2a": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_process": 1,
-        "basic_criteria": 2,
-        "structured_framework": 3,
-        "advanced_scoring": 4
+        "No formal qualification process": 1,
+        "Basic qualification criteria": 2,
+        "Structured qualification framework": 3,
+        "Advanced qualification with scoring": 4
       }
     },
     "how_1a3b4c": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "basic": 1,
-        "monthly": 2,
-        "weekly": 3,
-        "real_time": 4
+        "Basic forecasting": 1,
+        "Monthly forecasts": 2,
+        "Weekly forecasts with reviews": 3,
+        "Real-time forecasting with AI/ML": 4
       }
     },
     "how_5d6e7f": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_tracking": 1,
-        "basic_tracking": 2,
-        "detailed_analysis": 3,
-        "advanced_optimization": 4
+        "We don't track win rates": 1,
+        "Basic win/loss tracking": 2,
+        "Detailed win/loss analysis": 3,
+        "Advanced win rate optimization": 4
       }
     },
     "how_2d3e4f": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "one_size": 1,
-        "basic_segmentation": 2,
-        "detailed_segmentation": 3,
-        "dynamic_adaptation": 4
+        "One-size-fits-all approach": 1,
+        "Basic segmentation": 2,
+        "Detailed segmentation": 3,
+        "Dynamic process adaptation": 4
       }
     }
   },
@@ -344,60 +344,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_measurement": 1,
-        "basic_tracking": 2,
-        "detailed_analysis": 3,
-        "advanced_optimization": 4
+        "We don't measure forecast accuracy": 1,
+        "Basic accuracy tracking": 2,
+        "Detailed accuracy analysis": 3,
+        "Advanced accuracy optimization": 4
       }
     },
     "how_fe4a96": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_enablement": 1,
-        "basic_training": 2,
-        "structured_program": 3,
-        "comprehensive_platform": 4
+        "No formal enablement": 1,
+        "Basic training materials": 2,
+        "Structured enablement program": 3,
+        "Comprehensive enablement platform": 4
       }
     },
     "how_2e3f4g": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_process": 1,
-        "basic_criteria": 2,
-        "structured_framework": 3,
-        "advanced_scoring": 4
+        "No formal qualification process": 1,
+        "Basic qualification criteria": 2,
+        "Structured qualification framework": 3,
+        "Advanced qualification with scoring": 4
       }
     },
     "how_5f6g7h": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "basic": 1,
-        "monthly": 2,
-        "weekly": 3,
-        "real_time": 4
+        "Basic forecasting": 1,
+        "Monthly forecasts": 2,
+        "Weekly forecasts with reviews": 3,
+        "Real-time forecasting with AI/ML": 4
       }
     },
     "how_8g9h0i": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_tracking": 1,
-        "basic_tracking": 2,
-        "detailed_analysis": 3,
-        "advanced_optimization": 4
+        "We don't track win rates": 1,
+        "Basic win/loss tracking": 2,
+        "Detailed win/loss analysis": 3,
+        "Advanced win rate optimization": 4
       }
     },
     "how_4i5j6k": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "one_size": 1,
-        "basic_segmentation": 2,
-        "detailed_segmentation": 3,
-        "dynamic_adaptation": 4
+        "One-size-fits-all approach": 1,
+        "Basic segmentation": 2,
+        "Detailed segmentation": 3,
+        "Dynamic process adaptation": 4
       }
     }
   },
@@ -406,60 +406,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_used": 1,
-        "basic_sharing": 2,
-        "integrated_planning": 3,
-        "drives_strategy": 4
+        "Not used beyond sales": 1,
+        "Basic sharing with management": 2,
+        "Integrated with business planning": 3,
+        "Drives company-wide strategy": 4
       }
     },
     "how_ed3928": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_methodology": 1,
-        "basic_adoption": 2,
-        "structured_training": 3,
-        "advanced_optimization": 4
+        "No formal methodology": 1,
+        "Basic methodology adoption": 2,
+        "Structured methodology training": 3,
+        "Advanced methodology optimization": 4
       }
     },
     "how_6j7k8l": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "basic_tracking": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_optimization": 4
+        "Basic productivity tracking": 1,
+        "Activity-based metrics": 2,
+        "Advanced productivity analytics": 3,
+        "AI-driven productivity optimization": 4
       }
     },
     "how_9k0l1m": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "No formal planning": 1,
+        "Basic territory assignment": 2,
+        "Structured territory management": 3,
+        "Dynamic territory optimization": 4
       }
     },
     "how_2l3m4n": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "No formal qualification": 1,
+        "Basic qualification criteria": 2,
+        "Structured qualification process": 3,
+        "Advanced qualification system": 4
       }
     },
     "how_8n9o0p": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "static": 1,
-        "basic_monitoring": 2,
-        "regular_updates": 3,
-        "dynamic_adaptation": 4
+        "Static process": 1,
+        "Basic market monitoring": 2,
+        "Regular process updates": 3,
+        "Dynamic process adaptation": 4
       }
     }
   },
@@ -468,60 +468,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_planning": 1,
-        "basic_planning": 2,
-        "detailed_modeling": 3,
-        "advanced_optimization": 4
+        "No capacity planning": 1,
+        "Basic headcount planning": 2,
+        "Detailed capacity modeling": 3,
+        "Advanced capacity optimization": 4
       }
     },
     "how_70b7b8": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_testing": 1,
-        "basic_ab": 2,
-        "structured_experiment": 3,
-        "advanced_optimization": 4
+        "No methodology testing": 1,
+        "Basic A/B testing": 2,
+        "Structured experimentation": 3,
+        "Advanced methodology optimization": 4
       }
     },
     "how_1p2q3r": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "basic_tracking": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_optimization": 4
+        "Basic productivity tracking": 1,
+        "Activity-based metrics": 2,
+        "Advanced productivity analytics": 3,
+        "AI-driven productivity optimization": 4
       }
     },
     "how_4q5r6s": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "No formal planning": 1,
+        "Basic territory assignment": 2,
+        "Structured territory management": 3,
+        "Dynamic territory optimization": 4
       }
     },
     "how_7r8s9t": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "No formal qualification": 1,
+        "Basic qualification criteria": 2,
+        "Structured qualification process": 3,
+        "Advanced qualification system": 4
       }
     },
     "how_3t4u5v": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "static": 1,
-        "basic_monitoring": 2,
-        "regular_updates": 3,
-        "dynamic_adaptation": 4
+        "Static process": 1,
+        "Basic market monitoring": 2,
+        "Regular process updates": 3,
+        "Dynamic process adaptation": 4
       }
     }
   },
@@ -530,60 +530,60 @@
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_input": 1,
-        "basic_feedback": 2,
-        "regular_input": 3,
-        "drives_strategy": 4
+        "No strategic input": 1,
+        "Basic market feedback": 2,
+        "Regular strategic input": 3,
+        "Drives company strategy": 4
       }
     },
     "how_e9af60": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_culture": 1,
-        "basic_training": 2,
-        "structured_program": 3,
-        "advanced_ecosystem": 4
+        "No learning culture": 1,
+        "Basic training": 2,
+        "Structured learning program": 3,
+        "Advanced learning ecosystem": 4
       }
     },
     "how_6v7w8x": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "basic_tracking": 1,
-        "activity_metrics": 2,
-        "advanced_analytics": 3,
-        "ai_optimization": 4
+        "Basic productivity tracking": 1,
+        "Activity-based metrics": 2,
+        "Advanced productivity analytics": 3,
+        "AI-driven productivity optimization": 4
       }
     },
     "how_9w0x1y": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_planning": 1,
-        "basic_assignment": 2,
-        "structured_management": 3,
-        "dynamic_optimization": 4
+        "No formal planning": 1,
+        "Basic territory assignment": 2,
+        "Structured territory management": 3,
+        "Dynamic territory optimization": 4
       }
     },
     "how_2x3y4z": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_qualification": 1,
-        "basic_criteria": 2,
-        "structured_process": 3,
-        "advanced_system": 4
+        "No formal qualification": 1,
+        "Basic qualification criteria": 2,
+        "Structured qualification process": 3,
+        "Advanced qualification system": 4
       }
     },
     "how_8z9a0b": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "static": 1,
-        "basic_monitoring": 2,
-        "regular_updates": 3,
-        "dynamic_adaptation": 4
+        "Static process": 1,
+        "Basic market monitoring": 2,
+        "Regular process updates": 3,
+        "Dynamic process adaptation": 4
       }
     }
   }
