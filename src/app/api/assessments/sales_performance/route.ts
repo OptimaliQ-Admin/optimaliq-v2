@@ -216,45 +216,27 @@ const salesAnswerValueMap: Record<string, Record<string, string>> = {
   // Score 2.5 mappings
   "how_b5793e": { // activity_tracking
     "no_tracking": "no_tracking",
-    "manual_tracking": "manual_tracking",
-    "basic_tracking": "basic_tracking",
-    "advanced_tracking": "advanced_tracking"
+    "manual_spreadsheet": "manual_spreadsheet",
+    "basic_crm": "basic_crm",
+    "automated": "automated"
   },
   "how_140f94": { // sales_targets
     "no_targets": "no_targets",
-    "manual_targets": "manual_targets",
-    "basic_targets": "basic_targets",
-    "advanced_targets": "advanced_targets"
-  },
-  "how_3a6376": { // sales_reporting
-    "no_reporting": "no_reports",
-    "manual_reporting": "manual_reports",
-    "basic_reporting": "basic_reports",
-    "advanced_reporting": "advanced_reports"
-  },
-  "how_4cd27c": { // strategy_adjustment
-    "reactive": "no_process",
-    "monthly_review": "monthly_review",
-    "weekly_review": "weekly_review",
-    "continuous_review": "continuous_review"
+    "basic_goals": "basic_goals",
+    "individual_targets": "individual_targets",
+    "detailed_kpis": "detailed_kpis"
   },
   "how_68cbdb": { // pipeline_review_frequency
     "no_review": "no_review",
-    "monthly_review": "monthly_review",
-    "weekly_review": "weekly_review",
-    "daily_review": "daily_review"
+    "occasional": "occasional",
+    "weekly": "weekly",
+    "structured": "structured"
   },
   "how_d30c39": { // deal_insights
-    "no_insights": "not_confident",
-    "basic_insights": "somewhat_confident",
-    "standard_insights": "mostly_confident",
-    "advanced_insights": "very_confident"
-  },
-  "how_4a7d74": { // stage_consistency
-    "skip_stages": "not_scalable",
-    "inconsistent_stages": "somewhat_scalable",
-    "consistent_stages": "mostly_scalable",
-    "very_consistent": "very_scalable"
+    "call_recordings": "call_recordings",
+    "chat_messages": "chat_messages",
+    "crm_notes": "crm_notes",
+    "deal_reviews": "deal_reviews"
   }
 };
 
