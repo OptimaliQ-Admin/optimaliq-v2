@@ -1,6 +1,6 @@
 {
   "score_1": {
-    "how_b5d8e7": {
+    "lead_generation": {
       "label": "How do you typically generate new sales leads?",
       "type": "multiple_choice",
       "options": {
@@ -22,7 +22,7 @@
         }
       }
     },
-    "do_b7cc0a": {
+    "sales_process": {
       "label": "Do you follow a defined sales process?",
       "type": "multiple_choice",
       "options": {
@@ -44,7 +44,7 @@
         }
       }
     },
-    "how_fee95e": {
+    "pipeline_tracking": {
       "label": "How do you track your sales pipeline?",
       "type": "multiple_choice",
       "options": {
@@ -66,7 +66,7 @@
         }
       }
     },
-    "who_5d9558": {
+    "sales_team": {
       "label": "Who handles your sales?",
       "type": "multiple_choice",
       "options": {
@@ -88,7 +88,7 @@
         }
       }
     },
-    "how_454fc5": {
+    "follow_ups": {
       "label": "How do you handle follow-ups with prospects?",
       "type": "multiple_choice",
       "options": {
@@ -110,7 +110,7 @@
         }
       }
     },
-    "which_01150c": {
+    "lead_qualification": {
       "label": "How do you qualify potential customers?",
       "type": "multiple_choice",
       "options": {
@@ -132,7 +132,7 @@
         }
       }
     },
-    "how_142ca2": {
+    "pricing_proposals": {
       "label": "How do you handle pricing and proposals?",
       "type": "multiple_choice",
       "options": {
@@ -154,7 +154,7 @@
         }
       }
     },
-    "which_metrics_7f8d9e": {
+    "sales_metrics": {
       "label": "Which of the following do you currently track or measure in your sales process?",
       "type": "multi_select",
       "options": {
@@ -180,17 +180,17 @@
         }
       }
     },
-    "biggest_obstacle_9a1b2c": {
+    "biggest_obstacle": {
       "label": "What's the biggest obstacle you face when trying to close more deals?",
       "type": "text_area"
     },
-    "improvement_priority_3d4e5f": {
+    "improvement_priority": {
       "label": "If you could improve one part of your sales process today, what would it be and why?",
       "type": "text_area"
     }
   },
   "score_1_5": {
-    "how_2c42b7": {
+    "lead_assignment": {
       "label": "How are sales leads assigned?",
       "type": "multiple_choice",
       "options": {
@@ -212,7 +212,7 @@
         }
       }
     },
-    "how_79028c": {
+    "forecast_confidence": {
       "label": "How confident are you in your sales forecasts?",
       "type": "multiple_choice",
       "options": {
@@ -234,7 +234,7 @@
         }
       }
     },
-    "how_47b050": {
+    "pipeline_review": {
       "label": "How often do you review your sales pipeline?",
       "type": "multiple_choice",
       "options": {
@@ -256,7 +256,7 @@
         }
       }
     },
-    "how_12d26c": {
+    "sales_discovery": {
       "label": "How do you conduct sales discovery?",
       "type": "multiple_choice",
       "options": {
@@ -278,7 +278,7 @@
         }
       }
     },
-    "how_1f869b": {
+    "deal_progression": {
       "label": "How do you track deal progression?",
       "type": "multiple_choice",
       "options": {
@@ -300,11 +300,7 @@
         }
       }
     },
-    "what_metrics_8c9d0e": {
-      "label": "What sales metrics are most important to you right now?",
-      "type": "text_area"
-    },
-    "how_consistently_1a2b3c": {
+    "stage_consistency": {
       "label": "How consistently do you move leads through each sales stage?",
       "type": "multiple_choice",
       "options": {
@@ -325,6 +321,10 @@
           "score": 4
         }
       }
+    },
+    "what_metrics": {
+      "label": "What sales metrics are most important to you right now?",
+      "type": "text_area"
     },
     "which_bottlenecks_4d5e6f": {
       "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
@@ -380,7 +380,7 @@
     }
   },
   "score_2": {
-    "how_clearly_3m4n5o": {
+    "sales_stages": {
       "label": "How clearly are your sales stages defined (e.g. discovery, demo, proposal, negotiation)?",
       "type": "multiple_choice",
       "options": {
@@ -402,7 +402,7 @@
         }
       }
     },
-    "how_confident_6p7q8r": {
+    "pipeline_accuracy": {
       "label": "How confident are you in the accuracy of your current pipeline data?",
       "type": "multiple_choice",
       "options": {
@@ -424,7 +424,7 @@
         }
       }
     },
-    "how_prioritize_9s0t1u": {
+    "lead_prioritization": {
       "label": "How do you prioritize leads or accounts in your pipeline?",
       "type": "multiple_choice",
       "options": {
@@ -446,7 +446,7 @@
         }
       }
     },
-    "how_track_followups_2v3w4x": {
+    "followup_tracking": {
       "label": "How do you track and manage follow-ups across your deals?",
       "type": "multiple_choice",
       "options": {
@@ -468,7 +468,7 @@
         }
       }
     },
-    "which_operations_5y6z7a": {
+    "sales_operations": {
       "label": "Which of the following are part of your sales operations today?",
       "type": "multi_select",
       "options": {
@@ -494,7 +494,7 @@
         }
       }
     },
-    "how_prepare_8b9c0d": {
+    "sales_preparation": {
       "label": "How do you typically prepare for a sales meeting or call?",
       "type": "multiple_choice",
       "options": {
@@ -516,7 +516,7 @@
         }
       }
     },
-    "how_often_document_1e2f3g": {
+    "conversation_documentation": {
       "label": "How often are sales conversations documented or logged?",
       "type": "multiple_choice",
       "options": {
@@ -538,7 +538,7 @@
         }
       }
     },
-    "how_effective_handoff_4h5i6j": {
+    "marketing_handoff": {
       "label": "How effective is your current handoff process from marketing or SDR to sales?",
       "type": "multiple_choice",
       "options": {
@@ -560,17 +560,17 @@
         }
       }
     },
-    "biggest_friction_7k8l9m": {
+    "biggest_friction": {
       "label": "What's the biggest friction point in your current sales cycle?",
       "type": "text_area"
     },
-    "one_improvement_0n1o2p": {
+    "improvement_priority": {
       "label": "What's one improvement you'd make to your sales process if you could implement it today?",
       "type": "text_area"
     }
   },
   "score_2_5": {
-    "how_b5793e": {
+    "activity_tracking": {
       "label": "How do you track sales activities?",
       "type": "multiple_choice",
       "options": {
@@ -592,7 +592,7 @@
         }
       }
     },
-    "how_140f94": {
+    "sales_targets": {
       "label": "How do you handle sales targets and goals?",
       "type": "multiple_choice",
       "options": {
@@ -614,7 +614,7 @@
         }
       }
     },
-    "how_3a6376": {
+    "sales_reporting": {
       "label": "How do you handle sales reporting?",
       "type": "multiple_choice",
       "options": {
@@ -636,7 +636,7 @@
         }
       }
     },
-    "how_4cd27c": {
+    "strategy_adjustment": {
       "label": "How do you adjust sales strategies?",
       "type": "multiple_choice",
       "options": {
@@ -658,7 +658,7 @@
         }
       }
     },
-    "how_68cbdb": {
+    "pipeline_review_frequency": {
       "label": "How do you review your sales pipeline?",
       "type": "multiple_choice",
       "options": {
@@ -680,7 +680,7 @@
         }
       }
     },
-    "how_a4d10a": {
+    "deal_insights": {
       "label": "How do you capture deal insights?",
       "type": "multi_select",
       "options": {
@@ -706,7 +706,7 @@
         }
       }
     },
-    "how_consistently_1a2b3c": {
+    "stage_consistency": {
       "label": "How consistently do you move leads through each sales stage?",
       "type": "multiple_choice",
       "options": {
@@ -728,7 +728,7 @@
         }
       }
     },
-    "which_bottlenecks_4d5e6f": {
+    "sales_bottlenecks": {
       "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
       "type": "multi_select",
       "options": {
@@ -754,11 +754,11 @@
         }
       }
     },
-    "unpredictable_area_7g8h9i": {
+    "unpredictable_area": {
       "label": "What's one part of your pipeline that feels unpredictable or messy?",
       "type": "text_area"
     },
-    "handle_leads_0j1k2l": {
+    "lead_nurturing": {
       "label": "How do you handle leads that don't convert right away?",
       "type": "multiple_choice",
       "options": {
@@ -782,7 +782,7 @@
     }
   },
   "score_3": {
-    "how_7f8e9d": {
+    "pipeline_stages": {
       "label": "How do you define and track your sales pipeline stages?",
       "type": "multiple_choice",
       "options": {
@@ -804,7 +804,7 @@
         }
       }
     },
-    "how_1a2b3c": {
+    "pipeline_accuracy": {
       "label": "How accurate is your pipeline data?",
       "type": "multiple_choice",
       "options": {
@@ -826,7 +826,7 @@
         }
       }
     },
-    "how_4d5e6f": {
+    "opportunity_prioritization": {
       "label": "How do you prioritize sales opportunities?",
       "type": "multiple_choice",
       "options": {
@@ -848,7 +848,7 @@
         }
       }
     },
-    "how_7g8h9i": {
+    "followup_management": {
       "label": "How do you manage follow-ups with prospects?",
       "type": "multiple_choice",
       "options": {
@@ -870,7 +870,7 @@
         }
       }
     },
-    "which_0j1k2l": {
+    "sales_metrics": {
       "label": "Which sales metrics do you track?",
       "type": "multi_select",
       "options": {
@@ -896,7 +896,7 @@
         }
       }
     },
-    "how_prepare_3m4n5o": {
+    "sales_preparation": {
       "label": "How do you prepare for sales calls?",
       "type": "multiple_choice",
       "options": {
@@ -918,7 +918,7 @@
         }
       }
     },
-    "how_document_6p7q8r": {
+    "interaction_documentation": {
       "label": "How do you document sales interactions?",
       "type": "multiple_choice",
       "options": {
@@ -940,7 +940,7 @@
         }
       }
     },
-    "how_handoff_9s0t1u": {
+    "delivery_handoff": {
       "label": "How do you handle sales-to-delivery handoffs?",
       "type": "multiple_choice",
       "options": {
@@ -962,17 +962,17 @@
         }
       }
     },
-    "biggest_challenge_2v3w4x": {
+    "biggest_challenge": {
       "label": "What's the biggest challenge you face in your sales process?",
       "type": "text_area"
     },
-    "improvement_priority_5y6z7a": {
+    "improvement_priority": {
       "label": "What's one improvement you'd make to your sales process if you could implement it today?",
       "type": "text_area"
     }
   },
   "score_3_5": {
-    "how_3m4n5o": {
+    "sales_preparation": {
       "label": "How do you prepare for sales calls?",
       "type": "multiple_choice",
       "options": {
@@ -994,7 +994,7 @@
         }
       }
     },
-    "how_6p7q8r": {
+    "interaction_documentation": {
       "label": "How do you document sales interactions?",
       "type": "multiple_choice",
       "options": {
@@ -1016,7 +1016,7 @@
         }
       }
     },
-    "how_9s0t1u": {
+    "delivery_handoff": {
       "label": "How do you handle sales-to-delivery handoffs?",
       "type": "multiple_choice",
       "options": {
@@ -1038,7 +1038,7 @@
         }
       }
     },
-    "how_2v3w4x": {
+    "activity_tracking": {
       "label": "How do you track sales activities?",
       "type": "multiple_choice",
       "options": {
@@ -1060,7 +1060,7 @@
         }
       }
     },
-    "how_5y6z7a": {
+    "sales_targets": {
       "label": "How do you handle sales targets and goals?",
       "type": "multiple_choice",
       "options": {
@@ -1082,7 +1082,7 @@
         }
       }
     },
-    "which_metrics_8b9c0d": {
+    "sales_metrics": {
       "label": "Which sales metrics do you track?",
       "type": "multi_select",
       "options": {
@@ -1108,7 +1108,7 @@
         }
       }
     },
-    "how_effective_1e2f3g": {
+    "marketing_handoff": {
       "label": "How effective is your current handoff process from marketing or SDR to sales?",
       "type": "multiple_choice",
       "options": {
@@ -1130,7 +1130,7 @@
         }
       }
     },
-    "which_bottlenecks_4h5i6j": {
+    "sales_bottlenecks": {
       "label": "Which of the following bottlenecks do you encounter most often in your sales process?",
       "type": "multi_select",
       "options": {
@@ -1156,11 +1156,11 @@
         }
       }
     },
-    "biggest_friction_7k8l9m": {
+    "biggest_friction": {
       "label": "What's the biggest friction point in your current sales cycle?",
       "type": "text_area"
     },
-    "one_improvement_0n1o2p": {
+    "improvement_priority": {
       "label": "What's one improvement you'd make to your sales process if you could implement it today?",
       "type": "text_area"
     }

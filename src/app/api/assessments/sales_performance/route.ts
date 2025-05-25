@@ -13,6 +13,43 @@ const supabase = createClient(
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;
 
+// Add key mapping for backward compatibility
+const keyMapping: Record<string, string> = {
+  // Score 1 mappings
+  "how_b5d8e7": "lead_generation",
+  "do_b7cc0a": "sales_process",
+  "how_fee95e": "pipeline_tracking",
+  "who_5d9558": "sales_team",
+  "how_454fc5": "follow_ups",
+  "which_01150c": "lead_qualification",
+  "how_142ca2": "pricing_proposals",
+  
+  // Score 1.5 mappings
+  "how_2c42b7": "lead_assignment",
+  "how_79028c": "forecast_confidence",
+  "how_47b050": "pipeline_review",
+  "how_12d26c": "sales_discovery",
+  "how_1f869b": "deal_progression",
+  "how_c8eb2a": "stage_consistency"
+};
+
+// Add value mapping for backward compatibility
+const valueMapping: Record<string, Record<string, string>> = {
+  "lead_generation": {
+    "referrals": "referrals_only",
+    "occasional_outreach": "occasional_outreach",
+    "digital_inquiries": "digital_channels",
+    "no_consistent_method": "no_consistent_method"
+  },
+  "sales_process": {
+    "no_process": "no_process",
+    "loose_outline": "loose_outline",
+    "key_steps": "key_steps",
+    "defined_process": "defined_process"
+  }
+  // Add more mappings as needed
+};
+
 function getBracket(score: number): keyof ScoringMap {
   if (score >= 1 && score <= 1.4) return "score_1";
   if (score >= 1.5 && score <= 1.9) return "score_1_5";
@@ -50,17 +87,25 @@ export async function POST(request: Request) {
       return NextResponse.json(error, { status: 400 });
     }
 
+    // Map old keys to new semantic keys
+    const mappedAnswers = Object.entries(answers).reduce((acc, [key, value]) => {
+      const newKey = keyMapping[key] || key;
+      acc[newKey] = value;
+      return acc;
+    }, {} as Record<string, any>);
+
     // Filter answers to only include keys from the scoring map
     const bracketScoringKeys = Object.keys(bracketScoring);
     const filteredAnswers = Object.fromEntries(
-      Object.entries(answers).filter(([key]) => bracketScoringKeys.includes(key))
+      Object.entries(mappedAnswers).filter(([key]) => bracketScoringKeys.includes(key))
     );
 
     // Log filtered answers and missing keys
     logAssessmentDebug('sales_performance', {
       originalAnswers: answers,
+      mappedAnswers,
       filteredAnswers,
-      missingKeys: Object.keys(answers).filter(key => !bracketScoringKeys.includes(key))
+      missingKeys: Object.keys(mappedAnswers).filter(key => !bracketScoringKeys.includes(key))
     });
 
     let total = 0;
@@ -70,7 +115,13 @@ export async function POST(request: Request) {
     const scoringIssues = {
       unmatchedKeys: [] as string[],
       typeMismatches: [] as { key: string; expected: string; received: string }[],
-      defaultedScores: [] as { key: string; answer: any; reason: string }[]
+      defaultedScores: [] as { 
+        key: string; 
+        answer: any; 
+        reason: string;
+        mappedValue?: string;
+        mappedSelections?: string[];
+      }[]
     };
 
     for (const key in filteredAnswers) {
@@ -103,17 +154,23 @@ export async function POST(request: Request) {
       }
 
       if (q.type === "multiple_choice") {
-        valScore = q.values[answer as string] || 0;
+        // Map old values to new semantic values if needed
+        const valueMap = valueMapping[key];
+        const mappedValue = valueMap ? valueMap[answer as string] : answer;
+        valScore = q.values[mappedValue as string] || 0;
+        
         if (valScore === 0) {
           scoringIssues.defaultedScores.push({
             key,
             answer,
+            mappedValue,
             reason: `No matching value in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
           });
           logAssessmentDebug('sales_performance', {
             message: `No score found for multiple choice answer`,
             key,
             answer,
+            mappedValue,
             availableValues: Object.keys(q.values)
           });
         }
@@ -122,19 +179,27 @@ export async function POST(request: Request) {
       if (q.type === "multi_select") {
         try {
           const selections: string[] = Array.isArray(answer) ? answer : JSON.parse(answer as string);
-          const scores = selections.map((s) => q.values[s] || 0);
+          // Map old values to new semantic values if needed
+          const valueMap = valueMapping[key];
+          const mappedSelections = valueMap 
+            ? selections.map(s => valueMap[s] || s)
+            : selections;
+            
+          const scores = mappedSelections.map((s) => q.values[s] || 0);
           valScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
           
           if (valScore === 0) {
             scoringIssues.defaultedScores.push({
               key,
               answer: selections,
+              mappedSelections,
               reason: `No matching values in scoring map. Available values: ${Object.keys(q.values).join(', ')}`
             });
             logAssessmentDebug('sales_performance', {
               message: `No scores found for multi-select answers`,
               key,
               selections,
+              mappedSelections,
               availableValues: Object.keys(q.values)
             });
           }
@@ -213,6 +278,36 @@ export async function POST(request: Request) {
         { error: "Failed to save assessment", details: assessmentError },
         { status: 500 }
       );
+    }
+
+    // Insert into score_sales_performance table
+    const { error: scoreError } = await supabase
+      .from("score_sales_performance")
+      .insert([
+        {
+          u_id: userId,
+          gmf_score: score,
+          bracket_key: bracket,
+          score: normalized,
+          answers: answersObject,
+          version: "v1"
+        }
+      ]);
+
+    if (scoreError) {
+      logAssessmentError('sales_performance', {
+        error: "Failed to save score_sales_performance",
+        details: scoreError,
+        attemptedData: {
+          u_id: userId,
+          gmf_score: score,
+          bracket_key: bracket,
+          score: normalized,
+          answers: answersObject,
+          version: "v1"
+        }
+      });
+      // Do not return here, allow the main assessment to succeed
     }
 
     return NextResponse.json({ salesPerformanceScore: normalized });

@@ -185,7 +185,7 @@ export default function SalesPerformanceAssessmentPage() {
         throw new Error("Failed to update profile");
       }
 
-      router.push("/premium/assessment/complete?type=sales_performance");
+      router.push("/premium/assessment");
     } catch (err: unknown) {
       console.error("❌ Assessment submission failed:", err);
       setError(getErrorMessage(err));

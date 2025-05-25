@@ -1,135 +1,146 @@
 {
   "score_1": {
-    "how_b5d8e7": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "referrals": 1,
-        "occasional_outreach": 1,
-        "digital_inquiries": 1,
-        "no_consistent_method": 1
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "do_b7cc0a": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
         "no_process": 1,
-        "loose_outline": 1,
-        "key_steps": 1,
-        "defined_process": 1
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "how_fee95e": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
         "no_tracking": 1,
-        "manual_spreadsheet": 1,
-        "basic_crm": 1,
-        "structured_system": 1
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "who_5d9558": {
+    "sales_team": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "founder": 1,
-        "single_rep": 1,
-        "small_team": 1,
-        "dedicated_department": 1
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
       }
     },
-    "how_454fc5": {
+    "follow_ups": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "inconsistent": 1.5,
-        "sometimes_forget": 1.5,
-        "basic_reminders": 1.5,
-        "automated_followup": 1.5
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
       }
     },
-    "which_01150c": {
+    "lead_qualification": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "anyone": 1.5,
-        "basic_questions": 1.5,
-        "basic_criteria": 1.5,
-        "scoring_framework": 1.5
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
       }
     },
-    "how_142ca2": {
+    "pricing_proposals": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "ad_hoc": 1.5,
-        "price_list": 1.5,
-        "templated": 1.5,
-        "structured": 1.5
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_1_5": {
-    "how_2c42b7": {
+    "lead_assignment": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
         "unassigned": 1.5,
-        "manual_assignment": 1.5,
-        "independent": 1.5,
-        "routed": 1.5
+        "manual_assignment": 2,
+        "self_managed": 2.5,
+        "routed": 3
       }
     },
-    "how_79028c": {
+    "forecast_confidence": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "not_confident": 2,
+        "not_confident": 1.5,
         "rough_ideas": 2,
-        "some_metrics": 2,
-        "deal_based": 2
+        "some_metrics": 2.5,
+        "data_driven": 3
       }
     },
-    "how_47b050": {
+    "pipeline_review": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "rarely": 2,
-        "occasionally": 2,
-        "weekly": 2,
-        "daily": 2
+        "rarely": 1.5,
+        "occasional": 2,
+        "weekly": 2.5,
+        "daily": 3
       }
     },
-    "how_12d26c": {
+    "sales_discovery": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "informal": 2,
-        "basic_qualifying": 2,
-        "checklist": 2,
-        "formal_framework": 2
+        "informal": 1.5,
+        "basic_questions": 2,
+        "structured": 2.5,
+        "formal_framework": 3
       }
     },
-    "how_1f869b": {
+    "deal_progression": {
       "type": "multiple_choice",
       "weight": 1,
       "values": {
-        "skip_stages": 2,
+        "no_tracking": 1.5,
+        "manual_notes": 2,
+        "basic_crm": 2.5,
+        "detailed_tracking": 3
+      }
+    },
+    "stage_consistency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "skip_stages": 1.5,
         "loose_steps": 2,
-        "inconsistent_tracking": 2,
-        "methodical": 2
-      }
-    },
-    "how_c8eb2a": {
-      "type": "multiple_choice",
-      "weight": 1,
-      "values": {
-        "no_followup": 2.5,
-        "manual_reachout": 2.5,
-        "scheduled": 2.5,
-        "automated_nurture": 2.5
+        "track_movement": 2.5,
+        "methodical": 3
       }
     }
   },
