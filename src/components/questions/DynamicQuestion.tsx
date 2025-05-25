@@ -11,8 +11,8 @@ type Option = {
 type Props = {
   question: string;
   description?: string;
-  type: "multiple_choice" | "multi_select";
-  options: Record<string, { label: string; score: number }>;
+  type: "multiple_choice" | "multi_select" | "text_area";
+  options?: Record<string, { label: string; score: number }>;
   selected: string | string[];
   onChange: (value: string | string[]) => void;
   maxSelect?: number;
@@ -29,7 +29,25 @@ export default function DynamicQuestion({
 }: Props) {
   const [open, setOpen] = useState(false);
 
-  const optionsArray = Object.entries(options).map(([value, { label }]) => ({
+  if (type === "text_area") {
+    return (
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-gray-800">{question}</h2>
+        {description && <p className="text-gray-600 mt-1">{description}</p>}
+        <div className="mt-4">
+          <textarea
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={4}
+            value={selected as string}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Type your answer here..."
+          />
+        </div>
+      </div>
+    );
+  }
+
+  const optionsArray = Object.entries(options || {}).map(([value, { label }]) => ({
     value,
     label,
   }));
