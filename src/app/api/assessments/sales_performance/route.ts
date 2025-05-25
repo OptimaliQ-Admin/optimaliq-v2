@@ -13,58 +13,83 @@ const supabase = createClient(
 
 const scoringMap = salesPerformanceScoringMap as ScoringMap;
 
-// Add semantic to obfuscated key mapping by bracket
+// Update semantic key mapping to use new keys
 const salesSemanticToObfuscatedKeyMap: Record<string, Record<string, string>> = {
   "score_1": {
-    "lead_generation": "how_b5d8e7",
-    "sales_process": "do_b7cc0a",
-    "pipeline_tracking": "how_fee95e",
-    "sales_team": "who_5d9558",
-    "follow_ups": "how_454fc5",
-    "lead_qualification": "which_01150c",
-    "pricing_proposals": "how_142ca2"
+    "lead_generation": "lead_generation",
+    "sales_process": "sales_process",
+    "pipeline_tracking": "pipeline_tracking",
+    "sales_team": "sales_team",
+    "follow_ups": "follow_ups",
+    "lead_qualification": "lead_qualification",
+    "pricing_proposals": "pricing_proposals",
+    "sales_metrics": "sales_metrics"
   },
   "score_1_5": {
-    "lead_assignment": "how_2c42b7",
-    "forecast_confidence": "how_79028c",
-    "pipeline_review": "how_47b050",
-    "sales_discovery": "how_12d26c",
-    "deal_progression": "how_1f869b",
-    "stage_consistency": "how_c8eb2a"
+    "lead_assignment": "lead_assignment",
+    "forecast_confidence": "forecast_confidence",
+    "pipeline_review": "pipeline_review",
+    "sales_discovery": "sales_discovery",
+    "deal_progression": "deal_progression",
+    "stage_consistency": "stage_consistency"
   },
   "score_2": {
-    "sales_stages": "how_64a8d1",
-    "pipeline_accuracy": "how_7d8dcb",
-    "lead_prioritization": "how_0fa447",
-    "followup_tracking": "how_a76658",
-    "sales_operations": "how_5589a0",
-    "sales_preparation": "how_92a11d",
-    "conversation_documentation": "how_1e24f7"
+    "sales_stages": "sales_stages",
+    "pipeline_accuracy": "pipeline_accuracy",
+    "lead_prioritization": "lead_prioritization",
+    "followup_management": "followup_management",
+    "sales_preparation": "sales_preparation",
+    "call_documentation": "call_documentation",
+    "handoff_process": "handoff_process"
   },
   "score_2_5": {
-    "activity_tracking": "how_b5793e",
-    "sales_targets": "how_140f94",
-    "sales_reporting": "how_3a6376",
-    "strategy_adjustment": "how_4cd27c",
-    "pipeline_review_frequency": "how_68cbdb",
-    "deal_insights": "how_d30c39",
-    "stage_consistency": "how_4a7d74"
+    "activity_tracking": "activity_management",
+    "sales_targets": "sales_targets",
+    "sales_reporting": "reporting_system",
+    "strategy_adjustment": "strategy_adjustment",
+    "pipeline_review_frequency": "performance_review",
+    "deal_insights": "sales_communication",
+    "stage_consistency": "pipeline_management"
   },
   "score_3": {
-    "pipeline_stages": "how_c7b9f7",
-    "pipeline_accuracy": "what_84c5f2",
-    "opportunity_prioritization": "how_8f9d2a",
-    "followup_management": "how_1a3b4c",
-    "sales_metrics": "how_5d6e7f",
-    "sales_preparation": "how_2d3e4f"
+    "deal_velocity": "deal_velocity",
+    "forecast_accuracy": "forecast_accuracy",
+    "sales_optimization": "sales_optimization",
+    "performance_analytics": "performance_analytics",
+    "sales_metrics": "sales_metrics",
+    "pricing_strategy": "pricing_strategy"
   },
   "score_3_5": {
-    "sales_preparation": "how_4d1ff3",
-    "interaction_documentation": "how_fe4a96",
-    "delivery_handoff": "how_2e3f4g",
-    "activity_tracking": "how_5f6g7h",
-    "sales_targets": "how_8g9h0i",
-    "sales_metrics": "how_4i5j6k"
+    "roi_measurement": "roi_measurement",
+    "sales_effectiveness": "sales_effectiveness",
+    "sales_optimization": "sales_optimization",
+    "performance_monitoring": "performance_monitoring",
+    "sales_analytics": "sales_analytics",
+    "pricing_optimization": "pricing_optimization"
+  },
+  "score_4": {
+    "data_driven_strategy": "data_driven_strategy",
+    "sales_methodology": "sales_methodology",
+    "sales_intelligence": "sales_intelligence",
+    "resource_allocation": "resource_allocation",
+    "lead_scoring": "lead_scoring",
+    "process_adaptation": "process_adaptation"
+  },
+  "score_4_5": {
+    "team_capacity": "team_capacity",
+    "sales_experimentation": "sales_experimentation",
+    "sales_insights": "sales_insights",
+    "resource_planning": "resource_planning",
+    "lead_evaluation": "lead_evaluation",
+    "process_evolution": "process_evolution"
+  },
+  "score_5": {
+    "customer_feedback": "customer_feedback",
+    "sales_culture": "sales_culture",
+    "sales_automation": "sales_automation",
+    "resource_strategy": "resource_strategy",
+    "opportunity_assessment": "opportunity_assessment",
+    "process_innovation": "process_innovation"
   }
 };
 
@@ -85,158 +110,50 @@ const valueMapping: Record<string, Record<string, string>> = {
   // Add more mappings as needed
 };
 
-// Add value mapping for semantic answers to scoring values
+// Update value mapping for semantic answers
 const salesAnswerValueMap: Record<string, Record<string, string>> = {
-  // Score 1 mappings
-  "how_b5d8e7": { // lead_generation
-    "no_consistent_method": "no_process",
-    "referrals_only": "referrals",
-    "occasional_outreach": "ad_hoc",
-    "digital_channels": "digital_inquiries"
+  // Score 2.5 mappings (most relevant for current issue)
+  "activity_management": {
+    "no_tracking": "no_activity_tracking",
+    "manual_spreadsheet": "manual_activity_log",
+    "basic_crm": "basic_activity_crm",
+    "automated": "automated_activity"
   },
-  "do_b7cc0a": { // sales_process
-    "no_process": "no_process",
-    "loose_outline": "ad_hoc",
-    "key_steps": "basic_steps",
-    "defined_process": "defined_process"
-  },
-  "how_fee95e": { // pipeline_tracking
-    "no_tracking": "no_tracking",
-    "manual_tracking": "manual_tracking",
-    "basic_crm": "basic_crm",
-    "advanced_crm": "advanced_crm"
-  },
-  "who_5d9558": { // sales_team
-    "no_team": "no_team",
-    "single_rep": "single_rep",
-    "small_team": "small_team",
-    "dedicated_team": "dedicated_team"
-  },
-  "how_454fc5": { // follow_ups
-    "no_followup": "no_followup",
-    "manual_followup": "manual_followup",
-    "basic_automation": "basic_automation",
-    "advanced_automation": "advanced_automation"
-  },
-  "which_01150c": { // lead_qualification
-    "no_qualification": "no_qualification",
-    "basic_qualification": "basic_qualification",
-    "standard_qualification": "standard_qualification",
-    "advanced_qualification": "advanced_qualification"
-  },
-  "how_142ca2": { // pricing_proposals
-    "no_process": "no_process",
-    "manual_process": "manual_process",
-    "standardized_process": "standardized_process",
-    "automated_process": "automated_process"
-  },
-
-  // Score 1.5 mappings
-  "how_2c42b7": { // lead_assignment
-    "no_assignment": "no_assignment",
-    "manual_assignment": "manual_assignment",
-    "basic_rules": "basic_rules",
-    "advanced_rules": "advanced_rules"
-  },
-  "how_79028c": { // forecast_confidence
-    "not_confident": "not_confident",
-    "somewhat_confident": "somewhat_confident",
-    "mostly_confident": "mostly_confident",
-    "very_confident": "very_confident"
-  },
-  "how_47b050": { // pipeline_review
-    "no_review": "no_review",
-    "monthly_review": "monthly_review",
-    "weekly_review": "weekly_review",
-    "daily_review": "daily_review"
-  },
-  "how_12d26c": { // sales_discovery
-    "no_process": "no_process",
-    "basic_process": "basic_process",
-    "standard_process": "standard_process",
-    "advanced_process": "advanced_process"
-  },
-  "how_1f869b": { // deal_progression
-    "no_tracking": "no_tracking",
-    "manual_tracking": "manual_tracking",
-    "basic_tracking": "basic_tracking",
-    "advanced_tracking": "advanced_tracking"
-  },
-  "how_c8eb2a": { // stage_consistency
-    "no_consistency": "no_consistency",
-    "some_consistency": "some_consistency",
-    "good_consistency": "good_consistency",
-    "excellent_consistency": "excellent_consistency"
-  },
-
-  // Score 2 mappings
-  "how_64a8d1": { // sales_stages
-    "no_stages": "no_stages",
-    "basic_stages": "basic_stages",
-    "standard_stages": "standard_stages",
-    "advanced_stages": "advanced_stages"
-  },
-  "how_7d8dcb": { // pipeline_accuracy
-    "not_accurate": "not_accurate",
-    "somewhat_accurate": "somewhat_accurate",
-    "mostly_accurate": "mostly_accurate",
-    "very_accurate": "very_accurate"
-  },
-  "how_0fa447": { // lead_prioritization
-    "no_prioritization": "no_prioritization",
-    "manual_prioritization": "manual_prioritization",
-    "basic_prioritization": "basic_prioritization",
-    "advanced_prioritization": "advanced_prioritization"
-  },
-  "how_a76658": { // followup_tracking
-    "no_tracking": "no_tracking",
-    "manual_tracking": "manual_tracking",
-    "basic_tracking": "basic_tracking",
-    "advanced_tracking": "advanced_tracking"
-  },
-  "how_5589a0": { // sales_operations
-    "no_operations": "no_operations",
-    "basic_operations": "basic_operations",
-    "standard_operations": "standard_operations",
-    "advanced_operations": "advanced_operations"
-  },
-  "how_92a11d": { // sales_preparation
-    "no_preparation": "no_preparation",
-    "basic_preparation": "basic_preparation",
-    "standard_preparation": "standard_preparation",
-    "advanced_preparation": "advanced_preparation"
-  },
-  "how_1e24f7": { // conversation_documentation
-    "no_documentation": "no_documentation",
-    "manual_documentation": "manual_documentation",
-    "basic_documentation": "basic_documentation",
-    "advanced_documentation": "advanced_documentation"
-  },
-
-  // Score 2.5 mappings
-  "how_b5793e": { // activity_tracking
-    "no_tracking": "no_tracking",
-    "manual_spreadsheet": "manual_spreadsheet",
-    "basic_crm": "basic_crm",
-    "automated": "automated"
-  },
-  "how_140f94": { // sales_targets
-    "no_targets": "no_targets",
-    "basic_goals": "basic_goals",
+  "sales_targets": {
+    "no_targets": "no_sales_targets",
+    "basic_goals": "basic_team_targets",
     "individual_targets": "individual_targets",
-    "detailed_kpis": "detailed_kpis"
+    "detailed_kpis": "detailed_kpi_targets"
   },
-  "how_68cbdb": { // pipeline_review_frequency
-    "no_review": "no_review",
-    "occasional": "occasional",
-    "weekly": "weekly",
-    "structured": "structured"
+  "reporting_system": {
+    "no_reporting": "no_sales_reports",
+    "basic_reports": "basic_sales_reports",
+    "monthly_metrics": "monthly_sales_reports",
+    "real_time": "real_time_sales_reports"
   },
-  "how_d30c39": { // deal_insights
-    "call_recordings": "call_recordings",
-    "chat_messages": "chat_messages",
-    "crm_notes": "crm_notes",
-    "deal_reviews": "deal_reviews"
+  "strategy_adjustment": {
+    "reactive": "reactive_strategy",
+    "ad_hoc": "ad_hoc_strategy",
+    "regular_reviews": "regular_strategy_review",
+    "structured": "structured_strategy"
+  },
+  "performance_review": {
+    "no_review": "no_performance_review",
+    "occasional": "occasional_review",
+    "weekly": "weekly_review",
+    "structured": "structured_review"
+  },
+  "sales_communication": {
+    "call_recordings": "sales_call_records",
+    "chat_messages": "sales_chat_history",
+    "crm_notes": "sales_crm_notes",
+    "deal_reviews": "sales_deal_reviews"
+  },
+  "pipeline_management": {
+    "skip_stages": "skip_pipeline_stages",
+    "some_steps": "partial_pipeline",
+    "track_movement": "track_pipeline",
+    "stage_by_stage": "stage_by_stage"
   }
 };
 
@@ -277,12 +194,12 @@ export async function POST(request: Request) {
       return NextResponse.json(error, { status: 400 });
     }
 
-    // Map old keys to new semantic keys
+    // Update the mapping logic in the POST handler
     const mappedAnswers = Object.entries(answers).reduce((acc, [key, value]) => {
-      // First map semantic keys to obfuscated keys for scoring using the current bracket
+      // Map semantic keys to scoring map keys using the current bracket
       const bracketMap = salesSemanticToObfuscatedKeyMap[bracket] || {};
-      const obfuscatedKey = bracketMap[key] || key;
-      acc[obfuscatedKey] = value;
+      const scoringKey = bracketMap[key] || key;
+      acc[scoringKey] = value;
       return acc;
     }, {} as Record<string, any>);
 
