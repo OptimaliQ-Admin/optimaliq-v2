@@ -47,7 +47,7 @@ export function Group03({ answers, onAnswerChange }: Group03Props) {
             {/* Question 2 */}
             <div className="space-y-4">
               <Label className="text-lg font-semibold">
-                What's the biggest obstacle you face when trying to close more deals?
+                What&apos;s the biggest obstacle you face when trying to close more deals?
               </Label>
               <Textarea
                 placeholder="E.g., high CAC, unclear process, lead quality"
