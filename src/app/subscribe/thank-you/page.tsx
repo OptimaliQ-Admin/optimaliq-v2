@@ -1,46 +1,67 @@
-"use client";
 
-import { useEffect, Suspense } from "react";
-import { useRouter } from "next/navigation";
-import confetti from "canvas-confetti";
+import {  Suspense } from "react";
+import Stripe from "stripe";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import ThankYouContent from "./ThankYouContent";
 
-function ThankYouContent() {
-  const router = useRouter();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  useEffect(() => {
-    // 🎉 Launch confetti on load
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 },
+const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
+    // const session_id = new URLSearchParams(window.location.search).get("session_id");
+    // Ensure you have the Stripe session ID
+    if (!session_id) {
+      console.error("No session_id found in URL");
+        // router.push("/subscribe");
+      return;
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      expand: ["subscription", "customer"],
     });
 
-    // ⏳ Redirect after 4s to create-account
-    const timeout = setTimeout(() => {
-      router.push("/subscribe/create-account");
-    }, 4000);
+    const { data: validateSubscription, error: validateNotExistSubscriptionError } = await supabaseAdmin
+          .from("subscriptions")
+          .select("stripe_subscription_id")
+          .eq("stripe_subscription_id", session.subscription?.id)
+          .maybeSingle()
 
-    return () => clearTimeout(timeout);
-  }, [router]);
+    // console.log("Stripe session retrieved:", session.subscription);
+    // console.log("Exist Subscription :", !!validateSubscription);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4">
-      <div className="bg-white p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-blue-100">
-        <h1 className="text-4xl font-extrabold text-blue-700">Welcome to OptimaliQ 🎉</h1>
-        <p className="mt-4 text-gray-700 text-lg">Your payment was successful.</p>
-        <p className="text-gray-600 mt-1">We’re setting up your personalized onboarding experience.</p>
+    if(validateSubscription == null) {
+      const { error: subscriptionError } = await supabaseAdmin
+            .from("subscriptions")
+            .insert({
+              u_id:         session.metadata?.u_id!,
+              stripe_subscription_id: session.subscription?.id!,
+              stripe_customer_id:     session.subscription?.customer,
+              stripe_data:     session.subscription,
+              status:       session.subscription?.status,
+              plan:         session.subscription?.plan?.nickname,
+              billingCycle: session.metadata?.billingCycle,
+              // TODO: Set next billing date based on the plan
+              nextbillingdate: new Date().toISOString(),
 
-        <div className="mt-6 w-48 mx-auto h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
-        </div>
+            })
 
-        <p className="mt-4 text-sm text-gray-500">Redirecting to create your account...</p>
-      </div>
-    </div>
-  );
+      if (subscriptionError) {
+        console.error("❌ Failed to update subscription:", subscriptionError);
+        return;
+      }
+    }
+
+
+
 }
 
-export default function ThankYouPage() {
+
+export default async function ThankYouPage({
+  searchParams,
+}: {
+  searchParams: { session_id?: string };
+}) {
+  const session_id = await searchParams.session_id;
+  await saveSubscriptionFromStripeSessionId(session_id!)
   return (
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
       <ThankYouContent />
