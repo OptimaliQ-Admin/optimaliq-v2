@@ -1,101 +1,45 @@
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
-import { type ScoringMap } from "@/lib/types/ScoringMap";
 
-type QuestionType = "multiple_choice" | "multi_select" | "text_area";
+export type ScoringMap = {
+  [key: string]: {
+    [key: string]: {
+      type: "multiple_choice" | "multi_select" | "text_area";
+      weight: number;
+      values: Record<string, number>;
+    };
+  };
+};
 
 export function calculateScore(
   answers: AssessmentAnswers,
   baseScore: number,
   scoringMap: ScoringMap
 ): number {
-  // Get the appropriate scoring bracket based on the base score
-  const bracket = getBracket(baseScore);
-  const bracketScoring = scoringMap[bracket];
+  let totalScore = baseScore;
+  let totalWeight = 0;
 
-  if (!bracketScoring) {
-    throw new Error(`Invalid score bracket: ${bracket}`);
-  }
+  Object.entries(scoringMap).forEach(([questionKey, config]) => {
+    const answer = answers[questionKey];
+    if (!answer) return;
 
-  let total = 0;
-  let weightSum = 0;
+    const questionConfig = config[questionKey];
+    if (!questionConfig) return;
 
-  // Track scoring issues for debugging
-  const scoringIssues = {
-    unmatchedKeys: [] as string[],
-    typeMismatches: [] as { key: string; expected: string; received: string }[],
-    defaultedScores: [] as { 
-      key: string; 
-      answer: any; 
-      reason: string;
-      mappedValue?: string;
-      mappedSelections?: string[];
-    }[]
-  };
+    const { weight, values } = questionConfig;
+    totalWeight += weight;
 
-  for (const key in answers) {
-    const q = bracketScoring[key];
-    if (!q) {
-      scoringIssues.unmatchedKeys.push(key);
-      continue;
-    }
-
-    const answer = answers[key];
-    let valScore = 0;
-
-    switch (q.type as QuestionType) {
-      case "multiple_choice":
-        if (typeof answer === "string") {
-          valScore = q.values[answer] || 0;
-        } else {
-          scoringIssues.typeMismatches.push({
-            key,
-            expected: "string",
-            received: typeof answer
-          });
+    if (Array.isArray(answer)) {
+      answer.forEach(value => {
+        if (values[value]) {
+          totalScore += values[value] * weight;
         }
-        break;
-
-      case "multi_select":
-        if (Array.isArray(answer)) {
-          const scores = answer
-            .map((val) => q.values[val] || 0)
-            .filter((score) => score > 0);
-          valScore = scores.length > 0 ? scores.reduce((a, b) => a + b) / scores.length : 0;
-        } else {
-          scoringIssues.typeMismatches.push({
-            key,
-            expected: "array",
-            received: typeof answer
-          });
-        }
-        break;
-
-      case "text_area":
-        // Text areas don't contribute to the score
-        continue;
-
-      default:
-        scoringIssues.typeMismatches.push({
-          key,
-          expected: "multiple_choice | multi_select | text_area",
-          received: q.type
-        });
-        continue;
+      });
+    } else if (values[answer]) {
+      totalScore += values[answer] * weight;
     }
+  });
 
-    total += valScore * q.weight;
-    weightSum += q.weight;
-  }
-
-  // Log any scoring issues
-  if (scoringIssues.unmatchedKeys.length > 0 || 
-      scoringIssues.typeMismatches.length > 0 || 
-      scoringIssues.defaultedScores.length > 0) {
-    console.warn("Scoring issues:", scoringIssues);
-  }
-
-  // Calculate final weighted average
-  return weightSum > 0 ? total / weightSum : 0;
+  return totalWeight > 0 ? totalScore / totalWeight : baseScore;
 }
 
 function getBracket(score: number): keyof ScoringMap {

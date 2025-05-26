@@ -1,24 +1,18 @@
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 
-type QuestionType = "multiple_choice" | "multi_select" | "text_area";
-
-type QuestionOption = {
-  value: string;
-  label: string;
-};
-
-type Question = {
-  type: QuestionType;
-  key: string;
-  label: string;
-  required: boolean;
-  options?: QuestionOption[];
-};
-
-type ScoreConfig = {
+export type ScoreConfig = {
   steps: {
     [key: string]: {
-      questions: Question[];
+      questions: Array<{
+        type: "multiple_choice" | "multi_select" | "text_area";
+        key: string;
+        label: string;
+        required: boolean;
+        options?: Array<{
+          value: string;
+          label: string;
+        }>;
+      }>;
     };
   };
 };
@@ -29,64 +23,23 @@ export function isStepValid(
   answers: AssessmentAnswers,
   config: ScoreConfig
 ): boolean {
-  // Get the appropriate step from the config
-  const stepKey = `step_${step + 1}`;
-  const stepConfig = config.steps[stepKey];
+  const currentStep = config.steps[`step_${step + 1}`];
+  if (!currentStep) return false;
 
-  if (!stepConfig) {
-    console.error(`Invalid step: ${stepKey}`);
-    return false;
-  }
-
-  // Check each question in the step
-  for (const question of stepConfig.questions) {
-    // Skip validation for non-required questions
-    if (!question.required) {
-      continue;
-    }
-
+  return currentStep.questions.every(question => {
+    if (!question.required) return true;
     const answer = answers[question.key];
+    if (!answer) return false;
 
-    // If no answer provided for required question, step is invalid
-    if (answer === undefined || answer === null || answer === "") {
-      return false;
-    }
-
-    // Validate based on question type
     switch (question.type) {
       case "multiple_choice":
-        if (typeof answer !== "string") {
-          return false;
-        }
-        // Check if the answer is one of the valid options
-        if (question.options && !question.options.some(opt => opt.value === answer)) {
-          return false;
-        }
-        break;
-
+        return typeof answer === "string" && answer.length > 0;
       case "multi_select":
-        if (!Array.isArray(answer)) {
-          return false;
-        }
-        // Check if all selected values are valid options
-        if (question.options && !answer.every(val => 
-          question.options?.some(opt => opt.value === val)
-        )) {
-          return false;
-        }
-        break;
-
+        return Array.isArray(answer) && answer.length > 0;
       case "text_area":
-        if (typeof answer !== "string" || answer.trim() === "") {
-          return false;
-        }
-        break;
-
+        return typeof answer === "string" && answer.trim().length > 0;
       default:
-        console.error(`Unknown question type: ${question.type}`);
         return false;
     }
-  }
-
-  return true;
+  });
 } 
