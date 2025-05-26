@@ -62,6 +62,19 @@ export const isDynamicStepValid = (
   // Check if all required questions have valid answers
   return requiredQuestions.every((questionKey) => {
     const answer = formAnswers[questionKey];
+    
+    // Handle different question types
+    if (Array.isArray(answer)) {
+      // For multi-select questions, check if at least one option is selected
+      return answer.length > 0;
+    }
+    
+    // For text area questions, allow empty strings
+    if (questionKey === "process_improvement") {
+      return true;
+    }
+    
+    // For all other questions, check for non-empty values
     return answer !== undefined && answer !== null && answer !== "";
   });
 };
