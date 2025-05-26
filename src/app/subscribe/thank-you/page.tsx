@@ -7,11 +7,8 @@ import ThankYouContent from "./ThankYouContent";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
-    // const session_id = new URLSearchParams(window.location.search).get("session_id");
-    // Ensure you have the Stripe session ID
     if (!session_id) {
       console.error("No session_id found in URL");
-        // router.push("/subscribe");
       return;
     }
 
@@ -22,23 +19,32 @@ const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
     const { data: validateSubscription, error: validateNotExistSubscriptionError } = await supabaseAdmin
           .from("subscriptions")
           .select("stripe_subscription_id")
-          .eq("stripe_subscription_id", session.subscription?.id)
+          .eq("stripe_subscription_id", session?.subscription?.id)
           .maybeSingle()
 
     // console.log("Stripe session retrieved:", session.subscription);
     // console.log("Exist Subscription :", !!validateSubscription);
-
+    if (validateNotExistSubscriptionError) {
+      console.error("Failed to validate subscription:", validateNotExistSubscriptionError);
+    }
     if(validateSubscription == null) {
+      const plan: any = (session?.subscription as any).plan || {}
       const { error: subscriptionError } = await supabaseAdmin
             .from("subscriptions")
             .insert({
-              u_id:         session.metadata?.u_id!,
-              stripe_subscription_id: session.subscription?.id!,
-              stripe_customer_id:     session.subscription?.customer,
-              stripe_data:     session.subscription,
-              status:       session.subscription?.status,
-              plan:         session.subscription?.plan?.nickname,
-              billingCycle: session.metadata?.billingCycle,
+              u_id:         session?.metadata?.u_id,
+              stripe_subscription_id: typeof session?.subscription === "object" && session?.subscription !== null && "id" in session.subscription
+                                        ? (session.subscription as Stripe.Subscription).id
+                                        : undefined,
+              stripe_customer_id:     typeof session?.subscription === "object" && session?.subscription !== null && "customer" in session.subscription
+                                        ? (session.subscription as Stripe.Subscription).customer
+                                        : undefined,
+              stripe_data:     session?.subscription,
+              status:       typeof session?.subscription === "object" && session?.subscription !== null && "status" in session.subscription
+                                ? (session.subscription as Stripe.Subscription).status
+                                : 'ready',
+              plan:         plan?.nickname || "Unknown Plan",
+              billingCycle: session?.metadata?.billingCycle,
               // TODO: Set next billing date based on the plan
               nextbillingdate: new Date().toISOString(),
 
@@ -49,9 +55,6 @@ const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
         return;
       }
     }
-
-
-
 }
 
 
@@ -61,7 +64,9 @@ export default async function ThankYouPage({
   searchParams: { session_id?: string };
 }) {
   const session_id = await searchParams.session_id;
-  await saveSubscriptionFromStripeSessionId(session_id!)
+  if(session_id) {
+    await saveSubscriptionFromStripeSessionId(session_id)
+  }
   return (
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
       <ThankYouContent />
