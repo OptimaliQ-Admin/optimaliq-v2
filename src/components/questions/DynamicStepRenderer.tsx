@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DynamicQuestion from "./DynamicQuestion";
-import questionConfig from "@/lib/config/question_config.json";
 
 type QuestionType = "multiple_choice" | "multi_select" | "text_area";
 
@@ -26,6 +25,7 @@ type Props = {
   step: number;
   answers: Record<string, any>;
   onAnswer: (key: string, value: any) => void;
+  configPath?: string;
 };
 
 function normalizeScore(score: number): string {
@@ -44,9 +44,42 @@ export default function DynamicStepRenderer({
   step,
   answers,
   onAnswer,
+  configPath = "/api/assessments/data/question_config.json"
 }: Props) {
+  const [questionConfig, setQuestionConfig] = useState<Record<string, ScoreConfig>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const response = await fetch(configPath);
+        if (!response.ok) {
+          throw new Error(`Failed to load config: ${response.statusText}`);
+        }
+        const config = await response.json();
+        setQuestionConfig(config);
+      } catch (err) {
+        console.error("Error loading question config:", err);
+        setError(err instanceof Error ? err.message : "Failed to load question config");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadConfig();
+  }, [configPath]);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading questions...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-center text-red-600">Error: {error}</div>;
+  }
+
   const normalizedScore = normalizeScore(score);
-  const scoreConfig = questionConfig[normalizedScore as keyof typeof questionConfig];
+  const scoreConfig = questionConfig[normalizedScore];
 
   if (!scoreConfig) {
     console.error(`No configuration found for score ${score}`);
