@@ -94,7 +94,7 @@ export default function StepGroupRenderer({ score, step, answers, onAnswer }: Pr
       step={step}
       answers={answers}
       onAnswer={onAnswer}
-      configPath="/api/assessments/data/bpm_question_config.json"
+      configPath="/data/bpm_question_config.json"
     />
   );
 }
