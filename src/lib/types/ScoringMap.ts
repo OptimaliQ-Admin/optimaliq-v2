@@ -1,5 +1,5 @@
 export type ScoringEntry = {
-  type: "multiple_choice" | "multi_select";
+  type: "multiple_choice" | "multi_select" | "text_area";
   weight: number;
   values: Record<string, number>;
 };
