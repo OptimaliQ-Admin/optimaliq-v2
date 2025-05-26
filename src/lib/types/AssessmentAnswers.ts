@@ -1,8 +1,10 @@
 // src/types/AssessmentAnswers.ts
 
-export type AssessmentAnswerValue = string | string[] | number | boolean;
+export type AssessmentAnswerValue = string | string[] | number | boolean | null;
 
-export type AssessmentAnswers = Record<string, AssessmentAnswerValue>;
+export type AssessmentAnswers = {
+  [key: string]: AssessmentAnswerValue;
+};
 
 export type OnAnswerHandler = (key: string, value: AssessmentAnswerValue) => void;
 
