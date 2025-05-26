@@ -9,14 +9,10 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isStepValid } from "@/lib/validation/isStepValid";
 
-type PageProps = {
-  params: {
-    slug: string;
-  };
-};
+import { useParams } from "next/navigation";
 
-export default function Page({ params }: PageProps) {
-  const { slug } = params;
+export default function Page() {
+  const { slug } = useParams() as { slug: string };
   const router = useRouter();
   const { user } = usePremiumUser();
   const [step, setStep] = useState(0);
