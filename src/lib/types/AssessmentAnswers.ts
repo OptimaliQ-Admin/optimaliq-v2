@@ -2,7 +2,9 @@
 
 export type AssessmentAnswerValue = string | string[] | number | boolean;
 
-export type AssessmentAnswers = Record<string, AssessmentAnswerValue>;
+export type AssessmentAnswers = {
+  [key: string]: string | string[] | null;
+};
 
 export type OnAnswerHandler = (key: string, value: AssessmentAnswerValue) => void;
 

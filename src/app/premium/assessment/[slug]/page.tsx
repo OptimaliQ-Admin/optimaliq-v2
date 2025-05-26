@@ -13,10 +13,9 @@ type PageProps = {
   params: {
     slug: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function DynamicAssessmentPage({ params }: PageProps) {
+export default function Page({ params }: PageProps) {
   const { slug } = params;
   const router = useRouter();
   const { user } = usePremiumUser();
