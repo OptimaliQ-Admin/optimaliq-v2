@@ -9,13 +9,14 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isStepValid } from "@/lib/validation/isStepValid";
 
-type Props = {
+type PageProps = {
   params: {
     slug: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function DynamicAssessmentPage({ params }: Props) {
+export default function DynamicAssessmentPage({ params }: PageProps) {
   const { slug } = params;
   const router = useRouter();
   const { user } = usePremiumUser();
