@@ -1,7 +1,72 @@
-import questionConfig from "@/lib/config/question_config.json";
-import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 
-function normalizeScore(score: number): string {
+const validationConfig: Record<string, Record<number, string[]>> = {
+  score_1: {
+    0: ["task_consistency", "process_documentation", "team_training", "process_ownership", "process_questions", "process_confidence", "process_tools", "workflow_ownership", "process_improvement", "operations_approach"],
+    1: ["process_standardization", "process_metrics", "process_automation", "process_improvement_frequency"],
+    2: ["process_governance", "process_technology", "process_analytics"]
+  },
+  score_1_5: {
+    0: ["process_standardization_1_5", "process_metrics_1_5", "process_automation_1_5"],
+    1: ["process_standardization", "process_metrics", "process_automation", "process_improvement_frequency"],
+    2: ["process_governance", "process_technology", "process_analytics"]
+  },
+  score_2: {
+    0: ["process_standardization", "process_metrics", "process_automation", "process_improvement_frequency"],
+    1: ["process_governance", "process_technology", "process_analytics"],
+    2: ["process_optimization", "process_innovation", "process_culture"]
+  },
+  score_2_5: {
+    0: ["process_governance_2_5", "process_technology_2_5", "process_analytics_2_5"],
+    1: ["process_governance", "process_technology", "process_analytics"],
+    2: ["process_optimization", "process_innovation", "process_culture"]
+  },
+  score_3: {
+    0: ["process_governance", "process_technology", "process_analytics"],
+    1: ["process_optimization", "process_innovation", "process_culture"],
+    2: ["process_maturity", "process_excellence", "process_transformation"]
+  },
+  score_3_5: {
+    0: ["process_optimization_3_5", "process_innovation_3_5", "process_culture_3_5"],
+    1: ["process_optimization", "process_innovation", "process_culture"],
+    2: ["process_maturity", "process_excellence", "process_transformation"]
+  },
+  score_4: {
+    0: ["process_optimization", "process_innovation", "process_culture"],
+    1: ["process_maturity", "process_excellence", "process_transformation"],
+    2: ["process_maturity", "process_excellence", "process_transformation"]
+  },
+  score_4_5: {
+    0: ["process_maturity_4_5", "process_excellence_4_5", "process_transformation_4_5"],
+    1: ["process_maturity", "process_excellence", "process_transformation"],
+    2: ["process_maturity", "process_excellence", "process_transformation"]
+  },
+  score_5: {
+    0: ["process_maturity", "process_excellence", "process_transformation"],
+    1: ["process_maturity", "process_excellence", "process_transformation"],
+    2: ["process_maturity", "process_excellence", "process_transformation"]
+  }
+};
+
+export const isDynamicStepValid = (
+  score: number,
+  step: number,
+  formAnswers: AssessmentAnswers
+): boolean => {
+  // Normalize score to get the appropriate bracket
+  const normalizedScore = normalizeScore(score);
+  
+  // Get the required questions for this step and score bracket
+  const requiredQuestions = validationConfig[normalizedScore]?.[step] || [];
+  
+  // Check if all required questions have valid answers
+  return requiredQuestions.every((questionKey) => {
+    const answer = formAnswers[questionKey];
+    return answer !== undefined && answer !== null && answer !== "";
+  });
+};
+
+const normalizeScore = (score: number): string => {
   if (score >= 4.5) return "score_4_5";
   if (score >= 4.0) return "score_4";
   if (score >= 3.5) return "score_3_5";
@@ -10,34 +75,4 @@ function normalizeScore(score: number): string {
   if (score >= 2.0) return "score_2";
   if (score >= 1.5) return "score_1_5";
   return "score_1";
-}
-
-export function isDynamicStepValid(
-  score: number,
-  step: number,
-  answers: AssessmentAnswers
-): boolean {
-  const normalizedScore = normalizeScore(score);
-  const scoreConfig = questionConfig[normalizedScore as keyof typeof questionConfig];
-
-  if (!scoreConfig) {
-    console.error(`No configuration found for score ${score}`);
-    return false;
-  }
-
-  // Get questions for the current step
-  const questions = Object.entries(scoreConfig).slice(step * 3, (step + 1) * 3);
-
-  // Check if all questions in the step have valid answers
-  return questions.every(([key, question]) => {
-    const answer = answers[key];
-
-    // For multi-select questions
-    if (question.type === "multi_select") {
-      return Array.isArray(answer) && answer.length > 0;
-    }
-
-    // For multiple choice questions
-    return typeof answer === "string" && answer.trim().length > 0;
-  });
-} 
+}; 
