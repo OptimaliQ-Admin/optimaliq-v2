@@ -1,6 +1,6 @@
 {
   "score_1": {
-    "how_b5d8e7": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -10,7 +10,7 @@
         "digital_channels": 4
       }
     },
-    "do_b7cc0a": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -20,7 +20,7 @@
         "defined_process": 4
       }
     },
-    "how_fee95e": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -30,7 +30,7 @@
         "structured_system": 4
       }
     },
-    "who_5d9558": {
+    "sales_team": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -40,7 +40,7 @@
         "dedicated_department": 4
       }
     },
-    "how_454fc5": {
+    "follow_ups": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -50,7 +50,7 @@
         "automated": 4
       }
     },
-    "which_01150c": {
+    "lead_qualification": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -60,7 +60,7 @@
         "scoring_framework": 4
       }
     },
-    "how_142ca2": {
+    "pricing_proposals": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
@@ -69,504 +69,680 @@
         "templated": 3,
         "structured": 4
       }
+    },
+    "sales_metrics": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
+      }
     }
   },
   "score_1_5": {
-    "how_2c42b7": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "unassigned": 1,
-        "manual_assignment": 2,
-        "self_managed": 3,
-        "routed": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_79028c": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_confident": 1,
-        "rough_ideas": 2,
-        "some_metrics": 3,
-        "data_driven": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "what_dcd0de": {
-      "type": "multi_select",
-      "weight": 1.0,
-      "values": {
-        "CRM (HubSpot, Salesforce, etc.)": 1,
-        "Spreadsheets or Google Sheets": 2,
-        "Task or project tools (Asana, Trello)": 3,
-        "Calendar/email integrations": 4,
-        "Automated follow-up or cadence tools": 5
-      }
-    },
-    "how_47b050": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "rarely": 1,
-        "occasional": 2,
-        "weekly": 3,
-        "daily": 4
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "how_12d26c": {
+    "sales_team": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "informal": 1,
-        "basic_questions": 2,
-        "structured": 3,
-        "formal_framework": 4
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
       }
     },
-    "how_1f869b": {
+    "follow_ups": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "skip_stages": 1,
-        "loose_steps": 2,
-        "inconsistent_tracking": 3,
-        "methodical": 4
-      }
-    },
-    "which_4b594c": {
-      "type": "multi_select",
-      "weight": 1.0,
-      "values": {
-        "Leads go cold": 1,
-        "Prospects ghost after demos": 2,
-        "Proposals get stuck": 3,
-        "Pricing objections": 4,
-        "Internal delays or handoffs": 5
-      }
-    },
-    "how_c8eb2a": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "no_followup": 1,
-        "manual": 2,
-        "scheduled": 3,
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
         "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_2": {
-    "how_64a8d1": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_defined": 1,
-        "loosely_defined": 2,
-        "inconsistent_use": 3,
-        "clearly_documented": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_7d8dcb": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_accurate": 1,
-        "somewhat_accurate": 2,
-        "mostly_accurate": 3,
-        "very_accurate": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "how_0fa447": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "most_recent": 1,
-        "gut_feel": 2,
-        "deal_size": 3,
-        "scoring_criteria": 4
-      }
-    },
-    "how_a76658": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
         "no_tracking": 1,
-        "calendar_reminders": 2,
-        "crm_tasks": 3,
-        "automated_sequences": 4
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "which_045862": {
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "pipeline_reviews": 1,
-        "forecasting": 2,
-        "conversion_tracking": 3,
-        "enablement_content": 4,
-        "performance_dashboards": 5
-      }
-    },
-    "how_5589a0": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "no_prep": 1,
-        "basic_prep": 2,
-        "structured_prep": 3,
-        "comprehensive_prep": 4
-      }
-    },
-    "how_92a11d": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "rarely": 1,
-        "big_deals": 2,
-        "most_calls": 3,
-        "all_interactions": 4
-      }
-    },
-    "how_1e24f7": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "no_handoff": 1,
-        "inconsistent": 2,
-        "mostly_smooth": 3,
-        "standardized": 4
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_2_5": {
-    "how_b5793e": {
+    "lead_generation": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
+      }
+    },
+    "sales_process": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
+      }
+    },
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
         "no_tracking": 1,
-        "manual_tracking": 2,
-        "basic_tool": 3,
-        "crm_guided": 4
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "how_140f94": {
+    "sales_team": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_targets": 1,
-        "rep_tracked": 2,
-        "infrequent_review": 3,
-        "regular_review": 4
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
       }
     },
-    "how_3a6376": {
+    "follow_ups": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_reporting": 1,
-        "basic_reports": 2,
-        "weekly_metrics": 3,
-        "real_time": 4
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
       }
     },
-    "how_4cd27c": {
+    "lead_qualification": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "reactive": 1,
-        "weekly_review": 2,
-        "proactive": 3,
-        "forecasting": 4
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
       }
     },
-    "how_68cbdb": {
+    "pricing_proposals": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_review": 1,
-        "as_needed": 2,
-        "regular_reviews": 3,
-        "structured_reviews": 4
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
       }
     },
-    "how_a4d10a": {
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "call_recordings": 1,
-        "crm_notes": 2,
-        "chat_messages": 3,
-        "deal_reviews": 4,
-        "rep_feedback": 5
-      }
-    },
-    "how_consistently_1a2b3c": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "skip_stages": 1,
-        "loose_steps": 2,
-        "track_movement": 3,
-        "methodical": 4
-      }
-    },
-    "which_bottlenecks_4d5e6f": {
-      "type": "multi_select",
-      "weight": 1.0,
-      "values": {
-        "cold_leads": 1,
-        "ghost_after_demo": 2,
-        "stuck_proposals": 3,
-        "pricing_objections": 4,
-        "internal_delays": 5
-      }
-    },
-    "unpredictable_area_7g8h9i": {
-      "type": "text_area",
-      "weight": 0.0
-    },
-    "handle_leads_0j1k2l": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "no_followup": 1,
-        "manual_reachout": 2,
-        "scheduled_followup": 3,
-        "automated_nurture": 4
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_3": {
-    "how_7f8e9d": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_defined": 1,
-        "loosely_defined": 2,
-        "inconsistent_use": 3,
-        "clearly_documented": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_1a2b3c": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_accurate": 1,
-        "somewhat_accurate": 2,
-        "mostly_accurate": 3,
-        "very_accurate": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "how_4d5e6f": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "most_recent": 1,
-        "gut_feel": 2,
-        "deal_size": 3,
-        "scoring_criteria": 4
-      }
-    },
-    "how_7g8h9i": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
         "no_tracking": 1,
-        "calendar_reminders": 2,
-        "crm_tasks": 3,
-        "automated_sequences": 4
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "which_0j1k2l": {
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "pipeline_reviews": 1,
-        "forecasting": 2,
-        "conversion_tracking": 3,
-        "enablement_content": 4,
-        "performance_dashboards": 5
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_3_5": {
-    "how_3m4n5o": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_prep": 1,
-        "basic_prep": 2,
-        "structured_prep": 3,
-        "comprehensive_prep": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_6p7q8r": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "rarely": 1,
-        "big_deals": 2,
-        "most_calls": 3,
-        "all_interactions": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "how_9s0t1u": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "no_handoff": 1,
-        "inconsistent": 2,
-        "mostly_smooth": 3,
-        "standardized": 4
-      }
-    },
-    "how_2v3w4x": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
         "no_tracking": 1,
-        "manual_tracking": 2,
-        "basic_tool": 3,
-        "crm_guided": 4
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "how_5y6z7a": {
+    "sales_team": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_targets": 1,
-        "rep_tracked": 2,
-        "infrequent_review": 3,
-        "regular_review": 4
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
+      "type": "multi_select",
+      "weight": 1.0,
+      "values": {
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_4": {
-    "how_8b9c0d": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_reporting": 1,
-        "basic_reports": 2,
-        "weekly_metrics": 3,
-        "real_time": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_1e2f3g": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "reactive": 1,
-        "weekly_review": 2,
-        "proactive": 3,
-        "forecasting": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "how_4h5i6j": {
+    "pipeline_tracking": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_review": 1,
-        "as_needed": 2,
-        "regular_reviews": 3,
-        "structured_reviews": 4
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
       }
     },
-    "which_7k8l9m": {
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "call_recordings": 1,
-        "crm_notes": 2,
-        "chat_messages": 3,
-        "deal_reviews": 4,
-        "rep_feedback": 5
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_4_5": {
-    "how_0n1o2p": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "no_enablement": 1,
-        "basic_training": 2,
-        "regular_training": 3,
-        "continuous_learning": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "which_3q4r5s": {
+    "sales_process": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
+      }
+    },
+    "pipeline_tracking": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
+      }
+    },
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "win_loss": 1,
-        "stage_conversion": 2,
-        "forecast_accuracy": 3,
-        "deal_quality": 4,
-        "rep_coaching": 5
-      }
-    },
-    "how_6t7u8v": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "too_late": 1,
-        "manual_monitoring": 2,
-        "dashboards": 3,
-        "modeled_stages": 4
-      }
-    },
-    "how_9w0x1y": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "gut_feel": 1,
-        "call_history": 2,
-        "lead_fit": 3,
-        "multi_factor": 4
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   },
   "score_5": {
-    "how_2z3a4b": {
+    "lead_generation": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "not_shared": 1,
-        "tips_informal": 2,
-        "best_practice_reviews": 3,
-        "documented_trained": 4
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
       }
     },
-    "how_5c6d7e": {
+    "sales_process": {
       "type": "multiple_choice",
       "weight": 1.0,
       "values": {
-        "occasionally": 1,
-        "monthly": 2,
-        "weekly": 3,
-        "operating_cadence": 4
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
       }
     },
-    "what_8f9g0h": {
+    "pipeline_tracking": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
+      }
+    },
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1.0,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
       "type": "multi_select",
       "weight": 1.0,
       "values": {
-        "spreadsheets": 1,
-        "crm_dashboards": 2,
-        "call_review": 3,
-        "coaching_platforms": 4,
-        "sales_scorecards": 5
-      }
-    },
-    "how_1i2j3k": {
-      "type": "multiple_choice",
-      "weight": 1.0,
-      "values": {
-        "not_confident": 1,
-        "somewhat": 2,
-        "confident": 3,
-        "very_confident": 4
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
       }
     }
   }

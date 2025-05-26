@@ -1,0 +1,253 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "lead_generation",
+          "label": "How do you typically generate new sales leads?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "no_consistent_method",
+              "label": "We don't have a consistent method",
+              "score": 1
+            },
+            {
+              "value": "referrals_only",
+              "label": "Referrals and word of mouth",
+              "score": 2
+            },
+            {
+              "value": "occasional_outreach",
+              "label": "Occasional outreach or events",
+              "score": 3
+            },
+            {
+              "value": "digital_channels",
+              "label": "Website or social media inquiries",
+              "score": 4
+            }
+          ],
+          "order": 0
+        },
+        {
+          "key": "sales_process",
+          "label": "Do you follow a defined sales process?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "no_process",
+              "label": "No process - each sale is different",
+              "score": 1
+            },
+            {
+              "value": "loose_outline",
+              "label": "We follow a loose outline",
+              "score": 2
+            },
+            {
+              "value": "key_steps",
+              "label": "We have a few key steps we try to follow",
+              "score": 3
+            },
+            {
+              "value": "defined_process",
+              "label": "Yes - we use a defined process from lead to close",
+              "score": 4
+            }
+          ],
+          "order": 1
+        },
+        {
+          "key": "pipeline_tracking",
+          "label": "How do you track your sales pipeline?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "no_tracking",
+              "label": "We don't track it",
+              "score": 1
+            },
+            {
+              "value": "manual_spreadsheet",
+              "label": "Manually in a spreadsheet",
+              "score": 2
+            },
+            {
+              "value": "basic_crm",
+              "label": "In a basic CRM (e.g. HubSpot, Salesforce)",
+              "score": 3
+            },
+            {
+              "value": "structured_system",
+              "label": "In a structured system with deal stages and forecasts",
+              "score": 4
+            }
+          ],
+          "order": 2
+        }
+      ],
+      "1": [
+        {
+          "key": "sales_team",
+          "label": "Who handles your sales?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "founder_only",
+              "label": "The founder or owner",
+              "score": 1
+            },
+            {
+              "value": "single_rep",
+              "label": "One salesperson",
+              "score": 2
+            },
+            {
+              "value": "small_team",
+              "label": "A small team",
+              "score": 3
+            },
+            {
+              "value": "dedicated_department",
+              "label": "A dedicated structured sales department",
+              "score": 4
+            }
+          ],
+          "order": 3
+        },
+        {
+          "key": "follow_ups",
+          "label": "How do you handle follow-ups with prospects?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "inconsistent",
+              "label": "Inconsistently or not at all",
+              "score": 1
+            },
+            {
+              "value": "manual_reminders",
+              "label": "We try but sometimes forget",
+              "score": 2
+            },
+            {
+              "value": "basic_system",
+              "label": "We have a basic reminder system",
+              "score": 3
+            },
+            {
+              "value": "automated",
+              "label": "We have automated or scheduled follow ups",
+              "score": 4
+            }
+          ],
+          "order": 4
+        },
+        {
+          "key": "lead_qualification",
+          "label": "How do you qualify potential customers?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "no_qualification",
+              "label": "We talk to anyone interested",
+              "score": 1
+            },
+            {
+              "value": "basic_questions",
+              "label": "We ask a few questions during discovery",
+              "score": 2
+            },
+            {
+              "value": "basic_criteria",
+              "label": "We use basic criteria (e.g. budget, need)",
+              "score": 3
+            },
+            {
+              "value": "scoring_framework",
+              "label": "We follow a lead scoring or qualification framework",
+              "score": 4
+            }
+          ],
+          "order": 5
+        },
+        {
+          "key": "pricing_proposals",
+          "label": "How do you handle pricing and proposals?",
+          "type": "multiple_choice",
+          "options": [
+            {
+              "value": "ad_hoc",
+              "label": "We make up pricing as we go",
+              "score": 1
+            },
+            {
+              "value": "price_list",
+              "label": "We have a price list or one pager",
+              "score": 2
+            },
+            {
+              "value": "templated",
+              "label": "We use a templated proposal or quote",
+              "score": 3
+            },
+            {
+              "value": "structured",
+              "label": "We tailor pricing with a defined structure",
+              "score": 4
+            }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "sales_metrics",
+          "label": "Which of the following do you currently track or measure in your sales process?",
+          "type": "multi_select",
+          "options": [
+            {
+              "value": "lead_sources",
+              "label": "Lead sources",
+              "score": 1
+            },
+            {
+              "value": "conversion_rates",
+              "label": "Deal stage conversion rates",
+              "score": 2
+            },
+            {
+              "value": "time_to_close",
+              "label": "Time to close",
+              "score": 3
+            },
+            {
+              "value": "win_loss",
+              "label": "Win/loss reasons",
+              "score": 4
+            },
+            {
+              "value": "activity",
+              "label": "Sales activity (calls, emails)",
+              "score": 5
+            }
+          ],
+          "order": 7
+        },
+        {
+          "key": "biggest_obstacle",
+          "label": "What's the biggest obstacle you face when trying to close more deals?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "improvement_priority",
+          "label": "If you could improve one part of your sales process today, what would it be and why?",
+          "type": "text_area",
+          "order": 9
+        }
+      ]
+    }
+  }
+} 

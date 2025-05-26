@@ -1,0 +1,1114 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_consistency",
+          "label": "How do you currently ensure that recurring tasks (like onboarding a client or fulfilling an order) are done the same way every time?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "each_person_own_way", "label": "Each person has their own way", "score": 1 },
+            { "value": "rely_experience", "label": "We rely on experience or memory", "score": 2 },
+            { "value": "checklist_notes", "label": "There's a checklist or basic notes", "score": 3 },
+            { "value": "software_instructions", "label": "We use software or formal instructions", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_documentation",
+          "label": "Do you have any processes written down for how things should be done in your business?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "nothing_documented", "label": "No, nothing is documented", "score": 1 },
+            { "value": "few_things_written", "label": "A few things are written down", "score": 2 },
+            { "value": "most_core_documented", "label": "Most core processes are documented", "score": 3 },
+            { "value": "everything_documented", "label": "Everything is clearly documented and stored", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_training",
+          "label": "How do you train new team members on your current processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "shadowing", "label": "Shadowing or trial and error", "score": 1 },
+            { "value": "basic_docs", "label": "Basic documentation or notes", "score": 2 },
+            { "value": "structured_training", "label": "Structured training sessions", "score": 3 },
+            { "value": "comprehensive_onboarding", "label": "Comprehensive onboarding program", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_ownership",
+          "label": "Who defines the steps in your current business processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_owner", "label": "No one — it's based on habits", "score": 1 },
+            { "value": "team_defined", "label": "Each team or person defines their own", "score": 2 },
+            { "value": "manager_defined", "label": "It's loosely defined by a manager", "score": 3 },
+            { "value": "clear_owner", "label": "There's a clear owner for each process", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_clarity",
+          "label": "How often do people ask, \"How do I do this?\" or \"What's the right way to handle this?\"",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "all_time", "label": "All the time", "score": 1 },
+            { "value": "weekly", "label": "Weekly", "score": 2 },
+            { "value": "rarely", "label": "Rarely", "score": 3 },
+            { "value": "almost_never", "label": "Almost never", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_confidence",
+          "label": "How confident are you that critical business activities (like invoicing, outreach, or fulfillment) always follow the same steps?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_confident", "label": "Not confident at all", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "very_confident", "label": "Very confident", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_tools",
+          "label": "What tools or systems do you use to manage your business processes?",
+          "type": "multi_select",
+          "options": [
+            { "value": "spreadsheets", "label": "Spreadsheets", "score": 1 },
+            { "value": "project_boards", "label": "Project boards", "score": 2 },
+            { "value": "chat_tools", "label": "Chat tools", "score": 2 },
+            { "value": "email", "label": "Email", "score": 1 },
+            { "value": "workflow_software", "label": "Workflow software", "score": 3 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_responsibility",
+          "label": "Do you know who is responsible for each part of your main workflows (like customer service or fulfillment)?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_clear_ownership", "label": "No clear ownership", "score": 1 },
+            { "value": "somewhat_clear", "label": "Somewhat — it depends on the day", "score": 2 },
+            { "value": "mostly_clear_roles", "label": "Mostly clear roles", "score": 3 },
+            { "value": "clear_ownership", "label": "Everyone knows exactly what they own", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_improvement",
+          "label": "If you wanted to improve how something gets done in your business, where would you start?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "process_management",
+          "label": "How would you describe your current approach to managing day-to-day business operations?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "reactive", "label": "Mostly reactive — we fix problems as they come", "score": 1 },
+            { "value": "some_systems", "label": "Some systems, but things fall through", "score": 2 },
+            { "value": "organized_informal", "label": "Organized, but informal", "score": 3 },
+            { "value": "structured_proactive", "label": "Very structured and proactive", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_tracking",
+          "label": "How do you currently track or measure the performance of your business processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track performance", "score": 1 },
+            { "value": "manual_tracking", "label": "Basic manual tracking", "score": 2 },
+            { "value": "some_metrics", "label": "Some metrics in tools", "score": 3 },
+            { "value": "comprehensive_tracking", "label": "Comprehensive tracking system", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_review",
+          "label": "When was the last time you reviewed or updated your core business processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "over_year", "label": "Over a year ago", "score": 2 },
+            { "value": "within_year", "label": "Within the last year", "score": 3 },
+            { "value": "within_quarter", "label": "Within the last quarter", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_optimization",
+          "label": "How do you identify bottlenecks or inefficiencies in your current workflows?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_optimization", "label": "We don't actively look", "score": 1 },
+            { "value": "reactive", "label": "When problems arise", "score": 2 },
+            { "value": "regular_reviews", "label": "Through regular reviews", "score": 3 },
+            { "value": "continuous_monitoring", "label": "Through continuous monitoring", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_ownership_review",
+          "label": "How do you review and validate process ownership across your organization?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_review", "label": "No formal review process", "score": 1 },
+            { "value": "informal_check", "label": "Informal check-ins", "score": 2 },
+            { "value": "quarterly_review", "label": "Quarterly ownership reviews", "score": 3 },
+            { "value": "continuous_validation", "label": "Continuous ownership validation", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_clarity_frequency",
+          "label": "How often do you update process documentation to maintain clarity?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "never_updated", "label": "Never updated", "score": 1 },
+            { "value": "when_changes", "label": "Only when major changes occur", "score": 2 },
+            { "value": "quarterly_updates", "label": "Quarterly updates", "score": 3 },
+            { "value": "continuous_updates", "label": "Continuous updates as needed", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_confidence_level",
+          "label": "How do you measure confidence in process execution across teams?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_measurement", "label": "No formal measurement", "score": 1 },
+            { "value": "informal_feedback", "label": "Informal team feedback", "score": 2 },
+            { "value": "regular_assessment", "label": "Regular process assessments", "score": 3 },
+            { "value": "continuous_monitoring", "label": "Continuous confidence monitoring", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_feedback",
+          "label": "What methods do you use to collect feedback on your current processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_feedback", "label": "We don't collect feedback", "score": 1 },
+            { "value": "informal", "label": "Informal conversations", "score": 2 },
+            { "value": "team_meetings", "label": "Regular team meetings", "score": 3 },
+            { "value": "structured", "label": "Structured feedback system", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_changes",
+          "label": "How do you handle process changes or updates?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_process", "label": "We don't have a process", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad-hoc changes", "score": 2 },
+            { "value": "planned", "label": "Planned updates", "score": 3 },
+            { "value": "structured", "label": "Structured change management", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_challenges",
+          "label": "What is your biggest challenge in maintaining consistent processes?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "process_onboarding",
+          "label": "How do you ensure new team members follow your established processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_training", "label": "Basic training", "score": 2 },
+            { "value": "docs_training", "label": "Documentation and training", "score": 3 },
+            { "value": "comprehensive", "label": "Comprehensive onboarding and monitoring", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_consistency_areas",
+          "label": "Which areas of your business have consistent, documented processes?",
+          "type": "multi_select",
+          "options": [
+            { "value": "sales_management", "label": "Sales management", "score": 2 },
+            { "value": "customer_onboarding", "label": "Customer onboarding", "score": 2 },
+            { "value": "fulfillment", "label": "Fulfillment", "score": 2 },
+            { "value": "customer_support", "label": "Customer support", "score": 2 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_review_frequency",
+          "label": "How often do you review your core business processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "annually", "label": "Annually", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_ownership_structure",
+          "label": "How is process ownership structured in your organization?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_one", "label": "No one owns processes", "score": 1 },
+            { "value": "team_leads", "label": "Team leads manage their own", "score": 2 },
+            { "value": "operations_team", "label": "Operations team oversees", "score": 3 },
+            { "value": "dedicated_owner", "label": "Dedicated process owners", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_verification",
+          "label": "How do you ensure that team members are actually following the defined process?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_verification", "label": "We don't verify it", "score": 1 },
+            { "value": "spot_check", "label": "We spot check occasionally", "score": 2 },
+            { "value": "team_syncs", "label": "We review it during team syncs", "score": 3 },
+            { "value": "tracking_tools", "label": "We use tracking tools and reporting", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_definition",
+          "label": "Do your processes include clear steps, roles, and expected outcomes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "rough_guidelines", "label": "No — they're more like rough guidelines", "score": 1 },
+            { "value": "somewhat_defined", "label": "Somewhat — roles and steps are outlined", "score": 2 },
+            { "value": "mostly_defined", "label": "Mostly — they're detailed but not always used", "score": 3 },
+            { "value": "fully_defined", "label": "Yes — they're fully defined and referenced", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_breakdown",
+          "label": "When a process breaks down (e.g. delay, error, missed task), how do you respond?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "fix_move_on", "label": "We just fix it and move on", "score": 1 },
+            { "value": "understand_issue", "label": "We try to understand what went wrong", "score": 2 },
+            { "value": "team_discussion", "label": "We discuss it as a team", "score": 3 },
+            { "value": "process_adjustment", "label": "We adjust the process to prevent recurrence", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_measurement",
+          "label": "How do you measure the success of your business processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure success", "score": 1 },
+            { "value": "basic_tracking", "label": "Basic completion tracking", "score": 2 },
+            { "value": "key_metrics", "label": "Some key metrics", "score": 3 },
+            { "value": "comprehensive_metrics", "label": "Comprehensive metrics and KPIs", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_documentation_tools",
+          "label": "What tools do you use to document your processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_tools", "label": "No formal tools", "score": 1 },
+            { "value": "basic_tools", "label": "Basic documentation tools", "score": 2 },
+            { "value": "process_mapping", "label": "Process mapping tools", "score": 3 },
+            { "value": "bpm_software", "label": "Integrated BPM software", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_challenges_2",
+          "label": "What is the biggest challenge you face in process management?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "process_exceptions",
+          "label": "How do you handle exceptions or special cases in your processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "ad_hoc", "label": "We handle them as they come", "score": 1 },
+            { "value": "basic_guidelines", "label": "Basic guidelines exist", "score": 2 },
+            { "value": "clear_process", "label": "Clear exception process", "score": 3 },
+            { "value": "automated", "label": "Automated exception handling", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_doc_storage",
+          "label": "Where are your process documents typically stored or accessed?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "scattered", "label": "Scattered across email, chat, or drives", "score": 1 },
+            { "value": "shared_folders", "label": "Shared folders or team wikis", "score": 2 },
+            { "value": "workflow_tools", "label": "Inside workflow/project management tools", "score": 3 },
+            { "value": "centrally_documented", "label": "Centrally documented and linked to operations", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_update_communication",
+          "label": "When a process changes, how do you communicate updates to your team?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_formal_update", "label": "We don't have a formal update process", "score": 1 },
+            { "value": "announce_meeting_email", "label": "We announce it in a meeting or email", "score": 2 },
+            { "value": "update_docs_notify", "label": "We update documentation and notify the team", "score": 3 },
+            { "value": "track_confirm_adoption", "label": "We track changes and confirm everyone has adopted them", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_knowledge_gaps",
+          "label": "How do you identify knowledge gaps in your current processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_tracking_gaps", "label": "We don't track knowledge gaps", "score": 1 },
+            { "value": "team_feedback", "label": "Through team feedback", "score": 2 },
+            { "value": "regular_audits", "label": "Through regular audits", "score": 3 },
+            { "value": "systematic_management", "label": "Through systematic knowledge management", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_consistency_across_teams",
+          "label": "How do you ensure process consistency across different teams or locations?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_guidelines", "label": "Basic guidelines", "score": 2 },
+            { "value": "regular_reviews", "label": "Regular reviews", "score": 3 },
+            { "value": "automated_monitoring", "label": "Automated monitoring", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_performance_metrics",
+          "label": "What metrics do you track for process performance?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_metrics", "label": "We don't track metrics", "score": 1 },
+            { "value": "basic_completion", "label": "Basic completion rates", "score": 2 },
+            { "value": "time_quality", "label": "Time and quality metrics", "score": 3 },
+            { "value": "comprehensive_indicators", "label": "Comprehensive performance indicators", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_improvement_handling",
+          "label": "How do you handle process improvements or optimizations?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad-hoc improvements", "score": 2 },
+            { "value": "regular_review_cycles", "label": "Regular review cycles", "score": 3 },
+            { "value": "continuous_program", "label": "Continuous improvement program", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_doc_template",
+          "label": "Do you have a standard template or format for documenting processes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_standard", "label": "No — everyone documents differently", "score": 1 },
+            { "value": "some_common_format", "label": "Some use a common format, others don't", "score": 2 },
+            { "value": "standard_template", "label": "We have a standard template", "score": 3 },
+            { "value": "all_follow_structure", "label": "Yes — all teams follow the same structure", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_success_criteria",
+          "label": "Do you include measurable outcomes or success criteria in your process definitions?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes", "score": 2 },
+            { "value": "usually", "label": "Usually", "score": 3 },
+            { "value": "always", "label": "Always", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_confidence_uniformity",
+          "label": "How confident are you that processes are followed the same way regardless of who is doing the work?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "fully_confident", "label": "Fully confident", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_consistency_challenge",
+          "label": "What is your biggest challenge in maintaining process consistency?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_review_frequency_3",
+          "label": "How often are your documented processes reviewed for accuracy or improvement?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "rarely_never", "label": "Rarely or never", "score": 1 },
+            { "value": "once_per_year", "label": "Once per year", "score": 2 },
+            { "value": "once_per_quarter", "label": "Once per quarter", "score": 3 },
+            { "value": "reviewed_regularly", "label": "Reviewed regularly as part of operations", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_visual_maps",
+          "label": "Do you have visual process maps (e.g. flowcharts or swimlanes) for any of your business functions?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_written_only", "label": "No, only written instructions", "score": 1 },
+            { "value": "mapped_few", "label": "We've mapped a few key processes", "score": 2 },
+            { "value": "most_mapped", "label": "Most major processes are mapped", "score": 3 },
+            { "value": "all_visually_documented", "label": "Yes, every process is visually documented", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_mapping_tools",
+          "label": "What tools do you use for process mapping or documentation?",
+          "type": "multi_select",
+          "options": [
+            { "value": "spreadsheets", "label": "Spreadsheets", "score": 1 },
+            { "value": "project_boards", "label": "Project boards", "score": 2 },
+            { "value": "chat_tools", "label": "Chat tools", "score": 2 },
+            { "value": "email", "label": "Email", "score": 1 },
+            { "value": "workflow_software", "label": "Workflow software", "score": 3 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_efficiency_measurement",
+          "label": "How do you measure process efficiency and effectiveness?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure efficiency", "score": 1 },
+            { "value": "basic_time_tracking", "label": "Basic time tracking", "score": 2 },
+            { "value": "kpi", "label": "Key performance indicators", "score": 3 },
+            { "value": "comprehensive_analytics", "label": "Comprehensive metrics and analytics", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_change_handling_3",
+          "label": "How do you handle process changes or updates?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad-hoc changes", "score": 1 },
+            { "value": "basic_change_management", "label": "Basic change management", "score": 2 },
+            { "value": "structured_change", "label": "Structured change process", "score": 3 },
+            { "value": "integrated_change_system", "label": "Integrated change management system", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_technology_role",
+          "label": "What role does technology play in your process management?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "minimal_role", "label": "Minimal role", "score": 1 },
+            { "value": "basic_tools", "label": "Basic tools", "score": 2 },
+            { "value": "integrated_systems", "label": "Integrated systems", "score": 3 },
+            { "value": "core_enabler", "label": "Core enabler of processes", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_compliance_ensurance",
+          "label": "How do you ensure process compliance across the organization?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_compliance_check", "label": "We don't check compliance", "score": 1 },
+            { "value": "basic_monitoring", "label": "Basic monitoring", "score": 2 },
+            { "value": "regular_audits", "label": "Regular audits", "score": 3 },
+            { "value": "automated_tracking", "label": "Automated compliance tracking", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_improvement_implementation",
+          "label": "How do you identify and implement process improvements?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad-hoc improvements", "score": 2 },
+            { "value": "regular_review_cycles", "label": "Regular review cycles", "score": 3 },
+            { "value": "continuous_program", "label": "Continuous improvement program", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_optimization_challenge",
+          "label": "What is your biggest challenge in process optimization?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "process_improvement_impact",
+          "label": "How do you measure the impact of process improvements?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_impact_measurement", "label": "We don't measure impact", "score": 1 },
+            { "value": "before_after", "label": "Basic before/after comparison", "score": 2 },
+            { "value": "key_metrics_tracking", "label": "Key metrics tracking", "score": 3 },
+            { "value": "comprehensive_analysis", "label": "Comprehensive impact analysis", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_tool_integration",
+          "label": "Do your business processes integrate directly with the tools your teams use (e.g. CRM, project management, help desk)?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_tracked_separately", "label": "No, they're tracked separately", "score": 1 },
+            { "value": "some_integration", "label": "Some processes integrate with tools", "score": 2 },
+            { "value": "most_in_tools", "label": "Most processes live inside the tools", "score": 3 },
+            { "value": "fully_integrated", "label": "Yes — fully integrated workflows", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_performance_metrics_discussion",
+          "label": "How often are process performance metrics (like time, cost, error rate) discussed at a leadership or team level?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "rarely_never", "label": "Rarely or never", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly", "score": 2 },
+            { "value": "monthly", "label": "Monthly", "score": 3 },
+            { "value": "weekly_realtime", "label": "Weekly or in real-time", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_workflow_consistency",
+          "label": "Are your documented workflows consistent in format and structure across different teams or departments?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_consistency", "label": "No — every team documents differently", "score": 1 },
+            { "value": "some_consistency", "label": "Some consistency, but not standardized", "score": 2 },
+            { "value": "mostly_standardized", "label": "Mostly standardized", "score": 3 },
+            { "value": "fully_standardized", "label": "Fully standardized and enforced", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_feedback_collection",
+          "label": "How do you collect feedback from your team on whether current processes are effective or frustrating?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_feedback", "label": "We don't collect feedback", "score": 1 },
+            { "value": "ask_1on1_meetings", "label": "We ask during 1:1s or meetings", "score": 2 },
+            { "value": "forms_surveys", "label": "We use forms or surveys occasionally", "score": 3 },
+            { "value": "structured_feedback", "label": "We have structured feedback loops", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_improvement_suggestions",
+          "label": "How often do your teams suggest improvements to existing workflows?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "rarely", "label": "Rarely", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "frequently_not_implemented", "label": "Frequently, but not always implemented", "score": 3 },
+            { "value": "frequently_with_followthrough", "label": "Frequently, with follow-through", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_post_mortems",
+          "label": "Do you conduct post-mortems or debriefs after major process failures or breakdowns?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no", "label": "No", "score": 1 },
+            { "value": "only_critical", "label": "Only after critical issues", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes", "score": 3 },
+            { "value": "always", "label": "Always — it's part of our culture", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_change_communication",
+          "label": "How do you ensure process changes are effectively communicated and adopted?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_announcements", "label": "Basic announcements", "score": 2 },
+            { "value": "structured_communication", "label": "Structured communication", "score": 3 },
+            { "value": "integrated_change_management", "label": "Integrated change management", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_health_monitoring",
+          "label": "What methods do you use to monitor the health of critical workflows?",
+          "type": "multi_select",
+          "options": [
+            { "value": "dashboards_reports", "label": "Dashboards or reports", "score": 3 },
+            { "value": "audit_logs", "label": "Workflow audit logs", "score": 3 },
+            { "value": "manual_checkins", "label": "Manual check-ins", "score": 2 },
+            { "value": "team_feedback", "label": "Team feedback", "score": 2 },
+            { "value": "no_monitoring", "label": "We don't currently monitor health", "score": 1 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_efficiency_ownership",
+          "label": "Which team or role is ultimately responsible for improving process efficiency across your organization?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_one", "label": "No one — it's decentralized", "score": 1 },
+            { "value": "functional_managers", "label": "Functional managers own their teams' processes", "score": 2 },
+            { "value": "centralized_ops", "label": "A centralized ops or enablement function", "score": 3 },
+            { "value": "dedicated_bpm_team", "label": "A dedicated BPM, RevOps, or process team", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_excellence_challenge",
+          "label": "What is your biggest challenge in maintaining process excellence?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_redesign_frequency",
+          "label": "How often do you actively redesign or re-engineer a process to improve efficiency or experience?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "rarely_when_needed", "label": "Rarely — only when needed", "score": 1 },
+            { "value": "annually_planning", "label": "Annually as part of planning", "score": 2 },
+            { "value": "quarterly_metrics", "label": "Quarterly based on metrics", "score": 3 },
+            { "value": "continuously_operations", "label": "Continuously, as part of operations", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_owner_kpis",
+          "label": "Do process owners have KPIs tied to process performance (e.g. time savings, SLA adherence, error reduction)?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_performance_review", "label": "No — not part of performance review", "score": 1 },
+            { "value": "high_level", "label": "Only at a high level", "score": 2 },
+            { "value": "some_process_kpis", "label": "Some KPIs are process-based", "score": 3 },
+            { "value": "directly_accountable", "label": "Yes — directly accountable to metrics", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_tool_alignment",
+          "label": "How do your process management tools align with your overall technology stack?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_alignment", "label": "They don't align", "score": 1 },
+            { "value": "basic_integration", "label": "Basic integration", "score": 2 },
+            { "value": "mostly_integrated", "label": "Mostly integrated", "score": 3 },
+            { "value": "fully_integrated", "label": "Fully integrated ecosystem", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_roi_measurement",
+          "label": "How do you measure the ROI of your process improvements?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_roi_measurement", "label": "We don't measure ROI", "score": 1 },
+            { "value": "basic_cost_savings", "label": "Basic cost savings", "score": 2 },
+            { "value": "time_quality_metrics", "label": "Time and quality metrics", "score": 3 },
+            { "value": "comprehensive_impact", "label": "Comprehensive business impact", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_change_sustainability",
+          "label": "How do you ensure process changes are sustainable and lasting?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_followup", "label": "Basic follow-up", "score": 2 },
+            { "value": "regular_monitoring", "label": "Regular monitoring", "score": 3 },
+            { "value": "integrated_sustainability", "label": "Integrated sustainability metrics", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_data_role",
+          "label": "What role does data play in your process management?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "minimal_role", "label": "Minimal role", "score": 1 },
+            { "value": "basic_reporting", "label": "Basic reporting", "score": 2 },
+            { "value": "key_metrics", "label": "Key metrics", "score": 3 },
+            { "value": "data_driven", "label": "Data-driven decision making", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_automation_handling",
+          "label": "How do you handle process automation opportunities?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_automation", "label": "We don't automate", "score": 1 },
+            { "value": "basic_automation", "label": "Basic automation", "score": 2 },
+            { "value": "strategic_automation", "label": "Strategic automation", "score": 3 },
+            { "value": "comprehensive_strategy", "label": "Comprehensive automation strategy", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_scalability_ensurance",
+          "label": "How do you ensure process scalability across the organization?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_guidelines", "label": "Basic guidelines", "score": 2 },
+            { "value": "structured_approach", "label": "Structured approach", "score": 3 },
+            { "value": "built_in_scalability", "label": "Built-in scalability", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_transformation_challenge",
+          "label": "What is your biggest challenge in process transformation?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "process_management_success",
+          "label": "How do you measure the success of your process management program?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_success_measurement", "label": "We don't measure success", "score": 1 },
+            { "value": "basic_metrics", "label": "Basic metrics", "score": 2 },
+            { "value": "key_indicators", "label": "Key performance indicators", "score": 3 },
+            { "value": "comprehensive_metrics", "label": "Comprehensive success metrics", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_remote_monitoring",
+          "label": "How do you monitor adherence to processes across remote, hybrid, or distributed teams?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_formal_monitoring", "label": "No formal monitoring", "score": 1 },
+            { "value": "manual_oversight", "label": "Manual oversight or reviews", "score": 2 },
+            { "value": "digital_compliance", "label": "Digital compliance and reporting", "score": 3 },
+            { "value": "realtime_dashboards", "label": "Real-time dashboards and alerts", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "process_steering_group",
+          "label": "Do you have a cross-functional BPM steering group or center of excellence (CoE)?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no", "label": "No", "score": 1 },
+            { "value": "discussed", "label": "We've discussed it", "score": 2 },
+            { "value": "newly_formed", "label": "Yes — newly formed", "score": 3 },
+            { "value": "well_established", "label": "Yes — active and well-established", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_scale_confidence",
+          "label": "How confident are you in your ability to scale processes across new markets, teams, or business models without loss of quality?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "fully_confident", "label": "Fully confident — proven track record", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_change_adoption",
+          "label": "How do you ensure process changes are effectively communicated and adopted?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_system", "label": "We don't have a system", "score": 1 },
+            { "value": "basic_announcements", "label": "Basic announcements", "score": 2 },
+            { "value": "structured_communication", "label": "Structured communication", "score": 3 },
+            { "value": "integrated_change_management", "label": "Integrated change management", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_automation_role",
+          "label": "What role does automation play in your process management?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "minimal_role", "label": "Minimal role", "score": 1 },
+            { "value": "basic_automation", "label": "Basic automation", "score": 2 },
+            { "value": "strategic_automation", "label": "Strategic automation", "score": 3 },
+            { "value": "comprehensive_automation", "label": "Comprehensive automation", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_improvement_impact",
+          "label": "How do you measure the impact of process improvements on business outcomes?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_impact_measurement", "label": "We don't measure impact", "score": 1 },
+            { "value": "basic_metrics", "label": "Basic metrics", "score": 2 },
+            { "value": "key_indicators", "label": "Key performance indicators", "score": 3 },
+            { "value": "comprehensive_analysis", "label": "Comprehensive impact analysis", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_evolution_ensurance",
+          "label": "How do you ensure that your processes evolve alongside changes in customer behavior, regulations, or market shifts?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "update_as_needed", "label": "We update as needed", "score": 1 },
+            { "value": "annual_review", "label": "We review them annually", "score": 2 },
+            { "value": "quarterly_monitoring", "label": "We monitor signals and review quarterly", "score": 3 },
+            { "value": "adaptive_frameworks", "label": "We have adaptive frameworks built into governance", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_automation_strategy",
+          "label": "To what extent are automation, AI, or low-code tools part of your ongoing BPM strategy?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_part_of_strategy", "label": "Not part of our strategy", "score": 1 },
+            { "value": "few_areas", "label": "Used in a few areas", "score": 2 },
+            { "value": "expanding_departments", "label": "Actively expanding across departments", "score": 3 },
+            { "value": "deeply_integrated", "label": "Deeply integrated into all core processes", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_adaptability",
+          "label": "When your business adds a new system, product, or team, how easily can your existing processes adapt?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "significant_rework", "label": "Requires significant rework", "score": 1 },
+            { "value": "adaptable_with_effort", "label": "Adaptable with some effort", "score": 2 },
+            { "value": "built_to_flex", "label": "Processes are built to flex", "score": 3 },
+            { "value": "modular_by_design", "label": "Fully modular and scalable by design", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_sustainability_challenge",
+          "label": "What is your greatest challenge in sustaining high BPM performance across the organization?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_competitive_positioning",
+          "label": "How does BPM influence your company's competitive positioning or go-to-market strategy?",
+          "type": "text_area",
+          "order": 1
+        },
+        {
+          "key": "process_practice_ties",
+          "label": "Which of the following are directly tied to your BPM practice today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_journey_design", "label": "Customer journey design", "score": 3 },
+            { "value": "product_innovation", "label": "Product innovation", "score": 3 },
+            { "value": "esg_sustainability", "label": "ESG or sustainability initiatives", "score": 3 },
+            { "value": "ai_strategy", "label": "AI strategy", "score": 3 },
+            { "value": "ma_integration", "label": "M&A integration", "score": 3 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "process_market_adaptation",
+          "label": "How do your processes adapt to changing market conditions or customer needs?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "dont_adapt_well", "label": "They don't adapt well", "score": 1 },
+            { "value": "basic_adaptation", "label": "Basic adaptation", "score": 2 },
+            { "value": "proactive_adaptation", "label": "Proactive adaptation", "score": 3 },
+            { "value": "continuous_adaptation", "label": "Continuous adaptation built into the system", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "process_leadership_embedding",
+          "label": "How is BPM embedded in your leadership development and company culture?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_embedded", "label": "Not really embedded", "score": 1 },
+            { "value": "some_discussions", "label": "Included in some leadership discussions", "score": 2 },
+            { "value": "core_training", "label": "Core part of operational training", "score": 3 },
+            { "value": "cultural_values", "label": "Baked into cultural values and rituals", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "process_risk_compliance",
+          "label": "What role does your BPM system play in risk mitigation and regulatory compliance?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_connected", "label": "Not connected", "score": 1 },
+            { "value": "light_oversight", "label": "Light oversight only", "score": 2 },
+            { "value": "integrated_audits", "label": "Integrated with audits/reviews", "score": 3 },
+            { "value": "automated_enforcement", "label": "Drives automated compliance enforcement", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "process_innovation_implementation",
+          "label": "What is the biggest process innovation your organization has implemented in the last 12 months?",
+          "type": "text_area",
+          "order": 6
+        },
+        {
+          "key": "process_experimentation_support",
+          "label": "How does your BPM framework support experimentation and rapid iteration?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "change_is_slow", "label": "It doesn't — change is slow", "score": 1 },
+            { "value": "some_teams_adapt", "label": "Some teams can test and adapt", "score": 2 },
+            { "value": "agile_improvement", "label": "It supports agile process improvement", "score": 3 },
+            { "value": "built_in_experimentation", "label": "Experimentation is built into the system", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "process_ai_integration",
+          "label": "To what extent are your business processes informed or driven by AI or machine learning today?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "few_workflows", "label": "In a few workflows", "score": 2 },
+            { "value": "most_core_functions", "label": "In most core functions", "score": 3 },
+            { "value": "embedded_across_all", "label": "AI is embedded across all major processes", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_benchmarking",
+          "label": "How do you benchmark your BPM performance against the broader industry or competitors?",
+          "type": "multiple_choice",
+          "options": [
+            { "value": "no_benchmarking", "label": "We don't benchmark", "score": 1 },
+            { "value": "informal_comparisons", "label": "Informal or anecdotal comparisons", "score": 2 },
+            { "value": "structured_internal", "label": "Structured internal benchmarking", "score": 3 },
+            { "value": "ongoing_external", "label": "Ongoing external benchmarking with industry metrics", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_north_star",
+          "label": "What is your BPM North Star for the next 12 months?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

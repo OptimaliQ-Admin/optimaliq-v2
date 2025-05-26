@@ -24,30 +24,30 @@ export async function POST(req: Request) {
     }
 
     // Fetch all dummy company quadrant data
-    const { data: companies, error: companiesError } = await supabase
-      .from("growth_quadrant_data")
-      .select("label, strategy_score, process_score, technology_score, overall_score");
+const { data: companies, error: companiesError } = await supabase
+.from("growth_quadrant_data")
+.select("label, strategy_score, process_score, technology_score, overall_score");
 
-    if (companiesError) {
-      console.error("❌ Failed to fetch quadrant data:", companiesError);
-      return NextResponse.json({ error: "Failed to fetch quadrant data" }, { status: 500 });
-    }
+if (companiesError) {
+console.error("❌ Failed to fetch quadrant data:", companiesError);
+return NextResponse.json({ error: "Failed to fetch quadrant data" }, { status: 500 });
+}
 
     if (!companies || companies.length === 0) {
       return NextResponse.json({ error: "No comparison data available" }, { status: 404 });
     }
 
     // Fetch current user's insight scores
-    const { data: userData, error: userError } = await supabase
-      .from("tier2_dashboard_insights")
-      .select("strategy_score, process_score, technology_score, overall_score")
-      .eq("u_id", u_id)
-      .single();
+const { data: userData, error: userError } = await supabase
+.from("tier2_dashboard_insights")
+.select("strategy_score, process_score, technology_score, overall_score")
+.eq("u_id", u_id)
+.single();
 
-    if (userError || !userData) {
-      console.error("❌ Failed to fetch user data:", userError);
+if (userError || !userData) {
+console.error("❌ Failed to fetch user data:", userError);
       return NextResponse.json({ error: "User data not found. Please complete the assessment first." }, { status: 404 });
-    }
+}
 
     // Transform the data to match the expected format
     const transformedCompanies = companies.map(company => ({
@@ -65,10 +65,10 @@ export async function POST(req: Request) {
       score: userData.overall_score
     };
 
-    return NextResponse.json({
+return NextResponse.json({
       companies: transformedCompanies,
       user: transformedUser
-    });
+});
   } catch (err: unknown) {
     console.error("🔥 Unexpected error in quadrant API:", err);
     return NextResponse.json({ error: getErrorMessage(err) || "Unknown error" }, { status: 500 });

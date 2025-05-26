@@ -1,36 +1,35 @@
 import { supabase } from "@/lib/supabase";
-import { differenceInDays, parseISO } from "date-fns";
 
-export type BPMScoreResult = {
+type ScoreResult = {
   score: number;
   takenAt: string;
-  isExpired: boolean;
 } | null;
 
-export async function getLatestBPMScore(u_id: string): Promise<BPMScoreResult> {
-  const { data, error } = await supabase
-    .from("tier2_profiles")
-    .select("bpm_score, bpm_last_taken")
-    .eq("u_id", u_id)
-    .maybeSingle();
+export async function getLatestBPMScore(userId: string): Promise<ScoreResult> {
+  try {
+    const { data, error } = await supabase
+      .from("bpm_assessment")
+      .select("score, created_at")
+      .eq("u_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
 
-  if (error) {
-    console.error("❌ Failed to fetch BPM score from profile:", error);
+    if (error) {
+      console.error("Error fetching BPM score:", error);
+      return null;
+    }
+
+    if (!data) {
+      return null;
+    }
+
+    return {
+      score: data.score,
+      takenAt: data.created_at
+    };
+  } catch (error) {
+    console.error("Unexpected error fetching BPM score:", error);
     return null;
   }
-
-  if (!data?.bpm_score || !data?.bpm_last_taken) {
-    return null;
-  }
-
-  const takenAt = data.bpm_last_taken;
-  const score = data.bpm_score;
-  const daysOld = differenceInDays(new Date(), parseISO(takenAt));
-  const isExpired = daysOld > 30;
-
-  return {
-    score,
-    takenAt,
-    isExpired,
-  };
-}
+} 
