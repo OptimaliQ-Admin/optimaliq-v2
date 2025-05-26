@@ -34,7 +34,7 @@ export function calculateScore(
           totalScore += values[value] * weight;
         }
       });
-    } else if (values[answer]) {
+    } else if (typeof answer === "string" && values[answer]) {
       totalScore += values[answer] * weight;
     }
   });
@@ -51,4 +51,4 @@ function getBracket(score: number): keyof ScoringMap {
   if (score >= 2.0) return "score_2";
   if (score >= 1.5) return "score_1_5";
   return "score_1";
-} 
+}
