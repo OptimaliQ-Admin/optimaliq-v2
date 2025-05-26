@@ -27,18 +27,20 @@ const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
 
     // console.log("Stripe session retrieved:", session.subscription);
     // console.log("Exist Subscription :", !!validateSubscription);
-
+    if (validateNotExistSubscriptionError) {
+      console.error("Failed to validate subscription:", validateNotExistSubscriptionError);
+    }
     if(validateSubscription == null) {
       const { error: subscriptionError } = await supabaseAdmin
             .from("subscriptions")
             .insert({
-              u_id:         session.metadata?.u_id!,
-              stripe_subscription_id: session.subscription?.id!,
-              stripe_customer_id:     session.subscription?.customer,
-              stripe_data:     session.subscription,
-              status:       session.subscription?.status,
-              plan:         session.subscription?.plan?.nickname,
-              billingCycle: session.metadata?.billingCycle,
+              u_id:         session?.metadata?.u_id!,
+              stripe_subscription_id: session?.subscription?.id ,
+              stripe_customer_id:     session?.subscription?.customer,
+              stripe_data:     session?.subscription,
+              status:       session?.subscription?.status,
+              plan:         session?.subscription?.plan?.nickname,
+              billingCycle: session?.metadata?.billingCycle,
               // TODO: Set next billing date based on the plan
               nextbillingdate: new Date().toISOString(),
 
@@ -61,7 +63,9 @@ export default async function ThankYouPage({
   searchParams: { session_id?: string };
 }) {
   const session_id = await searchParams.session_id;
-  await saveSubscriptionFromStripeSessionId(session_id!)
+  if(session_id) {
+    await saveSubscriptionFromStripeSessionId(session_id)
+  }
   return (
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
       <ThankYouContent />
