@@ -15,11 +15,11 @@ const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
       expand: ["subscription", "customer"],
     });
-
+    const subscription: any = session?.subscription as any;
     const { data: validateSubscription, error: validateNotExistSubscriptionError } = await supabaseAdmin
           .from("subscriptions")
           .select("stripe_subscription_id")
-          .eq("stripe_subscription_id", session?.subscription?.id)
+          .eq("stripe_subscription_id", subscription?.id)
           .maybeSingle()
 
     // console.log("Stripe session retrieved:", session.subscription);
@@ -61,11 +61,13 @@ const saveSubscriptionFromStripeSessionId = async (session_id: string) => {
 export default async function ThankYouPage({
   searchParams,
 }: {
-  searchParams: { session_id?: string };
+  searchParams?: Promise<{
+    session_id: string
+  }>;
 }) {
-  const session_id = await searchParams.session_id;
-  if(session_id) {
-    await saveSubscriptionFromStripeSessionId(session_id)
+  const params = await searchParams
+  if(params?.session_id) {
+    await saveSubscriptionFromStripeSessionId(params?.session_id)
   }
   return (
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
