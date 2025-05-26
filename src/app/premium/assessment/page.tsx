@@ -1,218 +1,134 @@
 // src/app/tier2/assessment/page.tsx
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import SectionHeader from "@/components/growthstudio/SectionHeader";
-import BPMCard from "@/components/assessments/BPMCard";
-import SalesPerformanceCard from "@/components/assessments/SalesPerformanceCard";
-import { getLatestBPMScore } from "@/lib/queries/getLatestBPMScore";
-import { getLatestSalesScore } from "@/lib/queries/getLatestSalesScore";
-import TechCard from "@/components/assessments/TechCard";
-import { getLatestTechScore } from "@/lib/queries/getLatestTechScore";
-import StrategicCard from "@/components/assessments/StrategicCard";
-import { getLatestStrategicScore } from "@/lib/queries/getLatestStrategicScore";
-import Business_ReassessmentCard from "@/components/assessments/Business_ReassessmentCard";
-import { getLatestReassessmentScore } from "@/lib/queries/getLatestReassessmentScore";
-import MarketingCard from "@/components/assessments/MarketingCard";
-import { getLatestMarketingScore } from "@/lib/queries/getLatestMarketingScore";
-import CustomerCard from "@/components/assessments/CustomerCard";
-import { getLatestCustomerScore } from "@/lib/queries/getLatestCustomerScore";
-import AICard from "@/components/assessments/AICard";
-import { getLatestAIScore } from "@/lib/queries/getLatestAIScore";
-import DigitalCard from "@/components/assessments/DigitalCard";
-import { getLatestDigitalScore } from "@/lib/queries/getLatestDigitalScore";
-import LeadershipCard from "@/components/assessments/LeadershipCard";
-import { getLatestLeadershipScore } from "@/lib/queries/getLatestLeadershipScore";
-import GrowthCard from "@/components/assessments/GrowthCard";
-import { getLatestGrowthScore } from "@/lib/queries/getLatestGrowthScore";
-import InsightLoading from "@/components/dashboard/InsightLoading";
+import AssessmentCard from "@/components/assessment/AssessmentCard";
+import { assessments } from "@/lib/utils/assessmentMeta";
 
-
-function AssessmentComponent() {
+export default function AssessmentsPage() {
   const { user } = usePremiumUser();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const email = user?.email;
-  const u_id = user?.u_id;
-
-  const [bpmScore, setBpmScore] = useState<number | null>(null);
-  const [bpmLastTaken, setBpmLastTaken] = useState<string | null>(null);
-  const [salesScore, setSalesScore] = useState<number | null>(null);
-  const [salesLastTaken, setSalesLastTaken] = useState<string | null>(null);
-  const [techScore, settechScore] = useState<number | null>(null);
-  const [techLastTaken, settechLastTaken] = useState<string | null>(null);
-  const [StrategicScore, setStrategicScore] = useState<number | null>(null);
-  const [StrategicLastTaken, setStrategicLastTaken] = useState<string | null>(null);
-  const [reassessment_score, setreassessmentScore] = useState<number | null>(null);
-  const [reassessmentLastTaken, setreassessmentLastTaken] = useState<string | null>(null);
-  const [marketing_score, setmarketingScore] = useState<number | null>(null);
-  const [marketingLastTaken, setmarketingLastTaken] = useState<string | null>(null);
-  const [Customer_score, setCustomerScore] = useState<number | null>(null);
-  const [CustomerLastTaken, setCustomerLastTaken] = useState<string | null>(null);
-  const [AI_score, setAIScore] = useState<number | null>(null);
-  const [AILastTaken, setAILastTaken] = useState<string | null>(null);
-  const [Digital_score, setDigitalScore] = useState<number | null>(null);
-  const [DigitalLastTaken, setDigitalLastTaken] = useState<string | null>(null);
-  const [Leadership_score, setLeadershipScore] = useState<number | null>(null);
-  const [LeadershipLastTaken, setLeadershipLastTaken] = useState<string | null>(null);
-  const [Growth_score, setGrowthScore] = useState<number | null>(null);
-  const [GrowthLastTaken, setGrowthLastTaken] = useState<string | null>(null);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [assessmentData, setAssessmentData] = useState<{
+    [key: string]: {
+      score: number | null;
+      lastTakenDate: string | null;
+    };
+  }>({});
 
   useEffect(() => {
-    if (!u_id) return;
+    const fetchAssessmentData = async () => {
+      if (!user?.u_id) return;
 
-    const fetchBPM = async () => {
-      const result = await getLatestBPMScore(u_id);
-      setBpmScore(result?.score ?? null);
-      setBpmLastTaken(result?.takenAt ?? null);
+      try {
+        // Fetch scores from tier2_profiles
+        const { data: profileData, error: profileError } = await supabase
+          .from("tier2_profiles")
+          .select("sales_score, sales_last_taken, tech_score, tech_last_taken, strategy_score, strategy_last_taken, marketing_score, marketing_last_taken, customer_score, customer_last_taken, digital_score, digital_last_taken, leadership_score, leadership_last_taken, growth_score, growth_last_taken, ai_score, ai_last_taken")
+          .eq("u_id", user.u_id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        // Fetch scores from score tables
+        const { data: scoreData, error: scoreError } = await supabase
+          .from("score_sales_performance")
+          .select("gmf_score, created_at")
+          .eq("u_id", user.u_id)
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        if (scoreError) throw scoreError;
+
+        // Combine the data
+        setAssessmentData({
+          sales: {
+            score: profileData?.sales_score || null,
+            lastTakenDate: profileData?.sales_last_taken || null
+          },
+          bpm: {
+            score: scoreData?.[0]?.gmf_score || null,
+            lastTakenDate: scoreData?.[0]?.created_at || null
+          },
+          tech: {
+            score: profileData?.tech_score || null,
+            lastTakenDate: profileData?.tech_last_taken || null
+          },
+          strategy: {
+            score: profileData?.strategy_score || null,
+            lastTakenDate: profileData?.strategy_last_taken || null
+          },
+          marketing: {
+            score: profileData?.marketing_score || null,
+            lastTakenDate: profileData?.marketing_last_taken || null
+          },
+          customer: {
+            score: profileData?.customer_score || null,
+            lastTakenDate: profileData?.customer_last_taken || null
+          },
+          digital: {
+            score: profileData?.digital_score || null,
+            lastTakenDate: profileData?.digital_last_taken || null
+          },
+          leadership: {
+            score: profileData?.leadership_score || null,
+            lastTakenDate: profileData?.leadership_last_taken || null
+          },
+          growth: {
+            score: profileData?.growth_score || null,
+            lastTakenDate: profileData?.growth_last_taken || null
+          },
+          ai: {
+            score: profileData?.ai_score || null,
+            lastTakenDate: profileData?.ai_last_taken || null
+          },
+          reassessment: {
+            score: null,
+            lastTakenDate: null
+          }
+        });
+
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching assessment data:", err);
+        setError("Failed to load assessment data");
+        setLoading(false);
+      }
     };
 
-    const fetchSales = async () => {
-      const result = await getLatestSalesScore(u_id);
-      setSalesScore(result?.score ?? null);
-      setSalesLastTaken(result?.takenAt ?? null);
-    };
-    const fetchTech = async () => {
-      const result = await getLatestTechScore(u_id);
-      settechScore(result?.score ?? null);
-      settechLastTaken(result?.takenAt ?? null);
-    };
+    fetchAssessmentData();
+  }, [user?.u_id]);
 
-    const fetchStrategic = async () => {
-      const result = await getLatestStrategicScore(u_id);
-      setStrategicScore(result?.score ?? null);
-      setStrategicLastTaken(result?.takenAt ?? null);
-    };
-
-    const fetchReassessment = async () => {
-      const result = await getLatestReassessmentScore(u_id);
-      setreassessmentScore(result?.score ?? null);
-      setreassessmentLastTaken(result?.takenAt ?? null);
-    };
-
-    const fetchMarketing = async () => {
-      const result = await getLatestMarketingScore(u_id);
-      setmarketingScore(result?.score ?? null);
-      setmarketingLastTaken(result?.takenAt ?? null);
-    };
-
-     const fetchCustomer = async () => {
-      const result = await getLatestCustomerScore(u_id);
-      setCustomerScore(result?.score ?? null);
-      setCustomerLastTaken(result?.takenAt ?? null);
-    };
-
-    const fetchAI = async () => {
-      const result = await getLatestAIScore(u_id);
-      setAIScore(result?.score ?? null);
-      setAILastTaken(result?.takenAt ?? null);
-    };
-
-    const fetchDigital = async () => {
-      const result = await getLatestDigitalScore(u_id);
-      setDigitalScore(result?.score ?? null);
-      setDigitalLastTaken(result?.takenAt ?? null);
-    };
-
-     const fetchLeadership = async () => {
-      const result = await getLatestLeadershipScore(u_id);
-      setLeadershipScore(result?.score ?? null);
-      setLeadershipLastTaken(result?.takenAt ?? null);
-    };
-
-    const fetchGrowth = async () => {
-      const result = await getLatestGrowthScore(u_id);
-      setGrowthScore(result?.score ?? null);
-      setGrowthLastTaken(result?.takenAt ?? null);
-    };
-
-    // Simulate loading time for data fetching
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    fetchBPM();
-    fetchSales();
-    fetchTech();
-    fetchStrategic();
-    fetchReassessment();
-    fetchMarketing();
-    fetchCustomer();
-    fetchAI();
-    fetchDigital();
-    fetchLeadership();
-    fetchGrowth();
-
-    return () => clearTimeout(timer);
-  }, [u_id]);
-
-  if (!email || !u_id) {
-    return <p className="text-center text-red-600">⚠️ Email and User ID required.</p>;
+  if (loading) {
+    return <div className="p-10 text-center">Loading assessments...</div>;
   }
 
-  if (isLoading) {
-    return <InsightLoading />;
+  if (error) {
+    return (
+      <div className="p-10 text-center text-red-600">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="w-full flex justify-center px-4">
-      <div className="w-full max-w-6xl space-y-10">
-        <SectionHeader
-          title="📝 Business Assessments"
-          subtitle="Choose an assessment to gain deeper insights into your business."
-        />
-
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-  {/* Inject BPMCard */}
-  <BPMCard score={bpmScore} lastTakenDate={bpmLastTaken} userId={u_id} />
-
-  {/* Inject SalesPerformanceCard */}
-  <SalesPerformanceCard score={salesScore} lastTakenDate={salesLastTaken} userId={u_id} />
-
-{/* Inject TechCard */}
-  <TechCard score={techScore} lastTakenDate={techLastTaken} userId={u_id} />
-  
-{/* Inject StrategicCard */}
-  <StrategicCard score={StrategicScore} lastTakenDate={StrategicLastTaken} userId={u_id} />
-
-  {/* Inject ReassessmentCard */}
-  <Business_ReassessmentCard score={reassessment_score} lastTakenDate={reassessmentLastTaken} userId={u_id} />
-
-  {/* Inject MarketingCard */}
-  <MarketingCard score={marketing_score} lastTakenDate={marketingLastTaken} userId={u_id} />
-
-   {/* Inject CustomerCard */}
-  <CustomerCard score={Customer_score} lastTakenDate={CustomerLastTaken} userId={u_id} />
-
-  {/* Inject AICard */}
-  <AICard score={AI_score} lastTakenDate={AILastTaken} userId={u_id} />
-
-  {/* Inject DigitalCard */}
-  <DigitalCard score={Digital_score} lastTakenDate={DigitalLastTaken} userId={u_id} />
-
-  {/* Inject LeadershipCard */}
-  <LeadershipCard score={Leadership_score} lastTakenDate={LeadershipLastTaken} userId={u_id} />
-
-  {/* Inject GrowthCard */}
-  <GrowthCard score={Growth_score} lastTakenDate={GrowthLastTaken} userId={u_id} />
-  
-
-</div>
-
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Assessments</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {assessments.map((assessment) => (
+          <AssessmentCard
+            key={assessment.slug}
+            slug={assessment.slug}
+            title={assessment.title}
+            description={assessment.description}
+            score={assessmentData[assessment.slug]?.score ?? null}
+            lastTakenDate={assessmentData[assessment.slug]?.lastTakenDate ?? null}
+            userId={user?.u_id}
+          />
+        ))}
       </div>
     </div>
-  );
-}
-
-export default function AssessmentPage() {
-  return (
-    <Suspense fallback={<InsightLoading />}>
-      <AssessmentComponent />
-    </Suspense>
   );
 }
