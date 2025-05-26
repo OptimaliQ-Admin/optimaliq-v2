@@ -2,30 +2,38 @@
 
 import React from "react";
 import DynamicQuestion from "./DynamicQuestion";
-import questionConfig from "@/lib/config/question_config.json";
+import { type AssessmentAnswers, type AssessmentAnswerValue } from "@/lib/types/AssessmentAnswers";
 
 type QuestionType = "multiple_choice" | "multi_select" | "text_area";
 
 type QuestionOption = {
+  value: string;
   label: string;
   score: number;
 };
 
 type Question = {
+  key: string;
   label: string;
   type: QuestionType;
-  options?: Record<string, QuestionOption>;
+  options?: QuestionOption[];
+  order: number;
 };
 
 type ScoreConfig = {
-  [key: string]: Question;
+  [key: string]: {
+    groups: {
+      [key: string]: Question[];
+    };
+  };
 };
 
 type Props = {
+  config: ScoreConfig;
   score: number;
   step: number;
-  answers: Record<string, any>;
-  onAnswer: (key: string, value: any) => void;
+  answers: AssessmentAnswers;
+  onAnswer: (key: string, value: AssessmentAnswerValue) => void;
 };
 
 function normalizeScore(score: number): string {
@@ -39,14 +47,23 @@ function normalizeScore(score: number): string {
   return "score_1";
 }
 
+function convertToQuestionValue(value: AssessmentAnswerValue): string | string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return value.toString();
+  if (typeof value === "boolean") return value.toString();
+  return "";
+}
+
 export default function DynamicStepRenderer({
+  config,
   score,
   step,
   answers,
   onAnswer,
 }: Props) {
   const normalizedScore = normalizeScore(score);
-  const scoreConfig = questionConfig[normalizedScore as keyof typeof questionConfig];
+  const scoreConfig = config[normalizedScore];
 
   if (!scoreConfig) {
     console.error(`No configuration found for score ${score}`);
@@ -54,24 +71,26 @@ export default function DynamicStepRenderer({
   }
 
   // Get questions for the current step
-  const questions = Object.entries(scoreConfig).slice(step * 3, (step + 1) * 3);
+  const questions = scoreConfig.groups[step.toString()] || [];
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
-      {questions.map(([key, question]) => {
-        // Handle different question structures
-        const questionType = question.type as QuestionType;
-        const questionOptions = 'options' in question ? question.options as Record<string, QuestionOption> : undefined;
+      {questions.map((question) => {
+        // Convert options array to record format expected by DynamicQuestion
+        const optionsRecord = question.options?.reduce((acc, opt) => ({
+          ...acc,
+          [opt.value]: { label: opt.label, score: opt.score }
+        }), {} as Record<string, { label: string; score: number }>);
 
         return (
           <DynamicQuestion
-            key={key}
+            key={question.key}
             question={question.label}
-            type={questionType}
-            options={questionOptions}
-            selected={answers[key]}
-            onChange={(value) => onAnswer(key, value)}
-            maxSelect={questionType === "multi_select" ? 5 : undefined}
+            type={question.type}
+            options={optionsRecord}
+            selected={convertToQuestionValue(answers[question.key])}
+            onChange={(value: string | string[]) => onAnswer(question.key, value)}
+            maxSelect={question.type === "multi_select" ? 5 : undefined}
           />
         );
       })}

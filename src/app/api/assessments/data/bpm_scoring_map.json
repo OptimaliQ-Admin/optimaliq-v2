@@ -1,814 +1,823 @@
 {
-    "score_1_1_4": {
-  "consistency": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "own_way": 1,
-      "experience_memory": 2,
-      "checklisr": 3,
-      "software": 4
+  "score_1": {
+    "process_consistency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "each_person_own_way": 1,
+        "rely_experience": 2,
+        "checklist_notes": 3,
+        "software_instructions": 4
+      }
+    },
+    "process_documentation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "nothing_documented": 1,
+        "few_things_written": 2,
+        "most_core_documented": 3,
+        "everything_documented": 4
+      }
+    },
+    "process_training": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "shadowing": 1,
+        "basic_docs": 2,
+        "structured_training": 3,
+        "comprehensive_onboarding": 4
+      }
+    },
+    "process_ownership": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_owner": 1,
+        "team_defined": 2,
+        "manager_defined": 3,
+        "clear_owner": 4
+      }
+    },
+    "process_clarity": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "all_time": 1,
+        "weekly": 2,
+        "rarely": 3,
+        "almost_never": 4
+      }
+    },
+    "process_confidence": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_confident": 1,
+        "somewhat_confident": 2,
+        "mostly_confident": 3,
+        "very_confident": 4
+      }
+    },
+    "process_tools": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "spreadsheets": 1,
+        "project_boards": 2,
+        "chat_tools": 2,
+        "email": 1,
+        "workflow_software": 3,
+        "none": 1
+      }
+    },
+    "process_responsibility": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_clear_ownership": 1,
+        "somewhat_clear": 2,
+        "mostly_clear_roles": 3,
+        "clear_ownership": 4
+      }
+    },
+    "process_improvement": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_management": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "reactive": 1,
+        "some_systems": 2,
+        "organized_informal": 3,
+        "structured_proactive": 4
+      }
     }
   },
-  "documentation": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Nothing": 1,
-      "few": 2,
-      "most": 3,
-      "everything": 4
+  "score_1_5": {
+    "process_tracking": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_tracking": 1,
+        "manual_tracking": 2,
+        "some_metrics": 3,
+        "comprehensive_tracking": 4
+      }
+    },
+    "process_review": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "never": 1,
+        "over_year": 2,
+        "within_year": 3,
+        "within_quarter": 4
+      }
+    },
+    "process_optimization": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_optimization": 1,
+        "reactive": 2,
+        "regular_reviews": 3,
+        "continuous_monitoring": 4
+      }
+    },
+    "process_ownership_review": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_review": 1,
+        "informal_check": 2,
+        "quarterly_review": 3,
+        "continuous_validation": 4
+      }
+    },
+    "process_clarity_frequency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "never_updated": 1,
+        "when_changes": 2,
+        "quarterly_updates": 3,
+        "continuous_updates": 4
+      }
+    },
+    "process_confidence_level": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_measurement": 1,
+        "informal_feedback": 2,
+        "regular_assessment": 3,
+        "continuous_monitoring": 4
+      }
+    },
+    "process_feedback": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_feedback": 1,
+        "informal": 2,
+        "team_meetings": 3,
+        "structured": 4
+      }
+    },
+    "process_changes": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_process": 1,
+        "ad_hoc": 2,
+        "planned": 3,
+        "structured": 4
+      }
+    },
+    "process_challenges": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_onboarding": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "basic_training": 2,
+        "docs_training": 3,
+        "comprehensive": 4
+      }
     }
   },
-  "onboarding": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "ask_someone": 1,
-      "watch": 2,
-      "tips": 3,
-      "training": 4
+  "score_2": {
+    "process_consistency_areas": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "sales_management": 2,
+        "customer_onboarding": 2,
+        "fulfillment": 2,
+        "customer_support": 2,
+        "none": 1
+      }
+    },
+    "process_review_frequency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "never": 1,
+        "occasionally": 2,
+        "annually": 3,
+        "quarterly": 4
+      }
+    },
+    "process_ownership_structure": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_one": 1,
+        "team_leads": 2,
+        "operations_team": 3,
+        "dedicated_owner": 4
+      }
+    },
+    "process_verification": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_verification": 1,
+        "spot_check": 2,
+        "team_syncs": 3,
+        "tracking_tools": 4
+      }
+    },
+    "process_definition": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "rough_guidelines": 1,
+        "somewhat_defined": 2,
+        "mostly_defined": 3,
+        "fully_defined": 4
+      }
+    },
+    "process_breakdown": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "fix_move_on": 1,
+        "understand_issue": 2,
+        "team_discussion": 3,
+        "process_adjustment": 4
+      }
+    },
+    "process_measurement": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_measurement": 1,
+        "basic_tracking": 2,
+        "key_metrics": 3,
+        "comprehensive_metrics": 4
+      }
+    },
+    "process_documentation_tools": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_tools": 1,
+        "basic_tools": 2,
+        "process_mapping": 3,
+        "bpm_software": 4
+      }
+    },
+    "process_challenges_2": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_exceptions": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "ad_hoc": 1,
+        "basic_guidelines": 2,
+        "clear_process": 3,
+        "automated": 4
+      }
     }
   },
-  "error_handling": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "frequently": 1,
-      "Occasionally": 2,
-      "Rarely": 3,
-      "Never": 4
+  "score_2_5": {
+    "process_doc_storage": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "scattered": 1,
+        "shared_folders": 2,
+        "workflow_tools": 3,
+        "centrally_documented": 4
+      }
+    },
+    "process_update_communication": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_formal_update": 1,
+        "announce_meeting_email": 2,
+        "update_docs_notify": 3,
+        "track_confirm_adoption": 4
+      }
+    },
+    "process_knowledge_gaps": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_tracking_gaps": 1,
+        "team_feedback": 2,
+        "regular_audits": 3,
+        "systematic_management": 4
+      }
+    },
+    "process_consistency_across_teams": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "basic_guidelines": 2,
+        "regular_reviews": 3,
+        "automated_monitoring": 4
+      }
+    },
+    "process_performance_metrics": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_metrics": 1,
+        "basic_completion": 2,
+        "time_quality": 3,
+        "comprehensive_indicators": 4
+      }
+    },
+    "process_improvement_handling": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "ad_hoc": 2,
+        "regular_review_cycles": 3,
+        "continuous_program": 4
+      }
+    },
+    "process_doc_template": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_standard": 1,
+        "some_common_format": 2,
+        "standard_template": 3,
+        "all_follow_structure": 4
+      }
+    },
+    "process_success_criteria": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_at_all": 1,
+        "sometimes": 2,
+        "usually": 3,
+        "always": 4
+      }
+    },
+    "process_confidence_uniformity": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_confident": 1,
+        "somewhat_confident": 2,
+        "mostly_confident": 3,
+        "fully_confident": 4
+      }
+    },
+    "process_consistency_challenge": {
+      "type": "text_area",
+      "weight": 1
     }
   },
-  "issue_detection": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "unhappy_customer": 1,
-      "someone_notices": 2,
-      "manually": 3,
-      "reports": 4
+  "score_3": {
+    "process_review_frequency_3": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "rarely_never": 1,
+        "once_per_year": 2,
+        "once_per_quarter": 3,
+        "reviewed_regularly": 4
+      }
+    },
+    "process_visual_maps": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_written_only": 1,
+        "mapped_few": 2,
+        "most_mapped": 3,
+        "all_visually_documented": 4
+      }
+    },
+    "process_mapping_tools": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "spreadsheets": 1,
+        "project_boards": 2,
+        "chat_tools": 2,
+        "email": 1,
+        "workflow_software": 3,
+        "none": 1
+      }
+    },
+    "process_efficiency_measurement": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_measurement": 1,
+        "basic_time_tracking": 2,
+        "kpi": 3,
+        "comprehensive_analytics": 4
+      }
+    },
+    "process_change_handling_3": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "ad_hoc": 1,
+        "basic_change_management": 2,
+        "structured_change": 3,
+        "integrated_change_system": 4
+      }
+    },
+    "process_technology_role": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "minimal_role": 1,
+        "basic_tools": 2,
+        "integrated_systems": 3,
+        "core_enabler": 4
+      }
+    },
+    "process_compliance_ensurance": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_compliance_check": 1,
+        "basic_monitoring": 2,
+        "regular_audits": 3,
+        "automated_tracking": 4
+      }
+    },
+    "process_improvement_implementation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "ad_hoc": 2,
+        "regular_review_cycles": 3,
+        "continuous_program": 4
+      }
+    },
+    "process_optimization_challenge": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_improvement_impact": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_impact_measurement": 1,
+        "before_after": 2,
+        "key_metrics_tracking": 3,
+        "comprehensive_analysis": 4
+      }
     }
   },
-  "tools": {
-    "type": "multi_select",
-    "weight": 1.0,
-    "values": {
-      "Email": 1,
-      "Spreadsheets": 2,
-      "Shared_documents": 3,
-      "Project_management": 4,
-      "None": 5
+  "score_3_5": {
+    "process_tool_integration": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_tracked_separately": 1,
+        "some_integration": 2,
+        "most_in_tools": 3,
+        "fully_integrated": 4
+      }
+    },
+    "process_performance_metrics_discussion": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "rarely_never": 1,
+        "quarterly": 2,
+        "monthly": 3,
+        "weekly_realtime": 4
+      }
+    },
+    "process_workflow_consistency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_consistency": 1,
+        "some_consistency": 2,
+        "mostly_standardized": 3,
+        "fully_standardized": 4
+      }
+    },
+    "process_feedback_collection": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_feedback": 1,
+        "ask_1on1_meetings": 2,
+        "forms_surveys": 3,
+        "structured_feedback": 4
+      }
+    },
+    "process_improvement_suggestions": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "rarely": 1,
+        "occasionally": 2,
+        "frequently_not_implemented": 3,
+        "frequently_with_followthrough": 4
+      }
+    },
+    "process_post_mortems": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no": 1,
+        "only_critical": 2,
+        "sometimes": 3,
+        "always": 4
+      }
+    },
+    "process_change_communication": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "basic_announcements": 2,
+        "structured_communication": 3,
+        "integrated_change_management": 4
+      }
+    },
+    "process_health_monitoring": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "dashboards_reports": 3,
+        "audit_logs": 3,
+        "manual_checkins": 2,
+        "team_feedback": 2,
+        "no_monitoring": 1
+      }
+    },
+    "process_efficiency_ownership": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_one": 1,
+        "functional_managers": 2,
+        "centralized_ops": 3,
+        "dedicated_bpm_team": 4
+      }
+    },
+    "process_excellence_challenge": {
+      "type": "text_area",
+      "weight": 1
     }
   },
-  "ownership": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "no_ownership": 1,
-      "Somewhat": 2,
-      "Mostly": 3,
-      "exactly": 4
+  "score_4": {
+    "process_redesign_frequency": {
+      "rarely_when_needed": 1,
+      "annually_planning": 2,
+      "quarterly_metrics": 3,
+      "continuously_operations": 4
+    },
+    "process_owner_kpis": {
+      "no_performance_review": 1,
+      "high_level": 2,
+      "some_process_kpis": 3,
+      "directly_accountable": 4
+    },
+    "process_tool_alignment": {
+      "no_alignment": 1,
+      "basic_integration": 2,
+      "mostly_integrated": 3,
+      "fully_integrated": 4
+    },
+    "process_roi_measurement": {
+      "no_roi_measurement": 1,
+      "basic_cost_savings": 2,
+      "time_quality_metrics": 3,
+      "comprehensive_impact": 4
+    },
+    "process_change_sustainability": {
+      "no_system": 1,
+      "basic_followup": 2,
+      "regular_monitoring": 3,
+      "integrated_sustainability": 4
+    },
+    "process_data_role": {
+      "minimal_role": 1,
+      "basic_reporting": 2,
+      "key_metrics": 3,
+      "data_driven": 4
+    },
+    "process_automation_handling": {
+      "no_automation": 1,
+      "basic_automation": 2,
+      "strategic_automation": 3,
+      "comprehensive_strategy": 4
+    },
+    "process_scalability_ensurance": {
+      "no_system": 1,
+      "basic_guidelines": 2,
+      "structured_approach": 3,
+      "built_in_scalability": 4
+    },
+    "process_transformation_challenge": {},
+    "process_management_success": {
+      "no_success_measurement": 1,
+      "basic_metrics": 2,
+      "key_indicators": 3,
+      "comprehensive_metrics": 4
     }
   },
-  "operations_maturity": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "reactive": 1,
-      "Some_systems": 2,
-      "Organized_informal": 3,
-      "structured": 4
+  "score_4_5": {
+    "process_remote_monitoring": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_formal_monitoring": 1,
+        "manual_oversight": 2,
+        "digital_compliance": 3,
+        "realtime_dashboards": 4
+      }
+    },
+    "process_steering_group": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no": 1,
+        "discussed": 2,
+        "newly_formed": 3,
+        "well_established": 4
+      }
+    },
+    "process_scale_confidence": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_confident": 1,
+        "somewhat_confident": 2,
+        "mostly_confident": 3,
+        "fully_confident": 4
+      }
+    },
+    "process_change_adoption": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_system": 1,
+        "basic_announcements": 2,
+        "structured_communication": 3,
+        "integrated_change_management": 4
+      }
+    },
+    "process_automation_role": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "minimal_role": 1,
+        "basic_automation": 2,
+        "strategic_automation": 3,
+        "comprehensive_automation": 4
+      }
+    },
+    "process_improvement_impact": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_impact_measurement": 1,
+        "basic_metrics": 2,
+        "key_indicators": 3,
+        "comprehensive_analysis": 4
+      }
+    },
+    "process_evolution_ensurance": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "update_as_needed": 1,
+        "annual_review": 2,
+        "quarterly_monitoring": 3,
+        "adaptive_frameworks": 4
+      }
+    },
+    "process_automation_strategy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_part_of_strategy": 1,
+        "few_areas": 2,
+        "expanding_departments": 3,
+        "deeply_integrated": 4
+      }
+    },
+    "process_adaptability": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "significant_rework": 1,
+        "adaptable_with_effort": 2,
+        "built_to_flex": 3,
+        "modular_by_design": 4
+      }
+    },
+    "process_sustainability_challenge": {
+      "type": "text_area",
+      "weight": 1
+    }
+  },
+  "score_5": {
+    "process_competitive_positioning": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_practice_ties": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "customer_journey_design": 3,
+        "product_innovation": 3,
+        "esg_sustainability": 3,
+        "ai_strategy": 3,
+        "ma_integration": 3,
+        "none": 1
+      }
+    },
+    "process_market_adaptation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "dont_adapt_well": 1,
+        "basic_adaptation": 2,
+        "proactive_adaptation": 3,
+        "continuous_adaptation": 4
+      }
+    },
+    "process_leadership_embedding": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_embedded": 1,
+        "some_discussions": 2,
+        "core_training": 3,
+        "cultural_values": 4
+      }
+    },
+    "process_risk_compliance": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_connected": 1,
+        "light_oversight": 2,
+        "integrated_audits": 3,
+        "automated_enforcement": 4
+      }
+    },
+    "process_innovation_implementation": {
+      "type": "text_area",
+      "weight": 1
+    },
+    "process_experimentation_support": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "change_is_slow": 1,
+        "some_teams_adapt": 2,
+        "agile_improvement": 3,
+        "built_in_experimentation": 4
+      }
+    },
+    "process_ai_integration": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "not_at_all": 1,
+        "few_workflows": 2,
+        "most_core_functions": 3,
+        "embedded_across_all": 4
+      }
+    },
+    "process_benchmarking": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_benchmarking": 1,
+        "informal_comparisons": 2,
+        "structured_internal": 3,
+        "ongoing_external": 4
+      }
+    },
+    "process_north_star": {
+      "type": "text_area",
+      "weight": 1
     }
   }
-},
-"score_1_5_1_9": {
-  "coverage": {
-    "type": "multi_select",
-    "weight": 1.0,
-    "values": {
-      "Customer_onboarding": 1,
-      "Order_fulfillment": 2,
-      "Customer_support": 3,
-      "Invoicing_or_billing": 4,
-      "Marketing_campaigns": 5,
-      "None": 6
-    }
-  },
-  "documentation_storage": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "No_central_location": 1,
-      "email_or_chat": 2,
-      "shared folders": 3,
-      "playbook system": 4
-    }
-  },
-  "error_response": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "fix it and move on": 1,
-      "discuss it in the moment": 2,
-      " try to understand why it happened": 3,
-      "update the process to prevent it": 4
-    }
-  },
-  "process_definition": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "based on habits": 1,
-      "person defines their own": 2,
-      "loosely defined by a manager": 3,
-      "clear owner for each process": 4
-    }
-  },
-  "knowledge_transfer": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "All the time": 1,
-      "Weekly": 2,
-      "Rarely": 3,
-      "Almost never": 4
-    }
-  },
-  "consistency": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Not confident": 1,
-      "Somewhat": 2,
-      "Mostly": 3,
-      "Very confident": 4
-    }
-  },
-  "workflow_tools": {
-    "type": "multi_select",
-    "weight": 1.0,
-    "values": {
-      "Spreadsheets": 1,
-      "Project boards": 2,
-      "chat tools": 3,
-      "Email": 4,
-      "workflow software": 5,
-      "None": 6
-    }
-  },
-  "training": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Verbal": 1,
-      "Shadowing": 2,
-      "documents or checklists": 3,
-      "structured onboarding plan": 4
-    }
-  },
-  "discipline": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Very informal": 1,
-      "Semi-consistent": 2,
-      "Mostly standardized": 3,
-      "Well-defined": 4
-    }
-  }
-},
-    "score_2_2_4": {
-      "consistency": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Sales or lead management": 1,
-          "Customer onboarding": 2,
-          "Fulfillment or delivery": 3,
-          "Customer support": 4,
-          "None \u2014 it still depends on who\u2019s doing the work": 5
-        }
-      },
-      "review_frequency": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Never \u2014 they\u2019re mostly static": 1,
-          "Occasionally, when problems arise": 2,
-          "Annually or as part of planning cycles": 3,
-          "Quarterly or more frequently": 4
-        }
-      },
-      "ownership": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No one \u2014 it\u2019s not assigned": 1,
-          "Usually the person doing the work": 2,
-          "A team lead or department manager": 3,
-          "A dedicated operations/process owner": 4
-        }
-      },
-      "compliance": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We don\u2019t verify it": 1,
-          "We spot check occasionally": 2,
-          "We review it during team syncs": 3,
-          "We use tracking tools and reporting": 4
-        }
-      },
-      "clarity": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 they\u2019re more like rough guidelines": 1,
-          "Somewhat \u2014 roles and steps are outlined": 2,
-          "Mostly \u2014 they\u2019re detailed but not always used": 3,
-          "Yes \u2014 they\u2019re fully defined and referenced": 4
-        }
-      },
-      "issue_response": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We just fix it and move on": 1,
-          "We try to understand what went wrong": 2,
-          "We discuss it as a team": 3,
-          "We adjust the process to prevent recurrence": 4
-        }
-      },
-      "task_tracking": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Email or chat": 1,
-          "Project management tools (Trello, Monday)": 2,
-          "CRM or ERP software": 3,
-          "Custom dashboards or trackers": 4,
-          "We don\u2019t track task status formally": 5
-        }
-      },
-      "metrics": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No tracking at all": 1,
-          "Only informally or occasionally": 2,
-          "Some basic metrics in reports": 3,
-          "Yes \u2014 we monitor and review metrics": 4
-        }
-      },
-      "scalability": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident at all": 1,
-          "Somewhat confident": 2,
-          "Mostly confident": 3,
-          "Very confident": 4
-        }
-      }
-    },
-    "score_2_5_2_9": {
-      "documentation_access": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Scattered across email, chat, or drives": 1,
-          "Shared folders or team wikis": 2,
-          "Inside workflow/project management tools": 3,
-          "Centrally documented and linked to operations": 4
-        }
-      },
-      "change_communication": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We don\u2019t have a formal update process": 1,
-          "We announce it in a meeting or email": 2,
-          "We update documentation and notify the team": 3,
-          "We track changes and confirm everyone has adopted them": 4
-        }
-      },
-      "knowledge_gap": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Yes \u2014 many tasks are like that": 1,
-          "A few specialized areas only": 2,
-          "We\u2019re working to document those": 3,
-          "No \u2014 everything is documented or trained": 4
-        }
-      },
-      "role_clarity": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Unclear \u2014 people figure it out": 1,
-          "Somewhat \u2014 there\u2019s rough understanding": 2,
-          "Mostly \u2014 key roles are documented": 3,
-          "Very clearly \u2014 with RACI or equivalent models": 4
-        }
-      },
-      "workflow_disruption": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Frequently": 1,
-          "Occasionally": 2,
-          "Rarely": 3,
-          "Almost never": 4
-        }
-      },
-      "resiliency": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Very difficult \u2014 we rely on that person": 1,
-          "Somewhat difficult without guidance": 2,
-          "Mostly manageable with instructions": 3,
-          "Easy \u2014 the process is documented and repeatable": 4
-        }
-      },
-      "standardization": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 everyone documents differently": 1,
-          "Some use a common format, others don\u2019t": 2,
-          "We have a standard template": 3,
-          "Yes \u2014 all teams follow the same structure": 4
-        }
-      },
-      "success_criteria": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not at all": 1,
-          "Sometimes": 2,
-          "Usually": 3,
-          "Always": 4
-        }
-      },
-      "consistency_enforcement": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident": 1,
-          "Somewhat confident": 2,
-          "Mostly confident": 3,
-          "Fully confident": 4
-        }
-      }
-    },
-"score_3_3_4": {
-  "review_frequency": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Never": 1,
-      "Once per year": 2,
-      "Once per quarter": 3,
-      "Reviewed regularly": 4
-    }
-  },
-  "visual_mapping": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Never": 1,
-      "Occasionally": 2,
-      "Annually": 3,
-      "Quarterly": 4
-    }
-  },
-  "mapping_tools": {
-    "type": "multi_select",
-    "weight": 1.0,
-    "values": {
-      "Lucidchart, Miro, or similar": 1,
-      "ClickUp, Notion, or Monday": 2,
-      "Confluence or shared docs": 3,
-      "Whiteboards or paper": 4,
-      "We don’t currently map processes": 5
-    }
-  },
-  "handoffs": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Not documented": 1,
-      "Vaguely": 2,
-      "Mostly": 3,
-      "Clearly defined": 4
-    }
-  },
-  "alerts": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "No": 1,
-      "Sometimes": 2,
-      "Yes — we have alert systems": 3,
-      "Yes — alerts are automated": 4
-    }
-  },
-  "change_management": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "one team makes the change": 1,
-      "informally communicate updates": 2,
-      "hold coordination meetings": 3,
-      "formal review with all stakeholders": 4
-    }
-  },
-  "adaptability": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "No": 1,
-      "Slowly": 2,
-      "within a few months": 3,
-      "Yes": 4
-    }
-  },
-  "process_visibility": {
-    "type": "multiple_choice",
-    "weight": 1.0,
-    "values": {
-      "Very limited": 1,
-      "Some visibility": 2,
-      "track performance in most areas": 3,
-      "full visibility with clear KPIs": 4
-    }
-  }
-}
-,
-    "score_3_5_3_9": {
-      "tool_integration": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No, they\u2019re tracked separately": 1,
-          "Some processes integrate with tools": 2,
-          "Most processes live inside the tools": 3,
-          "Yes \u2014 fully integrated workflows": 4
-        }
-      },
-      "metrics_review": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Rarely or never": 1,
-          "Quarterly": 2,
-          "Monthly": 3,
-          "Weekly or in real-time": 4
-        }
-      },
-      "standardization": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 every team documents differently": 1,
-          "Some consistency, but not standardized": 2,
-          "Mostly standardized": 3,
-          "Fully standardized and enforced": 4
-        }
-      },
-      "team_feedback": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We don\u2019t collect feedback": 1,
-          "We ask during 1:1s or meetings": 2,
-          "We use forms or surveys occasionally": 3,
-          "We have structured feedback loops": 4
-        }
-      },
-      "improvement_input": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Rarely": 1,
-          "Occasionally": 2,
-          "Frequently, but not always implemented": 3,
-          "Frequently, with follow-through": 4
-        }
-      },
-      "incident_review": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No": 1,
-          "Only after critical issues": 2,
-          "Sometimes": 3,
-          "Always \u2014 it\u2019s part of our culture": 4
-        }
-      },
-      "adoption": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident": 1,
-          "Somewhat confident": 2,
-          "Mostly confident": 3,
-          "Fully confident with audit trails": 4
-        }
-      },
-      "automation": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No automation": 1,
-          "A few isolated automations": 2,
-          "Widespread use in certain teams": 3,
-          "Automation is deeply embedded across functions": 4
-        }
-      },
-      "monitoring": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Dashboards or reports": 1,
-          "Workflow audit logs": 2,
-          "Manual check-ins": 3,
-          "Team feedback": 4,
-          "We don\u2019t currently monitor health": 5
-        }
-      },
-      "ownership_model": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No one \u2014 it\u2019s decentralized": 1,
-          "Functional managers own their teams' processes": 2,
-          "A centralized ops or enablement function": 3,
-          "A dedicated BPM, RevOps, or process team": 4
-        }
-      }
-    },
-    "score_4_4_4": {
-      "process_redesign": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Rarely \u2014 only when needed": 1,
-          "Annually as part of planning": 2,
-          "Quarterly based on metrics": 3,
-          "Continuously, as part of operations": 4
-        }
-      },
-      "owner_accountability": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 not part of performance review": 1,
-          "Only at a high level": 2,
-          "Some KPIs are process-based": 3,
-          "Yes \u2014 directly accountable to metrics": 4
-        }
-      },
-      "tool_alignment": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Tools and processes are separate": 1,
-          "Alignment is reviewed during tool onboarding": 2,
-          "Regular syncs to maintain alignment": 3,
-          "Full alignment strategy and governance": 4
-        }
-      },
-      "cx_integration": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 internal efficiency is the priority": 1,
-          "Occasionally, based on feedback": 2,
-          "Often, as part of updates": 3,
-          "Always \u2014 experience is a design priority": 4
-        }
-      },
-      "improvement_cycle": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Stakeholder input": 1,
-          "Cross-functional testing": 2,
-          "Root cause analysis": 3,
-          "Automation review": 4,
-          "None of these": 5
-        }
-      },
-      "adaptive_processes": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 they\u2019re static": 1,
-          "Slightly \u2014 through branching or roles": 2,
-          "Moderately \u2014 through conditional logic": 3,
-          "Yes \u2014 dynamic, rule-based, or AI-driven": 4
-        }
-      },
-      "knowledge_sharing": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Word of mouth or informal sharing": 1,
-          "Internal wikis or SOP libraries": 2,
-          "Structured onboarding and documentation": 3,
-          "Embedded in daily systems and training": 4
-        }
-      },
-      "strategic_alignment": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident": 1,
-          "Somewhat aligned": 2,
-          "Mostly aligned": 3,
-          "Fully aligned and designed with strategy in mind": 4
-        }
-      },
-      "goal_focus": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Reduce costs": 1,
-          "Increase speed or throughput": 2,
-          "Improve experience (customer or team)": 3,
-          "Enable scale or innovation": 4
-        }
-      }
-    },
-    "score_4_5_4_9": {
-      "insight_to_strategy": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Rarely": 1,
-          "Sometimes": 2,
-          "Frequently": 3,
-          "Always \u2014 insights are tightly linked to strategy": 4
-        }
-      },
-      "predictive_analytics": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not at all": 1,
-          "Occasionally, in some areas": 2,
-          "Frequently, with good accuracy": 3,
-          "Yes \u2014 it\u2019s a core capability": 4
-        }
-      },
-      "governance_model": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Performance metrics": 1,
-          "Risk & compliance checks": 2,
-          "SLA tracking": 3,
-          "Change management workflows": 4,
-          "Executive sponsorship": 5
-        }
-      },
-      "remote_visibility": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No formal monitoring": 1,
-          "Manual oversight or reviews": 2,
-          "Digital compliance and reporting": 3,
-          "Real-time dashboards and alerts": 4
-        }
-      },
-      "coe_structure": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No": 1,
-          "We\u2019ve discussed it": 2,
-          "Yes \u2014 newly formed": 3,
-          "Yes \u2014 active and well-established": 4
-        }
-      },
-      "scalability_confidence": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not confident": 1,
-          "Somewhat confident": 2,
-          "Mostly confident": 3,
-          "Fully confident \u2014 proven track record": 4
-        }
-      },
-      "adaptive_governance": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We update as needed": 1,
-          "We review them annually": 2,
-          "We monitor signals and review quarterly": 3,
-          "We have adaptive frameworks built into governance": 4
-        }
-      },
-      "ai_automation": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not part of our strategy": 1,
-          "Used in a few areas": 2,
-          "Actively expanding across departments": 3,
-          "Deeply integrated into all core processes": 4
-        }
-      },
-      "adaptability": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Requires significant rework": 1,
-          "Adaptable with some effort": 2,
-          "Processes are built to flex": 3,
-          "Fully modular and scalable by design": 4
-        }
-      }
-    },
-    "score_5_0": {
-      "bpm_scope": {
-        "type": "multi_select",
-        "weight": 1.0,
-        "values": {
-          "Customer journey design": 1,
-          "Product innovation": 2,
-          "ESG or sustainability initiatives": 3,
-          "AI strategy": 4,
-          "M&A integration": 5,
-          "None of these": 6
-        }
-      },
-      "self_optimizing_processes": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "No \u2014 they require manual updates": 1,
-          "Some minor adaptive capabilities": 2,
-          "Yes \u2014 partially self-tuning": 3,
-          "Yes \u2014 dynamic and responsive at scale": 4
-        }
-      },
-      "culture_alignment": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not really embedded": 1,
-          "Included in some leadership discussions": 2,
-          "Core part of operational training": 3,
-          "Baked into cultural values and rituals": 4
-        }
-      },
-      "compliance_integration": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not connected": 1,
-          "Light oversight only": 2,
-          "Integrated with audits/reviews": 3,
-          "Drives automated compliance enforcement": 4
-        }
-      },
-      "agility": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "It doesn\u2019t \u2014 change is slow": 1,
-          "Some teams can test and adapt": 2,
-          "It supports agile process improvement": 3,
-          "Experimentation is built into the system": 4
-        }
-      },
-      "ai_driven_processes": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "Not at all": 1,
-          "In a few workflows": 2,
-          "In most core functions": 3,
-          "AI is embedded across all major processes": 4
-        }
-      },
-      "benchmarking": {
-        "type": "multiple_choice",
-        "weight": 1.0,
-        "values": {
-          "We don\u2019t benchmark": 1,
-          "Informal or anecdotal comparisons": 2,
-          "Structured internal benchmarking": 3,
-          "Ongoing external benchmarking with industry metrics": 4
-        }
-      }
-    }
-  }
+} 
