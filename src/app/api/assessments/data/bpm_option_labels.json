@@ -1,0 +1,470 @@
+{
+  "task_consistency": {
+    "own_way": "Everyone does it their own way",
+    "experience_memory": "Based on experience and memory",
+    "checklist_notes": "Using checklists or notes",
+    "software_instructions": "Following software or documented instructions"
+  },
+  "process_documentation": {
+    "nothing_documented": "Nothing is documented",
+    "few_things": "A few key things are documented",
+    "most_core": "Most core processes are documented",
+    "everything_documented": "Everything is documented",
+    "no_tools": "No formal tools",
+    "basic_tools": "Basic documentation tools",
+    "mapping_tools": "Process mapping tools",
+    "bpm_software": "Integrated BPM software"
+  },
+  "team_training": {
+    "shadowing": "Shadowing someone else",
+    "basic_docs": "Basic documentation",
+    "structured_training": "Structured training",
+    "comprehensive_onboarding": "Comprehensive onboarding program"
+  },
+  "process_ownership": {
+    "no_owner": "No clear owner",
+    "team_defined": "Defined by the team",
+    "manager_defined": "Defined by a manager",
+    "clear_owner": "Clear owner assigned",
+    "no_one": "No one specific",
+    "team_leads": "Team leads or managers",
+    "operations_team": "Operations team",
+    "dedicated_owner": "Dedicated process owner"
+  },
+  "process_questions": {
+    "all_the_time": "All the time",
+    "weekly": "Weekly",
+    "rarely": "Rarely",
+    "almost_never": "Almost never"
+  },
+  "process_confidence": {
+    "not_confident": "Not confident",
+    "somewhat_confident": "Somewhat confident",
+    "mostly_confident": "Mostly confident",
+    "very_confident": "Very confident"
+  },
+  "process_tools": {
+    "spreadsheets": "Spreadsheets",
+    "project_boards": "Project boards",
+    "chat_tools": "Chat tools",
+    "email": "Email",
+    "workflow_software": "Workflow software",
+    "none": "None"
+  },
+  "workflow_ownership": {
+    "no_clear_ownership": "No clear ownership",
+    "depends_on_day": "Depends on the day",
+    "mostly_clear_roles": "Mostly clear roles",
+    "exact_ownership": "Exact ownership defined"
+  },
+  "operations_approach": {
+    "reactive": "Reactive",
+    "some_systems": "Some systems in place",
+    "organized_informal": "Organized but informal",
+    "structured_proactive": "Structured and proactive"
+  },
+  "process_performance": {
+    "no_tracking": "We don't track performance",
+    "manual_tracking": "Basic manual tracking",
+    "some_metrics": "Some metrics in tools",
+    "comprehensive_tracking": "Comprehensive tracking system"
+  },
+  "process_review": {
+    "never": "Never",
+    "over_year": "Over a year ago",
+    "within_year": "Within the last year",
+    "within_quarter": "Within the last quarter"
+  },
+  "bottleneck_identification": {
+    "dont_look": "We don't actively look",
+    "when_problems": "When problems arise",
+    "regular_reviews": "Through regular reviews",
+    "continuous_monitoring": "Through continuous monitoring"
+  },
+  "process_definition": {
+    "based_on_habits": "No one — it's based on habits",
+    "team_defined": "Each team or person defines their own",
+    "manager_defined": "It's loosely defined by a manager",
+    "clear_owner": "There's a clear owner for each process"
+  },
+  "feedback_collection": {
+    "no_feedback": "We don't collect feedback",
+    "informal": "Informal conversations",
+    "team_meetings": "Regular team meetings",
+    "structured_system": "Structured feedback system"
+  },
+  "change_management": {
+    "no_process": "We don't have a process",
+    "ad_hoc": "Ad-hoc changes",
+    "planned": "Planned updates",
+    "structured": "Structured change management"
+  },
+  "new_team_onboarding": {
+    "no_system": "We don't have a system",
+    "basic_training": "Basic training",
+    "docs_and_training": "Documentation and training",
+    "comprehensive": "Comprehensive onboarding and monitoring"
+  },
+  "process_consistency": {
+    "sales_management": "Sales or lead management",
+    "customer_onboarding": "Customer onboarding",
+    "fulfillment": "Fulfillment or delivery",
+    "customer_support": "Customer support",
+    "none": "None — it still depends on who's doing the work"
+  },
+  "process_review_frequency": {
+    "rarely": "Rarely or never",
+    "yearly": "Once per year",
+    "quarterly": "Once per quarter",
+    "regular": "Reviewed regularly"
+  },
+  "process_verification": {
+    "no_verification": "We don't verify it",
+    "spot_check": "We spot check occasionally",
+    "team_syncs": "We review it during team syncs",
+    "tracking_tools": "We use tracking tools and reporting"
+  },
+  "process_clarity": {
+    "rough_guidelines": "No — they're more like rough guidelines",
+    "basic_outline": "Somewhat — roles and steps are outlined",
+    "detailed": "Mostly — they're detailed but not always used",
+    "fully_defined": "Yes — they're fully defined and referenced"
+  },
+  "process_breakdown": {
+    "fix_and_move": "We just fix it and move on",
+    "understand_issue": "We try to understand what went wrong",
+    "team_discussion": "We discuss it as a team",
+    "process_adjustment": "We adjust the process to prevent recurrence"
+  },
+  "success_measurement": {
+    "no_measurement": "We don't measure success",
+    "basic_tracking": "Basic completion tracking",
+    "key_metrics": "Some key metrics",
+    "comprehensive_kpis": "Comprehensive metrics and KPIs"
+  },
+  "exception_handling": {
+    "as_they_come": "We handle them as they come",
+    "basic_guidelines": "Basic guidelines exist",
+    "clear_process": "Clear exception process",
+    "automated": "Automated exception handling"
+  },
+  "document_storage": {
+    "scattered": "Scattered across email, chat, or drives",
+    "shared_folders": "Shared folders or team wikis",
+    "workflow_tools": "Inside workflow/project management tools",
+    "central_docs": "Centrally documented and linked to operations"
+  },
+  "change_communication": {
+    "no_process": "We don't have a formal update process",
+    "meeting_email": "We announce it in a meeting or email",
+    "update_notify": "We update documentation and notify the team",
+    "track_adoption": "We track changes and confirm everyone has adopted them"
+  },
+  "knowledge_gaps": {
+    "no_tracking": "We don't track knowledge gaps",
+    "team_feedback": "Through team feedback",
+    "regular_audits": "Through regular audits",
+    "systematic": "Through systematic knowledge management"
+  },
+  "cross_team_consistency": {
+    "no_system": "We don't have a system",
+    "basic_guidelines": "Basic guidelines",
+    "regular_reviews": "Regular reviews",
+    "automated": "Automated monitoring"
+  },
+  "performance_metrics": {
+    "no_metrics": "We don't track metrics",
+    "completion_rates": "Basic completion rates",
+    "time_quality": "Time and quality metrics",
+    "comprehensive": "Comprehensive performance indicators"
+  },
+  "improvement_handling": {
+    "no_system": "We don't have a system",
+    "ad_hoc": "Ad-hoc improvements",
+    "regular_reviews": "Regular review cycles",
+    "continuous": "Continuous improvement program"
+  },
+  "documentation_template": {
+    "no_standard": "No — everyone documents differently",
+    "partial": "Some use a common format, others don't",
+    "standard": "We have a standard template",
+    "enforced": "Yes — all teams follow the same structure"
+  },
+  "success_criteria": {
+    "never": "Not at all",
+    "sometimes": "Sometimes",
+    "usually": "Usually",
+    "always": "Always"
+  },
+  "process_confidence": {
+    "not_confident": "Not confident",
+    "somewhat": "Somewhat confident",
+    "mostly": "Mostly confident",
+    "fully": "Fully confident"
+  },
+  "visual_mapping": {
+    "no_maps": "No visual process maps",
+    "few_maps": "A few key processes mapped",
+    "most_mapped": "Most core processes mapped",
+    "all_mapped": "All processes visually mapped"
+  },
+  "mapping_tools": {
+    "spreadsheets": "Spreadsheets",
+    "project_boards": "Project boards",
+    "chat_tools": "Chat tools",
+    "email": "Email",
+    "workflow_software": "Workflow software",
+    "none": "None"
+  },
+  "efficiency_measurement": {
+    "no_measurement": "No formal measurement",
+    "time_tracking": "Basic time tracking",
+    "kpis": "Key performance indicators",
+    "comprehensive": "Comprehensive metrics"
+  },
+  "change_management": {
+    "ad_hoc": "Ad-hoc changes",
+    "basic": "Basic change process",
+    "structured": "Structured change management",
+    "integrated": "Integrated change system"
+  },
+  "tech_role": {
+    "minimal": "Minimal technology use",
+    "basic": "Basic tools and systems",
+    "integrated": "Integrated technology",
+    "core": "Technology is core to processes"
+  },
+  "compliance_ensurance": {
+    "no_check": "No formal checks",
+    "basic": "Basic compliance checks",
+    "regular": "Regular compliance reviews",
+    "automated": "Automated compliance monitoring"
+  },
+  "improvement_identification": {
+    "no_system": "No formal system",
+    "ad_hoc": "Ad-hoc improvements",
+    "regular": "Regular improvement reviews",
+    "continuous": "Continuous improvement system"
+  },
+  "improvement_impact": {
+    "no_measurement": "No formal measurement",
+    "basic_comparison": "Basic before/after comparison",
+    "metrics_tracking": "Metrics tracking",
+    "comprehensive": "Comprehensive impact analysis"
+  },
+  "process_automation": {
+    "no_automation": "No automation",
+    "basic_automation": "Basic task automation",
+    "partial_automation": "Partial process automation",
+    "full_automation": "Full process automation"
+  },
+  "process_metrics": {
+    "no_metrics": "No formal metrics",
+    "basic_metrics": "Basic performance metrics",
+    "regular_metrics": "Regular metric tracking",
+    "comprehensive_metrics": "Comprehensive metric system"
+  },
+  "process_standardization": {
+    "no_standardization": "No standardization",
+    "partial_standardization": "Partial standardization",
+    "mostly_standardized": "Mostly standardized",
+    "fully_standardized": "Fully standardized"
+  },
+  "team_feedback": {
+    "no_feedback": "No formal feedback",
+    "informal_feedback": "Informal feedback",
+    "structured_feedback": "Structured feedback",
+    "continuous_feedback": "Continuous feedback loop"
+  },
+  "improvement_input": {
+    "no_input": "No formal input",
+    "occasional_input": "Occasional input",
+    "regular_input": "Regular input",
+    "continuous_input": "Continuous input"
+  },
+  "incident_review": {
+    "no_review": "No formal review",
+    "critical_only": "Critical incidents only",
+    "major_incidents": "Major incidents",
+    "all_incidents": "All incidents"
+  },
+  "process_adoption": {
+    "not_confident": "Not confident",
+    "somewhat_confident": "Somewhat confident",
+    "mostly_confident": "Mostly confident",
+    "fully_confident": "Fully confident"
+  },
+  "automation_usage": {
+    "no_automation": "No automation",
+    "basic_automation": "Basic automation",
+    "partial_automation": "Partial automation",
+    "full_automation": "Full automation"
+  },
+  "process_monitoring": {
+    "manual_checks": "Manual checks",
+    "basic_tools": "Basic monitoring tools",
+    "advanced_tools": "Advanced monitoring tools",
+    "real_time_monitoring": "Real-time monitoring",
+    "no_monitoring": "No monitoring"
+  },
+  "process_ownership": {
+    "no_ownership": "No clear ownership",
+    "team_ownership": "Team ownership",
+    "manager_ownership": "Manager ownership",
+    "dedicated_owner": "Dedicated process owner"
+  },
+  "process_redesign": {
+    "as_needed": "Rarely — only when needed",
+    "annually": "Annually as part of planning",
+    "quarterly": "Quarterly based on metrics",
+    "continuously": "Continuously, as part of operations"
+  },
+  "owner_accountability": {
+    "no_accountability": "No — not part of performance review",
+    "high_level": "Only at a high level",
+    "some_kpis": "Some KPIs are process-based",
+    "full_accountability": "Yes — directly accountable to metrics"
+  },
+  "tool_alignment": {
+    "separate": "Tools and processes are separate",
+    "onboarding": "Alignment is reviewed during tool onboarding",
+    "regular_sync": "Regular syncs to maintain alignment",
+    "full_alignment": "Full alignment strategy and governance"
+  },
+  "customer_experience": {
+    "internal_focus": "No — internal efficiency is the priority",
+    "occasional_focus": "Occasionally, based on feedback",
+    "regular_focus": "Often, as part of updates",
+    "always_focus": "Always — experience is a design priority"
+  },
+  "improvement_cycle": {
+    "stakeholder_input": "Stakeholder input",
+    "cross_functional": "Cross-functional testing",
+    "root_cause": "Root cause analysis",
+    "automation": "Automation review",
+    "none": "None of these"
+  },
+  "adaptive_processes": {
+    "static": "No — they're static",
+    "slightly_adaptive": "Slightly — through branching or roles",
+    "moderately_adaptive": "Moderately — through conditional logic",
+    "fully_adaptive": "Yes — dynamic, rule-based, or AI-driven"
+  },
+  "knowledge_sharing": {
+    "informal": "Word of mouth or informal sharing",
+    "documentation": "Internal wikis or SOP libraries",
+    "structured": "Structured onboarding and documentation",
+    "embedded": "Embedded in daily systems and training"
+  },
+  "strategic_alignment": {
+    "not_aligned": "Not confident",
+    "somewhat_aligned": "Somewhat aligned",
+    "mostly_aligned": "Mostly aligned",
+    "fully_aligned": "Fully aligned and designed with strategy in mind"
+  },
+  "goal_focus": {
+    "cost_reduction": "Reduce costs",
+    "speed": "Increase speed or throughput",
+    "experience": "Improve experience (customer or team)",
+    "scale": "Enable scale or innovation"
+  },
+  "insight_to_strategy": {
+    "rarely": "Rarely",
+    "sometimes": "Sometimes",
+    "frequently": "Frequently",
+    "always": "Always — insights are tightly linked to strategy"
+  },
+  "predictive_analytics": {
+    "not_at_all": "Not at all",
+    "occasionally": "Occasionally, in some areas",
+    "frequently": "Frequently, with good accuracy",
+    "core_capability": "Yes — it's a core capability"
+  },
+  "governance_model": {
+    "performance_metrics": "Performance metrics",
+    "risk_compliance": "Risk & compliance checks",
+    "sla_tracking": "SLA tracking",
+    "change_management": "Change management workflows",
+    "executive_sponsorship": "Executive sponsorship"
+  },
+  "remote_visibility": {
+    "no_monitoring": "No formal monitoring",
+    "manual_oversight": "Manual oversight or reviews",
+    "digital_compliance": "Digital compliance and reporting",
+    "real_time": "Real-time dashboards and alerts"
+  },
+  "coe_structure": {
+    "no_coe": "No",
+    "discussed": "We've discussed it",
+    "new": "Yes — newly formed",
+    "established": "Yes — active and well-established"
+  },
+  "scalability_confidence": {
+    "not_confident": "Not confident",
+    "somewhat_confident": "Somewhat confident",
+    "mostly_confident": "Mostly confident",
+    "fully_confident": "Fully confident — proven track record"
+  },
+  "adaptive_governance": {
+    "as_needed": "We update as needed",
+    "annually": "We review them annually",
+    "quarterly": "We monitor signals and review quarterly",
+    "adaptive": "We have adaptive frameworks built into governance"
+  },
+  "ai_automation": {
+    "not_part": "Not part of our strategy",
+    "few_areas": "Used in a few areas",
+    "expanding": "Actively expanding across departments",
+    "integrated": "Deeply integrated into all core processes"
+  },
+  "adaptability": {
+    "significant_rework": "Requires significant rework",
+    "some_effort": "Adaptable with some effort",
+    "built_to_flex": "Processes are built to flex",
+    "modular": "Fully modular and scalable by design"
+  },
+  "bpm_scope": {
+    "customer_journey": "Customer journey design",
+    "product_innovation": "Product innovation",
+    "esg_sustainability": "ESG or sustainability initiatives",
+    "ai_strategy": "AI strategy",
+    "ma_integration": "M&A integration",
+    "none": "None of these"
+  },
+  "self_optimizing_processes": {
+    "manual_updates": "No — they require manual updates",
+    "minor_adaptive": "Some minor adaptive capabilities",
+    "partially_self_tuning": "Yes — partially self-tuning",
+    "dynamic_responsive": "Yes — dynamic and responsive at scale"
+  },
+  "culture_alignment": {
+    "not_embedded": "Not really embedded",
+    "leadership_discussions": "Included in some leadership discussions",
+    "operational_training": "Core part of operational training",
+    "cultural_values": "Baked into cultural values and rituals"
+  },
+  "compliance_integration": {
+    "not_connected": "Not connected",
+    "light_oversight": "Light oversight only",
+    "integrated_audits": "Integrated with audits/reviews",
+    "automated_enforcement": "Drives automated compliance enforcement"
+  },
+  "agility": {
+    "slow_change": "It doesn't — change is slow",
+    "some_teams": "Some teams can test and adapt",
+    "supports_improvement": "It supports agile process improvement",
+    "experimentation_built_in": "Experimentation is built into the system"
+  },
+  "ai_driven_processes": {
+    "not_at_all": "Not at all",
+    "few_workflows": "In a few workflows",
+    "most_functions": "In most core functions",
+    "all_major_processes": "AI is embedded across all major processes"
+  },
+  "benchmarking": {
+    "no_benchmarking": "We don't benchmark",
+    "informal_comparisons": "Informal or anecdotal comparisons",
+    "structured_internal": "Structured internal benchmarking",
+    "ongoing_external": "Ongoing external benchmarking with industry metrics"
+  }
+} 
