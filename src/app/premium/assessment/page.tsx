@@ -26,7 +26,38 @@ export default function AssessmentsPage() {
         // Fetch scores from tier2_profiles
         const { data: profileData, error: profileError } = await supabase
           .from("tier2_profiles")
-          .select("sales_score, sales_last_taken, tech_stack_score, tech_stack_last_taken, strategy_score, strategy_last_taken, marketing_score, marketing_last_taken, cx_score, cx_last_taken, digital_score, digital_last_taken, leadership_score, leadership_last_taken, ai_score, ai_last_taken, bpm_score, bpm_last_taken, strategic_maturity_score, strategic_maturity_last_taken, benchmarking_score, benchmarking_last_taken, reassessment_score, reassessment_last_taken")
+          .select(`
+            id,
+            u_id,
+            bpm_score,
+            bpm_last_taken,
+            tech_stack_score,
+            tech_stack_last_taken,
+            strategic_maturity_score,
+            strategic_maturity_last_taken,
+            marketing_score,
+            marketing_last_taken,
+            sales_score,
+            sales_last_taken,
+            cx_score,
+            cx_last_taken,
+            ai_score,
+            ai_last_taken,
+            digital_score,
+            digital_last_taken,
+            leadership_score,
+            leadership_last_taken,
+            benchmarking_score,
+            benchmarking_last_taken,
+            reassessment_score,
+            reassessment_last_taken,
+            created_at,
+            updated_at,
+            overall_score,
+            strategy_score,
+            process_score,
+            technology_score
+          `)
           .eq("u_id", user.u_id)
           .single();
 
@@ -58,7 +89,7 @@ export default function AssessmentsPage() {
           },
           strategy: {
             score: profileData?.strategy_score || null,
-            lastTakenDate: profileData?.strategy_last_taken || null
+            lastTakenDate: null  // No last_taken column for strategy
           },
           marketing: {
             score: profileData?.marketing_score || null,
