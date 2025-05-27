@@ -6,8 +6,8 @@ type AssessmentCardProps = {
   title: string;
   description: string;
   score: number | null;
-  lastTakenDate: string | null; // ISO string
-  userId: string;
+  lastTakenDate: string | null;
+  userId?: string;
 };
 
 export default function AssessmentCard({
