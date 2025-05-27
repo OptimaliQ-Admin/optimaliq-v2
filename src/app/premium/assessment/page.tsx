@@ -5,47 +5,63 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import AssessmentCard from "@/components/assessment/AssessmentCard";
+import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
+
+type AssessmentSlug = keyof typeof assessmentFieldMap;
+type ProfileData = Record<string, number | string | null>;
 
 export default function AssessmentsPage() {
   const { user } = usePremiumUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [assessmentData, setAssessmentData] = useState<{
-    score: number | null;
-    lastTakenDate: string | null;
-  }>({
-    score: null,
-    lastTakenDate: null
-  });
+  const [assessmentData, setAssessmentData] = useState<Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>>({} as Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>);
 
   useEffect(() => {
-    const fetchAssessmentData = async () => {
+    const fetchProfileData = async () => {
       if (!user?.u_id) return;
 
       try {
-        // Fetch only sales assessment data from tier2_profiles
+        const selectFields = Object.values(assessmentFieldMap)
+          .flatMap(({ scoreField, lastTakenField }) => [scoreField, lastTakenField])
+          .join(", ");
+
         const { data: profileData, error: profileError } = await supabase
           .from("tier2_profiles")
-          .select("sales_score, sales_last_taken")
+          .select(selectFields)
           .eq("u_id", user.u_id)
           .single();
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          console.error("❌ Failed to fetch profile data:", profileError);
+          setError("Failed to load assessment data");
+          return;
+        }
 
-        setAssessmentData({
-          score: profileData?.sales_score || null,
-          lastTakenDate: profileData?.sales_last_taken || null
-        });
+        if (!profileData) {
+          setError("No profile data found");
+          return;
+        }
 
+        const assessments = Object.keys(assessmentFieldMap) as AssessmentSlug[];
+        const data = assessments.reduce((acc, slug) => {
+          const mapping = assessmentFieldMap[slug];
+          const profile = profileData as unknown as ProfileData;
+          acc[slug] = {
+            score: profile[mapping.scoreField] as number | null,
+            lastTakenDate: profile[mapping.lastTakenField] as string | null
+          };
+          return acc;
+        }, {} as Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>);
+
+        setAssessmentData(data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching assessment data:", err);
-        setError("Failed to load assessment data");
-        setLoading(false);
+        console.error("❌ Unexpected error:", err);
+        setError("An unexpected error occurred");
       }
     };
 
-    fetchAssessmentData();
+    fetchProfileData();
   }, [user?.u_id]);
 
   if (loading) {
@@ -55,7 +71,13 @@ export default function AssessmentsPage() {
   if (error) {
     return (
       <div className="p-10 text-center text-red-600">
-        <p>{error}</p>
+        <p className="mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Try Again
+        </button>
       </div>
     );
   }
@@ -68,8 +90,8 @@ export default function AssessmentsPage() {
           slug="sales"
           title="Sales Performance"
           description="Evaluate your sales pipeline and conversions."
-          score={assessmentData.score}
-          lastTakenDate={assessmentData.lastTakenDate}
+          score={assessmentData.sales?.score ?? null}
+          lastTakenDate={assessmentData.sales?.lastTakenDate ?? null}
           userId={user?.u_id}
         />
       </div>
