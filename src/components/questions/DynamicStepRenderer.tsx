@@ -87,19 +87,16 @@ export default function DynamicStepRenderer({
     return null;
   }
 
+  const groupKeys = Object.keys(scoreConfig.groups || {}).map(Number);
+  const lastGroupStep = Math.max(...groupKeys);
+
   const group = scoreConfig.groups?.[step.toString()];
-  if (!group) return null;
-
-  // Get the last group number
-  const lastGroupStep = Math.max(...Object.keys(scoreConfig.groups).map(Number));
-
-  // Check if this is the last step and we have final questions for tech stack assessment
-  const isLastStep = step === lastGroupStep;
-  const shouldShowFinalQuestions = isLastStep && assessmentType === "tech_stack" && scoreConfig.finalQuestions;
+  const shouldShowFinalStep = step === lastGroupStep + 1;
+  const shouldShowFinalQuestions = shouldShowFinalStep && assessmentType === "tech_stack" && scoreConfig.finalQuestions;
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
-      {group.map((question) => {
+      {group?.map((question) => {
         const optionsRecord = question.options?.reduce((acc, opt) => ({
           ...acc,
           [opt.value]: { label: opt.label, score: opt.score }
@@ -118,21 +115,17 @@ export default function DynamicStepRenderer({
         );
       })}
 
-      {shouldShowFinalQuestions && scoreConfig.finalQuestions && (
-        <>
-          {scoreConfig.finalQuestions.map((question: Question) => (
-            <DynamicQuestion
-              key={question.key}
-              question={question.label}
-              type={question.type}
-              options={question.categories ? flattenedOptions(question.categories) : undefined}
-              selected={convertToQuestionValue(answers[question.key])}
-              onChange={(value: string | string[]) => onAnswer(question.key, value)}
-              maxSelect={10}
-            />
-          ))}
-        </>
-      )}
+      {shouldShowFinalQuestions && scoreConfig.finalQuestions?.map((question: Question) => (
+        <DynamicQuestion
+          key={question.key}
+          question={question.label}
+          type={question.type}
+          options={question.categories ? flattenedOptions(question.categories) : undefined}
+          selected={convertToQuestionValue(answers[question.key])}
+          onChange={(value: string | string[]) => onAnswer(question.key, value)}
+          maxSelect={10}
+        />
+      ))}
     </div>
   );
-} 
+}
