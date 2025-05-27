@@ -4,7 +4,7 @@ import React from "react";
 import DynamicQuestion from "./DynamicQuestion";
 import { type AssessmentAnswers, type AssessmentAnswerValue } from "@/lib/types/AssessmentAnswers";
 
-type QuestionType = "multiple_choice" | "multi_select" | "text_area";
+type QuestionType = "select" | "multi_select" | "text_area";
 
 type QuestionOption = {
   value: string;
@@ -17,7 +17,6 @@ type Question = {
   label: string;
   type: QuestionType;
   options?: QuestionOption[];
-  order: number;
 };
 
 type ScoreConfig = {
@@ -62,26 +61,20 @@ export default function DynamicStepRenderer({
   answers,
   onAnswer,
 }: Props) {
-  if (!config) {
-    console.error("❌ No config object found");
-    return <div className="text-red-600 text-center p-6">Assessment configuration missing.</div>;
-  }
-
   const normalizedScore = normalizeScore(score);
   const scoreConfig = config[normalizedScore];
-
-  if (!scoreConfig || !scoreConfig.groups) {
-    console.error(`❌ No groups found for score bracket "${normalizedScore}"`);
-    return <div className="text-red-600 text-center p-6">No questions available for your score range.</div>;
+  
+  if (!scoreConfig) {
+    console.error(`No configuration found for score ${score}`);
+    return null;
   }
 
-  // Get questions for the current step
-  const questions = scoreConfig.groups[step.toString()] || [];
+  const group = scoreConfig.groups?.[step.toString()];
+  if (!group) return null;
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
-      {questions.map((question) => {
-        // Convert options array to record format expected by DynamicQuestion
+      {group.map((question) => {
         const optionsRecord = question.options?.reduce((acc, opt) => ({
           ...acc,
           [opt.value]: { label: opt.label, score: opt.score }

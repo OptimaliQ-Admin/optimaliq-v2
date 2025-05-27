@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import AssessmentCard from "@/components/assessment/AssessmentCard";
+import AssessmentCard from "@/components/assessments/AssessmentCard";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 
 type AssessmentSlug = keyof typeof assessmentFieldMap;

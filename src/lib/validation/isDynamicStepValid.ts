@@ -6,13 +6,12 @@ type QuestionConfig = {
       [key: string]: Array<{
         key: string;
         label: string;
-        type: "multiple_choice" | "multi_select" | "text_area";
+        type: "select" | "multi_select" | "text_area";
         options?: Array<{
           value: string;
           label: string;
           score: number;
         }>;
-        order: number;
       }>;
     };
   };

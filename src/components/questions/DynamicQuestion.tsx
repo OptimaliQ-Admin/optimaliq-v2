@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
-type QuestionType = "multiple_choice" | "multi_select" | "text_area";
+type QuestionType = "select" | "multi_select" | "text_area";
 
 type QuestionOption = {
   label: string;
@@ -54,7 +54,7 @@ export default function DynamicQuestion({
     label,
   }));
 
-  if (type === "multiple_choice") {
+  if (type === "select") {
     return (
       <div className="mb-6">
         <h2 className="text-xl font-bold text-gray-800">{question}</h2>
