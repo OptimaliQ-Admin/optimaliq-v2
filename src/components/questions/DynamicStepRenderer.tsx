@@ -2,7 +2,10 @@
 
 import React from "react";
 import DynamicQuestion from "./DynamicQuestion";
-import { type AssessmentAnswers, type AssessmentAnswerValue } from "@/lib/types/AssessmentAnswers";
+import {
+  type AssessmentAnswers,
+  type AssessmentAnswerValue,
+} from "@/lib/types/AssessmentAnswers";
 
 type QuestionType = "select" | "multi_select" | "text_area";
 
@@ -51,7 +54,9 @@ function normalizeScore(score: number): string {
   return "score_1";
 }
 
-function convertToQuestionValue(value: AssessmentAnswerValue): string | string[] {
+function convertToQuestionValue(
+  value: AssessmentAnswerValue
+): string | string[] {
   if (Array.isArray(value)) return value;
   if (typeof value === "string") return value;
   if (typeof value === "number") return value.toString();
@@ -59,11 +64,13 @@ function convertToQuestionValue(value: AssessmentAnswerValue): string | string[]
   return "";
 }
 
-function flattenedOptions(categories: Record<string, string[]>): Record<string, { label: string; score: number }> {
+function flattenedOptions(
+  categories: Record<string, string[]>
+): Record<string, { label: string; score: number }> {
   const result: Record<string, { label: string; score: number }> = {};
   const score = 1;
   Object.entries(categories).forEach(([group, tools]) => {
-    tools.forEach(tool => {
+    tools.forEach((tool) => {
       const key = `${group}:${tool}`;
       result[key] = { label: `${group}: ${tool}`, score };
     });
@@ -87,45 +94,68 @@ export default function DynamicStepRenderer({
     return null;
   }
 
-  const groupKeys = Object.keys(scoreConfig.groups || {}).map(Number);
-  const lastGroupStep = Math.max(...groupKeys);
+  const groupStepCount = Object.keys(scoreConfig.groups || {}).length;
+  const isFinalStep =
+    step === groupStepCount &&
+    assessmentType === "tech_stack" &&
+    !!scoreConfig.finalQuestions;
 
-  const group = scoreConfig.groups?.[step.toString()];
-  const shouldShowFinalStep = step === lastGroupStep + 1;
-  const shouldShowFinalQuestions = shouldShowFinalStep && assessmentType === "tech_stack" && scoreConfig.finalQuestions;
+  // Standard group questions
+  if (step < groupStepCount) {
+    const group = scoreConfig.groups?.[step.toString()];
+    if (!group) return null;
 
-  return (
-    <div className="space-y-8 p-6 max-w-2xl mx-auto">
-      {group?.map((question) => {
-        const optionsRecord = question.options?.reduce((acc, opt) => ({
-          ...acc,
-          [opt.value]: { label: opt.label, score: opt.score }
-        }), {} as Record<string, { label: string; score: number }>);
+    return (
+      <div className="space-y-8 p-6 max-w-2xl mx-auto">
+        {group.map((question) => {
+          const optionsRecord = question.options?.reduce(
+            (acc, opt) => ({
+              ...acc,
+              [opt.value]: { label: opt.label, score: opt.score },
+            }),
+            {} as Record<string, { label: string; score: number }>
+          );
 
-        return (
+          return (
+            <DynamicQuestion
+              key={question.key}
+              question={question.label}
+              type={question.type}
+              options={optionsRecord}
+              selected={convertToQuestionValue(answers[question.key])}
+              onChange={(value: string | string[]) => onAnswer(question.key, value)}
+              maxSelect={question.type === "multi_select" ? 5 : undefined}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  // Final tech stack tool selection questions
+  if (isFinalStep && scoreConfig.finalQuestions) {
+    return (
+      <div className="space-y-8 p-6 max-w-2xl mx-auto">
+        {scoreConfig.finalQuestions.map((question: Question) => (
           <DynamicQuestion
             key={question.key}
             question={question.label}
             type={question.type}
-            options={optionsRecord}
+            options={
+              question.categories
+                ? flattenedOptions(question.categories)
+                : undefined
+            }
             selected={convertToQuestionValue(answers[question.key])}
-            onChange={(value: string | string[]) => onAnswer(question.key, value)}
-            maxSelect={question.type === "multi_select" ? 5 : undefined}
+            onChange={(value: string | string[]) =>
+              onAnswer(question.key, value)
+            }
+            maxSelect={10}
           />
-        );
-      })}
+        ))}
+      </div>
+    );
+  }
 
-      {shouldShowFinalQuestions && scoreConfig.finalQuestions?.map((question: Question) => (
-        <DynamicQuestion
-          key={question.key}
-          question={question.label}
-          type={question.type}
-          options={question.categories ? flattenedOptions(question.categories) : undefined}
-          selected={convertToQuestionValue(answers[question.key])}
-          onChange={(value: string | string[]) => onAnswer(question.key, value)}
-          maxSelect={10}
-        />
-      ))}
-    </div>
-  );
+  return null;
 }
