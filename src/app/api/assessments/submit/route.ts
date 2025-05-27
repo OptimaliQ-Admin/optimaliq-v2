@@ -24,7 +24,7 @@ const slugMap: SlugMap = {
   sales: {
     answerTable: "sales_performance_assessment",
     scoreTable: "score_sales_performance",
-    profileField: "score_sales",
+    profileField: "sales_score",
     lastTakenField: "sales_last_taken"
   },
   // Add more mappings here as needed
