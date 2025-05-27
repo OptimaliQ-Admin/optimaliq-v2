@@ -14,18 +14,17 @@ type QuestionConfig = {
         }>;
       }>;
     };
+    finalQuestions?: Array<{
+      key: string;
+      label: string;
+      type: "select" | "multi_select" | "text_area";
+      categories?: Record<string, string[]>;
+    }>;
   };
 };
 
 function normalizeScore(score: number): string {
-  if (score >= 4.5) return "score_4_5";
-  if (score >= 4.0) return "score_4";
-  if (score >= 3.5) return "score_3_5";
-  if (score >= 3.0) return "score_3";
-  if (score >= 2.5) return "score_2_5";
-  if (score >= 2.0) return "score_2";
-  if (score >= 1.5) return "score_1_5";
-  return "score_1";
+  return `score_${Math.min(Math.max(Math.ceil(score), 1), 5)}`;
 }
 
 export function isDynamicStepValid(
@@ -42,8 +41,13 @@ export function isDynamicStepValid(
     return false;
   }
 
+  const groupStepCount = Object.keys(scoreConfig.groups || {}).length;
+  const isFinalStep = step === groupStepCount && !!scoreConfig.finalQuestions;
+
   // Get questions for the current step
-  const questions = scoreConfig.groups[step.toString()] || [];
+  const questions = isFinalStep && scoreConfig.finalQuestions
+    ? scoreConfig.finalQuestions
+    : scoreConfig.groups[step.toString()] || [];
 
   // Check if all questions in the step have valid answers
   return questions.every((question) => {
@@ -54,7 +58,12 @@ export function isDynamicStepValid(
       return Array.isArray(answer) && answer.length > 0;
     }
 
-    // For multiple choice questions
+    // For text area questions
+    if (question.type === "text_area") {
+      return typeof answer === "string" && answer.trim().length > 0;
+    }
+
+    // For select questions
     return typeof answer === "string" && answer.trim().length > 0;
   });
 } 
