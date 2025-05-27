@@ -219,12 +219,13 @@ export default function DynamicAssessmentPage({ slug }: Props) {
         </div>
 
         <DynamicStepRenderer
-          config={questionConfig}
-          score={score || 0}
-          step={step}
-          answers={formAnswers}
-          onAnswer={handleAnswer}
-        />
+  config={questionConfig}
+  score={score || 0}
+  step={step}
+  answers={formAnswers}
+  onAnswer={handleAnswer}
+  assessmentType={slug}
+/>
 
         <div className="mt-8 flex justify-between">
           <button
