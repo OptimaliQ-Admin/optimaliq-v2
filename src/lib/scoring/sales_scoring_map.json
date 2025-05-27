@@ -329,8 +329,8 @@
         "win_loss": 4,
         "activity": 5
       }
-    }
-  },
+      }
+    },
   "score_3": {
     "lead_generation": {
       "type": "multiple_choice",
@@ -360,8 +360,8 @@
         "manual_spreadsheet": 2,
         "basic_crm": 3,
         "structured_system": 4
-      }
-    },
+    }
+  },
     "sales_team": {
       "type": "multiple_choice",
       "weight": 1.0,

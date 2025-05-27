@@ -36,12 +36,20 @@ export default function AssessmentCard({
     router.push(`/premium/assessment/${slug}`);
   };
 
+  const showScore = score !== null && score !== undefined;
+  const showLastTaken = lastTakenDate !== null && lastTakenDate !== undefined;
+  const lastTaken = lastTakenDate ? new Date(lastTakenDate) : null;
+  const daysSinceLastTaken = lastTaken 
+    ? Math.floor((Date.now() - lastTaken.getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+  const needsRetake = daysSinceLastTaken !== null && daysSinceLastTaken >= 30;
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 mb-4">{description}</p>
       
-      {(score !== undefined && score !== null) && (
+      {showScore && !needsRetake && (
         <div className="mb-4">
           <span className="text-sm font-medium text-gray-500">Score:</span>
           <span className="ml-2 text-lg font-semibold text-blue-600">
@@ -50,9 +58,9 @@ export default function AssessmentCard({
         </div>
       )}
       
-      {lastTakenDate && (
+      {showLastTaken && !needsRetake && (
         <div className="mb-4 text-sm text-gray-500">
-          Last taken {formatDistanceToNow(new Date(lastTakenDate), { addSuffix: true })}
+          Last taken {formatDistanceToNow(new Date(lastTakenDate!), { addSuffix: true })}
         </div>
       )}
       

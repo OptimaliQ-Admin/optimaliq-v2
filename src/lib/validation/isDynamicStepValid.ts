@@ -1,5 +1,22 @@
-import questionConfig from "@/lib/config/question_config.json";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+
+type QuestionConfig = {
+  [key: string]: {
+    groups: {
+      [key: string]: Array<{
+        key: string;
+        label: string;
+        type: "multiple_choice" | "multi_select" | "text_area";
+        options?: Array<{
+          value: string;
+          label: string;
+          score: number;
+        }>;
+        order: number;
+      }>;
+    };
+  };
+};
 
 function normalizeScore(score: number): string {
   if (score >= 4.5) return "score_4_5";
@@ -15,10 +32,11 @@ function normalizeScore(score: number): string {
 export function isDynamicStepValid(
   score: number,
   step: number,
-  answers: AssessmentAnswers
+  answers: AssessmentAnswers,
+  questionConfig: QuestionConfig
 ): boolean {
   const normalizedScore = normalizeScore(score);
-  const scoreConfig = questionConfig[normalizedScore as keyof typeof questionConfig];
+  const scoreConfig = questionConfig[normalizedScore];
 
   if (!scoreConfig) {
     console.error(`No configuration found for score ${score}`);
@@ -26,11 +44,11 @@ export function isDynamicStepValid(
   }
 
   // Get questions for the current step
-  const questions = Object.entries(scoreConfig).slice(step * 3, (step + 1) * 3);
+  const questions = scoreConfig.groups[step.toString()] || [];
 
   // Check if all questions in the step have valid answers
-  return questions.every(([key, question]) => {
-    const answer = answers[key];
+  return questions.every((question) => {
+    const answer = answers[question.key];
 
     // For multi-select questions
     if (question.type === "multi_select") {

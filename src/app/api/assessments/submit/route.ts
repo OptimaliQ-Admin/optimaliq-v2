@@ -22,11 +22,11 @@ export async function POST(request: Request) {
       return NextResponse.json(error, { status: 400 });
     }
 
-    // Load the scoring map for this assessment
-    const scoringMap = await import(`@/lib/scoring/${assessment}_scoring_map.json`);
+    // Load the question config for this assessment
+    const questionConfig = await import(`@/lib/config/${assessment}_question_config.json`);
 
     // Calculate the final score
-    const finalScore = calculateScore(answers, score, scoringMap.default);
+    const finalScore = calculateScore(answers, score, questionConfig.default);
 
     // Log the calculated score
     logAssessmentScore(assessment, { userId, score: finalScore });

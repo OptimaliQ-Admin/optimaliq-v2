@@ -7,7 +7,7 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import DynamicStepRenderer from "@/components/questions/DynamicStepRenderer";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
-import { isStepValid } from "@/lib/validation/isStepValid";
+import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 
 type Props = {
     slug: string;
@@ -118,7 +118,7 @@ export default function DynamicAssessmentPage({ slug }: Props) {
       return;
     }
 
-    const stepIsValid = isStepValid(score, step, formAnswers, questionConfig);
+    const stepIsValid = isDynamicStepValid(score, step, formAnswers, questionConfig);
 
     if (!stepIsValid) {
       alert("Please complete all required questions before continuing.");

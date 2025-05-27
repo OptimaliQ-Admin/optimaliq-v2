@@ -2,10 +2,16 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 
 export type ScoringMap = {
   [key: string]: {
-    [key: string]: {
-      type: "multiple_choice" | "multi_select" | "text_area";
-      weight: number;
-      values: Record<string, number>;
+    groups: {
+      [key: string]: Array<{
+        key: string;
+        type: "multiple_choice" | "multi_select" | "text_area";
+        options: Array<{
+          value: string;
+          label: string;
+          score: number;
+        }>;
+      }>;
     };
   };
 };
@@ -18,25 +24,32 @@ export function calculateScore(
   let totalScore = baseScore;
   let totalWeight = 0;
 
-  Object.entries(scoringMap).forEach(([questionKey, config]) => {
-    const answer = answers[questionKey];
-    if (!answer) return;
+  Object.entries(scoringMap).forEach(([scoreKey, scoreConfig]) => {
+    Object.entries(scoreConfig.groups).forEach(([groupKey, questions]) => {
+      questions.forEach(question => {
+        const answer = answers[question.key];
+        if (!answer) return;
 
-    const questionConfig = config[questionKey];
-    if (!questionConfig) return;
+        const { options } = question;
+        if (!options) return;
 
-    const { weight, values } = questionConfig;
-    totalWeight += weight;
+        totalWeight += 1; // Each question has equal weight
 
-    if (Array.isArray(answer)) {
-      answer.forEach(value => {
-        if (values[value]) {
-          totalScore += values[value] * weight;
+        if (Array.isArray(answer)) {
+          answer.forEach(value => {
+            const option = options.find(opt => opt.value === value);
+            if (option) {
+              totalScore += option.score;
+            }
+          });
+        } else if (typeof answer === "string") {
+          const option = options.find(opt => opt.value === answer);
+          if (option) {
+            totalScore += option.score;
+          }
         }
       });
-    } else if (typeof answer === "string" && values[answer]) {
-      totalScore += values[answer] * weight;
-    }
+    });
   });
 
   return totalWeight > 0 ? totalScore / totalWeight : baseScore;
