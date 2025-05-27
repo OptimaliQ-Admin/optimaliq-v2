@@ -30,6 +30,17 @@ const slugMap: SlugMap = {
   // Add more mappings here as needed
 };
 
+function normalizeScore(score: number): string {
+  if (score >= 4.5) return "score_4_5";
+  if (score >= 4.0) return "score_4";
+  if (score >= 3.5) return "score_3_5";
+  if (score >= 3.0) return "score_3";
+  if (score >= 2.5) return "score_2_5";
+  if (score >= 2.0) return "score_2";
+  if (score >= 1.5) return "score_1_5";
+  return "score_1";
+}
+
 export async function POST(request: Request) {
   try {
     const { assessment, answers, score, userId } = await request.json();
@@ -86,6 +97,9 @@ export async function POST(request: Request) {
       .upsert({
         u_id: userId,
         score: finalScore,
+        gmf_score: score,
+        bracket_key: normalizeScore(finalScore),
+        answers,
         created_at: new Date().toISOString()
       }, {
         onConflict: "u_id"
