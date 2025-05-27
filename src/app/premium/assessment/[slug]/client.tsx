@@ -187,6 +187,21 @@ export default function DynamicAssessmentPage({ slug }: Props) {
     }));
   };
 
+  const getButtonText = () => {
+    if (submitting) return "Submitting...";
+    const totalSteps = Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length;
+    const hasFinal = slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions;
+    const totalStepsWithFinal = hasFinal ? totalSteps + 1 : totalSteps;
+    return step >= totalStepsWithFinal - 1 ? "Submit" : "Next";
+  };
+
+  const getProgressWidth = () => {
+    const totalSteps = Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length;
+    const hasFinal = slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions;
+    const totalStepsWithFinal = hasFinal ? totalSteps + 1 : totalSteps;
+    return `${((step + 1) / totalStepsWithFinal) * 100}%`;
+  };
+
   if (loading) {
     return <div className="p-10 text-center">Loading your assessment...</div>;
   }
@@ -221,11 +236,8 @@ export default function DynamicAssessmentPage({ slug }: Props) {
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-blue-600 h-2.5 rounded-full"
-              style={{ 
-                width: `${((step + 1) / (Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length + 
-                  (slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions ? 1 : 0)) * 100}%` 
-              }}
-            ></div>
+              style={{ width: getProgressWidth() }}
+            />
           </div>
         </div>
 
@@ -259,11 +271,7 @@ export default function DynamicAssessmentPage({ slug }: Props) {
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            {submitting ? "Submitting..." : 
-              step >= (Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length + 
-                (slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions ? 1 : 0)) - 1 
-                ? "Submit" 
-                : "Next"}
+            {getButtonText()}
           </button>
         </div>
       </div>
