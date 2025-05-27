@@ -5,7 +5,7 @@ export type ScoringMap = {
     groups: {
       [key: string]: Array<{
         key: string;
-        type: "multiple_choice" | "multi_select" | "text_area";
+        type: "select" | "multi_select" | "text_area";
         options: Array<{
           value: string;
           label: string;
@@ -24,38 +24,45 @@ export function calculateScore(
   let totalScore = baseScore;
   let totalWeight = 0;
 
-  Object.entries(scoringMap).forEach(([scoreKey, scoreConfig]) => {
-    Object.entries(scoreConfig.groups).forEach(([groupKey, questions]) => {
-      questions.forEach(question => {
-        const answer = answers[question.key];
-        if (!answer) return;
+  // Get the appropriate score bracket based on baseScore
+  const scoreBracket = getBracket(baseScore);
+  const scoreConfig = scoringMap[scoreBracket];
 
-        const { options } = question;
-        if (!options) return;
+  if (!scoreConfig) {
+    console.error(`No scoring configuration found for score bracket ${scoreBracket}`);
+    return baseScore;
+  }
 
-        totalWeight += 1; // Each question has equal weight
+  Object.entries(scoreConfig.groups).forEach(([_, questions]) => {
+    questions.forEach(question => {
+      const answer = answers[question.key];
+      if (!answer) return;
 
-        if (Array.isArray(answer)) {
-          answer.forEach(value => {
-            const option = options.find(opt => opt.value === value);
-            if (option) {
-              totalScore += option.score;
-            }
-          });
-        } else if (typeof answer === "string") {
-          const option = options.find(opt => opt.value === answer);
+      const { options } = question;
+      if (!options) return;
+
+      totalWeight += 1; // Each question has equal weight
+
+      if (Array.isArray(answer)) {
+        answer.forEach(value => {
+          const option = options.find(opt => opt.value === value);
           if (option) {
             totalScore += option.score;
           }
+        });
+      } else if (typeof answer === "string") {
+        const option = options.find(opt => opt.value === answer);
+        if (option) {
+          totalScore += option.score;
         }
-      });
+      }
     });
   });
 
   return totalWeight > 0 ? totalScore / totalWeight : baseScore;
 }
 
-function getBracket(score: number): keyof ScoringMap {
+function getBracket(score: number): string {
   if (score >= 4.5) return "score_4_5";
   if (score >= 4.0) return "score_4";
   if (score >= 3.5) return "score_3_5";

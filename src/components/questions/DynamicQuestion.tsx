@@ -38,7 +38,7 @@ export default function DynamicQuestion({
         {description && <p className="text-gray-600 mt-1">{description}</p>}
         <div className="mt-4">
           <textarea
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             rows={4}
             value={selected as string}
             onChange={(e) => onChange(e.target.value)}
@@ -69,7 +69,7 @@ export default function DynamicQuestion({
                 className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${
                   isSelected
                     ? "border-blue-600 bg-blue-50"
-                    : "border-gray-300 hover:border-blue-400"
+                    : "border-gray-300 bg-white hover:border-blue-400"
                 }`}
                 onClick={() => onChange(opt.value)}
               >

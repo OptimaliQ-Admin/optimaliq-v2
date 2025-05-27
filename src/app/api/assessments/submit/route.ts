@@ -23,10 +23,16 @@ export async function POST(request: Request) {
     }
 
     // Load the question config for this assessment
-    const questionConfig = await import(`@/lib/config/${assessment}_question_config.json`);
+    const questionConfigModule = await import(`@/lib/config/${assessment}_question_config.json`);
+    const questionConfig = questionConfigModule.default;
 
     // Calculate the final score
-    const finalScore = calculateScore(answers, score, questionConfig.default);
+    const finalScore = calculateScore(answers, score, questionConfig);
+
+    // Validate the final score
+    if (typeof finalScore !== "number" || isNaN(finalScore)) {
+      throw new Error("Final score calculation returned invalid value");
+    }
 
     // Log the calculated score
     logAssessmentScore(assessment, { userId, score: finalScore });
