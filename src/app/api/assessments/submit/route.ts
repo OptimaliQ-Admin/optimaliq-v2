@@ -9,6 +9,27 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+type AssessmentMapping = {
+  answerTable: string;
+  scoreTable: string;
+  profileField: string;
+  lastTakenField: string;
+};
+
+type SlugMap = {
+  [key: string]: AssessmentMapping;
+};
+
+const slugMap: SlugMap = {
+  sales: {
+    answerTable: "sales_performance_assessment",
+    scoreTable: "score_sales_performance",
+    profileField: "score_sales",
+    lastTakenField: "sales_last_taken"
+  },
+  // Add more mappings here as needed
+};
+
 export async function POST(request: Request) {
   try {
     const { assessment, answers, score, userId } = await request.json();
@@ -20,6 +41,11 @@ export async function POST(request: Request) {
       const error = { error: "Missing required fields", details: { assessment, answers, score, userId } };
       logAssessmentError(assessment, error);
       return NextResponse.json(error, { status: 400 });
+    }
+
+    const mapping = slugMap[assessment];
+    if (!mapping) {
+      return NextResponse.json({ error: `Unknown assessment slug: ${assessment}` }, { status: 400 });
     }
 
     // Load the question config for this assessment
@@ -37,9 +63,9 @@ export async function POST(request: Request) {
     // Log the calculated score
     logAssessmentScore(assessment, { userId, score: finalScore });
 
-    // Store the full assessment in Supabase
+    // Save answers to assessment table
     const { error: assessmentError } = await supabase
-      .from(`${assessment}_assessment`)
+      .from(mapping.answerTable)
       .upsert({
         u_id: userId,
         answers: answers,
@@ -54,13 +80,29 @@ export async function POST(request: Request) {
       throw new Error("Failed to save assessment");
     }
 
-    // Update tier2_profiles with latest score and timestamp
+    // Save score to score summary table
+    const { error: scoreError } = await supabase
+      .from(mapping.scoreTable)
+      .upsert({
+        u_id: userId,
+        score: finalScore,
+        created_at: new Date().toISOString()
+      }, {
+        onConflict: "u_id"
+      });
+
+    if (scoreError) {
+      console.error("❌ Failed to save score:", scoreError);
+      throw new Error("Failed to save score summary");
+    }
+
+    // Update profile with latest score and timestamp
     const { error: profileError } = await supabase
       .from("tier2_profiles")
       .upsert({
         u_id: userId,
-        [`${assessment}_score`]: finalScore,
-        [`${assessment}_last_taken`]: new Date().toISOString()
+        [mapping.profileField]: finalScore,
+        [mapping.lastTakenField]: new Date().toISOString()
       }, {
         onConflict: "u_id"
       });
