@@ -62,12 +62,17 @@ export default function DynamicStepRenderer({
   answers,
   onAnswer,
 }: Props) {
+  if (!config) {
+    console.error("❌ No config object found");
+    return <div className="text-red-600 text-center p-6">Assessment configuration missing.</div>;
+  }
+
   const normalizedScore = normalizeScore(score);
   const scoreConfig = config[normalizedScore];
 
-  if (!scoreConfig) {
-    console.error(`No configuration found for score ${score}`);
-    return null;
+  if (!scoreConfig || !scoreConfig.groups) {
+    console.error(`❌ No groups found for score bracket "${normalizedScore}"`);
+    return <div className="text-red-600 text-center p-6">No questions available for your score range.</div>;
   }
 
   // Get questions for the current step

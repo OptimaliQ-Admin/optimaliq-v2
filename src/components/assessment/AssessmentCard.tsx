@@ -22,14 +22,10 @@ export default function AssessmentCard({
 
   const getButtonText = () => {
     if (!lastTakenDate) return "Start Assessment";
-    
+
     const lastTaken = new Date(lastTakenDate);
-    const daysSinceLastTaken = Math.floor(
-      (Date.now() - lastTaken.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    
-    if (daysSinceLastTaken >= 30) return "Retake Assessment";
-    return "View Results";
+    const daysAgo = (Date.now() - lastTaken.getTime()) / (1000 * 60 * 60 * 24);
+    return daysAgo >= 30 ? "Retake Assessment" : "View Results";
   };
 
   const handleClick = () => {
@@ -43,6 +39,15 @@ export default function AssessmentCard({
     ? Math.floor((Date.now() - lastTaken.getTime()) / (1000 * 60 * 60 * 24))
     : null;
   const needsRetake = daysSinceLastTaken !== null && daysSinceLastTaken >= 30;
+
+  // Debug logging
+  console.log({
+    score,
+    lastTakenDate,
+    daysSinceLastTaken,
+    needsRetake,
+    buttonText: getButtonText(),
+  });
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
@@ -58,9 +63,9 @@ export default function AssessmentCard({
         </div>
       )}
       
-      {showLastTaken && !needsRetake && (
+      {showLastTaken && !needsRetake && lastTaken && !isNaN(lastTaken.getTime()) && (
         <div className="mb-4 text-sm text-gray-500">
-          Last taken {formatDistanceToNow(new Date(lastTakenDate!), { addSuffix: true })}
+          Last taken {formatDistanceToNow(lastTaken, { addSuffix: true })}
         </div>
       )}
       
