@@ -86,7 +86,15 @@ export default function AssessmentsPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Assessments</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AssessmentCard
+      <AssessmentCard
+  slug="bpm"
+  title="Business Process Maturity"
+  description="Analyze your internal workflows and process scalability."
+  score={assessmentData.bpm?.score ?? null}
+  lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
+  userId={user?.u_id}
+/>
+<AssessmentCard
           slug="sales"
           title="Sales Performance"
           description="Evaluate your sales pipeline and conversions."

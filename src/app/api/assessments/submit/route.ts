@@ -27,7 +27,12 @@ const slugMap: SlugMap = {
     profileField: "sales_score",
     lastTakenField: "sales_last_taken"
   },
-  // Add more mappings here as needed
+  bpm: {
+    answerTable: "bpm_assessment",
+    scoreTable: "score_bpm",
+    profileField: "bpm_score",
+    lastTakenField: "bpm_last_taken"
+  }
 };
 
 function normalizeScore(score: number): string {
