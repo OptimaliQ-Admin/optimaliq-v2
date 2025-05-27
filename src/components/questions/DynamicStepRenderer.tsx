@@ -24,11 +24,11 @@ type ScoreConfigGroup = {
   groups: {
     [key: string]: Question[];
   };
+  finalQuestions?: Question[];
 };
 
 type ScoreConfig = {
   [key: string]: ScoreConfigGroup;
-  finalQuestions?: Question[];
 };
 
 type Props = {
@@ -61,7 +61,7 @@ function convertToQuestionValue(value: AssessmentAnswerValue): string | string[]
 
 function flattenedOptions(categories: Record<string, string[]>): Record<string, { label: string; score: number }> {
   const result: Record<string, { label: string; score: number }> = {};
-  let score = 1;
+  const score = 1;
   Object.entries(categories).forEach(([group, tools]) => {
     tools.forEach(tool => {
       const key = `${group}:${tool}`;
@@ -95,7 +95,7 @@ export default function DynamicStepRenderer({
 
   // Check if this is the last step and we have final questions for tech stack assessment
   const isLastStep = step === lastGroupStep;
-  const shouldShowFinalQuestions = isLastStep && assessmentType === "tech_stack" && config.finalQuestions;
+  const shouldShowFinalQuestions = isLastStep && assessmentType === "tech_stack" && scoreConfig.finalQuestions;
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
@@ -118,9 +118,9 @@ export default function DynamicStepRenderer({
         );
       })}
 
-      {shouldShowFinalQuestions && config.finalQuestions && (
+      {shouldShowFinalQuestions && scoreConfig.finalQuestions && (
         <>
-          {config.finalQuestions.map((question: Question) => (
+          {scoreConfig.finalQuestions.map((question: Question) => (
             <DynamicQuestion
               key={question.key}
               question={question.label}
