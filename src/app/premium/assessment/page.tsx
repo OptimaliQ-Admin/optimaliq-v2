@@ -5,124 +5,36 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import AssessmentCard from "@/components/assessment/AssessmentCard";
-import { assessments } from "@/lib/utils/assessmentMeta";
 
 export default function AssessmentsPage() {
   const { user } = usePremiumUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [assessmentData, setAssessmentData] = useState<{
-    [key: string]: {
-      score: number | null;
-      lastTakenDate: string | null;
-    };
-  }>({});
+    score: number | null;
+    lastTakenDate: string | null;
+  }>({
+    score: null,
+    lastTakenDate: null
+  });
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
       if (!user?.u_id) return;
 
       try {
-        // Fetch scores from tier2_profiles
+        // Fetch only sales assessment data from tier2_profiles
         const { data: profileData, error: profileError } = await supabase
           .from("tier2_profiles")
-          .select(`
-            id,
-            u_id,
-            bpm_score,
-            bpm_last_taken,
-            tech_stack_score,
-            tech_stack_last_taken,
-            strategic_maturity_score,
-            strategic_maturity_last_taken,
-            marketing_score,
-            marketing_last_taken,
-            sales_score,
-            sales_last_taken,
-            cx_score,
-            cx_last_taken,
-            ai_score,
-            ai_last_taken,
-            digital_score,
-            digital_last_taken,
-            leadership_score,
-            leadership_last_taken,
-            benchmarking_score,
-            benchmarking_last_taken,
-            reassessment_score,
-            reassessment_last_taken,
-            created_at,
-            updated_at,
-            overall_score,
-            strategy_score,
-            process_score,
-            technology_score
-          `)
+          .select("sales_score, sales_last_taken")
           .eq("u_id", user.u_id)
           .single();
 
         if (profileError) throw profileError;
 
-        // Fetch scores from score tables
-        const { data: scoreData, error: scoreError } = await supabase
-          .from("score_sales_performance")
-          .select("gmf_score, created_at")
-          .eq("u_id", user.u_id)
-          .order("created_at", { ascending: false })
-          .limit(1);
-
-        if (scoreError) throw scoreError;
-
-        // Combine the data
         setAssessmentData({
-          sales: {
-            score: profileData?.sales_score || null,
-            lastTakenDate: profileData?.sales_last_taken || null
-          },
-          bpm: {
-            score: profileData?.bpm_score || null,
-            lastTakenDate: profileData?.bpm_last_taken || null
-          },
-          tech: {
-            score: profileData?.tech_stack_score || null,
-            lastTakenDate: profileData?.tech_stack_last_taken || null
-          },
-          strategy: {
-            score: profileData?.strategy_score || null,
-            lastTakenDate: null  // No last_taken column for strategy
-          },
-          marketing: {
-            score: profileData?.marketing_score || null,
-            lastTakenDate: profileData?.marketing_last_taken || null
-          },
-          customer: {
-            score: profileData?.cx_score || null,
-            lastTakenDate: profileData?.cx_last_taken || null
-          },
-          digital: {
-            score: profileData?.digital_score || null,
-            lastTakenDate: profileData?.digital_last_taken || null
-          },
-          leadership: {
-            score: profileData?.leadership_score || null,
-            lastTakenDate: profileData?.leadership_last_taken || null
-          },
-          ai: {
-            score: profileData?.ai_score || null,
-            lastTakenDate: profileData?.ai_last_taken || null
-          },
-          strategic_maturity: {
-            score: profileData?.strategic_maturity_score || null,
-            lastTakenDate: profileData?.strategic_maturity_last_taken || null
-          },
-          benchmarking: {
-            score: profileData?.benchmarking_score || null,
-            lastTakenDate: profileData?.benchmarking_last_taken || null
-          },
-          reassessment: {
-            score: profileData?.reassessment_score || null,
-            lastTakenDate: profileData?.reassessment_last_taken || null
-          }
+          score: profileData?.sales_score || null,
+          lastTakenDate: profileData?.sales_last_taken || null
         });
 
         setLoading(false);
@@ -152,17 +64,14 @@ export default function AssessmentsPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Assessments</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {assessments.map((assessment) => (
-          <AssessmentCard
-            key={assessment.slug}
-            slug={assessment.slug}
-            title={assessment.title}
-            description={assessment.description}
-            score={assessmentData[assessment.slug]?.score ?? null}
-            lastTakenDate={assessmentData[assessment.slug]?.lastTakenDate ?? null}
-            userId={user?.u_id}
-          />
-        ))}
+        <AssessmentCard
+          slug="sales"
+          title="Sales Performance"
+          description="Evaluate your sales pipeline and conversions."
+          score={assessmentData.score}
+          lastTakenDate={assessmentData.lastTakenDate}
+          userId={user?.u_id}
+        />
       </div>
     </div>
   );
