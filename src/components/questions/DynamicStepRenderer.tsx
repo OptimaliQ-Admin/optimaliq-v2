@@ -17,14 +17,18 @@ type Question = {
   label: string;
   type: QuestionType;
   options?: QuestionOption[];
+  categories?: Record<string, string[]>;
+};
+
+type ScoreConfigGroup = {
+  groups: {
+    [key: string]: Question[];
+  };
 };
 
 type ScoreConfig = {
-  [key: string]: {
-    groups: {
-      [key: string]: Question[];
-    };
-  };
+  [key: string]: ScoreConfigGroup;
+  finalQuestions?: Question[];
 };
 
 type Props = {
@@ -33,6 +37,7 @@ type Props = {
   step: number;
   answers: AssessmentAnswers;
   onAnswer: (key: string, value: AssessmentAnswerValue) => void;
+  assessmentType?: string;
 };
 
 function normalizeScore(score: number): string {
@@ -54,16 +59,29 @@ function convertToQuestionValue(value: AssessmentAnswerValue): string | string[]
   return "";
 }
 
+function flattenedOptions(categories: Record<string, string[]>): Record<string, { label: string; score: number }> {
+  const result: Record<string, { label: string; score: number }> = {};
+  let score = 1;
+  Object.entries(categories).forEach(([group, tools]) => {
+    tools.forEach(tool => {
+      const key = `${group}:${tool}`;
+      result[key] = { label: `${group}: ${tool}`, score };
+    });
+  });
+  return result;
+}
+
 export default function DynamicStepRenderer({
   config,
   score,
   step,
   answers,
   onAnswer,
+  assessmentType,
 }: Props) {
   const normalizedScore = normalizeScore(score);
   const scoreConfig = config[normalizedScore];
-  
+
   if (!scoreConfig) {
     console.error(`No configuration found for score ${score}`);
     return null;
@@ -71,6 +89,13 @@ export default function DynamicStepRenderer({
 
   const group = scoreConfig.groups?.[step.toString()];
   if (!group) return null;
+
+  // Get the last group number
+  const lastGroupStep = Math.max(...Object.keys(scoreConfig.groups).map(Number));
+
+  // Check if this is the last step and we have final questions for tech stack assessment
+  const isLastStep = step === lastGroupStep;
+  const shouldShowFinalQuestions = isLastStep && assessmentType === "tech_stack" && config.finalQuestions;
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">
@@ -92,6 +117,22 @@ export default function DynamicStepRenderer({
           />
         );
       })}
+
+      {shouldShowFinalQuestions && config.finalQuestions && (
+        <>
+          {config.finalQuestions.map((question: Question) => (
+            <DynamicQuestion
+              key={question.key}
+              question={question.label}
+              type={question.type}
+              options={question.categories ? flattenedOptions(question.categories) : undefined}
+              selected={convertToQuestionValue(answers[question.key])}
+              onChange={(value: string | string[]) => onAnswer(question.key, value)}
+              maxSelect={10}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 } 

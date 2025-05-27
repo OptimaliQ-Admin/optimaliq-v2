@@ -32,8 +32,15 @@ const slugMap: SlugMap = {
     scoreTable: "score_bpm",
     profileField: "bpm_score",
     lastTakenField: "bpm_last_taken"
+  },
+  tech_stack: {
+    answerTable: "tech_stack_assessment",
+    scoreTable: "score_tech_stack",
+    profileField: "tech_stack_score",
+    lastTakenField: "tech_stack_last_taken"
   }
 };
+
 
 function normalizeScore(score: number): string {
   if (score >= 4.5) return "score_4_5";
@@ -129,6 +136,27 @@ export async function POST(request: Request) {
     if (profileError) {
       console.error("❌ Failed to update profile:", profileError);
       throw new Error("Failed to update profile");
+    }
+
+    // For tech stack assessment, save the selected tools
+    if (assessment === "tech_stack") {
+      const selectedTools = answers["current_tech_stack"];
+      if (selectedTools) {
+        const { error: techStackError } = await supabase
+          .from("user_tech_stack")
+          .upsert({
+            u_id: userId,
+            selected_tools: selectedTools,
+            created_at: new Date().toISOString()
+          }, {
+            onConflict: "u_id"
+          });
+
+        if (techStackError) {
+          console.error("❌ Failed to save tech stack:", techStackError);
+          throw new Error("Failed to save tech stack selections");
+        }
+      }
     }
 
     return NextResponse.json({ score: finalScore });

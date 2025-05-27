@@ -86,15 +86,15 @@ export default function AssessmentsPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Assessments</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <AssessmentCard
-  slug="bpm"
-  title="Business Process Maturity"
-  description="Analyze your internal workflows and process scalability."
-  score={assessmentData.bpm?.score ?? null}
-  lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
-  userId={user?.u_id}
-/>
-<AssessmentCard
+        <AssessmentCard
+          slug="bpm"
+          title="Business Process Maturity"
+          description="Analyze your internal workflows and process scalability."
+          score={assessmentData.bpm?.score ?? null}
+          lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
           slug="sales"
           title="Sales Performance"
           description="Evaluate your sales pipeline and conversions."
@@ -102,7 +102,15 @@ export default function AssessmentsPage() {
           lastTakenDate={assessmentData.sales?.lastTakenDate ?? null}
           userId={user?.u_id}
         />
+        <AssessmentCard
+          slug="tech_stack"
+          title="Technology Stack"
+          description="Audit your current tools and get recommendations to modernize."
+          score={assessmentData.tech_stack?.score ?? null}
+          lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
       </div>
     </div>
-  );
+  );  
 }
