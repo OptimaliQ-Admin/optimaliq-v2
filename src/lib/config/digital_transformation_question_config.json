@@ -1,0 +1,1087 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "tech_adoption",
+          "label": "How would you describe your current approach to technology adoption?",
+          "type": "select",
+          "options": [
+            { "value": "avoid_change", "label": "We avoid change whenever possible", "score": 1 },
+            { "value": "reactive", "label": "We adopt only when something breaks", "score": 2 },
+            { "value": "cost_driven", "label": "We make changes when there's a clear cost savings", "score": 3 },
+            { "value": "open_but_inactive", "label": "We're open but haven't acted on it yet", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "manual_systems",
+          "label": "Which of the following systems are still heavily manual in your organization?",
+          "type": "multi_select",
+          "options": [
+            { "value": "billing", "label": "Billing or invoicing", "score": 1 },
+            { "value": "customer_comm", "label": "Customer communication", "score": 1 },
+            { "value": "scheduling", "label": "Employee scheduling", "score": 1 },
+            { "value": "inventory", "label": "Inventory or fulfillment", "score": 1 },
+            { "value": "reporting", "label": "Reporting and dashboards", "score": 1 },
+            { "value": "all", "label": "All of the above", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "performance_visibility",
+          "label": "What's your current level of visibility into company performance through digital dashboards or tools?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None — we rely on verbal updates or email", "score": 1 },
+            { "value": "basic", "label": "Basic — we use Excel or similar", "score": 2 },
+            { "value": "some", "label": "Some — we have basic dashboards", "score": 3 },
+            { "value": "high", "label": "High — we have real-time visibility", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "transformation_roadmap",
+          "label": "Do you have a digital transformation roadmap or vision in place?",
+          "type": "select",
+          "options": [
+            { "value": "no_roadmap", "label": "No roadmap or long-term plan", "score": 1 },
+            { "value": "discussed", "label": "We've discussed the need for one", "score": 2 },
+            { "value": "draft", "label": "A draft exists but hasn't been executed", "score": 3 },
+            { "value": "departmental", "label": "Yes, but only within one department", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "change_management",
+          "label": "How do you typically manage changes to processes or systems?",
+          "type": "select",
+          "options": [
+            { "value": "avoid_changes", "label": "We avoid making changes", "score": 1 },
+            { "value": "reactive", "label": "We make changes reactively", "score": 2 },
+            { "value": "informal", "label": "We plan changes informally", "score": 3 },
+            { "value": "checklist", "label": "We use a checklist or informal reviews", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "tech_ownership",
+          "label": "Who currently drives technology or digital decisions in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "no_owner", "label": "No one owns this", "score": 1 },
+            { "value": "process_manager", "label": "Whoever is managing the process", "score": 2 },
+            { "value": "tech_savvy", "label": "A tech-savvy employee or manager", "score": 3 },
+            { "value": "executive", "label": "Executive team on an as-needed basis", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "innovation_approach",
+          "label": "How would your team describe the company's approach to innovation and change?",
+          "type": "select",
+          "options": [
+            { "value": "resistant", "label": "Resistant to change", "score": 1 },
+            { "value": "cautious", "label": "Cautiously curious", "score": 2 },
+            { "value": "slow", "label": "Open but slow to act", "score": 3 },
+            { "value": "enthusiastic", "label": "Enthusiastic with the right support", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "tech_blocker",
+          "label": "What's the biggest blocker to adopting new technology or modernizing systems today?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "current_tools",
+          "label": "What digital tools (if any) do you currently rely on?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "modernization_priority",
+          "label": "If you could modernize one part of your business today, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "digital_systems",
+          "label": "Which of the following digital systems are currently in use across your organization?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "A CRM or contact database", "score": 1 },
+            { "value": "marketing", "label": "Email marketing or SMS platforms", "score": 1 },
+            { "value": "ecommerce", "label": "E-commerce or POS software", "score": 1 },
+            { "value": "project", "label": "Project or task management tools", "score": 1 },
+            { "value": "analytics", "label": "Business analytics dashboards", "score": 1 },
+            { "value": "none", "label": "None of the above", "score": 1 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "tool_introduction",
+          "label": "How do you introduce new tools or systems to your team?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "We don't have a structured process", "score": 1 },
+            { "value": "self_explore", "label": "We provide access and let people explore", "score": 2 },
+            { "value": "basic_training", "label": "We offer some basic training", "score": 3 },
+            { "value": "documentation", "label": "We have onboarding documentation or sessions", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "digital_mindset",
+          "label": "How would you describe your company's mindset toward digital tools?",
+          "type": "select",
+          "options": [
+            { "value": "skeptical", "label": "Skeptical or overwhelmed", "score": 1 },
+            { "value": "cautious", "label": "Cautiously optimistic", "score": 2 },
+            { "value": "curious", "label": "Curious but cautious", "score": 3 },
+            { "value": "eager", "label": "Eager with limited guidance", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "legacy_replacement",
+          "label": "What's your current strategy for replacing legacy or outdated systems?",
+          "type": "select",
+          "options": [
+            { "value": "wait_break", "label": "We wait until something breaks", "score": 1 },
+            { "value": "patch", "label": "We patch or workaround issues", "score": 2 },
+            { "value": "evaluate", "label": "We evaluate alternatives occasionally", "score": 3 },
+            { "value": "identified", "label": "We have identified targets but haven't prioritized action", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "adoption_struggles",
+          "label": "What do your employees struggle with most when adopting digital tools?",
+          "type": "select",
+          "options": [
+            { "value": "confusion", "label": "Confusion about which tools to use", "score": 1 },
+            { "value": "fear", "label": "Fear of learning new systems", "score": 2 },
+            { "value": "time", "label": "Lack of time or training", "score": 3 },
+            { "value": "value", "label": "Not seeing the value or impact", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "data_tracking",
+          "label": "How do you currently track customer or operational data?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track anything", "score": 1 },
+            { "value": "spreadsheets", "label": "We use spreadsheets or printed reports", "score": 2 },
+            { "value": "basic_tools", "label": "Some data lives in tools like QuickBooks or Shopify", "score": 3 },
+            { "value": "multiple_tools", "label": "We use 2–3 different tools, but not in sync", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "disruption_confidence",
+          "label": "How confident are you that your business could adapt to a major digital disruption (e.g. industry shift, new platform, customer behavior change)?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident at all", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident with outside help", "score": 3 },
+            { "value": "very", "label": "Very confident — we adapt quickly", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "recent_modernization",
+          "label": "What's a recent process or system you've tried to modernize, and how did it go?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "system_concerns",
+          "label": "What's your biggest concern when evaluating new digital systems or providers?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "outdated_areas",
+          "label": "What part of your business feels most outdated or behind from a tech perspective?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "tool_count",
+          "label": "How many different digital tools or platforms are currently used across your organization?",
+          "type": "select",
+          "options": [
+            { "value": "1_2", "label": "1–2 tools", "score": 1 },
+            { "value": "3_5", "label": "3–5 tools", "score": 2 },
+            { "value": "6_10", "label": "6–10 tools", "score": 3 },
+            { "value": "more_10", "label": "More than 10 tools", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "system_integration",
+          "label": "How integrated are the systems and tools you currently use?",
+          "type": "select",
+          "options": [
+            { "value": "not_integrated", "label": "Not integrated at all", "score": 1 },
+            { "value": "loosely_connected", "label": "A few are loosely connected", "score": 2 },
+            { "value": "some_apis", "label": "We use connectors or APIs for some workflows", "score": 3 },
+            { "value": "most_sync", "label": "Most systems share data or sync reliably", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "improvement_prioritization",
+          "label": "How do you identify and prioritize areas for digital improvement?",
+          "type": "select",
+          "options": [
+            { "value": "complaints", "label": "Based on user complaints or urgency", "score": 1 },
+            { "value": "leadership", "label": "Based on leadership direction", "score": 2 },
+            { "value": "team_feedback", "label": "Through team feedback and pain points", "score": 3 },
+            { "value": "data_driven", "label": "Via performance data or ROI opportunities", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "active_improvements",
+          "label": "Which of the following are actively being evaluated or improved right now?",
+          "type": "multi_select",
+          "options": [
+            { "value": "workflows", "label": "Internal workflows or automation", "score": 1 },
+            { "value": "customer_service", "label": "Customer communication or service", "score": 1 },
+            { "value": "inventory", "label": "Inventory or logistics", "score": 1 },
+            { "value": "ecommerce", "label": "Website or ecommerce experience", "score": 1 },
+            { "value": "financial", "label": "Financial or reporting systems", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "leadership_view",
+          "label": "How does your leadership team view digital transformation?",
+          "type": "select",
+          "options": [
+            { "value": "buzzword", "label": "As a buzzword or future concern", "score": 1 },
+            { "value": "future", "label": "As something we need to do eventually", "score": 2 },
+            { "value": "priority", "label": "As a current strategic priority", "score": 3 },
+            { "value": "core", "label": "As core to our competitive advantage", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "decision_data",
+          "label": "What types of data do you use to make digital transformation decisions?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_feedback", "label": "Customer feedback", "score": 1 },
+            { "value": "operational_kpis", "label": "Operational KPIs", "score": 1 },
+            { "value": "tool_usage", "label": "Tool usage or adoption", "score": 1 },
+            { "value": "benchmarking", "label": "Benchmarking or competitor research", "score": 1 },
+            { "value": "none", "label": "None — we decide based on intuition", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_selection_confidence",
+          "label": "How confident are you in your ability to choose the right digital tools for your needs?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "very", "label": "Very confident with the right support", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "transformation_ownership",
+          "label": "Who owns or champions digital transformation within your organization?",
+          "type": "select",
+          "options": [
+            { "value": "no_one", "label": "No one specifically", "score": 1 },
+            { "value": "department", "label": "A department leader or manager", "score": 2 },
+            { "value": "executive", "label": "Executive sponsor or cross-functional group", "score": 3 },
+            { "value": "dedicated", "label": "A dedicated digital or transformation lead", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "frustrating_experience",
+          "label": "What's the most frustrating part of your current digital experience (internal or customer-facing)?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "recent_improvement",
+          "label": "What's one digital improvement you've made recently that had a positive impact?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "process_consistency",
+          "label": "How consistently do teams follow documented digital processes or workflows?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — everyone does it differently", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — we're improving consistency", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we have shared SOPs or systems", "score": 3 },
+            { "value": "always", "label": "Always — our processes are standardized and reinforced", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "cx_support",
+          "label": "How do digital tools support your customer experience today?",
+          "type": "select",
+          "options": [
+            { "value": "no_impact", "label": "Tools don't directly impact CX", "score": 1 },
+            { "value": "varies", "label": "CX varies depending on who's using the tools", "score": 2 },
+            { "value": "basic_automation", "label": "Tools help us automate basic support or updates", "score": 3 },
+            { "value": "personalized", "label": "Tools enable personalized, consistent experiences", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_review",
+          "label": "How often do you review and update your digital tools or vendors?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "Only when something breaks or renews", "score": 1 },
+            { "value": "annual", "label": "Annually during budgeting", "score": 2 },
+            { "value": "biannual", "label": "Every 6 months based on performance", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly or in agile planning cycles", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "beneficial_areas",
+          "label": "Which internal areas have benefited most from recent digital upgrades?",
+          "type": "multi_select",
+          "options": [
+            { "value": "operations", "label": "Operations/logistics", "score": 1 },
+            { "value": "sales", "label": "Sales/marketing", "score": 1 },
+            { "value": "service", "label": "Customer service", "score": 1 },
+            { "value": "hr", "label": "HR/payroll", "score": 1 },
+            { "value": "finance", "label": "Finance/reporting", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "effectiveness_measurement",
+          "label": "How do you measure the effectiveness of digital tools or transformation efforts?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure impact yet", "score": 1 },
+            { "value": "qualitative", "label": "We rely on qualitative feedback", "score": 2 },
+            { "value": "adoption", "label": "We track adoption or usage", "score": 3 },
+            { "value": "metrics", "label": "We monitor efficiency, ROI, or CX metrics", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "strategy_alignment",
+          "label": "How connected is your technology strategy to your business goals?",
+          "type": "select",
+          "options": [
+            { "value": "loose", "label": "It's loosely connected", "score": 1 },
+            { "value": "pain_points", "label": "We align tech with pain points", "score": 2 },
+            { "value": "priorities", "label": "We define priorities based on goals", "score": 3 },
+            { "value": "co_planning", "label": "We co-plan tech strategy and business planning", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "scaling_preparedness",
+          "label": "How prepared are you to scale your operations with digital tools (e.g. onboarding new hires, opening a new location)?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not very prepared", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — it would be messy", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we could scale with effort", "score": 3 },
+            { "value": "fully", "label": "Fully — we've built systems to support scale", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "change_management",
+          "label": "What's your current approach to managing digital change with employees or customers?",
+          "type": "select",
+          "options": [
+            { "value": "rollout", "label": "We just roll it out and hope for the best", "score": 1 },
+            { "value": "requested", "label": "We provide training if requested", "score": 2 },
+            { "value": "announcements", "label": "We use some internal announcements or guides", "score": 3 },
+            { "value": "process", "label": "We follow a change enablement process", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "proud_initiative",
+          "label": "What's a recent digital initiative you're proud of — and why did it work?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "next_priority",
+          "label": "What's the next priority for your digital roadmap?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategy_alignment",
+          "label": "How aligned is your digital transformation roadmap with your company's broader growth strategy?",
+          "type": "select",
+          "options": [
+            { "value": "light", "label": "Lightly aligned — priorities are set separately", "score": 1 },
+            { "value": "major", "label": "Aligned for major projects only", "score": 2 },
+            { "value": "quarterly", "label": "Reviewed together quarterly", "score": 3 },
+            { "value": "integrated", "label": "Fully integrated and co-owned across leadership", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "tool_adoption",
+          "label": "How do you ensure new digital tools are successfully adopted by employees?",
+          "type": "select",
+          "options": [
+            { "value": "self_learn", "label": "We give access and let teams self-learn", "score": 1 },
+            { "value": "basic_training", "label": "We provide basic training and documentation", "score": 2 },
+            { "value": "monitor", "label": "We onboard and monitor usage", "score": 3 },
+            { "value": "champions", "label": "We use champions, enablement, and adoption metrics", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "roadmap_departments",
+          "label": "Which departments are most involved in shaping your digital roadmap?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing", "label": "Marketing or sales", "score": 1 },
+            { "value": "operations", "label": "Operations or logistics", "score": 1 },
+            { "value": "it", "label": "IT or engineering", "score": 1 },
+            { "value": "finance", "label": "Finance or compliance", "score": 1 },
+            { "value": "executive", "label": "Executive leadership", "score": 1 },
+            { "value": "product", "label": "Product or customer experience", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "kpi_review",
+          "label": "How often do you revisit your digital transformation KPIs or success metrics?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we don't have formal KPIs", "score": 1 },
+            { "value": "annual", "label": "Annually", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "monthly", "label": "Monthly or as part of regular ops cadence", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "cx_impact",
+          "label": "How do digital initiatives influence your customer experience today?",
+          "type": "select",
+          "options": [
+            { "value": "no_impact", "label": "They don't have much impact", "score": 1 },
+            { "value": "reduce_friction", "label": "They reduce friction at key stages", "score": 2 },
+            { "value": "improve_speed", "label": "They improve consistency and speed", "score": 3 },
+            { "value": "personalization", "label": "They enable personalization and real-time support", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "integrated_systems",
+          "label": "What systems are integrated to support real-time decision-making?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "CRM and marketing platforms", "score": 1 },
+            { "value": "inventory", "label": "Inventory and order systems", "score": 1 },
+            { "value": "financial", "label": "Financial or forecasting tools", "score": 1 },
+            { "value": "bi", "label": "BI dashboards and analytics", "score": 1 },
+            { "value": "support", "label": "Support/ticketing platforms", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_alignment",
+          "label": "How do you keep teams aligned on priorities across departments during digital initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "no_coordination", "label": "We don't really coordinate", "score": 1 },
+            { "value": "email", "label": "We rely on email or meetings", "score": 2 },
+            { "value": "shared_tools", "label": "We use shared project tools or dashboards", "score": 3 },
+            { "value": "cross_functional", "label": "We run cross-functional planning and sprint reviews", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "transformation_mindset",
+          "label": "How would you describe your organization's mindset around digital transformation today?",
+          "type": "select",
+          "options": [
+            { "value": "adjusting", "label": "We're still adjusting", "score": 1 },
+            { "value": "slow", "label": "We support it but move slowly", "score": 2 },
+            { "value": "critical", "label": "We see it as critical to growth", "score": 3 },
+            { "value": "embedded", "label": "It's embedded in how we think and operate", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "transformation_barrier",
+          "label": "What is your biggest barrier to accelerating transformation today?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "recent_improvement",
+          "label": "What's one area where digital upgrades have meaningfully improved performance in the past 6 months?",
+          "type": "text_area",
+          "order": 9
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "progress_monitoring",
+          "label": "How do you monitor progress across your digital transformation initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "reviews", "label": "We check in during reviews or launches", "score": 1 },
+            { "value": "dashboards", "label": "We track progress via project dashboards", "score": 2 },
+            { "value": "metrics", "label": "We monitor impact via metrics and OKRs", "score": 3 },
+            { "value": "real_time", "label": "We use real-time visibility into adoption, cost, and results", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "employee_interaction",
+          "label": "Which of the following describe how employees interact with your digital systems?",
+          "type": "multi_select",
+          "options": [
+            { "value": "task_specific", "label": "They use task-specific apps and tools", "score": 1 },
+            { "value": "data_access", "label": "They access data or reports to guide decisions", "score": 1 },
+            { "value": "automation", "label": "They automate workflows or customer actions", "score": 1 },
+            { "value": "customization", "label": "They customize or configure digital systems", "score": 1 },
+            { "value": "innovation", "label": "They contribute to innovation via digital tools", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "change_response",
+          "label": "How are digital tools supporting your company's ability to respond to change or disruption?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We're still fairly reactive", "score": 1 },
+            { "value": "manual", "label": "We can adapt with manual effort", "score": 2 },
+            { "value": "agile", "label": "Our tools give us agility and insight", "score": 3 },
+            { "value": "real_time", "label": "We pivot in real-time based on signals and system triggers", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "governance_security",
+          "label": "How do you handle governance and data security across your digital ecosystem?",
+          "type": "select",
+          "options": [
+            { "value": "light", "label": "Light internal processes only", "score": 1 },
+            { "value": "basic", "label": "Basic vendor and team policies", "score": 2 },
+            { "value": "defined", "label": "Defined policies reviewed with stakeholders", "score": 3 },
+            { "value": "enterprise", "label": "Enterprise governance with cross-functional oversight", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "roi_approach",
+          "label": "What's your approach to identifying digital ROI across tools and systems?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure ROI yet", "score": 1 },
+            { "value": "track_spend", "label": "We track spend and savings", "score": 2 },
+            { "value": "impact_cost", "label": "We assess impact vs. cost", "score": 3 },
+            { "value": "value_model", "label": "We model value creation across departments", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "innovation_efforts",
+          "label": "Which innovation efforts are powered by your digital infrastructure today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_experience", "label": "New customer experiences", "score": 1 },
+            { "value": "product_expansion", "label": "Product or service expansion", "score": 1 },
+            { "value": "operational", "label": "Operational optimization", "score": 1 },
+            { "value": "ai_automation", "label": "AI/automation initiatives", "score": 1 },
+            { "value": "partnerships", "label": "Strategic partnerships or channels", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "department_collaboration",
+          "label": "What level of collaboration exists between departments on transformation projects?",
+          "type": "select",
+          "options": [
+            { "value": "siloed", "label": "Very little — most projects are siloed", "score": 1 },
+            { "value": "some", "label": "Some collaboration when required", "score": 2 },
+            { "value": "frequent", "label": "Frequent collaboration on key projects", "score": 3 },
+            { "value": "continuous", "label": "Deep, continuous collaboration is the norm", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "employee_feedback",
+          "label": "How do employees give feedback or shape digital system improvements?",
+          "type": "select",
+          "options": [
+            { "value": "no_feedback", "label": "We don't have a feedback loop", "score": 1 },
+            { "value": "post_launch", "label": "We gather feedback after launch", "score": 2 },
+            { "value": "planning", "label": "We involve users in planning or pilots", "score": 3 },
+            { "value": "co_create", "label": "We co-create solutions with continuous feedback", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you in your ability to scale transformation alongside company growth?",
+          "type": "select",
+          "options": [
+            { "value": "unsure", "label": "We're unsure or untested", "score": 1 },
+            { "value": "limited", "label": "We're ready for limited growth", "score": 2 },
+            { "value": "strong", "label": "We've built a strong foundation", "score": 3 },
+            { "value": "global", "label": "We're fully prepared for global scale and complexity", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "competitive_advantage",
+          "label": "What's one area where your digital investments have driven competitive advantage?",
+          "type": "text_area",
+          "order": 8
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "business_alignment",
+          "label": "How are digital tools aligned with revenue growth, margin expansion, or CX strategy?",
+          "type": "select",
+          "options": [
+            { "value": "loose", "label": "Loosely aligned by department", "score": 1 },
+            { "value": "reviewed", "label": "Reviewed during strategic planning", "score": 2 },
+            { "value": "monitored", "label": "Actively monitored and optimized", "score": 3 },
+            { "value": "tied", "label": "Tied directly to business outcomes and OKRs", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "operating_model",
+          "label": "Which of the following are part of your digital operating model today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "kpi_dashboards", "label": "Real-time KPI dashboards", "score": 1 },
+            { "value": "decision_support", "label": "Automated decision support", "score": 1 },
+            { "value": "self_service", "label": "Self-service reporting and analytics", "score": 1 },
+            { "value": "change_management", "label": "Embedded change management processes", "score": 1 },
+            { "value": "customer_data", "label": "Unified customer data platform", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "progress_communication",
+          "label": "How is transformation progress communicated across your organization?",
+          "type": "select",
+          "options": [
+            { "value": "project_team", "label": "Only within the project team", "score": 1 },
+            { "value": "all_hands", "label": "Shared in all-hands or newsletters", "score": 2 },
+            { "value": "metrics", "label": "Reported with metrics in planning meetings", "score": 3 },
+            { "value": "integrated", "label": "Integrated into weekly operations and team scorecards", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "system_scalability",
+          "label": "How do you ensure that your systems and architecture can support scale and innovation?",
+          "type": "select",
+          "options": [
+            { "value": "not_evaluated", "label": "We haven't evaluated this yet", "score": 1 },
+            { "value": "vendor_selection", "label": "We assess vendor scalability during selection", "score": 2 },
+            { "value": "monitoring", "label": "We monitor system usage, latency, and integration load", "score": 3 },
+            { "value": "formal_plan", "label": "We follow a formal architecture and capacity plan", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "system_selection",
+          "label": "What's your process for selecting and implementing new digital systems?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc based on need", "score": 1 },
+            { "value": "stakeholder", "label": "Based on stakeholder input and cost", "score": 2 },
+            { "value": "cross_functional", "label": "Cross-functional evaluation and pilot testing", "score": 3 },
+            { "value": "strategic", "label": "Strategic prioritization and business case alignment", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "innovation_approach",
+          "label": "Which of these best describes your digital innovation approach?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "Reactive to market trends", "score": 1 },
+            { "value": "periodic", "label": "Periodic experiments and updates", "score": 2 },
+            { "value": "agile", "label": "Agile innovation cycles", "score": 3 },
+            { "value": "continuous", "label": "Embedded continuous innovation and experimentation", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "vendor_involvement",
+          "label": "How are vendors, partners, or external tech providers involved in your transformation strategy?",
+          "type": "select",
+          "options": [
+            { "value": "basic_support", "label": "We use them for basic support", "score": 1 },
+            { "value": "tools_only", "label": "They provide tools or platforms only", "score": 2 },
+            { "value": "co_develop", "label": "We co-develop initiatives with them", "score": 3 },
+            { "value": "strategic", "label": "They are strategic partners in our roadmap", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "strategy_refresh",
+          "label": "How often do you revisit or refresh your digital transformation strategy?",
+          "type": "select",
+          "options": [
+            { "value": "annual", "label": "Annually", "score": 1 },
+            { "value": "biannual", "label": "Bi-annually", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "continuous", "label": "Continuously — as part of our growth model", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "digital_maturity",
+          "label": "How would you describe your organization's digital maturity to an investor or board member?",
+          "type": "select",
+          "options": [
+            { "value": "evolving", "label": "Evolving with momentum", "score": 1 },
+            { "value": "efficient", "label": "Efficient and coordinated", "score": 2 },
+            { "value": "scalable", "label": "Scalable and data-driven", "score": 3 },
+            { "value": "leading", "label": "Industry-leading and innovation-powered", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "strategic_advantage",
+          "label": "What digital capabilities give your business a strategic advantage today?",
+          "type": "text_area",
+          "order": 7
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategy_embedding",
+          "label": "How embedded is digital transformation in your corporate strategy and planning cycles?",
+          "type": "select",
+          "options": [
+            { "value": "tech_planning", "label": "Reviewed during tech planning", "score": 1 },
+            { "value": "annual", "label": "Addressed in annual strategy", "score": 2 },
+            { "value": "integrated", "label": "Integrated in every business unit's roadmap", "score": 3 },
+            { "value": "foundation", "label": "It's the foundation of our long-term business model", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "advanced_capabilities",
+          "label": "Which advanced capabilities are active in your current tech stack?",
+          "type": "multi_select",
+          "options": [
+            { "value": "predictive", "label": "Predictive forecasting", "score": 1 },
+            { "value": "workflow", "label": "Cross-functional workflow automation", "score": 1 },
+            { "value": "cx_orchestration", "label": "Real-time customer experience orchestration", "score": 1 },
+            { "value": "ai_decision", "label": "AI-enhanced decision-making", "score": 1 },
+            { "value": "api_architecture", "label": "Scalable, API-first platform architecture", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "roi_validation",
+          "label": "How do you validate the long-term ROI of your digital initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "annual", "label": "Through annual reviews", "score": 1 },
+            { "value": "cost_savings", "label": "By comparing cost savings or productivity", "score": 2 },
+            { "value": "dashboards", "label": "With dashboards and benchmarks", "score": 3 },
+            { "value": "total_impact", "label": "Through total business impact modeling (growth, margin, CX, resilience)", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "strategy_pivot",
+          "label": "How well can your team pivot when strategy shifts or market conditions change?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We need time to react", "score": 1 },
+            { "value": "manual", "label": "We adjust but need manual coordination", "score": 2 },
+            { "value": "quick", "label": "We move quickly using integrated tools", "score": 3 },
+            { "value": "real_time", "label": "We operate with real-time scenario planning and orchestration", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "leadership_support",
+          "label": "How does leadership support and sponsor transformation efforts?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "Support exists but not formalized", "score": 1 },
+            { "value": "visible", "label": "Visible sponsorship from key leaders", "score": 2 },
+            { "value": "executive", "label": "Executives drive transformation metrics and strategy", "score": 3 },
+            { "value": "cascade", "label": "Leadership cascades transformation mindset organization-wide", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "innovation_approach",
+          "label": "What's your organization's approach to continuous digital innovation?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc innovation based on ideas or urgency", "score": 1 },
+            { "value": "sprint", "label": "Annual or quarterly sprint cycles", "score": 2 },
+            { "value": "experimentation", "label": "Always-on experimentation supported by data", "score": 3 },
+            { "value": "enterprise", "label": "Enterprise-wide innovation culture with dedicated resources", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "trend_influence",
+          "label": "How do external trends or disruptions (tech, consumer, regulatory) influence your digital roadmap?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We react as needed", "score": 1 },
+            { "value": "monitor", "label": "We monitor and adapt over time", "score": 2 },
+            { "value": "scenario", "label": "We scenario-plan and adjust quarterly", "score": 3 },
+            { "value": "proactive", "label": "We proactively lead change in response to emerging signals", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "success_metrics",
+          "label": "What metrics best reflect your transformation success today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "time_to_market", "label": "Time to market", "score": 1 },
+            { "value": "revenue_per_employee", "label": "Revenue per employee", "score": 1 },
+            { "value": "customer_lifetime", "label": "Customer lifetime value", "score": 1 },
+            { "value": "nps", "label": "NPS or CSAT", "score": 1 },
+            { "value": "margin", "label": "Operating margin or digital ROI", "score": 1 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "competitive_confidence",
+          "label": "How confident are you that your digital capabilities give you a sustainable advantage over competitors?",
+          "type": "select",
+          "options": [
+            { "value": "vulnerable", "label": "We're competitive but vulnerable", "score": 1 },
+            { "value": "ahead", "label": "We're ahead in key areas", "score": 2 },
+            { "value": "differentiated", "label": "We're differentiated across core functions", "score": 3 },
+            { "value": "shaping", "label": "We're shaping the future of our category", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "strategic_advantage",
+          "label": "What part of your business has become a strategic advantage due to digital transformation?",
+          "type": "text_area",
+          "order": 8
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "purpose_culture",
+          "label": "How does digital transformation influence your company's purpose and culture?",
+          "type": "select",
+          "options": [
+            { "value": "execution", "label": "It supports execution but not core values", "score": 1 },
+            { "value": "leadership", "label": "It's reflected in leadership priorities", "score": 2 },
+            { "value": "structure", "label": "It shapes team structure and behavior", "score": 3 },
+            { "value": "defining", "label": "It defines how we hire, collaborate, innovate, and lead", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "operating_model",
+          "label": "Which of the following best describe your digital transformation operating model?",
+          "type": "multi_select",
+          "options": [
+            { "value": "adaptive", "label": "Adaptive, real-time architecture", "score": 1 },
+            { "value": "product_teams", "label": "Business units operate like digital product teams", "score": 1 },
+            { "value": "experimentation", "label": "Company-wide experimentation cycles", "score": 1 },
+            { "value": "metrics", "label": "Transparent metrics and learning loops", "score": 1 },
+            { "value": "ecosystem", "label": "Ecosystem orchestration with partners and platforms", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "outcome_modeling",
+          "label": "How do you simulate, predict, or model business outcomes using digital tools?",
+          "type": "select",
+          "options": [
+            { "value": "dashboards", "label": "We rely on dashboards or reports", "score": 1 },
+            { "value": "what_if", "label": "We use what-if planning tools", "score": 2 },
+            { "value": "modeling", "label": "We model financial, CX, or operational outcomes", "score": 3 },
+            { "value": "simulations", "label": "We run simulations with live data and machine learning", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "value_creation",
+          "label": "How has transformation changed the way your organization creates value?",
+          "type": "select",
+          "options": [
+            { "value": "streamlined", "label": "It has streamlined operations", "score": 1 },
+            { "value": "expanded", "label": "It expanded what we sell", "score": 2 },
+            { "value": "service", "label": "It changed how we serve customers", "score": 3 },
+            { "value": "redefined", "label": "It redefined our business model and growth engine", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "strategy_integration",
+          "label": "Which of the following are fully integrated into your transformation strategy?",
+          "type": "multi_select",
+          "options": [
+            { "value": "employee_experience", "label": "Employee experience design", "score": 1 },
+            { "value": "sustainable", "label": "Sustainable/ethical innovation", "score": 1 },
+            { "value": "partner", "label": "Partner and ecosystem integration", "score": 1 },
+            { "value": "ai", "label": "Embedded AI and automation", "score": 1 },
+            { "value": "agility", "label": "Organizational agility and reskilling", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "emerging_tech",
+          "label": "How does your organization stay ahead of emerging technologies or digital trends?",
+          "type": "select",
+          "options": [
+            { "value": "wait", "label": "We wait until it's mainstream", "score": 1 },
+            { "value": "monitor", "label": "We monitor and plan quarterly", "score": 2 },
+            { "value": "experiment", "label": "We experiment through pilots or partnerships", "score": 3 },
+            { "value": "lead", "label": "We lead with innovation labs, VC arms, or internal R&D", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "evolution_enablement",
+          "label": "How do you enable transformation to evolve without constant executive intervention?",
+          "type": "select",
+          "options": [
+            { "value": "top_down", "label": "We don't — it's top-down driven", "score": 1 },
+            { "value": "empower", "label": "We empower functional owners", "score": 2 },
+            { "value": "repeatable", "label": "We create repeatable models and rituals", "score": 3 },
+            { "value": "self_sustaining", "label": "Transformation is self-sustaining through culture, systems, and leadership", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "reinvention_confidence",
+          "label": "How confident are you that your organization can reinvent itself continuously through digital transformation?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "cycles", "label": "Confident for 1–2 cycles", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "fully", "label": "Fully confident — we're built for reinvention", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "transformative_decision",
+          "label": "What's the most transformative digital decision you've made in the last 12 months?",
+          "type": "text_area",
+          "order": 6
+        },
+        {
+          "key": "success_signal",
+          "label": "What has been the clearest signal that your transformation is truly working?",
+          "type": "text_area",
+          "order": 9
+        }
+      ]
+    }
+  }
+} 

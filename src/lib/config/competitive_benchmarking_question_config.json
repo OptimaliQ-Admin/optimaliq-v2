@@ -1,0 +1,1035 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "competitor_review_frequency",
+          "label": "How often do you review what your competitors are doing in the market?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally when we notice something", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly or as part of planning", "score": 3 },
+            { "value": "regularly", "label": "Regularly — it's part of our strategy", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "competitor_tracking",
+          "label": "What kind of information do you track about your competitors?",
+          "type": "multi_select",
+          "options": [
+            { "value": "pricing", "label": "Pricing or packaging", "score": 1 },
+            { "value": "marketing", "label": "Marketing messages", "score": 1 },
+            { "value": "features", "label": "Product features", "score": 1 },
+            { "value": "reviews", "label": "Customer reviews or NPS", "score": 1 },
+            { "value": "none", "label": "We don't currently track competitors", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "insight_gathering",
+          "label": "How do you gather competitor insights?",
+          "type": "select",
+          "options": [
+            { "value": "no_data", "label": "We don't gather competitor data", "score": 1 },
+            { "value": "public_content", "label": "We look at websites and public content", "score": 2 },
+            { "value": "customer_input", "label": "We ask sales or customers for input", "score": 3 },
+            { "value": "structured_research", "label": "We use structured research or tools", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "differentiator_understanding",
+          "label": "Do you have a clear understanding of your competitive differentiators?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "unclear", "label": "A few ideas but not clear", "score": 2 },
+            { "value": "internal", "label": "Yes — we talk about them internally", "score": 3 },
+            { "value": "external", "label": "Yes — we clearly communicate them externally", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "competitor_comparison_response",
+          "label": "When a customer compares you to competitors, how do you respond?",
+          "type": "select",
+          "options": [
+            { "value": "no_response", "label": "We don't really address it", "score": 1 },
+            { "value": "high_level", "label": "We give high-level answers", "score": 2 },
+            { "value": "talking_points", "label": "We have talking points or slides", "score": 3 },
+            { "value": "tailored", "label": "We tailor our response based on their needs", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "competitive_resources",
+          "label": "Which of the following do you have or use?",
+          "type": "multi_select",
+          "options": [
+            { "value": "battlecards", "label": "Competitor battlecards", "score": 1 },
+            { "value": "market_data", "label": "Market share or positioning data", "score": 1 },
+            { "value": "win_loss", "label": "Win/loss analysis", "score": 1 },
+            { "value": "pricing_comparison", "label": "Competitor pricing comparison", "score": 1 },
+            { "value": "none", "label": "None of the above", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "customer_differentiation",
+          "label": "How would your customers describe what makes you better than competitors?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "competitor_strengths",
+          "label": "What's one thing a competitor does well that you admire or find challenging?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "market_share_learning",
+          "label": "If you had to double your market share this year, what would you need to learn from your competitors?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "comparison_priority",
+          "label": "What's your top priority when comparing yourself to competitors?",
+          "type": "select",
+          "options": [
+            { "value": "price", "label": "Price", "score": 1 },
+            { "value": "features", "label": "Features or capabilities", "score": 2 },
+            { "value": "customer_experience", "label": "Customer experience", "score": 3 },
+            { "value": "brand", "label": "Brand reputation", "score": 4 },
+            { "value": "speed", "label": "Speed or convenience", "score": 5 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "kpi_benchmarking",
+          "label": "How often do you compare your KPIs (e.g., conversion rates, CAC, retention) to industry benchmarks?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "yearly", "label": "We do once a year", "score": 3 },
+            { "value": "quarterly", "label": "We review them quarterly or more", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "benchmark_tracking",
+          "label": "Which of the following benchmarks do you currently track or have access to?",
+          "type": "multi_select",
+          "options": [
+            { "value": "conversion_rates", "label": "Conversion rates", "score": 1 },
+            { "value": "cac", "label": "Customer acquisition cost (CAC)", "score": 1 },
+            { "value": "retention", "label": "Customer retention", "score": 1 },
+            { "value": "email_metrics", "label": "Email open/click rates", "score": 1 },
+            { "value": "none", "label": "None", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "competitor_information",
+          "label": "How do you gather information about your competitors?",
+          "type": "select",
+          "options": [
+            { "value": "no_gathering", "label": "We don't", "score": 1 },
+            { "value": "informal", "label": "Through informal conversations", "score": 2 },
+            { "value": "online_research", "label": "We do light research online", "score": 3 },
+            { "value": "structured", "label": "We have a process or tool for monitoring", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "insight_usage",
+          "label": "What do you use competitor insights for?",
+          "type": "select",
+          "options": [
+            { "value": "no_usage", "label": "We don't really use them", "score": 1 },
+            { "value": "occasional_adjustments", "label": "We occasionally adjust pricing or messaging", "score": 2 },
+            { "value": "planning", "label": "We use them in planning discussions", "score": 3 },
+            { "value": "strategy", "label": "We update strategy or GTM based on them", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "metric_alignment",
+          "label": "How aligned is your team on what metrics matter most for your business success?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "We're not aligned", "score": 1 },
+            { "value": "fuzzy", "label": "We've discussed it but it's fuzzy", "score": 2 },
+            { "value": "mostly_aligned", "label": "We're mostly aligned", "score": 3 },
+            { "value": "completely_aligned", "label": "We're completely aligned", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "competitive_gaps",
+          "label": "Where do you feel your business is falling behind your competitors?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "intelligence_access",
+          "label": "How would you describe your access to competitive intelligence today?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "We don't have any", "score": 1 },
+            { "value": "occasional", "label": "We occasionally hear things", "score": 2 },
+            { "value": "few_metrics", "label": "We track a few metrics", "score": 3 },
+            { "value": "central_source", "label": "We maintain a central source of truth", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "competitor_kpi_interest",
+          "label": "If you could understand how your top competitor performs across KPIs, what would you look at first?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "benchmarking_needs",
+          "label": "What kind of benchmarking data would be most helpful to your team right now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "comparison_uncertainty",
+          "label": "What's your biggest uncertainty about how your business compares to others in your space?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "competitor_selection",
+          "label": "How do you identify which competitors to benchmark against?",
+          "type": "select",
+          "options": [
+            { "value": "no_benchmarking", "label": "We don't benchmark competitors", "score": 1 },
+            { "value": "well_known_peers", "label": "We occasionally look at well-known peers", "score": 2 },
+            { "value": "industry_lists", "label": "We use industry lists or reports", "score": 3 },
+            { "value": "specific_tracking", "label": "We track specific competitors with similar models", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "comparison_metrics",
+          "label": "What metrics do you typically use to compare against competitors?",
+          "type": "multi_select",
+          "options": [
+            { "value": "revenue_growth", "label": "Revenue or growth rate", "score": 1 },
+            { "value": "pricing", "label": "Pricing or packaging", "score": 1 },
+            { "value": "product_features", "label": "Product features or roadmap", "score": 1 },
+            { "value": "customer_experience", "label": "Customer experience or reviews", "score": 1 },
+            { "value": "marketing_presence", "label": "Marketing visibility or brand presence", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "data_collection",
+          "label": "How do you collect data about competitors today?",
+          "type": "select",
+          "options": [
+            { "value": "no_collection", "label": "We don't collect competitive data", "score": 1 },
+            { "value": "public_content", "label": "We review public content and websites", "score": 2 },
+            { "value": "customer_feedback", "label": "We gather feedback from sales or customers", "score": 3 },
+            { "value": "formal_tools", "label": "We use formal tools, analysts, or services", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "research_ownership",
+          "label": "Who in your organization is responsible for competitor research?",
+          "type": "select",
+          "options": [
+            { "value": "no_owner", "label": "No one owns it", "score": 1 },
+            { "value": "sales_marketing", "label": "Sales or marketing sometimes reviews it", "score": 2 },
+            { "value": "product_marketing", "label": "A product or marketing leader tracks it", "score": 3 },
+            { "value": "shared_effort", "label": "There's a shared, consistent effort", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "landscape_review",
+          "label": "How often do you review or update your view of the competitive landscape?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — maybe once a year", "score": 1 },
+            { "value": "few_times", "label": "A few times a year when something changes", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly or during planning cycles", "score": 3 },
+            { "value": "ongoing", "label": "Ongoing — it's part of how we operate", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "insight_usage",
+          "label": "How do you use competitive insights in your planning or decision-making?",
+          "type": "select",
+          "options": [
+            { "value": "no_usage", "label": "We don't really use them", "score": 1 },
+            { "value": "conversation", "label": "They come up in conversation", "score": 2 },
+            { "value": "strategy", "label": "They help inform strategy or messaging", "score": 3 },
+            { "value": "direct_influence", "label": "They directly shape roadmap, pricing, or positioning", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "data_sources",
+          "label": "What sources do you trust most for competitive or market data?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_conversations", "label": "Customer conversations", "score": 1 },
+            { "value": "analyst_reports", "label": "Analyst reports", "score": 1 },
+            { "value": "review_sites", "label": "Third-party review sites (e.g., G2)", "score": 1 },
+            { "value": "win_loss", "label": "Sales win/loss feedback", "score": 1 },
+            { "value": "social_listening", "label": "Social listening or forums", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "surprising_insight",
+          "label": "What's the most surprising insight you've learned from studying competitors?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "competitive_concern",
+          "label": "What competitive risk or opportunity are you most concerned about right now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "additional_insight",
+          "label": "If you could get one additional insight about your top competitors, what would it be?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "competitor_position",
+          "label": "How do you assess your position relative to your top 3 competitors?",
+          "type": "select",
+          "options": [
+            { "value": "no_comparison", "label": "We don't regularly compare ourselves", "score": 1 },
+            { "value": "occasional_check", "label": "We check pricing or offerings occasionally", "score": 2 },
+            { "value": "annual_review", "label": "We review competitor performance annually", "score": 3 },
+            { "value": "comprehensive", "label": "We benchmark against them across strategy, CX, and performance", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "performance_benchmarks",
+          "label": "Which benchmarks do you use when comparing your performance to competitors?",
+          "type": "multi_select",
+          "options": [
+            { "value": "revenue_growth", "label": "Revenue or growth rate", "score": 1 },
+            { "value": "retention", "label": "Customer retention or churn", "score": 1 },
+            { "value": "marketing", "label": "Marketing performance (CAC, LTV)", "score": 1 },
+            { "value": "operational", "label": "Operational efficiency", "score": 1 },
+            { "value": "innovation", "label": "Innovation or product velocity", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "intelligence_collection",
+          "label": "How do you collect competitive intelligence?",
+          "type": "select",
+          "options": [
+            { "value": "no_collection", "label": "We don't collect it today", "score": 1 },
+            { "value": "customer_feedback", "label": "We ask customers or partners", "score": 2 },
+            { "value": "monitoring", "label": "We monitor websites, news, and pricing", "score": 3 },
+            { "value": "structured", "label": "We use structured research or tools", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "competitor_response",
+          "label": "How does your team respond when a competitor launches something new?",
+          "type": "select",
+          "options": [
+            { "value": "late_response", "label": "We usually find out late", "score": 1 },
+            { "value": "no_reaction", "label": "We monitor but don't react", "score": 2 },
+            { "value": "case_by_case", "label": "We assess and decide case-by-case", "score": 3 },
+            { "value": "proactive", "label": "We proactively prepare counter-responses", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "business_risk",
+          "label": "Which parts of your business feel most at risk of being outpaced by competitors?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "competitor_review",
+          "label": "How often do you review competitor product updates, go-to-market campaigns, or messaging?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — only when we hear something big", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — we keep an informal eye", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly — we have a review or discussion", "score": 3 },
+            { "value": "continuously", "label": "Continuously — part of ops or marketing cycle", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "win_loss_tracking",
+          "label": "Do you track your win/loss rates against specific competitors?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "No — we don't track it", "score": 1 },
+            { "value": "major_deals", "label": "Only for major deals", "score": 2 },
+            { "value": "crm_tracking", "label": "Yes — it's tracked in our CRM", "score": 3 },
+            { "value": "trend_review", "label": "Yes — we review and act on trends", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "whitespace_identification",
+          "label": "What's your approach to identifying strategic whitespace or under-served segments?",
+          "type": "select",
+          "options": [
+            { "value": "no_approach", "label": "We haven't done this", "score": 1 },
+            { "value": "internal_brainstorm", "label": "We occasionally brainstorm internally", "score": 2 },
+            { "value": "feedback_based", "label": "We review gaps based on feedback", "score": 3 },
+            { "value": "structured_research", "label": "We use structured research or market maps", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "admired_strategy",
+          "label": "What is one competitor strategy you admire or want to respond to?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "roadmap_influence",
+          "label": "How do you use competitive benchmarking to inform your product, pricing, or marketing roadmap?",
+          "type": "select",
+          "options": [
+            { "value": "no_use", "label": "We don't today", "score": 1 },
+            { "value": "big_bets", "label": "We consider it when making big bets", "score": 2 },
+            { "value": "quarterly", "label": "It's part of our quarterly review process", "score": 3 },
+            { "value": "active_shaping", "label": "It actively shapes priorities across teams", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "benchmarking_frequency",
+          "label": "How frequently do you benchmark your performance against top industry competitors?",
+          "type": "select",
+          "options": [
+            { "value": "no_benchmarking", "label": "We don't benchmark currently", "score": 1 },
+            { "value": "annually", "label": "Annually or during planning cycles", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly or semi-annually", "score": 3 },
+            { "value": "continuous", "label": "We benchmark continuously using tools or reports", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "comparison_areas",
+          "label": "Which areas do you regularly compare with competitors?",
+          "type": "multi_select",
+          "options": [
+            { "value": "pricing", "label": "Pricing and packaging", "score": 1 },
+            { "value": "customer_experience", "label": "Customer experience or NPS", "score": 1 },
+            { "value": "marketing", "label": "Marketing performance (e.g. traffic, engagement)", "score": 1 },
+            { "value": "sales", "label": "Sales performance (e.g. win rates)", "score": 1 },
+            { "value": "product", "label": "Product capabilities", "score": 1 },
+            { "value": "innovation", "label": "Innovation cycles", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "positioning_confidence",
+          "label": "How confident are you that your current positioning differentiates you from your top 3 competitors?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "very_confident", "label": "Very confident", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "intelligence_gathering",
+          "label": "How do you currently gather intelligence on competitors?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "We don't gather it consistently", "score": 1 },
+            { "value": "occasional_review", "label": "We review their websites or pricing occasionally", "score": 2 },
+            { "value": "monitoring", "label": "We monitor competitor campaigns, press, and customer reviews", "score": 3 },
+            { "value": "structured", "label": "We use tools, research, or dedicated teams", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "valuable_metrics",
+          "label": "What kind of external metrics or insights would be most valuable to improve your competitiveness?",
+          "type": "multi_select",
+          "options": [
+            { "value": "market_share", "label": "Market share benchmarks", "score": 1 },
+            { "value": "customer_satisfaction", "label": "Customer satisfaction/NPS comparisons", "score": 1 },
+            { "value": "marketing_performance", "label": "Marketing and ad performance data", "score": 1 },
+            { "value": "sales_conversion", "label": "Sales conversion and win/loss rates", "score": 1 },
+            { "value": "product_adoption", "label": "Product adoption or usage insights", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "competitor_impact",
+          "label": "What recent competitor move impacted your strategy or priorities?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "monitoring_tools",
+          "label": "What tools or platforms (if any) do you use to monitor your competitive position?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "gtm_integration",
+          "label": "How integrated is competitive benchmarking into your go-to-market planning?",
+          "type": "select",
+          "options": [
+            { "value": "not_integrated", "label": "Not at all", "score": 1 },
+            { "value": "occasional", "label": "Referenced occasionally", "score": 2 },
+            { "value": "annual", "label": "Part of annual planning", "score": 3 },
+            { "value": "fully_integrated", "label": "Used to inform messaging, pricing, and campaigns", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "meaningful_change",
+          "label": "What's one insight from competitive benchmarking that helped you make a meaningful change recently?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "valuable_learning",
+          "label": "What's the most valuable thing you could learn about your competition right now?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "position_review_frequency",
+          "label": "How frequently do you review your position relative to key competitors?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "annually", "label": "Annually or ad hoc", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly as part of planning", "score": 3 },
+            { "value": "continuous", "label": "Continuously with dashboards or alerts", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "benchmarking_data",
+          "label": "Which of the following benchmarking data points do you actively track?",
+          "type": "multi_select",
+          "options": [
+            { "value": "pricing", "label": "Pricing or offer comparisons", "score": 1 },
+            { "value": "market_share", "label": "Market share trends", "score": 1 },
+            { "value": "customer_sentiment", "label": "Customer sentiment or reviews", "score": 1 },
+            { "value": "product_features", "label": "Product features or releases", "score": 1 },
+            { "value": "sales_metrics", "label": "Sales or conversion metrics", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "intelligence_gathering",
+          "label": "How do you gather competitive intelligence?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "We don't gather much at all", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc research or public data", "score": 2 },
+            { "value": "dedicated_tools", "label": "Dedicated tools or services", "score": 3 },
+            { "value": "cross_functional", "label": "Cross-functional inputs with formal tracking", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "planning_integration",
+          "label": "How is competitor analysis incorporated into your planning or decision-making?",
+          "type": "select",
+          "options": [
+            { "value": "not_considered", "label": "It's not really considered", "score": 1 },
+            { "value": "major_planning", "label": "Only during major planning cycles", "score": 2 },
+            { "value": "quarterly_review", "label": "Reviewed quarterly or by department", "score": 3 },
+            { "value": "fully_integrated", "label": "Integrated into planning, product, and GTM strategy", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "market_differentiation",
+          "label": "How do you ensure your product or service stands out in a crowded market?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "competitor_response",
+          "label": "What's your process for responding when a competitor launches something new?",
+          "type": "select",
+          "options": [
+            { "value": "no_response", "label": "We don't respond unless it affects us directly", "score": 1 },
+            { "value": "reactive", "label": "We react based on customer or sales feedback", "score": 2 },
+            { "value": "evaluation", "label": "We meet to evaluate and discuss impact", "score": 3 },
+            { "value": "structured", "label": "We have a playbook or framework for competitive response", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "strategy_alignment",
+          "label": "How aligned are your benchmarking insights with product or marketing strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned", "score": 1 },
+            { "value": "loosely_referenced", "label": "Loosely referenced during planning", "score": 2 },
+            { "value": "reviewed", "label": "Reviewed and discussed with GTM teams", "score": 3 },
+            { "value": "embedded", "label": "Embedded into strategy development and iteration", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "competitive_advantages",
+          "label": "Which of the following competitive advantages do you believe are strongest today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "pricing", "label": "Pricing/value positioning", "score": 1 },
+            { "value": "customer_experience", "label": "Customer experience or service", "score": 1 },
+            { "value": "product_features", "label": "Product features or innovation", "score": 1 },
+            { "value": "brand_trust", "label": "Brand trust or reputation", "score": 1 },
+            { "value": "speed", "label": "Speed to market", "score": 1 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "competitive_threat",
+          "label": "What's the biggest competitive threat you're monitoring today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "desired_insight",
+          "label": "If you could gain one new insight about your competitors right now, what would it be?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "gtm_review_frequency",
+          "label": "How frequently do you review competitive positioning as part of your GTM (go-to-market) strategy?",
+          "type": "select",
+          "options": [
+            { "value": "annually", "label": "Annually or less", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly during planning", "score": 2 },
+            { "value": "monthly", "label": "Monthly as part of reviews", "score": 3 },
+            { "value": "continuous", "label": "Continuously tracked and benchmarked", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "competitor_insights",
+          "label": "Which sources do you rely on for understanding competitor moves or shifts?",
+          "type": "multi_select",
+          "options": [
+            { "value": "industry_reports", "label": "Industry newsletters or reports", "score": 1 },
+            { "value": "sales_insights", "label": "Sales team insights or win/loss notes", "score": 1 },
+            { "value": "customer_feedback", "label": "Customer feedback or objections", "score": 1 },
+            { "value": "analyst_tools", "label": "Analyst briefings or tools (e.g. G2, Gartner)", "score": 1 },
+            { "value": "internal_programs", "label": "Internal competitive intelligence programs", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "messaging_adaptation",
+          "label": "How is your messaging or positioning adapted based on competitor activity?",
+          "type": "select",
+          "options": [
+            { "value": "no_adaptation", "label": "It isn't — we stay the course", "score": 1 },
+            { "value": "reactive", "label": "We adjust campaigns reactively", "score": 2 },
+            { "value": "playbooks", "label": "We have playbooks for positioning shifts", "score": 3 },
+            { "value": "proactive", "label": "We test and evolve messaging proactively", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "internal_systems",
+          "label": "What internal systems or teams help track competitive intelligence?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing", "label": "Marketing", "score": 1 },
+            { "value": "sales_enablement", "label": "Sales Enablement", "score": 1 },
+            { "value": "product_management", "label": "Product Management", "score": 1 },
+            { "value": "competitive_ops", "label": "Competitive Ops or Research", "score": 1 },
+            { "value": "none", "label": "None — it's ad hoc", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "benchmarking_tools",
+          "label": "What tools or technologies do you use for benchmarking or competitor tracking?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "competitive_edge",
+          "label": "What part of your customer journey do you believe provides a competitive edge today?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_alignment",
+          "label": "How often do your sales, marketing, and product teams align on competitive insights?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or only during launches", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly syncs or workshops", "score": 2 },
+            { "value": "monthly", "label": "Monthly cross-functional meetings", "score": 3 },
+            { "value": "weekly", "label": "Integrated into weekly operations", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "brand_differentiation",
+          "label": "How confident are you that your brand is differentiated from your top competitors?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we're seen as similar", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we stand out in key areas", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we are perceived as unique", "score": 3 },
+            { "value": "very", "label": "Very — we lead with clear differentiation", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "strategic_insight",
+          "label": "What's one strategic insight you've gained recently from competitor analysis?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "insight_translation",
+          "label": "How are competitive insights translated into action across the org?",
+          "type": "select",
+          "options": [
+            { "value": "not_acted", "label": "They're noted but not acted on", "score": 1 },
+            { "value": "shared", "label": "Shared with teams when relevant", "score": 2 },
+            { "value": "gtm_adjustments", "label": "Included in GTM or campaign adjustments", "score": 3 },
+            { "value": "mapped", "label": "Mapped to product, sales, and brand plays", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "benchmarking_approach",
+          "label": "How do you benchmark your performance against best-in-class competitors?",
+          "type": "select",
+          "options": [
+            { "value": "no_system", "label": "We don't benchmark systematically", "score": 1 },
+            { "value": "high_level", "label": "We compare high-level metrics (e.g. revenue, growth)", "score": 2 },
+            { "value": "department_kpis", "label": "We benchmark specific KPIs by department", "score": 3 },
+            { "value": "dashboard", "label": "We maintain a dashboard of performance vs. top competitors", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "benchmarking_sources",
+          "label": "Which of the following sources do you use for benchmarking?",
+          "type": "multi_select",
+          "options": [
+            { "value": "industry_reports", "label": "Industry reports or analysts", "score": 1 },
+            { "value": "customer_feedback", "label": "Direct customer feedback or surveys", "score": 1 },
+            { "value": "win_loss", "label": "Sales win/loss data", "score": 1 },
+            { "value": "public_data", "label": "Public competitor data (e.g. pricing, funding)", "score": 1 },
+            { "value": "third_party", "label": "Third-party benchmarking tools", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "position_evaluation",
+          "label": "How frequently do you evaluate your position relative to competitors?",
+          "type": "select",
+          "options": [
+            { "value": "annually", "label": "Annually", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly", "score": 2 },
+            { "value": "monthly", "label": "Monthly", "score": 3 },
+            { "value": "continuous", "label": "Continuously via live dashboards or alerts", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "benchmarking_kpis",
+          "label": "Which of these KPIs are part of your competitive benchmarking strategy?",
+          "type": "multi_select",
+          "options": [
+            { "value": "retention", "label": "Customer retention or churn", "score": 1 },
+            { "value": "satisfaction", "label": "Customer satisfaction (NPS, CSAT)", "score": 1 },
+            { "value": "cac", "label": "Cost to acquire a customer (CAC)", "score": 1 },
+            { "value": "sales_velocity", "label": "Sales velocity and win rate", "score": 1 },
+            { "value": "usage_patterns", "label": "Product or service usage patterns", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "insight_translation",
+          "label": "How do you translate competitive benchmarking insights into action?",
+          "type": "select",
+          "options": [
+            { "value": "no_action", "label": "We review results but rarely take action", "score": 1 },
+            { "value": "assigned_owners", "label": "We assign owners for specific improvements", "score": 2 },
+            { "value": "quarterly_planning", "label": "We build benchmarking into quarterly planning", "score": 3 },
+            { "value": "direct_influence", "label": "Insights directly inform pricing, product, and GTM updates", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "strategy_influence",
+          "label": "What competitive insights have influenced your product or service strategy in the past year?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "executive_usage",
+          "label": "How does your executive team use benchmarking data?",
+          "type": "select",
+          "options": [
+            { "value": "occasional", "label": "They review it occasionally", "score": 1 },
+            { "value": "high_level", "label": "They use it to inform high-level decisions", "score": 2 },
+            { "value": "proactive", "label": "They request benchmarking reports proactively", "score": 3 },
+            { "value": "embedded", "label": "Benchmarking data is embedded in executive dashboards", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "blind_spot",
+          "label": "What's your biggest blind spot when it comes to competitive benchmarking?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "benchmarking_leadership",
+          "label": "Which department leads benchmarking efforts in your company?",
+          "type": "select",
+          "options": [
+            { "value": "sales", "label": "Sales or RevOps", "score": 1 },
+            { "value": "product", "label": "Product or Strategy", "score": 2 },
+            { "value": "executive", "label": "Executive/Leadership", "score": 3 },
+            { "value": "shared", "label": "Shared GTM/Data function", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "desired_learning",
+          "label": "What would you most like to learn about your top competitor right now?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "intelligence_usage",
+          "label": "How does your organization use competitive intelligence to inform product or strategy decisions?",
+          "type": "select",
+          "options": [
+            { "value": "not_proactive", "label": "We don't use it proactively", "score": 1 },
+            { "value": "occasional_sharing", "label": "We share articles or trends occasionally", "score": 2 },
+            { "value": "incorporated", "label": "We incorporate it into planning or messaging", "score": 3 },
+            { "value": "active_tracking", "label": "We actively track and act on competitor moves", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "benchmarking_areas",
+          "label": "Which of the following do you benchmark against peers or industry leaders?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_satisfaction", "label": "Customer satisfaction (NPS, CSAT)", "score": 1 },
+            { "value": "conversion_rates", "label": "Conversion and close rates", "score": 1 },
+            { "value": "cost_structure", "label": "Cost structure or margins", "score": 1 },
+            { "value": "revenue_growth", "label": "Revenue growth and market share", "score": 1 },
+            { "value": "tech_stack", "label": "Tech stack or digital maturity", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "data_refresh",
+          "label": "How frequently do you refresh or revisit your competitive benchmarking data?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — only when something major changes", "score": 1 },
+            { "value": "annually", "label": "Annually or as part of planning", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "continuous", "label": "Continuously — part of operating rhythm", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "differentiation_approach",
+          "label": "How do you use benchmarking insights to differentiate your go-to-market or product approach?",
+          "type": "select",
+          "options": [
+            { "value": "no_action", "label": "We don't act on it often", "score": 1 },
+            { "value": "messaging_angles", "label": "We look for messaging or pricing angles", "score": 2 },
+            { "value": "tailored_value", "label": "We tailor value props or campaigns", "score": 3 },
+            { "value": "strategic_design", "label": "We design roadmap or strategy around gaps/opportunities", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "insight_sources",
+          "label": "Which sources of benchmarking or peer insights do you rely on most?",
+          "type": "multi_select",
+          "options": [
+            { "value": "industry_reports", "label": "Industry reports (e.g. Gartner, Forrester)", "score": 1 },
+            { "value": "win_loss", "label": "Customer win/loss feedback", "score": 1 },
+            { "value": "competitor_data", "label": "Competitor websites, reviews, or campaigns", "score": 1 },
+            { "value": "peer_networks", "label": "Peer networks, communities, or roundtables", "score": 1 },
+            { "value": "internal_comparisons", "label": "Internal performance comparisons", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "unique_advantage",
+          "label": "What's one unique advantage your company has uncovered through benchmarking?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "sales_enablement",
+          "label": "How do you use competitive insights to inform sales enablement or objection handling?",
+          "type": "select",
+          "options": [
+            { "value": "no_usage", "label": "We don't use it for sales", "score": 1 },
+            { "value": "talking_points", "label": "We occasionally share talking points", "score": 2 },
+            { "value": "structured_responses", "label": "We provide structured objection responses", "score": 3 },
+            { "value": "custom_tools", "label": "We build custom tools or enablement assets", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "performance_transparency",
+          "label": "How transparent is your team about competitive performance — wins, losses, trends?",
+          "type": "select",
+          "options": [
+            { "value": "not_transparent", "label": "Not at all — it's sensitive info", "score": 1 },
+            { "value": "ad_hoc", "label": "Shared ad hoc or when asked", "score": 2 },
+            { "value": "team_reviews", "label": "Discussed in team reviews or retros", "score": 3 },
+            { "value": "dashboard_integration", "label": "Built into dashboards and team KPIs", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "positioning_metrics",
+          "label": "What metrics do you use to assess competitive positioning?",
+          "type": "multi_select",
+          "options": [
+            { "value": "pricing", "label": "Pricing and value perception", "score": 1 },
+            { "value": "customer_feedback", "label": "Customer feedback vs competitors", "score": 1 },
+            { "value": "speed", "label": "Speed or innovation velocity", "score": 1 },
+            { "value": "market_reach", "label": "Channel or market reach", "score": 1 },
+            { "value": "product_performance", "label": "Product performance comparisons", "score": 1 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "differentiation_confidence",
+          "label": "How confident are you that your business has a differentiated position in the market?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not very confident — we blend in", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident — we're finding our edge", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident — customers recognize our value", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — we lead and competitors react", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

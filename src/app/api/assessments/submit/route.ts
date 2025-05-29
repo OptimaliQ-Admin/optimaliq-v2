@@ -44,9 +44,50 @@ const slugMap: SlugMap = {
     scoreTable: "score_strategic_maturity",
     profileField: "strategic_maturity_score",
     lastTakenField: "strategic_maturity_last_taken"
+  },
+  marketing_effectiveness: {
+    answerTable: "marketing_effectiveness_assessment",
+    scoreTable: "score_marketing_effectiveness",
+    profileField: "marketing_effectiveness_score",
+    lastTakenField: "marketing_effectiveness_last_taken"
+  },
+  ai_readiness: {
+    answerTable: "ai_readiness_assessment",
+    scoreTable: "score_ai_readiness",
+    profileField: "ai_readiness_score",
+    lastTakenField: "ai_readiness_last_taken"
+  },
+  competitive_benchmarking: {
+    answerTable: "competitive_benchmarking_assessment",
+    scoreTable: "score_competitive_benchmarking",
+    profileField: "competitive_benchmarking_score",
+    lastTakenField: "competitive_benchmarking_last_taken"
+  },
+  customer_experience: {
+    answerTable: "customer_experience_assessment",
+    scoreTable: "score_customer_experience",
+    profileField: "customer_experience_score",
+    lastTakenField: "customer_experience_last_taken"
+  },
+  digital_transformation: {
+    answerTable: "digital_transformation_assessment",
+    scoreTable: "score_digital_transformation",
+    profileField: "digital_transformation_score",
+    lastTakenField: "digital_transformation_last_taken"
+  },
+  leadership: {
+    answerTable: "leadership_assessment",
+    scoreTable: "score_leadership",
+    profileField: "leadership_score",
+    lastTakenField: "leadership_last_taken"
+  },
+  reassessment: {
+    answerTable: "reassessment_assessment",
+    scoreTable: "score_reassessment",
+    profileField: "reassessment_score",
+    lastTakenField: "reassessment_last_taken"
   }
 };
-
 
 function normalizeScore(score: number): string {
   if (score >= 4.5) return "score_4_5";

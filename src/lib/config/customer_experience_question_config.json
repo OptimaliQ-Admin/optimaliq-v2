@@ -1,0 +1,1070 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "feedback_gathering",
+          "label": "How do you currently gather feedback from your customers?",
+          "type": "select",
+          "options": [
+            { "value": "no_feedback", "label": "We don't collect feedback", "score": 1 },
+            { "value": "informal", "label": "Occasional informal conversations", "score": 2 },
+            { "value": "surveys", "label": "We send surveys or review requests", "score": 3 },
+            { "value": "regular_analysis", "label": "We collect feedback regularly and analyze it", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "touchpoints",
+          "label": "Which of the following customer touchpoints do you actively manage or track?",
+          "type": "multi_select",
+          "options": [
+            { "value": "onboarding", "label": "Customer onboarding", "score": 1 },
+            { "value": "support", "label": "Support interactions", "score": 1 },
+            { "value": "website", "label": "Website or app experience", "score": 1 },
+            { "value": "renewals", "label": "Renewals or repeat purchases", "score": 1 },
+            { "value": "post_purchase", "label": "Post-purchase engagement", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "support_process",
+          "label": "How would you describe your current customer support process?",
+          "type": "select",
+          "options": [
+            { "value": "no_structure", "label": "We respond as needed without structure", "score": 1 },
+            { "value": "go_to_people", "label": "We have one or two go-to support people", "score": 2 },
+            { "value": "shared_system", "label": "We use a shared inbox or system", "score": 3 },
+            { "value": "structured", "label": "We have a structured support workflow", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "satisfaction_measurement",
+          "label": "How often do you measure customer satisfaction or loyalty?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "major_events", "label": "Only after major purchases or problems", "score": 2 },
+            { "value": "periodic", "label": "We send periodic surveys (e.g., NPS)", "score": 3 },
+            { "value": "key_moments", "label": "We measure satisfaction at key journey moments", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "customer_data_view",
+          "label": "Do you have a centralized view of customer data and history?",
+          "type": "select",
+          "options": [
+            { "value": "spread_out", "label": "No — it's spread across emails or tools", "score": 1 },
+            { "value": "spreadsheets", "label": "We track some info in spreadsheets or docs", "score": 2 },
+            { "value": "crm", "label": "We use a CRM or helpdesk system", "score": 3 },
+            { "value": "full_profile", "label": "Yes — we have a full customer profile system", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "issue_tracking",
+          "label": "How often do customer issues fall through the cracks?",
+          "type": "select",
+          "options": [
+            { "value": "frequently", "label": "Frequently — it's a big problem", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes, depending on the team or system", "score": 2 },
+            { "value": "rarely", "label": "Rarely — we usually follow up", "score": 3 },
+            { "value": "almost_never", "label": "Almost never — we have alerts or automations", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "onboarding_experience",
+          "label": "Which of the following best describes your onboarding or first-time customer experience?",
+          "type": "select",
+          "options": [
+            { "value": "no_onboarding", "label": "There is no formal onboarding", "score": 1 },
+            { "value": "welcome_contact", "label": "We send a welcome email or call", "score": 2 },
+            { "value": "manual_guidance", "label": "We guide new customers manually", "score": 3 },
+            { "value": "structured_journey", "label": "We have a structured onboarding journey", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "customer_frustration",
+          "label": "What's the biggest frustration your customers experience today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "loyalty_recognition",
+          "label": "How do you currently recognize or reward loyal customers?",
+          "type": "select",
+          "options": [
+            { "value": "no_strategy", "label": "We don't have a loyalty strategy", "score": 1 },
+            { "value": "occasional", "label": "Occasional discounts or emails", "score": 2 },
+            { "value": "manual_outreach", "label": "Manual outreach to top customers", "score": 3 },
+            { "value": "structured", "label": "Structured program or retention tactics", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "improvement_priority",
+          "label": "If you could improve one part of your customer experience today, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "feedback_collection",
+          "label": "How do you currently collect customer feedback?",
+          "type": "select",
+          "options": [
+            { "value": "no_collection", "label": "We don't collect it", "score": 1 },
+            { "value": "occasional_surveys", "label": "Occasionally through surveys", "score": 2 },
+            { "value": "basic_tools", "label": "Through basic tools like NPS or reviews", "score": 3 },
+            { "value": "structured_systems", "label": "With structured systems and regular cadence", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "journey_understanding",
+          "label": "Which of the following methods do you use to understand your customer journey?",
+          "type": "multi_select",
+          "options": [
+            { "value": "interviews", "label": "Customer interviews", "score": 1 },
+            { "value": "surveys", "label": "Surveys or polls", "score": 1 },
+            { "value": "analytics", "label": "Web analytics", "score": 1 },
+            { "value": "ticket_analysis", "label": "Support ticket analysis", "score": 1 },
+            { "value": "no_mapping", "label": "We don't map the journey", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "support_followup",
+          "label": "How do you follow up with customers after a support issue or negative experience?",
+          "type": "select",
+          "options": [
+            { "value": "no_followup", "label": "We don't follow up", "score": 1 },
+            { "value": "occasional_contact", "label": "Sometimes through email or phone", "score": 2 },
+            { "value": "team_review", "label": "A team member reviews and responds", "score": 3 },
+            { "value": "structured_workflow", "label": "There is a structured follow-up workflow", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "feedback_role",
+          "label": "What role does customer feedback play in product or service improvements?",
+          "type": "select",
+          "options": [
+            { "value": "not_much", "label": "Not much", "score": 1 },
+            { "value": "occasional_sharing", "label": "Occasionally shared with the team", "score": 2 },
+            { "value": "inform_decisions", "label": "Used to inform some decisions", "score": 3 },
+            { "value": "shapes_roadmap", "label": "Directly shapes product/service roadmap", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "success_functions",
+          "label": "Which of the following are part of your customer success or support function?",
+          "type": "multi_select",
+          "options": [
+            { "value": "support_tickets", "label": "Support tickets", "score": 1 },
+            { "value": "onboarding", "label": "Customer onboarding", "score": 1 },
+            { "value": "proactive_checkins", "label": "Proactive check-ins", "score": 1 },
+            { "value": "qbrs", "label": "QBRs or customer success planning", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "satisfaction_tracking",
+          "label": "How do you track and manage customer satisfaction today?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track it", "score": 1 },
+            { "value": "occasional_feedback", "label": "Occasional surveys or anecdotal feedback", "score": 2 },
+            { "value": "nps_csat", "label": "NPS or CSAT collection", "score": 3 },
+            { "value": "sentiment_tools", "label": "Customer sentiment tools with regular analysis", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "experience_tools",
+          "label": "What tools or platforms do you use to manage your customer experience?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "CRM system", "score": 1 },
+            { "value": "helpdesk", "label": "Helpdesk platform", "score": 1 },
+            { "value": "success_platform", "label": "Customer success platform", "score": 1 },
+            { "value": "analytics", "label": "Analytics/dashboard tools", "score": 1 },
+            { "value": "no_tools", "label": "We don't use tools", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "recent_challenge",
+          "label": "What's one challenge you've faced in delivering a great customer experience recently?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "poor_experience_detection",
+          "label": "If a customer had a poor experience with your business today, how would you find out?",
+          "type": "select",
+          "options": [
+            { "value": "wouldnt_know", "label": "We probably wouldn't", "score": 1 },
+            { "value": "direct_complaint", "label": "If they complained directly", "score": 2 },
+            { "value": "online_reviews", "label": "Via online reviews or social media", "score": 3 },
+            { "value": "structured_feedback", "label": "Through structured feedback or alerts", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "improvement_goal",
+          "label": "What's one way you'd like to improve your customer experience over the next 6 months?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "feedback_consistency",
+          "label": "How consistently do you collect feedback from your customers or users?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "We rarely collect feedback", "score": 1 },
+            { "value": "occasionally", "label": "We collect it occasionally (e.g., surveys or reviews)", "score": 2 },
+            { "value": "key_touchpoints", "label": "We ask for feedback after key touchpoints", "score": 3 },
+            { "value": "structured_loops", "label": "We have regular, structured feedback loops", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "touchpoint_evaluation",
+          "label": "Which touchpoints or channels do you currently evaluate for customer experience?",
+          "type": "multi_select",
+          "options": [
+            { "value": "website", "label": "Website or digital experience", "score": 1 },
+            { "value": "support", "label": "Support interactions", "score": 1 },
+            { "value": "product_usage", "label": "Product or service usage", "score": 1 },
+            { "value": "onboarding", "label": "Onboarding process", "score": 1 },
+            { "value": "none", "label": "We don't evaluate any yet", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "negative_feedback_handling",
+          "label": "What is your current method for addressing negative feedback or complaints?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "We address issues ad hoc", "score": 1 },
+            { "value": "dedicated_team", "label": "We have a person or team who reviews them", "score": 2 },
+            { "value": "prioritized_response", "label": "We log and prioritize feedback responses", "score": 3 },
+            { "value": "analysis_improvement", "label": "We analyze complaints and use them to improve experience", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "satisfaction_measurement",
+          "label": "How do you currently measure customer satisfaction or sentiment?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't currently measure it", "score": 1 },
+            { "value": "informal", "label": "We use informal feedback or gut feel", "score": 2 },
+            { "value": "csat_surveys", "label": "We track CSAT or survey results", "score": 3 },
+            { "value": "multiple_metrics", "label": "We track NPS, CSAT, and trends over time", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "insight_sharing",
+          "label": "How often do you share customer experience insights with your broader team?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "team_meetings", "label": "Sometimes in team meetings", "score": 2 },
+            { "value": "monthly", "label": "Monthly updates or dashboards", "score": 3 },
+            { "value": "real_time", "label": "Weekly or in real-time through platforms", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "customer_metrics",
+          "label": "Which of the following customer metrics do you actively track?",
+          "type": "multi_select",
+          "options": [
+            { "value": "churn", "label": "Churn rate", "score": 1 },
+            { "value": "retention", "label": "Retention rate", "score": 1 },
+            { "value": "csat", "label": "Customer satisfaction (CSAT)", "score": 1 },
+            { "value": "nps", "label": "Net Promoter Score (NPS)", "score": 1 },
+            { "value": "ces", "label": "Customer Effort Score (CES)", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "feedback_tools",
+          "label": "What tools or systems do you use to manage or analyze customer feedback?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None — it's all manual", "score": 1 },
+            { "value": "basic_tools", "label": "Basic survey tools or email", "score": 2 },
+            { "value": "support_platforms", "label": "Customer support platforms (e.g. Zendesk)", "score": 3 },
+            { "value": "cx_tools", "label": "Dedicated CX or feedback analytics tools", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "team_empowerment",
+          "label": "How empowered are your teams to act on customer insights?",
+          "type": "select",
+          "options": [
+            { "value": "not_empowered", "label": "They're not — actions come from leadership only", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — but it depends on the situation", "score": 2 },
+            { "value": "usually", "label": "Usually — teams make changes based on data", "score": 3 },
+            { "value": "fully", "label": "Fully — everyone is responsible for improving experience", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "frustration_point",
+          "label": "What's the most frustrating part of your customer experience today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "improvement_priority",
+          "label": "If you could improve one area of your customer journey today, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "feedback_action",
+          "label": "How do you ensure customer feedback is captured and acted upon?",
+          "type": "select",
+          "options": [
+            { "value": "no_collection", "label": "We don't collect feedback", "score": 1 },
+            { "value": "rarely_act", "label": "We collect but rarely act on it", "score": 2 },
+            { "value": "monthly_review", "label": "We review feedback monthly", "score": 3 },
+            { "value": "structured_process", "label": "We act on feedback with a structured process", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "customer_data_points",
+          "label": "Which of the following customer data points do you actively track?",
+          "type": "multi_select",
+          "options": [
+            { "value": "satisfaction", "label": "Satisfaction (CSAT/NPS)", "score": 1 },
+            { "value": "support_metrics", "label": "Support volume or resolution time", "score": 1 },
+            { "value": "retention", "label": "Retention/churn rates", "score": 1 },
+            { "value": "purchase", "label": "Purchase behavior", "score": 1 },
+            { "value": "usage", "label": "Product usage", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "experience_consistency",
+          "label": "How consistent is your customer experience across touchpoints (web, email, support, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "very_inconsistent", "label": "Very inconsistent", "score": 1 },
+            { "value": "somewhat_consistent", "label": "Somewhat consistent", "score": 2 },
+            { "value": "mostly_consistent", "label": "Mostly consistent", "score": 3 },
+            { "value": "fully_unified", "label": "Fully unified and intentional", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "churn_analysis",
+          "label": "How often do you analyze churn or retention metrics?",
+          "type": "select",
+          "options": [
+            { "value": "no_analysis", "label": "We don't analyze churn", "score": 1 },
+            { "value": "yearly", "label": "Once or twice a year", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly or during reviews", "score": 3 },
+            { "value": "monthly", "label": "Monthly with structured analysis", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "onboarding_process",
+          "label": "How would you describe your onboarding or welcome process for new customers?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "We don't have a structured process", "score": 1 },
+            { "value": "basic_emails", "label": "It's basic — we send a few emails", "score": 2 },
+            { "value": "helpful_content", "label": "We guide users with helpful content", "score": 3 },
+            { "value": "tailored_journey", "label": "We provide a journey tailored to use case and persona", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "support_delivery",
+          "label": "How do customers typically get support from your team?",
+          "type": "select",
+          "options": [
+            { "value": "direct_contact", "label": "They email or call us directly", "score": 1 },
+            { "value": "support_form", "label": "They use a support form or help desk", "score": 2 },
+            { "value": "self_serve", "label": "They self-serve with articles or bots", "score": 3 },
+            { "value": "dedicated_rep", "label": "They have a dedicated rep or success manager", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "interaction_systems",
+          "label": "What systems do you use to manage customer interactions or support?",
+          "type": "multi_select",
+          "options": [
+            { "value": "email", "label": "Email inbox", "score": 1 },
+            { "value": "helpdesk", "label": "CRM or help desk tool", "score": 1 },
+            { "value": "knowledge_base", "label": "Knowledge base or chatbot", "score": 1 },
+            { "value": "success_platform", "label": "Customer success platform", "score": 1 },
+            { "value": "none", "label": "None", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "success_story",
+          "label": "What's one thing your team is doing well when it comes to customer experience?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "friction_point",
+          "label": "Where do you believe customers experience the most friction with your business?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "improvement_focus",
+          "label": "If you could improve one area of the customer experience right now, what would it be?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "satisfaction_tracking",
+          "label": "How do you track and measure customer satisfaction?",
+          "type": "select",
+          "options": [
+            { "value": "anecdotal", "label": "Anecdotal feedback or informal surveys", "score": 1 },
+            { "value": "basic_metrics", "label": "Basic CSAT or NPS tracking", "score": 2 },
+            { "value": "regular_surveys", "label": "Regular surveys tied to journey stages", "score": 3 },
+            { "value": "integrated_systems", "label": "Integrated feedback systems with alerts and dashboards", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "journey_stages",
+          "label": "Which customer journey stages are mapped and documented?",
+          "type": "multi_select",
+          "options": [
+            { "value": "awareness", "label": "Awareness", "score": 1 },
+            { "value": "consideration", "label": "Consideration", "score": 1 },
+            { "value": "purchase", "label": "Purchase", "score": 1 },
+            { "value": "onboarding", "label": "Onboarding", "score": 1 },
+            { "value": "support", "label": "Support/Service", "score": 1 },
+            { "value": "retention", "label": "Retention/Loyalty", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "feedback_gathering",
+          "label": "How do you gather customer feedback across the journey?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "We don't gather feedback consistently", "score": 1 },
+            { "value": "occasional", "label": "We run occasional surveys", "score": 2 },
+            { "value": "key_stages", "label": "We collect feedback at key stages", "score": 3 },
+            { "value": "automated_loops", "label": "We have automated feedback loops at key touchpoints", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "support_offering",
+          "label": "What kind of customer service/support do you offer?",
+          "type": "select",
+          "options": [
+            { "value": "email_only", "label": "Email or contact forms only", "score": 1 },
+            { "value": "business_hours", "label": "Phone/chat during business hours", "score": 2 },
+            { "value": "multichannel", "label": "Multichannel support with some automation", "score": 3 },
+            { "value": "omnichannel", "label": "Omnichannel, personalized support with tracking", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "issue_management",
+          "label": "How do you manage customer issues or complaints?",
+          "type": "select",
+          "options": [
+            { "value": "manual", "label": "Manually as they come in", "score": 1 },
+            { "value": "ticketing", "label": "With a ticketing system", "score": 2 },
+            { "value": "structured", "label": "With structured workflows or SLAs", "score": 3 },
+            { "value": "proactive", "label": "With proactive monitoring and escalation paths", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "cx_tools",
+          "label": "What tools or systems support your CX efforts today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "CRM", "score": 1 },
+            { "value": "ticketing", "label": "Support/ticketing system", "score": 1 },
+            { "value": "cx_platform", "label": "CX or feedback platform", "score": 1 },
+            { "value": "analytics", "label": "Journey analytics tools", "score": 1 },
+            { "value": "community", "label": "Customer community or knowledge base", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "experience_personalization",
+          "label": "How do you personalize the customer experience?",
+          "type": "select",
+          "options": [
+            { "value": "no_personalization", "label": "We don't personalize experiences", "score": 1 },
+            { "value": "basic", "label": "We use names or simple rules", "score": 2 },
+            { "value": "segment_based", "label": "We personalize based on segment or behavior", "score": 3 },
+            { "value": "real_time", "label": "We deliver real-time personalized experiences", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "journey_success",
+          "label": "What's one part of your customer journey you think is working well?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "insight_usage",
+          "label": "How do you use customer insights to drive business decisions?",
+          "type": "select",
+          "options": [
+            { "value": "not_used", "label": "We don't use customer insights regularly", "score": 1 },
+            { "value": "team_discussions", "label": "We review feedback in team discussions", "score": 2 },
+            { "value": "quarterly_planning", "label": "We tie insights to quarterly planning", "score": 3 },
+            { "value": "strategic_decisions", "label": "Customer insights shape product and strategy decisions", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "improvement_priority",
+          "label": "What's one thing you'd change to improve your customer experience today?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "feedback_improvement",
+          "label": "How is customer feedback used to improve products, services, or operations?",
+          "type": "select",
+          "options": [
+            { "value": "not_systematic", "label": "We collect feedback but don't use it systematically", "score": 1 },
+            { "value": "occasional", "label": "We use feedback for occasional improvements", "score": 2 },
+            { "value": "planning_cycles", "label": "Feedback is reviewed in planning cycles", "score": 3 },
+            { "value": "continuous", "label": "Feedback is built into continuous improvement processes", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "real_time_data",
+          "label": "What kind of real-time customer data is accessible to your teams?",
+          "type": "multi_select",
+          "options": [
+            { "value": "support_trends", "label": "Support ticket trends", "score": 1 },
+            { "value": "behavior_patterns", "label": "Customer behavior or usage patterns", "score": 1 },
+            { "value": "satisfaction_scores", "label": "NPS or satisfaction scores", "score": 1 },
+            { "value": "purchase_signals", "label": "Purchase or renewal signals", "score": 1 },
+            { "value": "sentiment_analysis", "label": "Sentiment analysis or feedback loops", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "experience_consistency",
+          "label": "How do you ensure a consistent experience across all customer touchpoints?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "We don't have a consistency process", "score": 1 },
+            { "value": "documentation", "label": "We document touchpoints or scripts", "score": 2 },
+            { "value": "brand_alignment", "label": "We align brand and service expectations", "score": 3 },
+            { "value": "journey_monitoring", "label": "We monitor and refine experience journeys", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "success_strategy",
+          "label": "Which of the following are part of your customer success or retention strategy?",
+          "type": "multi_select",
+          "options": [
+            { "value": "onboarding", "label": "Onboarding programs", "score": 1 },
+            { "value": "health_scores", "label": "Health scores or engagement tracking", "score": 1 },
+            { "value": "proactive_checkins", "label": "Proactive check-ins or QBRs", "score": 1 },
+            { "value": "churn_prediction", "label": "Churn prediction or alerts", "score": 1 },
+            { "value": "referral_programs", "label": "Referral or advocacy programs", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "churn_prevention",
+          "label": "How do you identify at-risk customers before they churn?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We react after they leave", "score": 1 },
+            { "value": "manual_flagging", "label": "We flag concerns during support or check-ins", "score": 2 },
+            { "value": "usage_tracking", "label": "We track usage or satisfaction to predict churn", "score": 3 },
+            { "value": "predictive_models", "label": "We use predictive models or health scores", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "support_personalization",
+          "label": "How personalized is your customer support or service experience?",
+          "type": "select",
+          "options": [
+            { "value": "standard", "label": "We provide the same service to everyone", "score": 1 },
+            { "value": "segment_based", "label": "We personalize based on segment or tier", "score": 2 },
+            { "value": "context_based", "label": "We use CRM/context for tailored support", "score": 3 },
+            { "value": "dynamic", "label": "Service is dynamically personalized in real-time", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "voc_frequency",
+          "label": "How often do you run voice-of-customer (VoC) or CX research programs?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "annually", "label": "Annually or during product planning", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly or as part of ops review", "score": 3 },
+            { "value": "continuous", "label": "Continuously with formal analysis", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "feedback_scale",
+          "label": "How do you gather and use customer feedback at scale?",
+          "type": "select",
+          "options": [
+            { "value": "manual", "label": "We read reviews and emails manually", "score": 1 },
+            { "value": "surveys", "label": "We run surveys or feedback forms", "score": 2 },
+            { "value": "aggregation", "label": "We aggregate and analyze via tools", "score": 3 },
+            { "value": "insights_driven", "label": "We use insights to shape CX and product", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "active_refinement",
+          "label": "What's one part of your customer experience you're actively refining right now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "top_customer_feedback",
+          "label": "If your top customers gave you one piece of honest feedback, what do you think it would be?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "cx_impact_measurement",
+          "label": "How do you measure the impact of customer experience on business performance?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure it directly", "score": 1 },
+            { "value": "basic_metrics", "label": "We review basic satisfaction or NPS", "score": 2 },
+            { "value": "retention_link", "label": "We link CX to retention or loyalty", "score": 3 },
+            { "value": "roi_modeling", "label": "We model ROI or CLV based on CX insights", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "cx_systems",
+          "label": "Which systems contribute to delivering a consistent customer experience across touchpoints?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "CRM", "score": 1 },
+            { "value": "support_software", "label": "Customer support software", "score": 1 },
+            { "value": "marketing_automation", "label": "Marketing automation", "score": 1 },
+            { "value": "cdp", "label": "Customer data platform (CDP)", "score": 1 },
+            { "value": "unified_tools", "label": "Unified communications or workflow tools", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "feedback_action",
+          "label": "How do you act on customer feedback to improve experience?",
+          "type": "select",
+          "options": [
+            { "value": "rarely_act", "label": "We collect feedback but rarely act on it", "score": 1 },
+            { "value": "issue_response", "label": "We respond when there are issues", "score": 2 },
+            { "value": "product_updates", "label": "We incorporate feedback into product or service updates", "score": 3 },
+            { "value": "feedback_loops", "label": "We use feedback loops and roadmap alignment across teams", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "personalization_methods",
+          "label": "What methods do you use to personalize customer interactions?",
+          "type": "multi_select",
+          "options": [
+            { "value": "basic_details", "label": "First name and company details", "score": 1 },
+            { "value": "behavior_based", "label": "Behavior-based content or offers", "score": 1 },
+            { "value": "journey_based", "label": "Journey-based messaging", "score": 1 },
+            { "value": "real_time", "label": "Real-time personalization engines", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "scaling_quality",
+          "label": "How do you maintain CX quality as you scale?",
+          "type": "select",
+          "options": [
+            { "value": "not_addressed", "label": "We haven't addressed this yet", "score": 1 },
+            { "value": "reactive_scaling", "label": "We add more people or tools reactively", "score": 2 },
+            { "value": "standardization", "label": "We standardize key workflows", "score": 3 },
+            { "value": "proactive_optimization", "label": "We automate, monitor, and optimize proactively", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "team_training",
+          "label": "How are your teams trained or supported in delivering great customer experiences?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "We don't provide formal training", "score": 1 },
+            { "value": "basic_onboarding", "label": "Basic onboarding covers CX", "score": 2 },
+            { "value": "refresher_training", "label": "We provide refreshers or best practices", "score": 3 },
+            { "value": "advanced_training", "label": "We run advanced CX training and measurement", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "cx_metrics",
+          "label": "Which of the following metrics do you use to evaluate CX performance?",
+          "type": "multi_select",
+          "options": [
+            { "value": "csat", "label": "CSAT or satisfaction surveys", "score": 1 },
+            { "value": "nps", "label": "Net Promoter Score (NPS)", "score": 1 },
+            { "value": "churn", "label": "Churn or retention rates", "score": 1 },
+            { "value": "clv", "label": "Customer Lifetime Value (CLV)", "score": 1 },
+            { "value": "resolution_time", "label": "Support resolution time", "score": 1 },
+            { "value": "ttv", "label": "Time to value (TTV)", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "competitive_edge",
+          "label": "What's one part of your CX strategy that gives you a competitive edge today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "scaling_challenge",
+          "label": "What's one challenge you're anticipating as your CX scales?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you that your current CX model can scale to double your customer base?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we'd need major changes", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat — we'd need to hire or adjust", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly — with a few improvements", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — we're built for scale", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "customer_centric_culture",
+          "label": "How embedded is customer-centric thinking in your company's culture?",
+          "type": "select",
+          "options": [
+            { "value": "mentioned_only", "label": "It's mentioned in values but not lived", "score": 1 },
+            { "value": "leader_talk", "label": "Leaders talk about it, but it's not operationalized", "score": 2 },
+            { "value": "team_goals", "label": "It's part of team goals and feedback", "score": 3 },
+            { "value": "built_in", "label": "Customer-first thinking is built into how we plan, hire, and lead", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "customer_centric_practices",
+          "label": "Which of the following customer-centric practices are part of your standard operating model?",
+          "type": "multi_select",
+          "options": [
+            { "value": "journey_mapping", "label": "Customer journey mapping", "score": 1 },
+            { "value": "voc_programs", "label": "Voice-of-customer programs", "score": 1 },
+            { "value": "proactive_support", "label": "Proactive support or outreach", "score": 1 },
+            { "value": "health_monitoring", "label": "Real-time customer health monitoring", "score": 1 },
+            { "value": "experience_optimization", "label": "Experience optimization based on behavior", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "expectation_adaptation",
+          "label": "How do you anticipate and respond to changes in customer expectations?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We respond after issues arise", "score": 1 },
+            { "value": "periodic", "label": "We adjust based on periodic feedback", "score": 2 },
+            { "value": "quarterly", "label": "We monitor behavior and adapt quarterly", "score": 3 },
+            { "value": "proactive", "label": "We use real-time data and insights to evolve proactively", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "performance_reporting",
+          "label": "How is customer experience performance reported internally?",
+          "type": "select",
+          "options": [
+            { "value": "anecdotal", "label": "Occasional anecdotes or surveys", "score": 1 },
+            { "value": "department", "label": "Shared in department reviews", "score": 2 },
+            { "value": "leadership", "label": "Reported in leadership meetings", "score": 3 },
+            { "value": "company_wide", "label": "Part of company-wide dashboards and OKRs", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "issue_resolution",
+          "label": "What's your approach to resolving systemic CX issues (e.g. recurring pain points)?",
+          "type": "select",
+          "options": [
+            { "value": "reactive_fix", "label": "We fix things as they're flagged", "score": 1 },
+            { "value": "track_prioritize", "label": "We track and prioritize fixes as needed", "score": 2 },
+            { "value": "retrospectives", "label": "We run CX retrospectives and track themes", "score": 3 },
+            { "value": "continuous_improvement", "label": "We use a continuous improvement loop and CX root cause analysis", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "experience_personalization",
+          "label": "How personalized is your customer experience across different segments or personas?",
+          "type": "select",
+          "options": [
+            { "value": "standard", "label": "Not very — we treat everyone the same", "score": 1 },
+            { "value": "light", "label": "Light personalization by role or behavior", "score": 2 },
+            { "value": "tailored", "label": "Tailored experiences by persona or journey stage", "score": 3 },
+            { "value": "dynamic", "label": "Fully dynamic and contextual across touchpoints", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_empowerment",
+          "label": "How empowered are your front-line teams to resolve customer issues?",
+          "type": "select",
+          "options": [
+            { "value": "escalate", "label": "They escalate most issues", "score": 1 },
+            { "value": "common_issues", "label": "They can handle common issues", "score": 2 },
+            { "value": "trained", "label": "They're trained and trusted to act", "score": 3 },
+            { "value": "fully_empowered", "label": "They have tools, autonomy, and guidelines to resolve nearly anything", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "recent_initiative",
+          "label": "What's one initiative or investment that has elevated your customer experience in the past 6 months?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "competitive_signals",
+          "label": "What signals do you track to understand whether your customer experience is a competitive advantage?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "retention_confidence",
+          "label": "How confident are you that your customer experience will drive retention and advocacy in the next 12–18 months?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — it needs work", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "very_confident", "label": "Very confident with continued focus", "score": 3 },
+            { "value": "extremely_confident", "label": "Extremely confident — it's a major growth lever", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "delight_measurement",
+          "label": "How does your organization measure and evolve customer delight over time?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We track satisfaction and improve reactively", "score": 1 },
+            { "value": "quarterly", "label": "We track NPS or CSAT and review quarterly", "score": 2 },
+            { "value": "data_driven", "label": "We design for delight and adjust via data", "score": 3 },
+            { "value": "continuous", "label": "Delight is a shared KPI, continuously optimized", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "feedback_role",
+          "label": "What role does customer feedback play in company-wide decisions?",
+          "type": "select",
+          "options": [
+            { "value": "occasional", "label": "It's occasionally reviewed by CX", "score": 1 },
+            { "value": "team_influence", "label": "It influences product/service teams", "score": 2 },
+            { "value": "strategic", "label": "It's a core input to strategy", "score": 3 },
+            { "value": "foundational", "label": "Feedback loops shape decisions across the business", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "customer_centric_culture",
+          "label": "Which of these best describes your customer-centric culture?",
+          "type": "select",
+          "options": [
+            { "value": "departmental", "label": "It exists in some departments", "score": 1 },
+            { "value": "encouraged", "label": "It's encouraged, but not structured", "score": 2 },
+            { "value": "onboarding", "label": "It's part of onboarding and values", "score": 3 },
+            { "value": "core", "label": "It's a core part of identity and operations", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "value_metrics",
+          "label": "What metrics do you use to evaluate long-term customer value?",
+          "type": "multi_select",
+          "options": [
+            { "value": "ltv", "label": "LTV", "score": 1 },
+            { "value": "retention", "label": "Retention rate", "score": 1 },
+            { "value": "satisfaction", "label": "NPS/CSAT", "score": 1 },
+            { "value": "expansion", "label": "Expansion revenue", "score": 1 },
+            { "value": "advocacy", "label": "Advocacy or referrals", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "strategic_integration",
+          "label": "How is customer experience integrated into your strategic planning?",
+          "type": "select",
+          "options": [
+            { "value": "mentioned", "label": "It's mentioned during goal setting", "score": 1 },
+            { "value": "reviewed", "label": "It's reviewed alongside other functions", "score": 2 },
+            { "value": "shapes", "label": "It shapes company priorities", "score": 3 },
+            { "value": "foundation", "label": "It's the foundation of strategic growth planning", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "market_evolution",
+          "label": "How prepared is your organization to evolve its CX strategy with market shifts?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "We'd need to start from scratch", "score": 1 },
+            { "value": "leadership_driven", "label": "We could adapt with leadership direction", "score": 2 },
+            { "value": "flexible", "label": "We're flexible with some limitations", "score": 3 },
+            { "value": "real_time", "label": "We evolve in real time with feedback loops", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "innovation_influence",
+          "label": "How often do your CX insights influence cross-functional innovation?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally in brainstorming", "score": 2 },
+            { "value": "regularly", "label": "Regularly in roadmap discussions", "score": 3 },
+            { "value": "continuously", "label": "Continuously in product/service evolution", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "recent_innovation",
+          "label": "What's one customer experience innovation you've launched in the past year?",
+          "type": "text_area",
+          "order": 6
+        },
+        {
+          "key": "strategic_advantage",
+          "label": "What is your most strategic CX advantage today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "future_vision",
+          "label": "What's your vision for customer experience over the next 24 months?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  }
+} 
