@@ -1,0 +1,1082 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "documented_strategy",
+          "label": "Do you have a documented business strategy or strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "no_plan", "label": "No formal plan exists", "score": 1 },
+            { "value": "general_goals", "label": "We have some general goals", "score": 2 },
+            { "value": "outdated_plan", "label": "There's a basic plan, but it's outdated", "score": 3 },
+            { "value": "department_only", "label": "Yes, but only for one department", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategy_update_frequency",
+          "label": "How often do you revisit or update your strategic priorities?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "yearly", "label": "Once a year", "score": 2 },
+            { "value": "major_changes", "label": "Only during major changes", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "strategy_ownership",
+          "label": "Who is responsible for setting the direction of the business?",
+          "type": "select",
+          "options": [
+            { "value": "ceo_only", "label": "The founder or CEO only", "score": 1 },
+            { "value": "leadership_group", "label": "A small leadership group", "score": 2 },
+            { "value": "board", "label": "The board or investors", "score": 3 },
+            { "value": "no_process", "label": "We don't really have a process", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "strategic_areas",
+          "label": "Which of the following areas are included in your strategic thinking today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "revenue_growth", "label": "Revenue growth", "score": 1 },
+            { "value": "customer_experience", "label": "Customer experience", "score": 1 },
+            { "value": "tech_investment", "label": "Technology investment", "score": 1 },
+            { "value": "talent_development", "label": "Talent or team development", "score": 1 },
+            { "value": "market_expansion", "label": "Market expansion", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "decision_making",
+          "label": "How would you describe your company's strategic decision-making?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "Mostly reactive or opportunistic", "score": 1 },
+            { "value": "gut_feel", "label": "Gut feel or short-term goals", "score": 2 },
+            { "value": "inconsistent", "label": "Somewhat planned but inconsistent", "score": 3 },
+            { "value": "no_process", "label": "We don't have a process", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "team_understanding",
+          "label": "Do different departments or teams understand the business's strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "some_teams", "label": "Some teams do", "score": 2 },
+            { "value": "loose_communication", "label": "It's loosely communicated", "score": 3 },
+            { "value": "no_discussion", "label": "We don't talk about strategy", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "annual_planning",
+          "label": "Which of the following best describes your annual planning process?",
+          "type": "select",
+          "options": [
+            { "value": "no_planning", "label": "We don't do annual planning", "score": 1 },
+            { "value": "revenue_targets", "label": "We set revenue targets and move forward", "score": 2 },
+            { "value": "informal_session", "label": "There's an informal planning session", "score": 3 },
+            { "value": "team_goals", "label": "Each team sets their own goals", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "strategy_blockers",
+          "label": "What's the biggest blocker keeping you from creating or executing a strategy today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "strategy_evaluation",
+          "label": "How do you currently evaluate if your strategy is working?",
+          "type": "select",
+          "options": [
+            { "value": "no_evaluation", "label": "We don't really evaluate it", "score": 1 },
+            { "value": "revenue_only", "label": "We look at revenue growth only", "score": 2 },
+            { "value": "informal_kpis", "label": "We track a few KPIs informally", "score": 3 },
+            { "value": "leadership_feedback", "label": "It's based on leadership feedback", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "strategic_initiative",
+          "label": "What's one strategic initiative you wish you had time or resources to act on?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategy_update_frequency",
+          "label": "How often do you revisit or update your strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "no_plan", "label": "We don't have one", "score": 1 },
+            { "value": "goals_not_met", "label": "Only when goals aren't met", "score": 2 },
+            { "value": "annual_planning", "label": "Annually during planning", "score": 3 },
+            { "value": "quarterly_plus", "label": "Quarterly or more", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategy_creation",
+          "label": "Who is involved in your strategy creation process?",
+          "type": "select",
+          "options": [
+            { "value": "founder_only", "label": "Just the founder or owner", "score": 1 },
+            { "value": "leadership_group", "label": "Small leadership group", "score": 2 },
+            { "value": "cross_functional", "label": "Cross-functional leaders", "score": 3 },
+            { "value": "team_input", "label": "Leaders + team input", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "long_term_goals",
+          "label": "Which of the following best describes your long-term goals?",
+          "type": "select",
+          "options": [
+            { "value": "no_goals", "label": "We don't have clear long-term goals", "score": 1 },
+            { "value": "vague_goals", "label": "We have vague or general goals", "score": 2 },
+            { "value": "one_two_years", "label": "We've defined goals for the next 1–2 years", "score": 3 },
+            { "value": "three_plus_years", "label": "We've defined and documented goals for 3+ years", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "documented_elements",
+          "label": "Which of the following are currently documented in your business?",
+          "type": "multi_select",
+          "options": [
+            { "value": "vision_mission", "label": "Vision or mission statement", "score": 1 },
+            { "value": "core_values", "label": "Core values", "score": 1 },
+            { "value": "annual_goals", "label": "Annual strategic goals", "score": 1 },
+            { "value": "kpis", "label": "KPIs or success metrics", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "team_alignment",
+          "label": "How aligned are your team's activities to your strategic priorities?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — everyone is doing their own thing", "score": 1 },
+            { "value": "somewhat_aligned", "label": "Somewhat aligned — high-level awareness exists", "score": 2 },
+            { "value": "mostly_aligned", "label": "Mostly aligned — with regular updates", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully aligned — tracked through goals and KPIs", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "strategy_inputs",
+          "label": "What inputs do you use to shape your strategic decisions?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_feedback", "label": "Customer feedback", "score": 1 },
+            { "value": "market_research", "label": "Market research", "score": 1 },
+            { "value": "performance_data", "label": "Internal performance data", "score": 1 },
+            { "value": "investor_input", "label": "Investor or board input", "score": 1 },
+            { "value": "gut_instinct", "label": "Gut instinct", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "progress_measurement",
+          "label": "How do you measure progress against strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure progress", "score": 1 },
+            { "value": "informal_reviews", "label": "We do informal reviews", "score": 2 },
+            { "value": "team_checkins", "label": "We track progress through team check-ins", "score": 3 },
+            { "value": "dashboard_metrics", "label": "We track performance with dashboards and metrics", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "strategy_role",
+          "label": "What role does strategy play in hiring, resource planning, or budgeting?",
+          "type": "select",
+          "options": [
+            { "value": "very_little", "label": "Very little", "score": 1 },
+            { "value": "sometimes_considered", "label": "It's sometimes considered", "score": 2 },
+            { "value": "guiding_input", "label": "It's a guiding input", "score": 3 },
+            { "value": "drives_decisions", "label": "It drives all major decisions", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "strategy_challenges",
+          "label": "What's the biggest challenge you face in executing strategy today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "next_initiative",
+          "label": "If you had more time or support, what strategic initiative would you tackle next?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "goal_alignment",
+          "label": "How well does your team align around quarterly or annual business goals?",
+          "type": "select",
+          "options": [
+            { "value": "loosely_defined", "label": "Goals are loosely defined", "score": 1 },
+            { "value": "shared_not_tracked", "label": "Goals are shared but not tracked", "score": 2 },
+            { "value": "quarterly_review", "label": "Goals are set and reviewed quarterly", "score": 3 },
+            { "value": "aligned_kpis", "label": "Goals are aligned across functions and tied to KPIs", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategy_revision",
+          "label": "How consistently do you revisit or revise your business strategy?",
+          "type": "select",
+          "options": [
+            { "value": "major_shifts", "label": "Only during major shifts or crises", "score": 1 },
+            { "value": "annual_planning", "label": "Annually during planning", "score": 2 },
+            { "value": "six_months", "label": "Every 6 months based on performance", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly or iteratively", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "strategy_tracking",
+          "label": "How do you track whether your strategy is working?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't really track this", "score": 1 },
+            { "value": "intuition", "label": "Based on intuition or top-line results", "score": 2 },
+            { "value": "lagging_indicators", "label": "Using goals and lagging indicators", "score": 3 },
+            { "value": "leading_indicators", "label": "With KPIs and leading indicators tied to strategy", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "market_data",
+          "label": "What kind of external market or competitor data do you use to inform strategy?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None", "score": 1 },
+            { "value": "competitor_updates", "label": "Occasional competitor updates", "score": 2 },
+            { "value": "industry_trends", "label": "Industry news and trends", "score": 3 },
+            { "value": "formal_research", "label": "Formal benchmarking or market research", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "planning_guides",
+          "label": "Which of the following are actively used to guide strategic planning?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_research", "label": "Customer research or feedback", "score": 1 },
+            { "value": "competitor_analysis", "label": "Competitor analysis", "score": 1 },
+            { "value": "performance_data", "label": "Internal performance data", "score": 1 },
+            { "value": "market_trends", "label": "Market trend reports", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "initiative_evaluation",
+          "label": "What process do you follow to evaluate new initiatives or investments?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "Decisions are made informally", "score": 1 },
+            { "value": "rough_roi", "label": "We do rough ROI estimates", "score": 2 },
+            { "value": "model_impact", "label": "We model financial and strategic impact", "score": 3 },
+            { "value": "formal_framework", "label": "We use a formal prioritization framework", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_involvement",
+          "label": "How involved are team leads or departments in strategic planning?",
+          "type": "select",
+          "options": [
+            { "value": "top_down", "label": "Strategy is top-down", "score": 1 },
+            { "value": "feedback", "label": "Leads give feedback during planning", "score": 2 },
+            { "value": "team_input", "label": "Teams shape strategy via input or goals", "score": 3 },
+            { "value": "cross_functional", "label": "Planning is cross-functional and inclusive", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "recent_goal",
+          "label": "What is one strategic goal you've set recently, and how is progress tracked?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "adaptation_confidence",
+          "label": "How confident are you that your business strategy can adapt to change?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — it's too rigid", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we adjust reactively", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we adapt with effort", "score": 3 },
+            { "value": "very", "label": "Very — our strategy evolves dynamically", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "planning_improvement",
+          "label": "What would make your strategic planning process stronger?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategy_effectiveness",
+          "label": "How do you evaluate the effectiveness of your current business strategy?",
+          "type": "select",
+          "options": [
+            { "value": "no_evaluation", "label": "We don't evaluate it formally", "score": 1 },
+            { "value": "revenue_growth", "label": "We look at revenue or top-line growth", "score": 2 },
+            { "value": "competitor_benchmark", "label": "We compare against competitors or benchmarks", "score": 3 },
+            { "value": "kpi_objectives", "label": "We assess performance against clear KPIs and objectives", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategy_refresh",
+          "label": "How often do you revisit or refresh your company strategy?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — every few years", "score": 1 },
+            { "value": "when_broken", "label": "When something breaks or stalls", "score": 2 },
+            { "value": "annual_planning", "label": "Annually during planning", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly or in ongoing planning cycles", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "planning_tools",
+          "label": "What tools or frameworks do you use to guide strategic planning?",
+          "type": "multi_select",
+          "options": [
+            { "value": "none", "label": "None", "score": 1 },
+            { "value": "swot", "label": "SWOT or business canvas", "score": 1 },
+            { "value": "okrs", "label": "OKRs or KPIs", "score": 1 },
+            { "value": "scenario_modeling", "label": "Scenario or growth modeling", "score": 1 },
+            { "value": "competitive_benchmark", "label": "Competitive benchmarking", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "strategy_communication",
+          "label": "How is strategy communicated across your company?",
+          "type": "select",
+          "options": [
+            { "value": "not_clear", "label": "It's not communicated clearly", "score": 1 },
+            { "value": "annual_meeting", "label": "Shared at an annual meeting or kickoff", "score": 2 },
+            { "value": "team_meetings", "label": "Shared via team meetings or documentation", "score": 3 },
+            { "value": "regular_checkins", "label": "It's part of regular check-ins and scorecards", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "strategy_ownership",
+          "label": "Who is responsible for defining and owning strategy?",
+          "type": "select",
+          "options": [
+            { "value": "ceo_only", "label": "The founder or CEO only", "score": 1 },
+            { "value": "leadership_team", "label": "A small leadership team", "score": 2 },
+            { "value": "department_heads", "label": "Department heads participate", "score": 3 },
+            { "value": "shared_process", "label": "It's a shared process across leaders and functions", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "initiative_prioritization",
+          "label": "How do you prioritize initiatives within your strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "gut_urgency", "label": "Based on gut or urgency", "score": 1 },
+            { "value": "opportunity_size", "label": "Based on opportunity size", "score": 2 },
+            { "value": "goals_resourcing", "label": "Based on goals and resourcing", "score": 3 },
+            { "value": "framework_model", "label": "We use a prioritization framework or scoring model", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "progress_measurement",
+          "label": "How often do you measure progress against strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "year_end", "label": "At year-end or when prompted", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "monthly", "label": "Monthly or biweekly check-ins", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "strategy_challenges",
+          "label": "Which of the following challenge your ability to execute strategy today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "unclear_goals", "label": "Unclear goals or vision", "score": 1 },
+            { "value": "competing_priorities", "label": "Competing priorities", "score": 1 },
+            { "value": "lack_buyin", "label": "Lack of buy-in or alignment", "score": 1 },
+            { "value": "limited_resources", "label": "Limited resourcing or funding", "score": 1 },
+            { "value": "no_tracking", "label": "No system for tracking", "score": 1 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "unclear_goal",
+          "label": "What's one goal or initiative that you feel unclear on how to achieve?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "strategy_improvement",
+          "label": "What would make your strategy easier to communicate or execute?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "market_alignment",
+          "label": "How do you align your business goals with market trends and customer insights?",
+          "type": "select",
+          "options": [
+            { "value": "independent", "label": "Goals are set independently of the market", "score": 1 },
+            { "value": "occasional", "label": "We consider trends occasionally", "score": 2 },
+            { "value": "customer_insights", "label": "We use customer insights to adjust goals", "score": 3 },
+            { "value": "real_time", "label": "Goals are tightly aligned to real-time data and signals", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "planning_activities",
+          "label": "Which of the following planning activities do you perform regularly?",
+          "type": "multi_select",
+          "options": [
+            { "value": "quarterly_reviews", "label": "Quarterly business reviews", "score": 1 },
+            { "value": "customer_feedback", "label": "Customer feedback loops", "score": 1 },
+            { "value": "market_intelligence", "label": "Market intelligence analysis", "score": 1 },
+            { "value": "cross_functional", "label": "Cross-functional planning sessions", "score": 1 },
+            { "value": "scenario_planning", "label": "Scenario or contingency planning", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "initiative_prioritization",
+          "label": "How do you prioritize initiatives across departments?",
+          "type": "select",
+          "options": [
+            { "value": "department_needs", "label": "Based on department needs", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc based on urgency", "score": 2 },
+            { "value": "top_down", "label": "Top-down from leadership", "score": 3 },
+            { "value": "collaborative", "label": "Collaborative prioritization linked to KPIs", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "initiative_success",
+          "label": "How do you evaluate the success of strategic initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "revenue_metrics", "label": "Mostly by revenue or growth metrics", "score": 1 },
+            { "value": "team_feedback", "label": "Team feedback or anecdotal wins", "score": 2 },
+            { "value": "defined_kpis", "label": "Against defined goals and KPIs", "score": 3 },
+            { "value": "integrated_reviews", "label": "Through integrated performance reviews across roles", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "roadmap_review",
+          "label": "What is your process for reviewing and adjusting your strategic roadmap?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "It's informal and infrequent", "score": 1 },
+            { "value": "annual", "label": "Reviewed annually", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly reviews with minor updates", "score": 3 },
+            { "value": "dynamic", "label": "Dynamic roadmap with continuous input", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "data_sources",
+          "label": "Which of the following data sources influence your strategic decisions?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_surveys", "label": "Customer surveys", "score": 1 },
+            { "value": "operational_metrics", "label": "Operational metrics", "score": 1 },
+            { "value": "financial_performance", "label": "Financial performance", "score": 1 },
+            { "value": "market_trends", "label": "Market trends", "score": 1 },
+            { "value": "competitive_analysis", "label": "Competitive analysis", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "planning_tools",
+          "label": "What tools or systems do you use for strategic planning and tracking?",
+          "type": "select",
+          "options": [
+            { "value": "spreadsheets", "label": "Spreadsheets or whiteboards", "score": 1 },
+            { "value": "project_management", "label": "Project management software", "score": 2 },
+            { "value": "dedicated_tools", "label": "Dedicated planning tools (e.g., Cascade, WorkBoard)", "score": 3 },
+            { "value": "integrated_systems", "label": "Integrated business performance systems", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "recent_insight",
+          "label": "What's one insight or feedback loop that has improved your strategic execution recently?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "strategy_gaps",
+          "label": "What are the biggest gaps between strategy and execution in your company today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "strategic_focus",
+          "label": "How do you ensure strategic focus is maintained as the company scales or changes?",
+          "type": "select",
+          "options": [
+            { "value": "hard_to_maintain", "label": "It's hard to maintain focus", "score": 1 },
+            { "value": "individual_discipline", "label": "We rely on individual discipline", "score": 2 },
+            { "value": "cascade_priorities", "label": "We cascade priorities through teams", "score": 3 },
+            { "value": "okr_system", "label": "We use OKRs or a system to align execution with vision", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "plan_revisit_frequency",
+          "label": "How frequently does your organization revisit its strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — only during crises", "score": 1 },
+            { "value": "annual", "label": "Annually during planning", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly in leadership reviews", "score": 3 },
+            { "value": "continuous", "label": "Continuously as part of operating rhythm", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "goal_alignment",
+          "label": "How aligned are departmental goals with the overall strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "siloed", "label": "Mostly siloed or disconnected", "score": 1 },
+            { "value": "somewhat_aligned", "label": "Somewhat aligned during planning", "score": 2 },
+            { "value": "aligned_not_tracked", "label": "Aligned but not consistently tracked", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully aligned and tracked across teams", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "strategic_practices",
+          "label": "Which of the following strategic practices are currently active in your organization?",
+          "type": "multi_select",
+          "options": [
+            { "value": "quarterly_reviews", "label": "Quarterly strategic reviews", "score": 1 },
+            { "value": "cross_functional_okrs", "label": "Cross-functional OKRs", "score": 1 },
+            { "value": "scenario_planning", "label": "Scenario planning", "score": 1 },
+            { "value": "board_oversight", "label": "Board-level strategy oversight", "score": 1 },
+            { "value": "strategic_offsites", "label": "Strategic offsites or retreats", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "initiative_success",
+          "label": "How does your organization measure the success of strategic initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure them", "score": 1 },
+            { "value": "financial_metrics", "label": "We use high-level financial metrics", "score": 2 },
+            { "value": "initiative_kpis", "label": "We define initiative-level KPIs", "score": 3 },
+            { "value": "comprehensive", "label": "We use KPIs, feedback loops, and outcome mapping", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "decision_frameworks",
+          "label": "What strategic decision-making frameworks (if any) does your organization use?",
+          "type": "multi_select",
+          "options": [
+            { "value": "swot", "label": "SWOT analysis", "score": 1 },
+            { "value": "balanced_scorecard", "label": "Balanced Scorecard", "score": 1 },
+            { "value": "porters_five", "label": "Porter's Five Forces", "score": 1 },
+            { "value": "blue_ocean", "label": "Blue Ocean Strategy", "score": 1 },
+            { "value": "none", "label": "None of the above", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "priority_communication",
+          "label": "How does your leadership communicate strategic priorities to the broader organization?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "They don't — priorities are unclear", "score": 1 },
+            { "value": "annual_all_hands", "label": "Shared in annual all-hands or emails", "score": 2 },
+            { "value": "with_tracking", "label": "Presented with some tracking", "score": 3 },
+            { "value": "consistent", "label": "Communicated and reinforced consistently through channels and rituals", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "strategic_agility",
+          "label": "How agile is your organization when it comes to adjusting strategic direction?",
+          "type": "select",
+          "options": [
+            { "value": "slow", "label": "Slow to react to change", "score": 1 },
+            { "value": "moderate", "label": "Moderately responsive", "score": 2 },
+            { "value": "can_shift", "label": "Can shift priorities with effort", "score": 3 },
+            { "value": "highly_agile", "label": "Highly agile with systems to support rapid pivots", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "recent_initiative",
+          "label": "What's one strategic initiative that has significantly impacted your business recently?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "execution_confidence",
+          "label": "How confident are you in your organization's ability to execute on long-term strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "extremely_confident", "label": "Extremely confident with strong systems", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_improvement",
+          "label": "What's one improvement you'd make to your current strategic planning or execution process?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "goal_communication",
+          "label": "How are your strategic goals communicated and reinforced across the organization?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "Infrequently or informally", "score": 1 },
+            { "value": "quarterly_updates", "label": "Shared quarterly via updates or meetings", "score": 2 },
+            { "value": "regular_review", "label": "Reviewed regularly in team planning", "score": 3 },
+            { "value": "embedded_okrs", "label": "Embedded in team OKRs and workflows", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "execution_process",
+          "label": "Which of the following are part of your strategic execution process?",
+          "type": "multi_select",
+          "options": [
+            { "value": "quarterly_okrs", "label": "Quarterly goal-setting or OKRs", "score": 1 },
+            { "value": "cross_functional", "label": "Cross-functional planning sessions", "score": 1 },
+            { "value": "strategy_scorecards", "label": "Strategy scorecards or dashboards", "score": 1 },
+            { "value": "monthly_retros", "label": "Monthly retrospectives", "score": 1 },
+            { "value": "quarterly_reviews", "label": "Quarterly business reviews", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "initiative_success",
+          "label": "How do you evaluate success of strategic initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "revenue_metrics", "label": "Mostly by revenue or growth metrics", "score": 1 },
+            { "value": "team_feedback", "label": "Team feedback or anecdotal wins", "score": 2 },
+            { "value": "defined_kpis", "label": "Against defined goals and KPIs", "score": 3 },
+            { "value": "integrated_reviews", "label": "Through integrated performance reviews across roles", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "outcome_ownership",
+          "label": "How is ownership of strategic outcomes distributed in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "senior_only", "label": "Owned by senior leadership only", "score": 1 },
+            { "value": "department_heads", "label": "Shared with department heads", "score": 2 },
+            { "value": "team_leads", "label": "Cascaded through team leads", "score": 3 },
+            { "value": "role_based", "label": "Tied to roles and visible in systems", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "progress_tools",
+          "label": "What tools or systems do you use to monitor strategic progress?",
+          "type": "multi_select",
+          "options": [
+            { "value": "spreadsheets", "label": "Spreadsheets", "score": 1 },
+            { "value": "bi_dashboards", "label": "BI dashboards (Looker, PowerBI)", "score": 1 },
+            { "value": "okr_software", "label": "OKR software (Lattice, 15Five)", "score": 1 },
+            { "value": "project_management", "label": "Project management (Asana, Jira)", "score": 1 },
+            { "value": "integrated_reports", "label": "Integrated ERP or CRM reports", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "strategy_adjustments",
+          "label": "How often are strategy adjustments made based on performance or market shifts?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we stay the course", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — when goals aren't met", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly — via planning reviews", "score": 3 },
+            { "value": "continuously", "label": "Continuously — with feedback loops and data", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "proud_initiative",
+          "label": "What recent strategic bet or initiative are you most proud of, and why?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "data_usage",
+          "label": "How does your leadership team use data to guide strategic priorities?",
+          "type": "select",
+          "options": [
+            { "value": "not_central", "label": "Data isn't central to decision-making", "score": 1 },
+            { "value": "annual_planning", "label": "Used during annual planning", "score": 2 },
+            { "value": "quarterly_reviews", "label": "Used in quarterly reviews", "score": 3 },
+            { "value": "real_time", "label": "Used in real-time to guide priorities and execution", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "innovation_role",
+          "label": "What role does innovation play in your strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_focus", "label": "Not a focus", "score": 1 },
+            { "value": "occasional", "label": "Occasional innovation initiatives", "score": 2 },
+            { "value": "planning_process", "label": "Part of planning process", "score": 3 },
+            { "value": "core_pillar", "label": "Core pillar in strategy and execution", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "evolution_priority",
+          "label": "What's your top priority for evolving your strategic maturity in the next year?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "priority_reassessment",
+          "label": "How frequently do you reassess and evolve your strategic priorities?",
+          "type": "select",
+          "options": [
+            { "value": "annually", "label": "Annually or less", "score": 1 },
+            { "value": "semi_annual", "label": "Semi-annually based on market input", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly with key stakeholders", "score": 3 },
+            { "value": "ongoing", "label": "Ongoing with real-time strategy cycles", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "planning_cycles",
+          "label": "Which of the following are embedded in your strategic planning cycles?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_insights", "label": "Customer or market insights", "score": 1 },
+            { "value": "competitive_analysis", "label": "Competitive analysis", "score": 1 },
+            { "value": "financial_modeling", "label": "Financial modeling", "score": 1 },
+            { "value": "innovation_plans", "label": "Innovation or R&D plans", "score": 1 },
+            { "value": "scenario_planning", "label": "Scenario planning", "score": 1 },
+            { "value": "cross_functional_okrs", "label": "Cross-functional OKRs", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "strategy_alignment",
+          "label": "How aligned is your long-term strategy with day-to-day execution?",
+          "type": "select",
+          "options": [
+            { "value": "aspirational", "label": "It's aspirational but not actionable", "score": 1 },
+            { "value": "planning_only", "label": "We review it during planning only", "score": 2 },
+            { "value": "aligned_kpis", "label": "Most teams execute against aligned KPIs", "score": 3 },
+            { "value": "living_maps", "label": "We use living strategy maps with full alignment", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "strategic_foresight",
+          "label": "What role does strategic foresight (e.g., scenario modeling, trend analysis) play in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_done", "label": "It's not something we currently do", "score": 1 },
+            { "value": "annual_review", "label": "We review annual market trend reports", "score": 2 },
+            { "value": "integrated", "label": "We integrate it into annual or product strategy", "score": 3 },
+            { "value": "drives_evolution", "label": "It drives business model evolution and growth bets", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "disruption_preparation",
+          "label": "What's one way your organization is preparing for long-term disruption or opportunity?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "bet_effectiveness",
+          "label": "How do you evaluate the effectiveness of your strategic bets over time?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track them formally", "score": 1 },
+            { "value": "annual_review", "label": "We review impact annually", "score": 2 },
+            { "value": "track_indicators", "label": "We track leading/lagging indicators per initiative", "score": 3 },
+            { "value": "clear_kpis", "label": "Each bet has clear KPIs, review cycles, and resourcing", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "strategy_roles",
+          "label": "Which teams or roles are actively involved in shaping strategic direction?",
+          "type": "multi_select",
+          "options": [
+            { "value": "executive", "label": "Executive leadership", "score": 1 },
+            { "value": "product", "label": "Product or R&D", "score": 1 },
+            { "value": "marketing_sales", "label": "Marketing and Sales", "score": 1 },
+            { "value": "customer_experience", "label": "Customer experience or insights", "score": 1 },
+            { "value": "external_advisors", "label": "External advisors or partners", "score": 1 },
+            { "value": "frontline", "label": "Frontline team representatives", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "strategy_evolution",
+          "label": "How does your strategy evolve in response to market signals or unexpected shifts?",
+          "type": "select",
+          "options": [
+            { "value": "slow_reaction", "label": "We react slowly or after the fact", "score": 1 },
+            { "value": "next_quarter", "label": "We adapt within the next quarter", "score": 2 },
+            { "value": "dynamic_monitoring", "label": "We monitor and plan dynamically", "score": 3 },
+            { "value": "agile_adjustment", "label": "Our strategy is agile and constantly adjusted", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "competitive_advantage",
+          "label": "What's one aspect of your strategy that's created measurable competitive advantage?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "strategy_confidence",
+          "label": "How confident are you that your strategic model will remain relevant over the next 3–5 years?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low — we're vulnerable to disruption", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we have room to improve", "score": 2 },
+            { "value": "high", "label": "High — our model is built for adaptation", "score": 3 },
+            { "value": "very_high", "label": "Very high — we lead transformation in our category", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "vision_execution",
+          "label": "How does your organization translate its vision into daily execution?",
+          "type": "select",
+          "options": [
+            { "value": "not_translated", "label": "It's not clearly translated", "score": 1 },
+            { "value": "general_goals", "label": "We have general goals, but they're not operationalized", "score": 2 },
+            { "value": "loose_alignment", "label": "We align departments loosely to high-level goals", "score": 3 },
+            { "value": "cascaded_goals", "label": "We have cascaded, measurable goals tied to execution plans", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "initiative_evolution",
+          "label": "How do you ensure strategic initiatives are continuously evolving based on results?",
+          "type": "select",
+          "options": [
+            { "value": "stick_plan", "label": "We typically stick to the original plan", "score": 1 },
+            { "value": "annual_review", "label": "We review annually or after major issues", "score": 2 },
+            { "value": "quarterly_adapt", "label": "We adapt based on quarterly results", "score": 3 },
+            { "value": "continuous_loop", "label": "We have a continuous improvement loop with live metrics", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "strategic_capabilities",
+          "label": "Which of these strategic capabilities are mature within your business?",
+          "type": "multi_select",
+          "options": [
+            { "value": "scenario_modeling", "label": "Strategic scenario modeling", "score": 1 },
+            { "value": "innovation_portfolio", "label": "Innovation portfolio management", "score": 1 },
+            { "value": "okr_alignment", "label": "Cross-functional OKR alignment", "score": 1 },
+            { "value": "adaptive_resourcing", "label": "Adaptive resourcing and prioritization", "score": 1 },
+            { "value": "market_signals", "label": "Market signal-based decision loops", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "priority_adjustment",
+          "label": "How does your executive team adjust strategic priorities in response to external shifts?",
+          "type": "select",
+          "options": [
+            { "value": "annual_only", "label": "Only during annual planning", "score": 1 },
+            { "value": "occasional", "label": "Occasionally when absolutely needed", "score": 2 },
+            { "value": "quarterly", "label": "We assess and adjust quarterly", "score": 3 },
+            { "value": "proactive", "label": "We model and iterate strategy proactively", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "market_differentiation",
+          "label": "What is one way your strategic approach has created significant market differentiation?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "strategic_thinking",
+          "label": "How is strategic thinking embedded across levels of your organization?",
+          "type": "select",
+          "options": [
+            { "value": "executive_led", "label": "It's mostly executive-led", "score": 1 },
+            { "value": "manager_translation", "label": "Managers translate strategy independently", "score": 2 },
+            { "value": "training_empowerment", "label": "We train and empower strategic thinking", "score": 3 },
+            { "value": "cultural_norm", "label": "It's a cultural norm with strategic rituals at all levels", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "strategic_contributors",
+          "label": "Which roles or teams contribute most actively to strategic insight and decision-making?",
+          "type": "multi_select",
+          "options": [
+            { "value": "executive", "label": "Executive leadership", "score": 1 },
+            { "value": "middle_management", "label": "Middle management", "score": 1 },
+            { "value": "data_analytics", "label": "Data/analytics teams", "score": 1 },
+            { "value": "customer_success", "label": "Customer success or sales", "score": 1 },
+            { "value": "external_advisors", "label": "External advisors or consultants", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "priority_communication",
+          "label": "How do you communicate strategic priorities throughout your organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_clear", "label": "They're not clearly communicated", "score": 1 },
+            { "value": "town_halls", "label": "Shared via town halls or newsletters", "score": 2 },
+            { "value": "department_planning", "label": "Reinforced through department planning", "score": 3 },
+            { "value": "integrated_kpis", "label": "Integrated into team and individual KPIs", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "future_maturity",
+          "label": "What does strategic maturity look like for your organization 2 years from now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "evolution_confidence",
+          "label": "How confident are you that your strategy can evolve with market conditions and lead growth?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we'll need help", "score": 1 },
+            { "value": "moderately_confident", "label": "Moderately confident — we'll react quickly", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident — we're set up to adapt", "score": 3 },
+            { "value": "fully_confident", "label": "Fully confident — we're built for continuous evolution", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

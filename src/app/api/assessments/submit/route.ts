@@ -38,6 +38,12 @@ const slugMap: SlugMap = {
     scoreTable: "score_tech_stack",
     profileField: "tech_stack_score",
     lastTakenField: "tech_stack_last_taken"
+  },
+  strategic_maturity: {
+    answerTable: "strategic_maturity_assessment",
+    scoreTable: "score_strategic_maturity",
+    profileField: "strategic_maturity_score",
+    lastTakenField: "strategic_maturity_last_taken"
   }
 };
 

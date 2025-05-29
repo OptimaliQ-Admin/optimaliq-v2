@@ -110,6 +110,14 @@ export default function AssessmentsPage() {
           lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
           userId={user?.u_id}
         />
+        <AssessmentCard
+          slug="strategic_maturity"
+          title="Strategic Maturity"
+          description="Evaluate your organization's strategic planning and execution."
+          score={assessmentData.strategic_maturity?.score ?? null}
+          lastTakenDate={assessmentData.strategic_maturity?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
       </div>
     </div>
   );  

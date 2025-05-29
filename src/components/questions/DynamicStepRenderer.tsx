@@ -44,7 +44,14 @@ type Props = {
 };
 
 function normalizeScore(score: number): string {
-  return `score_${Math.min(Math.max(Math.ceil(score), 1), 5)}`;
+  if (score >= 4.5) return "score_4_5";
+  if (score >= 4.0) return "score_4";
+  if (score >= 3.5) return "score_3_5";
+  if (score >= 3.0) return "score_3";
+  if (score >= 2.5) return "score_2_5";
+  if (score >= 2.0) return "score_2";
+  if (score >= 1.5) return "score_1_5";
+  return "score_1";
 }
 
 function convertToQuestionValue(

@@ -9,10 +9,6 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 
-function normalizeScore(score: number): string {
-  return `score_${Math.min(Math.max(Math.ceil(score), 1), 5)}`;
-}
-
 type Props = {
     slug: string;
 };
@@ -129,11 +125,7 @@ export default function DynamicAssessmentPage({ slug }: Props) {
       return;
     }
 
-    // Count total question steps (dynamic + finalQuestions)
-    const totalSteps = Object.keys(questionConfig[normalizeScore(score)].groups || {}).length;
-    const hasFinal = slug === "tech_stack" && questionConfig[normalizeScore(score)].finalQuestions;
-    const totalStepsWithFinal = hasFinal ? totalSteps + 1 : totalSteps;
-    const isLastStep = step >= totalStepsWithFinal - 1;
+    const isLastStep = step >= 2;
 
     if (!isLastStep) {
       setStep((prev) => prev + 1);
@@ -187,21 +179,6 @@ export default function DynamicAssessmentPage({ slug }: Props) {
     }));
   };
 
-  const getButtonText = () => {
-    if (submitting) return "Submitting...";
-    const totalSteps = Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length;
-    const hasFinal = slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions;
-    const totalStepsWithFinal = hasFinal ? totalSteps + 1 : totalSteps;
-    return step >= totalStepsWithFinal - 1 ? "Submit" : "Next";
-  };
-
-  const getProgressWidth = () => {
-    const totalSteps = Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length;
-    const hasFinal = slug === "tech_stack" && questionConfig[normalizeScore(score || 0)].finalQuestions;
-    const totalStepsWithFinal = hasFinal ? totalSteps + 1 : totalSteps;
-    return `${((step + 1) / totalStepsWithFinal) * 100}%`;
-  };
-
   if (loading) {
     return <div className="p-10 text-center">Loading your assessment...</div>;
   }
@@ -236,19 +213,19 @@ export default function DynamicAssessmentPage({ slug }: Props) {
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-blue-600 h-2.5 rounded-full"
-              style={{ width: getProgressWidth() }}
-            />
+              style={{ width: `${((step + 1) / 3) * 100}%` }}
+            ></div>
           </div>
         </div>
 
         <DynamicStepRenderer
-          config={questionConfig}
-          score={score || 0}
-          step={step}
-          answers={formAnswers}
-          onAnswer={handleAnswer}
-          assessmentType={slug}
-        />
+  config={questionConfig}
+  score={score || 0}
+  step={step}
+  answers={formAnswers}
+  onAnswer={handleAnswer}
+  assessmentType={slug}
+/>
 
         <div className="mt-8 flex justify-between">
           <button
@@ -271,7 +248,7 @@ export default function DynamicAssessmentPage({ slug }: Props) {
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            {getButtonText()}
+            {submitting ? "Submitting..." : step === 2 ? "Submit" : "Next"}
           </button>
         </div>
       </div>

@@ -14,17 +14,18 @@ type QuestionConfig = {
         }>;
       }>;
     };
-    finalQuestions?: Array<{
-      key: string;
-      label: string;
-      type: "select" | "multi_select" | "text_area";
-      categories?: Record<string, string[]>;
-    }>;
   };
 };
 
 function normalizeScore(score: number): string {
-  return `score_${Math.min(Math.max(Math.ceil(score), 1), 5)}`;
+  if (score >= 4.5) return "score_4_5";
+  if (score >= 4.0) return "score_4";
+  if (score >= 3.5) return "score_3_5";
+  if (score >= 3.0) return "score_3";
+  if (score >= 2.5) return "score_2_5";
+  if (score >= 2.0) return "score_2";
+  if (score >= 1.5) return "score_1_5";
+  return "score_1";
 }
 
 export function isDynamicStepValid(
@@ -41,42 +42,19 @@ export function isDynamicStepValid(
     return false;
   }
 
-  const groupStepCount = Object.keys(scoreConfig.groups || {}).length;
-  const isFinalStep = step === groupStepCount && !!scoreConfig.finalQuestions;
-
   // Get questions for the current step
-  const questions = isFinalStep && scoreConfig.finalQuestions
-    ? scoreConfig.finalQuestions
-    : scoreConfig.groups[step.toString()] || [];
-
-  console.log(`Validating step ${step} with ${questions.length} questions`);
-  console.log('Current answers:', answers);
+  const questions = scoreConfig.groups[step.toString()] || [];
 
   // Check if all questions in the step have valid answers
-  const isValid = questions.every((question) => {
+  return questions.every((question) => {
     const answer = answers[question.key];
-    console.log(`Validating question ${question.key}:`, { type: question.type, answer });
 
     // For multi-select questions
     if (question.type === "multi_select") {
-      const isValid = Array.isArray(answer) && answer.length > 0;
-      console.log(`Multi-select validation for ${question.key}:`, isValid);
-      return isValid;
+      return Array.isArray(answer) && answer.length > 0;
     }
 
-    // For text area questions
-    if (question.type === "text_area") {
-      const isValid = typeof answer === "string" && answer.trim().length > 0;
-      console.log(`Text area validation for ${question.key}:`, isValid);
-      return isValid;
-    }
-
-    // For select questions
-    const isValid = typeof answer === "string" && answer.trim().length > 0;
-    console.log(`Select validation for ${question.key}:`, isValid);
-    return isValid;
+    // For multiple choice questions
+    return typeof answer === "string" && answer.trim().length > 0;
   });
-
-  console.log(`Step ${step} validation result:`, isValid);
-  return isValid;
 } 
