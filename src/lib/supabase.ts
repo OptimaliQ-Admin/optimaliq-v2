@@ -3,11 +3,4 @@
 
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 
-export const supabase = createPagesBrowserClient({
-  options: {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false
-    }
-  }
-});
+export const supabase = createPagesBrowserClient();
