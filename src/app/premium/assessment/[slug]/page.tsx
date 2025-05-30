@@ -1,6 +1,6 @@
-import dynamic from "next/dynamic";
+"use client";
 
-const DynamicAssessmentPage = dynamic(() => import("./client"), { ssr: false });
+import DynamicAssessmentPage from "./client";
 
 export default function AssessmentPage() {
   return <DynamicAssessmentPage />;
