@@ -8,6 +8,8 @@ import DynamicStepRenderer from "@/components/questions/DynamicStepRenderer";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
+import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
+
 
 type Props = {
     slug: string;
@@ -204,12 +206,28 @@ export default function DynamicAssessmentPage({ slug }: Props) {
   if (!questionConfig) {
     return <div className="p-10 text-center">Loading assessment configuration...</div>;
   }
-
+  const slugToAssessmentType: Record<string, AssessmentType> = {
+    bpm: "BPM",
+    sales: "sales",
+    tech_stack: "tech",
+    strategic_maturity: "strategy",
+    marketing_effectiveness: "marketing",
+    ai_readiness: "ai",
+    competitive_benchmarking: "benchmarking",
+    customer_experience: "cx",
+    digital_transformation: "digital",
+    leadership: "leadership",
+    reassessment: "reassessment",
+  };
+  
+  const currentType = slugToAssessmentType[slug];
+  const title = currentType ? assessmentIntros[currentType].title : "Assessment";
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Assessment</h1>
+        <h1 className="text-3xl font-bold mb-4">{title}</h1>
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-blue-600 h-2.5 rounded-full"
