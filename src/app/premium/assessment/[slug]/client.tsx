@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import DynamicStepRenderer from "@/components/questions/DynamicStepRenderer";
@@ -9,9 +9,6 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
-
-
-import { useParams } from "next/navigation";
 
 export default function DynamicAssessmentPage() {
   const params = useParams();

@@ -1,15 +1,7 @@
-import DynamicAssessmentPage from "./client";
+import dynamic from "next/dynamic";
 
-interface Props {
-  params?: Promise<{
-    slug: string;
-  }>;
-}
+const DynamicAssessmentPage = dynamic(() => import("./client"), { ssr: false });
 
-export default async function Page({ params }: Props) {
-  const resolvedParams = await params;
-  const slug = resolvedParams?.slug;
-  return <>
-    {slug && <DynamicAssessmentPage slug={slug} />}
-  </>;
+export default function AssessmentPage() {
+  return <DynamicAssessmentPage />;
 }
