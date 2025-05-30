@@ -9,6 +9,7 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
+import { showToast } from "@/lib/utils/toast";
 
 export default function DynamicAssessmentPage() {
   const params = useParams();
@@ -109,19 +110,19 @@ export default function DynamicAssessmentPage() {
 
   const handleNext = async () => {
     if (score === null) {
-      alert("Score is not loaded yet. Please try again.");
+      showToast.error("Score is not loaded yet. Please try again.");
       return;
     }
 
     if (!questionConfig) {
-      alert("Question configuration is not loaded yet. Please try again.");
+      showToast.error("Question configuration is not loaded yet. Please try again.");
       return;
     }
 
     const stepIsValid = isDynamicStepValid(score, step, formAnswers, questionConfig);
 
     if (!stepIsValid) {
-      alert("Please complete all required questions before continuing.");
+      showToast.warning("Please complete all required questions before continuing.");
       return;
     }
 
@@ -133,7 +134,7 @@ export default function DynamicAssessmentPage() {
     }
 
     if (!user?.u_id) {
-      alert("User ID missing. Please try again.");
+      showToast.error("User ID missing. Please try again.");
       return;
     }
 
@@ -159,10 +160,12 @@ export default function DynamicAssessmentPage() {
         throw new Error(result.error || "Failed to score assessment");
       }
 
+      showToast.success("Assessment submitted successfully!");
       router.push("/premium/assessment");
     } catch (err: unknown) {
       console.error("❌ Assessment submission failed:", err);
       setError(getErrorMessage(err));
+      showToast.error(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }

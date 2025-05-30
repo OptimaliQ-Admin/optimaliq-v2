@@ -14,6 +14,7 @@ import {
 import { stripOtherFields } from "@/utils/stripOtherFields";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import { showToast } from "@/lib/utils/toast";
 
 export default function InitialAssessmentPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function InitialAssessmentPage() {
     console.log("🧠 user =", user);
   
     if (!user?.u_id) {
-      alert("User not authenticated. Please log in again.");
+      showToast.error("User not authenticated. Please log in again.");
       router.push("/subscribe/create-account");
     } else {
       setLoading(false);
@@ -45,12 +46,12 @@ export default function InitialAssessmentPage() {
   const handleNext = async () => {
     const validator = stepValidators[step];
     if (validator && !validator(formAnswers)) {
-      alert("Please complete all required questions before continuing.");
+      showToast.warning("Please complete all required questions before continuing.");
       return;
     }
   
     if (!user?.u_id) {
-      alert("User session expired. Please log in again.");
+      showToast.error("User session expired. Please log in again.");
       router.push("/subscribe/create-account");
       return;
     }
@@ -70,13 +71,14 @@ export default function InitialAssessmentPage() {
   
       const result = await response.json();
       if (!response.ok) {
-        alert(`Submission error: ${result.error}`);
+        showToast.error(`Submission error: ${result.error}`);
         return;
       }
   
+      showToast.success("Assessment completed successfully!");
       router.push("/premium/dashboard");
     } catch (err: unknown) {
-      alert("Unexpected error occurred: " + getErrorMessage(err));
+      showToast.error("Unexpected error occurred: " + getErrorMessage(err));
     }
   };  
 

@@ -15,6 +15,7 @@ import {
   FaIndustry,
 } from "react-icons/fa";
 import { supabase } from "@/lib/supabase";
+import { showToast } from "@/lib/utils/toast";
 
 
 export default function SubscribeForm() {
@@ -42,7 +43,10 @@ export default function SubscribeForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  if (!captchaToken) return alert("⚠️ Please complete the captcha.");
+  if (!captchaToken) {
+    showToast.warning("Please complete the captcha.");
+    return;
+  }
   setLoading(true);
   
     // 1. Insert into leads
@@ -63,7 +67,8 @@ export default function SubscribeForm() {
       .maybeSingle();
   
     if (fetchError) {
-      alert("❌ Failed to check existing user.");
+      console.error("Failed to check existing user:", fetchError);
+      showToast.error("Failed to check existing user.");
       setLoading(false);
       return;
     }
@@ -90,7 +95,8 @@ export default function SubscribeForm() {
         }]);
   
       if (insertUserError) {
-        alert("❌ Failed to create preliminary user record.");
+        console.error("Failed to create preliminary user record:", insertUserError);
+        showToast.error("Failed to create preliminary user record.");
         setLoading(false);
         return;
       }
@@ -105,7 +111,8 @@ export default function SubscribeForm() {
         .maybeSingle();
   
       if (subError) {
-        alert("❌ Failed to check subscription status.");
+        console.error("Failed to check subscription status:", subError);
+        showToast.error("Failed to check subscription status.");
         setLoading(false);
         return;
       }
@@ -137,7 +144,8 @@ export default function SubscribeForm() {
     if (url) {
       window.location.href = url;
     } else {
-      alert("❌ Failed to create Stripe session.");
+      console.error("Failed to create Stripe session:");
+      showToast.error("Failed to create Stripe session.");
       setLoading(false);
     }
   };  

@@ -11,6 +11,7 @@ import {
   FaUser, FaEnvelope, FaIndustry, FaBriefcase,
   FaBuilding, FaDollarSign,
 } from "react-icons/fa";
+import { showToast } from "@/lib/utils/toast";
 
 export default function GrowthAssessmentForm() {
   const router = useRouter();
@@ -34,13 +35,13 @@ export default function GrowthAssessmentForm() {
     // ✅ Validate required fields
     for (const [key, value] of Object.entries(userInfo)) {
       if (!value) {
-        alert("⚠️ All fields are required.");
+        showToast.warning("All fields are required.");
         return;
       }
     }
   
     if (!captchaToken) {
-      alert("⚠️ Please verify you are not a robot.");
+      showToast.warning("Please verify you are not a robot.");
       return;
     }
   
@@ -54,7 +55,7 @@ export default function GrowthAssessmentForm() {
   
       if (fetchError) {
         console.error("❌ Error checking user:", fetchError);
-        alert("Unable to check user. Try again.");
+        showToast.error("Unable to check user. Try again.");
         return;
       }
   
@@ -70,7 +71,7 @@ export default function GrowthAssessmentForm() {
   
         if (updateError) {
           console.error("❌ Error updating user:", updateError);
-          alert("Failed to update user. Try again.");
+          showToast.error("Failed to update user. Try again.");
           return;
         }
       } else {
@@ -82,7 +83,7 @@ export default function GrowthAssessmentForm() {
   
         if (insertError || !newUser?.u_id) {
           console.error("❌ Error creating user:", insertError);
-          alert("Failed to create user. Try again.");
+          showToast.error("Failed to create user. Try again.");
           return;
         }
   
@@ -97,14 +98,14 @@ export default function GrowthAssessmentForm() {
   
     } catch (err) {
       console.error("❌ Unexpected error:", err);
-      alert("Unexpected error. Please try again.");
+      showToast.error("Unexpected error. Please try again.");
     }
   };  
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
       <h2 className="text-2xl font-bold text-gray-800 text-center">Tell Us About Yourself</h2>
-      <p className="text-gray-600 text-center mt-2">We’ll tailor insights to your business needs.</p>
+      <p className="text-gray-600 text-center mt-2">We'll tailor insights to your business needs.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mt-6">
         <IconInput icon={FaUser} name="name" maxLength={30} value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
