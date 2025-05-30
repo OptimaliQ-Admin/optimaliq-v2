@@ -1,4 +1,4 @@
-// src/app/tier2/assessment/page.tsx
+// src/app/premium/assessment/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";

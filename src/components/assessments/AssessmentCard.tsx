@@ -1,7 +1,11 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, differenceInDays } from "date-fns";
-import AssessmentIntroModal from "./AssessmentIntroModal";
+import AssessmentIntroModal, {
+  AssessmentType,
+} from "./AssessmentIntroModal"; // ✅ Adjust the path if needed
 
 type AssessmentCardProps = {
   slug: string;
@@ -18,12 +22,12 @@ export default function AssessmentCard({
   description,
   score,
   lastTakenDate,
-  userId
+  userId,
 }: AssessmentCardProps) {
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
 
-  const handleStart = () => {
+  const handleClick = () => {
     setShowIntro(true);
   };
 
@@ -50,17 +54,15 @@ export default function AssessmentCard({
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className="text-gray-600 mb-4">{description}</p>
 
-        {/* Never taken */}
         {!hasTaken && (
           <button
-            onClick={handleStart}
+            onClick={handleClick}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
           >
             Start Assessment
           </button>
         )}
 
-        {/* Taken < 30 days ago */}
         {hasTaken && !needsRetake && (
           <>
             <div className="mb-4">
@@ -75,7 +77,6 @@ export default function AssessmentCard({
           </>
         )}
 
-        {/* Taken > 30 days ago */}
         {hasTaken && needsRetake && (
           <>
             <div className="mb-4">
@@ -89,10 +90,11 @@ export default function AssessmentCard({
             </p>
             <div className="mt-4 border-t pt-4">
               <p className="text-yellow-700 mb-2">
-                Your last assessment is over 30 days old. Consider retaking it to reflect recent changes.
+                Your last assessment is over 30 days old. Consider retaking it
+                to reflect recent changes.
               </p>
               <button
-                onClick={handleStart}
+                onClick={handleClick}
                 className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
               >
                 Retake Assessment
@@ -106,7 +108,7 @@ export default function AssessmentCard({
         isOpen={showIntro}
         onClose={handleClose}
         onStart={handleStartAssessment}
-        assessmentType={slug as any}
+        assessmentType={slug as AssessmentType} // ✅ This cast ensures types line up
       />
     </>
   );
