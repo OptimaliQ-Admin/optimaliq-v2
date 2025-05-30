@@ -48,32 +48,32 @@ const slugMap: SlugMap = {
   marketing_effectiveness: {
     answerTable: "marketing_effectiveness_assessment",
     scoreTable: "score_marketing_effectiveness",
-    profileField: "marketing_effectiveness_score",
-    lastTakenField: "marketing_effectiveness_last_taken"
+    profileField: "marketing_score",
+    lastTakenField: "marketing_last_taken"
   },
   ai_readiness: {
     answerTable: "ai_readiness_assessment",
     scoreTable: "score_ai_readiness",
-    profileField: "ai_readiness_score",
-    lastTakenField: "ai_readiness_last_taken"
+    profileField: "ai_score",
+    lastTakenField: "ai_last_taken"
   },
   competitive_benchmarking: {
     answerTable: "competitive_benchmarking_assessment",
     scoreTable: "score_competitive_benchmarking",
-    profileField: "competitive_benchmarking_score",
-    lastTakenField: "competitive_benchmarking_last_taken"
+    profileField: "benchmarking_score",
+    lastTakenField: "benchmarking_last_taken"
   },
   customer_experience: {
     answerTable: "customer_experience_assessment",
     scoreTable: "score_customer_experience",
-    profileField: "customer_experience_score",
-    lastTakenField: "customer_experience_last_taken"
+    profileField: "cx_score",
+    lastTakenField: "cx_last_taken"
   },
   digital_transformation: {
     answerTable: "digital_transformation_assessment",
     scoreTable: "score_digital_transformation",
-    profileField: "digital_transformation_score",
-    lastTakenField: "digital_transformation_last_taken"
+    profileField: "digital_score",
+    lastTakenField: "digital_last_taken"
   },
   leadership: {
     answerTable: "leadership_assessment",
