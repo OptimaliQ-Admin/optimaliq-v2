@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface PricingCardProps {
   plan: "Free" | "Accelerator" | "Enterprise";
@@ -10,10 +11,21 @@ interface PricingCardProps {
 }
 
 export default function PricingCard({ plan, price, cycle, features, disabled = [], cta }: PricingCardProps) {
+  const router = useRouter();
   const emojiMap = {
     Free: "🌟",
     Accelerator: "🚀",
     Enterprise: "🏆",
+  };
+
+  const handleClick = () => {
+    if (plan === "Free") {
+      router.push("/dashboard/Page1");
+      return;
+    }
+
+    const planSlug = plan.toLowerCase();
+    router.push(`/subscribe?plan=${planSlug}&cycle=${cycle}`);
   };
 
   return (
@@ -25,11 +37,12 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
         {features.map(f => <li key={f}>✅ {f}</li>)}
         {disabled.map(f => <li key={f} className="opacity-50">❌ {f}</li>)}
       </ul>
-      <Link href="/dashboard/Page1">
-        <button className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-bold hover:bg-blue-800 transition">
-          {cta}
-        </button>
-      </Link>
+      <button
+        onClick={handleClick}
+        className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-bold hover:bg-blue-800 transition"
+      >
+        {cta}
+      </button>
     </div>
   );
 }

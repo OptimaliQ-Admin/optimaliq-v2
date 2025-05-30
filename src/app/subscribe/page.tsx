@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import SubscribeForm from "@/components/subscribe/SubscribeForm";
 import ValueCarousel from "@/components/subscribe/ValueCarousel";
 
 export default function SubscribePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [checkingStatus, setCheckingStatus] = useState(true);
+
+  const plan = searchParams.get("plan") as "accelerator" | "enterprise" | null;
+  const cycle = searchParams.get("cycle") as "monthly" | "annual" | null;
 
   useEffect(() => {
     const checkIfUserExists = async () => {
@@ -53,7 +57,7 @@ export default function SubscribePage() {
         <div className="hidden md:block">
           <ValueCarousel />
         </div>
-        <SubscribeForm />
+        <SubscribeForm plan={plan} cycle={cycle} />
       </div>
     </div>
   );
