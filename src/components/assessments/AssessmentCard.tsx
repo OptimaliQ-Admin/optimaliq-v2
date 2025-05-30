@@ -5,7 +5,21 @@ import { useRouter } from "next/navigation";
 import { format, differenceInDays } from "date-fns";
 import AssessmentIntroModal, {
   AssessmentType,
-} from "./AssessmentIntroModal"; // ✅ Adjust the path if needed
+} from "./AssessmentIntroModal"; 
+
+const slugToAssessmentType: Record<string, AssessmentType> = {
+  bpm: "BPM",
+  sales: "sales",
+  tech_stack: "tech",
+  strategic_maturity: "strategy",
+  marketing_effectiveness: "marketing",
+  ai_readiness: "ai",
+  competitive_benchmarking: "benchmarking",
+  customer_experience: "cx",
+  digital_transformation: "digital",
+  leadership: "leadership",
+  reassessment: "reassessment",
+};
 
 type AssessmentCardProps = {
   slug: string;
@@ -104,12 +118,14 @@ export default function AssessmentCard({
         )}
       </div>
 
-      <AssessmentIntroModal
-        isOpen={showIntro}
-        onClose={handleClose}
-        onStart={handleStartAssessment}
-        assessmentType={slug as AssessmentType} // ✅ This cast ensures types line up
-      />
+      {slug in slugToAssessmentType && (
+  <AssessmentIntroModal
+    isOpen={showIntro}
+    onClose={handleClose}
+    onStart={handleStartAssessment}
+    assessmentType={slugToAssessmentType[slug]}
+  />
+)}
     </>
   );
 }
