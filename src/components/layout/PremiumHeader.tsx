@@ -9,7 +9,7 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import { supabase } from "@/lib/supabase";
 
 export default function PremiumHeader() {
-  const { user, setUser } = usePremiumUser();
+  const { user } = usePremiumUser();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,31 +28,7 @@ export default function PremiumHeader() {
 
   const handleLogout = async () => {
     try {
-      // 1. Sign out from Supabase
       await supabase.auth.signOut();
-      
-      // 2. Clear all localStorage items
-      const keysToRemove = [
-        "tier2_user",
-        "tier2_email",
-        "tier2_user_id",
-        "tier2_full_user_info",
-        "sb-access-token",
-        "sb-refresh-token"
-      ];
-      
-      keysToRemove.forEach(key => localStorage.removeItem(key));
-      
-      // 3. Clear the user context
-      setUser(null);
-      
-      // 4. Clear any session cookies
-      document.cookie.split(";").forEach(cookie => {
-        const [name] = cookie.split("=");
-        document.cookie = `${name.trim()}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      });
-      
-      // 5. Redirect to home page
       router.push("/");
     } catch (error) {
       console.error("Error signing out:", error);
