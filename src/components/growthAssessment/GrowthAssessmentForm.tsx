@@ -105,7 +105,7 @@ export default function GrowthAssessmentForm() {
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
       <h2 className="text-2xl font-bold text-gray-800 text-center">Tell Us About Yourself</h2>
-      <p className="text-gray-600 text-center mt-2">We'll tailor insights to your business needs.</p>
+      <p className="text-gray-600 text-center mt-2">We&rsquo;ll tailor insights to your business needs.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mt-6">
         <IconInput icon={FaUser} name="name" maxLength={30} value={userInfo.name} onChange={handleChange} placeholder="Your Name" />
