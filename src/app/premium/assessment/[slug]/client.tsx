@@ -11,11 +11,12 @@ import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
 
 
-type Props = {
-    slug: string;
-};
+import { useParams } from "next/navigation";
 
-export default function DynamicAssessmentPage({ slug }: Props) {
+export default function DynamicAssessmentPage() {
+  const params = useParams();
+  const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug || "";
+
   const router = useRouter();
   const { user } = usePremiumUser();
   const [step, setStep] = useState(0);
