@@ -118,6 +118,62 @@ export default function AssessmentsPage() {
           lastTakenDate={assessmentData.strategic_maturity?.lastTakenDate ?? null}
           userId={user?.u_id}
         />
+        <AssessmentCard
+          slug="marketing_effectiveness"
+          title="Marketing Effectiveness"
+          description="Measure how well your marketing drives engagement and results."
+          score={assessmentData.marketing_effectiveness?.score ?? null}
+          lastTakenDate={assessmentData.marketing_effectiveness?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="ai_readiness"
+          title="AI & Automation Readiness"
+          description="Assess how prepared you are to leverage AI and automation at scale."
+          score={assessmentData.ai_readiness?.score ?? null}
+          lastTakenDate={assessmentData.ai_readiness?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="competitive_benchmarking"
+          title="Competitive Benchmarking"
+          description="See how you stack up against peers and top performers."
+          score={assessmentData.competitive_benchmarking?.score ?? null}
+          lastTakenDate={assessmentData.competitive_benchmarking?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="customer_experience"
+          title="Customer Experience"
+          description="Understand your CX performance and opportunities to improve."
+          score={assessmentData.customer_experience?.score ?? null}
+          lastTakenDate={assessmentData.customer_experience?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="digital_transformation"
+          title="Digital Transformation"
+          description="Evaluate your readiness for digital transformation success."
+          score={assessmentData.digital_transformation?.score ?? null}
+          lastTakenDate={assessmentData.digital_transformation?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="leadership"
+          title="Leadership & Team Performance"
+          description="Assess team alignment, leadership effectiveness, and culture."
+          score={assessmentData.leadership?.score ?? null}
+          lastTakenDate={assessmentData.leadership?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
+        <AssessmentCard
+          slug="reassessment"
+          title="Progress Reassessment"
+          description="Track your improvement over time with a periodic check-in."
+          score={assessmentData.reassessment?.score ?? null}
+          lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
+          userId={user?.u_id}
+        />
       </div>
     </div>
   );  

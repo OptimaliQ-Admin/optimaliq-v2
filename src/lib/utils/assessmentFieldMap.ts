@@ -16,24 +16,24 @@ export const assessmentFieldMap = {
     lastTakenField: "strategic_maturity_last_taken",
   },
   marketing_effectiveness: {
-    scoreField: "marketing_effectiveness_score",
-    lastTakenField: "marketing_effectiveness_last_taken",
+    scoreField: "marketing_score",
+    lastTakenField: "marketing_last_taken",
   },
   ai_readiness: {
-    scoreField: "ai_readiness_score",
-    lastTakenField: "ai_readiness_last_taken",
+    scoreField: "ai_score",
+    lastTakenField: "ai_last_taken",
   },
   competitive_benchmarking: {
-    scoreField: "competitive_benchmarking_score",
-    lastTakenField: "competitive_benchmarking_last_taken",
+    scoreField: "benchmarking_score",
+    lastTakenField: "benchmarking_last_taken",
   },
   customer_experience: {
-    scoreField: "customer_experience_score",
-    lastTakenField: "customer_experience_last_taken",
+    scoreField: "cx_score",
+    lastTakenField: "cx_last_taken",
   },
   digital_transformation: {
-    scoreField: "digital_transformation_score",
-    lastTakenField: "digital_transformation_last_taken",
+    scoreField: "digital_score",
+    lastTakenField: "digital_last_taken",
   },
   leadership: {
     scoreField: "leadership_score",
