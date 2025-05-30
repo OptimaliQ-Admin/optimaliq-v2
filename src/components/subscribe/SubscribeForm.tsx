@@ -173,7 +173,7 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
 
       <div className="mt-4 mb-6 p-4 bg-blue-50 rounded-lg">
         <p className="text-blue-800 text-center">
-          You're subscribing to the <span className="font-semibold capitalize">{selectedPlan}</span> plan
+          You&lsquo;re subscribing to the <span className="font-semibold capitalize">{selectedPlan}</span> plan
           <br />
           <span className="text-sm">(Billed {selectedCycle})</span>
         </p>
