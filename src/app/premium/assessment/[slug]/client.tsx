@@ -221,8 +221,11 @@ export default function DynamicAssessmentPage() {
     reassessment: "reassessment",
   };
   
-  const currentType = slugToAssessmentType[slug];
-  const title = currentType ? assessmentIntros[currentType].title : "Assessment";
+  let title = "Assessment";
+if (slug in slugToAssessmentType) {
+  const typeKey = slugToAssessmentType[slug];
+  title = assessmentIntros[typeKey]?.title ?? "Assessment";
+}
   
   return (
     <div className="container mx-auto px-4 py-8">
