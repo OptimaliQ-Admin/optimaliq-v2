@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import SubscribeForm from "@/components/subscribe/SubscribeForm";
 import ValueCarousel from "@/components/subscribe/ValueCarousel";
 
-export default function SubscribePage() {
+function SubscribePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [checkingStatus, setCheckingStatus] = useState(true);
@@ -60,5 +60,17 @@ export default function SubscribePage() {
         <SubscribeForm plan={plan} cycle={cycle} />
       </div>
     </div>
+  );
+}
+
+export default function SubscribePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
+        Loading subscription page...
+      </div>
+    }>
+      <SubscribePageContent />
+    </Suspense>
   );
 }
