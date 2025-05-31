@@ -95,10 +95,7 @@ export default function DynamicStepRenderer({
   }
 
   const groupStepCount = Object.keys(scoreConfig.groups || {}).length;
-  const isFinalStep =
-    step === groupStepCount &&
-    assessmentType === "tech_stack" &&
-    !!scoreConfig.finalQuestions;
+  const isTechStackStep = step === groupStepCount && assessmentType === "tech_stack";
 
   // Standard group questions
   if (step < groupStepCount) {
@@ -132,27 +129,143 @@ export default function DynamicStepRenderer({
     );
   }
 
-  // Final tech stack tool selection questions
-  if (isFinalStep && scoreConfig.finalQuestions) {
+  // Tech stack tool selection questions
+  if (isTechStackStep) {
+    const techStackQuestion = {
+      key: "current_tech_stack",
+      label: "Which technologies does your team currently use?",
+      type: "multi_select" as const,
+      categories: {
+        "CRM": [
+          "Agile CRM",
+          "Apptivo",
+          "Bigin by Zoho CRM",
+          "Capsule CRM",
+          "Close CRM",
+          "Copper",
+          "Creatio",
+          "Freshsales (Freshworks)",
+          "HubSpot CRM",
+          "Insightly",
+          "Keap (formerly Infusionsoft)",
+          "Less Annoying CRM",
+          "Microsoft Dynamics 365",
+          "Monday.com CRM",
+          "Nimble",
+          "Nutshell",
+          "Oracle NetSuite CRM",
+          "Pipedrive",
+          "SAP Sales Cloud",
+          "Salesforce",
+          "SugarCRM",
+          "Vtiger",
+          "Zendesk Sell",
+          "Zoho CRM",
+          "None",
+          "Other"
+        ],
+        "ESP": [
+          "Acoustic Campaign (formerly IBM Watson)",
+          "ActiveCampaign",
+          "Adobe Campaign",
+          "AWeber",
+          "Benchmark Email",
+          "Blueshift",
+          "Braze",
+          "Campaign Monitor",
+          "Constant Contact",
+          "dotdigital",
+          "Drip",
+          "GetResponse",
+          "HubSpot Marketing Hub",
+          "Iterable",
+          "Klaviyo",
+          "Listrak",
+          "Mailchimp",
+          "MailerLite",
+          "Mailjet",
+          "Moosend",
+          "Omnisend",
+          "Oracle Eloqua",
+          "SAP Emarsys",
+          "Salesforce Marketing Cloud",
+          "Sendinblue (Brevo)",
+          "SharpSpring",
+          "None",
+          "Other"
+        ],
+        "Analytics": [
+          "Adobe Analytics",
+          "Amplitude",
+          "Chartio (acquired by Atlassian)",
+          "Countly",
+          "Crazy Egg",
+          "Domo",
+          "FullStory",
+          "Google Analytics (GA4)",
+          "Heap",
+          "Hotjar (behavior + feedback)",
+          "Kissmetrics",
+          "Looker (Google)",
+          "Matomo",
+          "Metabase",
+          "Mixpanel",
+          "Piwik PRO",
+          "Plausible Analytics",
+          "Power BI",
+          "Qlik Sense",
+          "Redash",
+          "Segment (for behavioral tracking)",
+          "Sisense",
+          "Snowplow",
+          "Tableau",
+          "Zoho Analytics",
+          "None",
+          "Other"
+        ],
+        "CDP": [
+          "ActionIQ",
+          "Adobe Real-Time CDP",
+          "Amperity",
+          "Bloomreach Engagement",
+          "BlueConic",
+          "Celebrus",
+          "Commanders Act",
+          "Exponea (Bloomreach)",
+          "Lexer",
+          "Lytics",
+          "Meiro",
+          "MetaRouter",
+          "mParticle",
+          "NGDATA",
+          "Oracle Unity",
+          "RudderStack",
+          "Salesforce Data Cloud (formerly Customer 360 Audiences)",
+          "SAP Customer Data Cloud",
+          "Segment (Twilio)",
+          "Simon Data",
+          "Tealium AudienceStream",
+          "Totango",
+          "Treasure Data",
+          "Zeotap",
+          "Zeta Global",
+          "None",
+          "Other"
+        ]
+      }
+    };
+
     return (
       <div className="space-y-8 p-6 max-w-2xl mx-auto">
-        {scoreConfig.finalQuestions.map((question: Question) => (
-          <DynamicQuestion
-            key={question.key}
-            question={question.label}
-            type={question.type}
-            options={
-              question.categories
-                ? flattenedOptions(question.categories)
-                : undefined
-            }
-            selected={convertToQuestionValue(answers[question.key])}
-            onChange={(value: string | string[]) =>
-              onAnswer(question.key, value)
-            }
-            maxSelect={10}
-          />
-        ))}
+        <DynamicQuestion
+          key={techStackQuestion.key}
+          question={techStackQuestion.label}
+          type={techStackQuestion.type}
+          options={flattenedOptions(techStackQuestion.categories)}
+          selected={convertToQuestionValue(answers[techStackQuestion.key])}
+          onChange={(value: string | string[]) => onAnswer(techStackQuestion.key, value)}
+          maxSelect={10}
+        />
       </div>
     );
   }
