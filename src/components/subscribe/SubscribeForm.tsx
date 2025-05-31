@@ -18,7 +18,7 @@ import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
 
 interface SubscribeFormProps {
-  plan: "accelerator" | "enterprise" | null;
+  plan: "accelerator" | "strategic" | null;
   cycle: "monthly" | "annual" | null;
 }
 

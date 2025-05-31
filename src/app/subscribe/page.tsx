@@ -11,7 +11,7 @@ function SubscribePageContent() {
   const searchParams = useSearchParams();
   const [checkingStatus, setCheckingStatus] = useState(true);
 
-  const plan = searchParams.get("plan") as "accelerator" | "enterprise" | null;
+  const plan = searchParams.get("plan") as "accelerator" | "strategic" | null;
   const cycle = searchParams.get("cycle") as "monthly" | "annual" | null;
 
   useEffect(() => {

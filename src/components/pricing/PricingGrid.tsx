@@ -6,48 +6,62 @@ interface PricingGridProps {
 
 export default function PricingGrid({ billingCycle }: PricingGridProps) {
   const pricing = {
-    annual: { accelerator: 99, enterprise: 999 },
-    monthly: { accelerator: 199, enterprise: 1999 },
+    annual: { accelerator: 2988, strategic: 5268 },
+    monthly: { accelerator: 329, strategic: 549 },
   };
 
   return (
-    <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-0">
+      {/* FREE PLAN */}
       <PricingCard
         plan="Free"
         price="FREE"
         cycle={billingCycle}
-        features={["GMF+ Business Score", "Limited Growth Insights"]}
-        disabled={["No Competitive Benchmarking", "No AI-Generated 30-Day Plan", "No Personalized Strategy Adjustments"]}
+        features={[
+          "GMF+ Business Score Assessment",
+          "Basic AI-Generated Summary",
+          "Limited Growth Insight Preview",
+        ]}
+        disabled={[
+          "No Industry Benchmarking",
+          "No Strategic Roadmap",
+          "No 30-Day Growth Plan",
+          "No Business Simulations",
+          "No Strategy Sessions or Review Calls",
+          "No Real-Time Market Trend Insights",
+        ]}
         cta="Take Free Assessment"
       />
+
+      {/* ACCELERATOR PLAN */}
       <PricingCard
         plan="Accelerator"
         price={pricing[billingCycle].accelerator}
         cycle={billingCycle}
         features={[
-          "Monthly Review Call",
-          "AI-Powered Business Assessments",
-          "Industry Benchmarking & Competitive Insights",
-          "Future Performance Overview",
-          "Personalized 30-Day Action Plan",
-          "Predictive AI Insights & Market Trends",
-          "Business Simulations & Strategy Adjustments",
-          "Access to Expert-Led Growth Community",
+          "Full AI-Powered Business Assessments",
+          "Industry Benchmarking & Competitive Positioning",
+          "Personalized 30-Day Growth Plan (refreshed monthly)",
+          "Executive Radar Charts & KPI Forecasts",
+          "Business Simulation Tools for Scenario Planning",
+          "One Monthly Review Call with a Growth Advisor",
+          "Real-Time Market & Trend Insights (updated regularly)",
         ]}
-        cta="Get Accelerator"
+        cta="Unlock Accelerator"
       />
+
+      {/* STRATEGIC PLAN */}
       <PricingCard
-        plan="Enterprise"
-        price={pricing[billingCycle].enterprise}
+        plan="Strategic"
+        price={pricing[billingCycle].strategic}
         cycle={billingCycle}
         features={[
           "Everything in Accelerator",
-          "CRM & SaaS Integrations (HubSpot, Salesforce, Asana)",
-          "AI Task Execution & Workflow Automation",
-          "Monthly Strategy Calls & Executive Coaching",
-          "Personalized AI-Generated Growth Playbooks",
+          "Two Monthly 1:1 Strategy Sessions with Executive Coach",
+          "AI-Generated Strategic Growth Playbooks",
+          "Quarterly Planning Support & Advanced Insights",
         ]}
-        cta="Get Enterprise Access"
+        cta="Start Strategic Plan"
       />
     </section>
   );
