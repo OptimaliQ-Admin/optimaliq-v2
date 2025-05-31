@@ -24,11 +24,11 @@ type Question = {
 };
 
 type ScoreConfigGroup = {
-  groups: {
-    [key: string]: Question[];
-  };
+    groups: {
+      [key: string]: Question[];
+    };
   finalQuestions?: Question[];
-};
+  };
 
 type ScoreConfig = {
   [key: string]: ScoreConfigGroup;
@@ -102,32 +102,32 @@ export default function DynamicStepRenderer({
     const group = scoreConfig.groups?.[step.toString()];
     if (!group) return null;
 
-    return (
-      <div className="space-y-8 p-6 max-w-2xl mx-auto">
+  return (
+    <div className="space-y-8 p-6 max-w-2xl mx-auto">
         {group.map((question) => {
           const optionsRecord = question.options?.reduce(
             (acc, opt) => ({
-              ...acc,
+          ...acc,
               [opt.value]: { label: opt.label, score: opt.score },
             }),
             {} as Record<string, { label: string; score: number }>
           );
 
-          return (
-            <DynamicQuestion
-              key={question.key}
-              question={question.label}
-              type={question.type}
-              options={optionsRecord}
-              selected={convertToQuestionValue(answers[question.key])}
-              onChange={(value: string | string[]) => onAnswer(question.key, value)}
-              maxSelect={question.type === "multi_select" ? 5 : undefined}
-            />
-          );
-        })}
-      </div>
-    );
-  }
+        return (
+          <DynamicQuestion
+            key={question.key}
+            question={question.label}
+            type={question.type}
+            options={optionsRecord}
+            selected={convertToQuestionValue(answers[question.key])}
+            onChange={(value: string | string[]) => onAnswer(question.key, value)}
+            maxSelect={question.type === "multi_select" ? 5 : undefined}
+          />
+        );
+      })}
+    </div>
+  );
+} 
 
   // Tech stack tool selection questions
   if (isTechStackStep) {
