@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import AssessmentCard from "@/components/assessments/AssessmentCard";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
+import TechToolsCard from "@/components/assessment/TechToolsCard";
 
 type AssessmentSlug = keyof typeof assessmentFieldMap;
 type ProfileData = Record<string, number | string | null>;
@@ -174,6 +175,7 @@ export default function AssessmentsPage() {
           lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
           userId={user?.u_id}
         />
+        {user?.u_id && <TechToolsCard userId={user.u_id} />}
       </div>
     </div>
   );  

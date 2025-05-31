@@ -11,17 +11,6 @@ import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
 import { showToast } from "@/lib/utils/toast";
 
-function normalizeScore(score: number): string {
-  if (score >= 4.5) return "score_4_5";
-  if (score >= 4.0) return "score_4";
-  if (score >= 3.5) return "score_3_5";
-  if (score >= 3.0) return "score_3";
-  if (score >= 2.5) return "score_2_5";
-  if (score >= 2.0) return "score_2";
-  if (score >= 1.5) return "score_1_5";
-  return "score_1";
-}
-
 export default function DynamicAssessmentPage() {
   const params = useParams();
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug || "";
@@ -137,8 +126,7 @@ export default function DynamicAssessmentPage() {
       return;
     }
 
-    const groupStepCount = Object.keys(questionConfig[normalizeScore(score || 0)].groups || {}).length;
-    const isLastStep = step >= (slug === "tech_stack" ? groupStepCount : 2);
+    const isLastStep = step >= 2;
 
     if (!isLastStep) {
       setStep((prev) => prev + 1);
@@ -237,31 +225,29 @@ export default function DynamicAssessmentPage() {
 if (slug in slugToAssessmentType) {
   const typeKey = slugToAssessmentType[slug];
   title = assessmentIntros[typeKey]?.title ?? "Assessment";
-  }
-
+}
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
+        <h1 className="text-3xl font-bold mb-4">{title}</h1>
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-blue-600 h-2.5 rounded-full"
-              style={{ 
-                width: `${((step + 1) / (slug === "tech_stack" ? 4 : 3)) * 100}%` 
-              }}
+              style={{ width: `${((step + 1) / 3) * 100}%` }}
             ></div>
           </div>
         </div>
 
         <DynamicStepRenderer
-          config={questionConfig}
-          score={score || 0}
-          step={step}
-          answers={formAnswers}
-          onAnswer={handleAnswer}
+  config={questionConfig}
+  score={score || 0}
+  step={step}
+  answers={formAnswers}
+  onAnswer={handleAnswer}
   assessmentType={slug}
-        />
+/>
 
         <div className="mt-8 flex justify-between">
           <button

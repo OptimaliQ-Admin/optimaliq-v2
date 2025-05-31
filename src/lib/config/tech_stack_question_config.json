@@ -1103,324 +1103,129 @@
       ]
     }
   },
-  "brackets": [
+  "finalQuestions": [
     {
-      "min": 0,
-      "max": 1.5,
-      "questions": [
-        {
-          "key": "crm_usage",
-          "label": "Do you use a CRM system?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "email_marketing",
-          "label": "Do you use an email marketing platform?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "analytics",
-          "label": "Do you use any analytics tools?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        }
-      ]
-    },
-    {
-      "min": 1.5,
-      "max": 2.5,
-      "questions": [
-        {
-          "key": "crm_integration",
-          "label": "Is your CRM integrated with other tools?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "marketing_automation",
-          "label": "Do you use marketing automation?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "data_warehouse",
-          "label": "Do you have a data warehouse?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        }
-      ]
-    },
-    {
-      "min": 2.5,
-      "max": 3.5,
-      "questions": [
-        {
-          "key": "cdp_usage",
-          "label": "Do you use a Customer Data Platform (CDP)?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "data_integration",
-          "label": "Is your data fully integrated across platforms?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "ai_ml",
-          "label": "Do you use AI/ML in your marketing?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        }
-      ]
-    },
-    {
-      "min": 3.5,
-      "max": 5,
-      "questions": [
-        {
-          "key": "real_time_analytics",
-          "label": "Do you have real-time analytics?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "predictive_analytics",
-          "label": "Do you use predictive analytics?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        },
-        {
-          "key": "personalization",
-          "label": "Do you have real-time personalization?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes", "score": 1 },
-            { "value": "no", "label": "No", "score": 0 }
-          ]
-        }
-      ]
+      "key": "current_tech_stack",
+      "label": "Which technologies does your team currently use?",
+      "type": "multi_select",
+      "categories": {
+        "CRM": [
+          "Agile CRM",
+          "Apptivo",
+          "Bigin by Zoho CRM",
+          "Capsule CRM",
+          "Close CRM",
+          "Copper",
+          "Creatio",
+          "Freshsales (Freshworks)",
+          "HubSpot CRM",
+          "Insightly",
+          "Keap (formerly Infusionsoft)",
+          "Less Annoying CRM",
+          "Microsoft Dynamics 365",
+          "Monday.com CRM",
+          "Nimble",
+          "Nutshell",
+          "Oracle NetSuite CRM",
+          "Pipedrive",
+          "SAP Sales Cloud",
+          "Salesforce",
+          "SugarCRM",
+          "Vtiger",
+          "Zendesk Sell",
+          "Zoho CRM",
+          "None",
+          "Other"
+        ],
+        "ESP": [
+          "Acoustic Campaign (formerly IBM Watson)",
+          "ActiveCampaign",
+          "Adobe Campaign",
+          "AWeber",
+          "Benchmark Email",
+          "Blueshift",
+          "Braze",
+          "Campaign Monitor",
+          "Constant Contact",
+          "dotdigital",
+          "Drip",
+          "GetResponse",
+          "HubSpot Marketing Hub",
+          "Iterable",
+          "Klaviyo",
+          "Listrak",
+          "Mailchimp",
+          "MailerLite",
+          "Mailjet",
+          "Moosend",
+          "Omnisend",
+          "Oracle Eloqua",
+          "SAP Emarsys",
+          "Salesforce Marketing Cloud",
+          "Sendinblue (Brevo)",
+          "SharpSpring",
+          "None",
+          "Other"
+        ],
+        "Analytics": [
+          "Adobe Analytics",
+          "Amplitude",
+          "Chartio (acquired by Atlassian)",
+          "Countly",
+          "Crazy Egg",
+          "Domo",
+          "FullStory",
+          "Google Analytics (GA4)",
+          "Heap",
+          "Hotjar (behavior + feedback)",
+          "Kissmetrics",
+          "Looker (Google)",
+          "Matomo",
+          "Metabase",
+          "Mixpanel",
+          "Piwik PRO",
+          "Plausible Analytics",
+          "Power BI",
+          "Qlik Sense",
+          "Redash",
+          "Segment (for behavioral tracking)",
+          "Sisense",
+          "Snowplow",
+          "Tableau",
+          "Zoho Analytics",
+          "None",
+          "Other"
+        ],
+        "CDP": [
+          "ActionIQ",
+          "Adobe Real-Time CDP",
+          "Amperity",
+          "Bloomreach Engagement",
+          "BlueConic",
+          "Celebrus",
+          "Commanders Act",
+          "Exponea (Bloomreach)",
+          "Lexer",
+          "Lytics",
+          "Meiro",
+          "MetaRouter",
+          "mParticle",
+          "NGDATA",
+          "Oracle Unity",
+          "RudderStack",
+          "Salesforce Data Cloud (formerly Customer 360 Audiences)",
+          "SAP Customer Data Cloud",
+          "Segment (Twilio)",
+          "Simon Data",
+          "Tealium AudienceStream",
+          "Totango",
+          "Treasure Data",
+          "Zeotap",
+          "Zeta Global",
+          "None",
+          "Other"
+        ]
+      }
     }
-  ],
-  "techStackQuestions": {
-    "groups": {
-      "0": [
-        {
-          "key": "use_crm",
-          "label": "Do you use a CRM system?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes" },
-            { "value": "no", "label": "No" }
-          ]
-        },
-        {
-          "key": "crm_tools",
-          "label": "Which CRM technologies does your team currently use?",
-          "type": "multi_select",
-          "showIf": "use_crm",
-          "showIfValue": "yes",
-          "options": [
-            "Agile CRM",
-            "Apptivo",
-            "Bigin by Zoho CRM",
-            "Capsule CRM",
-            "Close CRM",
-            "Copper",
-            "Creatio",
-            "Freshsales (Freshworks)",
-            "HubSpot CRM",
-            "Insightly",
-            "Keap (formerly Infusionsoft)",
-            "Less Annoying CRM",
-            "Microsoft Dynamics 365",
-            "Monday.com CRM",
-            "Nimble",
-            "Nutshell",
-            "Oracle NetSuite CRM",
-            "Pipedrive",
-            "SAP Sales Cloud",
-            "Salesforce",
-            "SugarCRM",
-            "Vtiger",
-            "Zendesk Sell",
-            "Zoho CRM",
-            "None",
-            "Other"
-          ]
-        },
-        {
-          "key": "use_esp",
-          "label": "Do you use an Email Service Provider?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes" },
-            { "value": "no", "label": "No" }
-          ]
-        },
-        {
-          "key": "esp_tools",
-          "label": "Which ESP technologies does your team currently use?",
-          "type": "multi_select",
-          "showIf": "use_esp",
-          "showIfValue": "yes",
-          "options": [
-            "Acoustic Campaign (formerly IBM Watson)",
-            "ActiveCampaign",
-            "Adobe Campaign",
-            "AWeber",
-            "Benchmark Email",
-            "Blueshift",
-            "Braze",
-            "Campaign Monitor",
-            "Constant Contact",
-            "dotdigital",
-            "Drip",
-            "GetResponse",
-            "HubSpot Marketing Hub",
-            "Iterable",
-            "Klaviyo",
-            "Listrak",
-            "Mailchimp",
-            "MailerLite",
-            "Mailjet",
-            "Moosend",
-            "Omnisend",
-            "Oracle Eloqua",
-            "SAP Emarsys",
-            "Salesforce Marketing Cloud",
-            "Sendinblue (Brevo)",
-            "SharpSpring",
-            "None",
-            "Other"
-          ]
-        },
-        {
-          "key": "use_analytics",
-          "label": "Do you use Analytics tools?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes" },
-            { "value": "no", "label": "No" }
-          ]
-        },
-        {
-          "key": "analytics_tools",
-          "label": "Which Analytics technologies does your team currently use?",
-          "type": "multi_select",
-          "showIf": "use_analytics",
-          "showIfValue": "yes",
-          "options": [
-            "Adobe Analytics",
-            "Amplitude",
-            "Chartio (acquired by Atlassian)",
-            "Countly",
-            "Crazy Egg",
-            "Domo",
-            "FullStory",
-            "Google Analytics (GA4)",
-            "Heap",
-            "Hotjar (behavior + feedback)",
-            "Kissmetrics",
-            "Looker (Google)",
-            "Matomo",
-            "Metabase",
-            "Mixpanel",
-            "Piwik PRO",
-            "Plausible Analytics",
-            "Power BI",
-            "Qlik Sense",
-            "Redash",
-            "Segment (for behavioral tracking)",
-            "Sisense",
-            "Snowplow",
-            "Tableau",
-            "Zoho Analytics",
-            "None",
-            "Other"
-          ]
-        },
-        {
-          "key": "use_cdp",
-          "label": "Do you use a Customer Data Platform (CDP)?",
-          "type": "select",
-          "options": [
-            { "value": "yes", "label": "Yes" },
-            { "value": "no", "label": "No" }
-          ]
-        },
-        {
-          "key": "cdp_tools",
-          "label": "Which CDP technologies does your team currently use?",
-          "type": "multi_select",
-          "showIf": "use_cdp",
-          "showIfValue": "yes",
-          "options": [
-            "ActionIQ",
-            "Adobe Real-Time CDP",
-            "Amperity",
-            "Bloomreach Engagement",
-            "BlueConic",
-            "Celebrus",
-            "Commanders Act",
-            "Exponea (Bloomreach)",
-            "Lexer",
-            "Lytics",
-            "Meiro",
-            "MetaRouter",
-            "mParticle",
-            "NGDATA",
-            "Oracle Unity",
-            "RudderStack",
-            "Salesforce Data Cloud (formerly Customer 360 Audiences)",
-            "SAP Customer Data Cloud",
-            "Segment (Twilio)",
-            "Simon Data",
-            "Tealium AudienceStream",
-            "Totango",
-            "Treasure Data",
-            "Zeotap",
-            "Zeta Global",
-            "None",
-            "Other"
-          ]
-        }
-      ]
-    }
-  }
+  ]
 } 
