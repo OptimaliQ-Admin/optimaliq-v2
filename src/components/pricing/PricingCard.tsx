@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface PricingCardProps {
-  plan: "Free" | "Accelerator" | "Enterprise";
+  plan: "Free" | "Accelerator" | "Strategic";
   price: number | string;
   cycle: "monthly" | "annual";
   features: string[];
@@ -15,7 +15,7 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
   const emojiMap = {
     Free: "🌟",
     Accelerator: "🚀",
-    Enterprise: "🏆",
+    Strategic: "🏆",
   };
 
   const handleClick = () => {
