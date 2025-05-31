@@ -136,13 +136,11 @@ export async function POST(request: Request) {
     // Save answers to assessment table
     const { error: assessmentError } = await supabase
       .from(mapping.answerTable)
-      .upsert({
+      .insert({
         u_id: userId,
         answers: answers,
         score: finalScore,
         created_at: new Date().toISOString()
-      }, {
-        onConflict: "u_id"
       });
 
     if (assessmentError) {
@@ -191,12 +189,10 @@ export async function POST(request: Request) {
       if (selectedTools) {
         const { error: techStackError } = await supabase
           .from("user_tech_stack")
-          .upsert({
+          .insert({
             u_id: userId,
             selected_tools: selectedTools,
             created_at: new Date().toISOString()
-          }, {
-            onConflict: "u_id"
           });
 
         if (techStackError) {
