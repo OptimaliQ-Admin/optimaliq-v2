@@ -12,7 +12,7 @@ export default function ComparisonBlock() {
         <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-700">
           <h3 className="text-2xl font-bold text-blue-600">OptimaliQ</h3>
           <ul className="mt-4 text-gray-700 space-y-3">
-            <li>✅ All this starting at just <strong>$329/month</strong></li>
+            <li>✅ Smarter than hiring a consultant — and costs less than one hour of their time</li>
             <li>✅ Instant Strategy with Zero Ramp-Up</li>
             <li>✅ Real-Time Market & Trend Intelligence (Updated Weekly)</li>
             <li>✅ Monthly Progress Reviews with Actionable Adjustments</li>

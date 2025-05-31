@@ -9,6 +9,7 @@ import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
 import LoadingSpinner from "@/components/shared/LoadingSpinner"; // ✅ Make sure you have this
 import { toast } from "react-hot-toast";
+import PasswordInput from "@/components/shared/PasswordInput";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -95,12 +96,12 @@ console.log("🧠 Session after login:", sessionData);
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <LabeledInput
+          <PasswordInput
             label="Password"
             name="password"
-            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
           />
 
           <div className="text-right text-sm">

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
+import PasswordInput from "@/components/shared/PasswordInput";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -54,19 +55,20 @@ export default function ResetPasswordPage() {
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <LabeledInput
-              type="password"
-              name="password"
+            <PasswordInput
               label="New Password"
+              name="password"
               value={form.password}
               onChange={handleChange}
+              showRequirements
             />
-            <LabeledInput
-              type="password"
-              name="confirmPassword"
+            <PasswordInput
               label="Confirm New Password"
+              name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
+              showMatchError
+              matchValue={form.password}
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}

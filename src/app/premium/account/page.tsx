@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
+import PasswordInput from "@/components/shared/PasswordInput";
 
 export default function AccountPage() {
   const { user } = usePremiumUser();
@@ -202,41 +203,30 @@ export default function AccountPage() {
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
         
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Current Password</label>
-            <input
-              type="password"
-              name="currentPassword"
-              value={passwordForm.currentPassword}
-              onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
-              className="w-full rounded border px-3 py-2"
-              required
-            />
-          </div>
+          <PasswordInput
+            label="Current Password"
+            name="currentPassword"
+            value={passwordForm.currentPassword}
+            onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+            autoComplete="current-password"
+          />
           
-          <div>
-            <label className="block text-sm font-medium mb-1">New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              value={passwordForm.newPassword}
-              onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-              className="w-full rounded border px-3 py-2"
-              required
-            />
-          </div>
+          <PasswordInput
+            label="New Password"
+            name="newPassword"
+            value={passwordForm.newPassword}
+            onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+            showRequirements
+          />
           
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm New Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={passwordForm.confirmPassword}
-              onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-              className="w-full rounded border px-3 py-2"
-              required
-            />
-          </div>
+          <PasswordInput
+            label="Confirm New Password"
+            name="confirmPassword"
+            value={passwordForm.confirmPassword}
+            onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+            showMatchError
+            matchValue={passwordForm.newPassword}
+          />
         </div>
 
         {passwordError && (

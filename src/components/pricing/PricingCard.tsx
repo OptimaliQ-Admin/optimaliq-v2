@@ -20,7 +20,7 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
 
   const handleClick = () => {
     if (plan === "Free") {
-      router.push("/dashboard/Page1");
+      router.push("/growth-assessment");
       return;
     }
 

@@ -8,6 +8,7 @@ import LabeledInput from "@/components/shared/LabeledInput";
 import LabeledSelect from "@/components/shared/LabeledSelect";
 import SubmitButton from "@/components/shared/SubmitButton";
 import { toast } from "react-hot-toast";
+import PasswordInput from "@/components/shared/PasswordInput";
 
 
 const timezoneOptions = [
@@ -137,8 +138,21 @@ const timezoneOptions = [
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
     <LabeledInput label="Email" name="email" value={formState.email} readOnly type="email" />
-    <LabeledInput label="Password" name="password" type="password" value={formState.password} onChange={handleChange} />
-    <LabeledInput label="Confirm Password" name="confirmPassword" type="password" value={formState.confirmPassword} onChange={handleChange} />
+    <PasswordInput
+      label="Password"
+      name="password"
+      value={formState.password}
+      onChange={handleChange}
+      showRequirements
+    />
+    <PasswordInput
+      label="Confirm Password"
+      name="confirmPassword"
+      value={formState.confirmPassword}
+      onChange={handleChange}
+      showMatchError
+      matchValue={formState.password}
+    />
     <LabeledSelect label="Your Timezone" name="timezone" value={formState.timezone} onChange={handleChange} options={timezoneOptions} />
     <LabeledInput label="LinkedIn URL (optional)" name="linkedin_url" value={formState.linkedin_url} onChange={handleChange} /> {/* ✅ fixed here */}
 

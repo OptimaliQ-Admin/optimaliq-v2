@@ -1,4 +1,4 @@
-//src/components/home/WhyOptimaliQ.tsx
+// File: /src/components/home/WhyOptimaliQ.tsx
 "use client";
 
 import Link from "next/link";
@@ -18,8 +18,7 @@ export default function WhyOptimaliQ() {
 
         {/* Persuasive Statement */}
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Your competition is scaling faster with AI-driven strategy and real-time market intelligence. 
-          Leverage data-driven decisions and dominate your industry.
+          Your competitors are scaling faster by using AI to optimize strategy, streamline execution, and stay ahead of the market. OptimaliQ gives you that same edge — for less than the cost of one hour with a consultant.
         </p>
 
         {/* Comparison Table */}
@@ -34,10 +33,12 @@ export default function WhyOptimaliQ() {
             </thead>
             <tbody className="text-gray-800 text-md">
               {[
-                ["Cost", "Free to Start", "$10,000+ Retainers"],
-                ["Speed", "Instant Insights", "Weeks of Analysis"],
-                ["Actionable Data", "Yes, with AI-backed trends", "Subjective Reports"],
-                ["Scalability", "Continuous Improvement", "One-time Service"],
+                ["Cost", "Starts at $249/mo", "$10,000+ Retainers"],
+                ["Speed", "Instant, AI-Powered Insights", "Weeks of Manual Reporting"],
+                ["Actionability", "Real-Time Strategy Adjustments", "Static Reports & Decks"],
+                ["Market Awareness", "Live Trend + Benchmark Data", "Limited to Analyst Opinion"],
+                ["Scalability", "Continuously Learns & Improves", "Bound by Human Bandwidth"],
+                ["Execution", "AI Task Recommendations & Playbooks", "Requires Internal Teams"],
               ].map(([label, optimaliq, consulting], i) => (
                 <tr
                   key={label}
@@ -56,7 +57,7 @@ export default function WhyOptimaliQ() {
         <div className="mt-12">
           <Link href="/growth-assessment">
             <button className="bg-blue-600 text-white text-lg px-6 py-3 rounded-lg shadow-md hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition">
-              Try OptimaliQ Now
+              Unlock My Growth Plan
             </button>
           </Link>
         </div>

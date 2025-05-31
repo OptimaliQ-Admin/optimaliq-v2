@@ -6,7 +6,7 @@ interface PricingGridProps {
 
 export default function PricingGrid({ billingCycle }: PricingGridProps) {
   const pricing = {
-    annual: { accelerator: 2988, strategic: 5268 },
+    annual: { accelerator: 249, strategic: 439 },
     monthly: { accelerator: 329, strategic: 549 },
   };
 
@@ -42,7 +42,6 @@ export default function PricingGrid({ billingCycle }: PricingGridProps) {
           "Full AI-Powered Business Assessments",
           "Industry Benchmarking & Competitive Positioning",
           "Personalized 30-Day Growth Plan (refreshed monthly)",
-          "Executive Radar Charts & KPI Forecasts",
           "Business Simulation Tools for Scenario Planning",
           "One Monthly Review Call with a Growth Advisor",
           "Real-Time Market & Trend Insights (updated regularly)",
@@ -57,7 +56,7 @@ export default function PricingGrid({ billingCycle }: PricingGridProps) {
         cycle={billingCycle}
         features={[
           "Everything in Accelerator",
-          "Two Monthly 1:1 Strategy Sessions with Executive Coach",
+          "Two Monthly 1:1 Strategy Sessions with an Executive Coach",
           "AI-Generated Strategic Growth Playbooks",
           "Quarterly Planning Support & Advanced Insights",
         ]}
