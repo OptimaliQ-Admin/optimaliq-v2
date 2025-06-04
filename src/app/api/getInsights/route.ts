@@ -1,20 +1,13 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
-import AWS from "aws-sdk";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const sagemaker = new AWS.SageMakerRuntime({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-
 export async function POST(req: Request) {
-  let sageMakerScore = 0; // initialize early
+  let mlScore = 0; // initialize early
   try {
     const { u_id } = await req.json(); // ✅ Ensure lowercase column name
     console.log("🔍 Fetching stored answers for User ID:", u_id);
@@ -140,62 +133,53 @@ export async function POST(req: Request) {
 
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
-    // ✅ Extract OpenAI scores to use in SageMaker input
+    // ✅ Extract OpenAI scores to use in ML API input
     const strategy_score = parsedResponse.strategy_score || 0;
     const process_score = parsedResponse.process_score || 0;
     const technology_score = parsedResponse.technology_score || 0;
 
-    // ✅ Build SageMaker input vector using the OpenAI scores
-    const industryOneHot = [
-      "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-      "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-      "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-      "Construction", "Legal", "Nonprofit", "Other"
-    ].map((industry) => (user.industry === industry ? 1 : 0));
-
-    const sageInput = [
-      strategy_score,
-      process_score,
-      technology_score,
-      ...industryOneHot,
-    ];
-
-    const csvPayload = sageInput.join(",");
-
-    // ✅ Fail-safe check for SageMaker environment variable and call SageMaker Endpoint
-    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME;
-    if (!endpointName) {
-      console.error("❌ Missing SageMaker endpoint name in environment variables.");
-      return NextResponse.json({ error: "SageMaker endpoint not configured." }, { status: 500 });
-    }
     try {
-      const sageResponse = await sagemaker
-        .invokeEndpoint({
-          EndpointName: endpointName,
-          Body: csvPayload,
-          ContentType: "text/csv",
-        })
-        .promise();
+      const mlResponse = await fetch('/api/ml_score', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          strategy_score,
+          process_score,
+          technology_score,
+          industry: user.industry
+        }),
+      });
 
-      // Ensure Body is correctly parsed as a Buffer before converting to string
-      sageMakerScore = parseFloat((sageResponse.Body as Buffer).toString("utf-8"));
-      console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
+      if (!mlResponse.ok) {
+        throw new Error(`ML API error: ${mlResponse.statusText}`);
+      }
+
+      const mlData = await mlResponse.json();
+      mlScore = mlData.score;
+      console.log("🎯 ML API Predicted Score:", mlScore);
 
     } catch (error) {
-      console.error("❌ SageMaker Error:", error);
-      // ✅ Log SageMaker error in ai_log
+      console.error("❌ ML API Error:", error);
+      // ✅ Log ML API error in ai_log
       await supabase
         .from("ai_log")
         .insert([
           {
             u_id,
-            apirequest: `SageMaker Payload: ${csvPayload}`,
+            apirequest: `ML API Request: ${JSON.stringify({
+              strategy_score,
+              process_score,
+              technology_score,
+              industry: user.industry
+            })}`,
             apiresponse: JSON.stringify(error),
-            model: "SageMaker",
+            model: "ML API",
             createdat: new Date().toISOString(),
           },
         ]);
-      return NextResponse.json({ error: "SageMaker prediction failed." }, { status: 500 });
+      return NextResponse.json({ error: "ML API prediction failed." }, { status: 500 });
     }
 
     // ✅ Insert AI response into ai_log
@@ -225,7 +209,7 @@ export async function POST(req: Request) {
       technologyscore: parsedResponse.technology_score,
       technologyinsight: parsedResponse.technologyInsight,
       generatedat: new Date().toISOString(),
-      overallscore: sageMakerScore,
+      overallscore: mlScore,
     };
 
     const { data: insertedInsights, error: storeError } = await supabase
