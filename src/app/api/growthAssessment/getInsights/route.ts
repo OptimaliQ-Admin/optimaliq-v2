@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const { data: assessment, error: assessmentError } = await supabase
       .from("growth_assessment")
       .select("*")
-      .eq("user_id", userId)
+      .eq("u_id", userId)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
@@ -60,6 +60,9 @@ export async function POST(request: Request) {
 
     // Generate AI prompt
     const aiPrompt = generatePrompt(assessment, userDetails);
+    
+    // Log the prompt being sent to OpenAI
+    console.log("🤖 OpenAI Request Prompt:", aiPrompt);
 
     // Get insights from OpenAI
     const response = await openai.chat.completions.create({
@@ -70,43 +73,61 @@ export async function POST(request: Request) {
     });
 
     const content = response.choices[0]?.message?.content;
+    
+    // Log the raw response from OpenAI
+    console.log("🤖 OpenAI Raw Response:", content);
+
     if (!content) {
+      console.error("❌ OpenAI returned empty response");
       return NextResponse.json(
-        { error: "No content in OpenAI response" },
+        { error: "Failed to generate insights" },
         { status: 500 }
       );
     }
 
-    const insights = JSON.parse(content);
+    try {
+      // Parse the JSON response
+      const parsedContent = JSON.parse(content);
+      
+      // Log the parsed response
+      console.log("🤖 OpenAI Parsed Response:", JSON.stringify(parsedContent, null, 2));
+      
+      // Update growth insights table
+      const { error: updateError } = await supabase
+        .from("growth_insights")
+        .upsert({
+          user_id: userId,
+          strategy_score: parsedContent.strategy_score,
+          strategy_insight: parsedContent.strategyInsight,
+          process_score: parsedContent.process_score,
+          process_insight: parsedContent.processInsight,
+          technology_score: parsedContent.technology_score,
+          technology_insight: parsedContent.technologyInsight,
+          overall_score: parsedContent.overall_score,
+          created_at: new Date().toISOString(),
+        });
 
-    // Update growth insights table
-    const { error: updateError } = await supabase
-      .from("growth_insights")
-      .upsert({
-        user_id: userId,
-        strategy_score: insights.strategy_score,
-        strategy_insight: insights.strategyInsight,
-        process_score: insights.process_score,
-        process_insight: insights.processInsight,
-        technology_score: insights.technology_score,
-        technology_insight: insights.technologyInsight,
-        overall_score: insights.overall_score,
-        created_at: new Date().toISOString(),
-      });
+      if (updateError) {
+        console.error("Error updating growth insights:", updateError);
+        return NextResponse.json(
+          { error: "Failed to update growth insights" },
+          { status: 500 }
+        );
+      }
 
-    if (updateError) {
-      console.error("Error updating growth insights:", updateError);
+      return NextResponse.json(parsedContent);
+    } catch (parseError) {
+      console.error("❌ Failed to parse OpenAI response:", parseError);
+      console.error("Raw content that failed to parse:", content);
       return NextResponse.json(
-        { error: "Failed to update growth insights" },
+        { error: "Failed to parse AI response" },
         { status: 500 }
       );
     }
-
-    return NextResponse.json(insights);
   } catch (error) {
-    console.error("Error in growth assessment getInsights:", error);
+    console.error("❌ Unexpected error in getInsights:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "An unexpected error occurred" },
       { status: 500 }
     );
   }
