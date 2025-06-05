@@ -4,9 +4,11 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generatePrompt } from "@/lib/ai/generatePrompt";
 import { callOpenAI } from "@/lib/ai/callOpenAI";
+import { callSageMaker } from "@/lib/ai/callSageMaker";
+
 
 export async function POST(req: Request) {
-  let mlScore = 0;
+  let sageMakerScore = 0;
   try {
     const { u_id } = await req.json();
     if (!u_id) return NextResponse.json({ error: "Missing User ID" }, { status: 400 });
@@ -43,50 +45,20 @@ export async function POST(req: Request) {
       strategyInsight: parsed.strategyInsight || "No insight available.",
       processInsight: parsed.processInsight || "No insight available.",
       technologyInsight: parsed.technologyInsight || "No insight available.",
-    };
+    };    
 
-    try {
-      const mlResponse = await fetch('/api/ml_score', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          strategy_score: scores.strategy_score,
-          process_score: scores.process_score,
-          technology_score: scores.technology_score,
-          industry: user.industry
-        }),
-      });
+    const sageInput = [
+      scores.strategy_score,
+      scores.process_score,
+      scores.technology_score,
+      ...["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
+        "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
+        "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
+        "Construction", "Legal", "Nonprofit", "Other"
+      ].map(ind => user.industry === ind ? 1 : 0),
+    ];
 
-      if (!mlResponse.ok) {
-        throw new Error(`ML API error: ${mlResponse.statusText}`);
-      }
-
-      const mlData = await mlResponse.json();
-      mlScore = mlData.score;
-      console.log("🎯 ML API Predicted Score:", mlScore);
-
-    } catch (error) {
-      console.error("❌ ML API Error:", error);
-      await supabase
-        .from("ai_log")
-        .insert([
-          {
-            u_id,
-            apirequest: `ML API Request: ${JSON.stringify({
-              strategy_score: scores.strategy_score,
-              process_score: scores.process_score,
-              technology_score: scores.technology_score,
-              industry: user.industry
-            })}`,
-            apiresponse: JSON.stringify(error),
-            model: "ML API",
-            createdat: new Date().toISOString(),
-          },
-        ]);
-      return NextResponse.json({ error: "ML API prediction failed." }, { status: 500 });
-    }
+    sageMakerScore = await callSageMaker(sageInput);
 
     const insertPayload = {
       u_id,
@@ -97,7 +69,7 @@ export async function POST(req: Request) {
       technologyscore: scores.technology_score,
       technologyinsight: insights.technologyInsight,
       generatedat: new Date().toISOString(),
-      overallscore: mlScore,
+      overallscore: sageMakerScore,
     };
 
     await supabase.from("insights").upsert([insertPayload], { onConflict: "u_id" });

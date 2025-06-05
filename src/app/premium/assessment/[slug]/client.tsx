@@ -225,8 +225,8 @@ export default function DynamicAssessmentPage() {
 if (slug in slugToAssessmentType) {
   const typeKey = slugToAssessmentType[slug];
   title = assessmentIntros[typeKey]?.title ?? "Assessment";
-}
-  
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
@@ -241,13 +241,13 @@ if (slug in slugToAssessmentType) {
         </div>
 
         <DynamicStepRenderer
-  config={questionConfig}
-  score={score || 0}
-  step={step}
-  answers={formAnswers}
-  onAnswer={handleAnswer}
+          config={questionConfig}
+          score={score || 0}
+          step={step}
+          answers={formAnswers}
+          onAnswer={handleAnswer}
   assessmentType={slug}
-/>
+        />
 
         <div className="mt-8 flex justify-between">
           <button

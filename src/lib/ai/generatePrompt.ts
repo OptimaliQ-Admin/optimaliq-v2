@@ -35,13 +35,19 @@ type Assessment = {
       - **Revenue Range:** ${user.revenuerange}
       
       **Your Task:**
-      - Provide **custom insights** directly addressing the user's input.
-      - If an obstacle (e.g., "Funding") is listed, showcase how top-performing companies have overcome them. Provide real-world, battle-tested solutions (e.g., alternative funding sources, leadership restructuring, or automation strategies).
-      - If strategy is strong, guide the user toward maximum scalability. Offer specific growth levers, such as expanding market share, operational automation, pricing optimization, or vertical/horizontal expansion.
-      - If processes are optimized, focus on future-proofing & risk mitigation. Identify areas where bottlenecks could emerge at scale and suggest proactive measures to maintain efficiency.
-      - If technology is cutting-edge, provide advanced insights on maximizing ROI through integration, automation, AI-driven efficiencies, and leveraging first-party data.
-      - Deliver powerful, compelling insights. Avoid generic advice—every recommendation should be highly relevant, tailored, and capable of driving immediate action.
-      - Deliver strategic insights that go beyond surface-level advice. Use the user's inputs to provide deeply customized, high-value recommendations.
+      1. Analyze the business inputs and company details
+      2. Assign scores (1-5) for strategy, process, and technology maturity
+      3. Calculate an overall score considering:
+         - Industry-specific weighting (e.g., technology companies should weight tech score higher)
+         - Balance between strategy, process, and technology
+         - Overall business maturity level
+      4. Provide detailed insights for each area
+      
+      **Scoring Guidelines:**
+      - Strategy Score (1-5): Based on market positioning, competitive advantage, and growth potential
+      - Process Score (1-5): Based on operational efficiency, scalability, and automation
+      - Technology Score (1-5): Based on tech stack maturity, integration, and digital capabilities
+      - Overall Score (1-5): Weighted average considering industry context and company size
       
       **Example Output Format (strict JSON, no extra text):**
       {
@@ -52,7 +58,9 @@ type Assessment = {
         "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
         
         "technology_score": 5,
-        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
+        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation.",
+        
+        "overall_score": 4.2
       }
     `;
   };
