@@ -3,80 +3,111 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generatePrompt } from "@/lib/ai/generatePrompt";
-import { callOpenAI } from "@/lib/ai/callOpenAI";
-import { callSageMaker } from "@/lib/ai/callSageMaker";
+import OpenAI from "openai";
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export async function POST(req: Request) {
-  let sageMakerScore = 0;
+export async function POST(request: Request) {
   try {
-    const { u_id } = await req.json();
-    if (!u_id) return NextResponse.json({ error: "Missing User ID" }, { status: 400 });
+    const { userId } = await request.json();
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Missing user ID" },
+        { status: 400 }
+      );
+    }
 
-    const { data: assessment } = await supabase
-      .from("assessment")
+    // Get user's growth assessment
+    const { data: assessment, error: assessmentError } = await supabase
+      .from("growth_assessment")
       .select("*")
-      .eq("u_id", u_id)
-      .order("submittedat", { ascending: false })
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
       .limit(1)
       .single();
 
-    if (!assessment) return NextResponse.json({ error: "No assessment found" }, { status: 404 });
+    if (assessmentError) {
+      console.error("Error fetching growth assessment:", assessmentError);
+      return NextResponse.json(
+        { error: "Failed to fetch growth assessment" },
+        { status: 500 }
+      );
+    }
 
-    const { data: user } = await supabase
+    // Get user details
+    const { data: userDetails, error: userError } = await supabase
       .from("users")
-      .select("*")
-      .eq("u_id", u_id)
+      .select("industry, companysize, revenuerange")
+      .eq("u_id", userId)
       .single();
 
-    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (userError) {
+      console.error("Error fetching user details:", userError);
+      return NextResponse.json(
+        { error: "Failed to fetch user details" },
+        { status: 500 }
+      );
+    }
 
-    const aiPrompt = generatePrompt(assessment, user);
-    const { parsed } = await callOpenAI(aiPrompt);    
-    
-    // ✅ Extract `scores` and `insights` from parsed
-    const scores = {
-      strategy_score: parsed.strategy_score || 0,
-      process_score: parsed.process_score || 0,
-      technology_score: parsed.technology_score || 0,
-    };
-    
-    const insights = {
-      strategyInsight: parsed.strategyInsight || "No insight available.",
-      processInsight: parsed.processInsight || "No insight available.",
-      technologyInsight: parsed.technologyInsight || "No insight available.",
-    };    
+    if (!assessment || !userDetails) {
+      return NextResponse.json(
+        { error: "No assessment or user details found" },
+        { status: 404 }
+      );
+    }
 
-    const sageInput = [
-      scores.strategy_score,
-      scores.process_score,
-      scores.technology_score,
-      ...["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-        "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-        "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-        "Construction", "Legal", "Nonprofit", "Other"
-      ].map(ind => user.industry === ind ? 1 : 0),
-    ];
+    // Generate AI prompt
+    const aiPrompt = generatePrompt(assessment, userDetails);
 
-    sageMakerScore = await callSageMaker(sageInput);
+    // Get insights from OpenAI
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "system", content: aiPrompt }],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
 
-    const insertPayload = {
-      u_id,
-      strategyscore: scores.strategy_score,
-      strategyinsight: insights.strategyInsight,
-      processscore: scores.process_score,
-      processinsight: insights.processInsight,
-      technologyscore: scores.technology_score,
-      technologyinsight: insights.technologyInsight,
-      generatedat: new Date().toISOString(),
-      overallscore: sageMakerScore,
-    };
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      return NextResponse.json(
+        { error: "No content in OpenAI response" },
+        { status: 500 }
+      );
+    }
 
-    await supabase.from("insights").upsert([insertPayload], { onConflict: "u_id" });
+    const insights = JSON.parse(content);
 
-    return NextResponse.json(insertPayload);
-  } catch (err) {
-    console.error("❌ Insight API Error:", err);
-    return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
+    // Update growth insights table
+    const { error: updateError } = await supabase
+      .from("growth_insights")
+      .upsert({
+        user_id: userId,
+        strategy_score: insights.strategy_score,
+        strategy_insight: insights.strategyInsight,
+        process_score: insights.process_score,
+        process_insight: insights.processInsight,
+        technology_score: insights.technology_score,
+        technology_insight: insights.technologyInsight,
+        overall_score: insights.overall_score,
+        created_at: new Date().toISOString(),
+      });
+
+    if (updateError) {
+      console.error("Error updating growth insights:", updateError);
+      return NextResponse.json(
+        { error: "Failed to update growth insights" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(insights);
+  } catch (error) {
+    console.error("Error in growth assessment getInsights:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
