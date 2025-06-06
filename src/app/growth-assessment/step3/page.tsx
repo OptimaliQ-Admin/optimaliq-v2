@@ -39,7 +39,7 @@ function Step3Component() {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("insights")
+        .from("growth_insights")
         .select("strategy_score, strategy_insight, processscore, process_insight, technology_score, technology_insight, overall_score")
         .eq("u_id", u_id)
         .order("generatedat", { ascending: false })

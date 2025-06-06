@@ -96,15 +96,15 @@ export async function POST(request: Request) {
       const { error: updateError } = await supabase
         .from("growth_insights")
         .upsert({
-          user_id: userId,
+          u_id: userId,
           strategy_score: parsedContent.strategy_score,
           strategy_insight: parsedContent.strategyInsight,
-          process_score: parsedContent.process_score,
+          processscore: parsedContent.process_score,
           process_insight: parsedContent.processInsight,
           technology_score: parsedContent.technology_score,
           technology_insight: parsedContent.technologyInsight,
           overall_score: parsedContent.overall_score,
-          created_at: new Date().toISOString(),
+          generatedat: new Date().toISOString(),
         });
 
       if (updateError) {

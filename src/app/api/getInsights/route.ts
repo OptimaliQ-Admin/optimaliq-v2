@@ -79,7 +79,7 @@ export async function POST(request: Request) {
 
     // Update insights table
     const { error: updateError } = await supabase
-      .from("insights")
+  .from("growth_insights")
       .upsert({
         user_id: userId,
         strategy_score: insights.strategy_score,
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-
+  
     return NextResponse.json(insights);
   } catch (error) {
     console.error("Error in getInsights:", error);
@@ -107,5 +107,5 @@ export async function POST(request: Request) {
       { error: "Internal server error" },
       { status: 500 }
     );
-  }
+  }  
 }
