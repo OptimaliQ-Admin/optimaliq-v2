@@ -178,5 +178,5 @@ export default function AssessmentsPage() {
         {user?.u_id && <TechToolsCard userId={user.u_id} />}
       </div>
     </div>
-  );  
+  );
 }

@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-  
+
     return NextResponse.json(insights);
   } catch (error) {
     console.error("Error in getInsights:", error);

@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     
     // Log the prompt being sent to OpenAI
     console.log("🤖 OpenAI Request Prompt:", aiPrompt);
-
+    
     // Get insights from OpenAI
     const response = await openai.chat.completions.create({
       model: "gpt-4",
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       temperature: 0.7,
       max_tokens: 1000,
     });
-
+    
     const content = response.choices[0]?.message?.content;
     
     // Log the raw response from OpenAI
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
           technology_score: parsedContent.technology_score,
           technology_insight: parsedContent.technologyInsight,
           overall_score: parsedContent.overall_score,
-          generatedat: new Date().toISOString(),
+      generatedat: new Date().toISOString(),
         });
 
       if (updateError) {

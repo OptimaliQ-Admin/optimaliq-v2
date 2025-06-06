@@ -40,7 +40,7 @@ function Step3Component() {
     try {
       const { data, error } = await supabase
         .from("growth_insights")
-        .select("strategy_score, strategy_insight, processscore, process_insight, technology_score, technology_insight, overall_score")
+        .select("strategyscore, strategyinsight, processscore, processinsight, technologyscore, technologyinsight, overallscore")
         .eq("u_id", u_id)
         .order("generatedat", { ascending: false })
         .limit(1)
@@ -51,13 +51,13 @@ function Step3Component() {
       }
 
       const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(data.overall_score ?? 0);
+      const roundedScore = roundToNearestHalf(data.overallscore ?? 0);
 
       setScore(roundedScore);
       setInsights({
-        strategy: data.strategy_insight || insights.strategy,
-        process: data.process_insight || insights.process,
-        technology: data.technology_insight || insights.technology,
+        strategy: data.strategyinsight || insights.strategy,
+        process: data.processinsight || insights.process,
+        technology: data.technologyinsight || insights.technology,
       });
 
       setRoadmapData([
