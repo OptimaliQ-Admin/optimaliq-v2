@@ -58,55 +58,55 @@ export default function GrowthAssessmentStep2() {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setIsSubmitting(true);
-
-    if (!userId) {
-      setError("User ID is missing. Please start again.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!validateForm()) {
-      setIsSubmitting(false);
-      return;
-    }
+    setError(null);
 
     try {
-      console.log("📝 Submitting growth assessment:", {
-        userId,
-        responses: businessResponses,
-        timestamp: new Date().toISOString()
+      console.log("📝 Submitting growth assessment for user:", userId);
+      console.log("📊 Business Responses:", businessResponses);
+      console.log("⏰ Timestamp:", new Date().toISOString());
+
+      // Save to growth_assessment table
+      const { error: saveError } = await supabase
+        .from("growth_assessment")
+        .upsert({
+          u_id: userId,
+          business_responses: businessResponses,
+          generatedat: new Date().toISOString(),
+        });
+
+      if (saveError) {
+        console.error("❌ Failed to save responses:", saveError);
+        throw new Error("Failed to save responses");
+      }
+
+      console.log("✅ Growth assessment saved successfully");
+
+      // Generate insights
+      console.log("🤖 Generating insights for user:", userId);
+      const insightsResponse = await fetch("/api/getInsights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
       });
 
-      const { error: upsertError } = await supabase
-        .from("growth_assessment")
-        .upsert(
-          [
-            {
-              u_id: userId,
-              ...businessResponses,
-              submittedat: new Date().toISOString(),
-            },
-          ],
-          { onConflict: "u_id" }
-        );
-
-      if (upsertError) {
-        console.error("❌ Failed to save responses:", upsertError);
-        setError(`Failed to save responses: ${upsertError.message}`);
-      } else {
-        console.log("✅ Successfully saved growth assessment");
-        router.push("/growth-assessment/step3");
+      if (!insightsResponse.ok) {
+        const errorData = await insightsResponse.json();
+        console.error("❌ Failed to generate insights:", errorData);
+        throw new Error("Failed to generate insights");
       }
+
+      console.log("✅ Insights generated successfully");
+      router.push("/growth-assessment/step3");
     } catch (err) {
-      console.error("❌ Unexpected error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error("❌ Error in form submission:", err);
+      setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
-      setCooldown(10);
     }
   };
 

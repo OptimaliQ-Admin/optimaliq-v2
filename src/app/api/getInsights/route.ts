@@ -17,19 +17,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get user's assessments
-    const { data: assessments, error: assessmentError } = await supabase
-      .from("assessments")
+    console.log("🔍 Fetching growth assessment for user:", userId);
+
+    // Get user's growth assessment
+    const { data: assessment, error: assessmentError } = await supabase
+      .from("growth_assessment")
       .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false })
+      .eq("u_id", userId)
+      .order("generatedat", { ascending: false })
       .limit(1)
       .single();
 
     if (assessmentError) {
-      console.error("Error fetching assessment:", assessmentError);
+      console.error("❌ Error fetching growth assessment:", assessmentError);
       return NextResponse.json(
-        { error: "Failed to fetch assessment" },
+        { error: "Failed to fetch growth assessment" },
         { status: 500 }
       );
     }
@@ -42,22 +44,24 @@ export async function POST(request: Request) {
       .single();
 
     if (userError) {
-      console.error("Error fetching user details:", userError);
+      console.error("❌ Error fetching user details:", userError);
       return NextResponse.json(
         { error: "Failed to fetch user details" },
         { status: 500 }
       );
     }
 
-    if (!assessments || !userDetails) {
+    if (!assessment || !userDetails) {
+      console.error("❌ No assessment or user details found for user:", userId);
       return NextResponse.json(
         { error: "No assessment or user details found" },
         { status: 404 }
       );
     }
 
+    console.log("🤖 Generating AI prompt for user:", userId);
     // Generate AI prompt
-    const aiPrompt = generatePrompt(assessments, userDetails);
+    const aiPrompt = generatePrompt(assessment, userDetails);
 
     // Get insights from OpenAI
     const response = await openai.chat.completions.create({
@@ -69,40 +73,43 @@ export async function POST(request: Request) {
 
     const content = response.choices[0]?.message?.content;
     if (!content) {
+      console.error("❌ No content in OpenAI response for user:", userId);
       return NextResponse.json(
         { error: "No content in OpenAI response" },
         { status: 500 }
       );
     }
 
+    console.log("📝 Parsing OpenAI response for user:", userId);
     const insights = JSON.parse(content);
 
     // Update insights table
     const { error: updateError } = await supabase
-  .from("growth_insights")
+      .from("growth_insights")
       .upsert({
-        user_id: userId,
-        strategy_score: insights.strategy_score,
-        strategy_insight: insights.strategyInsight,
-        process_score: insights.process_score,
-        process_insight: insights.processInsight,
-        technology_score: insights.technology_score,
-        technology_insight: insights.technologyInsight,
-        overall_score: insights.overall_score,
-        created_at: new Date().toISOString(),
+        u_id: userId,
+        strategyscore: insights.strategy_score,
+        strategyinsight: insights.strategyInsight,
+        processscore: insights.process_score,
+        processinsight: insights.processInsight,
+        technologyscore: insights.technology_score,
+        technologyinsight: insights.technologyInsight,
+        overallscore: insights.overall_score,
+        generatedat: new Date().toISOString(),
       });
 
     if (updateError) {
-      console.error("Error updating insights:", updateError);
+      console.error("❌ Error updating insights:", updateError);
       return NextResponse.json(
         { error: "Failed to update insights" },
         { status: 500 }
       );
     }
 
+    console.log("✅ Successfully generated and saved insights for user:", userId);
     return NextResponse.json(insights);
   } catch (error) {
-    console.error("Error in getInsights:", error);
+    console.error("❌ Error in getInsights:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
