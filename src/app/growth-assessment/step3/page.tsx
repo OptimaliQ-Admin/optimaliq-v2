@@ -1,138 +1,131 @@
 "use client";
 
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "src/lib/supabase";
-import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardGrid";
-import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
-import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
+import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
+import InsightsDisplay from "../../../components/assessment/InsightsDisplay";
+import RoadmapDisplay from "../../../components/assessment/RoadmapDisplay";
 
-function Step3Component() {
+// Helper function to clamp scores between 0 and 5
+const clamp = (val: number) => Math.min(5, Math.max(0, parseFloat(String(val))));
+
+export default function Step3Page() {
   const router = useRouter();
-  const hasFetched = useRef(false);
-
-  const [score, setScore] = useState<number>(0);
-  const [insights, setInsights] = useState<{ [key: string]: string }>({
-    strategy: "Complete the assessment to receive insights.",
-    process: "Complete the assessment to receive insights.",
-    technology: "Complete the assessment to receive insights.",
-  });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [roadmapData, setRoadmapData] = useState<{ month: string; score: number }[]>([]);
+  const [insights, setInsights] = useState<any>(null);
+  const [roadmap, setRoadmap] = useState<any>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 6;
+  const RETRY_INTERVAL = 5000;
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    const u_id = typeof window !== "undefined" ? localStorage.getItem("u_id") : null;
-    if (!u_id) {
-      showToast.error("User session expired. Please start again.");
-      router.push("/growth-assessment");
-      return;
-    }
-
-    fetchInsights(u_id);
-  }, [router]);
-
-  const fetchInsights = async (u_id: string, retryCount = 0) => {
-    const MAX_RETRIES = 6; // 30 seconds total with 5-second intervals
-    const clamp = (val: number) => Math.min(5, Math.max(0, val));
-    
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("growth_insights")
-        .select("strategy_score, strategy_insight, process_score, process_insight, technology_score, technology_insight, overall_score")
-        .eq("u_id", u_id)
-        .order("generatedat", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (error) {
-        console.error("❌ Error fetching insights:", error);
-        showToast.error("Failed to load insights. Please try again.");
+    const fetchInsights = async () => {
+      const u_id = localStorage.getItem("u_id");
+      if (!u_id) {
+        console.error("❌ User ID not found in localStorage");
+        showToast.error("User ID not found. Please start over.");
+        localStorage.removeItem("u_id");
+        router.push("/growth-assessment");
         return;
       }
 
-      if (!data) {
-        if (retryCount < MAX_RETRIES) {
-          console.warn(`⚠️ No insights found (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-          // Only show toast on final attempt
-          if (retryCount === MAX_RETRIES - 1) {
-            showToast.error("Insights are still being generated. Please wait...");
+      try {
+        const { data, error } = await supabase
+          .from("growth_insights")
+          .select("*")
+          .eq("u_id", u_id)
+          .order("generatedat", { ascending: false })
+          .maybeSingle();
+
+        if (error) {
+          console.error("❌ Error fetching insights:", error);
+          throw error;
+        }
+
+        if (!data) {
+          if (retryCount < MAX_RETRIES) {
+            console.log(`Retrying fetch (${retryCount + 1}/${MAX_RETRIES})...`);
+            setRetryCount(prev => prev + 1);
+            setTimeout(fetchInsights, RETRY_INTERVAL);
+            return;
           }
-          setTimeout(() => {
-            fetchInsights(u_id, retryCount + 1);
-          }, 5000);
-          return;
-        } else {
-          console.error("❌ Max retries reached");
+          console.error("❌ No insights found after all retries");
           showToast.error("Failed to load insights. Please try again.");
           router.push("/growth-assessment/step2");
           return;
         }
+
+        // Validate insight structure
+        const requiredFields = [
+          "strategy_score", "strategy_insight",
+          "process_score", "process_insight",
+          "technology_score", "technology_insight",
+          "overall_score"
+        ];
+
+        const missingFields = requiredFields.filter(field => !data[field]);
+        if (missingFields.length > 0) {
+          console.error("❌ Missing insight fields:", missingFields);
+        }
+
+        // Set insights with fallback values and clamped scores
+        setInsights({
+          strategy: {
+            score: clamp(data.strategy_score),
+            insight: data.strategy_insight || "Strategy insight unavailable."
+          },
+          process: {
+            score: clamp(data.process_score),
+            insight: data.process_insight || "Process insight unavailable."
+          },
+          technology: {
+            score: clamp(data.technology_score),
+            insight: data.technology_insight || "Technology insight unavailable."
+          },
+          overall: clamp(data.overall_score)
+        });
+
+        // Set roadmap with fallback values
+        setRoadmap({
+          strategy: data.strategy_roadmap || "Strategy roadmap unavailable.",
+          process: data.process_roadmap || "Process roadmap unavailable.",
+          technology: data.technology_roadmap || "Technology roadmap unavailable."
+        });
+
+      } catch (error) {
+        console.error("❌ Error in fetchInsights:", error);
+        if (retryCount < MAX_RETRIES) {
+          console.log(`Retrying fetch (${retryCount + 1}/${MAX_RETRIES})...`);
+          setRetryCount(prev => prev + 1);
+          setTimeout(fetchInsights, RETRY_INTERVAL);
+        } else {
+          showToast.error("Failed to load insights. Please try again.");
+          router.push("/growth-assessment/step2");
+        }
       }
+    };
 
-      // Log insight structure
-      console.log("📊 Insight data structure:", {
-        hasStrategy: !!data.strategy_insight,
-        hasProcess: !!data.process_insight,
-        hasTechnology: !!data.technology_insight,
-        hasOverallScore: !!data.overall_score,
-      });
+    fetchInsights();
+  }, [router, retryCount]);
 
-      const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(clamp(data.overall_score ?? 0));
-
-      setScore(roundedScore);
-      setInsights({
-        strategy: data.strategy_insight || "No strategy insight available.",
-        process: data.process_insight || "No process insight available.",
-        technology: data.technology_insight || "No technology insight available.",
-      });
-
-      setRoadmapData([
-        { month: "Now", score: roundedScore },
-        { month: "3 Months", score: Math.min(5, roundedScore + 0.5) },
-        { month: "6 Months", score: Math.min(5, roundedScore + 1) },
-        { month: "12 Months", score: Math.min(5, roundedScore + 2) },
-      ]);
-    } catch (err) {
-      console.error("❌ Unexpected error in fetchInsights:", err);
-      showToast.error("An unexpected error occurred. Please try again.");
-      router.push("/growth-assessment/step2");
-    } finally {
-      setLoading(false);
-      localStorage.removeItem("u_id");
-    }
-  };
+  if (!insights || !roadmap) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center text-center px-4">
+        <h1 className="text-3xl font-bold text-blue-700 mb-4">Loading your insights...</h1>
+        <div className="mt-8 w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center px-6">
-      <section className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mt-8">
-        <h1 className="text-4xl font-bold text-gray-800 text-center">Your Strategic Insights & Growth Projection</h1>
-        <p className="text-gray-600 text-center mt-2">
-          A data-driven assessment that uncovers your business&rsquo;s potential in the market and provides key insights for <span className="font-bold text-blue-600">optimization.</span>
-        </p>
-      </section>
-
-      <section className="w-full max-w-5xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ScoreCardGrid score={score} />
-        <ScoreLineChart data={roadmapData} score={score} />
-      </section>
-
-      <section className="w-full max-w-5xl mt-8">
-        <ScoreInsightGrid loading={loading} insights={insights} />
-      </section>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Your Growth Assessment Results</h1>
+        <InsightsDisplay insights={insights} />
+        <RoadmapDisplay roadmap={roadmap} />
+      </div>
     </div>
-  );
-}
-
-export default function Step3Page() {
-  return (
-    <Suspense fallback={<p className="text-center mt-12 text-gray-500">Loading insights...</p>}>
-      <Step3Component />
-    </Suspense>
   );
 }

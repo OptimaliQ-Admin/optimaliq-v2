@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import AnalyzingMessage from "../../../components/shared/AnalyzingMessage";
 import { showToast } from "@/lib/utils/toast";
 
-
 function AnalyzingComponent() {
   const router = useRouter();
 
@@ -14,6 +13,7 @@ function AnalyzingComponent() {
     const fetchInsights = async () => {
       const u_id = localStorage.getItem("u_id");
       if (!u_id) {
+        console.error("❌ User ID not found in localStorage");
         showToast.error("User ID not found. Please start over.");
         localStorage.removeItem("u_id");
         router.push("/growth-assessment");
@@ -55,6 +55,9 @@ function AnalyzingComponent() {
         }
       } catch (error) {
         console.error("❌ Error fetching insights:", error);
+        if (error instanceof Error) {
+          console.error("Error details:", error.message);
+        }
         showToast.error("Failed to generate insights. Please try again.");
         router.push("/growth-assessment/step2");
       }

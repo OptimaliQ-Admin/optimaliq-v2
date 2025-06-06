@@ -9,10 +9,17 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Helper function to clamp scores between 0 and 5
+const clamp = (val: number) => Math.min(5, Math.max(0, parseFloat(String(val))));
+
+// Required fields for validation
+const requiredFields = ["strategy", "process", "technology", "obstacles", "customers"];
+
 export async function POST(request: Request) {
   try {
     const { userId } = await request.json();
     if (!userId) {
+      console.error("❌ Missing user ID in request");
       return NextResponse.json(
         { error: "Missing user ID" },
         { status: 400 }
@@ -29,10 +36,20 @@ export async function POST(request: Request) {
       .single();
 
     if (assessmentError) {
-      console.error("Error fetching growth assessment:", assessmentError);
+      console.error("❌ Error fetching growth assessment:", assessmentError);
       return NextResponse.json(
         { error: "Failed to fetch growth assessment" },
         { status: 500 }
+      );
+    }
+
+    // Validate required fields
+    const missingFields = requiredFields.filter(field => !assessment?.[field]);
+    if (missingFields.length > 0) {
+      console.error("❌ Missing required fields:", missingFields);
+      return NextResponse.json(
+        { error: `Missing required fields: ${missingFields.join(", ")}` },
+        { status: 400 }
       );
     }
 
@@ -44,7 +61,7 @@ export async function POST(request: Request) {
       .single();
 
     if (userError) {
-      console.error("Error fetching user details:", userError);
+      console.error("❌ Error fetching user details:", userError);
       return NextResponse.json(
         { error: "Failed to fetch user details" },
         { status: 500 }
@@ -52,6 +69,7 @@ export async function POST(request: Request) {
     }
 
     if (!assessment || !userDetails) {
+      console.error("❌ No assessment or user details found");
       return NextResponse.json(
         { error: "No assessment or user details found" },
         { status: 404 }
@@ -60,8 +78,6 @@ export async function POST(request: Request) {
 
     // Generate AI prompt
     const aiPrompt = generatePrompt(assessment, userDetails);
-    
-    // Log the prompt being sent to OpenAI
     console.log("🤖 OpenAI Request Prompt:", aiPrompt);
     
     // Get insights from OpenAI
@@ -101,48 +117,42 @@ export async function POST(request: Request) {
       );
     }
 
-    // Clamp scores between 0 and 5
-    const clamp = (val: number) => Math.min(5, Math.max(0, val));
+    // Prepare insights data with clamped scores and fallback messages
+    const insightsData = {
+      u_id: userId,
+      strategy_score: clamp(parsedContent.strategy_score),
+      strategy_insight: parsedContent.strategy_insight || "Strategy insight unavailable.",
+      process_score: clamp(parsedContent.process_score),
+      process_insight: parsedContent.process_insight || "Process insight unavailable.",
+      technology_score: clamp(parsedContent.technology_score),
+      technology_insight: parsedContent.technology_insight || "Technology insight unavailable.",
+      overall_score: clamp(parsedContent.overall_score),
+      generatedat: new Date().toISOString(),
+    };
 
-    // Update growth insights table with retry
+    // Update growth insights table with single retry
     try {
       const { data, error: upsertError } = await supabase
         .from("growth_insights")
-        .upsert({
-          u_id: userId,
-          strategy_score: clamp(parseFloat(parsedContent.strategy_score) || 0),
-          strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
-          process_score: clamp(parseFloat(parsedContent.process_score) || 0),
-          process_insight: parsedContent.process_insight || "No process insight available.",
-          technology_score: clamp(parseFloat(parsedContent.technology_score) || 0),
-          technology_insight: parsedContent.technology_insight || "No technology insight available.",
-          overall_score: clamp(parseFloat(parsedContent.overall_score) || 0),
-          generatedat: new Date().toISOString(),
-        })
+        .upsert(insightsData)
         .select();
 
       if (upsertError) {
-        console.error("❌ Failed to insert insights:", upsertError);
-        // One retry attempt
+        console.error("❌ Initial upsert failed:", upsertError);
+        
+        // Wait 1 second before retry
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Single retry attempt
         const { error: retryError } = await supabase
           .from("growth_insights")
-          .upsert({
-            u_id: userId,
-            strategy_score: clamp(parseFloat(parsedContent.strategy_score) || 0),
-            strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
-            process_score: clamp(parseFloat(parsedContent.process_score) || 0),
-            process_insight: parsedContent.process_insight || "No process insight available.",
-            technology_score: clamp(parseFloat(parsedContent.technology_score) || 0),
-            technology_insight: parsedContent.technology_insight || "No technology insight available.",
-            overall_score: clamp(parseFloat(parsedContent.overall_score) || 0),
-            generatedat: new Date().toISOString(),
-          })
+          .upsert(insightsData)
           .select();
 
         if (retryError) {
-          console.error("❌ Failed to insert insights on retry:", retryError);
+          console.error("❌ Retry upsert failed:", retryError);
           return NextResponse.json(
-            { error: "Failed to save insights" },
+            { error: "Failed to save insights after retry" },
             { status: 500 }
           );
         }
