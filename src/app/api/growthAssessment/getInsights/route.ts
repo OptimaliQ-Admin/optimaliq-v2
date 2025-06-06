@@ -98,13 +98,13 @@ export async function POST(request: Request) {
         .upsert({
           u_id: userId,
           strategy_score: parsedContent.strategy_score,
-          strategy_insight: parsedContent.strategyInsight,
+          strategy_insight: parsedContent.strategy_insight,
           processscore: parsedContent.process_score,
-          process_insight: parsedContent.processInsight,
+          process_insight: parsedContent.process_insight,
           technology_score: parsedContent.technology_score,
-          technology_insight: parsedContent.technologyInsight,
+          technology_insight: parsedContent.technology_insight,
           overall_score: parsedContent.overall_score,
-      generatedat: new Date().toISOString(),
+          generatedat: new Date().toISOString(),
         });
 
       if (updateError) {
