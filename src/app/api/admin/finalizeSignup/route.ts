@@ -57,8 +57,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
     }
 
-    // ✅ 4. Insertar datos en tabla 'users'
-    const { error: insertError } = await supabaseAdmin.from("users").insert({
+    // ✅ 4. Insertar datos en tabla 'growth_users'
+    const { error: insertError } = await supabaseAdmin.from("growth_users").insert({
       u_id: authUser.id, // UUID del auth
       name: `${tier2User.first_name} ${tier2User.last_name}`,
       email: tier2User.email,
@@ -69,8 +69,8 @@ export async function POST(req: Request) {
     });
 
     if (insertError) {
-      console.error("❌ Error al insertar en users:", insertError);
-      return NextResponse.json({ error: "Failed to insert into users table" }, { status: 500 });
+      console.error("❌ Error al insertar en growth_users:", insertError);
+      return NextResponse.json({ error: "Failed to insert into growth_users table" }, { status: 500 });
     }
 
     // ✅ 5. Actualizar tier2_users con user ID y nuevos datos

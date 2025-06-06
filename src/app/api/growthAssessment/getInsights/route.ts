@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Get user details
     const { data: userDetails, error: userError } = await supabase
-      .from("users")
+      .from("growth_users")
       .select("industry, companysize, revenuerange")
       .eq("u_id", userId)
       .single();

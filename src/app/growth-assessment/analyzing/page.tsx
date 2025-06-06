@@ -18,10 +18,10 @@ function AnalyzingComponent() {
 
     const generateInsights = async () => {
       try {
-        const res = await fetch("/api/getInsights", {
+        const res = await fetch("/api/growthAssessment/getInsights", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ u_id }),
+          body: JSON.stringify({ userId: u_id }),
         });
 
         if (res.ok) {
