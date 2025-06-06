@@ -93,29 +93,30 @@ export async function POST(request: Request) {
       console.log("🤖 OpenAI Parsed Response:", JSON.stringify(parsedContent, null, 2));
       
       // Update growth insights table
-      const { error: updateError } = await supabase
+      const { error: upsertError } = await supabase
         .from("growth_insights")
         .upsert({
           u_id: userId,
-          strategy_score: parsedContent.strategy_score,
-          strategy_insight: parsedContent.strategy_insight,
-          processscore: parsedContent.process_score,
-          process_insight: parsedContent.process_insight,
-          technology_score: parsedContent.technology_score,
-          technology_insight: parsedContent.technology_insight,
-          overall_score: parsedContent.overall_score,
+          strategy_score: parseFloat(parsedContent.strategy_score) || 0,
+          strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
+          process_score: parseFloat(parsedContent.process_score) || 0,
+          process_insight: parsedContent.process_insight || "No process insight available.",
+          technology_score: parseFloat(parsedContent.technology_score) || 0,
+          technology_insight: parsedContent.technology_insight || "No technology insight available.",
+          overall_score: parseFloat(parsedContent.overall_score) || 0,
           generatedat: new Date().toISOString(),
-        });
+        })
+        .select();
 
-      if (updateError) {
-        console.error("Error updating growth insights:", updateError);
+      if (upsertError) {
+        console.error("❌ Error upserting insights:", upsertError);
         return NextResponse.json(
-          { error: "Failed to update growth insights" },
+          { error: "Failed to save insights" },
           { status: 500 }
         );
       }
 
-      return NextResponse.json(parsedContent);
+      return NextResponse.json({ success: true });
     } catch (parseError) {
       console.error("❌ Failed to parse OpenAI response:", parseError);
       console.error("Raw content that failed to parse:", content);
