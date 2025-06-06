@@ -40,13 +40,21 @@ function Step3Component() {
     try {
       const { data, error } = await supabase
         .from("growth_insights")
-        .select("strategy_score, strategy_insight, processscore, process_insight, technology_score, technology_insight, overall_score")
+        .select("strategy_score, strategy_insight, process_score, process_insight, technology_score, technology_insight, overall_score")
         .eq("u_id", u_id)
         .order("generatedat", { ascending: false })
         .limit(1)
         .maybeSingle();
 
-      if (error || !data) {
+      if (error) {
+        console.error("❌ Error fetching insights:", error);
+        showToast.error("Failed to load insights. Please try again.");
+        return;
+      }
+
+      if (!data) {
+        console.warn("⚠️ No insights found for user:", u_id);
+        showToast.error("No insights found. Please complete the assessment first.");
         return;
       }
 
@@ -66,6 +74,9 @@ function Step3Component() {
         { month: "6 Months", score: Math.min(5, roundedScore + 1) },
         { month: "12 Months", score: Math.min(5, roundedScore + 2) },
       ]);
+    } catch (err) {
+      console.error("❌ Unexpected error in fetchInsights:", err);
+      showToast.error("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
       localStorage.removeItem("u_id");
