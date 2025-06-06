@@ -65,17 +65,20 @@ export async function POST(request: Request) {
     console.log("🤖 OpenAI Request Prompt:", aiPrompt);
     
     // Get insights from OpenAI
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "system", content: aiPrompt }],
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-turbo-preview",
+      messages: [
+        {
+          role: "system",
+          content: aiPrompt,
+        },
+      ],
       temperature: 0.7,
       max_tokens: 1000,
     });
-    
-    const content = response.choices[0]?.message?.content;
-    
-    // Log the raw response from OpenAI
-    console.log("🤖 OpenAI Raw Response:", content);
+
+    const content = completion.choices[0]?.message?.content;
+    console.log("🔍 Raw OpenAI Response:", content);
 
     if (!content) {
       console.error("❌ OpenAI returned empty response");
@@ -85,43 +88,72 @@ export async function POST(request: Request) {
       );
     }
 
+    let parsedContent;
     try {
-      // Parse the JSON response
-      const parsedContent = JSON.parse(content);
-      
-      // Log the parsed response
-      console.log("🤖 OpenAI Parsed Response:", JSON.stringify(parsedContent, null, 2));
-      
-      // Update growth insights table
-      const { error: upsertError } = await supabase
-        .from("growth_insights")
-        .upsert({
-          u_id: userId,
-          strategy_score: parseFloat(parsedContent.strategy_score) || 0,
-          strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
-          process_score: parseFloat(parsedContent.process_score) || 0,
-          process_insight: parsedContent.process_insight || "No process insight available.",
-          technology_score: parseFloat(parsedContent.technology_score) || 0,
-          technology_insight: parsedContent.technology_insight || "No technology insight available.",
-          overall_score: parseFloat(parsedContent.overall_score) || 0,
-          generatedat: new Date().toISOString(),
-        })
-        .select();
-
-      if (upsertError) {
-        console.error("❌ Error upserting insights:", upsertError);
-        return NextResponse.json(
-          { error: "Failed to save insights" },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({ success: true });
+      parsedContent = JSON.parse(content);
+      console.log("✅ Successfully parsed OpenAI response:", parsedContent);
     } catch (parseError) {
       console.error("❌ Failed to parse OpenAI response:", parseError);
       console.error("Raw content that failed to parse:", content);
       return NextResponse.json(
         { error: "Failed to parse AI response" },
+        { status: 500 }
+      );
+    }
+
+    // Clamp scores between 0 and 5
+    const clamp = (val: number) => Math.min(5, Math.max(0, val));
+
+    // Update growth insights table with retry
+    try {
+      const { data, error: upsertError } = await supabase
+        .from("growth_insights")
+        .upsert({
+          u_id: userId,
+          strategy_score: clamp(parseFloat(parsedContent.strategy_score) || 0),
+          strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
+          process_score: clamp(parseFloat(parsedContent.process_score) || 0),
+          process_insight: parsedContent.process_insight || "No process insight available.",
+          technology_score: clamp(parseFloat(parsedContent.technology_score) || 0),
+          technology_insight: parsedContent.technology_insight || "No technology insight available.",
+          overall_score: clamp(parseFloat(parsedContent.overall_score) || 0),
+          generatedat: new Date().toISOString(),
+        })
+        .select();
+
+      if (upsertError) {
+        console.error("❌ Failed to insert insights:", upsertError);
+        // One retry attempt
+        const { error: retryError } = await supabase
+          .from("growth_insights")
+          .upsert({
+            u_id: userId,
+            strategy_score: clamp(parseFloat(parsedContent.strategy_score) || 0),
+            strategy_insight: parsedContent.strategy_insight || "No strategy insight available.",
+            process_score: clamp(parseFloat(parsedContent.process_score) || 0),
+            process_insight: parsedContent.process_insight || "No process insight available.",
+            technology_score: clamp(parseFloat(parsedContent.technology_score) || 0),
+            technology_insight: parsedContent.technology_insight || "No technology insight available.",
+            overall_score: clamp(parseFloat(parsedContent.overall_score) || 0),
+            generatedat: new Date().toISOString(),
+          })
+          .select();
+
+        if (retryError) {
+          console.error("❌ Failed to insert insights on retry:", retryError);
+          return NextResponse.json(
+            { error: "Failed to save insights" },
+            { status: 500 }
+          );
+        }
+      }
+
+      console.log("✅ Successfully saved insights:", data);
+      return NextResponse.json({ success: true, data });
+    } catch (dbError) {
+      console.error("❌ Database operation failed:", dbError);
+      return NextResponse.json(
+        { error: "Database operation failed" },
         { status: 500 }
       );
     }

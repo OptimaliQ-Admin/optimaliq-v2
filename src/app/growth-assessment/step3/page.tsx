@@ -35,7 +35,10 @@ function Step3Component() {
     fetchInsights(u_id);
   }, [router]);
 
-  const fetchInsights = async (u_id: string) => {
+  const fetchInsights = async (u_id: string, retryCount = 0) => {
+    const MAX_RETRIES = 6; // 30 seconds total with 5-second intervals
+    const clamp = (val: number) => Math.min(5, Math.max(0, val));
+    
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -53,19 +56,40 @@ function Step3Component() {
       }
 
       if (!data) {
-        console.warn("⚠️ No insights found for user:", u_id);
-        showToast.error("Insights are still being generated. Please wait a moment and refresh.");
-        return;
+        if (retryCount < MAX_RETRIES) {
+          console.warn(`⚠️ No insights found (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+          // Only show toast on final attempt
+          if (retryCount === MAX_RETRIES - 1) {
+            showToast.error("Insights are still being generated. Please wait...");
+          }
+          setTimeout(() => {
+            fetchInsights(u_id, retryCount + 1);
+          }, 5000);
+          return;
+        } else {
+          console.error("❌ Max retries reached");
+          showToast.error("Failed to load insights. Please try again.");
+          router.push("/growth-assessment/step2");
+          return;
+        }
       }
 
+      // Log insight structure
+      console.log("📊 Insight data structure:", {
+        hasStrategy: !!data.strategy_insight,
+        hasProcess: !!data.process_insight,
+        hasTechnology: !!data.technology_insight,
+        hasOverallScore: !!data.overall_score,
+      });
+
       const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
-      const roundedScore = roundToNearestHalf(data.overall_score ?? 0);
+      const roundedScore = roundToNearestHalf(clamp(data.overall_score ?? 0));
 
       setScore(roundedScore);
       setInsights({
-        strategy: data.strategy_insight || insights.strategy,
-        process: data.process_insight || insights.process,
-        technology: data.technology_insight || insights.technology,
+        strategy: data.strategy_insight || "No strategy insight available.",
+        process: data.process_insight || "No process insight available.",
+        technology: data.technology_insight || "No technology insight available.",
       });
 
       setRoadmapData([
@@ -77,6 +101,7 @@ function Step3Component() {
     } catch (err) {
       console.error("❌ Unexpected error in fetchInsights:", err);
       showToast.error("An unexpected error occurred. Please try again.");
+      router.push("/growth-assessment/step2");
     } finally {
       setLoading(false);
       localStorage.removeItem("u_id");
