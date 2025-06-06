@@ -4,12 +4,11 @@
 import { useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import AnalyzingMessage from "../../../components/shared/AnalyzingMessage";
-import { useToast } from "../../../components/ui/use-toast";
+import { showToast } from "@/lib/utils/toast";
 
 
 function AnalyzingComponent() {
   const router = useRouter();
-  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchInsights = async () => {
