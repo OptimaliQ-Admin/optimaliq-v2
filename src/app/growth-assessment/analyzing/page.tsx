@@ -24,6 +24,7 @@ function AnalyzingComponent() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
 
+        console.log("📝 Fetching insights for user:", u_id);
         const response = await fetch("/api/growthAssessment/getInsights", {
           method: "POST",
           headers: {
@@ -36,6 +37,7 @@ function AnalyzingComponent() {
         clearTimeout(timeoutId);
 
         const data = await response.json();
+        console.log("📝 API Response:", data);
 
         if (!response.ok) {
           console.error("❌ API Error:", data.error);

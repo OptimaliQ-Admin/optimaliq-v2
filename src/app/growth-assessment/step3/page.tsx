@@ -1,19 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
-import InsightsDisplay from "../../../components/assessment/InsightsDisplay";
-import RoadmapDisplay from "../../../components/assessment/RoadmapDisplay";
+import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardGrid";
+import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
+import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 
 // Helper function to clamp scores between 0 and 5
 const clamp = (val: number) => Math.min(5, Math.max(0, parseFloat(String(val))));
 
-export default function Step3Page() {
+function Step3Component() {
   const router = useRouter();
-  const [insights, setInsights] = useState<any>(null);
-  const [roadmap, setRoadmap] = useState<any>(null);
+  const [score, setScore] = useState<number>(0);
+  const [insights, setInsights] = useState<{ [key: string]: string }>({
+    strategy: "Complete the assessment to receive insights.",
+    process: "Complete the assessment to receive insights.",
+    technology: "Complete the assessment to receive insights.",
+  });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [roadmapData, setRoadmapData] = useState<{ month: string; score: number }[]>([]);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 6;
   const RETRY_INTERVAL = 5000;
@@ -68,30 +75,24 @@ export default function Step3Page() {
           console.error("❌ Missing insight fields:", missingFields);
         }
 
-        // Set insights with fallback values and clamped scores
+        const roundToNearestHalf = (num: number) => Math.floor(num * 2) / 2;
+        const roundedScore = roundToNearestHalf(clamp(data.overall_score ?? 0));
+
+        setScore(roundedScore);
         setInsights({
-          strategy: {
-            score: clamp(data.strategy_score),
-            insight: data.strategy_insight || "Strategy insight unavailable."
-          },
-          process: {
-            score: clamp(data.process_score),
-            insight: data.process_insight || "Process insight unavailable."
-          },
-          technology: {
-            score: clamp(data.technology_score),
-            insight: data.technology_insight || "Technology insight unavailable."
-          },
-          overall: clamp(data.overall_score)
+          strategy: data.strategy_insight || "Strategy insight unavailable.",
+          process: data.process_insight || "Process insight unavailable.",
+          technology: data.technology_insight || "Technology insight unavailable.",
         });
 
-        // Set roadmap with fallback values
-        setRoadmap({
-          strategy: data.strategy_roadmap || "Strategy roadmap unavailable.",
-          process: data.process_roadmap || "Process roadmap unavailable.",
-          technology: data.technology_roadmap || "Technology roadmap unavailable."
-        });
+        setRoadmapData([
+          { month: "Now", score: roundedScore },
+          { month: "3 Months", score: Math.min(5, roundedScore + 0.5) },
+          { month: "6 Months", score: Math.min(5, roundedScore + 1) },
+          { month: "12 Months", score: Math.min(5, roundedScore + 2) },
+        ]);
 
+        setLoading(false);
       } catch (error) {
         console.error("❌ Error in fetchInsights:", error);
         if (retryCount < MAX_RETRIES) {
@@ -108,24 +109,31 @@ export default function Step3Page() {
     fetchInsights();
   }, [router, retryCount]);
 
-  if (!insights || !roadmap) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-3xl font-bold text-blue-700 mb-4">Loading your insights...</h1>
-        <div className="mt-8 w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Your Growth Assessment Results</h1>
-        <InsightsDisplay insights={insights} />
-        <RoadmapDisplay roadmap={roadmap} />
-      </div>
+    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center px-6">
+      <section className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mt-8">
+        <h1 className="text-4xl font-bold text-gray-800 text-center">Your Strategic Insights & Growth Projection</h1>
+        <p className="text-gray-600 text-center mt-2">
+          A data-driven assessment that uncovers your business&rsquo;s potential in the market and provides key insights for <span className="font-bold text-blue-600">optimization.</span>
+        </p>
+      </section>
+
+      <section className="w-full max-w-5xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ScoreCardGrid score={score} />
+        <ScoreLineChart data={roadmapData} score={score} />
+      </section>
+
+      <section className="w-full max-w-5xl mt-8">
+        <ScoreInsightGrid loading={loading} insights={insights} />
+      </section>
     </div>
+  );
+}
+
+export default function Step3Page() {
+  return (
+    <Suspense fallback={<div className="text-center mt-12 text-gray-500">Loading insights...</div>}>
+      <Step3Component />
+    </Suspense>
   );
 }
