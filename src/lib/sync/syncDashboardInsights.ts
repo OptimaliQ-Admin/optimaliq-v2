@@ -19,7 +19,7 @@ export async function syncDashboardInsights(
   try {
     // 1. Fetch latest insights
     const { data: insightData, error: insightError } = await supabase
-      .from("insights")
+      .from("growth_insights")
       .select("*")
       .eq("u_id", u_id)
       .order("generatedat", { ascending: false })
