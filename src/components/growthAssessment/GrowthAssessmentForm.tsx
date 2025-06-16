@@ -48,7 +48,7 @@ export default function GrowthAssessmentForm() {
     try {
       // 🔍 Check for existing user by email
       const { data: existingUser, error: fetchError } = await supabase
-        .from("growth_users")
+        .from("users")
         .select("u_id")
         .eq("email", userInfo.email)
         .maybeSingle();
@@ -65,7 +65,7 @@ export default function GrowthAssessmentForm() {
         userId = existingUser.u_id;
   
         const { error: updateError } = await supabase
-          .from("growth_users")
+          .from("users")
           .update(userInfo)
           .eq("u_id", userId);
   
@@ -76,7 +76,7 @@ export default function GrowthAssessmentForm() {
         }
       } else {
         const { data: newUser, error: insertError } = await supabase
-          .from("growth_users")
+          .from("users")
           .insert([userInfo])
           .select("u_id")
           .single();

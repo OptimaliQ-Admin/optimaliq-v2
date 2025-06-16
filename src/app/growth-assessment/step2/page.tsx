@@ -75,12 +75,6 @@ export default function GrowthAssessmentStep2() {
     }
 
     try {
-      console.log("📝 Submitting growth assessment:", {
-        userId,
-        responses: businessResponses,
-        timestamp: new Date().toISOString()
-      });
-
       const { error: upsertError } = await supabase
         .from("growth_assessment")
         .upsert(
@@ -95,14 +89,13 @@ export default function GrowthAssessmentStep2() {
         );
 
       if (upsertError) {
-        console.error("❌ Failed to save responses:", upsertError);
+        console.error("Failed to save responses:", upsertError);
         setError(`Failed to save responses: ${upsertError.message}`);
       } else {
-        console.log("✅ Successfully saved growth assessment");
         router.push("/growth-assessment/step3");
       }
     } catch (err) {
-      console.error("❌ Unexpected error:", err);
+      console.error("Unexpected error:", err);
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);

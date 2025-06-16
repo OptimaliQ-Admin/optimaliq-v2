@@ -4,68 +4,37 @@
 import { useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import AnalyzingMessage from "../../../components/shared/AnalyzingMessage";
-import { showToast } from "@/lib/utils/toast";
+
 
 function AnalyzingComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchInsights = async () => {
-      const u_id = localStorage.getItem("u_id");
-      if (!u_id) {
-        console.error("❌ User ID not found in localStorage");
-        showToast.error("User ID not found. Please start over.");
-        localStorage.removeItem("u_id");
-        router.push("/growth-assessment");
-        return;
-      }
+    const u_id = typeof window !== "undefined" ? localStorage.getItem("u_id") : null;
+    if (!u_id) {
+      router.push("/growth-assessment");
+      return;
+    }
 
+    const generateInsights = async () => {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-        console.log("📝 Fetching insights for user:", u_id);
-        const response = await fetch("/api/growthAssessment/getInsights", {
+        const res = await fetch("/api/getInsights", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: u_id }),
-          signal: controller.signal,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ u_id }),
         });
 
-        clearTimeout(timeoutId);
-
-        const data = await response.json();
-        console.log("📝 API Response:", data);
-
-        if (!response.ok) {
-          console.error("❌ API Error:", data.error);
-          console.error("API response:", data);
-          showToast.error("Failed to generate insights. Please try again.");
-          router.push("/growth-assessment/step2");
-          return;
-        }
-
-        if (data.success) {
-          console.log("✅ Insights generated successfully");
+        if (res.ok) {
           router.push("/growth-assessment/step3");
         } else {
-          console.error("❌ Unexpected API response:", data);
-          showToast.error("Something went wrong. Please try again.");
-          router.push("/growth-assessment/step2");
+          router.push("/growth-assessment");
         }
-      } catch (error) {
-        console.error("❌ Error fetching insights:", error);
-        if (error instanceof Error) {
-          console.error("Error details:", error.message);
-        }
-        showToast.error("Failed to generate insights. Please try again.");
-        router.push("/growth-assessment/step2");
+      } catch {
+        router.push("/growth-assessment");
       }
     };
 
-    fetchInsights();
+    generateInsights();
   }, [router]);
 
   return (

@@ -3,175 +3,80 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generatePrompt } from "@/lib/ai/generatePrompt";
-import OpenAI from "openai";
+import { callOpenAI } from "@/lib/ai/callOpenAI";
+import { callSageMaker } from "@/lib/ai/callSageMaker";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
-// Helper function to clamp scores between 0 and 5
-const clamp = (val: number) => Math.min(5, Math.max(0, parseFloat(String(val))));
-
-// Required fields for validation
-const requiredFields = ["strategy", "process", "technology", "obstacles", "customers"];
-
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  let sageMakerScore = 0;
   try {
-    const { userId } = await request.json();
-    if (!userId) {
-      console.error("❌ Missing user ID in request");
-      return NextResponse.json(
-        { error: "Missing user ID" },
-        { status: 400 }
-      );
-    }
+    const { u_id } = await req.json();
+    if (!u_id) return NextResponse.json({ error: "Missing User ID" }, { status: 400 });
 
-    // Get user's growth assessment
-    const { data: assessment, error: assessmentError } = await supabase
+    const { data: assessment } = await supabase
       .from("growth_assessment")
       .select("*")
-      .eq("u_id", userId)
-      .order("created_at", { ascending: false })
+      .eq("u_id", u_id)
+      .order("submittedat", { ascending: false })
       .limit(1)
       .single();
 
-    if (assessmentError) {
-      console.error("❌ Error fetching growth assessment:", assessmentError);
-      return NextResponse.json(
-        { error: "Failed to fetch growth assessment" },
-        { status: 500 }
-      );
-    }
+    if (!assessment) return NextResponse.json({ error: "No assessment found" }, { status: 404 });
 
-    // Validate required fields
-    const missingFields = requiredFields.filter(field => !assessment?.[field]);
-    if (missingFields.length > 0) {
-      console.error("❌ Missing required fields:", missingFields);
-      return NextResponse.json(
-        { error: `Missing required fields: ${missingFields.join(", ")}` },
-        { status: 400 }
-      );
-    }
-
-    // Get user details
-    const { data: userDetails, error: userError } = await supabase
+    const { data: user } = await supabase
       .from("growth_users")
-      .select("industry, companysize, revenuerange")
-      .eq("u_id", userId)
+      .select("*")
+      .eq("u_id", u_id)
       .single();
 
-    if (userError) {
-      console.error("❌ Error fetching user details:", userError);
-      return NextResponse.json(
-        { error: "Failed to fetch user details" },
-        { status: 500 }
-      );
-    }
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    if (!assessment || !userDetails) {
-      console.error("❌ No assessment or user details found");
-      return NextResponse.json(
-        { error: "No assessment or user details found" },
-        { status: 404 }
-      );
-    }
-
-    // Generate AI prompt
-    const aiPrompt = generatePrompt(assessment, userDetails);
-    console.log("🤖 OpenAI Request Prompt:", aiPrompt);
+    const aiPrompt = generatePrompt(assessment, user);
+    const { parsed } = await callOpenAI(aiPrompt);    
     
-    // Get insights from OpenAI
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        {
-          role: "system",
-          content: aiPrompt,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 1000,
-    });
+    // ✅ Extract `scores` and `insights` from parsed
+    const scores = {
+      strategy_score: parsed.strategy_score || 0,
+      process_score: parsed.process_score || 0,
+      technology_score: parsed.technology_score || 0,
+    };
+    
+    const insights = {
+      strategy_insight: parsed.strategyInsight || "No insight available.",
+      process_insight: parsed.processInsight || "No insight available.",
+      technology_insight: parsed.technologyInsight || "No insight available.",
+    };    
 
-    const content = completion.choices[0]?.message?.content;
-    console.log("🔍 Raw OpenAI Response:", content);
+    const sageInput = [
+      scores.strategy_score,
+      scores.process_score,
+      scores.technology_score,
+      ...["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
+        "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
+        "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
+        "Construction", "Legal", "Nonprofit", "Other"
+      ].map(ind => user.industry === ind ? 1 : 0),
+    ];
 
-    if (!content) {
-      console.error("❌ OpenAI returned empty response");
-      return NextResponse.json(
-        { error: "Failed to generate insights" },
-        { status: 500 }
-      );
-    }
+    sageMakerScore = await callSageMaker(sageInput);
 
-    let parsedContent;
-    try {
-      parsedContent = JSON.parse(content);
-      console.log("✅ Successfully parsed OpenAI response:", parsedContent);
-    } catch (parseError) {
-      console.error("❌ Failed to parse OpenAI response:", parseError);
-      console.error("Raw content that failed to parse:", content);
-      return NextResponse.json(
-        { error: "Failed to parse AI response" },
-        { status: 500 }
-      );
-    }
-
-    // Prepare insights data with clamped scores and fallback messages
-    const insightsData = {
-      u_id: userId,
-      strategy_score: clamp(parsedContent.strategy_score),
-      strategy_insight: parsedContent.strategy_insight || "Strategy insight unavailable.",
-      process_score: clamp(parsedContent.process_score),
-      process_insight: parsedContent.process_insight || "Process insight unavailable.",
-      technology_score: clamp(parsedContent.technology_score),
-      technology_insight: parsedContent.technology_insight || "Technology insight unavailable.",
-      overall_score: clamp(parsedContent.overall_score),
+    const insertPayload = {
+      u_id,
+      strategy_score: scores.strategy_score,
+      strategy_insight: insights.strategy_insight,
+      process_score: scores.process_score,
+      process_insight: insights.process_insight,
+      technology_score: scores.technology_score,
+      technology_insight: insights.technology_insight,
       generatedat: new Date().toISOString(),
+      overall_score: sageMakerScore,
     };
 
-    // Update growth insights table with single retry
-    try {
-      const { data, error: upsertError } = await supabase
-        .from("growth_insights")
-        .upsert(insightsData)
-        .select();
+    await supabase.from("growth_insights").upsert([insertPayload], { onConflict: "u_id" });
 
-      if (upsertError) {
-        console.error("❌ Initial upsert failed:", upsertError);
-        
-        // Wait 1 second before retry
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Single retry attempt
-        const { error: retryError } = await supabase
-          .from("growth_insights")
-          .upsert(insightsData)
-          .select();
-
-        if (retryError) {
-          console.error("❌ Retry upsert failed:", retryError);
-          return NextResponse.json(
-            { error: "Failed to save insights after retry" },
-            { status: 500 }
-          );
-        }
-      }
-
-      console.log("✅ Successfully saved insights:", data);
-      return NextResponse.json({ success: true, data });
-    } catch (dbError) {
-      console.error("❌ Database operation failed:", dbError);
-      return NextResponse.json(
-        { error: "Database operation failed" },
-        { status: 500 }
-      );
-    }
-  } catch (error) {
-    console.error("❌ Unexpected error in getInsights:", error);
-    return NextResponse.json(
-      { error: "An unexpected error occurred" },
-      { status: 500 }
-    );
+    return NextResponse.json(insertPayload);
+  } catch (err) {
+    console.error("❌ Insight API Error:", err);
+    return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
 }
