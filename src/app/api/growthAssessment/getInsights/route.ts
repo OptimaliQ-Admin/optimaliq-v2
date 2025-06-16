@@ -42,9 +42,9 @@ export async function POST(req: Request) {
     };
     
     const insights = {
-      strategy_insight: parsed.strategyInsight || "No insight available.",
-      process_insight: parsed.processInsight || "No insight available.",
-      technology_insight: parsed.technologyInsight || "No insight available.",
+      strategyInsight: parsed.strategyInsight || "No insight available.",
+      processInsight: parsed.processInsight || "No insight available.",
+      technologyInsight: parsed.technologyInsight || "No insight available.",
     };    
 
     const sageInput = [
@@ -63,11 +63,11 @@ export async function POST(req: Request) {
     const insertPayload = {
       u_id,
       strategy_score: scores.strategy_score,
-      strategy_insight: insights.strategy_insight,
+      strategy_insight: insights.strategyInsight,
       process_score: scores.process_score,
-      process_insight: insights.process_insight,
+      process_insight: insights.processInsight,
       technology_score: scores.technology_score,
-      technology_insight: insights.technology_insight,
+      technology_insight: insights.technologyInsight,
       generatedat: new Date().toISOString(),
       overall_score: sageMakerScore,
     };
