@@ -17,7 +17,7 @@ coverage/
 .vscode/
 .idea/
 
-# Python / ML files (since you're AWS now)
+# Python / ML files
 ML/
 *.csv
 *.pkl

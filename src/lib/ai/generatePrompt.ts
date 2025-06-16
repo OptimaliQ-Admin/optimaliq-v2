@@ -42,6 +42,9 @@ type Assessment = {
       - If technology is cutting-edge, provide advanced insights on maximizing ROI through integration, automation, AI-driven efficiencies, and leveraging first-party data.
       - Deliver powerful, compelling insights. Avoid generic advice—every recommendation should be highly relevant, tailored, and capable of driving immediate action.
       - Deliver strategic insights that go beyond surface-level advice. Use the user's inputs to provide deeply customized, high-value recommendations.
+      - Based on the three scores you're providing, also return a field called \`fallback_overall_score\` that reflects your judgment of the user's overall maturity. 
+      - Strategy should be weighted most heavily, followed by process and technology.
+      - Output this field in the same JSON block. Format strictly as shown below.
       
       **Example Output Format (strict JSON, no extra text):**
       {
@@ -52,7 +55,9 @@ type Assessment = {
         "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
         
         "technology_score": 5,
-        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
+        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation.",
+        
+        "fallback_overall_score": 4.1
       }
     `;
   };

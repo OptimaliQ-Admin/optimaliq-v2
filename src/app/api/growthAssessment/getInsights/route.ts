@@ -4,11 +4,8 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generatePrompt } from "@/lib/ai/generatePrompt";
 import { callOpenAI } from "@/lib/ai/callOpenAI";
-import { callSageMaker } from "@/lib/ai/callSageMaker";
-
 
 export async function POST(req: Request) {
-  let sageMakerScore = 0;
   try {
     const { u_id } = await req.json();
     if (!u_id) return NextResponse.json({ error: "Missing User ID" }, { status: 400 });
@@ -39,6 +36,7 @@ export async function POST(req: Request) {
       strategy_score: parsed.strategy_score || 0,
       process_score: parsed.process_score || 0,
       technology_score: parsed.technology_score || 0,
+      fallback_overall_score: parsed.fallback_overall_score || 0,
     };
     
     const insights = {
@@ -47,18 +45,13 @@ export async function POST(req: Request) {
       technologyInsight: parsed.technologyInsight || "No insight available.",
     };    
 
-    const sageInput = [
-      scores.strategy_score,
-      scores.process_score,
-      scores.technology_score,
-      ...["E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-        "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-        "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-        "Construction", "Legal", "Nonprofit", "Other"
-      ].map(ind => user.industry === ind ? 1 : 0),
-    ];
-
-    sageMakerScore = await callSageMaker(sageInput);
+    // Calculate weighted overall score
+    const weightedScore = 
+      0.4 * scores.strategy_score + 
+      0.3 * scores.process_score + 
+      0.3 * scores.technology_score;
+    
+    const overall_score = Math.min(5, Math.max(0, parseFloat(weightedScore.toFixed(2))));
 
     const insertPayload = {
       u_id,
@@ -69,7 +62,8 @@ export async function POST(req: Request) {
       technology_score: scores.technology_score,
       technology_insight: insights.technologyInsight,
       generatedat: new Date().toISOString(),
-      overall_score: sageMakerScore,
+      overall_score,
+      fallback_score_gpt: scores.fallback_overall_score,
     };
 
     await supabase.from("growth_insights").upsert([insertPayload], { onConflict: "u_id" });
