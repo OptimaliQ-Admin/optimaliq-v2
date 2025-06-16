@@ -1,20 +1,12 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
-import AWS from "aws-sdk";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const sagemaker = new AWS.SageMakerRuntime({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-
 export async function POST(req: Request) {
-  let sageMakerScore = 0; // initialize early
   try {
     const { u_id } = await req.json(); // ✅ Ensure lowercase column name
     console.log("🔍 Fetching stored answers for User ID:", u_id);
@@ -89,7 +81,9 @@ export async function POST(req: Request) {
         "processInsight": "Your current operations are stable, but not yet built for scalability. Implement automation in customer onboarding, introduce KPI-driven decision-making, and establish a delegation framework to eliminate bottlenecks as you scale.",
         
         "technology_score": 5,
-        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation."
+        "technologyInsight": "Your tech stack is cutting-edge, but underutilized. Implement a data unification strategy across CRM, analytics, and automation tools to drive more predictive decision-making and customer segmentation.",
+        
+        "fallback_overall_score": 4.2
       }
     `;
 
@@ -116,7 +110,7 @@ export async function POST(req: Request) {
 
     // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [{ role: "system", content: aiPrompt }],
       max_tokens: 1000,
       response_format: { type: "json_object" },
@@ -140,63 +134,19 @@ export async function POST(req: Request) {
 
     console.log("🔢 AI-Generated Scores:", parsedResponse);
 
-    // ✅ Extract OpenAI scores to use in SageMaker input
+    // Calculate weighted overall score
     const strategy_score = parsedResponse.strategy_score || 0;
     const process_score = parsedResponse.process_score || 0;
     const technology_score = parsedResponse.technology_score || 0;
-
-    // ✅ Build SageMaker input vector using the OpenAI scores
-    const industryOneHot = [
-      "E-commerce", "Finance", "SaaS", "Education", "Technology", "Healthcare", "Retail",
-      "Manufacturing", "Consulting", "Entertainment", "Real Estate", "Transportation",
-      "Hospitality", "Energy", "Telecommunications", "Pharmaceuticals", "Automotive",
-      "Construction", "Legal", "Nonprofit", "Other"
-    ].map((industry) => (user.industry === industry ? 1 : 0));
-
-    const sageInput = [
-      strategy_score,
-      process_score,
-      technology_score,
-      ...industryOneHot,
-    ];
-
-    const csvPayload = sageInput.join(",");
-
-    // ✅ Fail-safe check for SageMaker environment variable and call SageMaker Endpoint
-    const endpointName = process.env.SAGEMAKER_ENDPOINT_NAME;
-    if (!endpointName) {
-      console.error("❌ Missing SageMaker endpoint name in environment variables.");
-      return NextResponse.json({ error: "SageMaker endpoint not configured." }, { status: 500 });
-    }
-    try {
-      const sageResponse = await sagemaker
-        .invokeEndpoint({
-          EndpointName: endpointName,
-          Body: csvPayload,
-          ContentType: "text/csv",
-        })
-        .promise();
-
-      // Ensure Body is correctly parsed as a Buffer before converting to string
-      sageMakerScore = parseFloat((sageResponse.Body as Buffer).toString("utf-8"));
-      console.log("🎯 SageMaker Predicted Score:", sageMakerScore);
-
-    } catch (error) {
-      console.error("❌ SageMaker Error:", error);
-      // ✅ Log SageMaker error in ai_log
-      await supabase
-        .from("ai_log")
-        .insert([
-          {
-            u_id,
-            apirequest: `SageMaker Payload: ${csvPayload}`,
-            apiresponse: JSON.stringify(error),
-            model: "SageMaker",
-            createdat: new Date().toISOString(),
-          },
-        ]);
-      return NextResponse.json({ error: "SageMaker prediction failed." }, { status: 500 });
-    }
+    
+    // Calculate weighted score (40% strategy, 30% process, 30% technology)
+    const overall_score = Math.min(
+      5,
+      Math.max(
+        0,
+        strategy_score * 0.4 + process_score * 0.3 + technology_score * 0.3
+      )
+    );
 
     // ✅ Insert AI response into ai_log
     if (logData?.log_id) {
@@ -225,7 +175,8 @@ export async function POST(req: Request) {
       technology_score: parsedResponse.technology_score,
       technology_insight: parsedResponse.technologyInsight,
       generatedat: new Date().toISOString(),
-      overall_score: sageMakerScore,
+      overall_score: overall_score,
+      fallback_score_gpt: parsedResponse.fallback_overall_score
     };
 
     const { data: insertedInsights, error: storeError } = await supabase
@@ -243,32 +194,7 @@ export async function POST(req: Request) {
     return NextResponse.json(parsedResponse);
 
   } catch (error: any) {
-    console.error("🚨 AI API Error (Raw):", error);
-  
-    // 🔍 Check if it looks like an AWS error
-    if (
-      error &&
-      typeof error === "object" &&
-      "code" in error &&
-      "message" in error &&
-      "requestId" in error
-    ) {
-      console.error("📛 AWS Error Code:", error.code);
-      console.error("📄 AWS Error Message:", error.message);
-      console.error("📃 AWS Request ID:", error.requestId);
-      console.error("📦 AWS Error Stack:", error.stack);
-    }
-  
-    // 🧠 OpenAI-style error (optional)
-    if (error.response && error.response.data) {
-      console.error("🧠 OpenAI API Error Response:", JSON.stringify(error.response.data, null, 2));
-    }
-  
-    // General logging
-    console.error("🧩 Stringified Error:", JSON.stringify(error, null, 2));
-    console.error("🧱 Error Type:", typeof error);
-    console.error("📌 Stack Trace:", error.stack || "No stack trace available");
-  
-    return NextResponse.json({ error: "Failed to generate AI-driven insights" }, { status: 500 });
-  }  
+    console.error("🚨 AI API Error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
