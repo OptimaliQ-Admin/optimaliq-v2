@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     // ✅ Retrieve latest business assessment
     const { data: assessment, error: assessmentError } = await supabase
-      .from("assessment")
+      .from("growth_assessment")
       .select("*")
       .eq("u_id", u_id)
       .order("submittedat", { ascending: false }) // ✅ Get the latest submission
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
     // ✅ Retrieve user details
     const { data: user, error: userError } = await supabase
-      .from("users")
+      .from("growth_users")
       .select("*")
       .eq("u_id", u_id)
       .single();
@@ -218,20 +218,20 @@ export async function POST(req: Request) {
     // ✅ Insert AI insights into Supabase
     const insightsData = {
       u_id,
-      strategyscore: parsedResponse.strategy_score,
-      strategyinsight: parsedResponse.strategyInsight,
-      processscore: parsedResponse.process_score,
-      processinsight: parsedResponse.processInsight,
-      technologyscore: parsedResponse.technology_score,
-      technologyinsight: parsedResponse.technologyInsight,
+      strategy_score: parsedResponse.strategy_score,
+      strategy_insight: parsedResponse.strategyInsight,
+      process_score: parsedResponse.process_score,
+      process_insight: parsedResponse.processInsight,
+      technology_score: parsedResponse.technology_score,
+      technology_insight: parsedResponse.technologyInsight,
       generatedat: new Date().toISOString(),
-      overallscore: sageMakerScore,
+      overall_score: sageMakerScore,
     };
 
     const { data: insertedInsights, error: storeError } = await supabase
-  .from("insights")
-  .upsert([insightsData], { onConflict: "u_id" }) // 👈 ensures one active insight per user
-  .select("*");
+      .from("growth_insights")
+      .upsert([insightsData], { onConflict: "u_id" }) // 👈 ensures one active insight per user
+      .select("*");
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);

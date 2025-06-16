@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ 4. Insertar datos en tabla 'users'
-    const { error: insertError } = await supabaseAdmin.from("users").insert({
+    const { error: insertError } = await supabaseAdmin.from("growth_users").insert({
       u_id: authUser.id, // UUID del auth
       name: `${tier2User.first_name} ${tier2User.last_name}`,
       email: tier2User.email,
