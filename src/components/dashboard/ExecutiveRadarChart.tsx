@@ -97,35 +97,29 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       .style("stroke", "#CDCDCD")
       .style("stroke-width", "1px");
 
-    // Add the labels
+    // Add the labels with improved positioning and styling
+    const labelRadius = rScale(5) + 20;
     axes
       .append("text")
-      .attr("class", "legend")
-      .style("font-size", "14px")
+      .attr("x", (d, i) => labelRadius * Math.cos(angleSlice * i - Math.PI / 2))
+      .attr("y", (d, i) => labelRadius * Math.sin(angleSlice * i - Math.PI / 2))
       .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("x", (d, i) => {
-        const angle = (i * angleSlice - Math.PI / 2);
-        return rScale(5.5) * Math.cos(angle);
-      })
-      .attr("y", (d, i) => {
-        const angle = (i * angleSlice - Math.PI / 2);
-        return rScale(5.5) * Math.sin(angle);
-      })
-      .text((d) => d.axis)
-      .call(wrap, 60);
+      .attr("dominant-baseline", "middle")
+      .style("font-size", "14px")
+      .attr("fill", "#374151") // text-gray-700
+      .text((d) => d.axis);
 
     // Draw the radar chart
     const radarLine = d3
       .lineRadial<{ axis: string; value: number }>()
       .radius((d) => rScale(d.value))
-      .angle((d, i) => i * angleSlice - Math.PI / 2);
+      .angle((d, i) => i * angleSlice);
 
     // Add the radar chart for each dataset
     const radarArea = d3
       .areaRadial<{ axis: string; value: number }>()
       .radius((d) => rScale(d.value))
-      .angle((d, i) => i * angleSlice - Math.PI / 2)
+      .angle((d, i) => i * angleSlice)
       .innerRadius(0)
       .outerRadius((d) => rScale(d.value));
 
@@ -209,43 +203,6 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-
-    // Helper function to wrap text
-    function wrap(text: d3.Selection<SVGTextElement, any, any, any>, width: number) {
-      text.each(function () {
-        const text = d3.select(this);
-        const words = text.text().split(/\s+/).reverse();
-        let word;
-        let line: string[] = [];
-        let lineNumber = 0;
-        const lineHeight = 1.1;
-        const y = text.attr("y");
-        const dy = parseFloat(text.attr("dy"));
-        let tspan = text
-          .text(null)
-          .append("tspan")
-          .attr("x", 0)
-          .attr("y", y)
-          .attr("dy", dy + "em");
-
-        while ((word = words.pop())) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          const node = tspan.node();
-          if (node && node.getComputedTextLength() > width) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text
-              .append("tspan")
-              .attr("x", 0)
-              .attr("y", y)
-              .attr("dy", ++lineNumber * lineHeight + dy + "em")
-              .text(word);
-          }
-        }
-      });
-    }
 
     // Cleanup function
     return () => {
