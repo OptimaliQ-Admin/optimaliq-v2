@@ -31,11 +31,13 @@ export async function POST(req: Request) {
     const hasActiveSubscription = subscription?.status === "active";
 
     // Fetch onboarding
-    const { data: onboarding, error: onboardingError } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from("onboarding_assessments")
-      .select("id")
+      .select("o_id")
       .eq("u_id", u_id)
-      .maybeSingle();
+      .limit(1);
+
+    const onboarding = data?.[0];
 
     const hasCompletedOnboarding = Boolean(onboarding);
 
@@ -46,6 +48,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("❌ Server error in checkUserStatus:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
