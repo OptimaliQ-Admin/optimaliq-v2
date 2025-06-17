@@ -225,7 +225,8 @@ const ExecutiveRadarChart: React.FC<Props> = ({
         while ((word = words.pop())) {
           line.push(word);
           tspan.text(line.join(" "));
-          if (tspan.node()?.getComputedTextLength()! > width) {
+          const node = tspan.node();
+          if (node && node.getComputedTextLength() > width) {
             line.pop();
             tspan.text(line.join(" "));
             line = [word];
