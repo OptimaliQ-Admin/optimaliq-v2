@@ -51,7 +51,7 @@ const ExecutiveRadarChart: React.FC<Props> = ({
     const margin = { top: 60, right: 60, bottom: 60, left: 60 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
     const height = svgRef.current.clientHeight - margin.top - margin.bottom;
-    const radius = Math.min(width, height) / 2 * 0.85; // Reduce size by 15%
+    const radius = Math.min(width, height) / 2;
 
     // Create SVG group
     const svg = d3
@@ -105,13 +105,11 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
       .attr("x", (d, i) => {
-        // Adjust angles for each axis
-        const angle = angleSlice * i - Math.PI / 2;
+        const angle = (i * angleSlice - Math.PI / 2);
         return rScale(5.5) * Math.cos(angle);
       })
       .attr("y", (d, i) => {
-        // Adjust angles for each axis
-        const angle = angleSlice * i - Math.PI / 2;
+        const angle = (i * angleSlice - Math.PI / 2);
         return rScale(5.5) * Math.sin(angle);
       })
       .text((d) => d.axis)
@@ -121,13 +119,13 @@ const ExecutiveRadarChart: React.FC<Props> = ({
     const radarLine = d3
       .lineRadial<{ axis: string; value: number }>()
       .radius((d) => rScale(d.value))
-      .angle((d, i) => i * angleSlice);
+      .angle((d, i) => i * angleSlice - Math.PI / 2);
 
     // Add the radar chart for each dataset
     const radarArea = d3
       .areaRadial<{ axis: string; value: number }>()
       .radius((d) => rScale(d.value))
-      .angle((d, i) => i * angleSlice)
+      .angle((d, i) => i * angleSlice - Math.PI / 2)
       .innerRadius(0)
       .outerRadius((d) => rScale(d.value));
 
