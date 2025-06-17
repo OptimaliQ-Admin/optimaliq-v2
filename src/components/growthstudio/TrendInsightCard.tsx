@@ -43,6 +43,14 @@ export default function TrendInsightCard() {
       .slice(0, 2)
       .join("\n");
 
+  const getKeyInsights = (text: string) => {
+    const lines = text.split("\n");
+    const insights = lines
+      .filter((line) => line.startsWith("•"))
+      .slice(0, 3); // Get first 3 bullet points
+    return insights.length > 0 ? insights.join("\n") : "";
+  };
+
   const formatModalContent = (text: string) => {
     const [main, tail] = text.split("Final thoughts");
 
@@ -89,18 +97,46 @@ export default function TrendInsightCard() {
         <p className="text-gray-400 mt-2 animate-pulse">Loading insights...</p>
       ) : insight ? (
         <>
-          <p className="text-gray-700 font-semibold mb-1">{getLeadIn(insight)}</p>
-          <p className="text-gray-600 whitespace-pre-line text-sm">{getTopBullets(insight)}</p>
+          <div className="mt-4 space-y-3">
+            <p className="text-gray-700 font-semibold">
+              {getLeadIn(insight).replace("Lead in Statement", "").trim()}
+            </p>
+            
+            <div className="text-gray-600 text-sm space-y-2">
+              {getKeyInsights(insight)
+                .split("\n")
+                .map((line, idx) => (
+                  <p key={idx} className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>{line.replace("•", "").trim()}</span>
+                  </p>
+                ))}
+            </div>
 
-          <button
-            onClick={() => setIsOpen(true)}
-            className="mt-4 text-blue-600 underline text-sm hover:text-blue-800"
-          >
-            🔍 Read full insight
-          </button>
-          {lastUpdated && (
-            <p className="mt-2 text-xs text-gray-400">Last updated: {lastUpdated}</p>
-          )}
+            <button
+              onClick={() => setIsOpen(true)}
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+            >
+              <span>Read full insights</span>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+
+            {lastUpdated && (
+              <p className="text-xs text-gray-400">Last updated: {lastUpdated}</p>
+            )}
+          </div>
 
           <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />

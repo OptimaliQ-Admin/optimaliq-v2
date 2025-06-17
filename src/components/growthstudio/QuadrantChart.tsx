@@ -77,7 +77,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
     // Setup dimensions
     const margin = { top: 60, right: 60, bottom: 60, left: 60 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
-    const height = 460 - margin.top - margin.bottom;
+    const height = 560 - margin.top - margin.bottom;
 
     // Create SVG
     const svg = d3
@@ -160,16 +160,22 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         .style("fill", quad.fill)
         .style("fill-opacity", 0.2);
 
-      // Add quadrant labels
+      // Add quadrant labels with darker text
       const color = d3.color(quad.fill);
-      const darkerColor = color ? color.darker(0.5).toString() : quad.fill;
+      const darkerColor = color ? color.darker(0.7).toString() : quad.fill;
+      
+      // Position labels in corners
+      const labelX = quad.x1 === minX ? xScale(quad.x1) + 20 : xScale(quad.x2) - 20;
+      const labelY = quad.y1 === minY ? yScale(quad.y1) - 20 : yScale(quad.y2) + 20;
+      const textAnchor = quad.x1 === minX ? "start" : "end";
+      const dominantBaseline = quad.y1 === minY ? "auto" : "hanging";
       
       svg
         .append("text")
-        .attr("x", xScale((quad.x1 + quad.x2) / 2))
-        .attr("y", yScale((quad.y1 + quad.y2) / 2))
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
+        .attr("x", labelX)
+        .attr("y", labelY)
+        .attr("text-anchor", textAnchor)
+        .attr("dominant-baseline", dominantBaseline)
         .style("font-size", "14px")
         .style("font-weight", "600")
         .style("fill", darkerColor)
@@ -294,12 +300,12 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         tooltip.style("visibility", "hidden");
       });
 
-    // Add branding
+    // Add branding (moved to bottom left)
     svg
       .append("text")
-      .attr("x", width - 10)
+      .attr("x", 10)
       .attr("y", height - 10)
-      .style("text-anchor", "end")
+      .style("text-anchor", "start")
       .style("font-size", "12px")
       .style("fill", "#9ca3af")
       .style("font-style", "italic")
@@ -346,8 +352,16 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         />
       </div>
 
-      <div className="relative px-6 pt-10 pb-12">
-        <svg ref={svgRef} className="w-full" style={{ height: "460px" }} />
+      <div className="px-6 pt-4">
+        <p className="text-sm text-gray-600 mb-6">
+          This quadrant analysis positions your business relative to industry peers, highlighting your strategic and operational strengths. 
+          Your position indicates your current maturity level, while the bubble size reflects your technological capabilities. 
+          Use this insight to identify growth opportunities and benchmark against top performers in your sector.
+        </p>
+      </div>
+
+      <div className="relative px-6 pt-4 pb-12">
+        <svg ref={svgRef} className="w-full" style={{ height: "560px" }} />
       </div>
     </motion.div>
   );
