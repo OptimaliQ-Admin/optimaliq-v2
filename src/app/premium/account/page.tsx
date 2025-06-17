@@ -8,7 +8,7 @@ import PasswordInput from "@/components/shared/PasswordInput";
 import NotificationPreferences from "@/components/notifications/NotificationPreferences";
 
 export default function AccountPage() {
-  const { user } = usePremiumUser();
+  const { user, setUser } = usePremiumUser();
   const [form, setForm] = useState<Partial<PremiumUser>>({});
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -47,6 +47,14 @@ export default function AccountPage() {
       const { data: { publicUrl } } = supabase.storage.from('profile-pics').getPublicUrl(fileName);
       setProfilePic(publicUrl);
       setForm(prev => ({ ...prev, profile_pic_url: publicUrl }));
+      
+      // Update user context with new profile picture URL
+      if (user) {
+        setUser({
+          ...user,
+          profile_pic_url: publicUrl
+        });
+      }
     } catch (err) {
       console.error('Error uploading profile picture:', err);
       setError('Failed to upload profile picture.');
