@@ -1,7 +1,7 @@
 //src/components/dashboard/GrowthChart.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import SectionTitleBar from "./SectionTitleBar";
 
@@ -18,36 +18,35 @@ interface Props {
 
 const GrowthChart: React.FC<Props> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (!svgRef.current) return;
+    if (!svgRef.current || !data.length) return;
 
-    // Clear any existing SVG content
+    // Clear previous chart
     d3.select(svgRef.current).selectAll("*").remove();
 
-    // Responsive dimensions
-    const updateDimensions = () => {
-      const width = svgRef.current?.clientWidth || 0;
-      const height = window.innerWidth < 640 ? 300 : window.innerWidth < 1024 ? 400 : 500;
-      setDimensions({ width, height });
-    };
+    // Setup dimensions
+    const margin = { top: 40, right: 60, bottom: 40, left: 60 };
+    const width = svgRef.current.clientWidth - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
 
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-
-    // Chart setup
-    const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-    const width = dimensions.width - margin.left - margin.right;
-    const height = dimensions.height - margin.top - margin.bottom;
-
-    // Create SVG group
+    // Create SVG
     const svg = d3
       .select(svgRef.current)
-      .attr("width", dimensions.width)
-      .attr("height", dimensions.height)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Add background rectangle
+    svg
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill", "#f9fafb")
+      .style("rx", "8")
+      .style("ry", "8")
+      .style("filter", "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05))");
 
     // Scales
     const xScale = d3
@@ -62,10 +61,55 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .range([height, 0])
       .nice();
 
+    // Target Zone
+    const targetZone = svg
+      .append("g")
+      .attr("class", "target-zone");
+
+    // Add gradient definition
+    const gradient = svg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", "targetGradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%");
+
+    gradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#10b981")
+      .attr("stop-opacity", 0.1);
+
+    gradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#10b981")
+      .attr("stop-opacity", 0);
+
+    targetZone
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", yScale(5))
+      .attr("width", width)
+      .attr("height", yScale(4) - yScale(5))
+      .style("fill", "url(#targetGradient)");
+
+    targetZone
+      .append("text")
+      .attr("x", 10)
+      .attr("y", yScale(5) + 20)
+      .style("font-size", "12px")
+      .style("font-style", "italic")
+      .style("fill", "#10b981")
+      .text("Target Maturity Zone");
+
     // Grid lines
-    const gridLines = svg
+    const yTicks = yScale.ticks(9); // Every 0.5 from 1 to 5
+    svg
       .selectAll(".grid-line")
-      .data(yScale.ticks(5))
+      .data(yTicks)
       .enter()
       .append("line")
       .attr("class", "grid-line")
@@ -77,20 +121,11 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .style("stroke-width", 1)
       .style("stroke-dasharray", "4 4");
 
-    // Target zone
-    const targetZone = svg
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", yScale(4))
-      .attr("width", width)
-      .attr("height", yScale(3) - yScale(4))
-      .style("fill", "#10b981")
-      .style("opacity", 0.1);
-
     // Axes
     const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale)
-      .ticks(5)
+    const yAxis = d3
+      .axisLeft(yScale)
+      .ticks(9)
       .tickFormat((d) => (d as number).toFixed(1));
 
     svg
@@ -107,6 +142,28 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .call(yAxis)
       .style("color", "#6b7280")
       .style("font-size", "12px");
+
+    // Axis labels
+    svg
+      .append("text")
+      .attr("class", "y-axis-label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height / 2)
+      .attr("y", -40)
+      .style("text-anchor", "middle")
+      .style("font-size", "12px")
+      .style("fill", "#6b7280")
+      .text("Maturity Score");
+
+    svg
+      .append("text")
+      .attr("class", "x-axis-label")
+      .attr("x", width / 2)
+      .attr("y", height + 35)
+      .style("text-anchor", "middle")
+      .style("font-size", "12px")
+      .style("fill", "#6b7280")
+      .text("Timeline");
 
     // Line generators
     const lineGenerator = d3
@@ -135,7 +192,8 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .attr("d", lineGenerator)
       .style("fill", "none")
       .style("stroke", "#3b82f6")
-      .style("stroke-width", 3);
+      .style("stroke-width", 4)
+      .style("filter", "drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3))");
 
     const industryLine = svg
       .append("path")
@@ -144,8 +202,7 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .attr("d", industryLineGenerator)
       .style("fill", "none")
       .style("stroke", "#6b7280")
-      .style("stroke-width", 2)
-      .style("stroke-dasharray", "5 5");
+      .style("stroke-width", 2);
 
     const topPerformerLine = svg
       .append("path")
@@ -154,8 +211,26 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .attr("d", topPerformerLineGenerator)
       .style("fill", "none")
       .style("stroke", "#10b981")
-      .style("stroke-width", 2)
-      .style("stroke-dasharray", "2 2");
+      .style("stroke-width", 2);
+
+    // Add benchmark labels
+    svg
+      .append("text")
+      .attr("x", width - 10)
+      .attr("y", yScale(data[0].industryScore))
+      .style("text-anchor", "end")
+      .style("font-size", "12px")
+      .style("fill", "#6b7280")
+      .text("Industry Avg");
+
+    svg
+      .append("text")
+      .attr("x", width - 10)
+      .attr("y", yScale(data[0].topPerformerScore))
+      .style("text-anchor", "end")
+      .style("font-size", "12px")
+      .style("fill", "#10b981")
+      .text("Top Performers");
 
     // Add dots
     const dots = svg
@@ -169,7 +244,8 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .attr("r", 4)
       .style("fill", "#3b82f6")
       .style("stroke", "#ffffff")
-      .style("stroke-width", 2);
+      .style("stroke-width", 2)
+      .style("transition", "r 0.2s");
 
     // Tooltip
     const tooltip = d3
@@ -206,6 +282,11 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
           .attr("y2", height)
           .style("display", "block");
 
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 6);
+
         tooltip
           .style("visibility", "visible")
           .html(`
@@ -234,72 +315,53 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .on("mouseout", function () {
         hoverLine.style("display", "none");
         tooltip.style("visibility", "hidden");
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 4);
       });
 
-    // Animate lines
+    // Add branding
+    svg
+      .append("text")
+      .attr("x", width - 10)
+      .attr("y", height - 10)
+      .style("text-anchor", "end")
+      .style("font-size", "12px")
+      .style("fill", "#9ca3af")
+      .style("font-style", "italic")
+      .text("OptimaliQ.ai");
+
+    // Animate line drawing
     const totalLength = userLine.node()?.getTotalLength() || 0;
     userLine
-      .attr("stroke-dasharray", totalLength)
-      .attr("stroke-dashoffset", totalLength)
+      .style("stroke-dasharray", totalLength)
+      .style("stroke-dashoffset", totalLength)
       .transition()
-      .duration(1000)
+      .duration(1500)
       .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
+      .style("stroke-dashoffset", 0);
 
-    industryLine
-      .attr("stroke-dasharray", totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(1000)
-      .delay(200)
-      .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
-
-    topPerformerLine
-      .attr("stroke-dasharray", totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(1000)
-      .delay(400)
-      .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
-
-    // Cleanup
     return () => {
-      window.removeEventListener("resize", updateDimensions);
       d3.select("body").selectAll(".tooltip").remove();
     };
-  }, [data, dimensions.width]);
+  }, [data]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-      <div className="mb-6">
-        <SectionTitleBar
-          title="📈 Growth Projection"
-          tooltip="Your forecasted growth based on current maturity and best practices."
-        />
-        <p className="text-gray-500 text-sm mt-2">
-          Track your progress against industry benchmarks and top performers over time.
-        </p>
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">Growth Projection</h3>
+          <p className="text-sm text-gray-500">
+            Track your maturity score progression over time
+          </p>
+        </div>
       </div>
-
-      <div className="w-full">
-        <svg ref={svgRef} className="w-full" />
+      <div className="relative">
+        <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>
-
-      <div className="flex justify-around text-sm text-gray-700 font-medium pt-6 mt-2">
-        <span className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
-          You
-        </span>
-        <span className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-gray-600 rounded-sm"></div>
-          Industry Avg
-        </span>
-        <span className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-emerald-500 rounded-sm"></div>
-          Top Performers
-        </span>
+      <div className="mt-4 text-sm text-gray-500 italic">
+        Insight: You're on track to reach 5.0 maturity in 12 months
       </div>
     </div>
   );
