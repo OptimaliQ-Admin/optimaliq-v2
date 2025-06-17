@@ -5,14 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
 import PasswordInput from "@/components/shared/PasswordInput";
-import { Metadata } from "next";
-import AccountSettings from "@/components/account/AccountSettings";
 import NotificationPreferences from "@/components/notifications/NotificationPreferences";
-
-export const metadata: Metadata = {
-  title: "Account Settings | OptimaliQ",
-  description: "Manage your account settings and preferences",
-};
 
 export default function AccountPage() {
   const { user } = usePremiumUser();
