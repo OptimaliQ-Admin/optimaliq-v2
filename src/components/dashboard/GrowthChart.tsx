@@ -361,7 +361,7 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
         <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>
       <div className="mt-4 text-sm text-gray-500 italic">
-        Insight: You're on track to reach 5.0 maturity in 12 months
+        Insight: You&apos;re on track to reach 5.0 maturity in 12 months
       </div>
     </div>
   );
