@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200">
+    <footer className="bg-gray-50 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
@@ -69,15 +69,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-200 pt-8 text-center">
-          <p className="text-gray-600 mb-2">
-            123 Innovation Drive, Suite 456<br />
-            San Francisco, CA 94107
+        <div className="border-t border-gray-200 pt-8">
+          <p className="text-gray-600 mb-2 text-center">
+            123 Innovation Drive, Suite 456, San Francisco, CA 94107
           </p>
-          <p className="text-gray-600 mb-2">
+          <p className="text-gray-600 mb-4 text-center">
             © {new Date().getFullYear()} OptimaliQ. All rights reserved.
           </p>
-          <div className="flex justify-center space-x-4 mb-4">
+          <div className="flex justify-center items-center space-x-6">
             <a 
               href="https://linkedin.com/company/optimaliq" 
               target="_blank" 
@@ -87,28 +86,12 @@ export default function Footer() {
               <FaLinkedin className="w-6 h-6" />
             </a>
             <a 
-              href="https://twitter.com/optimaliq" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-blue-600 transition"
+              href="mailto:support@optimaliq.ai" 
+              className="text-blue-600 hover:text-blue-700 transition"
             >
-              <FaTwitter className="w-6 h-6" />
-            </a>
-            <a 
-              href="https://facebook.com/optimaliq" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-blue-600 transition"
-            >
-              <FaFacebook className="w-6 h-6" />
+              support@optimaliq.ai
             </a>
           </div>
-          <a 
-            href="mailto:support@optimaliq.ai" 
-            className="text-blue-600 hover:text-blue-700 transition"
-          >
-            support@optimaliq.ai
-          </a>
         </div>
       </div>
     </footer>
