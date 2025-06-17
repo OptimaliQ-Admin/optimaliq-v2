@@ -91,15 +91,15 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
     targetZone
       .append("rect")
       .attr("x", 0)
-      .attr("y", yScale(5))
+      .attr("y", yScale(4.5))
       .attr("width", width)
-      .attr("height", yScale(4) - yScale(5))
+      .attr("height", yScale(3.8) - yScale(4.5))
       .style("fill", "url(#targetGradient)");
 
     targetZone
       .append("text")
       .attr("x", 10)
-      .attr("y", yScale(5) + 20)
+      .attr("y", yScale(4.5) + 20)
       .style("font-size", "12px")
       .style("font-style", "italic")
       .style("fill", "#10b981")
@@ -361,7 +361,7 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
         <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>
       <div className="mt-4 text-sm text-gray-500 italic">
-        Insight: You&apos;re on track to reach 5.0 maturity in 12 months
+        Insight: Based on current trajectory, you&apos;re trending toward higher maturity—potentially nearing 5.0 within 18 months if growth continues.
       </div>
     </div>
   );

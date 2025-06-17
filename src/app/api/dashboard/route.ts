@@ -82,9 +82,12 @@ if (aiScores) {
 
     const chartData = [
       { month: "Now", userScore: aiScores.score, industryScore: 3.2, topPerformerScore: 4.5 },
-      { month: "3 Months", userScore: Math.min(5, aiScores.score + 0.5), industryScore: 3.2, topPerformerScore: 4.5 },
-      { month: "6 Months", userScore: Math.min(5, aiScores.score + 1), industryScore: 3.2, topPerformerScore: 4.5 },
-      { month: "12 Months", userScore: Math.min(5, aiScores.score + 2), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "3 Months", userScore: Math.min(4.6, aiScores.score + 0.3), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "6 Months", userScore: Math.min(4.6, aiScores.score + 0.6), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "9 Months", userScore: Math.min(4.6, aiScores.score + 0.9), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "12 Months", userScore: Math.min(4.6, aiScores.score + 1.2), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "15 Months", userScore: Math.min(4.6, aiScores.score + 1.5), industryScore: 3.2, topPerformerScore: 4.5 },
+      { month: "18 Months", userScore: Math.min(4.6, aiScores.score + 1.8), industryScore: 3.2, topPerformerScore: 4.5 },
     ];
 
     const payload = {
