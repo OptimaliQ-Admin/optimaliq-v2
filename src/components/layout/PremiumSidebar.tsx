@@ -17,7 +17,6 @@ const navItems = [
   { href: "/premium/dashboard", icon: <ChartBarIcon className="w-5 h-5" />, label: "Dashboard" },
   { href: "/premium/growth-studio", icon: <RocketLaunchIcon className="w-5 h-5" />, label: "Growth Studio" },
   { href: "/premium/assessment", icon: <PencilSquareIcon className="w-5 h-5" />, label: "Assessment" },
-  { href: "/premium/community", icon: <UserGroupIcon className="w-5 h-5" />, label: "Community" },
 ];
 
 export default function PremiumSidebar() {
