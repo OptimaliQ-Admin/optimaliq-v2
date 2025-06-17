@@ -25,7 +25,7 @@ interface Props {
   onSelectCompany: (company: string | null) => void;
 }
 
-export default function BarChartCard({ companies, userData, selectedCompany, onSelectCompany }: Props) {
+export function BarChartCard({ companies, userData, selectedCompany, onSelectCompany }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {

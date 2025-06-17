@@ -2,55 +2,58 @@
 
 import { useState, useEffect } from "react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import QuadrantChart from "./QuadrantChart";
-import BarChartCard from "./BarChartCard";
+import QuadrantChart from './QuadrantChart';
+import { BarChartCard } from './BarChartCard';
+import { motion } from "framer-motion";
 
-interface GrowthInsights {
-  quadrantData: {
-    companies: Array<{
-      label: string;
-      strategyScore: number;
-      processScore: number;
-      technologyScore: number;
-    }>;
-    user: {
-      strategyScore: number;
-      processScore: number;
-      technologyScore: number;
-    };
-  };
+interface CompanyData {
+  label: string;
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
 }
 
-export default function GrowthChartModule() {
+interface UserData {
+  strategyScore: number;
+  processScore: number;
+  technologyScore: number;
+}
+
+interface QuadrantData {
+  companies: CompanyData[];
+  user: UserData;
+}
+
+export const GrowthChartModule = () => {
   const { user } = usePremiumUser();
-  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
-  const [data, setData] = useState<GrowthInsights | null>(null);
+  const [data, setData] = useState<QuadrantData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.u_id) return;
-
-      setLoading(true);
-      setError(null);
-
+      
       try {
-        const res = await fetch("/api/growth_studio/insights", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        setLoading(true);
+        const response = await fetch('/api/growth_studio/quadrant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({ u_id: user.u_id }),
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch growth insights");
+        if (!response.ok) {
+          throw new Error('Failed to fetch quadrant data');
         }
 
-        const result = await res.json();
-        setData(result);
+        const quadrantData = await response.json();
+        setData(quadrantData);
       } catch (err) {
-        console.error("Error fetching growth insights:", err);
-        setError(err instanceof Error ? err.message : "Failed to load insights");
+        console.error('Error fetching quadrant data:', err);
+        setError('Failed to load growth data. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -61,40 +64,42 @@ export default function GrowthChartModule() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-[400px] bg-gray-100 rounded"></div>
-          <div className="h-[400px] bg-gray-100 rounded"></div>
-        </div>
+      <div className="flex items-center justify-center h-[600px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-600">
-        <p className="font-semibold mb-2">⚠️ Error Loading Charts</p>
-        <p className="text-sm">{error}</p>
+      <div className="flex items-center justify-center h-[600px]">
+        <div className="text-red-500">{error}</div>
       </div>
     );
   }
 
-  if (!data) return null;
+  if (!data) {
+    return null;
+  }
 
   return (
-    <div className="space-y-6">
-      <QuadrantChart
-        companies={data.quadrantData.companies}
-        userData={data.quadrantData.user}
+    <motion.div 
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <QuadrantChart 
+        companies={data.companies}
+        userData={data.user}
         selectedCompany={selectedCompany}
         onSelectCompany={setSelectedCompany}
       />
-      <BarChartCard
-        companies={data.quadrantData.companies}
-        userData={data.quadrantData.user}
+      <BarChartCard 
+        companies={data.companies}
+        userData={data.user}
         selectedCompany={selectedCompany}
-        onSelectCompany={setSelectedCompany}
       />
-    </div>
+    </motion.div>
   );
-} 
+}; 

@@ -264,7 +264,7 @@ export default function QuadrantChart({ companies, userData, selectedCompany, on
           .style("stroke-width", 2);
       }
       tooltip.style("visibility", "hidden");
-    };
+  };
 
     const handleClick = (event: MouseEvent, d: CompanyData) => {
       onSelectCompany(d.label === selectedCompany ? null : d.label);
@@ -317,10 +317,10 @@ export default function QuadrantChart({ companies, userData, selectedCompany, on
 
   return (
     <Card className="p-6">
-      <SectionTitleBar
-        title="📊 Strategic Growth Quadrant"
-        tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
-      />
+        <SectionTitleBar
+          title="📊 Strategic Growth Quadrant"
+          tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
+        />
       <div className="relative mt-6">
         <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>

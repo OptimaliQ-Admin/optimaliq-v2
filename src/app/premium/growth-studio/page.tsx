@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, LineChart, Target, TrendingUp } from "lucide-react";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
-import GrowthChartModule from "@/components/growthstudio/GrowthChartModule";
+import { GrowthChartModule } from "@/components/growthstudio/GrowthChartModule";
 
 interface GrowthInsights {
   quadrantData: {
@@ -48,21 +48,27 @@ export default function GrowthStudioPage() {
       setError(null);
 
       try {
-        const res = await fetch("/api/growth_studio/insights", {
+        const res = await fetch("/api/growth_studio/quadrant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ u_id: user.u_id }),
         });
 
         if (!res.ok) {
-          throw new Error("Failed to fetch growth insights");
+          throw new Error("Failed to fetch quadrant data");
         }
 
         const data = await res.json();
-        setInsights(data);
+        setInsights({
+          quadrantData: {
+            companies: data.companies,
+            user: data.user
+          },
+          recommendations: [] // We'll need to implement this separately
+        });
       } catch (err) {
-        console.error("Error fetching growth insights:", err);
-        setError(err instanceof Error ? err.message : "Failed to load insights");
+        console.error("Error fetching quadrant data:", err);
+        setError(err instanceof Error ? err.message : "Failed to load data");
       } finally {
         setLoading(false);
       }
@@ -117,20 +123,26 @@ export default function GrowthStudioPage() {
               tooltip="Personalized recommendations based on your current performance and goals"
             />
             <div className="mt-6 space-y-4">
-              {insights.recommendations.map((rec, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-200"
-                >
-                  <h3 className="font-semibold text-gray-900">{rec.title}</h3>
-                  <p className="mt-1 text-sm text-gray-600">{rec.description}</p>
-                  <div className="mt-3 flex items-center gap-4 text-sm">
-                    <span className="text-blue-600">Impact: {rec.impact}</span>
-                    <span className="text-purple-600">Effort: {rec.effort}</span>
-                    <span className="text-green-600">Priority: {rec.priority}</span>
+              {insights.recommendations.length > 0 ? (
+                insights.recommendations.map((rec, index) => (
+                  <div
+                    key={index}
+                    className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                  >
+                    <h3 className="font-semibold text-gray-900">{rec.title}</h3>
+                    <p className="mt-1 text-sm text-gray-600">{rec.description}</p>
+                    <div className="mt-3 flex items-center gap-4 text-sm">
+                      <span className="text-blue-600">Impact: {rec.impact}</span>
+                      <span className="text-purple-600">Effort: {rec.effort}</span>
+                      <span className="text-green-600">Priority: {rec.priority}</span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>Complete your assessment to get personalized recommendations</p>
                 </div>
-              ))}
+              )}
             </div>
           </Card>
 
