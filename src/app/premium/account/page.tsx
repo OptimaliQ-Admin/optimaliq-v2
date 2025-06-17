@@ -3,19 +3,48 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import { PremiumUser } from "@/context/PremiumUserContext";
 import PasswordInput from "@/components/shared/PasswordInput";
 import NotificationPreferences from "@/components/notifications/NotificationPreferences";
 
+type ProfileForm = {
+  first_name: string;
+  last_name: string;
+  title: string;
+  company: string;
+  company_size: string;
+  industry: string;
+  phone: string;
+  linkedin_url: string;
+  timezone: string;
+  agreed_marketing: boolean;
+};
+
+type PasswordForm = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 export default function AccountPage() {
   const { user } = usePremiumUser();
-  const [form, setForm] = useState<Partial<PremiumUser>>({});
+  const [form, setForm] = useState<ProfileForm>({
+    first_name: "",
+    last_name: "",
+    title: "",
+    company: "",
+    company_size: "",
+    industry: "",
+    phone: "",
+    linkedin_url: "",
+    timezone: "",
+    agreed_marketing: false,
+  });
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [passwordForm, setPasswordForm] = useState({
+  const [passwordForm, setPasswordForm] = useState<PasswordForm>({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -25,11 +54,43 @@ export default function AccountPage() {
   const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setForm(user);
-      setProfilePic(user.profile_pic_url || null);
-    }
-  }, [user]);
+    if (!user?.u_id) return;
+
+    const fetchProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("tier2_profiles")
+          .select("*")
+          .eq("u_id", user.u_id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error);
+          return;
+        }
+
+        if (data) {
+          setForm({
+            first_name: data.first_name || "",
+            last_name: data.last_name || "",
+            title: data.title || "",
+            company: data.company || "",
+            company_size: data.company_size || "",
+            industry: data.industry || "",
+            phone: data.phone || "",
+            linkedin_url: data.linkedin_url || "",
+            timezone: data.timezone || "",
+            agreed_marketing: data.agreed_marketing || false,
+          });
+          setProfilePic(data.profile_pic || null);
+        }
+      } catch (error) {
+        console.error("Error in fetchProfile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [user?.u_id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -138,9 +199,22 @@ export default function AccountPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div>
-            <AccountSettings />
+          <div className="space-y-8">
+            {/* Profile Settings */}
+            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+              {/* ... rest of the form ... */}
+            </form>
+
+            {/* Password change form */}
+            <form
+              onSubmit={handlePasswordChange}
+              className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200"
+            >
+              {/* ... rest of the password form ... */}
+            </form>
           </div>
+
+          {/* Notification Preferences */}
           <div>
             <NotificationPreferences />
           </div>
