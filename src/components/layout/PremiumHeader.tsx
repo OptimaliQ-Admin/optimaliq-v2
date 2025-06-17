@@ -66,9 +66,15 @@ export default function PremiumHeader() {
             className="flex items-center space-x-2 hover:opacity-80 transition"
           >
             {user?.profile_pic_url ? (
-              <img src={user.profile_pic_url} alt="Profile" className="h-6 w-6 rounded-full object-cover" />
+              <img 
+                src={user.profile_pic_url} 
+                alt="Profile" 
+                className="h-8 w-8 rounded-full object-cover border-2 border-gray-300" 
+              />
             ) : (
-              <UserCircleIcon className="h-6 w-6 text-gray-600" />
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-sm text-gray-400 border-2 border-gray-300">
+                {user?.first_name?.[0] || user?.email?.[0] || '?'}
+              </div>
             )}
             <span className="text-sm text-gray-700 font-medium">
               {user?.email || "User"}
