@@ -51,7 +51,7 @@ const ExecutiveRadarChart: React.FC<Props> = ({
     const margin = { top: 60, right: 60, bottom: 60, left: 60 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
     const height = svgRef.current.clientHeight - margin.top - margin.bottom;
-    const radius = Math.min(width, height) / 2;
+    const radius = Math.min(width, height) / 2 * 0.85; // Reduce size by 15%
 
     // Create SVG group
     const svg = d3
@@ -104,8 +104,16 @@ const ExecutiveRadarChart: React.FC<Props> = ({
       .style("font-size", "14px")
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
-      .attr("x", (d, i) => rScale(5.5) * Math.cos(angleSlice * i - Math.PI / 2))
-      .attr("y", (d, i) => rScale(5.5) * Math.sin(angleSlice * i - Math.PI / 2))
+      .attr("x", (d, i) => {
+        // Adjust angles for each axis
+        const angle = angleSlice * i - Math.PI / 2;
+        return rScale(5.5) * Math.cos(angle);
+      })
+      .attr("y", (d, i) => {
+        // Adjust angles for each axis
+        const angle = angleSlice * i - Math.PI / 2;
+        return rScale(5.5) * Math.sin(angle);
+      })
       .text((d) => d.axis)
       .call(wrap, 60);
 
