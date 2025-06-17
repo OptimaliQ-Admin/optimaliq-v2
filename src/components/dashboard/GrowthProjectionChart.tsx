@@ -19,6 +19,31 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
+  // Generate 18 months of data if not provided
+  const extendedData = React.useMemo(() => {
+    if (data.length >= 18) return data;
+    
+    const lastDataPoint = data[data.length - 1];
+    const newData = [...data];
+    
+    for (let i = data.length; i < 18; i++) {
+      const monthNumber = i + 1;
+      const monthLabel = `${monthNumber} Months`;
+      
+      // Cap the score at 5 until after 18 months
+      const cappedScore = Math.min(lastDataPoint.userScore + (i - data.length + 1) * 0.2, 5);
+      
+      newData.push({
+        month: monthLabel,
+        userScore: cappedScore,
+        industryScore: Math.min(lastDataPoint.industryScore + (i - data.length + 1) * 0.1, 4.5),
+        topPerformerScore: Math.min(lastDataPoint.topPerformerScore + (i - data.length + 1) * 0.05, 4.8)
+      });
+    }
+    
+    return newData;
+  }, [data]);
+
   // Update dimensions on mount and resize
   useEffect(() => {
     const updateDimensions = () => {
@@ -63,10 +88,13 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
     // Scales
     const xScale = d3
       .scaleBand()
-      .domain(data.map((d) => d.month))
+      .domain(extendedData.map((d) => d.month))
       .range([0, width])
       .padding(0.1);
 
+    // Create y-axis ticks with 0.2 increments
+    const yTicks = d3.range(1, 5.2, 0.2);
+    
     const yScale = d3
       .scaleLinear()
       .domain([1, 5])
@@ -95,15 +123,57 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .attr("stop-color", (d) => d.color)
       .attr("stop-opacity", (d) => d.opacity);
 
+    // Target zone gradient with pulse effect
+    defs
+      .append("linearGradient")
+      .attr("id", "targetZoneGradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%")
+      .selectAll("stop")
+      .data([
+        { offset: "0%", color: "#10b981", opacity: 0.15 },
+        { offset: "100%", color: "#10b981", opacity: 0.05 }
+      ])
+      .enter()
+      .append("stop")
+      .attr("offset", (d) => d.offset)
+      .attr("stop-color", (d) => d.color)
+      .attr("stop-opacity", (d) => d.opacity);
+
+    // Add watermark
+    svg
+      .append("text")
+      .attr("x", width - 10)
+      .attr("y", height - 10)
+      .attr("text-anchor", "end")
+      .attr("font-size", "12px")
+      .attr("fill", "#e5e7eb")
+      .style("font-style", "italic")
+      .text("OptimaliQ.ai");
+
+    // Add baseline at y = 1
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", yScale(1))
+      .attr("y2", yScale(1))
+      .style("stroke", "#e5e7eb")
+      .style("stroke-width", 1)
+      .style("stroke-dasharray", "2 2")
+      .style("opacity", 0.5);
+
     // Grid lines with animation
     const gridLines = svg
       .selectAll(".grid-line")
-      .data(yScale.ticks(5))
+      .data(yTicks)
       .enter()
       .append("line")
       .attr("class", "grid-line")
       .attr("x1", 0)
-      .attr("x2", 0) // Start from 0
+      .attr("x2", 0)
       .attr("y1", (d) => yScale(d))
       .attr("y2", (d) => yScale(d))
       .style("stroke", "#e5e7eb")
@@ -115,24 +185,42 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .attr("x2", width)
       .style("opacity", 1);
 
-    // Target zone with animation
+    // Target zone with pulse animation
     const targetZone = svg
       .append("rect")
       .attr("x", 0)
       .attr("y", yScale(4))
       .attr("width", 0)
       .attr("height", yScale(1) - yScale(4))
-      .style("fill", "#10b981")
+      .style("fill", "url(#targetZoneGradient)")
       .style("opacity", 0)
       .transition()
       .duration(1000)
       .attr("width", width)
-      .style("opacity", 0.1);
+      .style("opacity", 1);
+
+    // Add pulse animation to target zone
+    function pulseTargetZone() {
+      targetZone
+        .transition()
+        .duration(2000)
+        .style("opacity", 0.2)
+        .transition()
+        .duration(2000)
+        .style("opacity", 0.1)
+        .on("end", pulseTargetZone);
+    }
+    pulseTargetZone();
 
     // Axes with improved styling
-    const xAxis = d3.axisBottom(xScale);
+    const xAxis = d3.axisBottom(xScale)
+      .tickFormat((d) => {
+        const month = d as string;
+        return month;
+      });
+
     const yAxis = d3.axisLeft(yScale)
-      .ticks(5)
+      .ticks(yTicks.length)
       .tickFormat((d) => (d as number).toFixed(1));
 
     // X-axis with animation
@@ -193,39 +281,53 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .y1((d) => yScale(d.userScore))
       .curve(d3.curveCatmullRom.alpha(0.5));
 
-    // Draw area under user score line
-    svg
+    // Draw area under user score line with sweep animation
+    const area = svg
       .append("path")
-      .datum(data)
+      .datum(extendedData)
       .attr("class", "area")
       .attr("d", areaGenerator)
       .style("fill", "url(#userScoreGradient)")
-      .style("opacity", 0)
+      .style("opacity", 0);
+
+    // Animate the area with a sweep effect
+    const totalLength = area.node()?.getTotalLength() || 0;
+    area
+      .attr("stroke-dasharray", totalLength)
+      .attr("stroke-dashoffset", totalLength)
       .transition()
-      .duration(1000)
+      .duration(1500)
+      .attr("stroke-dashoffset", 0)
       .style("opacity", 1);
 
-    // Draw lines with improved animations
+    // Draw lines with improved animations and more vibrant colors
     const userLine = svg
       .append("path")
-      .datum(data)
+      .datum(extendedData)
       .attr("class", "user-line")
       .attr("d", lineGenerator)
       .style("fill", "none")
-      .style("stroke", "#3b82f6")
+      .style("stroke", "#2563eb") // Darker blue
       .style("stroke-width", 3)
-      .style("opacity", 0)
+      .style("opacity", 0);
+
+    // Animate the user line with a sweep effect
+    const lineLength = userLine.node()?.getTotalLength() || 0;
+    userLine
+      .attr("stroke-dasharray", lineLength)
+      .attr("stroke-dashoffset", lineLength)
       .transition()
-      .duration(1000)
+      .duration(1500)
+      .attr("stroke-dashoffset", 0)
       .style("opacity", 1);
 
     const industryLine = svg
       .append("path")
-      .datum(data)
+      .datum(extendedData)
       .attr("class", "industry-line")
       .attr("d", industryLineGenerator)
       .style("fill", "none")
-      .style("stroke", "#6b7280")
+      .style("stroke", "#4b5563") // Darker gray
       .style("stroke-width", 2)
       .style("stroke-dasharray", "5 5")
       .style("opacity", 0)
@@ -236,11 +338,11 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
 
     const topPerformerLine = svg
       .append("path")
-      .datum(data)
+      .datum(extendedData)
       .attr("class", "top-performer-line")
       .attr("d", topPerformerLineGenerator)
       .style("fill", "none")
-      .style("stroke", "#10b981")
+      .style("stroke", "#059669") // Darker green
       .style("stroke-width", 2)
       .style("stroke-dasharray", "2 2")
       .style("opacity", 0)
@@ -249,16 +351,16 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .delay(400)
       .style("opacity", 1);
 
-    // Add dots with improved animations
+    // Add dots with improved animations and hover effects
     const dots = svg
       .selectAll(".dot")
-      .data(data)
+      .data(extendedData)
       .enter()
       .append("circle")
       .attr("class", "dot")
       .attr("cx", (d) => xScale(d.month)! + xScale.bandwidth() / 2)
-      .attr("cy", height) // Start from bottom
-      .attr("r", 0) // Start with radius 0
+      .attr("cy", height)
+      .attr("r", 0)
       .style("fill", "#3b82f6")
       .style("stroke", "#ffffff")
       .style("stroke-width", 2)
@@ -267,7 +369,40 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .delay((d, i) => i * 100)
       .attr("cy", (d) => yScale(d.userScore))
       .attr("r", 4)
-      .style("opacity", 1);
+      .style("opacity", 1)
+      .on("mouseover", function() {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 6)
+          .style("fill", "#2563eb");
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 4)
+          .style("fill", "#3b82f6");
+      });
+
+    // Add inflection point markers
+    extendedData.forEach((d, i) => {
+      if (i > 0 && Math.abs(d.userScore - extendedData[i - 1].userScore) >= 0.8) {
+        svg
+          .append("text")
+          .attr("x", xScale(d.month)! + xScale.bandwidth() / 2)
+          .attr("y", yScale(d.userScore) - 12)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "10px")
+          .attr("fill", "#3b82f6")
+          .style("opacity", 0)
+          .transition()
+          .duration(1000)
+          .delay(1500)
+          .style("opacity", 1)
+          .text("⬆ Growth Spike");
+      }
+    });
 
     // Enhanced tooltip
     const tooltip = d3
@@ -309,7 +444,7 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .on("mousemove", (event) => {
         const [x] = d3.pointer(event);
         const month = xScale.domain()[Math.floor(x / xScale.step())];
-        const dataPoint = data.find((d) => d.month === month);
+        const dataPoint = extendedData.find((d) => d.month === month);
 
         if (dataPoint) {
           // Update hover line
@@ -326,16 +461,16 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
             .html(`
               <div class="font-semibold text-gray-900">${dataPoint.month}</div>
               <div class="flex items-center gap-2 mt-1">
-                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span class="text-sm text-gray-600">You: ${dataPoint.userScore.toFixed(1)}</span>
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="text-sm text-gray-600">You: ${dataPoint.userScore.toFixed(1)}</span>
               </div>
               <div class="flex items-center gap-2 mt-1">
-                <div class="w-3 h-3 rounded-full bg-gray-500"></div>
-                <span class="text-sm text-gray-600">Industry Avg: ${dataPoint.industryScore.toFixed(1)}</span>
+                <div className="w-3 h-3 rounded-full bg-gray-500"></div>
+                <span className="text-sm text-gray-600">Industry Avg: ${dataPoint.industryScore.toFixed(1)}</span>
               </div>
               <div class="flex items-center gap-2 mt-1">
-                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                <span class="text-sm text-gray-600">Top Performers: ${dataPoint.topPerformerScore.toFixed(1)}</span>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span className="text-sm text-gray-600">Top Performers: ${dataPoint.topPerformerScore.toFixed(1)}</span>
               </div>
             `);
         }
@@ -349,10 +484,10 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
     return () => {
       d3.select("body").selectAll(".tooltip").remove();
     };
-  }, [data, dimensions]);
+  }, [extendedData, dimensions]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+    <div className="bg-gray-50 rounded-2xl shadow-xl p-8 border border-gray-200">
       <div className="mb-6">
         <SectionTitleBar
           title="📈 Growth Projection"
@@ -369,7 +504,7 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
 
       <div className="flex justify-around text-sm text-gray-700 font-medium pt-6 mt-2">
         <span className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
+          <div className="w-4 h-4 bg-blue-600 rounded-sm"></div>
           You
         </span>
         <span className="flex items-center gap-2">
@@ -377,7 +512,7 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
           Industry Avg
         </span>
         <span className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-emerald-500 rounded-sm"></div>
+          <div className="w-4 h-4 border-2 border-emerald-600 rounded-sm"></div>
           Top Performers
         </span>
       </div>
