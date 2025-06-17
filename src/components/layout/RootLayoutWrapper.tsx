@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default function RootLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,6 +14,7 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
       <main className="min-h-screen bg-white text-gray-900">
         {children}
       </main>
+      {isPublicRoute && <Footer />}
     </>
   );
 }
