@@ -1,44 +1,83 @@
 //src/components/growthstudio/QuadrantChart.tsx
 "use client";
 
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
-import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
-interface CompanyData {
+interface CompanyPoint {
   label: string;
   strategyScore: number;
   processScore: number;
   technologyScore: number;
+  score: number;
 }
 
-interface UserData {
+interface UserPoint {
   strategyScore: number;
   processScore: number;
   technologyScore: number;
+  score: number;
 }
 
-interface Props {
-  companies: CompanyData[];
-  userData: UserData;
-  selectedCompany: string | null;
-  onSelectCompany: (company: string | null) => void;
+interface APIResponse {
+  companies: CompanyPoint[];
+  user: UserPoint;
 }
 
-export default function QuadrantChart({ companies, userData, selectedCompany, onSelectCompany }: Props) {
+export default function QuadrantChart({ userId }: { userId: string }) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [data, setData] = useState<APIResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!svgRef.current) return;
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/growth_studio/quadrant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ u_id: userId }),
+        });
+        
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || "Failed to fetch quadrant data");
+        }
+
+        const result = await res.json();
+        
+        if (!result.companies || !result.user) {
+          throw new Error("Invalid data format received");
+        }
+
+        setData(result);
+      } catch (err) {
+        console.error("❌ Failed to load quadrant data:", err);
+        setError(err instanceof Error ? err.message : "Failed to load quadrant data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (!svgRef.current || !data) return;
 
     // Clear previous chart
     d3.select(svgRef.current).selectAll("*").remove();
 
     // Setup dimensions
-    const margin = { top: 60, right: 40, bottom: 40, left: 60 };
+    const margin = { top: 60, right: 60, bottom: 60, left: 60 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const height = 460 - margin.top - margin.bottom;
 
     // Create SVG
     const svg = d3
@@ -58,169 +97,142 @@ export default function QuadrantChart({ companies, userData, selectedCompany, on
       .style("ry", "8")
       .style("filter", "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05))");
 
-    // Scales
+    // Normalize data
+    const normalizedCompanies = data.companies.map((company) => ({
+      name: company.label,
+      strategy_score: company.strategyScore,
+      process_score: company.processScore,
+      technology_score: company.technologyScore,
+    }));
+
+    const normalizedUser = {
+      name: "You",
+      strategy_score: data.user.strategyScore,
+      process_score: data.user.processScore,
+      technology_score: data.user.technologyScore,
+    };
+
+    const allData = [...normalizedCompanies, normalizedUser];
+
+    // Calculate bounds with padding
+    const strategyValues = allData.map(d => d.strategy_score);
+    const processValues = allData.map(d => d.process_score);
+
+    const minX = Math.floor(Math.min(...strategyValues)) - 0.2;
+    const maxX = Math.ceil(Math.max(...strategyValues)) + 0.2;
+    const minY = Math.floor(Math.min(...processValues)) - 0.2;
+    const maxY = Math.ceil(Math.max(...processValues)) + 0.2;
+
+    const quadrantMidX = 3;
+    const quadrantMidY = 3;
+
+    // Create scales
     const xScale = d3
       .scaleLinear()
-      .domain([1, 5])
+      .domain([minX, maxX])
       .range([0, width]);
 
     const yScale = d3
       .scaleLinear()
-      .domain([1, 5])
+      .domain([minY, maxY])
       .range([height, 0]);
 
-    const rScale = d3
+    const sizeScale = d3
       .scaleLinear()
       .domain([1, 5])
-      .range([20, 40]);
+      .range([40, 400]);
 
     // Add quadrant backgrounds
     const quadrants = [
-      { x1: 0, x2: width / 2, y1: 0, y2: height / 2, fill: "#FEF9C3", label: "Emerging Foundations" },
-      { x1: width / 2, x2: width, y1: 0, y2: height / 2, fill: "#EDE9FE", label: "Efficient Executors" },
-      { x1: 0, x2: width / 2, y1: height / 2, y2: height, fill: "#DBEAFE", label: "Strategic Builders" },
-      { x1: width / 2, x2: width, y1: height / 2, y2: height, fill: "#DCFCE7", label: "Accelerated Performers" },
+      { x1: minX, x2: quadrantMidX, y1: quadrantMidY, y2: maxY, fill: "#DBEAFE", label: "Strategic Builders" },
+      { x1: quadrantMidX, x2: maxX, y1: quadrantMidY, y2: maxY, fill: "#DCFCE7", label: "Accelerated Performers" },
+      { x1: minX, x2: quadrantMidX, y1: minY, y2: quadrantMidY, fill: "#FEF9C3", label: "Emerging Foundations" },
+      { x1: quadrantMidX, x2: maxX, y1: minY, y2: quadrantMidY, fill: "#EDE9FE", label: "Efficient Executors" },
     ];
 
-    quadrants.forEach((q) => {
+    quadrants.forEach(quad => {
       svg
         .append("rect")
-        .attr("x", q.x1)
-        .attr("y", q.y1)
-        .attr("width", q.x2 - q.x1)
-        .attr("height", q.y2 - q.y1)
-        .style("fill", q.fill)
-        .style("opacity", 0.2);
+        .attr("x", xScale(quad.x1))
+        .attr("y", yScale(quad.y2))
+        .attr("width", xScale(quad.x2) - xScale(quad.x1))
+        .attr("height", yScale(quad.y1) - yScale(quad.y2))
+        .style("fill", quad.fill)
+        .style("fill-opacity", 0.2);
 
+      // Add quadrant labels
+      const color = d3.color(quad.fill);
+      const darkerColor = color ? color.darker(0.5).toString() : quad.fill;
+      
       svg
         .append("text")
-        .attr("x", q.x1 + 10)
-        .attr("y", q.y1 + 20)
-        .style("font-size", "12px")
+        .attr("x", xScale((quad.x1 + quad.x2) / 2))
+        .attr("y", yScale((quad.y1 + quad.y2) / 2))
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .style("font-size", "14px")
         .style("font-weight", "600")
-        .style("fill", d3.color(q.fill)?.darker(0.5)?.toString() || "#000000")
-        .text(q.label);
+        .style("fill", darkerColor)
+        .text(quad.label);
     });
 
-    // Add grid lines
-    const gridLines = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
-    gridLines.forEach((value) => {
-      // Vertical lines
-      svg
-        .append("line")
-        .attr("x1", xScale(value))
-        .attr("x2", xScale(value))
-        .attr("y1", 0)
-        .attr("y2", height)
-        .style("stroke", "#e5e7eb")
-        .style("stroke-width", value === 3 ? 1.5 : 1)
-        .style("stroke-dasharray", "4 4");
-
-      // Horizontal lines
-      svg
-        .append("line")
-        .attr("x1", 0)
-        .attr("x2", width)
-        .attr("y1", yScale(value))
-        .attr("y2", yScale(value))
-        .style("stroke", "#e5e7eb")
-        .style("stroke-width", value === 3 ? 1.5 : 1)
-        .style("stroke-dasharray", "4 4");
-    });
-
-    // Add axes
-    const xAxis = d3.axisBottom(xScale).ticks(5);
-    const yAxis = d3.axisLeft(yScale).ticks(5);
+    // Add midlines
+    svg
+      .append("line")
+      .attr("x1", xScale(quadrantMidX))
+      .attr("x2", xScale(quadrantMidX))
+      .attr("y1", yScale(minY))
+      .attr("y2", yScale(maxY))
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
 
     svg
-      .append("g")
-      .attr("class", "x-axis")
-      .attr("transform", `translate(0,${height})`)
-      .call(xAxis)
-      .style("color", "#6b7280")
-      .style("font-size", "12px");
+      .append("line")
+      .attr("x1", xScale(minX))
+      .attr("x2", xScale(maxX))
+      .attr("y1", yScale(quadrantMidY))
+      .attr("y2", yScale(quadrantMidY))
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
 
+    // Add company dots
     svg
-      .append("g")
-      .attr("class", "y-axis")
-      .call(yAxis)
-      .style("color", "#6b7280")
-      .style("font-size", "12px");
-
-    // Add axis labels
-    svg
-      .append("text")
-      .attr("class", "x-axis-label")
-      .attr("x", width / 2)
-      .attr("y", height + 35)
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("fill", "#6b7280")
-      .text("Strategy Score");
-
-    svg
-      .append("text")
-      .attr("class", "y-axis-label")
-      .attr("transform", "rotate(-90)")
-      .attr("x", -height / 2)
-      .attr("y", -40)
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("fill", "#6b7280")
-      .text("Process Score");
-
-    // Add companies
-    const companyCircles = svg
-      .selectAll(".company-circle")
-      .data(companies)
+      .selectAll(".company-dot")
+      .data(normalizedCompanies)
       .enter()
       .append("circle")
-      .attr("class", "company-circle")
-      .attr("cx", (d) => xScale(d.strategyScore))
-      .attr("cy", (d) => yScale(d.processScore))
-      .attr("r", (d) => rScale(d.technologyScore))
+      .attr("class", "company-dot")
+      .attr("cx", d => xScale(d.strategy_score))
+      .attr("cy", d => yScale(d.process_score))
+      .attr("r", d => Math.sqrt(sizeScale(d.technology_score)) / 2)
       .style("fill", "#CBD5E1")
       .style("stroke", "#ffffff")
       .style("stroke-width", 2)
-      .style("cursor", "pointer")
-      .style("transition", "all 0.2s");
+      .style("opacity", 0.8)
+      .style("transition", "r 0.2s, opacity 0.2s");
 
-    // Add user point
-    const userCircle = svg
+    // Add user dot
+    svg
       .append("circle")
-      .attr("class", "user-circle")
-      .attr("cx", xScale(userData.strategyScore))
-      .attr("cy", yScale(userData.processScore))
-      .attr("r", rScale(userData.technologyScore))
+      .attr("class", "user-dot")
+      .attr("cx", xScale(normalizedUser.strategy_score))
+      .attr("cy", yScale(normalizedUser.process_score))
+      .attr("r", Math.sqrt(sizeScale(normalizedUser.technology_score)) / 2)
       .style("fill", "#2563eb")
       .style("stroke", "#ffffff")
       .style("stroke-width", 2)
-      .style("cursor", "pointer")
-      .style("transition", "all 0.2s");
+      .style("filter", "drop-shadow(0 2px 4px rgba(37, 99, 235, 0.3))");
 
-    // Add labels
-    svg
-      .selectAll(".company-label")
-      .data(companies)
-      .enter()
-      .append("text")
-      .attr("class", "company-label")
-      .attr("x", (d) => xScale(d.strategyScore))
-      .attr("y", (d) => yScale(d.processScore) - rScale(d.technologyScore) - 5)
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("fill", "#6b7280")
-      .text((d) => d.label);
-
+    // Add user label
     svg
       .append("text")
       .attr("class", "user-label")
-      .attr("x", xScale(userData.strategyScore))
-      .attr("y", yScale(userData.processScore) - rScale(userData.technologyScore) - 5)
-      .style("text-anchor", "middle")
+      .attr("x", xScale(normalizedUser.strategy_score))
+      .attr("y", yScale(normalizedUser.process_score) - Math.sqrt(sizeScale(normalizedUser.technology_score)) / 2 - 10)
+      .attr("text-anchor", "middle")
       .style("font-size", "12px")
-      .style("fill", "#2563eb")
       .style("font-weight", "600")
+      .style("fill", "#2563eb")
       .text("You");
 
     // Add tooltip
@@ -237,93 +249,106 @@ export default function QuadrantChart({ companies, userData, selectedCompany, on
       .style("font-size", "0.875rem")
       .style("box-shadow", "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)");
 
-    // Add hover and click interactions
-    const handleMouseOver = (event: MouseEvent, d: CompanyData) => {
-      d3.select(event.currentTarget as Element)
-        .style("stroke", "#2563eb")
-        .style("stroke-width", 3);
-
-      tooltip
-        .style("visibility", "visible")
-        .html(`
-          <div class="font-semibold mb-1">${d.label}</div>
-          <div>Strategy: ${d.strategyScore.toFixed(1)}</div>
-          <div>Process: ${d.processScore.toFixed(1)}</div>
-          <div>Technology: ${d.technologyScore.toFixed(1)}</div>
-        `)
-        .style("top", `${event.pageY - 10}px`)
-        .style("left", `${event.pageX + 10}px`);
-    };
-
-    const handleMouseOut = (event: MouseEvent) => {
-      const element = event.currentTarget as Element;
-      const data = (element as any).__data__ as CompanyData;
-      if (selectedCompany !== data.label) {
-        d3.select(element)
-          .style("stroke", "#ffffff")
-          .style("stroke-width", 2);
-      }
-      tooltip.style("visibility", "hidden");
-  };
-
-    const handleClick = (event: MouseEvent, d: CompanyData) => {
-      onSelectCompany(d.label === selectedCompany ? null : d.label);
-    };
-
-    companyCircles
-      .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut)
-      .on("click", handleClick);
-
-    userCircle
-      .on("mouseover", (event) => {
-        d3.select(event.currentTarget)
-          .style("stroke", "#2563eb")
-          .style("stroke-width", 3);
+    // Add hover effects
+    svg
+      .selectAll(".company-dot")
+      .on("mouseover", function(event: MouseEvent, d: any) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", Math.sqrt(sizeScale(d.technology_score)) / 2 + 5)
+          .style("opacity", 1);
 
         tooltip
           .style("visibility", "visible")
           .html(`
-            <div class="font-semibold mb-1">You</div>
-            <div>Strategy: ${userData.strategyScore.toFixed(1)}</div>
-            <div>Process: ${userData.processScore.toFixed(1)}</div>
-            <div>Technology: ${userData.technologyScore.toFixed(1)}</div>
+            <div class="font-semibold mb-1">${d.name}</div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+              <span>Strategy: ${d.strategy_score.toFixed(1)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+              <span>Process: ${d.process_score.toFixed(1)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+              <span>Technology: ${d.technology_score.toFixed(1)}</span>
+            </div>
           `)
           .style("top", `${event.pageY - 10}px`)
           .style("left", `${event.pageX + 10}px`);
       })
-      .on("mouseout", (event) => {
-        if (selectedCompany !== "You") {
-          d3.select(event.currentTarget)
-            .style("stroke", "#ffffff")
-            .style("stroke-width", 2);
-        }
-        tooltip.style("visibility", "hidden");
+      .on("mousemove", function(event: MouseEvent) {
+        tooltip
+          .style("top", `${event.pageY - 10}px`)
+          .style("left", `${event.pageX + 10}px`);
       })
-      .on("click", () => onSelectCompany(selectedCompany === "You" ? null : "You"));
+      .on("mouseout", function() {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", Math.sqrt(sizeScale((this as any).__data__.technology_score)) / 2)
+          .style("opacity", 0.8);
 
-    // Update selected state
-    const updateSelection = () => {
-      companyCircles.style("stroke-width", (d) => (d.label === selectedCompany ? 3 : 2));
-      userCircle.style("stroke-width", selectedCompany === "You" ? 3 : 2);
-    };
+        tooltip.style("visibility", "hidden");
+      });
 
-    updateSelection();
+    // Add branding
+    svg
+      .append("text")
+      .attr("x", width - 10)
+      .attr("y", height - 10)
+      .style("text-anchor", "end")
+      .style("font-size", "12px")
+      .style("fill", "#9ca3af")
+      .style("font-style", "italic")
+      .text("OptimaliQ.ai");
 
     return () => {
       d3.select("body").selectAll(".tooltip").remove();
     };
-  }, [companies, userData, selectedCompany, onSelectCompany]);
+  }, [data]);
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-[460px] bg-gray-100 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+        <div className="text-center text-red-600">
+          <p className="font-semibold mb-2">⚠️ Error Loading Quadrant</p>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Card className="p-6">
+    <motion.div
+      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="px-6 pt-6">
         <SectionTitleBar
           title="📊 Strategic Growth Quadrant"
           tooltip="Visualize how businesses compare based on Strategy and Process. Larger bubbles reflect higher Tech maturity."
         />
-      <div className="relative mt-6">
-        <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>
-    </Card>
+
+      <div className="relative px-6 pt-10 pb-12">
+        <svg ref={svgRef} className="w-full" style={{ height: "460px" }} />
+      </div>
+    </motion.div>
   );
 }
