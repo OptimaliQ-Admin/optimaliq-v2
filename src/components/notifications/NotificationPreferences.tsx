@@ -108,7 +108,7 @@ export default function NotificationPreferences() {
       <div>
         <h3 className="text-lg font-medium text-gray-900">Notification Preferences</h3>
         <p className="mt-1 text-sm text-gray-500">
-          Choose which notifications you'd like to receive
+          Choose which notifications you&apos;d like to receive
         </p>
       </div>
 
