@@ -77,7 +77,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
     // Setup dimensions
     const margin = { top: 60, right: 60, bottom: 60, left: 60 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
-    const height = 560 - margin.top - margin.bottom;
+    const height = 660 - margin.top - margin.bottom;
 
     // Create SVG
     const svg = d3
@@ -300,15 +300,17 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         tooltip.style("visibility", "hidden");
       });
 
-    // Add branding (moved to bottom left)
+    // Add branding (moved to center left)
     svg
       .append("text")
       .attr("x", 10)
-      .attr("y", height - 10)
+      .attr("y", height / 2)
       .style("text-anchor", "start")
       .style("font-size", "12px")
       .style("fill", "#9ca3af")
       .style("font-style", "italic")
+      .style("transform", "rotate(-90deg)")
+      .style("transform-origin", "left center")
       .text("OptimaliQ.ai");
 
     return () => {
@@ -354,14 +356,12 @@ export default function QuadrantChart({ userId }: { userId: string }) {
 
       <div className="px-6 pt-4">
         <p className="text-sm text-gray-600 mb-6">
-          This quadrant analysis positions your business relative to industry peers, highlighting your strategic and operational strengths. 
-          Your position indicates your current maturity level, while the bubble size reflects your technological capabilities. 
-          Use this insight to identify growth opportunities and benchmark against top performers in your sector.
+          Our position reflects real-world comparisons against businesses we&apos;ve assessed—revealing where you lead and where you can grow.
         </p>
       </div>
 
       <div className="relative px-6 pt-4 pb-12">
-        <svg ref={svgRef} className="w-full" style={{ height: "560px" }} />
+        <svg ref={svgRef} className="w-full" style={{ height: "660px" }} />
       </div>
     </motion.div>
   );

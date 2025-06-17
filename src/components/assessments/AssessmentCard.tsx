@@ -81,7 +81,7 @@ export default function AssessmentCard({
           <>
             <div className="mb-4">
               <span className="text-sm font-medium text-gray-500">Score:</span>
-              <span className="ml-2 text-lg font-semibold text-blue-600">
+              <span className="ml-2 text-3xl font-bold text-blue-600">
                 {roundedScore?.toFixed(1)}
               </span>
             </div>
@@ -95,7 +95,7 @@ export default function AssessmentCard({
           <>
             <div className="mb-4">
               <span className="text-sm font-medium text-gray-500">Score:</span>
-              <span className="ml-2 text-lg font-semibold text-blue-600">
+              <span className="ml-2 text-3xl font-bold text-blue-600">
                 {roundedScore?.toFixed(1)}
               </span>
             </div>

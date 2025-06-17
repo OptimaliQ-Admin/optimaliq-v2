@@ -36,13 +36,6 @@ export default function TrendInsightCard() {
     text.split("\n").find((line) => line.toLowerCase().includes("lead in")) ||
     "Lead-in not found";
 
-  const getTopBullets = (text: string) =>
-    text
-      .split("\n")
-      .filter((line) => line.startsWith("•"))
-      .slice(0, 2)
-      .join("\n");
-
   const getKeyInsights = (text: string) => {
     const lines = text.split("\n");
     const insights = lines
@@ -98,8 +91,10 @@ export default function TrendInsightCard() {
       ) : insight ? (
         <>
           <div className="mt-4 space-y-3">
-            <p className="text-gray-700 font-semibold">
-              {getLeadIn(insight).replace("Lead in Statement", "").trim()}
+            <p className="text-gray-600 whitespace-pre-line">
+              {getLeadIn(insight)
+                .replace("Lead in Statement", "")
+                .trim()}
             </p>
             
             <div className="text-gray-600 text-sm space-y-2">
@@ -142,13 +137,11 @@ export default function TrendInsightCard() {
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
-                <Dialog.Title className="text-lg font-bold text-red-600 mb-4">
-                  🔥 This Week&#39;s Feed
+                <Dialog.Title className="text-lg font-bold text-gray-800 mb-2">
+                  📈 Full Growth Trend Insight
                 </Dialog.Title>
-
                 {insight && formatModalContent(insight)}
-
-                <div className="mt-6 text-right">
+                <div className="mt-4 text-right">
                   <button
                     onClick={() => setIsOpen(false)}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

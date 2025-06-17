@@ -23,14 +23,12 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
           const now = new Date();
           const diffInDays = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
 
-          if (diffInDays <= 7) {
-            setInsight(data.insight);
-            setLastUpdated(format(created, "MMMM d, yyyy"));
-          } else {
+          setInsight(data.insight);
+          setLastUpdated(format(created, "MMMM d, yyyy"));
+
+          if (diffInDays > 7) {
             // Trigger background refresh (non-blocking)
             fetch("/api/cron/generateMarketInsight");
-            setInsight(data.insight); // Show stale data
-            setLastUpdated(format(created, "MMMM d, yyyy (stale)"));
           }
         } else {
           console.warn("No valid insight found");
@@ -68,9 +66,6 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
           {lastUpdated && (
             <p className="mt-2 text-xs text-gray-400">
               Last updated: {lastUpdated}
-              {lastUpdated?.includes("stale") && (
-                <span className="ml-2 text-xs text-yellow-600 italic">refreshing...</span>
-              )}
             </p>
           )}
 
