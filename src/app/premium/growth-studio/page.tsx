@@ -1,129 +1,191 @@
 //src/app/premium/growth-studio/page.tsx
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import { Dialog } from "@headlessui/react";
+import { useEffect, useState } from "react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import InsightLoading from "@/components/dashboard/InsightLoading";
-
-import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
-import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
-import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
-import SectionHeader from "@/components/growthstudio/SectionHeader";
-import QuadrantChart from "@/components/growthstudio/QuadrantChart";
-import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
+import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, BarChart3, LineChart, Target, TrendingUp } from "lucide-react";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import GrowthChartModule from "@/components/growthstudio/GrowthChartModule";
 
-function GrowthStudioComponent() {
-  const { user } = usePremiumUser();
-  const email = user?.email;
-  const userId = user?.u_id;
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [aiInsight, setAiInsight] = useState<string | null>(null);
-
-  const handleRunSimulation = async (result: SimulationResult | null) => {
-    if (!result) return;
-
-    setSimulationResult(result);
-    setShowModal(true);
-
-    try {
-      const res = await fetch("/api/growth_studio/commentary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(result),
-      });
-
-      const data = await res.json();
-      setAiInsight(data.summary || null);
-    } catch (err) {
-      console.error("❌ Failed to fetch AI insight:", err);
-      setAiInsight(null);
-    }
+interface GrowthInsights {
+  quadrantData: {
+    companies: Array<{
+      label: string;
+      strategyScore: number;
+      processScore: number;
+      technologyScore: number;
+    }>;
+    user: {
+      strategyScore: number;
+      processScore: number;
+      technologyScore: number;
+    };
   };
-
-  useEffect(() => {
-    // Simulate loading time for data fetching
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!email || !userId) {
-    return <p className="text-center text-red-600">⚠️ Email and User ID are required to access the Growth Studio.</p>;
-  }
-
-  if (isLoading) {
-    return <InsightLoading />;
-  }
-
-  return (
-    <div className="w-full flex justify-center px-4">
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <SectionHeader
-            title="📈 Growth Studio"
-            subtitle="Explore curated trends and simulate how strategic improvements could impact your business."
-          />
-
-          <TrendInsightCard />
-
-          <SimulatorPanel onResult={handleRunSimulation} />
-        </div>
-
-        <div className="space-y-8">
-          <QuadrantChart userId={userId} />
-
-          <GrowthLeversCard />
-        </div>
-
-        <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-xl bg-white p-6 rounded-xl shadow-xl">
-              <Dialog.Title className="text-lg font-bold text-gray-800 mb-4">
-                📊 Simulation Results
-              </Dialog.Title>
-
-              {simulationResult && <SimulationResults results={simulationResult} />}
-
-              {aiInsight ? (
-                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                  <p className="text-sm text-gray-700 leading-relaxed italic">
-                    💡 <strong>Strategic Insight:</strong><br />{aiInsight}
-                  </p>
-                </div>
-              ) : (
-                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md animate-pulse">
-                  <p className="text-sm text-gray-500 italic">⏳ Generating insight...</p>
-                </div>
-              )}
-
-              <div className="mt-6 text-right">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Close
-                </button>
-              </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-      </div>
-    </div>
-  );
+  recommendations: Array<{
+    title: string;
+    description: string;
+    impact: string;
+    effort: string;
+    priority: string;
+  }>;
 }
 
 export default function GrowthStudioPage() {
+  const { user } = usePremiumUser();
+  const router = useRouter();
+  const [insights, setInsights] = useState<GrowthInsights | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      if (!user?.u_id) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch("/api/growth_studio/insights", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ u_id: user.u_id }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch growth insights");
+        }
+
+        const data = await res.json();
+        setInsights(data);
+      } catch (err) {
+        console.error("Error fetching growth insights:", err);
+        setError(err instanceof Error ? err.message : "Failed to load insights");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInsights();
+  }, [user?.u_id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="animate-pulse space-y-8">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="h-[400px] bg-gray-100 rounded"></div>
+            <div className="h-[400px] bg-gray-100 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-red-600">
+          <p className="font-semibold mb-2">⚠️ Error Loading Growth Studio</p>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!insights) return null;
+
   return (
-    <Suspense fallback={<InsightLoading />}>
-      <GrowthStudioComponent />
-    </Suspense>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Growth Studio</h1>
+        <p className="mt-2 text-gray-600">
+          Analyze your growth trajectory and get personalized recommendations
+        </p>
+      </div>
+
+      <div className="space-y-8">
+        <GrowthChartModule />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="p-6">
+            <SectionTitleBar
+              title="🎯 Growth Recommendations"
+              tooltip="Personalized recommendations based on your current performance and goals"
+            />
+            <div className="mt-6 space-y-4">
+              {insights.recommendations.map((rec, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                >
+                  <h3 className="font-semibold text-gray-900">{rec.title}</h3>
+                  <p className="mt-1 text-sm text-gray-600">{rec.description}</p>
+                  <div className="mt-3 flex items-center gap-4 text-sm">
+                    <span className="text-blue-600">Impact: {rec.impact}</span>
+                    <span className="text-purple-600">Effort: {rec.effort}</span>
+                    <span className="text-green-600">Priority: {rec.priority}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <SectionTitleBar
+              title="📈 Growth Metrics"
+              tooltip="Key metrics tracking your growth progress"
+            />
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-700">
+                  <TrendingUp className="w-5 h-5" />
+                  <span className="font-semibold">Growth Rate</span>
+                </div>
+                <p className="mt-2 text-2xl font-bold text-blue-900">+15%</p>
+                <p className="text-sm text-blue-600">vs last quarter</p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg">
+                <div className="flex items-center gap-2 text-purple-700">
+                  <Target className="w-5 h-5" />
+                  <span className="font-semibold">Goal Progress</span>
+                </div>
+                <p className="mt-2 text-2xl font-bold text-purple-900">75%</p>
+                <p className="text-sm text-purple-600">of annual target</p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-2 text-green-700">
+                  <LineChart className="w-5 h-5" />
+                  <span className="font-semibold">Efficiency</span>
+                </div>
+                <p className="mt-2 text-2xl font-bold text-green-900">92%</p>
+                <p className="text-sm text-green-600">resource utilization</p>
+              </div>
+              <div className="p-4 bg-orange-50 rounded-lg">
+                <div className="flex items-center gap-2 text-orange-700">
+                  <BarChart3 className="w-5 h-5" />
+                  <span className="font-semibold">Market Position</span>
+                </div>
+                <p className="mt-2 text-2xl font-bold text-orange-900">#3</p>
+                <p className="text-sm text-orange-600">in your segment</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            onClick={() => router.push("/premium/action-plan")}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            View Action Plan
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
