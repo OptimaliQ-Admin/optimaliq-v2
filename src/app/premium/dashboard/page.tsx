@@ -10,7 +10,7 @@ import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
 import InsightCard from "@/components/dashboard/InsightCard";
-import GrowthProjectionChart from "@/components/dashboard/GrowthProjectionChart";
+import GrowthChart from "@/components/dashboard/GrowthChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
@@ -185,7 +185,7 @@ export default function PremiumDashboardPage() {
                 detail: item.expectedImpact 
               }))} 
             />
-            <GrowthProjectionChart data={insights.chartData} />
+            <GrowthChart data={insights.chartData} />
           </div>
         </div>
 
