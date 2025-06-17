@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { showToast } from "@/lib/utils/toast";
@@ -179,6 +179,45 @@ export default function TechToolsAssessment() {
     commerceTools: []
   });
 
+  // Load existing tech stack data
+  useEffect(() => {
+    const loadTechStack = async () => {
+      if (!user?.u_id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from("user_tech_stack")
+          .select("*")
+          .eq("u_id", user.u_id)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          setAnswers({
+            usesCRM: data.crm_tools?.length > 0,
+            crmTools: data.crm_tools || [],
+            usesESP: data.esp_tools?.length > 0,
+            espTools: data.esp_tools || [],
+            usesAnalytics: data.analytics_tools?.length > 0,
+            analyticsTools: data.analytics_tools || [],
+            usesCDP: data.cdp_tools?.length > 0,
+            cdpTools: data.cdp_tools || [],
+            usesERP: data.erp_tools?.length > 0,
+            erpTools: data.erp_tools || [],
+            usesCommerce: data.commerce_tools?.length > 0,
+            commerceTools: data.commerce_tools || []
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load tech stack:", err);
+        showToast.error("Failed to load tech stack data");
+      }
+    };
+
+    loadTechStack();
+  }, [user?.u_id]);
+
   const handleSubmit = async () => {
     if (!user?.u_id) {
       showToast.error("User session expired. Please log in again.");
@@ -199,6 +238,8 @@ export default function TechToolsAssessment() {
           erp_tools: answers.usesERP ? answers.erpTools : [],
           commerce_tools: answers.usesCommerce ? answers.commerceTools : [],
           updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'u_id'
         });
 
       if (error) throw error;
@@ -393,7 +434,7 @@ export default function TechToolsAssessment() {
                   onChange={(e) => setAnswers({ ...answers, usesERP: e.target.checked })}
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
-                <span className="text-lg font-medium">Do you use an Enterprise Resource Planning (ERP) system?</span>
+                <span className="text-lg font-medium">Do you use an ERP system?</span>
               </label>
             </div>
             
@@ -434,14 +475,14 @@ export default function TechToolsAssessment() {
                   onChange={(e) => setAnswers({ ...answers, usesCommerce: e.target.checked })}
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
-                <span className="text-lg font-medium">Do you use an E-commerce platform?</span>
+                <span className="text-lg font-medium">Do you use E-commerce tools?</span>
               </label>
             </div>
             
             {answers.usesCommerce && (
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which Commerce technologies do you use?
+                  Which E-commerce technologies do you use?
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   {techOptions.commerce.map((tool) => (
