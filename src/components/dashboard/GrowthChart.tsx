@@ -349,14 +349,10 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">Growth Projection</h3>
-          <p className="text-sm text-gray-500">
-            Track your maturity score progression over time
-          </p>
-        </div>
-      </div>
+      <SectionTitleBar title="Growth Projection" />
+      <p className="text-sm text-gray-500 mb-4">
+        Track your maturity score progression over time
+      </p>
       <div className="relative">
         <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
       </div>

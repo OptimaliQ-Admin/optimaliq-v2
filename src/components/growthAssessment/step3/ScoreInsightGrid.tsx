@@ -2,11 +2,12 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 export default function ScoreInsightGrid({ insights, loading }: { insights: Record<string, string>, loading: boolean }) {
   return (
     <Card className="p-6 shadow-md bg-white rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-700 text-center">📌 Data Driven Business Insights</h2>
+      <SectionTitleBar title="📌 Data Driven Business Insights" />
       {loading ? (
         <p className="text-gray-500 text-center mt-4">Generating insights...</p>
       ) : (

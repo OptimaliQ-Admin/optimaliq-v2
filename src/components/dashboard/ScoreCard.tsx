@@ -1,6 +1,8 @@
 //src/components/dashboard/ScoreCard.tsx
 "use client";
 
+import SectionTitleBar from "./SectionTitleBar";
+
 type ScoreCardProps = {
   title: string;
   score: number;
@@ -21,7 +23,7 @@ export default function ScoreCard({
   return (
     <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between h-full">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-1">{title}</h3>
+        <SectionTitleBar title={title} />
         <p className="text-3xl font-bold text-blue-600">{score?.toFixed(1)}</p>
 
         {industryAvg !== undefined && (
@@ -40,14 +42,14 @@ export default function ScoreCard({
 
       {onLearnMore && (
         <button
-        onClick={() => {
-          console.log(`🚀 Learn More clicked for: ${title}`);
-          onLearnMore?.();
-        }}
-        className="text-sm text-blue-600 mt-4 font-medium hover:underline self-start"
-      >
-        Learn more →
-      </button>      
+          onClick={() => {
+            console.log(`🚀 Learn More clicked for: ${title}`);
+            onLearnMore?.();
+          }}
+          className="text-sm text-blue-600 mt-4 font-medium hover:underline self-start"
+        >
+          Learn more →
+        </button>      
       )}
     </div>
   );

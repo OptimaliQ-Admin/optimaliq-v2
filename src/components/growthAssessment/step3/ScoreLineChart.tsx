@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import {
   ResponsiveContainer,
   LineChart,
@@ -20,7 +21,7 @@ type Props = {
 export default function ScoreLineChart({ data, score }: Props) {
   return (
     <Card className="p-6 shadow-md bg-white rounded-lg">
-      <h2 className="text-lg font-bold text-gray-700 text-center">🚀 Your Growth Projections</h2>
+      <SectionTitleBar title="🚀 Your Growth Projections" />
       <p className="text-gray-600 text-center text-sm mb-4">
         A visual projection of how strategic improvements can elevate your business performance over time.
       </p>

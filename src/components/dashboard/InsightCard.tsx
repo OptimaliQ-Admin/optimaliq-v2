@@ -1,31 +1,31 @@
 //src/components/dashboard/InsightCard.tsx
 "use client";
 
-type InsightItem = {
+import { Card } from "@/components/ui/card";
+import SectionTitleBar from "./SectionTitleBar";
+
+interface InsightItem {
   label: string;
   detail: string;
-};
+}
 
-type InsightCardProps = {
+interface InsightCardProps {
   title: string;
   items: InsightItem[];
-};
+}
 
 export default function InsightCard({ title, items }: InsightCardProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow space-y-4">
-      <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-      <ul className="list-disc list-inside text-gray-700 space-y-1">
-        {items.length > 0 ? (
-          items.map((item, i) => (
-            <li key={i}>
-              <strong>{item.label}:</strong> {item.detail}
-            </li>
-          ))
-        ) : (
-          <li className="text-gray-500 italic">No data available.</li>
-        )}
-      </ul>
-    </div>
+    <Card className="p-6 shadow-md bg-white rounded-lg">
+      <SectionTitleBar title={title} />
+      <div className="mt-4 space-y-4">
+        {items.map((item, index) => (
+          <div key={index} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+            <h4 className="font-semibold text-gray-800">{item.label}</h4>
+            <p className="text-gray-600 text-sm mt-1">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </Card>
   );
 }

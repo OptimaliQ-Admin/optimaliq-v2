@@ -32,16 +32,23 @@ export default function TrendInsightCard() {
     fetchInsight();
   }, []);
 
-  const getLeadIn = (text: string) =>
-    text.split("\n").find((line) => line.toLowerCase().includes("lead in")) ||
-    "Lead-in not found";
+  const getLeadIn = (text: string) => {
+    const lines = text.split("\n");
+    const leadInLine = lines.find(line => 
+      line.toLowerCase().includes("lead in") || 
+      line.toLowerCase().includes("summary") ||
+      line.toLowerCase().includes("overview")
+    );
+    return leadInLine ? leadInLine.replace(/^(lead in|summary|overview):?\s*/i, "").trim() : lines[0];
+  };
 
   const getKeyInsights = (text: string) => {
     const lines = text.split("\n");
     const insights = lines
-      .filter((line) => line.startsWith("•"))
+      .filter(line => line.trim().startsWith("•") || line.trim().startsWith("-"))
+      .map(line => line.trim())
       .slice(0, 3); // Get first 3 bullet points
-    return insights.length > 0 ? insights.join("\n") : "";
+    return insights;
   };
 
   const formatModalContent = (text: string) => {
@@ -92,20 +99,16 @@ export default function TrendInsightCard() {
         <>
           <div className="mt-4 space-y-3">
             <p className="text-gray-600 whitespace-pre-line">
-              {getLeadIn(insight)
-                .replace("Lead in Statement", "")
-                .trim()}
+              {getLeadIn(insight)}
             </p>
             
             <div className="text-gray-600 text-sm space-y-2">
-              {getKeyInsights(insight)
-                .split("\n")
-                .map((line, idx) => (
-                  <p key={idx} className="flex items-start">
-                    <span className="mr-2">•</span>
-                    <span>{line.replace("•", "").trim()}</span>
-                  </p>
-                ))}
+              {getKeyInsights(insight).map((line, idx) => (
+                <p key={idx} className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>{line.replace(/^[•-]\s*/, "").trim()}</span>
+                </p>
+              ))}
             </div>
 
             <button

@@ -6,6 +6,7 @@ import { format, differenceInDays } from "date-fns";
 import AssessmentIntroModal, {
   AssessmentType,
 } from "./AssessmentIntroModal"; 
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
 const slugToAssessmentType: Record<string, AssessmentType> = {
   bpm: "BPM",
@@ -65,7 +66,7 @@ export default function AssessmentCard({
   return (
     <>
       <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <SectionTitleBar title={title} />
         <p className="text-gray-600 mb-4">{description}</p>
 
         {!hasTaken && (
@@ -119,13 +120,13 @@ export default function AssessmentCard({
       </div>
 
       {slug in slugToAssessmentType && (
-  <AssessmentIntroModal
-    isOpen={showIntro}
-    onClose={handleClose}
-    onStart={handleStartAssessment}
-    assessmentType={slugToAssessmentType[slug]}
-  />
-)}
+        <AssessmentIntroModal
+          isOpen={showIntro}
+          onClose={handleClose}
+          onStart={handleStartAssessment}
+          assessmentType={slugToAssessmentType[slug]}
+        />
+      )}
     </>
   );
 }
