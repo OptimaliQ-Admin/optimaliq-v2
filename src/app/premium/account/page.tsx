@@ -3,48 +3,19 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import { PremiumUser } from "@/context/PremiumUserContext";
 import PasswordInput from "@/components/shared/PasswordInput";
 import NotificationPreferences from "@/components/notifications/NotificationPreferences";
 
-type ProfileForm = {
-  first_name: string;
-  last_name: string;
-  title: string;
-  company: string;
-  company_size: string;
-  industry: string;
-  phone: string;
-  linkedin_url: string;
-  timezone: string;
-  agreed_marketing: boolean;
-};
-
-type PasswordForm = {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
-
 export default function AccountPage() {
   const { user } = usePremiumUser();
-  const [form, setForm] = useState<ProfileForm>({
-    first_name: "",
-    last_name: "",
-    title: "",
-    company: "",
-    company_size: "",
-    industry: "",
-    phone: "",
-    linkedin_url: "",
-    timezone: "",
-    agreed_marketing: false,
-  });
+  const [form, setForm] = useState<Partial<PremiumUser>>({});
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [passwordForm, setPasswordForm] = useState<PasswordForm>({
+  const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -54,43 +25,11 @@ export default function AccountPage() {
   const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
-    if (!user?.u_id) return;
-
-    const fetchProfile = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("tier2_profiles")
-          .select("*")
-          .eq("u_id", user.u_id)
-          .single();
-
-        if (error) {
-          console.error("Error fetching profile:", error);
-          return;
-        }
-
-        if (data) {
-          setForm({
-            first_name: data.first_name || "",
-            last_name: data.last_name || "",
-            title: data.title || "",
-            company: data.company || "",
-            company_size: data.company_size || "",
-            industry: data.industry || "",
-            phone: data.phone || "",
-            linkedin_url: data.linkedin_url || "",
-            timezone: data.timezone || "",
-            agreed_marketing: data.agreed_marketing || false,
-          });
-          setProfilePic(data.profile_pic || null);
-        }
-      } catch (error) {
-        console.error("Error in fetchProfile:", error);
-      }
-    };
-
-    fetchProfile();
-  }, [user?.u_id]);
+    if (user) {
+      setForm(user);
+      setProfilePic(user.profile_pic_url || null);
+    }
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -189,36 +128,131 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-2xl mx-auto py-12 px-4">
+      <h1 className="text-2xl font-bold mb-6">Account Settings</h1>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Manage your account settings and preferences
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="space-y-8">
-            {/* Profile Settings */}
-            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-              {/* ... rest of the form ... */}
-            </form>
-
-            {/* Password change form */}
-            <form
-              onSubmit={handlePasswordChange}
-              className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200"
-            >
-              {/* ... rest of the password form ... */}
-            </form>
-          </div>
-
-          {/* Notification Preferences */}
-          <div>
+        <div className="bg-white shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
             <NotificationPreferences />
           </div>
         </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mb-8">
+          <div className="flex items-center gap-6">
+            <div className="relative w-24 h-24">
+              {profilePic ? (
+                <img src={profilePic} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-gray-300" />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-400">?</div>
+              )}
+              <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer shadow-lg">
+                <input type="file" accept="image/*" className="hidden" onChange={handlePicChange} />
+                <span className="text-xs">Edit</span>
+              </label>
+            </div>
+            <div>
+              <div className="font-semibold text-lg">{form.first_name} {form.last_name}</div>
+              <div className="text-gray-500 text-sm">{form.email}</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">First Name</label>
+              <input name="first_name" value={form.first_name || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Last Name</label>
+              <input name="last_name" value={form.last_name || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Title</label>
+              <input name="title" value={form.title || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Company</label>
+              <input name="company" value={form.company || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Company Size</label>
+              <input name="company_size" value={form.company_size || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Industry</label>
+              <input name="industry" value={form.industry || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Phone</label>
+              <input name="phone" value={form.phone || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">LinkedIn URL</label>
+              <input name="linkedin_url" value={form.linkedin_url || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Timezone</label>
+              <input name="timezone" value={form.timezone || ''} onChange={handleChange} className="w-full rounded border px-3 py-2" />
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" name="agreed_marketing" checked={!!form.agreed_marketing} onChange={e => setForm(f => ({ ...f, agreed_marketing: e.target.checked }))} />
+              Receive marketing emails
+            </label>
+          </div>
+          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded font-semibold disabled:opacity-50" disabled={saving || uploading}>
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+          {success && <div className="text-green-600 font-medium">Profile updated!</div>}
+          {error && <div className="text-red-600 font-medium">{error}</div>}
+        </form>
+
+        {/* Password change form */}
+        <form onSubmit={handlePasswordChange} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+          
+          <div className="space-y-4">
+            <PasswordInput
+              label="Current Password"
+              name="currentPassword"
+              value={passwordForm.currentPassword}
+              onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+              autoComplete="current-password"
+            />
+            
+            <PasswordInput
+              label="New Password"
+              name="newPassword"
+              value={passwordForm.newPassword}
+              onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+              showRequirements
+            />
+            
+            <PasswordInput
+              label="Confirm New Password"
+              name="confirmPassword"
+              value={passwordForm.confirmPassword}
+              onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+              showMatchError
+              matchValue={passwordForm.newPassword}
+            />
+          </div>
+
+          {passwordError && (
+            <div className="text-red-600 font-medium">{passwordError}</div>
+          )}
+          
+          {passwordSuccess && (
+            <div className="text-green-600 font-medium">Password updated successfully!</div>
+          )}
+
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-2 rounded font-semibold disabled:opacity-50"
+            disabled={changingPassword}
+          >
+            {changingPassword ? "Updating..." : "Update Password"}
+          </button>
+        </form>
       </div>
     </div>
   );

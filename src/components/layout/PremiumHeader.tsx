@@ -3,14 +3,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { supabase } from "@/lib/supabase";
 import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function PremiumHeader() {
-  const pathname = usePathname();
   const { user } = usePremiumUser();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -56,10 +55,9 @@ export default function PremiumHeader() {
 
       {/* Actions */}
       <div className="flex items-center space-x-6">
-        {user?.u_id && <NotificationBell />}
-        <button className="relative">
-          <BellIcon className="h-5 w-5 text-gray-600 hover:text-blue-600 transition" />
-        </button>
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+        </div>
 
         {/* Profile Dropdown */}
         <div className="relative" ref={dropdownRef}>
