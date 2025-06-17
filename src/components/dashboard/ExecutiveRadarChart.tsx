@@ -277,8 +277,13 @@ const ExecutiveRadarChart: React.FC<Props> = ({
         </p>
       </div>
 
-      <div className="relative">
-        <svg ref={svgRef} className="w-full h-[600px] md:h-[600px] sm:h-[400px]" />
+      <div className="relative flex justify-center items-center">
+        <svg 
+          ref={svgRef} 
+          className="w-full max-w-[600px] h-[500px] mx-auto" 
+          viewBox="0 0 600 600"
+          preserveAspectRatio="xMidYMid meet"
+        />
         <div
           ref={tooltipRef}
           className="absolute hidden z-10"
