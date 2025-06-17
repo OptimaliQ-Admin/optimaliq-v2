@@ -99,6 +99,7 @@ export const GrowthChartModule = () => {
         companies={data.companies}
         userData={data.user}
         selectedCompany={selectedCompany}
+        onSelectCompany={setSelectedCompany}
       />
     </motion.div>
   );
