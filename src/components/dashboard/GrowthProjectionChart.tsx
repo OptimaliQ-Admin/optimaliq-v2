@@ -32,8 +32,12 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
     };
 
     updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
+    const debouncedResize = debounce(updateDimensions, 250);
+    window.addEventListener("resize", debouncedResize);
+    return () => {
+      window.removeEventListener("resize", debouncedResize);
+      debouncedResize.cancel();
+    };
   }, []);
 
   // Draw chart
@@ -69,7 +73,29 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .range([height, 0])
       .nice();
 
-    // Grid lines
+    // Add gradient definitions
+    const defs = svg.append("defs");
+
+    // User score gradient
+    defs
+      .append("linearGradient")
+      .attr("id", "userScoreGradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%")
+      .selectAll("stop")
+      .data([
+        { offset: "0%", color: "#3b82f6", opacity: 0.2 },
+        { offset: "100%", color: "#3b82f6", opacity: 0 },
+      ])
+      .enter()
+      .append("stop")
+      .attr("offset", (d) => d.offset)
+      .attr("stop-color", (d) => d.color)
+      .attr("stop-opacity", (d) => d.opacity);
+
+    // Grid lines with animation
     const gridLines = svg
       .selectAll(".grid-line")
       .data(yScale.ticks(5))
@@ -77,64 +103,109 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .append("line")
       .attr("class", "grid-line")
       .attr("x1", 0)
-      .attr("x2", width)
+      .attr("x2", 0) // Start from 0
       .attr("y1", (d) => yScale(d))
       .attr("y2", (d) => yScale(d))
       .style("stroke", "#e5e7eb")
       .style("stroke-width", 1)
-      .style("stroke-dasharray", "4 4");
+      .style("stroke-dasharray", "4 4")
+      .style("opacity", 0)
+      .transition()
+      .duration(1000)
+      .attr("x2", width)
+      .style("opacity", 1);
 
-    // Target zone
+    // Target zone with animation
     const targetZone = svg
       .append("rect")
       .attr("x", 0)
       .attr("y", yScale(4))
-      .attr("width", width)
+      .attr("width", 0)
       .attr("height", yScale(1) - yScale(4))
       .style("fill", "#10b981")
+      .style("opacity", 0)
+      .transition()
+      .duration(1000)
+      .attr("width", width)
       .style("opacity", 0.1);
 
-    // Axes
+    // Axes with improved styling
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale)
       .ticks(5)
       .tickFormat((d) => (d as number).toFixed(1));
 
-    svg
+    // X-axis with animation
+    const xAxisGroup = svg
       .append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0,${height})`)
-      .call(xAxis)
-      .style("color", "#6b7280")
-      .style("font-size", "12px");
+      .style("opacity", 0)
+      .transition()
+      .duration(1000)
+      .style("opacity", 1);
 
-    svg
+    xAxisGroup.call(xAxis)
+      .selectAll("text")
+      .style("fill", "#6b7280")
+      .style("font-size", "12px")
+      .style("font-weight", "500");
+
+    // Y-axis with animation
+    const yAxisGroup = svg
       .append("g")
       .attr("class", "y-axis")
-      .call(yAxis)
-      .style("color", "#6b7280")
-      .style("font-size", "12px");
+      .style("opacity", 0)
+      .transition()
+      .duration(1000)
+      .style("opacity", 1);
 
-    // Line generators
+    yAxisGroup.call(yAxis)
+      .selectAll("text")
+      .style("fill", "#6b7280")
+      .style("font-size", "12px")
+      .style("font-weight", "500");
+
+    // Line generators with improved curves
     const lineGenerator = d3
       .line<DataPoint>()
       .x((d) => xScale(d.month)! + xScale.bandwidth() / 2)
       .y((d) => yScale(d.userScore))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveCatmullRom.alpha(0.5));
 
     const industryLineGenerator = d3
       .line<DataPoint>()
       .x((d) => xScale(d.month)! + xScale.bandwidth() / 2)
       .y((d) => yScale(d.industryScore))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveCatmullRom.alpha(0.5));
 
     const topPerformerLineGenerator = d3
       .line<DataPoint>()
       .x((d) => xScale(d.month)! + xScale.bandwidth() / 2)
       .y((d) => yScale(d.topPerformerScore))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveCatmullRom.alpha(0.5));
 
-    // Draw lines
+    // Area generator for user score
+    const areaGenerator = d3
+      .area<DataPoint>()
+      .x((d) => xScale(d.month)! + xScale.bandwidth() / 2)
+      .y0(height)
+      .y1((d) => yScale(d.userScore))
+      .curve(d3.curveCatmullRom.alpha(0.5));
+
+    // Draw area under user score line
+    svg
+      .append("path")
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", areaGenerator)
+      .style("fill", "url(#userScoreGradient)")
+      .style("opacity", 0)
+      .transition()
+      .duration(1000)
+      .style("opacity", 1);
+
+    // Draw lines with improved animations
     const userLine = svg
       .append("path")
       .datum(data)
@@ -178,7 +249,7 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .delay(400)
       .style("opacity", 1);
 
-    // Add dots
+    // Add dots with improved animations
     const dots = svg
       .selectAll(".dot")
       .data(data)
@@ -186,18 +257,19 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .append("circle")
       .attr("class", "dot")
       .attr("cx", (d) => xScale(d.month)! + xScale.bandwidth() / 2)
-      .attr("cy", (d) => yScale(d.userScore))
-      .attr("r", 4)
+      .attr("cy", height) // Start from bottom
+      .attr("r", 0) // Start with radius 0
       .style("fill", "#3b82f6")
       .style("stroke", "#ffffff")
       .style("stroke-width", 2)
-      .style("opacity", 0)
       .transition()
       .duration(1000)
       .delay((d, i) => i * 100)
+      .attr("cy", (d) => yScale(d.userScore))
+      .attr("r", 4)
       .style("opacity", 1);
 
-    // Tooltip
+    // Enhanced tooltip
     const tooltip = d3
       .select("body")
       .append("div")
@@ -210,9 +282,10 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .style("padding", "0.75rem")
       .style("font-size", "0.875rem")
       .style("box-shadow", "0 4px 6px -1px rgba(0, 0, 0, 0.1)")
-      .style("pointer-events", "none");
+      .style("pointer-events", "none")
+      .style("z-index", "50");
 
-    // Add hover effects
+    // Add hover effects with improved interaction
     const hoverArea = svg
       .append("rect")
       .attr("class", "hover-area")
@@ -221,6 +294,17 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       .style("fill", "none")
       .style("pointer-events", "all");
 
+    // Vertical line for hover effect
+    const hoverLine = svg
+      .append("line")
+      .attr("class", "hover-line")
+      .attr("y1", 0)
+      .attr("y2", height)
+      .style("stroke", "#e5e7eb")
+      .style("stroke-width", 1)
+      .style("stroke-dasharray", "4 4")
+      .style("opacity", 0);
+
     hoverArea
       .on("mousemove", (event) => {
         const [x] = d3.pointer(event);
@@ -228,6 +312,13 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
         const dataPoint = data.find((d) => d.month === month);
 
         if (dataPoint) {
+          // Update hover line
+          hoverLine
+            .attr("x1", xScale(dataPoint.month)! + xScale.bandwidth() / 2)
+            .attr("x2", xScale(dataPoint.month)! + xScale.bandwidth() / 2)
+            .style("opacity", 1);
+
+          // Update tooltip
           tooltip
             .style("visibility", "visible")
             .style("left", `${event.pageX + 10}px`)
@@ -251,6 +342,7 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
       })
       .on("mouseleave", () => {
         tooltip.style("visibility", "hidden");
+        hoverLine.style("opacity", 0);
       });
 
     // Cleanup
@@ -292,5 +384,22 @@ const GrowthProjectionChart: React.FC<Props> = ({ data }) => {
     </div>
   );
 };
+
+// Debounce utility function
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): T & { cancel: () => void } {
+  let timeout: NodeJS.Timeout;
+  
+  const debounced = (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+  
+  debounced.cancel = () => clearTimeout(timeout);
+  
+  return debounced as T & { cancel: () => void };
+}
 
 export default GrowthProjectionChart; 
