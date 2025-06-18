@@ -28,20 +28,11 @@ export async function saveDashboardInsights(
     if (!payload.roadmap?.length) console.warn("⚠️ roadmap array is empty or missing");
     if (!payload.benchmarking || !payload.benchmarking.strategy) console.warn("⚠️ benchmarking object is empty or incomplete");
 
-    const safePayload = {
-      ...payload,
-      benchmarking: payload.benchmarking || {},
-      strengths: payload.strengths || [],
-      weaknesses: payload.weaknesses || [],
-      roadmap: payload.roadmap || [],
-      chartData: payload.chartData || [],
-    };
-
-    console.log("💾 About to save insights:", JSON.stringify(safePayload, null, 2));
+    console.log("💾 About to save insights:", JSON.stringify(payload, null, 2));
 
     const { error } = await supabase
       .from("tier2_dashboard_insights")
-      .upsert([safePayload], { onConflict: "u_id" });
+      .upsert([payload], { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save dashboard insights:", error);
