@@ -1,147 +1,105 @@
 // /lib/ai/generateDashboard.ts
 
 import OpenAI from "openai";
+import { z } from "zod";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export type DashboardScores = {
-  strategy_score: number;
-  process_score: number;
-  technology_score: number;
-  score: number;
-  industryAvgScore: number;
-  topPerformerScore: number;
-  benchmarking: Record<string, string>;
-  strengths: { title: string; impact: string }[];
-  weaknesses: { title: string; impact: string }[];
-  roadmap: { task: string; expectedImpact: string }[];
-};
+export const DashboardScoresSchema = z.object({
+  strategy_score: z.number(),
+  process_score: z.number(),
+  technology_score: z.number(),
+  score: z.number(),
+  industryAvgScore: z.number(),
+  topPerformerScore: z.number(),
+  benchmarking: z.object({
+    strategy: z.string(),
+    process: z.string(),
+    technology: z.string(),
+  }),
+  strengths: z.array(
+    z.object({
+      title: z.string(),
+      impact: z.string(),
+    })
+  ),
+  weaknesses: z.array(
+    z.object({
+      title: z.string(),
+      impact: z.string(),
+    })
+  ),
+  roadmap: z.array(
+    z.object({
+      task: z.string(),
+      expectedImpact: z.string(),
+    })
+  ),
+});
 
-export async function generateDashboardScores(user: any, assessment: any): Promise<DashboardScores | null> {
-      // 🧠 Build OpenAI prompt
-    const aiPrompt = `
-    You are a world-class business strategist hired to evaluate high-growth companies. 
-    Your role is to synthesize the qualitative and operational inputs below to generate a full assessment of the business: 
-    its current position, strategic gaps, comparative benchmarks, and a 30-day improvement roadmap.
-    
-    Return your response as a **well-formatted JSON object** with **no commentary or extra text**.
-    
-    ---
-    
-    ## 🧠 Company Profile
-    - **Industry:** ${user.industry}
-    - **Company Size:** ${user.company_size}
-    - **Revenue Range:** ${user.revenue_range}
-    
-    ---
-    
-    ## 📋 Strategic Assessment Responses
-    
-    - **Growth Metrics Tracked:** ${assessment.growth_metrics}
-    - **Go-to-Market Strategy:** ${assessment.gtm_strategy}
-    - **Biggest Friction Points:** ${assessment.friction_points}
-    - **Differentiator (Competitive Edge):** ${assessment.differentiator}
-    - **Customer Brand Perception:** ${assessment.brand_perception}
-    - **Top Priorities (Ranked):** ${assessment.business_priorities}
-    - **Core Tech Stack:** ${assessment.tech_stack}
-    - **Internal Process Discipline:** ${assessment.process_discipline}
-    - **Winning Acquisition Channels:** ${assessment.acquisition_channels}
-    - **Technology Maturity Level:** ${assessment.tech_maturity}
-    - **Retention Strategy:** ${assessment.retention_strategy}
-    - **Current Decision Bottlenecks:** ${assessment.decision_bottlenecks}
-    - **Team Alignment on Goals:** ${assessment.team_alignment}
-    - **12-Month Vision of Success:** ${assessment.future_success}
-    - **Preferred Benchmarking Insights:** ${assessment.benchmark_preferences}
-    - **Funding Status or Exit Prep:** ${assessment.funding_status}
-    - **Ideal Pace of Growth:** ${assessment.growth_pace}
-    - **Unresolved Internal Issues:** ${assessment.unresolved_issue}
-    - **Willingness to Commit to Growth Model:** ${assessment.final_confirmation}
-    
-    ---
-    
-    ## 🎯 Your Task
-    Using this data:
-    - Assign a score (1–5) for **strategy**, **process**, and **technology** maturity
-    - Benchmark this business against **industry averages** and **top performers**
-    - List 2–4 **strengths** and **weaknesses**, each with a practical business impact
-    - Build a high-impact **30-day roadmap** with tactical steps that address weaknesses and accelerate growth
-    
-    ---
-    
-    ## 📦 JSON Response Format
-    Return a structured JSON object like:
-    
-    {
-      "strategy_score": 3.5,
-      "process_score": 3.0,
-      "technology_score": 4.0,
-      "score": 3.5,
-      "industryAvgScore": 3.2,
-      "topPerformerScore": 4.5,
-      "benchmarking": {
-        "strategy": "...",
-        "process": "...",
-        "technology": "..."
-      },
-      "strengths": [ { "title": "...", "impact": "..." } ],
-      "weaknesses": [ { "title": "...", "impact": "..." } ],
-      "roadmap": [ { "task": "...", "expectedImpact": "..." } ]
+export type DashboardScores = z.infer<typeof DashboardScoresSchema>;
+
+export async function generateDashboardScores(
+  user: any,
+  assessment: any
+): Promise<DashboardScores | null> {
+  try {
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4.1",
+      messages: [
+        {
+          role: "system",
+          content: "You are a world-class business strategist hired to evaluate high-growth companies. Respond in valid JSON only.",
+        },
+        {
+          role: "user",
+          content: JSON.stringify({
+            industry: user.industry,
+            company_size: user.company_size,
+            revenue_range: user.revenue_range,
+            growth_metrics: assessment.growth_metrics,
+            gtm_strategy: assessment.gtm_strategy,
+            friction_points: assessment.friction_points,
+            differentiator: assessment.differentiator,
+            brand_perception: assessment.brand_perception,
+            business_priorities: assessment.business_priorities,
+            tech_stack: assessment.tech_stack,
+            process_discipline: assessment.process_discipline,
+            acquisition_channels: assessment.acquisition_channels,
+            tech_maturity: assessment.tech_maturity,
+            retention_strategy: assessment.retention_strategy,
+            decision_bottlenecks: assessment.decision_bottlenecks,
+            team_alignment: assessment.team_alignment,
+            future_success: assessment.future_success,
+            benchmark_preferences: assessment.benchmark_preferences,
+            funding_status: assessment.funding_status,
+            growth_pace: assessment.growth_pace,
+            unresolved_issue: assessment.unresolved_issue,
+            final_confirmation: assessment.final_confirmation,
+          }),
+        },
+      ],
+      max_tokens: 900,
+    });
+
+    let content = aiResponse.choices?.[0]?.message?.content || "{}";
+    if (content.startsWith("```")) {
+      content = content.replace(/```(?:json)?/g, "").trim();
     }
-    `;
 
-    try {
-      const aiResponse = await openai.chat.completions.create({
-        model: "gpt-4.1",
-        messages: [
-          { role: "system", content: "Respond in valid JSON only." },
-          { role: "user", content: aiPrompt },
-        ],
-        max_tokens: 900,
-      });
-  
-      let content = aiResponse.choices[0].message.content || "{}";
-      if (content.startsWith("```")) {
-        content = content.replace(/```(?:json)?/g, "").trim();
-      }
-  // 🧪 Log raw GPT content
-  console.log("🧠 Raw OpenAI response content:", content);
-      const parsed = JSON.parse(content);
-  // 🧪 Log parsed object
-  console.log("🧪 Parsed AI response object:", JSON.stringify(parsed, null, 2));
-  if (
-    typeof parsed.strategy_score !== "number" ||
-    typeof parsed.process_score !== "number" ||
-    typeof parsed.technology_score !== "number" ||
-    typeof parsed.score !== "number" ||
-    typeof parsed.industryAvgScore !== "number" ||
-    typeof parsed.topPerformerScore !== "number" ||
-    typeof parsed.benchmarking !== "object" ||
-    !Array.isArray(parsed.strengths) ||
-    !Array.isArray(parsed.weaknesses) ||
-    !Array.isArray(parsed.roadmap)
-  ) {
-    console.error("❌ Missing or invalid expected fields in parsed OpenAI response:", parsed);
-    return null;
-  }
-  
-      
-      return {
-        strategy_score: parsed.strategy_score,
-        process_score: parsed.process_score,
-        technology_score: parsed.technology_score,
-        score: parsed.score,
-        industryAvgScore: parsed.industryAvgScore,
-        topPerformerScore: parsed.topPerformerScore,
-        benchmarking: parsed.benchmarking,
-        strengths: parsed.strengths,
-        weaknesses: parsed.weaknesses,
-        roadmap: parsed.roadmap,
-      };
-      
-    } catch (error) {
-      console.error("❌ Failed to generate dashboard scores:", error);
+    const parsed = JSON.parse(content);
+    const result = DashboardScoresSchema.safeParse(parsed);
+
+    if (!result.success) {
+      console.error("❌ Schema validation failed:", result.error.flatten());
       return null;
     }
+
+    return result.data;
+  } catch (error) {
+    console.error("❌ Failed to generate dashboard scores:", error);
+    return null;
   }
+}
