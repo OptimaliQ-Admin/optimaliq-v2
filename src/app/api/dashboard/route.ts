@@ -106,13 +106,13 @@ if (aiScores) {
       strategy_score: aiScores.strategy_score,
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
-      overall_score: profile.overall_score,
+      overall_score: aiScores.score,
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
-      benchmarking: aiScores.benchmarking || {},
-      strengths: aiScores.strengths || [],
-      weaknesses: aiScores.weaknesses || [],
-      roadmap: aiScores.roadmap || [],
+      benchmarking: aiScores.benchmarking,
+      strengths: aiScores.strengths,
+      weaknesses: aiScores.weaknesses,
+      roadmap: aiScores.roadmap,
       chartData,
       updated_at: now.toISOString(),
       industry: user.industry?.trim().toLowerCase(),
@@ -120,10 +120,10 @@ if (aiScores) {
 
     // Save insights
     console.log("🧪 Payload Field Checks:");
-console.log("benchmarking:", payload.benchmarking);
-console.log("strengths:", payload.strengths);
-console.log("weaknesses:", payload.weaknesses);
-console.log("roadmap:", payload.roadmap);
+    console.log("benchmarking:", payload.benchmarking);
+    console.log("strengths:", payload.strengths);
+    console.log("weaknesses:", payload.weaknesses);
+    console.log("roadmap:", payload.roadmap);
     await saveDashboardInsights(supabase, payload);
 
 
