@@ -137,11 +137,13 @@ export async function POST(request: Request) {
     // Save answers to assessment table
     const { error: assessmentError } = await supabase
       .from(mapping.answerTable)
-      .insert({
+      .upsert({
         u_id: userId,
         answers: answers,
         score: finalScore,
         created_at: new Date().toISOString()
+      }, {
+        onConflict: "u_id"
       });
 
     if (assessmentError) {
