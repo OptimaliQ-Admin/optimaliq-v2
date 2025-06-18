@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // ✅ 1. Buscar usuario en tier2_users
+    // ✅ 1. Check user in tier2_users
     const { data: tier2User, error: tier2Error } = await supabaseAdmin
       .from("tier2_users")
       .select("*")
@@ -17,21 +17,21 @@ export async function POST(req: Request) {
       .single();
 
     if (tier2Error || !tier2User) {
-      console.error("❌ No se encontró el usuario en tier2_users:", tier2Error);
+      console.error("❌ User not found in tier2_users:", tier2Error);
       return NextResponse.json({ error: "User not found in tier2_users" }, { status: 404 });
     }
 
-    // ✅ 2. Buscar usuario en Supabase Auth
+    // ✅ 2. Check user in Supabase Auth
     const { data: userList, error: listError } = await supabaseAdmin.auth.admin.listUsers();
     if (listError || !userList?.users) {
-      console.error("❌ Error al listar usuarios:", listError);
+      console.error("❌ Error listing users:", listError);
       return NextResponse.json({ error: "Failed to list users" }, { status: 500 });
     }
 
     let authUser = userList.users.find((user) => user.email?.toLowerCase() === email.toLowerCase());
 
     if (!authUser) {
-      console.log("👤 Usuario no existe en Auth. Creando usuario nuevo...");
+      console.log("👤 User does not exist in Auth. Creating new user...");
 
       const { data: createdUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
         email,
@@ -40,40 +40,24 @@ export async function POST(req: Request) {
       });
 
       if (createError || !createdUser?.user) {
-        console.error("❌ Error al crear usuario en Auth:", createError);
+        console.error("❌ Error creating user in Auth:", createError);
         return NextResponse.json({ error: "Failed to create user in auth" }, { status: 500 });
       }
 
       authUser = createdUser.user;
     }
 
-    // ✅ 3. Actualizar contraseña
+    // ✅ 3. Update password
     const { error: updatePasswordError } = await supabaseAdmin.auth.admin.updateUserById(authUser.id, {
       password,
     });
 
     if (updatePasswordError) {
-      console.error("❌ Error al actualizar contraseña:", updatePasswordError);
+      console.error("❌ Error updating password:", updatePasswordError);
       return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
     }
 
-    // ✅ 4. Insertar datos en tabla 'users'
-    const { error: insertError } = await supabaseAdmin.from("growth_users").insert({
-      u_id: authUser.id, // UUID del auth
-      name: `${tier2User.first_name} ${tier2User.last_name}`,
-      email: tier2User.email,
-      role: tier2User.title,
-      companysize: tier2User.company_size,
-      revenuerange: tier2User.revenue_range,
-      industry: tier2User.industry,
-    });
-
-    if (insertError) {
-      console.error("❌ Error al insertar en users:", insertError);
-      return NextResponse.json({ error: "Failed to insert into users table" }, { status: 500 });
-    }
-
-    // ✅ 5. Actualizar tier2_users con user ID y nuevos datos
+    // ✅ 4. Update tier2_users with user ID and new data
     const { error: updateTier2Error } = await supabaseAdmin
       .from("tier2_users")
       .update({
@@ -86,13 +70,13 @@ export async function POST(req: Request) {
       .eq("email", email);
 
     if (updateTier2Error) {
-      console.error("❌ Error al actualizar tier2_users:", updateTier2Error);
+      console.error("❌ Error updating tier2_users:", updateTier2Error);
       return NextResponse.json({ error: "Failed to update tier2_users" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("❌ Error inesperado:", error);
+    console.error("❌ Unexpected error:", error);
     return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });
   }
 }
