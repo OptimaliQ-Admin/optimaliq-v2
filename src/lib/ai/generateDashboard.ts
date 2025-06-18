@@ -93,7 +93,7 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
 
     try {
       const aiResponse = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4.1",
         messages: [
           { role: "system", content: "Respond in valid JSON only." },
           { role: "user", content: aiPrompt },

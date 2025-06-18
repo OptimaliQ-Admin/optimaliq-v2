@@ -3,8 +3,9 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import OpenAI from "openai";
-
 import { getErrorMessage } from "@/utils/errorHandler";
+import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -80,7 +81,7 @@ Return JSON:
 `;
 
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4.1",
       messages: [
         { role: "system", content: "Respond only with JSON" },
         { role: "user", content: aiPrompt },
@@ -99,7 +100,7 @@ Return JSON:
       strategy_score: parsed.strategy_score,
       process_score: parsed.process_score,
       technology_score: parsed.technology_score,
-      overall_score: parsed.overall_score,
+      base_score: parsed.overall_score,
       reassessment_score: parsed.overall_score,
       reassessment_last_taken: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -108,6 +109,9 @@ Return JSON:
     if (profileError) {
       return NextResponse.json({ error: profileError.message }, { status: 500 });
     }
+
+    // Recalculate overall score
+    await recalculateOverallScore(supabase, u_id);
 
     return NextResponse.json({ success: true, ...parsed });
   } catch (err: unknown) {

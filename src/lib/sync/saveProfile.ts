@@ -4,7 +4,7 @@ type ProfileScores = {
   strategy_score: number;
   process_score: number;
   technology_score: number;
-  overall_score: number;
+  base_score: number;
 };
 
 export async function saveProfileScores(
@@ -18,7 +18,7 @@ export async function saveProfileScores(
       strategy_score: scores.strategy_score,
       process_score: scores.process_score,
       technology_score: scores.technology_score,
-      overall_score: scores.overall_score,
+      base_score: scores.base_score,
       updated_at: new Date().toISOString(),
     };
 

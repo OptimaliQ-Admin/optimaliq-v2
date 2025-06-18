@@ -1,9 +1,12 @@
 // src/app/api/growthAssessment/getInsights/route.ts
 
 import { NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { supabase } from "@/lib/supabase";
 import { generatePrompt } from "@/lib/ai/generatePrompt";
 import { callOpenAI } from "@/lib/ai/callOpenAI";
+import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 
 export async function POST(req: Request) {
   try {
@@ -66,7 +69,21 @@ export async function POST(req: Request) {
       fallback_score_gpt: scores.fallback_overall_score,
     };
 
+    const { error: profileError } = await supabase.from("tier2_profiles").upsert({
+      u_id: u_id,
+      strategy_score: parsed.strategy_score,
+      process_score: parsed.process_score,
+      technology_score: parsed.technology_score,
+      base_score: parsed.overall_score,
+      reassessment_score: parsed.overall_score,
+      reassessment_last_taken: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "u_id" });
+
     await supabase.from("growth_insights").upsert([insertPayload], { onConflict: "u_id" });
+
+    // Recalculate overall score
+    await recalculateOverallScore(supabase, u_id);
 
     return NextResponse.json(insertPayload);
   } catch (err) {

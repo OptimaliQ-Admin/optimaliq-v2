@@ -103,7 +103,7 @@ export async function POST(request: Request) {
     if (needsNewLevers) {
       // Generate new levers using OpenAI
       const completion = await openai.chat.completions.create({
-        model: "gpt-4-turbo-preview",
+        model: "gpt-4.1",
         messages: [
           {
             role: "system",

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabase";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -110,7 +113,7 @@ export async function POST(req: Request) {
 
     // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4.1",
       messages: [{ role: "system", content: aiPrompt }],
       max_tokens: 1000,
       response_format: { type: "json_object" },
@@ -190,6 +193,27 @@ export async function POST(req: Request) {
     }
 
     console.log("✅ AI Insights Successfully Stored:", insertedInsights);
+
+    // Update tier2_profiles
+    const { error: profileError } = await supabase.from("tier2_profiles").upsert({
+      u_id: u_id,
+      strategy_score: parsedResponse.strategy_score,
+      process_score: parsedResponse.process_score,
+      technology_score: parsedResponse.technology_score,
+      base_score: overall_score,
+      reassessment_score: overall_score,
+      reassessment_last_taken: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "u_id" });
+
+    if (profileError) {
+      console.error("❌ Supabase Profile Update Error:", profileError);
+    } else {
+      console.log("✅ Profile updated in tier2_profiles");
+    }
+
+    // Recalculate overall score
+    await recalculateOverallScore(supabase, u_id);
 
     return NextResponse.json(parsedResponse);
 

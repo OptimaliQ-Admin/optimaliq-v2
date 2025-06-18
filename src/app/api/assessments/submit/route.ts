@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { calculateScore } from "@/lib/scoring/calculateScore";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError } from "@/lib/utils/logger";
+import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -182,6 +183,9 @@ export async function POST(request: Request) {
       console.error("❌ Failed to update profile:", profileError);
       throw new Error("Failed to update profile");
     }
+
+    // Recalculate overall score
+    await recalculateOverallScore(supabase, userId);
 
     // For tech stack assessment, save the selected tools
     if (assessment === "tech_stack") {

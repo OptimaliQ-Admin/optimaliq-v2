@@ -7,6 +7,7 @@ import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { getErrorMessage } from "@/utils/errorHandler";
+import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 
 
 export async function POST(req: Request) {
@@ -58,8 +59,11 @@ export async function POST(req: Request) {
       strategy_score: aiScores.strategy_score,
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
-      overall_score: aiScores.score,
+      base_score: aiScores.score,
     });
+
+    // Recalculate overall score
+    await recalculateOverallScore(supabase, userId);
 
     // ✅ Update dashboard insights
     await saveDashboardInsights(supabase, {
