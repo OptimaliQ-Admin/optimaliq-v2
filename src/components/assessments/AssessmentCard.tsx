@@ -120,13 +120,13 @@ export default function AssessmentCard({
       </div>
 
       {slug in slugToAssessmentType && (
-        <AssessmentIntroModal
-          isOpen={showIntro}
-          onClose={handleClose}
-          onStart={handleStartAssessment}
-          assessmentType={slugToAssessmentType[slug]}
-        />
-      )}
+  <AssessmentIntroModal
+    isOpen={showIntro}
+    onClose={handleClose}
+    onStart={handleStartAssessment}
+    assessmentType={slugToAssessmentType[slug]}
+  />
+)}
     </>
   );
 }

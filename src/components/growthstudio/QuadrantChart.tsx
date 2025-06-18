@@ -358,7 +358,7 @@ export default function QuadrantChart({ userId }: { userId: string }) {
         <p className="text-sm text-gray-600 mb-6">
           Our position reflects real-world comparisons against businesses we&apos;ve assessed—revealing where you lead and where you can grow.
         </p>
-      </div>
+        </div>
 
       <div className="relative px-6 pt-4 pb-12">
         <svg ref={svgRef} className="w-full" style={{ height: "660px" }} />

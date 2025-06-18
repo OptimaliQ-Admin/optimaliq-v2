@@ -23,8 +23,8 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
           const now = new Date();
           const diffInDays = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
 
-          setInsight(data.insight);
-          setLastUpdated(format(created, "MMMM d, yyyy"));
+            setInsight(data.insight);
+            setLastUpdated(format(created, "MMMM d, yyyy"));
 
           if (diffInDays > 7) {
             // Trigger background refresh (non-blocking)

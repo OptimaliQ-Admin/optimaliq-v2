@@ -111,10 +111,10 @@ export default function TrendInsightCard() {
               ))}
             </div>
 
-            <button
-              onClick={() => setIsOpen(true)}
+          <button
+            onClick={() => setIsOpen(true)}
               className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
-            >
+          >
               <span>Read full insights</span>
               <svg
                 className="w-4 h-4"
@@ -129,11 +129,11 @@ export default function TrendInsightCard() {
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
+          </button>
 
-            {lastUpdated && (
+          {lastUpdated && (
               <p className="text-xs text-gray-400">Last updated: {lastUpdated}</p>
-            )}
+          )}
           </div>
 
           <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">

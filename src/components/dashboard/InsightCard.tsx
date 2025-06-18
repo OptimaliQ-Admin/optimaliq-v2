@@ -25,7 +25,7 @@ export default function InsightCard({ title, items }: InsightCardProps) {
             <p className="text-gray-600 text-sm mt-1">{item.detail}</p>
           </div>
         ))}
-      </div>
+    </div>
     </Card>
   );
 }

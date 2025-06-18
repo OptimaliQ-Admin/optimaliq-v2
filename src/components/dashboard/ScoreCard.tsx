@@ -42,14 +42,14 @@ export default function ScoreCard({
 
       {onLearnMore && (
         <button
-          onClick={() => {
-            console.log(`🚀 Learn More clicked for: ${title}`);
-            onLearnMore?.();
-          }}
-          className="text-sm text-blue-600 mt-4 font-medium hover:underline self-start"
-        >
-          Learn more →
-        </button>      
+        onClick={() => {
+          console.log(`🚀 Learn More clicked for: ${title}`);
+          onLearnMore?.();
+        }}
+        className="text-sm text-blue-600 mt-4 font-medium hover:underline self-start"
+      >
+        Learn more →
+      </button>      
       )}
     </div>
   );
