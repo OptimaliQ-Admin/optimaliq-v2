@@ -26,6 +26,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    // Fetch profile scores
+    const { data: profile, error: profileError } = await supabase
+      .from("tier2_profiles")
+      .select("*")
+      .eq("u_id", u_id)
+      .single();
+
+    if (profileError || !profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
     // Fetch latest assessment
     const { data: assessment, error: assessmentError } = await supabase
       .from("onboarding_assessments")
@@ -95,7 +106,7 @@ if (aiScores) {
       strategy_score: aiScores.strategy_score,
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
-      overall_score: aiScores.score,
+      overall_score: profile.overall_score,
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
       benchmarking: aiScores.benchmarking || {},
