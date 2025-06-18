@@ -5,6 +5,7 @@ type ProfileScores = {
   process_score: number;
   technology_score: number;
   base_score: number;
+  overall_score?: number;
 };
 
 export async function saveProfileScores(
@@ -14,11 +15,12 @@ export async function saveProfileScores(
 ): Promise<boolean> {
   try {
     const payload = {
-      u_id, // 👈 ensure this is part of the payload
+      u_id,
       strategy_score: scores.strategy_score,
       process_score: scores.process_score,
       technology_score: scores.technology_score,
       base_score: scores.base_score,
+      ...(scores.overall_score !== undefined && { overall_score: scores.overall_score }),
       updated_at: new Date().toISOString(),
     };
 
@@ -26,7 +28,7 @@ export async function saveProfileScores(
 
     const { error } = await supabase
       .from("tier2_profiles")
-      .upsert(payload, { onConflict: "u_id" }); // 👈 key change here
+      .upsert(payload, { onConflict: "u_id" });
 
     if (error) {
       console.error("❌ Failed to save profile scores:", error);

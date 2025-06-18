@@ -121,7 +121,7 @@ console.log("roadmap:", payload.roadmap);
       strategy_score: aiScores.strategy_score,
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
-      overall_score: aiScores.score,
+      base_score: aiScores.score,
     });
 
     console.info("📦 Dashboard & profile saved for:", u_id);
