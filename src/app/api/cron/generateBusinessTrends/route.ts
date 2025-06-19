@@ -31,20 +31,28 @@ export async function GET(req: Request) {
     const prompt = `
 You are a strategic business advisor helping high-growth companies identify market shifts, competitive pressures, and innovation opportunities.
 
-Based on the following top news headlines, generate a high-level business trend summary with directional recommendations.
+Based on the following top news headlines, generate a **concise but insightful** business trend summary and **3–5 directional recommendations**.
 
 📰 Top News Headlines:
 ${headlines}
 
 📦 Instructions:
-- Extract key business trends.
-- Do not just summarize — offer strategic insight.
-- Help companies understand how to adapt, pivot, or grow.
-- These are **not guarantees** — they are guidance to think smarter.
+- Extract strategic business trends using signals from the headlines.
+- Offer **actionable insights**, not just summaries.
+- Assume a **cross-industry audience** (unless clear sector context exists).
+- Focus on **innovation, adaptability, and growth** (not just risk).
+- Use **headlines as anchor points** where helpful (but don’t quote all of them).
+- Keep the tone **balanced and strategic**, not overly optimistic or alarmist.
 
 ✍️ Output Format:
 🔥 Business Trend Summary:
-🎯 Actionable Recommendations (3–5):
+A 2–3 sentence summary highlighting the major directional theme.
+
+🎯 Actionable Recommendations:
+- Bullet 1
+- Bullet 2
+- Bullet 3
+...
 `.trim();
 
     // 3. Call OpenAI
