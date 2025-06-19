@@ -133,7 +133,7 @@ export default function ReassessmentCard({
             ) : (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-yellow-800 text-sm mb-3">
-                  Complete your initial assessments first to establish a baseline. You&apos;ll be able to track your progress after 30 days.
+                  You've established a baseline. You&apos;ll be able to track your progress after 30 days.
                 </p>
               </div>
             )}

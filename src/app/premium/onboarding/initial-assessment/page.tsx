@@ -61,22 +61,16 @@ export default function InitialAssessmentPage() {
       return;
     }
   
+    // Final step - store data and redirect to analyzing page
     try {
       const sanitized = stripOtherFields(formAnswers);
-      const response = await fetch("/api/premium/onboarding/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ u_id: user.u_id, formAnswers: sanitized }),
-      });
-  
-      const result = await response.json();
-      if (!response.ok) {
-        showToast.error(`Submission error: ${result.error}`);
-        return;
-      }
-  
-      showToast.success("Assessment completed successfully!");
-      router.push("/premium/dashboard");
+      
+      // Store the assessment data in localStorage
+      localStorage.setItem("onboarding_assessment_data", JSON.stringify(sanitized));
+      
+      // Redirect to analyzing page
+      router.push("/premium/onboarding/analyzing");
+      
     } catch (err: unknown) {
       showToast.error("Unexpected error occurred: " + getErrorMessage(err));
     }
@@ -146,7 +140,7 @@ export default function InitialAssessmentPage() {
               disabled={submitting}
               className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              {submitting ? "Submitting..." : step === 6 ? "Submit" : "Next"}
+              {submitting ? "Processing..." : step === 6 ? "Analyze Assessment" : "Next"}
             </button>
           </div>
         </div>

@@ -15,6 +15,8 @@ export async function POST(req: Request) {
   try {
     const { formAnswers } = await req.json();
 
+    console.log("🚀 Starting onboarding assessment processing...");
+
     // ✅ Get the currently logged-in user
     const {
       data: { user },
@@ -22,10 +24,12 @@ export async function POST(req: Request) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
+      console.error("❌ Authentication error:", authError);
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = user.id;
+    console.log("👤 Processing assessment for user:", userId);
 
     // ✅ Fetch user profile
     const { data: userData, error: userError } = await supabase
@@ -35,9 +39,11 @@ export async function POST(req: Request) {
       .single();
 
     if (userError || !userData) {
+      console.error("❌ User profile not found:", userError);
       return NextResponse.json({ error: "User profile not found" }, { status: 404 });
     }
 
+    console.log("📝 Saving assessment answers...");
     // ✅ Insert onboarding answers
     const { error: insertError } = await supabase
       .from("onboarding_assessments")
@@ -48,12 +54,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
+    console.log("🧠 Generating AI scores...");
     // ✅ Run scoring
     const aiScores = await generateDashboardScores(userData, formAnswers);
     if (!aiScores) {
+      console.error("❌ AI scoring failed");
       return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });
     }
 
+    console.log("✅ AI scores generated successfully");
+
+    console.log("💾 Updating profile scores...");
     // ✅ Update profile scores
     await saveProfileScores(supabase, userId, {
       strategy_score: aiScores.strategy_score,
@@ -65,6 +76,7 @@ export async function POST(req: Request) {
     // Recalculate overall score
     await recalculateOverallScore(supabase, userId);
 
+    console.log("📊 Saving dashboard insights...");
     // ✅ Update dashboard insights
     await saveDashboardInsights(supabase, {
       u_id: userId,
@@ -87,6 +99,8 @@ export async function POST(req: Request) {
       updated_at: new Date().toISOString(),
       industry: userData.industry?.trim().toLowerCase(),
     });
+
+    console.log("🎉 Onboarding assessment completed successfully for user:", userId);
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

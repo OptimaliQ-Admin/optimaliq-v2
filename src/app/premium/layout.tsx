@@ -5,9 +5,14 @@ import { PremiumUserProvider } from "@/context/PremiumUserContext";
 import PremiumHeader from "@/components/layout/PremiumHeader";
 import PremiumSidebar from "@/components/layout/PremiumSidebar";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { usePathname } from "next/navigation";
 
 export default function PremiumLayout({ children }: { children: React.ReactNode }) {
   const { checking } = useRequireAuth(); // get checking status
+  const pathname = usePathname();
+
+  // Check if we're in onboarding flow
+  const isOnboarding = pathname?.startsWith("/premium/onboarding");
 
   if (checking) {
     return (
@@ -20,10 +25,12 @@ export default function PremiumLayout({ children }: { children: React.ReactNode 
   return (
     <PremiumUserProvider>
       <div className="flex min-h-screen bg-gray-100 text-gray-900">
-        <PremiumSidebar />
+        {!isOnboarding && <PremiumSidebar />}
         <div className="flex flex-col flex-1">
-          <PremiumHeader />
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+          {!isOnboarding && <PremiumHeader />}
+          <main className={`flex-1 overflow-y-auto ${!isOnboarding ? 'p-6' : ''}`}>
+            {children}
+          </main>
         </div>
       </div>
     </PremiumUserProvider>
