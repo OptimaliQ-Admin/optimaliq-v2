@@ -92,7 +92,7 @@ export default function GrowthAssessmentStep2() {
         console.error("Failed to save responses:", upsertError);
         setError(`Failed to save responses: ${upsertError.message}`);
       } else {
-        router.push("/growth-assessment/step3");
+        router.push("/growth-assessment/analyzing");
       }
     } catch (err) {
       console.error("Unexpected error:", err);

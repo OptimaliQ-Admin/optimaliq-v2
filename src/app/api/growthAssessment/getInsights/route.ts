@@ -131,7 +131,7 @@ Example Output:
 
     // ✅ Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: "gpt-4.1",
+      model: "gpt-4.1-mini",
       messages: [{ role: "system", content: aiPrompt }],
       max_tokens: 1000,
       response_format: { type: "json_object" },
