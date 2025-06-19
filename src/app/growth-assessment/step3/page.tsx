@@ -78,16 +78,21 @@ function Step3Component() {
       <div className="max-w-[1920px] mx-auto p-6 space-y-8">
         {/* Header Section */}
         <div className="space-y-6">
-          <SectionHeader 
-            title="Your Strategic Insights & Growth Projection" 
-            subtitle="A data-driven assessment that uncovers your business's potential in the market and provides key insights for optimization."
-          />
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              Your Growth Analysis is Ready
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Join other businesses that use OptimaliQ to get ongoing insights, 
+              real-time benchmarks, and AI-powered growth strategies.
+            </p>
+          </div>
         </div>
 
         {/* Score Overview Section */}
         <div className="space-y-6">
           <SectionHeader title="🏆 Business Score Overview" />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <ScoreCardGrid score={score} />
           </div>
         </div>

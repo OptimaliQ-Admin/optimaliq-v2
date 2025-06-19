@@ -65,17 +65,31 @@ export default function ScoreLineChart({ data, score }: Props) {
       </ResponsiveContainer>
 
       <div className="mt-4 text-center">
-        <p className="text-gray-700 text-sm">
+        <p className="text-gray-700 text-sm mb-4">
           Most businesses fail because they rely on instinct over intelligence.
           <br />
           <span className="font-bold text-blue-600">OptimaliQ</span> provides the exact roadmap to dominate your industry.
         </p>
-        <a
-          href="/Pricing"
-          className="inline-block mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition"
-        >
-          Learn More
-        </a>
+        
+        {/* Add urgency element */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+          <p className="text-yellow-800 text-sm font-semibold">
+            ⏰ Your insights are fresh now - get ongoing monitoring and AI recommendations
+          </p>
+        </div>
+        
+        {/* Enhanced CTA */}
+        <div className="space-y-3">
+          <a
+            href="/Pricing"
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition w-full sm:w-auto"
+          >
+            Get Ongoing Insights & AI Recommendations
+          </a>
+          <p className="text-xs text-gray-500">
+            Start now • Cancel anytime
+          </p>
+        </div>
       </div>
     </div>
   );

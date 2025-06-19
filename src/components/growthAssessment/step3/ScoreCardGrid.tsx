@@ -4,6 +4,7 @@
 import { useState } from "react";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import GMFModal from "./GMFModal";
+import SocialProofCard from "./SocialProofCard";
 
 export default function ScoreCardGrid({ score }: { score: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +41,8 @@ export default function ScoreCardGrid({ score }: { score: number }) {
           <p className="text-sm text-gray-600 mt-2">Potential to elevate your score and revenue over the next 12 months.</p>
         </div>
       </div>
+
+      <SocialProofCard />
 
       <GMFModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
