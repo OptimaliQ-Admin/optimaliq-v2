@@ -199,13 +199,13 @@ Example Output:
       process_insight: parsedResponse.processInsight || "",
       technology_score: Number(parsedResponse.technology_score) || 0,
       technology_insight: parsedResponse.technologyInsight || "",
-      generatedat: new Date().toISOString(),
       overall_score: Number(overall_score) || 0,
       fallback_score_gpt: Number(parsedResponse.fallback_overall_score) || 0
     };
 
     console.log("🔍 Insights data to insert:", JSON.stringify(insightsData, null, 2));
 
+    console.log("🔍 About to insert into growth_insights table...");
     const { data: insertedInsights, error: storeError } = await supabase
       .from("growth_insights")
       .upsert([insightsData], { onConflict: "u_id" }) // 👈 ensures one active insight per user
