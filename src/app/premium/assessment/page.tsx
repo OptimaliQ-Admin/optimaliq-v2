@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import AssessmentCard from "@/components/assessments/AssessmentCard";
+import ReassessmentCard from "@/components/assessments/ReassessmentCard";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 import TechToolsCard from "@/components/assessment/TechToolsCard";
 import AssessmentExplanationModal from "@/components/modals/AssessmentExplanationModal";
@@ -187,10 +188,7 @@ export default function AssessmentsPage() {
             lastTakenDate={assessmentData.leadership?.lastTakenDate ?? null}
             userId={user?.u_id}
           />
-          <AssessmentCard
-            slug="reassessment"
-            title="Progress Reassessment"
-            description="Track your improvement over time with a periodic check-in."
+          <ReassessmentCard
             score={assessmentData.reassessment?.score ?? null}
             lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
             userId={user?.u_id}
