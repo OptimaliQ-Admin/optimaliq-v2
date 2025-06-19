@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Dialog } from "@headlessui/react";
 import SectionTitleBar from "./SectionTitleBar";
+import axios from "axios";
 
 export default function MarketInsightCard({ industry }: { industry: string }) {
   const [insight, setInsight] = useState<string | null>(null);
@@ -15,20 +16,31 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const res = await fetch(`/api/dashboard/market_trends?industry=${encodeURIComponent(industry)}`);
+        const res = await fetch(
+          `/api/dashboard/market_trends?industry=${encodeURIComponent(
+            industry
+          )}`
+        );
         const data = await res.json();
 
         if (data?.insight && data?.createdat) {
           const created = new Date(data.createdat);
           const now = new Date();
-          const diffInDays = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
+          const diffInDays = Math.floor(
+            (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24)
+          );
 
-            setInsight(data.insight);
-            setLastUpdated(format(created, "MMMM d, yyyy"));
+          setInsight(data.insight);
+          setLastUpdated(format(created, "MMMM d, yyyy"));
 
           if (diffInDays > 7) {
-            // Trigger background refresh (non-blocking)
-            fetch("/api/cron/generateMarketInsight");
+            const response = fetch("/api/cron/generateMarketInsight", {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`,
+                "Content-Type": "application/json",
+              },
+            });
           }
         } else {
           console.warn("No valid insight found");
@@ -53,7 +65,9 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
       />
 
       {loading ? (
-        <p className="text-gray-400 mt-2 animate-pulse">Loading latest insight...</p>
+        <p className="text-gray-400 mt-2 animate-pulse">
+          Loading latest insight...
+        </p>
       ) : insight ? (
         <>
           <p className="text-gray-600 mt-2 whitespace-pre-line">{preview}</p>
@@ -69,7 +83,11 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
             </p>
           )}
 
-          <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+          <Dialog
+            open={isOpen}
+            onClose={() => setIsOpen(false)}
+            className="relative z-50"
+          >
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="max-w-2xl w-full bg-white p-6 rounded-xl shadow-xl">
