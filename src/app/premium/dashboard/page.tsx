@@ -14,10 +14,16 @@ import GrowthChart from "@/components/dashboard/GrowthChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
+import DashboardExplanationModal from "@/components/modals/DashboardExplanationModal";
 import dynamic from "next/dynamic";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
+import { supabase } from "@/lib/supabase";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
+
+interface ProfileData {
+  dashboard_explanation_seen_at: string | null;
+}
 
 export default function PremiumDashboardPage() {
   const { user } = usePremiumUser();
@@ -29,6 +35,7 @@ export default function PremiumDashboardPage() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDashboardExplanation, setShowDashboardExplanation] = useState(false);
 
   useEffect(() => {
     if (!u_id) return;
@@ -63,6 +70,36 @@ export default function PremiumDashboardPage() {
       }));
   }, [u_id]);
 
+  // Check if user has seen dashboard explanation
+  useEffect(() => {
+    if (!u_id) return;
+
+    const checkDashboardExplanation = async () => {
+      try {
+        const { data: profileData, error } = await supabase
+          .from("tier2_profiles")
+          .select("dashboard_explanation_seen_at")
+          .eq("u_id", u_id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile data:", error);
+          return;
+        }
+
+        const hasSeenExplanation = (profileData as ProfileData).dashboard_explanation_seen_at !== null;
+        
+        if (!hasSeenExplanation) {
+          setShowDashboardExplanation(true);
+        }
+      } catch (err) {
+        console.error("Error checking dashboard explanation status:", err);
+      }
+    };
+
+    checkDashboardExplanation();
+  }, [u_id]);
+
   // Auto-dismiss welcome message after 5 minutes
   useEffect(() => {
     if (showWelcome) {
@@ -92,6 +129,13 @@ export default function PremiumDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Dashboard Explanation Modal */}
+      <DashboardExplanationModal
+        isOpen={showDashboardExplanation}
+        onClose={() => setShowDashboardExplanation(false)}
+        userId={u_id}
+      />
+
       {/* Welcome Toast */}
       {showWelcome && (
         <div className="fixed top-4 right-4 z-50 animate-fade-in">

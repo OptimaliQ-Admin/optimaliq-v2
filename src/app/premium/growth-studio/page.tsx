@@ -5,6 +5,8 @@ import { Suspense, useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import InsightLoading from "@/components/dashboard/InsightLoading";
+import GrowthStudioExplanationModal from "@/components/modals/GrowthStudioExplanationModal";
+import { supabase } from "@/lib/supabase";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
@@ -14,15 +16,50 @@ import QuadrantChart from "@/components/growthstudio/QuadrantChart";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
+interface ProfileData {
+  growth_studio_explanation_seen_at: string | null;
+}
+
 function GrowthStudioComponent() {
   const { user } = usePremiumUser();
   const email = user?.email;
   const userId = user?.u_id;
   const [isLoading, setIsLoading] = useState(true);
+  const [showGrowthStudioExplanation, setShowGrowthStudioExplanation] = useState(false);
 
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
+
+  // Check if user has seen growth studio explanation
+  useEffect(() => {
+    if (!userId) return;
+
+    const checkGrowthStudioExplanation = async () => {
+      try {
+        const { data: profileData, error } = await supabase
+          .from("tier2_profiles")
+          .select("growth_studio_explanation_seen_at")
+          .eq("u_id", userId)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile data:", error);
+          return;
+        }
+
+        const hasSeenExplanation = (profileData as ProfileData).growth_studio_explanation_seen_at !== null;
+        
+        if (!hasSeenExplanation) {
+          setShowGrowthStudioExplanation(true);
+        }
+      } catch (err) {
+        console.error("Error checking growth studio explanation status:", err);
+      }
+    };
+
+    checkGrowthStudioExplanation();
+  }, [userId]);
 
   const handleRunSimulation = async (result: SimulationResult | null) => {
     if (!result) return;
@@ -64,6 +101,13 @@ function GrowthStudioComponent() {
 
   return (
     <div className="w-full flex justify-center px-4">
+      {/* Growth Studio Explanation Modal */}
+      <GrowthStudioExplanationModal
+        isOpen={showGrowthStudioExplanation}
+        onClose={() => setShowGrowthStudioExplanation(false)}
+        userId={userId}
+      />
+
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
           <SectionHeader

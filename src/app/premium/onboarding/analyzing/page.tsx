@@ -4,13 +4,33 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { showToast } from "@/lib/utils/toast";
-import AnalyzingMessage from "@/components/shared/AnalyzingMessage";
+
+const statements = [
+  "Bringing 20 years of battlefield strategy to your business.",
+  "One insight can change everything.",
+  "Smart businesses don't guess—they measure.",
+  "Turning complexity into clarity, one model at a time.",
+  "If you can't scale it, you can't sell it.",
+  "We don't just diagnose. We prescribe transformation.",
+  "Clarity isn't a luxury—it's your growth engine.",
+  "You can't fix what you don't understand.",
+  "OptimaliQ reveals what your gut instinct misses.",
+  "Benchmark your way to category leadership.",
+];
 
 export default function OnboardingAnalyzingPage() {
   const router = useRouter();
   const { user } = usePremiumUser();
   const [isProcessing, setIsProcessing] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % statements.length);
+    }, 2200);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!user?.u_id) {
@@ -87,11 +107,15 @@ export default function OnboardingAnalyzingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center">
-        <AnalyzingMessage />
-        <p className="mt-4 text-sm text-gray-500">Powered by OptimaliQ.ai</p>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center space-y-6 px-4">
+      <h1 className="text-3xl font-bold text-blue-700">Analyzing your data...</h1>
+      <p className="text-xl text-gray-700 italic max-w-xl transition-opacity duration-500 ease-in-out">
+        {statements[index]}
+      </p>
+      <div className="mt-4 w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
       </div>
+      <p className="text-sm text-gray-400">Powered by OptimaliQ.ai</p>
     </div>
   );
 } 
