@@ -193,16 +193,18 @@ Example Output:
     // ✅ Insert AI insights into Supabase
     const insightsData = {
       u_id,
-      strategy_score: parsedResponse.strategy_score,
-      strategy_insight: parsedResponse.strategyInsight,
-      process_score: parsedResponse.process_score,
-      process_insight: parsedResponse.processInsight,
-      technology_score: parsedResponse.technology_score,
-      technology_insight: parsedResponse.technologyInsight,
+      strategy_score: Number(parsedResponse.strategy_score) || 0,
+      strategy_insight: parsedResponse.strategyInsight || "",
+      process_score: Number(parsedResponse.process_score) || 0,
+      process_insight: parsedResponse.processInsight || "",
+      technology_score: Number(parsedResponse.technology_score) || 0,
+      technology_insight: parsedResponse.technologyInsight || "",
       generatedat: new Date().toISOString(),
-      overall_score: overall_score,
-      fallback_score_gpt: parsedResponse.fallback_overall_score
+      overall_score: Number(overall_score) || 0,
+      fallback_score_gpt: Number(parsedResponse.fallback_overall_score) || 0
     };
+
+    console.log("🔍 Insights data to insert:", JSON.stringify(insightsData, null, 2));
 
     const { data: insertedInsights, error: storeError } = await supabase
       .from("growth_insights")
@@ -211,6 +213,7 @@ Example Output:
 
     if (storeError) {
       console.error("❌ Supabase Insert Error:", storeError);
+      console.error("❌ Data that failed to insert:", JSON.stringify(insightsData, null, 2));
       return NextResponse.json({ error: "Failed to store AI insights" }, { status: 500 });
     }
 
