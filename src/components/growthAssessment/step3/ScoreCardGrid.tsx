@@ -41,14 +41,6 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         </div>
       </div>
 
-      <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between h-full">
-        <div>
-          <SectionTitleBar title="🎯 Growth Opportunity" />
-          <p className="text-3xl font-bold text-purple-600">{(score / 5 * 100).toFixed(0)}%</p>
-          <p className="text-sm text-gray-600 mt-2">Your current market readiness percentage.</p>
-        </div>
-      </div>
-
       <GMFModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
