@@ -56,11 +56,11 @@ export default function AssessmentExplanationModal({
           </p>
           
           <p>
-            Each assessment you take—whether it's Strategy, Sales, Tech, or others—adds new insights that refine your overall score. The more you complete, the more personalized and accurate your benchmarks and recommendations become.
+            Each assessment you take—whether it&apos;s Strategy, Sales, Tech, or others—adds new insights that refine your overall score. The more you complete, the more personalized and accurate your benchmarks and recommendations become.
           </p>
           
           <p>
-            We adjust your score dynamically to reflect your progress across different areas. That means your score isn't fixed—it improves as you build strength across key business dimensions.
+            We adjust your score dynamically to reflect your progress across different areas. That means your score isn&apos;t fixed—it improves as you build strength across key business dimensions.
           </p>
           
           <p>
