@@ -105,8 +105,8 @@ export default function AssessmentsPage() {
         />
         <AssessmentCard
           slug="tech_stack"
-          title="Technology Stack"
-          description="Audit your current tools and get recommendations to modernize."
+          title="Technology Maturity Assessment"
+          description="Evaluate your technology infrastructure and digital capabilities."
           score={assessmentData.tech_stack?.score ?? null}
           lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
           userId={user?.u_id}

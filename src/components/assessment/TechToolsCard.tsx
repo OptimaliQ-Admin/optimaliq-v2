@@ -35,8 +35,17 @@ export default function TechToolsCard({ userId }: TechToolsCardProps) {
           .eq("u_id", userId)
           .single();
 
-        if (error) throw error;
-        setTechStack(data);
+        if (error) {
+          // Don't show error for PGRST116 (no rows returned) - this is expected when user hasn't taken the assessment
+          if (error.code === 'PGRST116') {
+            setTechStack(null);
+          } else {
+            console.error("Failed to fetch tech stack:", error);
+            showToast.error("Failed to load tech stack");
+          }
+        } else {
+          setTechStack(data);
+        }
       } catch (err) {
         console.error("Failed to fetch tech stack:", err);
         showToast.error("Failed to load tech stack");
