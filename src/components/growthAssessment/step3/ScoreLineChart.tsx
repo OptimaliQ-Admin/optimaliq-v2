@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import {
   ResponsiveContainer,
@@ -20,9 +19,9 @@ type Props = {
 
 export default function ScoreLineChart({ data, score }: Props) {
   return (
-    <Card className="p-6 shadow-md bg-white rounded-lg">
+    <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition h-full">
       <SectionTitleBar title="🚀 Your Growth Projections" />
-      <p className="text-gray-600 text-center text-sm mb-4">
+      <p className="text-gray-600 text-sm mb-4">
         A visual projection of how strategic improvements can elevate your business performance over time.
       </p>
 
@@ -65,8 +64,8 @@ export default function ScoreLineChart({ data, score }: Props) {
         </LineChart>
       </ResponsiveContainer>
 
-      <div className="mt-2 text-center">
-        <p className="text-gray-700 text-sm mt-2">
+      <div className="mt-4 text-center">
+        <p className="text-gray-700 text-sm">
           Most businesses fail because they rely on instinct over intelligence.
           <br />
           <span className="font-bold text-blue-600">OptimaliQ</span> provides the exact roadmap to dominate your industry.
@@ -75,6 +74,6 @@ export default function ScoreLineChart({ data, score }: Props) {
           Learn More
         </button>
       </div>
-    </Card>
+    </div>
   );
 }

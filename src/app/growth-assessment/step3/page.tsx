@@ -7,6 +7,7 @@ import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardG
 import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
 import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 import { showToast } from "@/lib/utils/toast";
+import SectionHeader from "@/components/dashboard/SectionHeader";
 
 function Step3Component() {
   const router = useRouter();
@@ -73,22 +74,32 @@ function Step3Component() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center px-6">
-      <section className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mt-8">
-        <h1 className="text-4xl font-bold text-gray-800 text-center">Your Strategic Insights & Growth Projection</h1>
-        <p className="text-gray-600 text-center mt-2">
-          A data-driven assessment that uncovers your business&rsquo;s potential in the market and provides key insights for <span className="font-bold text-blue-600">optimization.</span>
-        </p>
-      </section>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-[1920px] mx-auto p-6 space-y-8">
+        {/* Header Section */}
+        <div className="space-y-6">
+          <SectionHeader 
+            title="Your Strategic Insights & Growth Projection" 
+            subtitle="A data-driven assessment that uncovers your business's potential in the market and provides key insights for optimization."
+          />
+        </div>
 
-      <section className="w-full max-w-5xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ScoreCardGrid score={score} />
-        <ScoreLineChart data={roadmapData} score={score} />
-      </section>
+        {/* Score Overview Section */}
+        <div className="space-y-6">
+          <SectionHeader title="🏆 Business Score Overview" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ScoreCardGrid score={score} />
+          </div>
+        </div>
 
-      <section className="w-full max-w-5xl mt-8">
-        <ScoreInsightGrid loading={loading} insights={insights} />
-      </section>
+        {/* Analysis Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ScoreLineChart data={roadmapData} score={score} />
+          <div className="space-y-6">
+            <ScoreInsightGrid loading={loading} insights={insights} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
