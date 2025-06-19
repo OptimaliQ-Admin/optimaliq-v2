@@ -34,7 +34,7 @@ export default function SocialProofCard() {
       <div className="flex-1 flex flex-col justify-center">
         <div className="text-center">
           <p className="text-gray-700 italic mb-4 text-sm leading-relaxed">
-            "{testimonials[currentIndex].quote}"
+            &ldquo;{testimonials[currentIndex].quote}&rdquo;
           </p>
           <p className="text-gray-500 text-xs">- {testimonials[currentIndex].role}</p>
         </div>
