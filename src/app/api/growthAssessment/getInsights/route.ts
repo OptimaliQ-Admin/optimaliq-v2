@@ -200,7 +200,7 @@ Example Output:
       technology_score: Number(parsedResponse.technology_score) || 0,
       technology_insight: parsedResponse.technologyInsight || "",
       overall_score: Number(overall_score) || 0,
-      fallback_score_gpt: Number(parsedResponse.fallback_overall_score) || 0
+      generatedat: new Date().toISOString()
     };
 
     console.log("🔍 Insights data to insert:", JSON.stringify(insightsData, null, 2));
