@@ -10,6 +10,7 @@ import {
   Tooltip,
   CartesianGrid,
   ReferenceLine,
+  ReferenceArea,
 } from "recharts";
 
 type Props = {
@@ -30,7 +31,28 @@ export default function ScoreLineChart({ data, score }: Props) {
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.3} />
           <XAxis dataKey="month" tick={{ fill: "#4F46E5" }} />
           <YAxis domain={[1, 5]} tick={{ fill: "#4F46E5" }} />
-          <Tooltip contentStyle={{ backgroundColor: "#fff", borderRadius: "8px", border: "1px solid #ddd" }} />
+          <Tooltip 
+            contentStyle={{ 
+              backgroundColor: "#fff", 
+              borderRadius: "8px", 
+              border: "1px solid #ddd",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+            }}
+            formatter={(value: any, name: any) => [
+              `${value.toFixed(1)}`,
+              "Your Projected Score"
+            ]}
+            labelFormatter={(label) => `${label}`}
+          />
+
+          {/* Target Maturity Zone */}
+          <ReferenceArea
+            y1={3.8}
+            y2={4.5}
+            fill="#10b981"
+            fillOpacity={0.1}
+            stroke="none"
+          />
 
           <Line
             type="monotone"
@@ -55,6 +77,19 @@ export default function ScoreLineChart({ data, score }: Props) {
             }}
           />
 
+          {/* Target Zone Label */}
+          <ReferenceLine
+            y={4.5}
+            stroke="none"
+            label={{
+              position: "left",
+              value: "Target Maturity Zone",
+              fill: "#10b981",
+              fontSize: 11,
+              fontStyle: "italic",
+            }}
+          />
+
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#2563EB" stopOpacity={1} />
@@ -63,6 +98,22 @@ export default function ScoreLineChart({ data, score }: Props) {
           </defs>
         </LineChart>
       </ResponsiveContainer>
+
+      {/* Legend */}
+      <div className="flex justify-center items-center space-x-6 mt-4 text-xs text-gray-600">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+          <span>Your Projection</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+          <span>Current Score</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 rounded-full bg-green-500 opacity-30"></div>
+          <span>Target Zone</span>
+        </div>
+      </div>
 
       <div className="mt-4 text-center">
         <p className="text-gray-700 text-sm mb-4">

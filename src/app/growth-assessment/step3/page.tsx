@@ -8,6 +8,7 @@ import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLine
 import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 import { showToast } from "@/lib/utils/toast";
 import SectionHeader from "@/components/dashboard/SectionHeader";
+import SubscriptionPopup from "@/components/modals/SubscriptionPopup";
 
 function Step3Component() {
   const router = useRouter();
@@ -21,6 +22,7 @@ function Step3Component() {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [roadmapData, setRoadmapData] = useState<{ month: string; score: number }[]>([]);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -35,6 +37,15 @@ function Step3Component() {
 
     fetchInsights(u_id);
   }, [router]);
+
+  // Timer for subscription popup
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSubscriptionPopup(true);
+    }, 15000); // 15 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const fetchInsights = async (u_id: string) => {
     setLoading(true);
@@ -73,39 +84,51 @@ function Step3Component() {
     }
   };
 
+  const handleCloseSubscriptionPopup = () => {
+    setShowSubscriptionPopup(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-[1920px] mx-auto p-6 space-y-8">
-        {/* Header Section */}
-        <div className="space-y-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Your Growth Analysis is Ready
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join other businesses that use OptimaliQ to get ongoing insights, 
-              real-time benchmarks, and AI-powered growth strategies.
-            </p>
-          </div>
-        </div>
-
-        {/* Score Overview Section */}
-        <div className="space-y-6">
-          <SectionHeader title="🏆 Business Score Overview" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <ScoreCardGrid score={score} />
-          </div>
-        </div>
-
-        {/* Analysis Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ScoreLineChart data={roadmapData} score={score} />
+    <>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-[1920px] mx-auto p-6 space-y-8">
+          {/* Header Section */}
           <div className="space-y-6">
-            <ScoreInsightGrid loading={loading} insights={insights} />
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                Your Growth Analysis is Ready
+              </h1>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Join other businesses that use OptimaliQ to get ongoing insights, 
+                real-time benchmarks, and AI-powered growth strategies.
+              </p>
+            </div>
+          </div>
+
+          {/* Score Overview Section */}
+          <div className="space-y-6">
+            <SectionHeader title="🏆 Business Score Overview" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <ScoreCardGrid score={score} />
+            </div>
+          </div>
+
+          {/* Analysis Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ScoreLineChart data={roadmapData} score={score} />
+            <div className="space-y-6">
+              <ScoreInsightGrid loading={loading} insights={insights} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Subscription Popup */}
+      <SubscriptionPopup
+        isOpen={showSubscriptionPopup}
+        onClose={handleCloseSubscriptionPopup}
+      />
+    </>
   );
 }
 
