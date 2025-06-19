@@ -1,9 +1,13 @@
 // components/step3/ScoreCardGrid.tsx
 "use client";
 
+import { useState } from "react";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import GMFModal from "./GMFModal";
 
 export default function ScoreCardGrid({ score }: { score: number }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
       <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between h-full">
@@ -13,6 +17,12 @@ export default function ScoreCardGrid({ score }: { score: number }) {
           <p className="text-sm text-gray-600 mt-2">Your current growth maturity level.</p>
           <p className="text-xs text-gray-400 mt-1 italic">Powered by <span className="text-blue-600 font-semibold">OptimaliQ.ai</span></p>
         </div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="text-sm text-blue-600 mt-4 font-medium hover:underline self-start"
+        >
+          Learn more →
+        </button>
       </div>
 
       <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between h-full">
@@ -38,6 +48,8 @@ export default function ScoreCardGrid({ score }: { score: number }) {
           <p className="text-sm text-gray-600 mt-2">Your current market readiness percentage.</p>
         </div>
       </div>
+
+      <GMFModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 }

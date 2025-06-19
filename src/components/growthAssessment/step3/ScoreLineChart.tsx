@@ -22,7 +22,7 @@ export default function ScoreLineChart({ data, score }: Props) {
     <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition h-full">
       <SectionTitleBar title="🚀 Your Growth Projections" />
       <p className="text-gray-600 text-sm mb-4">
-        A visual projection of how strategic improvements can elevate your business performance over time.
+        A visual projection of how strategic improvements with OptimaliQ can elevate your business performance over time.
       </p>
 
       <ResponsiveContainer width="100%" height={350}>
@@ -70,9 +70,12 @@ export default function ScoreLineChart({ data, score }: Props) {
           <br />
           <span className="font-bold text-blue-600">OptimaliQ</span> provides the exact roadmap to dominate your industry.
         </p>
-        <button className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition">
+        <a
+          href="/Pricing"
+          className="inline-block mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition"
+        >
           Learn More
-        </button>
+        </a>
       </div>
     </div>
   );
