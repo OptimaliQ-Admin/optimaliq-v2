@@ -9,6 +9,7 @@ import Group04_GrowthStack, { isGroup04Complete } from "@/app/premium/onboarding
 import Group05_Clarity, { isGroup05Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group05_Clarity";
 import Group06_Benchmarks, { isGroup06Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group06_Benchmarks";
 import Group07_Final, { isGroup07Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group07_Final";
+import Group08_BusinessOverview, { isGroup08Complete } from "@/app/premium/onboarding/initial-assessment/groups/Group08_BusinessOverview";
 
 export const stepValidators: Record<number, (answers: AssessmentAnswers) => boolean> = {
   0: isGroup01Complete,
@@ -17,7 +18,8 @@ export const stepValidators: Record<number, (answers: AssessmentAnswers) => bool
   3: isGroup04Complete,
   4: isGroup05Complete,
   5: isGroup06Complete,
-  6: isGroup07Complete,
+  6: isGroup08Complete,
+  7: isGroup07Complete,
 };
 
 export const onboardingGroups = [
@@ -27,5 +29,6 @@ export const onboardingGroups = [
   Group04_GrowthStack,
   Group05_Clarity,
   Group06_Benchmarks,
+  Group08_BusinessOverview,
   Group07_Final,
 ];

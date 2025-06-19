@@ -44,6 +44,9 @@ export async function POST(req: Request) {
     }
 
     console.log("📝 Saving assessment answers...");
+    console.log("📋 Form answers include business_overview:", !!formAnswers.business_overview);
+    console.log("📋 Business overview value:", formAnswers.business_overview?.substring(0, 50) + "...");
+    
     // ✅ Insert onboarding answers
     const { error: insertError } = await supabase
       .from("onboarding_assessments")
@@ -52,6 +55,22 @@ export async function POST(req: Request) {
     if (insertError) {
       console.error("❌ Insert Error:", insertError);
       return NextResponse.json({ error: insertError.message }, { status: 500 });
+    }
+
+    // ✅ Save business_overview to tier2_profiles
+    if (formAnswers.business_overview) {
+      console.log("💼 Saving business overview...");
+      const { error: businessOverviewError } = await supabase
+        .from("tier2_profiles")
+        .upsert({
+          u_id: userId,
+          business_overview: formAnswers.business_overview,
+        }, { onConflict: "u_id" });
+
+      if (businessOverviewError) {
+        console.error("❌ Business overview save error:", businessOverviewError);
+        // Don't fail the entire process for this
+      }
     }
 
     console.log("🧠 Generating AI scores...");

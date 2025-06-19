@@ -8,6 +8,7 @@ import Group04_GrowthStack from "@/app/premium/onboarding/initial-assessment/gro
 import Group05_Clarity from "@/app/premium/onboarding/initial-assessment/groups/Group05_Clarity";
 import Group06_Benchmarks from "@/app/premium/onboarding/initial-assessment/groups/Group06_Benchmarks";
 import Group07_Final from "@/app/premium/onboarding/initial-assessment/groups/Group07_Final";
+import Group08_BusinessOverview from "@/app/premium/onboarding/initial-assessment/groups/Group08_BusinessOverview";
 import {
   type AssessmentAnswers,
   type AssessmentAnswerValue,
@@ -34,6 +35,8 @@ export default function StepGroupRenderer({ step, answers, onAnswer }: Props) {
     case 5:
       return <Group06_Benchmarks answers={answers} onAnswer={onAnswer} />;
     case 6:
+      return <Group08_BusinessOverview answers={answers} onAnswer={onAnswer} />;
+    case 7:
       return <Group07_Final answers={answers} onAnswer={onAnswer} />;
     default:
       return null;

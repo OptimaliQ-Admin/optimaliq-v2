@@ -83,7 +83,13 @@ export async function POST(req: Request) {
     }
 
     // Generate AI scores
-    const aiScores = await generateDashboardScores(user, assessment);
+    const aiScores = await generateDashboardScores(
+      { 
+        ...user, 
+        business_overview: profile.business_overview || assessment.business_overview
+      }, 
+      assessment
+    );
 
     console.log(
       "🧪 Final AI scores returned to dashboard route:",

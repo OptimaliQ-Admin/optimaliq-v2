@@ -81,6 +81,14 @@ Formatting rules:
 `;
 
   try {
+    // Prepare user context with business overview
+    const userContext = {
+      industry: user.industry,
+      company_size: user.company_size,
+      revenue_range: user.revenue_range,
+      business_overview: assessment.business_overview || user.business_overview,
+    };
+
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4.1-mini",
       messages: [
@@ -88,9 +96,7 @@ Formatting rules:
         {
           role: "user",
           content: JSON.stringify({
-            industry: user.industry,
-            company_size: user.company_size,
-            revenue_range: user.revenue_range,
+            ...userContext,
             ...assessment,
           }),
         },

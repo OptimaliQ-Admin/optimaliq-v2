@@ -28,6 +28,7 @@ export async function GET() {
     growth_pace: "25_50",
     unresolved_issue: "This is a test",
     final_confirmation: "yes_ready",
+    business_overview: "We provide strategic consulting services to small and medium-sized businesses, helping them optimize their operations, improve customer experience, and scale their growth through data-driven insights and process improvements.",
   };
 
   try {

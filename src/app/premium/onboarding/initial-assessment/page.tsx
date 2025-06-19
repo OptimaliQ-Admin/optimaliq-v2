@@ -56,7 +56,7 @@ export default function InitialAssessmentPage() {
       return;
     }
   
-    if (step < 6) {
+    if (step < 7) {
       setStep((prev) => prev + 1);
       return;
     }
@@ -113,7 +113,7 @@ export default function InitialAssessmentPage() {
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-4xl mx-auto">
-        <ProgressBar current={step} total={7} />
+        <ProgressBar current={step} total={8} />
         <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
           <AnimatePresence mode="wait">
             <motion.div
@@ -140,7 +140,7 @@ export default function InitialAssessmentPage() {
               disabled={submitting}
               className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              {submitting ? "Processing..." : step === 6 ? "Analyze Assessment" : "Next"}
+              {submitting ? "Processing..." : step === 7 ? "Analyze Assessment" : "Next"}
             </button>
           </div>
         </div>
