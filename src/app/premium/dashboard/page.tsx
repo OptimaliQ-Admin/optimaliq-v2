@@ -10,8 +10,6 @@ import InsightLoading from "@/components/dashboard/InsightLoading";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import InsightCard from "@/components/dashboard/InsightCard";
-import GrowthChart from "@/components/dashboard/GrowthChart";
-import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import StrategicAnalysisCard from "@/components/dashboard/StrategicAnalysisCard";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
@@ -44,8 +42,8 @@ export default function PremiumDashboardPage() {
   const pageSections = [
     { id: "score-overview", label: "Score Overview", icon: "🏆" },
     { id: "performance-summary", label: "Performance Summary", icon: "📊" },
-    { id: "growth-analysis", label: "Growth Analysis", icon: "📈" },
-    { id: "performance-insights", label: "Performance Insights", icon: "🎯" },
+    { id: "strategic-analysis", label: "Strategic Analysis", icon: "🎯" },
+    { id: "performance-insights", label: "Performance Insights", icon: "💡" },
     { id: "market-intelligence", label: "Market Intelligence", icon: "🌍" },
   ];
 
@@ -311,41 +309,23 @@ export default function PremiumDashboardPage() {
 
         <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
 
-        {/* Analysis Section */}
+        {/* Strategic Analysis Section - Dedicated, Prominent Section */}
         <motion.section 
-          id="growth-analysis"
+          id="strategic-analysis"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-8"
         >
-          <SectionHeader title="📈 Growth Analysis & Planning" subtitle="Strategic insights and actionable growth recommendations" />
-          
-          {/* Strategic Analysis Card */}
-          <StrategicAnalysisCard userId={u_id} />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1">
-              <InsightCard 
-                title="🚀 30-Day Growth Plan" 
-                items={insights.roadmap.map(item => ({ 
-                  label: item.task, 
-                  detail: item.expectedImpact 
-                }))} 
-              />
-            </div>
-            <div className="lg:col-span-2 space-y-8">
-              <GrowthChart data={insights.chartData} />
-              <PerformanceFunnelChart 
-                strategyScore={insights.strategy_score}
-                processScore={insights.process_score}
-                technologyScore={insights.technology_score}
-                overallScore={insights.overall_score}
-                industryAvg={insights.industryAvgScore}
-                topPerformer={insights.topPerformerScore}
-              />
-            </div>
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold text-gray-900">🎯 Strategic Analysis</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Comprehensive competitive positioning and benchmark analysis to understand your market position and strategic opportunities
+            </p>
           </div>
+          
+          {/* Strategic Analysis Card - Full Width, Prominent */}
+          <StrategicAnalysisCard userId={u_id} />
         </motion.section>
 
         {/* Strengths & Weaknesses Section */}
