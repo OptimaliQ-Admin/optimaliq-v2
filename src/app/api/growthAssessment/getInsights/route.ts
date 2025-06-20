@@ -21,21 +21,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
 
-    // Fetch stored answers for the user
-    const { data: storedAnswers, error: fetchError } = await supabase
-      .from('growth_assessment')
-      .select('answers')
-      .eq('u_id', u_id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (fetchError || !storedAnswers) {
-      console.error("❌ Supabase Fetch Error (Answers):", fetchError);
-      return NextResponse.json({ error: "Failed to retrieve business responses" }, { status: 500 });
-    }
-    console.log("✅ Retrieved Business Responses:", storedAnswers);
-
     // ✅ Retrieve latest business assessment
     const { data: assessment, error: assessmentError } = await supabase
       .from("growth_assessment")
