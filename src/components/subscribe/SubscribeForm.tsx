@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import { IconInput } from "@/components/shared/IconInput";
@@ -16,6 +16,8 @@ import {
 } from "react-icons/fa";
 import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
+import { formatPhoneForDisplay, stripPhoneFormatting } from "@/lib/utils/phoneFormatter";
+import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from "@/lib/utils/validation";
 
 interface SubscribeFormProps {
   plan: "accelerator" | "strategic" | null;
@@ -39,18 +41,41 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
     company_size: "",
     revenue_range: "",
     industry: "",
+    linkedin_url: "",
   });
+
+  const [validationErrors, setValidationErrors] = useState<{ email?: string; linkedin_url?: string }>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    if (name === 'phone') {
+      // For phone, store only digits in form state but display formatted
+      const digits = stripPhoneFormatting(value);
+      setUserInfo({ ...userInfo, [name]: digits });
+    } else {
+      setUserInfo({ ...userInfo, [name]: value });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!captchaToken) {
       showToast.warning("Please complete the captcha.");
+      return;
+    }
+    // Client-side validation
+    const errors: { email?: string; linkedin_url?: string } = {};
+    if (!isValidEmail(userInfo.email) || isDisposableEmail(userInfo.email)) {
+      errors.email = 'Please enter a valid, non-disposable email address.';
+    }
+    if (userInfo.linkedin_url && !isValidLinkedInUrl(userInfo.linkedin_url)) {
+      errors.linkedin_url = 'Please enter a valid LinkedIn profile URL.';
+    }
+    setValidationErrors(errors);
+    if (Object.keys(errors).length > 0) {
       return;
     }
     setLoading(true);
@@ -198,10 +223,13 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
           onChange={handleChange}
           placeholder="Email Address"
         />
+        {validationErrors.email && (
+          <div className="text-red-600 text-xs mt-1">{validationErrors.email}</div>
+        )}
         <IconInput
           icon={FaPhone}
           name="phone"
-          value={userInfo.phone}
+          value={formatPhoneForDisplay(userInfo.phone)}
           onChange={handleChange}
           placeholder="Phone Number"
         />
@@ -250,6 +278,16 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
             "Other",
           ]}
         />
+        <IconInput
+          icon={FaBriefcase}
+          name="linkedin_url"
+          value={userInfo.linkedin_url}
+          onChange={handleChange}
+          placeholder="LinkedIn URL"
+        />
+        {validationErrors.linkedin_url && (
+          <div className="text-red-600 text-xs mt-1">{validationErrors.linkedin_url}</div>
+        )}
 
         <div className="pt-2">
           <ReCAPTCHA

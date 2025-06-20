@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
+import { formatPhoneForDisplay, stripPhoneFormatting } from "@/lib/utils/phoneFormatter";
+import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from "@/lib/utils/validation";
 
 export default function ProfilePage() {
   const { user, setUser } = usePremiumUser();
@@ -14,6 +16,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ email?: string; linkedin_url?: string }>({});
 
   useEffect(() => {
     if (user) {
@@ -23,7 +26,15 @@ export default function ProfilePage() {
   }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    if (name === 'phone') {
+      // For phone, store only digits in form state but display formatted
+      const digits = stripPhoneFormatting(value);
+      setForm({ ...form, [name]: digits });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handlePicChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +70,19 @@ export default function ProfilePage() {
     setSaving(true);
     setError(null);
     setSuccess(false);
+    // Client-side validation
+    const errors: { email?: string; linkedin_url?: string } = {};
+    if (form.email && (!isValidEmail(form.email) || isDisposableEmail(form.email))) {
+      errors.email = 'Please enter a valid, non-disposable email address.';
+    }
+    if (form.linkedin_url && !isValidLinkedInUrl(form.linkedin_url)) {
+      errors.linkedin_url = 'Please enter a valid LinkedIn profile URL.';
+    }
+    setValidationErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setSaving(false);
+      return;
+    }
     try {
       const response = await fetch('/api/premium/account/update', {
         method: 'POST',
@@ -193,10 +217,22 @@ export default function ProfilePage() {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
             <input 
               name="phone" 
-              value={form.phone || ''} 
+              value={formatPhoneForDisplay(form.phone || '')} 
               onChange={handleChange} 
               className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" 
             />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <input 
+              name="email" 
+              value={form.email || ''} 
+              onChange={handleChange} 
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" 
+            />
+            {validationErrors.email && (
+              <div className="text-red-600 text-xs mt-1">{validationErrors.email}</div>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn URL</label>
@@ -206,6 +242,9 @@ export default function ProfilePage() {
               onChange={handleChange} 
               className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" 
             />
+            {validationErrors.linkedin_url && (
+              <div className="text-red-600 text-xs mt-1">{validationErrors.linkedin_url}</div>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Timezone</label>
