@@ -7,12 +7,14 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import InsightLoading from "@/components/dashboard/InsightLoading";
 import GrowthStudioExplanationModal from "@/components/modals/GrowthStudioExplanationModal";
 import { supabase } from "@/lib/supabase";
+import { motion } from "framer-motion";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
 import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
 import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
-import QuadrantChart from "@/components/growthstudio/QuadrantChart";
+import StrategicQuadrantChart from "@/components/dashboard/StrategicQuadrantChart";
+import CompetitiveBenchmarkRadar from "@/components/dashboard/CompetitiveBenchmarkRadar";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
@@ -100,7 +102,7 @@ function GrowthStudioComponent() {
   }
 
   return (
-    <div className="w-full flex justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Growth Studio Explanation Modal */}
       <GrowthStudioExplanationModal
         isOpen={showGrowthStudioExplanation}
@@ -108,23 +110,57 @@ function GrowthStudioComponent() {
         userId={userId}
       />
 
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
+      <div className="max-w-[1920px] mx-auto p-8 space-y-10">
+        {/* Header Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8"
+        >
           <SectionHeader
             title="📈 Growth Studio"
             subtitle="Explore curated trends and simulate how strategic improvements could impact your business."
           />
 
-          <TrendInsightCard />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <TrendInsightCard />
+            <SimulatorPanel onResult={handleRunSimulation} />
+          </div>
+        </motion.section>
 
-          <SimulatorPanel onResult={handleRunSimulation} />
-        </div>
+        {/* Strategic Analysis Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="space-y-8"
+        >
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">🎯 Strategic Analysis</h2>
+            <p className="text-gray-600">Comprehensive competitive positioning and benchmark analysis</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <StrategicQuadrantChart userId={userId} />
+            <CompetitiveBenchmarkRadar userId={userId} />
+          </div>
+        </motion.section>
 
-        <div className="space-y-8">
-          <QuadrantChart userId={userId} />
-
+        {/* Growth Levers Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-8"
+        >
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">⚙️ Growth Levers</h2>
+            <p className="text-gray-600">Strategic tools and insights to accelerate your growth</p>
+          </div>
+          
           <GrowthLeversCard />
-        </div>
+        </motion.section>
 
         <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
           <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
