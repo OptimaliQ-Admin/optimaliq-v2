@@ -34,7 +34,7 @@ export default function PremiumDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showDashboardExplanation, setShowDashboardExplanation] = useState(false);
@@ -47,6 +47,15 @@ export default function PremiumDashboardPage() {
     { id: "performance-insights", label: "Performance Insights", icon: "💡" },
     { id: "market-intelligence", label: "Market Intelligence", icon: "🌍" },
   ];
+
+  // Check if welcome message has been shown in this session
+  useEffect(() => {
+    const hasSeenWelcome = sessionStorage.getItem('dashboard_welcome_shown');
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+      sessionStorage.setItem('dashboard_welcome_shown', 'true');
+    }
+  }, []);
 
   useEffect(() => {
     if (!u_id) return;

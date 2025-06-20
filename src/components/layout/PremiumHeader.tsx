@@ -6,13 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import { supabase } from "@/lib/supabase";
 import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function PremiumHeader() {
-  const { user } = usePremiumUser();
+  const { user, logout } = usePremiumUser();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -28,20 +28,18 @@ export default function PremiumHeader() {
   }, []);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
+    setIsDropdownOpen(false);
+    
     try {
-      await supabase.auth.signOut();
-
-      // ✅ Clear locally cached items (manual cleanup)
-      localStorage.removeItem("userId");
-      localStorage.removeItem("tier2_email");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("tier2_user_id");
-      localStorage.removeItem("tier2_full_user_info");
-      localStorage.removeItem("tier2_user");
-
+      await logout();
       router.push("/");
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.error("Logout failed:", error);
+      // Force redirect even if logout fails
+      router.push("/");
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -89,9 +87,10 @@ export default function PremiumHeader() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                disabled={isLoggingOut}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Log Out
+                {isLoggingOut ? "Logging out..." : "Log Out"}
               </button>
             </div>
           )}
