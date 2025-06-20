@@ -37,13 +37,31 @@ export default function MarketingPlaybookCard() {
   ? new Date(lastUpdated).toLocaleString("default", { month: "long", year: "numeric" })
   : "{Month Year}";
 
-const preview = insight
-  ?.replace("{Month Year}", formattedMonthYear)
-  .split("\n")
-  .slice(0, 4)
-  .join("\n");
+  const fullInsight = insight?.replace("{Month Year}", formattedMonthYear);
 
-const fullInsight = insight?.replace("{Month Year}", formattedMonthYear);
+  // Extract meaningful preview content from the new format
+  const getPreview = (content: string) => {
+    if (!content) return "";
+    
+    const lines = content.split("\n");
+    const trendsIndex = lines.findIndex(line => line.includes("🔥 Trends:"));
+    const strategicPlaysIndex = lines.findIndex(line => line.includes("🎯 Strategic Plays:"));
+    
+    if (trendsIndex !== -1) {
+      // Get trends section and first few strategic plays
+      const trendsSection = lines.slice(trendsIndex, strategicPlaysIndex !== -1 ? strategicPlaysIndex : undefined);
+      const strategicPlaysSection = strategicPlaysIndex !== -1 
+        ? lines.slice(strategicPlaysIndex, strategicPlaysIndex + 4) // Get first few strategic plays
+        : [];
+      
+      return [...trendsSection, ...strategicPlaysSection].join("\n");
+    }
+    
+    // Fallback to first 6 lines if format is different
+    return lines.slice(0, 6).join("\n");
+  };
+
+  const preview = getPreview(fullInsight || "");
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl">
