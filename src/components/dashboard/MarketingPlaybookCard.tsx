@@ -45,16 +45,16 @@ export default function MarketingPlaybookCard() {
     
     const lines = content.split("\n");
     const trendsIndex = lines.findIndex(line => line.includes("🔥 Trends:"));
-    const strategicPlaysIndex = lines.findIndex(line => line.includes("🎯 Strategic Plays:"));
     
     if (trendsIndex !== -1) {
-      // Get trends section and first few strategic plays
-      const trendsSection = lines.slice(trendsIndex, strategicPlaysIndex !== -1 ? strategicPlaysIndex : undefined);
-      const strategicPlaysSection = strategicPlaysIndex !== -1 
-        ? lines.slice(strategicPlaysIndex, strategicPlaysIndex + 4) // Get first few strategic plays
-        : [];
+      // Get the headline and first few lines of trends
+      const headlineSection = lines.slice(0, trendsIndex + 1); // Include the trends header
+      const trendsContent = lines.slice(trendsIndex + 1);
       
-      return [...trendsSection, ...strategicPlaysSection].join("\n");
+      // Get first few lines of trends (up to 3 lines)
+      const firstTrendLines = trendsContent.slice(0, 3);
+      
+      return [...headlineSection, ...firstTrendLines].join("\n");
     }
     
     // Fallback to first 6 lines if format is different
