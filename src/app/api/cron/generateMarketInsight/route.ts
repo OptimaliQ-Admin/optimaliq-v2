@@ -63,10 +63,9 @@ export async function GET(req: Request) {
       const marketCap = metrics.marketCapitalization ? `${Math.round(metrics.marketCapitalization).toLocaleString()}M` : "N/A";
 
       const prompt = `
-You are a world-class strategic advisor trusted by growth-stage companies to translate market signals into high-impact decisions.
+You are a world-class strategic advisor trusted by growth-stage companies to translate fast-moving market signals into high-impact decisions.
 
-**Market Context:**
-
+Market Context
 📈 Analyst Recommendations:
 ${analystSummary}
 
@@ -74,20 +73,38 @@ ${analystSummary}
 ${topHeadlines}
 
 📊 Financial Snapshot for ${symbols[0]}:
-- P/E Ratio: ${pe}
-- Beta: ${beta}
-- Market Cap: ${marketCap}
 
-**Instructions:**
-- Write a Bain/McKinsey-style memo.
-- Segment by industry if relevant.
-- Provide directional insights and strategic actions.
-- Avoid fluff.
+P/E Ratio: ${pe}
 
-**Output:**
-📊 Market Summary:
-🎯 Strategic Outlook for Growth Companies:
-      `.trim();
+Beta: ${beta}
+
+Market Cap: ${marketCap}
+
+Instructions
+Write a concise, consulting-style memo similar to Bain or McKinsey briefing notes.
+
+Segment by industry only if relevant patterns emerge.
+
+Focus on strategic insights and directional implications — not financial advice or stock recommendations.
+
+Prioritize signals relevant to growth-stage companies (e.g., shifts in consumer behavior, digital investment trends, capital efficiency).
+
+Avoid fluff, hype, or technical trading commentary.
+
+Output Format
+📊 Market Summary
+A clear 2–4 sentence snapshot of the macro/micro shifts emerging from the analyst sentiment, headlines, and financials.
+
+🎯 Strategic Outlook for Growth Companies
+
+Bullet 1: Insightful, directional action or consideration
+
+Bullet 2
+
+Bullet 3
+
+(Optional) Bullet 4
+`.trim();
 
       const gptRes = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -96,7 +113,7 @@ ${topHeadlines}
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4.1",
+          model: "gpt-4.1-mini",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.7,
         }),

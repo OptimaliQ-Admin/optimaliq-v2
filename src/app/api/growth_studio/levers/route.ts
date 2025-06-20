@@ -85,6 +85,11 @@ export async function POST(request: Request) {
           )}. If appropriate, suggest that the user take these assessments.`
         : "");
 
+    // Build business context prompt
+    const businessContext = profile?.business_overview 
+      ? `Business Context: The user runs a business in the ${industry} industry. Specifically, their business ${profile.business_overview}.`
+      : `Business Context: The user runs a business in the ${industry} industry.`;
+
     // Check for existing levers
     const { data: existingLevers, error: fetchError } = await supabase
       .from("growth_levers")
@@ -103,24 +108,39 @@ export async function POST(request: Request) {
     if (needsNewLevers) {
       // Generate new levers using OpenAI
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1",
+        model: "gpt-4.1-mini",
         messages: [
           {
             role: "system",
             content: `You are a growth strategy expert for the ${industry} industry.
+
+Business Context: The user runs a business in the ${industry} industry. Specifically, their business ${profile?.business_overview || 'provides services in this industry'}.
 
 ${scorePrompt}
 
 Based on this data, generate 5 high-impact growth levers the business should focus on. Each lever should be:
 - One actionable sentence starting with a verb
 - Practical and measurable
-- Either based on the provided scores or suggesting assessments if relevant
+- Either based on the provided scores or suggest assessments if relevant
+- Tailored to the specific business context and industry
 
-Return the levers as a numbered list.`
+## Output Format
+Return your response as a JSON object with a "levers" array containing exactly 5 growth levers as strings. For example:
+
+{
+  "levers": [
+    "Expand your online marketing efforts by increasing ad spend towards targeted demographics.",
+    "Launch a customer referral program to drive new client acquisition.",
+    "Assess the potential of upselling additional services to existing customers based on sales data.",
+    "Strengthen supply chain partnerships to optimize inventory management and reduce costs.",
+    "Introduce a quarterly customer feedback survey to identify new service opportunities."
+  ]
+}`
           }
         ],
         temperature: 0.7,
         max_tokens: 500,
+        response_format: { type: "json_object" },
       });
 
       const content = completion.choices[0].message.content;
@@ -128,24 +148,30 @@ Return the levers as a numbered list.`
         throw new Error("No content in OpenAI response");
       }
 
-      // Parse the response to extract levers
-      const leversText = content
-        .split("\n")
-        .map(line => line.trim())
-        .filter(line => line.match(/^\d+\./)) // Match numbered lines
-        .map(line => line.replace(/^\d+\.\s*/, "").trim()) // Remove numbers and extra spaces
-        .slice(0, 5); // Take first 5 levers
+      // Parse the JSON response
+      let responseData;
+      try {
+        responseData = JSON.parse(content);
+      } catch (parseError) {
+        console.error("Failed to parse OpenAI response as JSON:", content);
+        throw new Error("Invalid response format from AI");
+      }
 
+      const leversText = responseData.levers || [];
+      
       if (!leversText || leversText.length === 0) {
         throw new Error("Failed to generate growth levers");
       }
+
+      // Ensure we have exactly 5 levers
+      const finalLevers = leversText.slice(0, 5);
 
       // Upsert the new levers
       const { error: upsertError } = await supabase
         .from("growth_levers")
         .upsert({
           u_id,
-          levers: leversText,
+          levers: finalLevers,
           generated_at: new Date().toISOString()
         });
 
@@ -158,14 +184,14 @@ Return the levers as a numbered list.`
         .from("growth_lever_progress")
         .select("*")
         .eq("u_id", u_id)
-        .in("lever_text", leversText);
+        .in("lever_text", finalLevers);
 
       if (progressError) {
         throw progressError;
       }
 
       // Combine levers with their progress
-      const levers = leversText.map(text => ({
+      const levers = finalLevers.map((text: string) => ({
         text,
         isCompleted: progressData?.some(p => p.lever_text === text && p.is_completed) || false,
       }));

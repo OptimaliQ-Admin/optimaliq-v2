@@ -31,28 +31,34 @@ export async function GET(req: Request) {
     const prompt = `
 You are a strategic business advisor helping high-growth companies identify market shifts, competitive pressures, and innovation opportunities.
 
-Based on the following top news headlines, generate a **concise but insightful** business trend summary and **3–5 directional recommendations**.
+Based on the following top news headlines and the user's business context, generate a concise but insightful business trend summary and 3–5 directional recommendations.
 
 📰 Top News Headlines:
 ${headlines}
 
-📦 Instructions:
+🗂️ Instructions:
 - Extract strategic business trends using signals from the headlines.
-- Offer **actionable insights**, not just summaries.
-- Assume a **cross-industry audience** (unless clear sector context exists).
-- Focus on **innovation, adaptability, and growth** (not just risk).
-- Use **headlines as anchor points** where helpful (but don’t quote all of them).
-- Keep the tone **balanced and strategic**, not overly optimistic or alarmist.
+- Offer actionable insights, not just summaries.
+- Assume a cross-industry audience (unless clear sector context exists).
+- Focus on innovation, adaptability, and growth (not just risk).
+- Use headlines as anchor points where helpful (but don't quote all of them).
+- Keep the tone balanced and strategic, not overly optimistic or alarmist.
 
+## Output Format
 ✍️ Output Format:
 🔥 Business Trend Summary:
-A 2–3 sentence summary highlighting the major directional theme.
+A concise 2–3 sentence summary highlighting the major directional theme.
 
 🎯 Actionable Recommendations:
-- Bullet 1
+- Bullet 1 (actionable and relevant)
 - Bullet 2
 - Bullet 3
-...
+- Bullet 4 (optional, up to 5 total)
+- Bullet 5 (optional)
+
+Guidance:
+- Provide at least 3 and no more than 5 recommendations.
+- If the news headlines offer ambiguous or insufficient information for clear recommendations, briefly note this in the trend summary and offer general strategic advice based on available signals.
 `.trim();
 
     // 3. Call OpenAI
@@ -63,7 +69,7 @@ A 2–3 sentence summary highlighting the major directional theme.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4.1",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
       }),

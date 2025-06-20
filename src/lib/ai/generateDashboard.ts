@@ -52,7 +52,7 @@ export async function generateDashboardScores(user: any, assessment: any): Promi
   const systemPrompt = `
 You are a world-class business strategist evaluating high-growth companies. Your job is to assess strategy, process, and technology maturity, identify strategic gaps, benchmark against peers, and generate a 30-day growth roadmap.
 
-All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company's industry (e.g., ${user.industry}) and their business (e.g., ${assessment.business_overview}). Use the provided company size and revenue range to contextualize your output.
+All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company's industry (${user.industry}) and their business (${assessment.business_overview}). Use the provided company size and revenue range to contextualize your output.
 
 Responses must be deterministic — the same input should produce the same output. This ensures consistency in scoring and insights across sessions.
 
@@ -80,7 +80,7 @@ weaknesses: array of 3–4 objects:
 
 roadmap: array of 4 task objects:
 - each with a task (string) and expectedImpact (string)
-- each task should be clear, action-oriented, and specific (not generic or vague)
+- each task should be clear, action-oriented, and specific (not generic or vague) to company's industry and their business
 
 Formatting rules:
 - All numeric scores must be floats rounded to 1–2 decimal places

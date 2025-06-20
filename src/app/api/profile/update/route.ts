@@ -81,7 +81,7 @@ Return JSON:
 `;
 
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4.1",
+      model: "gpt-4.1-mini",
       messages: [
         { role: "system", content: "Respond only with JSON" },
         { role: "user", content: aiPrompt },

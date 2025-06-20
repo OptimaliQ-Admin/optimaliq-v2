@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 export async function callOpenAI(prompt: string) {
   const response = await openai.chat.completions.create({
-    model: "gpt-4.1",
+    model: "gpt-4.1-mini",
     messages: [{ role: "system", content: prompt }],
     max_tokens: 1000,
     response_format: { type: "json_object" },

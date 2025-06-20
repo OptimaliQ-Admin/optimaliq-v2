@@ -40,24 +40,41 @@ export async function GET(req: Request) {
 
     const contentChunk = headlines.slice(0, 20).join("\n");
     const prompt = `
-You are a marketing intelligence strategist trusted by top CMOs. Based on the headlines below, extract high-level strategic marketing trends and investment signals.
+You are a marketing intelligence strategist trusted by top CMOs to identify emerging marketing trends, shifts in investment strategy, and strategic plays shaping modern go-to-market efforts.
 
-Your goal is to help growth-stage companies understand how leading brands are allocating budget, shifting priorities, and adjusting their marketing playbooks. These insights should guide strategic thinking — not prescribe exact actions.
+Based on the curated news headlines below, extract high-level marketing trends and directional guidance for growth-stage companies.
 
-Do not mention the original sources or websites.
+📰 Headlines:
+${contentChunk}
 
-Format the response as:
+🗂️ Instructions:
 
+Assume headlines are from the past 7 days and reflect current shifts and patterns.
+
+Identify marketing priorities, channel shifts, investment signals, and campaign strategies from industry leaders.
+
+Focus on budget reallocation, audience behavior, channel performance, creative trends, and tech adoption.
+
+Frame insights for a cross-industry CMO audience (unless specific vertical patterns emerge).
+
+Avoid quoting sources or websites.
+
+Keep the tone strategic, data-aware, and future-focused — not tactical or executional.
+
+If signals are weak or unclear, provide thoughtful context and guidance.
+
+Output Format
+✍️ Output Format:
 🧠 Marketing Intelligence Brief — {Month Year}
+
 🔥 Trends:
-List 4-5 emerging marketing shifts (e.g., "B2B brands reallocating 25% of paid media budget to lifecycle email campaigns").
+List 4–5 emerging shifts in brand marketing strategy. Each should be concise, specific, and ideally quantitative.
+(e.g., "B2B brands are reallocating up to 25% of paid media budgets to lifecycle email automation.")
 
 🎯 Strategic Plays:
-Offer 3-4 directional plays companies might consider, based on the trends above. Include ROI signals or benchmarks if possible (e.g., "Brands investing in short-form video are seeing 40% lift in engagement").
-
-Headlines:
-${contentChunk}
-    `.trim();
+Offer 3–4 directional plays companies might consider in response. These should be hypothesis-driven, grounded in market signals, and include ROI indicators where possible.
+(e.g., "Retailers investing in loyalty-first retention campaigns have seen 40% lift in 6-month CLTV.")
+`.trim();
 
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -66,7 +83,7 @@ ${contentChunk}
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4.1",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
       }),

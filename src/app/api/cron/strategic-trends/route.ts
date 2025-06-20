@@ -48,31 +48,47 @@ export async function GET() {
 
     // ✅ GPT Prompt
     const prompt = `
-You are a World renowned top strategic advisor that works for McKinsey and Company researching and creating Dialogue for business owners to help them understand the current business strategies and trends today.
+You are a world-renowned strategic advisor at McKinsey & Company, helping business leaders decode emerging strategic shifts.
 
-Based on the business headlines and research insights below, generate 3 short Headlines, with forward-looking bullet points that help business leaders think strategically. Focus on things like emerging risks, technology shifts, and market trends And anything else worth noting in your job — insights they can act on or consider.
+Your task is to generate three forward-looking strategic headlines, each followed by three concise, executive-ready bullet-point insights. These insights should address innovation, competitive dynamics, risk signals, and investment shifts relevant to C-level conversations.
 
-Avoid general advice. Use crisp, clear language. Do NOT include tags or a summary paragraph.
+${finalSummary} contains up to 3 headline blocks, each consisting of:
+- A short headline (1 sentence)
+- Supporting research insights (1–3 sentences of context)
 
-Format:
-Lead in Statement
+Example format:
+[
+  {
+    "headline": "AI adoption accelerates in enterprise software.",
+    "insights": "Gartner reports a 35% YoY increase in AI budget allocation across B2B SaaS. Executives cite efficiency, personalization, and analytics as core drivers."
+  },
+  {
+    "headline": "Retail media networks are driving record ad spend.",
+    "insights": "Brands like Walmart and Amazon are capturing up to 30% of total digital ad budgets, reshaping the CPG marketing landscape."
+  }
+]
 
-[Headline 1]
-    • [Insight 1]
-    • [Insight 2]
-    • [Insight 3]
+Tone:
+- Assertive, strategic, and precise — no fluff, no hype.
+- Speak like a McKinsey partner delivering boardroom-ready guidance.
 
-[Headline 2]
-    • [Insight 1]
-    • [Insight 2]
-    • [Insight 3]
-    
-[Headline 3]
-    • [Insight 1]
-    • [Insight 2]
-    • [Insight 3]
-    
-Final thoughts
+Instructions:
+- Write a lead-in statement (1–2 sentences explaining why this matters now).
+- For each headline in ${finalSummary}, generate 3 clear and insightful bullet points.
+- Use the headline as-is. Do not add numbering or section labels like "Headline 1".
+- If a headline has insufficient supporting insights, write only 1–2 strong bullets.
+- If fewer than 3 headline blocks exist, only use the ones provided.
+- End with a final thoughts section (1–2 sentence strategic takeaway).
+
+Formatting:
+- Output must be plain text.
+- Use hyphens (-) for bullet points.
+- No tags, no markdown, no HTML.
+- Maintain clean structure and spacing between sections.
+
+Error handling:
+If ${finalSummary} is empty or malformed, return:
+ERROR: Missing or invalid summary data; cannot generate headlines.
 
 Headlines:
 ${finalSummary}
@@ -80,7 +96,7 @@ ${finalSummary}
 
     // ✅ GPT Completion
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1",
+      model: "gpt-4.1-mini",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
