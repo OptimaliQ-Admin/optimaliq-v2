@@ -137,11 +137,54 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="fixed inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
       
       <div className="relative max-w-4xl mx-auto px-6 py-16">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
+          <div className="text-center space-y-8">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold"
+            >
+              <span>Account Management</span>
+            </motion.div>
+
+            {/* Main Heading */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
+            >
+              Manage Your{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Account Settings
+              </span>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto"
+            >
+              Update your profile information, manage your password, and customize your notification preferences to get the most out of OptimaliQ.
+            </motion.p>
+          </div>
+        </motion.div>
+
         {/* Content Sections */}
         <div className="space-y-8">
           {/* Notification Preferences */}
