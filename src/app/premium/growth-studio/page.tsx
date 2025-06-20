@@ -15,6 +15,7 @@ import SimulationResults, { SimulationResult } from "@/components/growthstudio/S
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import StrategicQuadrantChart from "@/components/dashboard/StrategicQuadrantChart";
 import CompetitiveBenchmarkRadar from "@/components/dashboard/CompetitiveBenchmarkRadar";
+import WhatIfScenarioSimulator from "@/components/dashboard/WhatIfScenarioSimulator";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 
@@ -147,11 +148,26 @@ function GrowthStudioComponent() {
           </div>
         </motion.section>
 
-        {/* Growth Levers Section */}
+        {/* Advanced Simulation Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-8"
+        >
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">🔮 Advanced Scenario Simulation</h2>
+            <p className="text-gray-600">Interactive what-if analysis with real-time impact visualization</p>
+          </div>
+          
+          <WhatIfScenarioSimulator />
+        </motion.section>
+
+        {/* Growth Levers Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="space-y-8"
         >
           <div className="text-center">

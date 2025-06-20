@@ -161,7 +161,7 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
     const sizeScale = d3
       .scaleLinear()
       .domain([1, 5])
-      .range([20, 80]);
+      .range([30, 120]);
 
     // Add quadrant backgrounds with Salesforce-style gradients
     const quadrants = [
@@ -231,12 +231,13 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
         .style("rx", "8")
         .style("ry", "8");
 
-      // Add quadrant labels with Salesforce styling
-      const labelX = quad.x1 === minX ? xScale(quad.x1) + 30 : xScale(quad.x2) - 30;
-      const labelY = quad.y1 === minY ? yScale(quad.y1) - 30 : yScale(quad.y2) + 30;
+      // Add quadrant labels with Salesforce styling and better spacing
+      const labelX = quad.x1 === minX ? xScale(quad.x1) + 40 : xScale(quad.x2) - 40;
+      const labelY = quad.y1 === minY ? yScale(quad.y1) - 40 : yScale(quad.y2) + 40;
       const textAnchor = quad.x1 === minX ? "start" : "end";
       const dominantBaseline = quad.y1 === minY ? "auto" : "hanging";
       
+      // Add main label
       svg
         .append("text")
         .attr("x", labelX)
@@ -248,16 +249,18 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
         .style("fill", "#374151")
         .text(quad.label);
 
-      // Add description
+      // Add description with proper spacing
+      const descY = quad.y1 === minY ? labelY - 20 : labelY + 20;
       svg
         .append("text")
         .attr("x", labelX)
-        .attr("y", labelY + (quad.y1 === minY ? -15 : 15))
+        .attr("y", descY)
         .attr("text-anchor", textAnchor)
         .attr("dominant-baseline", dominantBaseline)
         .style("font-size", "11px")
         .style("font-weight", "500")
         .style("fill", "#6b7280")
+        .style("max-width", "120px")
         .text(quad.description);
     });
 
@@ -294,17 +297,19 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
       .attr("r", d => Math.sqrt(sizeScale(d.technology_score)) / 2)
       .style("fill", "#cbd5e1")
       .style("stroke", "#ffffff")
-      .style("stroke-width", 3)
-      .style("opacity", 0.7)
+      .style("stroke-width", 4)
+      .style("opacity", 0.8)
       .style("transition", "all 0.3s ease")
       .style("cursor", "pointer")
+      .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
       .on("mouseover", function(event: MouseEvent, d: any) {
         d3.select(this)
           .transition()
           .duration(200)
-          .attr("r", Math.sqrt(sizeScale(d.technology_score)) / 2 + 8)
+          .attr("r", Math.sqrt(sizeScale(d.technology_score)) / 2 + 10)
           .style("opacity", 1)
-          .style("stroke-width", 4);
+          .style("stroke-width", 5)
+          .style("filter", "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))");
 
         setHoveredPoint(d.name);
       })
@@ -313,8 +318,9 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
           .transition()
           .duration(200)
           .attr("r", Math.sqrt(sizeScale(d.technology_score)) / 2)
-          .style("opacity", 0.7)
-          .style("stroke-width", 3);
+          .style("opacity", 0.8)
+          .style("stroke-width", 4)
+          .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))");
 
         setHoveredPoint(null);
       });
@@ -329,15 +335,16 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
       .attr("r", userRadius)
       .style("fill", "url(#userGradient)")
       .style("stroke", "#ffffff")
-      .style("stroke-width", 4)
+      .style("stroke-width", 5)
       .style("filter", "drop-shadow(0 4px 12px rgba(37, 99, 235, 0.4))")
       .style("cursor", "pointer")
       .on("mouseover", function() {
         d3.select(this)
           .transition()
           .duration(200)
-          .attr("r", userRadius + 8)
-          .style("stroke-width", 5);
+          .attr("r", userRadius + 10)
+          .style("stroke-width", 6)
+          .style("filter", "drop-shadow(0 6px 16px rgba(37, 99, 235, 0.6))");
         setHoveredPoint("You");
       })
       .on("mouseout", function() {
@@ -345,7 +352,8 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
           .transition()
           .duration(200)
           .attr("r", userRadius)
-          .style("stroke-width", 4);
+          .style("stroke-width", 5)
+          .style("filter", "drop-shadow(0 4px 12px rgba(37, 99, 235, 0.4))");
         setHoveredPoint(null);
       });
 
@@ -435,7 +443,7 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
       .enter()
       .append("g")
       .attr("class", "legend-item")
-      .attr("transform", (d, i) => `translate(0, ${i * 30 + 20})`)
+      .attr("transform", (d, i) => `translate(0, ${i * 35 + 20})`)
       .each(function(d) {
         const g = d3.select(this);
         const radius = Math.sqrt(sizeScale(d.size)) / 2;
@@ -444,12 +452,14 @@ export default function StrategicQuadrantChart({ userId }: { userId: string }) {
           .attr("r", radius)
           .style("fill", "#cbd5e1")
           .style("stroke", "#ffffff")
-          .style("stroke-width", 2);
+          .style("stroke-width", 3)
+          .style("filter", "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))");
         
         g.append("text")
-          .attr("x", radius + 15)
+          .attr("x", radius + 20)
           .attr("y", 4)
           .style("font-size", "11px")
+          .style("font-weight", "500")
           .style("fill", "#6b7280")
           .text(d.label);
       });
