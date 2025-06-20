@@ -14,7 +14,7 @@ export default function BillingPage() {
   const { user } = usePremiumUser();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null);
+  const [stripeCustomerId] = useState<string | null>(null);
 
   useEffect(() => {
     // Simple loading state to ensure user context is loaded

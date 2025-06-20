@@ -87,7 +87,7 @@ export default function PricingPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-center md:text-left">
                 <p className="text-sm font-semibold text-blue-600 mb-2">TRUSTED BY LEADING COMPANIES</p>
-                <p className="text-lg text-gray-700 font-medium">"GMF Plus transformed our growth strategy. We've seen a 40% increase in efficiency and 3x faster decision-making."</p>
+                <p className="text-lg text-gray-700 font-medium">&ldquo;GMF Plus transformed our growth strategy. We&rsquo;ve seen a 40% increase in efficiency and 3x faster decision-making.&rdquo;</p>
                 <p className="text-sm text-gray-500 mt-2">— Sarah Chen, VP Strategy at TechFlow</p>
               </div>
               <div className="flex items-center space-x-4">
