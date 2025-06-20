@@ -32,6 +32,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
 }) => {
   const [hoveredGauge, setHoveredGauge] = useState<string | null>(null);
   const [selectedGauge, setSelectedGauge] = useState<string | null>(null);
+  const [showExplanation, setShowExplanation] = useState<string | null>(null);
   const svgRefs = useRef<{ [key: string]: SVGSVGElement | null }>({});
 
   const gaugeData: GaugeData[] = [
@@ -79,6 +80,19 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
     return { direction: "stable", color: "#6b7280", percentage: 0 };
   };
 
+  const getExplanation = (data: GaugeData) => {
+    const vsIndustry = ((data.value / data.industryAvg) * 100 - 100);
+    const vsTopPerformer = (data.value / data.topPerformer) * 100;
+    
+    return {
+      vsIndustry: vsIndustry > 0 
+        ? `You&apos;re performing ${Math.round(vsIndustry)}% better than the typical company in your industry`
+        : `You&apos;re performing ${Math.round(Math.abs(vsIndustry))}% below the typical company in your industry`,
+      vsTopPerformer: `You&apos;re operating at ${Math.round(vsTopPerformer)}% of what the best companies in your industry achieve`,
+      performanceZone: getPerformanceZone(data.value, data.topPerformer).zone
+    };
+  };
+
   useEffect(() => {
     gaugeData.forEach((data) => {
       const svgRef = svgRefs.current[data.category];
@@ -87,11 +101,11 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       // Clear previous content
       d3.select(svgRef).selectAll("*").remove();
 
-      // Setup dimensions
-      const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+      // Setup dimensions - making gauges larger
+      const margin = { top: 30, right: 30, bottom: 30, left: 30 };
       const width = svgRef.clientWidth - margin.left - margin.right;
       const height = svgRef.clientHeight - margin.top - margin.bottom;
-      const radius = Math.min(width, height) / 2 - 10;
+      const radius = Math.min(width, height) / 2 - 15; // Increased radius for better visibility
 
       // Create SVG
       const svg = d3
@@ -104,7 +118,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       // Create gauge arc
       const arc = d3
         .arc<d3.DefaultArcObject>()
-        .innerRadius(radius * 0.6)
+        .innerRadius(radius * 0.5) // Reduced inner radius for larger arc
         .outerRadius(radius)
         .startAngle(-Math.PI / 2)
         .endAngle(Math.PI / 2);
@@ -113,7 +127,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       svg
         .append("path")
         .datum({
-          innerRadius: radius * 0.6,
+          innerRadius: radius * 0.5,
           outerRadius: radius,
           startAngle: -Math.PI / 2,
           endAngle: Math.PI / 2
@@ -134,7 +148,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       zones.forEach((zone) => {
         const zoneArc = d3
           .arc<d3.DefaultArcObject>()
-          .innerRadius(radius * 0.6)
+          .innerRadius(radius * 0.5)
           .outerRadius(radius)
           .startAngle(-Math.PI / 2 + (zone.start * Math.PI))
           .endAngle(-Math.PI / 2 + (zone.end * Math.PI));
@@ -142,7 +156,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
         svg
           .append("path")
           .datum({
-            innerRadius: radius * 0.6,
+            innerRadius: radius * 0.5,
             outerRadius: radius,
             startAngle: -Math.PI / 2 + (zone.start * Math.PI),
             endAngle: -Math.PI / 2 + (zone.end * Math.PI)
@@ -156,7 +170,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       const valuePercentage = data.value / 5;
       const valueArc = d3
         .arc<d3.DefaultArcObject>()
-        .innerRadius(radius * 0.6)
+        .innerRadius(radius * 0.5)
         .outerRadius(radius)
         .startAngle(-Math.PI / 2)
         .endAngle(-Math.PI / 2 + (valuePercentage * Math.PI));
@@ -164,7 +178,7 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       const valuePath = svg
         .append("path")
         .datum({
-          innerRadius: radius * 0.6,
+          innerRadius: radius * 0.5,
           outerRadius: radius,
           startAngle: -Math.PI / 2,
           endAngle: -Math.PI / 2 + (valuePercentage * Math.PI)
@@ -183,22 +197,24 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
         .ease(d3.easeElastic)
         .style("stroke-dashoffset", 0);
 
-      // Center text
+      // Center text - making it larger and more prominent
       svg
         .append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", "-0.5em")
-        .style("font-size", "24px")
+        .attr("dy", "-0.3em")
+        .style("font-size", "28px") // Increased font size
         .style("font-weight", "bold")
         .style("fill", data.color)
+        .style("text-shadow", "0 1px 2px rgba(0,0,0,0.1)") // Added text shadow for better readability
         .text(data.value.toFixed(1));
 
       svg
         .append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", "1em")
-        .style("font-size", "12px")
+        .attr("dy", "1.2em")
+        .style("font-size", "14px") // Increased font size
         .style("fill", "#6b7280")
+        .style("font-weight", "500")
         .text("Score");
 
       // Industry average line
@@ -207,10 +223,10 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       
       svg
         .append("line")
-        .attr("x1", (radius * 0.5) * Math.cos(industryAngle))
-        .attr("y1", (radius * 0.5) * Math.sin(industryAngle))
-        .attr("x2", (radius * 0.8) * Math.cos(industryAngle))
-        .attr("y2", (radius * 0.8) * Math.sin(industryAngle))
+        .attr("x1", (radius * 0.4) * Math.cos(industryAngle))
+        .attr("y1", (radius * 0.4) * Math.sin(industryAngle))
+        .attr("x2", (radius * 0.9) * Math.cos(industryAngle))
+        .attr("y2", (radius * 0.9) * Math.sin(industryAngle))
         .style("stroke", "#6b7280")
         .style("stroke-width", 2)
         .style("stroke-dasharray", "4,4");
@@ -221,10 +237,10 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
       
       svg
         .append("line")
-        .attr("x1", (radius * 0.5) * Math.cos(topAngle))
-        .attr("y1", (radius * 0.5) * Math.sin(topAngle))
-        .attr("x2", (radius * 0.8) * Math.cos(topAngle))
-        .attr("y2", (radius * 0.8) * Math.sin(topAngle))
+        .attr("x1", (radius * 0.4) * Math.cos(topAngle))
+        .attr("y1", (radius * 0.4) * Math.sin(topAngle))
+        .attr("x2", (radius * 0.9) * Math.cos(topAngle))
+        .attr("y2", (radius * 0.9) * Math.sin(topAngle))
         .style("stroke", "#10b981")
         .style("stroke-width", 2)
         .style("stroke-dasharray", "2,2");
@@ -256,6 +272,8 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
         {gaugeData.map((data) => {
           const performanceZone = getPerformanceZone(data.value, data.topPerformer);
           const trend = getTrendDirection(data.value, data.industryAvg);
+          const explanation = getExplanation(data);
+          const isSelected = selectedGauge === data.category;
           
           return (
             <motion.div
@@ -266,20 +284,27 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`relative p-6 rounded-xl border-2 transition-all duration-300 cursor-pointer ${
-                hoveredGauge === data.category || selectedGauge === data.category
+                isSelected
+                  ? "border-blue-400 shadow-lg bg-blue-50"
+                  : hoveredGauge === data.category
                   ? "border-blue-300 shadow-lg"
                   : "border-gray-100 hover:border-gray-200"
               }`}
               onMouseEnter={() => setHoveredGauge(data.category)}
               onMouseLeave={() => setHoveredGauge(null)}
-              onClick={() => setSelectedGauge(selectedGauge === data.category ? null : data.category)}
+              onClick={() => {
+                setSelectedGauge(isSelected ? null : data.category);
+                setShowExplanation(isSelected ? null : data.category);
+              }}
               role="button"
               tabIndex={0}
               aria-label={`${data.category} capability gauge showing ${data.value.toFixed(1)} out of 5`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  setSelectedGauge(selectedGauge === data.category ? null : data.category);
+                  const newSelected = isSelected ? null : data.category;
+                  setSelectedGauge(newSelected);
+                  setShowExplanation(newSelected);
                 }
               }}
             >
@@ -290,13 +315,13 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
                 <p className="text-xs text-gray-500 mt-1">{data.description}</p>
               </div>
 
-              {/* Gauge SVG */}
+              {/* Gauge SVG - Made larger */}
               <div className="flex justify-center mb-4">
                 <svg
                   ref={(el) => {
                     svgRefs.current[data.category] = el;
                   }}
-                  className="w-32 h-32"
+                  className="w-40 h-40" // Increased from w-32 h-32
                   style={{ maxWidth: "100%" }}
                   aria-hidden="true"
                 />
@@ -340,15 +365,40 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
                 </div>
               </div>
 
-              {/* Hover/Selected State Overlay */}
+              {/* Click to see explanation hint */}
+              <div className="text-center mt-3">
+                <span className="text-xs text-blue-600 font-medium">
+                  {isSelected ? "Click to hide details" : "Click for detailed explanation"}
+                </span>
+              </div>
+
+              {/* Detailed Explanation Modal */}
               <AnimatePresence>
-                {(hoveredGauge === data.category || selectedGauge === data.category) && (
+                {isSelected && showExplanation === data.category && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-blue-50 bg-opacity-50 rounded-xl pointer-events-none"
-                  />
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-4 p-4 bg-white rounded-lg border border-blue-200 shadow-sm"
+                  >
+                    <h4 className="font-semibold text-gray-800 mb-3 text-sm">
+                      📊 {data.category} Performance Analysis
+                    </h4>
+                    <div className="space-y-2 text-xs text-gray-600">
+                      <div className="flex items-start gap-2">
+                        <span className="text-blue-600">•</span>
+                        <span>{explanation.vsIndustry}</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-green-600">•</span>
+                        <span>{explanation.vsTopPerformer}</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600">•</span>
+                        <span>Performance Zone: <strong>{explanation.performanceZone}</strong></span>
+                      </div>
+                    </div>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>
@@ -373,6 +423,9 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
               +{Math.round(industryPosition - 100)}%
             </div>
             <div className="text-sm text-gray-600">Above Industry Average</div>
+            <div className="text-xs text-gray-500 mt-1">
+              You&apos;re performing {Math.round(industryPosition - 100)}% better than the typical company in your industry
+            </div>
           </div>
           
           <div className="text-center">
@@ -380,6 +433,9 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
               {Math.round(overallPerformance)}%
             </div>
             <div className="text-sm text-gray-600">of Top Performer Level</div>
+            <div className="text-xs text-gray-500 mt-1">
+              You&apos;re operating at {Math.round(overallPerformance)}% of what the best companies in your industry achieve
+            </div>
           </div>
           
           <div className="text-center">
@@ -387,6 +443,9 @@ const CapabilityGaugeCluster: React.FC<Props> = ({
               Top {Math.round(100 - overallPerformance)}%
             </div>
             <div className="text-sm text-gray-600">Industry Percentile</div>
+            <div className="text-xs text-gray-500 mt-1">
+              You&apos;re in the top {Math.round(100 - overallPerformance)}% of companies in your industry
+            </div>
           </div>
         </div>
 
