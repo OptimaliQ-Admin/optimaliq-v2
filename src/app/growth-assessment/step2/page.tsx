@@ -3,11 +3,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { supabase } from "src/lib/supabase";
 import LabeledInput from "../../../components/shared/LabeledInput";
 import LabeledSelect from "../../../components/shared/LabeledSelect";
 import SubmitButton from "../../../components/shared/SubmitButton";
 import FormSectionHeader from "../../../components/shared/FormSectionHeader";
+import { FaChartLine, FaShieldAlt, FaCheckCircle } from "react-icons/fa";
 
 export default function GrowthAssessmentStep2() {
   const router = useRouter();
@@ -104,56 +106,96 @@ export default function GrowthAssessmentStep2() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg">
-        <p className="text-blue-600 text-sm font-bold mb-4 text-center">Step 2 of 2 – Business Profile</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center px-4 py-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl w-full bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl border border-white/20 p-8 lg:p-10"
+      >
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <FaChartLine className="text-sm" />
+            <span>Step 2 of 2 – Business Profile</span>
+          </div>
+          <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <FaShieldAlt className="text-white text-2xl" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tell Us About Your Business</h1>
+          <p className="text-gray-600">Help us understand your current challenges and opportunities.</p>
+        </div>
+
         <FormSectionHeader />
 
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl"
+          >
+            <p className="text-red-600 text-sm flex items-center gap-2">
+              <FaCheckCircle className="text-red-500" />
+              {error}
+            </p>
+          </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <LabeledInput 
-            label="What are your biggest obstacles to scaling?" 
-            name="obstacles" 
-            maxLength={250} 
-            value={businessResponses.obstacles} 
-            onChange={handleChange}
-          />
-          <LabeledInput 
-            label="How does your strategy differentiate you?" 
-            name="strategy" 
-            maxLength={250} 
-            value={businessResponses.strategy} 
-            onChange={handleChange}
-          />
-          <LabeledSelect 
-            label="Are your processes optimized for efficiency?" 
-            name="process" 
-            value={businessResponses.process} 
-            onChange={handleChange} 
-            options={["Yes", "No"]}
-          />
-          <LabeledInput 
-            label="How well do you understand your customers' needs?" 
-            name="customers" 
-            maxLength={250} 
-            value={businessResponses.customers} 
-            onChange={handleChange}
-          />
-          <LabeledSelect 
-            label="Is your technology stack supporting your growth?" 
-            name="technology" 
-            value={businessResponses.technology} 
-            onChange={handleChange} 
-            options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]}
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <LabeledInput 
+              label="What are your biggest obstacles to scaling?" 
+              name="obstacles" 
+              maxLength={250} 
+              value={businessResponses.obstacles} 
+              onChange={handleChange}
+            />
+            <LabeledInput 
+              label="How does your strategy differentiate you?" 
+              name="strategy" 
+              maxLength={250} 
+              value={businessResponses.strategy} 
+              onChange={handleChange}
+            />
+            <LabeledSelect 
+              label="Are your processes optimized for efficiency?" 
+              name="process" 
+              value={businessResponses.process} 
+              onChange={handleChange} 
+              options={["Yes", "No"]}
+            />
+            <LabeledInput 
+              label="How well do you understand your customers' needs?" 
+              name="customers" 
+              maxLength={250} 
+              value={businessResponses.customers} 
+              onChange={handleChange}
+            />
+            <div className="lg:col-span-2">
+              <LabeledSelect 
+                label="Is your technology stack supporting your growth?" 
+                name="technology" 
+                value={businessResponses.technology} 
+                onChange={handleChange} 
+                options={["Outdated", "Needs Work", "Optimized", "Cutting Edge"]}
+              />
+            </div>
+          </div>
+          
           <SubmitButton isSubmitting={isSubmitting} cooldown={cooldown} type="submit" />
         </form>
-      </div>
+
+        {/* Progress Indicator */}
+        <div className="mt-8 pt-6 border-t border-gray-100">
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <span className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Step 2 of 2</span>
+            </span>
+            <span className="text-blue-600 font-medium">OptimaliQ.ai</span>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
