@@ -87,7 +87,7 @@ export default function SubscribeHeader() {
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-          <span className="text-sm text-gray-600">30-day money-back guarantee</span>
+          <span className="text-sm text-gray-600">No long-term contracts.</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>

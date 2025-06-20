@@ -7,7 +7,6 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
 import PasswordInput from "@/components/shared/PasswordInput";
 import NotificationPreferences from "@/components/notifications/NotificationPreferences";
-import AccountHeader from "@/components/premium/AccountHeader";
 
 export default function AccountPage() {
   const { user, setUser } = usePremiumUser();
@@ -143,16 +142,6 @@ export default function AccountPage() {
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       
       <div className="relative max-w-4xl mx-auto px-6 py-16">
-        {/* Header Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <AccountHeader />
-        </motion.div>
-
         {/* Content Sections */}
         <div className="space-y-8">
           {/* Notification Preferences */}
