@@ -24,6 +24,21 @@ const slugToAssessmentType: Record<string, AssessmentType> = {
   reassessment: "reassessment",
 };
 
+// Icon mapping for each assessment type
+const assessmentIcons: Record<string, string> = {
+  bpm: "⚙️",
+  sales: "💰",
+  tech_stack: "💻",
+  strategic_maturity: "🎯",
+  marketing_effectiveness: "📢",
+  ai_readiness: "🤖",
+  competitive_benchmarking: "📊",
+  customer_experience: "👥",
+  digital_transformation: "🚀",
+  leadership: "👑",
+  reassessment: "📈",
+};
+
 type AssessmentCardProps = {
   slug: string;
   title: string;
@@ -101,6 +116,7 @@ export default function AssessmentCard({
 
   const statusInfo = getStatusInfo();
   const StatusIcon = statusInfo.icon;
+  const assessmentIcon = assessmentIcons[slug] || "📊";
 
   return (
     <>
@@ -111,7 +127,7 @@ export default function AssessmentCard({
         className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
       >
         <div className="mb-4">
-          <SectionTitleBar title={`📊 ${title}`} />
+          <SectionTitleBar title={`${assessmentIcon} ${title}`} />
           <p className="text-gray-500 text-sm leading-relaxed mt-2">
             {description}
           </p>
@@ -143,7 +159,7 @@ export default function AssessmentCard({
               <div className="text-sm text-gray-600 font-medium">Score</div>
             </div>
             
-            <div className="space-y-3 mb-4">
+            <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Status:</span>
                 <span className="text-sm font-semibold px-2 py-1 rounded-full bg-green-50 text-green-700">
@@ -157,16 +173,20 @@ export default function AssessmentCard({
                   {format(new Date(lastTakenDate!), "MMM d, yyyy")}
                 </span>
               </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Days Since:</span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {daysSinceLast} days
+                </span>
+              </div>
             </div>
             
-            <motion.button
-              onClick={handleClick}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 py-2 px-4 rounded-lg border border-blue-200 hover:border-blue-300 hover:bg-blue-50"
-            >
-              Retake Assessment →
-            </motion.button>
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <p className="text-green-800 text-sm font-medium">
+                Assessment completed recently. You can retake this assessment after 30 days to track your progress.
+              </p>
+            </div>
           </div>
         )}
 
@@ -189,6 +209,13 @@ export default function AssessmentCard({
                 <span className="text-sm text-gray-600">Last Taken:</span>
                 <span className="text-sm font-semibold text-gray-800">
                   {format(new Date(lastTakenDate!), "MMM d, yyyy")}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Days Since:</span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {daysSinceLast} days
                 </span>
               </div>
             </div>

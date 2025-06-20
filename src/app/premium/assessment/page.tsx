@@ -10,6 +10,7 @@ import ReassessmentCard from "@/components/assessments/ReassessmentCard";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 import TechToolsCard from "@/components/assessment/TechToolsCard";
 import AssessmentExplanationModal from "@/components/modals/AssessmentExplanationModal";
+import PageNavigation from "@/components/shared/PageNavigation";
 import { FaChartLine, FaLightbulb, FaRocket } from "react-icons/fa";
 
 type AssessmentSlug = keyof typeof assessmentFieldMap;
@@ -24,6 +25,15 @@ export default function AssessmentsPage() {
   const [assessmentData, setAssessmentData] = useState<Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>>({} as Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [explanationSeen, setExplanationSeen] = useState<boolean | null>(null);
+
+  // Define page sections for navigation
+  const pageSections = [
+    { id: "header", label: "Overview", icon: "📊" },
+    { id: "business-assessments", label: "Business Assessments", icon: "🏢" },
+    { id: "technology-assessments", label: "Technology Assessments", icon: "💻" },
+    { id: "strategy-assessments", label: "Strategy Assessments", icon: "🎯" },
+    { id: "progress-tracking", label: "Progress Tracking", icon: "📈" },
+  ];
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -122,19 +132,18 @@ export default function AssessmentsPage() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        {/* Floating Page Navigation */}
+        <PageNavigation sections={pageSections} />
+
         <div className="max-w-[1920px] mx-auto p-8 space-y-10">
           {/* Header Section */}
           <motion.div 
+            id="header"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <FaChartLine className="text-sm" />
-              <span>Premium Assessments</span>
-            </div>
-            
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               Strategic Business Assessments
             </h1>
@@ -171,99 +180,154 @@ export default function AssessmentsPage() {
             </div>
           </motion.div>
 
-          {/* Assessment Grid */}
+          {/* Business Assessments Section */}
           <motion.div 
+            id="business-assessments"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="space-y-6"
           >
-            <AssessmentCard
-              slug="bpm"
-              title="Business Process Maturity"
-              description="Analyze your internal workflows and process scalability."
-              score={assessmentData.bpm?.score ?? null}
-              lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="sales"
-              title="Sales Performance"
-              description="Evaluate your sales pipeline and conversions."
-              score={assessmentData.sales?.score ?? null}
-              lastTakenDate={assessmentData.sales?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="tech_stack"
-              title="Technology Maturity Assessment"
-              description="Evaluate your technology infrastructure and digital capabilities."
-              score={assessmentData.tech_stack?.score ?? null}
-              lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="strategic_maturity"
-              title="Strategic Maturity"
-              description="Evaluate your organization's strategic planning and execution."
-              score={assessmentData.strategic_maturity?.score ?? null}
-              lastTakenDate={assessmentData.strategic_maturity?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="marketing_effectiveness"
-              title="Marketing Effectiveness"
-              description="Measure how well your marketing drives engagement and results."
-              score={assessmentData.marketing_effectiveness?.score ?? null}
-              lastTakenDate={assessmentData.marketing_effectiveness?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="ai_readiness"
-              title="AI & Automation Readiness"
-              description="Assess how prepared you are to leverage AI and automation at scale."
-              score={assessmentData.ai_readiness?.score ?? null}
-              lastTakenDate={assessmentData.ai_readiness?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="competitive_benchmarking"
-              title="Competitive Benchmarking"
-              description="See how you stack up against peers and top performers."
-              score={assessmentData.competitive_benchmarking?.score ?? null}
-              lastTakenDate={assessmentData.competitive_benchmarking?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="customer_experience"
-              title="Customer Experience"
-              description="Understand your CX performance and opportunities to improve."
-              score={assessmentData.customer_experience?.score ?? null}
-              lastTakenDate={assessmentData.customer_experience?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="digital_transformation"
-              title="Digital Transformation"
-              description="Evaluate your readiness for digital transformation success."
-              score={assessmentData.digital_transformation?.score ?? null}
-              lastTakenDate={assessmentData.digital_transformation?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <AssessmentCard
-              slug="leadership"
-              title="Leadership & Team Performance"
-              description="Assess team alignment, leadership effectiveness, and culture."
-              score={assessmentData.leadership?.score ?? null}
-              lastTakenDate={assessmentData.leadership?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            <ReassessmentCard
-              score={assessmentData.reassessment?.score ?? null}
-              lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
-              userId={user?.u_id}
-            />
-            {user?.u_id && <TechToolsCard userId={user.u_id} />}
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Business Process Assessments</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AssessmentCard
+                slug="bpm"
+                title="Business Process Maturity"
+                description="Analyze your internal workflows and process scalability."
+                score={assessmentData.bpm?.score ?? null}
+                lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="sales"
+                title="Sales Performance"
+                description="Evaluate your sales pipeline and conversions."
+                score={assessmentData.sales?.score ?? null}
+                lastTakenDate={assessmentData.sales?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="marketing_effectiveness"
+                title="Marketing Effectiveness"
+                description="Measure how well your marketing drives engagement and results."
+                score={assessmentData.marketing_effectiveness?.score ?? null}
+                lastTakenDate={assessmentData.marketing_effectiveness?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+            </div>
+          </motion.div>
+
+          {/* Technology Assessments Section */}
+          <motion.div 
+            id="technology-assessments"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="space-y-6"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Technology Assessments</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AssessmentCard
+                slug="tech_stack"
+                title="Technology Maturity Assessment"
+                description="Evaluate your technology infrastructure and digital capabilities."
+                score={assessmentData.tech_stack?.score ?? null}
+                lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="ai_readiness"
+                title="AI & Automation Readiness"
+                description="Assess how prepared you are to leverage AI and automation at scale."
+                score={assessmentData.ai_readiness?.score ?? null}
+                lastTakenDate={assessmentData.ai_readiness?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="digital_transformation"
+                title="Digital Transformation"
+                description="Evaluate your readiness for digital transformation success."
+                score={assessmentData.digital_transformation?.score ?? null}
+                lastTakenDate={assessmentData.digital_transformation?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+            </div>
+          </motion.div>
+
+          {/* Strategy Assessments Section */}
+          <motion.div 
+            id="strategy-assessments"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="space-y-6"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Strategy & Leadership Assessments</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AssessmentCard
+                slug="strategic_maturity"
+                title="Strategic Maturity"
+                description="Evaluate your organization's strategic planning and execution."
+                score={assessmentData.strategic_maturity?.score ?? null}
+                lastTakenDate={assessmentData.strategic_maturity?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="competitive_benchmarking"
+                title="Competitive Benchmarking"
+                description="See how you stack up against peers and top performers."
+                score={assessmentData.competitive_benchmarking?.score ?? null}
+                lastTakenDate={assessmentData.competitive_benchmarking?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              <AssessmentCard
+                slug="leadership"
+                title="Leadership & Team Performance"
+                description="Assess team alignment, leadership effectiveness, and culture."
+                score={assessmentData.leadership?.score ?? null}
+                lastTakenDate={assessmentData.leadership?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+            </div>
+          </motion.div>
+
+          {/* Customer Experience Assessment */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="space-y-6"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Customer Experience Assessment</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AssessmentCard
+                slug="customer_experience"
+                title="Customer Experience"
+                description="Understand your CX performance and opportunities to improve."
+                score={assessmentData.customer_experience?.score ?? null}
+                lastTakenDate={assessmentData.customer_experience?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+            </div>
+          </motion.div>
+
+          {/* Progress Tracking Section */}
+          <motion.div 
+            id="progress-tracking"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="space-y-6"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Progress Tracking & Technology</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <ReassessmentCard
+                score={assessmentData.reassessment?.score ?? null}
+                lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
+                userId={user?.u_id}
+              />
+              {user?.u_id && <TechToolsCard userId={user.u_id} />}
+            </div>
           </motion.div>
         </div>
       </div>

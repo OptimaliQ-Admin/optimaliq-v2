@@ -286,16 +286,16 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       }
 
       // Add background for better text readability - properly centered
-      svg
-        .append("rect")
-        .attr("x", bgX)
-        .attr("y", bgY)
-        .attr("width", bgWidth)
-        .attr("height", bgHeight)
-        .style("fill", "rgba(255, 255, 255, 0.95)")
-        .style("rx", "8")
-        .style("ry", "8")
-        .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))");
+      // svg
+      //   .append("rect")
+      //   .attr("x", bgX)
+      //   .attr("y", bgY)
+      //   .attr("width", bgWidth)
+      //   .attr("height", bgHeight)
+      //   .style("fill", "rgba(255, 255, 255, 0.95)")
+      //   .style("rx", "8")
+      //   .style("ry", "8")
+      //   .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))");
 
       // Add label text
       svg
