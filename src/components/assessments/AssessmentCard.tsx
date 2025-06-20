@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { format, differenceInDays } from "date-fns";
 import AssessmentIntroModal, {
   AssessmentType,
 } from "./AssessmentIntroModal"; 
 import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import { FaChartLine, FaCheckCircle, FaExclamationTriangle, FaPlay } from "react-icons/fa";
 
 const slugToAssessmentType: Record<string, AssessmentType> = {
   bpm: "BPM",
@@ -63,70 +65,153 @@ export default function AssessmentCard({
   const needsRetake = daysSinceLast !== null && daysSinceLast > 30;
   const roundedScore = score !== null ? Math.floor(score * 2) / 2 : null;
 
+  // Get status and color based on assessment state
+  const getStatusInfo = () => {
+    if (!hasTaken) {
+      return {
+        status: "Not Started",
+        color: "gray",
+        icon: FaPlay,
+        bgColor: "bg-gray-50",
+        borderColor: "border-gray-200",
+        textColor: "text-gray-600"
+      };
+    }
+    
+    if (needsRetake) {
+      return {
+        status: "Needs Update",
+        color: "yellow",
+        icon: FaExclamationTriangle,
+        bgColor: "bg-yellow-50",
+        borderColor: "border-yellow-200",
+        textColor: "text-yellow-700"
+      };
+    }
+    
+    return {
+      status: "Completed",
+      color: "green",
+      icon: FaCheckCircle,
+      bgColor: "bg-green-50",
+      borderColor: "border-green-200",
+      textColor: "text-green-700"
+    };
+  };
+
+  const statusInfo = getStatusInfo();
+  const StatusIcon = statusInfo.icon;
+
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
-        <SectionTitleBar title={title} />
-        <p className="text-gray-600 mb-4">{description}</p>
-
-        {!hasTaken && (
-          <button
-            onClick={handleClick}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-          >
-            Start Assessment
-          </button>
-        )}
-
-        {hasTaken && !needsRetake && (
-          <>
-            <div className="mb-4">
-              <span className="text-sm font-medium text-gray-500">Score:</span>
-              <span className="ml-2 text-3xl font-bold text-blue-600">
-                {roundedScore?.toFixed(1)}
-              </span>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -5 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden group"
+      >
+        {/* Header with gradient */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+              <FaChartLine className="text-white text-lg" />
             </div>
-            <p className="text-sm text-gray-500">
-              Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-            </p>
-          </>
-        )}
+            <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${statusInfo.bgColor} ${statusInfo.textColor}`}>
+              <StatusIcon className="text-xs" />
+              <span>{statusInfo.status}</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold mb-2">{title}</h3>
+          <p className="text-blue-100 text-sm leading-relaxed">{description}</p>
+        </div>
 
-        {hasTaken && needsRetake && (
-          <>
-            <div className="mb-4">
-              <span className="text-sm font-medium text-gray-500">Score:</span>
-              <span className="ml-2 text-3xl font-bold text-blue-600">
-                {roundedScore?.toFixed(1)}
-              </span>
+        {/* Content */}
+        <div className="p-6">
+          {!hasTaken && (
+            <motion.button
+              onClick={handleClick}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              <FaPlay className="text-sm" />
+              <span>Start Assessment</span>
+            </motion.button>
+          )}
+
+          {hasTaken && !needsRetake && (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-4">
+                  <FaCheckCircle className="text-green-600 text-sm" />
+                  <span className="text-green-700 text-sm font-semibold">Assessment Complete</span>
+                </div>
+                
+                <div className="mb-4">
+                  <span className="text-sm font-medium text-gray-500">Your Score:</span>
+                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    {roundedScore?.toFixed(1)}
+                  </div>
+                  <span className="text-sm text-gray-500">out of 5.0</span>
+                </div>
+                
+                <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg">
+                  Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
+                </p>
+              </div>
             </div>
-            <p className="text-sm text-gray-500 mb-2">
-              Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-            </p>
-            <div className="mt-4 border-t pt-4">
-              <p className="text-yellow-700 mb-2">
-                Your last assessment is over 30 days old. Consider retaking it
-                to reflect recent changes.
-              </p>
-              <button
-                onClick={handleClick}
-                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-              >
-                Retake Assessment
-              </button>
+          )}
+
+          {hasTaken && needsRetake && (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full border border-yellow-200 mb-4">
+                  <FaExclamationTriangle className="text-yellow-600 text-sm" />
+                  <span className="text-yellow-700 text-sm font-semibold">Update Recommended</span>
+                </div>
+                
+                <div className="mb-4">
+                  <span className="text-sm font-medium text-gray-500">Previous Score:</span>
+                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    {roundedScore?.toFixed(1)}
+                  </div>
+                  <span className="text-sm text-gray-500">out of 5.0</span>
+                </div>
+                
+                <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg mb-4">
+                  Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
+                </p>
+                
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+                  <p className="text-yellow-800 text-sm font-medium">
+                    Your assessment is over 30 days old. Consider retaking it to reflect recent changes.
+                  </p>
+                </div>
+                
+                <motion.button
+                  onClick={handleClick}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  <FaPlay className="text-sm" />
+                  <span>Retake Assessment</span>
+                </motion.button>
+              </div>
             </div>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      </motion.div>
 
       {slug in slugToAssessmentType && (
-  <AssessmentIntroModal
-    isOpen={showIntro}
-    onClose={handleClose}
-    onStart={handleStartAssessment}
-    assessmentType={slugToAssessmentType[slug]}
-  />
-)}
+        <AssessmentIntroModal
+          isOpen={showIntro}
+          onClose={handleClose}
+          onStart={handleStartAssessment}
+          assessmentType={slugToAssessmentType[slug]}
+        />
+      )}
     </>
   );
 }

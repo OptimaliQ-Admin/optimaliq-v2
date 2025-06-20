@@ -248,40 +248,40 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       let bgX, bgY, bgWidth, bgHeight;
       
       if (index === 0) { // Strategic Builders (top-left)
-        labelX = xScale(quadrant.x1) + 30;
-        labelY = yScale(quadrant.y2) + 30;
+        labelX = xScale(quadrant.x1) + 20;
+        labelY = yScale(quadrant.y2) + 20;
         textAnchor = "start";
         dominantBaseline = "hanging";
-        bgX = labelX - 10;
-        bgY = labelY - 10;
-        bgWidth = maxTextWidth + 20;
+        bgX = labelX - 5;
+        bgY = labelY - 5;
+        bgWidth = maxTextWidth + 10;
         bgHeight = 60;
       } else if (index === 1) { // Accelerated Performers (top-right)
-        labelX = xScale(quadrant.x2) - 30;
-        labelY = yScale(quadrant.y2) + 30;
+        labelX = xScale(quadrant.x2) - 20;
+        labelY = yScale(quadrant.y2) + 20;
         textAnchor = "end";
         dominantBaseline = "hanging";
-        bgX = labelX - maxTextWidth - 10;
-        bgY = labelY - 10;
-        bgWidth = maxTextWidth + 20;
+        bgX = labelX - maxTextWidth - 5;
+        bgY = labelY - 5;
+        bgWidth = maxTextWidth + 10;
         bgHeight = 60;
       } else if (index === 2) { // Emerging Foundations (bottom-left)
-        labelX = xScale(quadrant.x1) + 30;
-        labelY = yScale(quadrant.y1) - 30;
+        labelX = xScale(quadrant.x1) + 20;
+        labelY = yScale(quadrant.y1) - 20;
         textAnchor = "start";
         dominantBaseline = "auto";
-        bgX = labelX - 10;
-        bgY = labelY - 50;
-        bgWidth = maxTextWidth + 20;
+        bgX = labelX - 5;
+        bgY = labelY - 55;
+        bgWidth = maxTextWidth + 10;
         bgHeight = 60;
       } else { // Efficient Executors (bottom-right)
-        labelX = xScale(quadrant.x2) - 30;
-        labelY = yScale(quadrant.y1) - 30;
+        labelX = xScale(quadrant.x2) - 20;
+        labelY = yScale(quadrant.y1) - 20;
         textAnchor = "end";
         dominantBaseline = "auto";
-        bgX = labelX - maxTextWidth - 10;
-        bgY = labelY - 50;
-        bgWidth = maxTextWidth + 20;
+        bgX = labelX - maxTextWidth - 5;
+        bgY = labelY - 55;
+        bgWidth = maxTextWidth + 10;
         bgHeight = 60;
       }
 
