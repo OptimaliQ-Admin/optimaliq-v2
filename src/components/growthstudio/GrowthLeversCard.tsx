@@ -267,7 +267,7 @@ export default function GrowthLeversCard() {
             </div>
             <div>
               <h4 className="font-semibold text-green-900">All Growth Levers Completed!</h4>
-              <p className="text-sm text-green-700">Excellent work! You've completed all your growth initiatives. Consider taking a reassessment to unlock new opportunities.</p>
+              <p className="text-sm text-green-700">Excellent work! You&apos;ve completed all your growth initiatives. Consider taking a reassessment to unlock new opportunities.</p>
             </div>
           </div>
         </motion.div>
