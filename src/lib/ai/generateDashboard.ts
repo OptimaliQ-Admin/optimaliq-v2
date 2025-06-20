@@ -41,10 +41,18 @@ const DashboardScoresSchema = z.object({
 export type DashboardScores = z.infer<typeof DashboardScoresSchema>;
 
 export async function generateDashboardScores(user: any, assessment: any): Promise<DashboardScores | null> {
+  // Prepare user context with business overview
+  const userContext = {
+    industry: user.industry,
+    company_size: user.company_size,
+    revenue_range: user.revenue_range,
+    business_overview: assessment.business_overview || user.business_overview,
+  };
+
   const systemPrompt = `
 You are a world-class business strategist evaluating high-growth companies. Your job is to assess strategy, process, and technology maturity, identify strategic gaps, benchmark against peers, and generate a 30-day growth roadmap.
 
-All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company's industry (e.g., ${user.industry}). Use the provided company size and revenue range to contextualize your output.
+All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company's industry (e.g., ${user.industry}) and their business (e.g., ${assessment.business_overview}). Use the provided company size and revenue range to contextualize your output.
 
 Responses must be deterministic — the same input should produce the same output. This ensures consistency in scoring and insights across sessions.
 
@@ -81,13 +89,11 @@ Formatting rules:
 `;
 
   try {
-    // Prepare user context with business overview
-    const userContext = {
-      industry: user.industry,
-      company_size: user.company_size,
-      revenue_range: user.revenue_range,
-      business_overview: assessment.business_overview || user.business_overview,
-    };
+    // Log the data being sent to AI
+    console.log("🧠 Business overview in assessment:", !!assessment.business_overview);
+    console.log("🧠 Business overview in user:", !!user.business_overview);
+    console.log("🧠 Business overview in userContext:", !!userContext.business_overview);
+    console.log("🧠 Business overview preview:", userContext.business_overview?.substring(0, 50) + "...");
 
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4.1-mini",

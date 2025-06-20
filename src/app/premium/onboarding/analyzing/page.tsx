@@ -107,7 +107,7 @@ export default function OnboardingAnalyzingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center space-y-6 px-4">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center text-center space-y-6">
       <h1 className="text-3xl font-bold text-blue-700">Analyzing your data...</h1>
       <p className="text-xl text-gray-700 italic max-w-xl transition-opacity duration-500 ease-in-out">
         {statements[index]}
@@ -117,5 +117,5 @@ export default function OnboardingAnalyzingPage() {
       </div>
       <p className="text-sm text-gray-400">Powered by OptimaliQ.ai</p>
     </div>
-  );
+  );  
 } 
