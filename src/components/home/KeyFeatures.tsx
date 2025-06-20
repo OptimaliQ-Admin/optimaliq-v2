@@ -119,19 +119,19 @@ export default function KeyFeatures() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl lg:text-4xl font-bold text-blue-600 mb-2">500+</div>
-              <div className="text-sm text-gray-600">Companies Analyzed</div>
+              <div className="text-sm text-gray-600">Built to Analyze Growth-Stage Companies</div>
             </div>
             <div>
-              <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-2">94%</div>
-              <div className="text-sm text-gray-600">Accuracy Rate</div>
+              <div className="text-3xl lg:text-4xl font-bold text-green-600 mb-2">99%</div>
+              <div className="text-sm text-gray-600">Engineered for Scoring Precision</div>
             </div>
             <div>
-              <div className="text-3xl lg:text-4xl font-bold text-purple-600 mb-2">$2.3M</div>
-              <div className="text-sm text-gray-600">Avg. Revenue Impact</div>
+              <div className="text-3xl lg:text-4xl font-bold text-purple-600 mb-2">$2.3M+</div>
+              <div className="text-sm text-gray-600">Designed for Revenue Impact Potential</div>
             </div>
             <div>
               <div className="text-3xl lg:text-4xl font-bold text-orange-600 mb-2">24/7</div>
-              <div className="text-sm text-gray-600">AI Monitoring</div>
+              <div className="text-sm text-gray-600">AI-Driven Strategy Updates</div>
             </div>
           </div>
         </motion.div>
