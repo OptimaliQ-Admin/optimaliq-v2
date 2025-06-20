@@ -34,6 +34,8 @@ export default function WhatIfScenarioSimulator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
+  const [aiInsight, setAiInsight] = useState<string | null>(null);
+  const [insightLoading, setInsightLoading] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Calculate impact in real-time
@@ -62,6 +64,33 @@ export default function WhatIfScenarioSimulator() {
     ) / 10;
 
     return { revenueImpact, costSavings, efficiencyGain };
+  };
+
+  // Generate AI insights
+  const generateAIInsight = async (result: SimulationResult) => {
+    setInsightLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch("/api/growth_studio/commentary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to generate AI insight");
+      }
+
+      const data = await res.json();
+      setAiInsight(data.summary || null);
+    } catch (err) {
+      console.error("❌ Failed to generate AI insight:", err);
+      setError("Failed to generate AI insight. Please try again.");
+      setAiInsight(null);
+    } finally {
+      setInsightLoading(false);
+    }
   };
 
   // Update results when simulation data changes
@@ -139,87 +168,92 @@ export default function WhatIfScenarioSimulator() {
     const yScale = d3
       .scaleLinear()
       .domain([0, d3.max(chartData, d => d.value) || 0])
-      .range([height, 0])
-      .nice();
+      .range([height, 0]);
 
-    // Add bars with Salesforce styling
-    const bars = svg
-      .selectAll(".bar")
-      .data(chartData)
-      .enter()
-      .append("g")
-      .attr("class", "bar");
-
-    // Create gradients for bars
+    // Add bars with gradients
     chartData.forEach((d, i) => {
-      const gradient = svg.append("defs").append("linearGradient")
+      const barGradient = svg.append("defs").append("linearGradient")
         .attr("id", `barGradient${i}`)
         .attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
       
-      gradient.append("stop").attr("offset", "0%").attr("stop-color", d.color).attr("stop-opacity", 0.8);
-      gradient.append("stop").attr("offset", "100%").attr("stop-color", d.color).attr("stop-opacity", 0.4);
+      barGradient.append("stop").attr("offset", "0%").attr("stop-color", d.color).attr("stop-opacity", 0.8);
+      barGradient.append("stop").attr("offset", "100%").attr("stop-color", d.color).attr("stop-opacity", 0.4);
+
+      const barWidth = xScale.bandwidth();
+      const barHeight = height - yScale(d.value);
+      const barX = xScale(d.category) || 0;
+      const barY = yScale(d.value);
+
+      // Add bar
+      svg
+        .append("rect")
+        .attr("x", barX)
+        .attr("y", barY)
+        .attr("width", barWidth)
+        .attr("height", barHeight)
+        .style("fill", `url(#barGradient${i})`)
+        .style("stroke", d.color)
+        .style("stroke-width", 1.5)
+        .style("rx", "6")
+        .style("ry", "6")
+        .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
+        .style("transition", "all 0.3s ease")
+        .on("mouseover", function() {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("filter", "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))")
+            .style("opacity", 0.9);
+        })
+        .on("mouseout", function() {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
+            .style("opacity", 1);
+        });
+
+      // Add value labels
+      svg
+        .append("text")
+        .attr("x", barX + barWidth / 2)
+        .attr("y", barY - 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("font-weight", "600")
+        .style("fill", "#374151")
+        .text(d.category === "Efficiency Gain" ? `${d.value}%` : `$${(d.value / 1000).toFixed(0)}k`);
+
+      // Add category labels
+      svg
+        .append("text")
+        .attr("x", barX + barWidth / 2)
+        .attr("y", height + 20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("font-weight", "500")
+        .style("fill", "#6b7280")
+        .text(d.category);
     });
 
-    bars.append("rect")
-      .attr("x", d => xScale(d.category)!)
-      .attr("y", d => yScale(d.value))
-      .attr("width", xScale.bandwidth())
-      .attr("height", d => height - yScale(d.value))
-      .style("fill", (d, i) => `url(#barGradient${i})`)
-      .style("stroke", d => d.color)
-      .style("stroke-width", 2)
-      .style("rx", 6)
-      .style("ry", 6)
-      .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
-      .style("transition", "all 0.3s ease")
-      .on("mouseover", function(event, d) {
-        d3.select(this)
-          .style("filter", "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))")
-          .style("transform", "scale(1.02)");
-      })
-      .on("mouseout", function() {
-        d3.select(this)
-          .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
-          .style("transform", "scale(1)");
-      });
-
-    // Add value labels on bars
-    bars.append("text")
-      .attr("x", d => xScale(d.category)! + xScale.bandwidth() / 2)
-      .attr("y", d => yScale(d.value) - 10)
-      .attr("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("font-weight", "600")
-      .style("fill", d => d.color)
-      .text(d => {
-        if (d.category === "Efficiency Gain") return `${d.value.toFixed(1)}%`;
-        return `$${(d.value / 1000).toFixed(0)}k`;
-      });
-
-    // Add category labels
-    bars.append("text")
-      .attr("x", d => xScale(d.category)! + xScale.bandwidth() / 2)
-      .attr("y", height + 20)
-      .attr("text-anchor", "middle")
-      .style("font-size", "11px")
-      .style("font-weight", "500")
-      .style("fill", "#64748b")
-      .text(d => `${d.icon} ${d.category}`);
-
-    // Add grid lines
-    const yTicks = yScale.ticks(5);
-    svg.selectAll(".grid-line")
-      .data(yTicks)
-      .enter()
+    // Add axis lines
+    svg
       .append("line")
-      .attr("class", "grid-line")
       .attr("x1", 0)
       .attr("x2", width)
-      .attr("y1", d => yScale(d))
-      .attr("y2", d => yScale(d))
-      .style("stroke", "#e2e8f0")
-      .style("stroke-width", 1)
-      .style("stroke-dasharray", "2 4");
+      .attr("y1", height)
+      .attr("y2", height)
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
+
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("y1", 0)
+      .attr("y2", height)
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
 
   }, [chartData]);
 
@@ -232,29 +266,19 @@ export default function WhatIfScenarioSimulator() {
   };
 
   const runSimulation = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch("/api/growth_studio/simulation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(simulationData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to run simulation");
-      }
-
-      const data = await response.json();
-      setResults(data);
-    } catch (err) {
-      console.error("Simulation error:", err);
-      setError(err instanceof Error ? err.message : "Failed to run simulation");
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    setError(null);
+    
+    // Simulate processing time
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const newResults = calculateImpact(simulationData);
+    setResults(newResults);
+    
+    // Generate AI insight
+    await generateAIInsight(newResults);
+    
+    setLoading(false);
   };
 
   return (
@@ -424,6 +448,32 @@ export default function WhatIfScenarioSimulator() {
           <div className="bg-gray-50 rounded-lg p-4">
             <svg ref={svgRef} className="w-full" style={{ height: "300px" }} />
           </div>
+
+          {/* AI Strategic Insight */}
+          {aiInsight && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
+            >
+              <div className="flex items-start gap-3">
+                <div className="text-blue-600 text-lg mt-0.5">💡</div>
+                <div>
+                  <h5 className="font-semibold text-blue-900 text-sm mb-1">Strategic Insight:</h5>
+                  <p className="text-blue-800 text-sm leading-relaxed">{aiInsight}</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {insightLoading && (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                <span className="text-sm text-gray-600">Generating AI insights...</span>
+              </div>
+            </div>
+          )}
 
           {/* Quick Stats */}
           {results && (

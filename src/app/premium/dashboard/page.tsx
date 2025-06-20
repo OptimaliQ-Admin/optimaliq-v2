@@ -12,6 +12,7 @@ import ScoreCard from "@/components/dashboard/ScoreCard";
 import InsightCard from "@/components/dashboard/InsightCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
+import StrategicAnalysisCard from "@/components/dashboard/StrategicAnalysisCard";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
@@ -303,6 +304,10 @@ export default function PremiumDashboardPage() {
           className="space-y-8"
         >
           <SectionHeader title="📈 Growth Analysis & Planning" subtitle="Strategic insights and actionable growth recommendations" />
+          
+          {/* Strategic Analysis Card */}
+          <StrategicAnalysisCard userId={u_id} />
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-1">
               <InsightCard 
