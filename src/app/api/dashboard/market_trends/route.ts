@@ -13,13 +13,48 @@ export async function GET(req: Request) {
 
   console.log("🔎 Requested industry insight for:", industry);
 
-  const { data, error } = await supabase
+  // Try exact match first
+  let { data, error } = await supabase
     .from("realtime_market_trends")
     .select("insight, createdat")
     .eq("industry", industry)
     .order("createdat", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  // If no exact match, try case-insensitive match
+  if (error || !data) {
+    console.log("🔍 Trying case-insensitive match for:", industry);
+    const { data: caseInsensitiveData, error: caseInsensitiveError } = await supabase
+      .from("realtime_market_trends")
+      .select("insight, createdat")
+      .ilike("industry", industry)
+      .order("createdat", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (caseInsensitiveData) {
+      data = caseInsensitiveData;
+      error = null;
+    }
+  }
+
+  // If still no match, try to get any recent insight as fallback
+  if (error || !data) {
+    console.log("🔍 Trying fallback to any recent insight");
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("realtime_market_trends")
+      .select("insight, createdat")
+      .order("createdat", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (fallbackData) {
+      data = fallbackData;
+      error = null;
+      console.log("✅ Using fallback insight");
+    }
+  }
 
   if (error || !data) {
     console.warn("⚠️ No insight found for:", industry);

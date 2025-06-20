@@ -65,7 +65,7 @@ If signals are weak or unclear, provide thoughtful context and guidance.
 
 Output Format
 ✍️ Output Format:
-🧠 Marketing Intelligence Brief — {Month Year}
+🧠 Marketing Intelligence Brief
 
 🔥 Trends:
 List 4–5 emerging shifts in brand marketing strategy. Each should be concise, specific, and ideally quantitative.
