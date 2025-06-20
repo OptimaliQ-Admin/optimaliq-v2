@@ -70,6 +70,19 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
       .style("ry", "12")
       .style("filter", "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05))");
 
+    // Scales - Define yScale before using it in zones
+    const xScale = d3
+      .scalePoint()
+      .domain(data.map((d) => d.month))
+      .range([0, width])
+      .padding(0.3);
+
+    const yScale = d3
+      .scaleLinear()
+      .domain([1, 5])
+      .range([height, 0])
+      .nice();
+
     // Performance zones
     const zones = [
       { name: "Excellence", start: 4.5, end: 5.0, color: "#10b981", opacity: 0.1 },
@@ -89,19 +102,6 @@ const GrowthChart: React.FC<Props> = ({ data }) => {
         .style("opacity", zone.opacity)
         .style("rx", "4");
     });
-
-    // Scales
-    const xScale = d3
-      .scalePoint()
-      .domain(data.map((d) => d.month))
-      .range([0, width])
-      .padding(0.3);
-
-    const yScale = d3
-      .scaleLinear()
-      .domain([1, 5])
-      .range([height, 0])
-      .nice();
 
     // Grid lines with Salesforce-style
     const yTicks = yScale.ticks(8);

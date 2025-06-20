@@ -111,7 +111,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       .style("ry", "12")
       .style("filter", "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05))");
 
-    // Scales
+    // Scales - Define yScale before using it in zones
     const xScale = d3
       .scaleBand()
       .domain(funnelData.map((d) => d.category))
