@@ -234,43 +234,70 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         .style("rx", "8")
         .style("ry", "8");
 
+      // Calculate text dimensions for proper centering
+      const labelText = quadrant.label;
+      const descriptionText = quadrant.description;
+      
+      // Estimate text width (approximate - in a real app you'd measure actual text)
+      const labelWidth = labelText.length * 9; // Approximate character width
+      const descriptionWidth = descriptionText.length * 7; // Smaller font
+      const maxTextWidth = Math.max(labelWidth, descriptionWidth);
+      
       // Position labels in corners based on quadrant
       let labelX, labelY, textAnchor, dominantBaseline;
+      let bgX, bgY, bgWidth, bgHeight;
       
       if (index === 0) { // Strategic Builders (top-left)
         labelX = xScale(quadrant.x1) + 30;
         labelY = yScale(quadrant.y2) + 30;
         textAnchor = "start";
         dominantBaseline = "hanging";
+        bgX = labelX - 10;
+        bgY = labelY - 10;
+        bgWidth = maxTextWidth + 20;
+        bgHeight = 60;
       } else if (index === 1) { // Accelerated Performers (top-right)
         labelX = xScale(quadrant.x2) - 30;
         labelY = yScale(quadrant.y2) + 30;
         textAnchor = "end";
         dominantBaseline = "hanging";
+        bgX = labelX - maxTextWidth - 10;
+        bgY = labelY - 10;
+        bgWidth = maxTextWidth + 20;
+        bgHeight = 60;
       } else if (index === 2) { // Emerging Foundations (bottom-left)
         labelX = xScale(quadrant.x1) + 30;
         labelY = yScale(quadrant.y1) - 30;
         textAnchor = "start";
         dominantBaseline = "auto";
+        bgX = labelX - 10;
+        bgY = labelY - 50;
+        bgWidth = maxTextWidth + 20;
+        bgHeight = 60;
       } else { // Efficient Executors (bottom-right)
         labelX = xScale(quadrant.x2) - 30;
         labelY = yScale(quadrant.y1) - 30;
         textAnchor = "end";
         dominantBaseline = "auto";
+        bgX = labelX - maxTextWidth - 10;
+        bgY = labelY - 50;
+        bgWidth = maxTextWidth + 20;
+        bgHeight = 60;
       }
 
-      // Add background for better text readability
+      // Add background for better text readability - properly centered
       svg
         .append("rect")
-        .attr("x", labelX - 80)
-        .attr("y", labelY - 25)
-        .attr("width", 160)
-        .attr("height", 50)
-        .style("fill", "rgba(255, 255, 255, 0.9)")
-        .style("rx", "6")
-        .style("ry", "6")
+        .attr("x", bgX)
+        .attr("y", bgY)
+        .attr("width", bgWidth)
+        .attr("height", bgHeight)
+        .style("fill", "rgba(255, 255, 255, 0.95)")
+        .style("rx", "8")
+        .style("ry", "8")
         .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))");
 
+      // Add label text
       svg
         .append("text")
         .attr("x", labelX)
@@ -282,6 +309,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         .style("fill", "#374151")
         .text(quadrant.label);
 
+      // Add description text
       svg
         .append("text")
         .attr("x", labelX)
