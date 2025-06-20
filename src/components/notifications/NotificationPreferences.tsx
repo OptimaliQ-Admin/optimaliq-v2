@@ -41,7 +41,7 @@ export default function NotificationPreferences() {
           .from('notification_preferences')
           .select('*')
           .eq('u_id', user.u_id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error('Error fetching preferences:', error);
@@ -50,9 +50,40 @@ export default function NotificationPreferences() {
 
         if (data) {
           setPreferences(data);
+        } else {
+          const defaultPreferences: NotificationPreference = {
+            u_id: user.u_id,
+            assessment_updates: true,
+            growth_insights: true,
+            system_updates: true,
+            marketing_updates: false,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+
+          const { error: insertError } = await supabase
+            .from('notification_preferences')
+            .insert(defaultPreferences);
+
+          if (insertError) {
+            console.error('Error creating default preferences:', insertError);
+            setPreferences(defaultPreferences);
+          } else {
+            setPreferences(defaultPreferences);
+          }
         }
       } catch (error) {
         console.error('Error in fetchPreferences:', error);
+        const defaultPreferences: NotificationPreference = {
+          u_id: user.u_id,
+          assessment_updates: true,
+          growth_insights: true,
+          system_updates: true,
+          marketing_updates: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setPreferences(defaultPreferences);
       } finally {
         setIsLoading(false);
       }
@@ -112,6 +143,16 @@ export default function NotificationPreferences() {
         </p>
       </div>
 
+      {saveMessage && (
+        <div className={`p-3 rounded-md text-sm ${
+          saveMessage.includes('Failed') 
+            ? 'bg-red-50 text-red-700 border border-red-200' 
+            : 'bg-green-50 text-green-700 border border-green-200'
+        }`}>
+          {saveMessage}
+        </div>
+      )}
+
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -124,7 +165,8 @@ export default function NotificationPreferences() {
           </div>
           <button
             onClick={() => handleToggle('assessment_updates')}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+            disabled={isSaving}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
               preferences.assessment_updates ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           >
@@ -147,7 +189,8 @@ export default function NotificationPreferences() {
           </div>
           <button
             onClick={() => handleToggle('growth_insights')}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+            disabled={isSaving}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
               preferences.growth_insights ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           >
@@ -170,7 +213,8 @@ export default function NotificationPreferences() {
           </div>
           <button
             onClick={() => handleToggle('system_updates')}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+            disabled={isSaving}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
               preferences.system_updates ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           >
@@ -193,7 +237,8 @@ export default function NotificationPreferences() {
           </div>
           <button
             onClick={() => handleToggle('marketing_updates')}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+            disabled={isSaving}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
               preferences.marketing_updates ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           >
@@ -205,18 +250,6 @@ export default function NotificationPreferences() {
           </button>
         </div>
       </div>
-
-      {saveMessage && (
-        <div
-          className={`mt-4 p-2 rounded text-sm ${
-            saveMessage.includes('Failed')
-              ? 'bg-red-50 text-red-700'
-              : 'bg-green-50 text-green-700'
-          }`}
-        >
-          {saveMessage}
-        </div>
-      )}
     </div>
   );
 } 

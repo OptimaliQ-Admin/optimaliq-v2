@@ -10,7 +10,7 @@ import {
   CreditCardIcon, 
   ArrowPathIcon 
 } from '@heroicons/react/24/outline';
-import { usePremiumUser } from '@/hooks/usePremiumUser';
+import { usePremiumUser } from '@/context/PremiumUserContext';
 import { useNextBillingDate } from '@/hooks/useNextBillingDate';
 
 interface SubscriptionData {
@@ -29,6 +29,8 @@ export default function BillingPage() {
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   // Use the new hook to get accurate next billing date from Stripe
   const { 
@@ -38,35 +40,40 @@ export default function BillingPage() {
   } = useNextBillingDate(subscriptionData?.stripeCustomerId || null);
 
   const fetchSubscriptionData = async () => {
-    if (!user?.id) return;
-    
+    if (!user?.u_id) return;
     setLoading(true);
+    setLoadError(false);
     try {
       const response = await fetch('/api/premium/account/subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ u_id: user.id }),
+        body: JSON.stringify({ u_id: user.u_id }),
       });
-
       if (response.ok) {
         const data = await response.json();
-        console.log("Subscription data fetched:", data);
         setSubscriptionData(data);
       } else {
-        console.error("Failed to fetch subscription data:", response.status);
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Error details:", errorData);
+        setLoadError(true);
       }
     } catch (error) {
-      console.error("Error fetching subscription data:", error);
+      setLoadError(true);
     } finally {
       setLoading(false);
+      if (timeoutId) clearTimeout(timeoutId);
     }
   };
 
   useEffect(() => {
+    if (!user?.u_id) return;
     fetchSubscriptionData();
-  }, [user?.id]);
+    // Set a timeout for fallback error UI
+    const id = setTimeout(() => {
+      setLoadError(true);
+      setLoading(false);
+    }, 5000);
+    setTimeoutId(id);
+    return () => clearTimeout(id);
+  }, [user?.u_id]);
 
   const handleManageBilling = async () => {
     console.log("Manage Billing clicked", { 
@@ -146,6 +153,20 @@ export default function BillingPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="mb-4 text-red-600 font-semibold">Failed to load subscription data.</div>
+        <button
+          onClick={fetchSubscriptionData}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          Try Again
+        </button>
       </div>
     );
   }
