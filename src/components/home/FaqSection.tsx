@@ -65,7 +65,7 @@ export default function FaqSection() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Everything you need to know about OptimaliQ's AI-powered strategic intelligence platform.
+            Everything you need to know about OptimaliQ&apos;s AI-powered strategic intelligence platform.
           </p>
         </motion.div>
 
