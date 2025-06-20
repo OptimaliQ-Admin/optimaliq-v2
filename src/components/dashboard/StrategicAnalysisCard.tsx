@@ -165,7 +165,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     const sizeScale = d3
       .scaleLinear()
       .domain([1, 5])
-      .range([15, 45]); // Reduced from 25-80 to 15-45 for better spacing
+      .range([8, 22]); // Reduced from 15-45 to 8-22 (about half the size)
 
     // Add quadrant backgrounds with Salesforce-style gradients
     const quadrants = [
@@ -234,15 +234,36 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         .style("rx", "8")
         .style("ry", "8");
 
-      // Add quadrant labels with better positioning and larger text
-      const centerX = (xScale(quadrant.x1) + xScale(quadrant.x2)) / 2;
-      const centerY = (yScale(quadrant.y1) + yScale(quadrant.y2)) / 2;
+      // Position labels in corners based on quadrant
+      let labelX, labelY, textAnchor, dominantBaseline;
+      
+      if (index === 0) { // Strategic Builders (top-left)
+        labelX = xScale(quadrant.x1) + 30;
+        labelY = yScale(quadrant.y2) + 30;
+        textAnchor = "start";
+        dominantBaseline = "hanging";
+      } else if (index === 1) { // Accelerated Performers (top-right)
+        labelX = xScale(quadrant.x2) - 30;
+        labelY = yScale(quadrant.y2) + 30;
+        textAnchor = "end";
+        dominantBaseline = "hanging";
+      } else if (index === 2) { // Emerging Foundations (bottom-left)
+        labelX = xScale(quadrant.x1) + 30;
+        labelY = yScale(quadrant.y1) - 30;
+        textAnchor = "start";
+        dominantBaseline = "auto";
+      } else { // Efficient Executors (bottom-right)
+        labelX = xScale(quadrant.x2) - 30;
+        labelY = yScale(quadrant.y1) - 30;
+        textAnchor = "end";
+        dominantBaseline = "auto";
+      }
 
       // Add background for better text readability
       svg
         .append("rect")
-        .attr("x", centerX - 80)
-        .attr("y", centerY - 25)
+        .attr("x", labelX - 80)
+        .attr("y", labelY - 25)
         .attr("width", 160)
         .attr("height", 50)
         .style("fill", "rgba(255, 255, 255, 0.9)")
@@ -252,9 +273,10 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
 
       svg
         .append("text")
-        .attr("x", centerX)
-        .attr("y", centerY - 8)
-        .style("text-anchor", "middle")
+        .attr("x", labelX)
+        .attr("y", labelY - 8)
+        .attr("text-anchor", textAnchor)
+        .attr("dominant-baseline", dominantBaseline)
         .style("font-size", "16px")
         .style("font-weight", "700")
         .style("fill", "#374151")
@@ -262,9 +284,10 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
 
       svg
         .append("text")
-        .attr("x", centerX)
-        .attr("y", centerY + 12)
-        .style("text-anchor", "middle")
+        .attr("x", labelX)
+        .attr("y", labelY + 12)
+        .attr("text-anchor", textAnchor)
+        .attr("dominant-baseline", dominantBaseline)
         .style("font-size", "12px")
         .style("fill", "#6b7280")
         .text(quadrant.description);
