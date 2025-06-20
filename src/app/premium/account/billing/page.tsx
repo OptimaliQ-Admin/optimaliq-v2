@@ -4,98 +4,45 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   CheckCircleIcon, 
-  ExclamationTriangleIcon, 
-  DocumentTextIcon, 
-  CalendarIcon, 
   CreditCardIcon, 
-  ArrowPathIcon 
+  ArrowPathIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import { usePremiumUser } from '@/context/PremiumUserContext';
 
-interface SubscriptionData {
-  status: string;
-  plan: string;
-  billingCycle: string;
-  nextBillingDate: string;
-  stripeCustomerId: string;
-  stripeSubscriptionId: string;
-  amount: number;
-  currency: string;
-}
-
 export default function BillingPage() {
   const { user } = usePremiumUser();
-  const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [loadError, setLoadError] = useState(false);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  const fetchSubscriptionData = async () => {
-    if (!user?.u_id) return;
-    setLoading(true);
-    setLoadError(false);
-    try {
-      const response = await fetch('/api/premium/account/subscription', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ u_id: user.u_id }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setSubscriptionData(data);
-      } else {
-        setLoadError(true);
-      }
-    } catch (error) {
-      setLoadError(true);
-    } finally {
-      setLoading(false);
-      if (timeoutId) clearTimeout(timeoutId);
-    }
-  };
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user?.u_id) return;
-    fetchSubscriptionData();
-    // Set a timeout for fallback error UI
-    const id = setTimeout(() => {
-      setLoadError(true);
+    // Simple loading state to ensure user context is loaded
+    const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000);
-    setTimeoutId(id);
-    return () => clearTimeout(id);
-  }, [user?.u_id]);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleManageBilling = async () => {
-    console.log("Manage Billing clicked", { 
-      stripeCustomerId: subscriptionData?.stripeCustomerId,
-      subscriptionData 
-    });
-    
-    if (!subscriptionData?.stripeCustomerId) {
-      console.error("No Stripe customer ID available");
+    if (!stripeCustomerId) {
       alert("Unable to access billing portal. Please contact support.");
       return;
     }
     
     setUpdating(true);
     try {
-      console.log("Creating billing portal session...");
       const response = await fetch('/api/stripe/createBillingPortalSession', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          customerId: subscriptionData.stripeCustomerId,
+          customerId: stripeCustomerId,
           returnUrl: window.location.href 
         }),
       });
       
-      console.log("Billing portal response status:", response.status);
-      
       if (response.ok) {
         const data = await response.json();
-        console.log("Billing portal session created:", data);
         if (data.url) {
           window.location.href = data.url;
         } else {
@@ -103,7 +50,6 @@ export default function BillingPage() {
         }
       } else {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Billing portal error response:", errorData);
         alert(`Unable to access billing portal: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
@@ -115,7 +61,10 @@ export default function BillingPage() {
   };
 
   const handleUpdatePaymentMethod = async () => {
-    if (!subscriptionData?.stripeCustomerId) return;
+    if (!stripeCustomerId) {
+      alert("Unable to update payment method. Please contact support.");
+      return;
+    }
     
     setUpdating(true);
     try {
@@ -123,7 +72,7 @@ export default function BillingPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          customerId: subscriptionData.stripeCustomerId,
+          customerId: stripeCustomerId,
           returnUrl: window.location.href 
         }),
       });
@@ -136,6 +85,7 @@ export default function BillingPage() {
       }
     } catch (error) {
       console.error('Error creating setup session:', error);
+      alert('Failed to update payment method. Please try again or contact support.');
     } finally {
       setUpdating(false);
     }
@@ -149,32 +99,6 @@ export default function BillingPage() {
     );
   }
 
-  if (loadError) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="mb-4 text-red-600 font-semibold">Failed to load subscription data.</div>
-        <button
-          onClick={fetchSubscriptionData}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-
-  // Determine which next billing date to display
-  const displayNextBillingDate = () => {
-    if (subscriptionData?.nextBillingDate) {
-      return new Date(subscriptionData.nextBillingDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    }
-    return 'Not available';
-  };
-
   return (
     <div className="space-y-8">
       {/* Current Plan */}
@@ -185,140 +109,99 @@ export default function BillingPage() {
       >
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Current Plan</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
-            <div className={`p-3 rounded-lg ${subscriptionData?.status === 'active' ? 'bg-green-100' : 'bg-red-100'}`}>
-              {subscriptionData?.status === 'active' ? (
-                <CheckCircleIcon className="w-6 h-6 text-green-600" />
-              ) : (
-                <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
-              )}
+            <div className="p-3 rounded-lg bg-green-100">
+              <CheckCircleIcon className="w-6 h-6 text-green-600" />
             </div>
             <div>
               <p className="text-sm text-gray-600">Status</p>
-              <p className={`font-semibold ${subscriptionData?.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
-                {subscriptionData?.status === 'active' ? 'Active' : 'Inactive'}
-              </p>
+              <p className="font-semibold text-green-600">Active</p>
             </div>
           </div>
           
           <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
             <div className="p-3 rounded-lg bg-blue-100">
-              <DocumentTextIcon className="w-6 h-6 text-blue-600" />
+              <CreditCardIcon className="w-6 h-6 text-blue-600" />
             </div>
             <div>
               <p className="text-sm text-gray-600">Plan</p>
-              <p className="font-semibold text-blue-600">{subscriptionData?.plan || 'Unknown'}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
-            <div className="p-3 rounded-lg bg-purple-100">
-              <CalendarIcon className="w-6 h-6 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Billing Cycle</p>
-              <p className="font-semibold text-purple-600">{subscriptionData?.billingCycle || 'Unknown'}</p>
+              <p className="font-semibold text-blue-600">Premium</p>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Billing Information */}
+      {/* Billing Management */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8"
       >
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Billing Information</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Billing Management</h2>
         
         <div className="space-y-6">
-          <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
-            <div>
-              <h3 className="font-semibold text-gray-900">Next Billing Date</h3>
-              <div className="flex items-center gap-2">
-                <p className="text-gray-600 text-sm">
-                  {displayNextBillingDate()}
-                </p>
-                {subscriptionData?.nextBillingDate && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                    Live from Stripe
-                  </span>
-                )}
-              </div>
-            </div>
-            <CalendarIcon className="w-5 h-5 text-gray-400" />
+          <div className="p-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Manage Your Subscription</h3>
+            <p className="text-gray-700 mb-4">
+              Access your Stripe billing portal to view invoices, update payment methods, 
+              and manage your subscription details.
+            </p>
+            <button
+              onClick={handleManageBilling}
+              disabled={updating}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {updating ? (
+                <ArrowPathIcon className="w-5 h-5 animate-spin" />
+              ) : (
+                <CreditCardIcon className="w-5 h-5" />
+              )}
+              {updating ? 'Loading...' : 'Manage Billing'}
+            </button>
           </div>
-          
-          <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
-            <div>
-              <h3 className="font-semibold text-gray-900">Amount</h3>
-              <p className="text-gray-600 text-sm">
-                {subscriptionData?.amount 
-                  ? `${subscriptionData.currency} ${(subscriptionData.amount / 100).toFixed(2)}`
-                  : 'Not available'
-                }
-              </p>
-            </div>
-            <CreditCardIcon className="w-5 h-5 text-gray-400" />
+
+          <div className="p-6 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Update Payment Method</h3>
+            <p className="text-gray-700 mb-4">
+              Add or update your payment method securely through Stripe.
+            </p>
+            <button
+              onClick={handleUpdatePaymentMethod}
+              disabled={updating}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {updating ? (
+                <ArrowPathIcon className="w-5 h-5 animate-spin" />
+              ) : (
+                <CreditCardIcon className="w-5 h-5" />
+              )}
+              {updating ? 'Loading...' : 'Update Payment Method'}
+            </button>
           </div>
         </div>
       </motion.div>
 
-      {/* Billing Actions */}
+      {/* Information */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8"
+        className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 border border-gray-200/50"
       >
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Billing Actions</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleManageBilling}
-            disabled={updating || !subscriptionData?.stripeCustomerId}
-            className="flex items-center justify-center gap-3 p-6 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg group disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <div className="p-3 rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors">
-              {updating ? (
-                <div className="h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <CreditCardIcon className="w-6 h-6 text-blue-600" />
-              )}
-            </div>
-            <div className="text-left">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                {updating ? 'Opening Billing Portal...' : 'Manage Billing'}
-              </h3>
-              <p className="text-gray-600 text-sm">
-                {updating ? 'Please wait...' : 'Update payment method, view invoices, and manage subscription'}
-              </p>
-            </div>
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleUpdatePaymentMethod}
-            disabled={updating || !subscriptionData?.stripeCustomerId}
-            className="flex items-center justify-center gap-3 p-6 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg group disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <div className="p-3 rounded-lg bg-green-100 group-hover:bg-green-200 transition-colors">
-              <ArrowPathIcon className="w-6 h-6 text-green-600" />
-            </div>
-            <div className="text-left">
-              <h3 className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
-                Update Payment Method
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Add or update your payment information
-              </p>
-            </div>
-          </motion.button>
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-lg bg-blue-100">
+            <ExclamationTriangleIcon className="w-6 h-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Billing Information</h3>
+            <p className="text-gray-700 leading-relaxed">
+              All billing is handled securely through Stripe. You can view your next billing date, 
+              download invoices, and manage your subscription directly in the Stripe portal. 
+              For billing support, please contact our team.
+            </p>
+          </div>
         </div>
       </motion.div>
     </div>

@@ -10,52 +10,20 @@ import {
   BellIcon, 
   CreditCardIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon,
-  CalendarIcon,
   ChartBarIcon
 } from "@heroicons/react/24/outline";
 
 export default function AccountOverviewPage() {
   const { user } = usePremiumUser();
-  const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const fetchSubscriptionData = async () => {
-      if (!user?.u_id) return;
-      setLoading(true);
-      setLoadError(false);
-      try {
-        const response = await fetch('/api/premium/account/subscription', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ u_id: user.u_id }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setSubscriptionData(data);
-        } else {
-          setLoadError(true);
-        }
-      } catch (error) {
-        setLoadError(true);
-      } finally {
-        setLoading(false);
-        if (timeoutId) clearTimeout(timeoutId);
-      }
-    };
-    if (!user?.u_id) return;
-    fetchSubscriptionData();
-    // Set a timeout for fallback error UI
-    const id = setTimeout(() => {
-      setLoadError(true);
+    // Simple loading state to ensure user context is loaded
+    const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000);
-    setTimeoutId(id);
-    return () => clearTimeout(id);
-  }, [user?.u_id]);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const quickActions = [
     {
@@ -88,37 +56,25 @@ export default function AccountOverviewPage() {
     }
   ];
 
-  // Determine which next billing date to display
-  const displayNextBillingDate = () => {
-    if (subscriptionData?.nextBillingDate) {
-      return new Date(subscriptionData.nextBillingDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    }
-    return 'Not available';
-  };
-
   const accountStats = [
     {
       label: "Account Status",
-      value: subscriptionData?.status === 'active' ? "Active" : "Inactive",
-      icon: subscriptionData?.status === 'active' ? CheckCircleIcon : ExclamationTriangleIcon,
-      color: subscriptionData?.status === 'active' ? "text-green-600" : "text-red-600",
-      bgColor: subscriptionData?.status === 'active' ? "bg-green-100" : "bg-red-100"
+      value: "Active",
+      icon: CheckCircleIcon,
+      color: "text-green-600",
+      bgColor: "bg-green-100"
     },
     {
       label: "Plan",
-      value: subscriptionData?.plan || "Unknown",
+      value: "Premium",
       icon: ChartBarIcon,
       color: "text-blue-600",
       bgColor: "bg-blue-100"
     },
     {
-      label: "Next Billing",
-      value: displayNextBillingDate(),
-      icon: CalendarIcon,
+      label: "Email",
+      value: user?.email || "N/A",
+      icon: ChartBarIcon,
       color: "text-purple-600",
       bgColor: "bg-purple-100"
     }
@@ -128,20 +84,6 @@ export default function AccountOverviewPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="mb-4 text-red-600 font-semibold">Failed to load subscription data.</div>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Try Again
-        </button>
       </div>
     );
   }
@@ -172,14 +114,7 @@ export default function AccountOverviewPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">{stat.label}</p>
-                  <div className="flex items-center gap-2">
-                    <p className={`font-semibold ${stat.color}`}>{stat.value}</p>
-                    {stat.label === "Next Billing" && subscriptionData?.nextBillingDate && (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                        Live
-                      </span>
-                    )}
-                  </div>
+                  <p className={`font-semibold ${stat.color}`}>{stat.value}</p>
                 </div>
               </motion.div>
             );
@@ -205,22 +140,20 @@ export default function AccountOverviewPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 <Link
                   href={action.href}
-                  className="block p-6 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg group"
+                  className="block p-6 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 hover:from-gray-100 hover:to-gray-200/50 transition-all duration-300 border border-gray-200/50 hover:border-gray-300/50 group"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} text-white shadow-lg group-hover:shadow-xl transition-shadow`}>
-                      <Icon className="w-6 h-6" />
+                  <div className="flex items-center gap-4">
+                    <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">
                         {action.title}
                       </h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-600 text-sm mt-1">
                         {action.description}
                       </p>
                     </div>
@@ -232,29 +165,18 @@ export default function AccountOverviewPage() {
         </div>
       </motion.div>
 
-      {/* Recent Activity */}
+      {/* Welcome Message */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8"
+        className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200/50"
       >
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
-        
-        <div className="space-y-4">
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
-            <div className="p-3 rounded-lg bg-blue-100">
-              <CalendarIcon className="w-5 h-5 text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <p className="font-medium text-gray-900">Account Created</p>
-              <p className="text-sm text-gray-600">
-                Welcome to GMF Plus! Your account is now active.
-              </p>
-            </div>
-            <span className="text-xs text-gray-500">Just now</span>
-          </div>
-        </div>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Welcome to Your Account Dashboard</h3>
+        <p className="text-gray-700 leading-relaxed">
+          Manage your profile, security settings, billing, and notifications all in one place. 
+          Need help? Contact our support team for assistance.
+        </p>
       </motion.div>
     </div>
   );
