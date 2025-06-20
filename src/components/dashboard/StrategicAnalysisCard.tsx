@@ -77,10 +77,10 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     // Clear previous chart
     d3.select(quadrantSvgRef.current).selectAll("*").remove();
 
-    // Setup dimensions - MUCH LARGER for executive view
-    const margin = { top: 60, right: 60, bottom: 60, left: 60 };
+    // Setup dimensions - MUCH LARGER for executive view with better spacing
+    const margin = { top: 80, right: 80, bottom: 80, left: 80 }; // Increased margins for breathing room
     const width = quadrantSvgRef.current.clientWidth - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom; // Increased from 300 to 500
+    const height = 600 - margin.top - margin.bottom; // Increased from 500 to 600
 
     // Create SVG
     const svg = d3
@@ -161,10 +161,11 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .domain([minY, maxY])
       .range([height, 0]);
 
+    // Reduced bubble sizes to prevent overlap
     const sizeScale = d3
       .scaleLinear()
       .domain([1, 5])
-      .range([25, 80]); // Larger bubbles for better visibility
+      .range([15, 45]); // Reduced from 25-80 to 15-45 for better spacing
 
     // Add quadrant backgrounds with Salesforce-style gradients
     const quadrants = [
@@ -237,22 +238,34 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       const centerX = (xScale(quadrant.x1) + xScale(quadrant.x2)) / 2;
       const centerY = (yScale(quadrant.y1) + yScale(quadrant.y2)) / 2;
 
+      // Add background for better text readability
+      svg
+        .append("rect")
+        .attr("x", centerX - 80)
+        .attr("y", centerY - 25)
+        .attr("width", 160)
+        .attr("height", 50)
+        .style("fill", "rgba(255, 255, 255, 0.9)")
+        .style("rx", "6")
+        .style("ry", "6")
+        .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))");
+
       svg
         .append("text")
         .attr("x", centerX)
-        .attr("y", centerY - 10)
+        .attr("y", centerY - 8)
         .style("text-anchor", "middle")
-        .style("font-size", "14px")
-        .style("font-weight", "600")
+        .style("font-size", "16px")
+        .style("font-weight", "700")
         .style("fill", "#374151")
         .text(quadrant.label);
 
       svg
         .append("text")
         .attr("x", centerX)
-        .attr("y", centerY + 10)
+        .attr("y", centerY + 12)
         .style("text-anchor", "middle")
-        .style("font-size", "11px")
+        .style("font-size", "12px")
         .style("fill", "#6b7280")
         .text(quadrant.description);
     });
@@ -290,14 +303,14 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .style("stroke-width", 1)
       .style("stroke-dasharray", "2 2");
 
-    // Add axis labels with larger text
+    // Add axis labels with larger text and better positioning
     svg
       .append("text")
       .attr("x", width / 2)
-      .attr("y", height + 40)
+      .attr("y", height + 50)
       .style("text-anchor", "middle")
-      .style("font-size", "14px")
-      .style("font-weight", "600")
+      .style("font-size", "16px")
+      .style("font-weight", "700")
       .style("fill", "#374151")
       .text("Strategy Score");
 
@@ -305,14 +318,14 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -height / 2)
-      .attr("y", -40)
+      .attr("y", -50)
       .style("text-anchor", "middle")
-      .style("font-size", "14px")
-      .style("font-weight", "600")
+      .style("font-size", "16px")
+      .style("font-weight", "700")
       .style("fill", "#374151")
       .text("Process Score");
 
-    // Add data points with larger sizes and better interactivity
+    // Add data points with better spacing and visibility
     const points = svg
       .selectAll(".data-point")
       .data(allData)
@@ -321,7 +334,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .attr("class", "data-point")
       .style("cursor", "pointer");
 
-    // Add circles with larger sizes
+    // Add circles with better sizing and enhanced user visibility
     points
       .append("circle")
       .attr("cx", d => xScale(d.strategy_score))
@@ -329,31 +342,36 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .attr("r", d => sizeScale(d.technology_score))
       .style("fill", d => d.name === "You" ? "#1d4ed8" : "#64748b")
       .style("stroke", "#ffffff")
-      .style("stroke-width", 3)
-      .style("opacity", 0.8)
+      .style("stroke-width", d => d.name === "You" ? 4 : 3)
+      .style("opacity", d => d.name === "You" ? 0.9 : 0.7)
+      .style("filter", d => d.name === "You" ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))")
       .on("mouseover", function(event, d) {
         d3.select(this)
           .style("opacity", 1)
-          .style("stroke-width", 4);
+          .style("stroke-width", d.name === "You" ? 5 : 4)
+          .style("filter", d.name === "You" ? "drop-shadow(0 3px 6px rgba(29, 78, 216, 0.5))" : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))");
         setHoveredPoint(`${d.name}: Strategy ${d.strategy_score.toFixed(1)}, Process ${d.process_score.toFixed(1)}, Technology ${d.technology_score.toFixed(1)}`);
       })
       .on("mouseout", function() {
+        const d = d3.select(this).datum() as any;
         d3.select(this)
-          .style("opacity", 0.8)
-          .style("stroke-width", 3);
+          .style("opacity", d.name === "You" ? 0.9 : 0.7)
+          .style("stroke-width", d.name === "You" ? 4 : 3)
+          .style("filter", d.name === "You" ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))");
         setHoveredPoint(null);
       });
 
-    // Add labels for user point and selected companies
+    // Add labels for user point with better visibility
     points
       .append("text")
       .attr("x", d => xScale(d.strategy_score))
-      .attr("y", d => yScale(d.process_score) - sizeScale(d.technology_score) - 10)
+      .attr("y", d => yScale(d.process_score) - sizeScale(d.technology_score) - 15)
       .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("font-weight", "600")
+      .style("font-size", "14px")
+      .style("font-weight", "700")
       .style("fill", d => d.name === "You" ? "#1d4ed8" : "#64748b")
       .style("opacity", d => d.name === "You" ? 1 : 0)
+      .style("text-shadow", "0 1px 2px rgba(255, 255, 255, 0.8)")
       .text(d => d.name);
 
   }, [data]);
@@ -366,10 +384,10 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     d3.select(radarSvgRef.current).selectAll("*").remove();
 
     // Setup dimensions - MUCH LARGER for executive view
-    const margin = { top: 60, right: 60, bottom: 60, left: 60 };
+    const margin = { top: 80, right: 80, bottom: 80, left: 80 }; // Increased margins
     const width = radarSvgRef.current.clientWidth - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom; // Increased from 300 to 500
-    const radius = Math.min(width, height) / 2 - 40;
+    const height = 600 - margin.top - margin.bottom; // Increased from 500 to 600
+    const radius = Math.min(width, height) / 2 - 60; // Increased radius for better visibility
 
     // Create SVG
     const svg = d3
@@ -379,13 +397,14 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .append("g")
       .attr("transform", `translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`);
 
-    // Add background circle
+    // Add background circle with enhanced styling
     svg
       .append("circle")
       .attr("r", radius)
       .style("fill", "url(#radarBackgroundGradient)")
       .style("stroke", "#e5e7eb")
-      .style("stroke-width", 1);
+      .style("stroke-width", 2)
+      .style("filter", "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))");
 
     // Create background gradient
     const backgroundGradient = svg
@@ -400,13 +419,13 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .append("stop")
       .attr("offset", "0%")
       .attr("stop-color", "#f8fafc")
-      .attr("stop-opacity", 0.8);
+      .attr("stop-opacity", 0.9);
 
     backgroundGradient
       .append("stop")
       .attr("offset", "100%")
       .attr("stop-color", "#ffffff")
-      .attr("stop-opacity", 0.3);
+      .attr("stop-opacity", 0.4);
 
     // Prepare radar data
     const radarData = {
@@ -439,36 +458,46 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .radius(d => rScale(d.value))
       .angle((d, i) => angleSlice * i - Math.PI / 2);
 
-    // Add concentric circles
+    // Add concentric circles with enhanced styling
     const levels = 5;
     for (let i = 1; i <= levels; i++) {
       const levelRadius = (radius / levels) * i;
+      
+      // Add subtle background fill for each level
+      svg
+        .append("circle")
+        .attr("r", levelRadius)
+        .style("fill", i % 2 === 0 ? "rgba(59, 130, 246, 0.02)" : "rgba(16, 185, 129, 0.02)")
+        .style("stroke", "none");
+
       svg
         .append("circle")
         .attr("r", levelRadius)
         .style("fill", "none")
         .style("stroke", "#e5e7eb")
-        .style("stroke-width", 1)
+        .style("stroke-width", 1.5)
         .style("stroke-dasharray", "2 2");
 
-      // Add level labels
+      // Add level labels with better positioning
       svg
         .append("text")
         .attr("x", 0)
-        .attr("y", -levelRadius + 15)
+        .attr("y", -levelRadius + 20)
         .style("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "14px")
+        .style("font-weight", "600")
         .style("fill", "#6b7280")
         .text(i);
     }
 
-    // Add axis lines and labels
+    // Add axis lines and labels with enhanced styling
     const axisLabels = ["Strategy", "Process", "Technology", "Overall"];
     axisLabels.forEach((label, i) => {
       const angle = angleSlice * i - Math.PI / 2;
-      const x = Math.cos(angle) * (radius + 30);
-      const y = Math.sin(angle) * (radius + 30);
+      const x = Math.cos(angle) * (radius + 40);
+      const y = Math.sin(angle) * (radius + 40);
 
+      // Add axis lines with better styling
       svg
         .append("line")
         .attr("x1", 0)
@@ -476,45 +505,38 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         .attr("x2", Math.cos(angle) * radius)
         .attr("y2", Math.sin(angle) * radius)
         .style("stroke", "#d1d5db")
-        .style("stroke-width", 1);
+        .style("stroke-width", 2);
 
-      svg
-        .append("text")
-        .attr("x", x)
-        .attr("y", y)
-        .style("text-anchor", "middle")
-        .style("dominant-baseline", "middle")
-        .style("font-size", "14px")
-        .style("font-weight", "600")
+      // Add axis labels with background for better readability
+      const labelGroup = svg.append("g")
+        .attr("transform", `translate(${x}, ${y})`);
+
+      // Add background rectangle for label
+      const labelText = labelGroup.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "700")
         .style("fill", "#374151")
         .text(label);
+
+      // Get text dimensions and add background
+      const bbox = (labelText.node() as SVGTextElement).getBBox();
+      labelGroup.insert("rect", "text")
+        .attr("x", bbox.x - 8)
+        .attr("y", bbox.y - 4)
+        .attr("width", bbox.width + 16)
+        .attr("height", bbox.height + 8)
+        .style("fill", "rgba(255, 255, 255, 0.9)")
+        .style("rx", "4")
+        .style("ry", "4")
+        .style("filter", "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))");
+
+      // Move text to front
+      labelText.raise();
     });
 
-    // Draw user radar
-    const userData = [
-      { value: radarData.user.strategy },
-      { value: radarData.user.process },
-      { value: radarData.user.technology },
-      { value: radarData.user.overall }
-    ];
-
-    // Create user gradient
-    const userGradient = svg.append("defs").append("linearGradient")
-      .attr("id", "userRadarGradient")
-      .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
-    userGradient.append("stop").attr("offset", "0%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.3);
-    userGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1e40af").attr("stop-opacity", 0.1);
-
-    svg
-      .append("path")
-      .datum(userData)
-      .attr("class", "userRadar")
-      .attr("d", radarLine)
-      .style("fill", "url(#userRadarGradient)")
-      .style("stroke", "#1d4ed8")
-      .style("stroke-width", 3);
-
-    // Draw industry average radar
+    // Draw industry average radar first (background)
     const industryData = [
       { value: radarData.industryAvg.strategy },
       { value: radarData.industryAvg.process },
@@ -529,8 +551,9 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .attr("d", radarLine)
       .style("fill", "none")
       .style("stroke", "#64748b")
-      .style("stroke-width", 2)
-      .style("stroke-dasharray", "4 2");
+      .style("stroke-width", 3)
+      .style("stroke-dasharray", "6 3")
+      .style("opacity", 0.6);
 
     // Draw top performer radar
     const topPerformerData = [
@@ -544,7 +567,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     const topPerformerGradient = svg.append("defs").append("linearGradient")
       .attr("id", "topPerformerRadarGradient")
       .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
-    topPerformerGradient.append("stop").attr("offset", "0%").attr("stop-color", "#10b981").attr("stop-opacity", 0.3);
+    topPerformerGradient.append("stop").attr("offset", "0%").attr("stop-color", "#10b981").attr("stop-opacity", 0.2);
     topPerformerGradient.append("stop").attr("offset", "100%").attr("stop-color", "#059669").attr("stop-opacity", 0.1);
 
     svg
@@ -554,18 +577,45 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .attr("d", radarLine)
       .style("fill", "url(#topPerformerRadarGradient)")
       .style("stroke", "#059669")
-      .style("stroke-width", 2)
-      .style("stroke-dasharray", "2 4");
+      .style("stroke-width", 3)
+      .style("stroke-dasharray", "3 6")
+      .style("opacity", 0.8);
 
-    // Add data points with larger sizes
-    const addDataPoints = (data: { value: number }[], color: string, className: string) => {
+    // Draw user radar with enhanced prominence
+    const userData = [
+      { value: radarData.user.strategy },
+      { value: radarData.user.process },
+      { value: radarData.user.technology },
+      { value: radarData.user.overall }
+    ];
+
+    // Create user gradient with enhanced styling
+    const userGradient = svg.append("defs").append("linearGradient")
+      .attr("id", "userRadarGradient")
+      .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+    userGradient.append("stop").attr("offset", "0%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.4);
+    userGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1e40af").attr("stop-opacity", 0.2);
+
+    // Add user radar with enhanced styling and glow effect
+    svg
+      .append("path")
+      .datum(userData)
+      .attr("class", "userRadar")
+      .attr("d", radarLine)
+      .style("fill", "url(#userRadarGradient)")
+      .style("stroke", "#1d4ed8")
+      .style("stroke-width", 4)
+      .style("filter", "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))");
+
+    // Add data points with larger sizes and enhanced visibility
+    const addDataPoints = (data: { value: number }[], color: string, className: string, isUser: boolean = false) => {
       svg
         .selectAll(`.${className}-point`)
         .data(data)
         .enter()
         .append("circle")
         .attr("class", `${className}-point`)
-        .attr("r", 4) // Larger points
+        .attr("r", isUser ? 6 : 5) // Larger points, user points slightly bigger
         .attr("cx", (d: { value: number }, i: number) => {
           const angle = angleSlice * i - Math.PI / 2;
           return Math.cos(angle) * rScale(d.value);
@@ -576,19 +626,20 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         })
         .style("fill", color)
         .style("stroke", "#ffffff")
-        .style("stroke-width", 2);
+        .style("stroke-width", isUser ? 3 : 2)
+        .style("filter", isUser ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.4))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))");
     };
 
-    addDataPoints(userData, "#1d4ed8", "user");
+    addDataPoints(userData, "#1d4ed8", "user", true);
     addDataPoints(industryData, "#64748b", "industry");
     addDataPoints(topPerformerData, "#059669", "topPerformer");
 
-    // Add legend with larger text
-    const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${radius + 50}, -${radius / 2})`);
+    // Add legend with enhanced styling and larger text
+    const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${radius + 60}, -${radius / 2})`);
     
     const legendData = [
-      { label: "You", color: "#1d4ed8", pattern: "solid" },
-      { label: "Industry", color: "#64748b", pattern: "dashed" },
+      { label: "You", color: "#1d4ed8", pattern: "solid", isUser: true },
+      { label: "Industry Average", color: "#64748b", pattern: "dashed" },
       { label: "Top Performers", color: "#059669", pattern: "dotted" }
     ];
 
@@ -597,25 +648,25 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .enter()
       .append("g")
       .attr("class", "legend-item")
-      .attr("transform", (d, i) => `translate(0, ${i * 25})`) // More spacing
+      .attr("transform", (d, i) => `translate(0, ${i * 30})`) // More spacing
       .each(function(d) {
         const g = d3.select(this);
         
         g.append("line")
           .attr("x1", 0)
-          .attr("x2", 20) // Longer lines
+          .attr("x2", 25) // Longer lines
           .attr("y1", 0)
           .attr("y2", 0)
           .style("stroke", d.color)
-          .style("stroke-width", 3) // Thicker lines
-          .style("stroke-dasharray", d.pattern === "dashed" ? "4 2" : d.pattern === "dotted" ? "2 4" : "none");
+          .style("stroke-width", d.isUser ? 4 : 3) // Thicker line for user
+          .style("stroke-dasharray", d.pattern === "dashed" ? "6 3" : d.pattern === "dotted" ? "3 6" : "none");
         
         g.append("text")
-          .attr("x", 25) // More spacing
+          .attr("x", 30) // More spacing
           .attr("y", 3)
-          .style("font-size", "12px") // Larger text
-          .style("font-weight", "500")
-          .style("fill", "#374151")
+          .style("font-size", "14px") // Larger text
+          .style("font-weight", d.isUser ? "700" : "500")
+          .style("fill", d.isUser ? "#1d4ed8" : "#374151")
           .text(d.label);
       });
 
@@ -675,7 +726,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
           </div>
           
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <svg ref={quadrantSvgRef} className="w-full" style={{ height: "500px" }} />
+            <svg ref={quadrantSvgRef} className="w-full" style={{ height: "600px" }} />
           </div>
           
           {hoveredPoint && (
@@ -699,7 +750,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
           </div>
           
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <svg ref={radarSvgRef} className="w-full" style={{ height: "500px" }} />
+            <svg ref={radarSvgRef} className="w-full" style={{ height: "600px" }} />
           </div>
           
           <div className="text-sm text-gray-600 leading-relaxed max-w-2xl">
