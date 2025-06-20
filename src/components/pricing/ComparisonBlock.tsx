@@ -1,37 +1,97 @@
+import { motion } from "framer-motion";
+
 export default function ComparisonBlock() {
   return (
-    <section className="max-w-6xl mx-auto my-20 bg-gray-100 rounded-lg p-10 shadow-lg">
-      <h2 className="text-5xl font-semibold text-center text-gray-800">
-        Why <span className="text-blue-600">OptimaliQ</span> Wins — Every Time
-      </h2>
-      <p className="text-lg text-gray-600 text-center mt-2">
-        AI-powered. Always on. Built for real business momentum.
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+    <motion.section 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 lg:p-12 shadow-xl border border-white/20"
+    >
+      <div className="text-center mb-12">
+        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          Why <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">OptimaliQ</span> Wins — Every Time
+        </h2>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          AI-powered. Always on. Built for real business momentum.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* OptimaliQ */}
-        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-700">
-          <h3 className="text-2xl font-bold text-blue-600">OptimaliQ</h3>
-          <ul className="mt-4 text-gray-700 space-y-3">
-            <li>✅ Smarter than hiring a consultant — and costs less than one hour of their time</li>
-            <li>✅ Instant Strategy with Zero Ramp-Up</li>
-            <li>✅ Real-Time Market & Trend Intelligence (Updated Weekly)</li>
-            <li>✅ Monthly Progress Reviews with Actionable Adjustments</li>
-            <li>✅ Benchmarking vs. Industry & Top Performers</li>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl border border-blue-100 shadow-lg"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-xl">🚀</span>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">OptimaliQ</h3>
+          </div>
+          <ul className="space-y-4">
+            {[
+              "Smarter than hiring a consultant — and costs less than one hour of their time",
+              "Instant Strategy with Zero Ramp-Up",
+              "Real-Time Market & Trend Intelligence (Updated Weekly)",
+              "Monthly Progress Reviews with Actionable Adjustments",
+              "Benchmarking vs. Industry & Top Performers"
+            ].map((item, index) => (
+              <motion.li 
+                key={item}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+                className="flex items-start gap-3 text-gray-700"
+              >
+                <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-green-600 text-xs">✓</span>
+                </div>
+                <span className="text-sm leading-relaxed">{item}</span>
+              </motion.li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Traditional Consulting */}
-        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-600">
-          <h3 className="text-2xl font-bold text-red-600">Traditional Consulting</h3>
-          <ul className="mt-4 text-gray-700 space-y-3">
-            <li>❌ $10,000+ Retainers</li>
-            <li>❌ Slow, Manual Reporting</li>
-            <li>❌ Recommendations Stale by the Time You Get Them</li>
-            <li>❌ Limited to Human Bandwidth</li>
-            <li>❌ Static Strategy Without Data Refresh</li>
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-gradient-to-br from-red-50 to-pink-50 p-8 rounded-2xl border border-red-100 shadow-lg"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-xl">⏰</span>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">Traditional Consulting</h3>
+          </div>
+          <ul className="space-y-4">
+            {[
+              "$10,000+ Retainers",
+              "Slow, Manual Reporting",
+              "Recommendations Stale by the Time You Get Them",
+              "Limited to Human Bandwidth",
+              "Static Strategy Without Data Refresh"
+            ].map((item, index) => (
+              <motion.li 
+                key={item}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                className="flex items-start gap-3 text-gray-600"
+              >
+                <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-red-600 text-xs">✗</span>
+                </div>
+                <span className="text-sm leading-relaxed">{item}</span>
+              </motion.li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

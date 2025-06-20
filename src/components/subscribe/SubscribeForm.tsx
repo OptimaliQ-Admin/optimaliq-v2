@@ -163,15 +163,8 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-xl">
-      <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-2">
-        Subscribe to OptimaliQ
-      </h2>
-      <p className="text-gray-600 text-center mb-6">
-        Get your 30-day strategic roadmap and AI-driven insights — starting now.
-      </p>
-
-      <div className="mt-4 mb-6 p-4 bg-blue-50 rounded-lg">
+    <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border border-white/20 p-8 lg:p-10 w-full max-w-lg">
+      <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
         <p className="text-blue-800 text-center">
           You&lsquo;re subscribing to the <span className="font-semibold capitalize">{selectedPlan}</span> plan
           <br />
@@ -268,9 +261,9 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl text-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/20 shadow-lg hover:shadow-xl"
         >
-          {loading ? "Redirecting..." : "Continue"}
+          {loading ? "Redirecting..." : "Continue to Payment"}
         </button>
 
         <p className="text-sm text-gray-500 text-center mt-3">

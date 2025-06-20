@@ -2,9 +2,10 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import SubscribeForm from "@/components/subscribe/SubscribeForm";
-import ValueCarousel from "@/components/subscribe/ValueCarousel";
+import SubscribeHeader from "@/components/subscribe/SubscribeHeader";
 
 function SubscribePageContent() {
   const router = useRouter();
@@ -52,12 +53,20 @@ function SubscribePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 flex items-center justify-center px-6 py-16">
-      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="hidden md:block">
-          <ValueCarousel />
-        </div>
-        <SubscribeForm plan={plan} cycle={cycle} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-6 py-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+        >
+          <SubscribeHeader />
+          <SubscribeForm plan={plan} cycle={cycle} />
+        </motion.div>
       </div>
     </div>
   );
