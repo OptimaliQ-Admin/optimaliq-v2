@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { usePremiumUser } from "@/context/PremiumUserContext";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
-  CreditCardIcon, 
+  CheckCircleIcon, 
+  ExclamationTriangleIcon, 
+  DocumentTextIcon, 
   CalendarIcon, 
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  ArrowPathIcon,
-  DocumentTextIcon
-} from "@heroicons/react/24/outline";
+  CreditCardIcon, 
+  ArrowPathIcon 
+} from '@heroicons/react/24/outline';
+import { usePremiumUser } from '@/hooks/usePremiumUser';
+import { useNextBillingDate } from '@/hooks/useNextBillingDate';
 
 interface SubscriptionData {
   status: string;
@@ -29,36 +30,43 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
-  useEffect(() => {
-    const fetchSubscriptionData = async () => {
-      if (!user?.u_id) return;
-      
-      setLoading(true);
-      try {
-        const response = await fetch('/api/premium/account/subscription', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ u_id: user.u_id }),
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Subscription data fetched:", data);
-          setSubscriptionData(data);
-        } else {
-          console.error("Failed to fetch subscription data:", response.status);
-          const errorData = await response.json().catch(() => ({}));
-          console.error("Error details:", errorData);
-        }
-      } catch (error) {
-        console.error("Error fetching subscription data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Use the new hook to get accurate next billing date from Stripe
+  const { 
+    nextBillingDate: stripeNextBillingDate, 
+    loading: nextBillingLoading, 
+    error: nextBillingError 
+  } = useNextBillingDate(subscriptionData?.stripeCustomerId || null);
 
+  const fetchSubscriptionData = async () => {
+    if (!user?.id) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch('/api/premium/account/subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ u_id: user.id }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Subscription data fetched:", data);
+        setSubscriptionData(data);
+      } else {
+        console.error("Failed to fetch subscription data:", response.status);
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error details:", errorData);
+      }
+    } catch (error) {
+      console.error("Error fetching subscription data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchSubscriptionData();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const handleManageBilling = async () => {
     console.log("Manage Billing clicked", { 
@@ -68,6 +76,7 @@ export default function BillingPage() {
     
     if (!subscriptionData?.stripeCustomerId) {
       console.error("No Stripe customer ID available");
+      alert("Unable to access billing portal. Please contact support.");
       return;
     }
     
@@ -96,11 +105,11 @@ export default function BillingPage() {
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error("Billing portal error response:", errorData);
-        throw new Error(`Failed to create billing portal session: ${response.status}`);
+        alert(`Unable to access billing portal: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error creating billing portal session:', error);
-      // You might want to show a user-friendly error message here
+      alert('Failed to access billing portal. Please try again or contact support.');
     } finally {
       setUpdating(false);
     }
@@ -140,6 +149,17 @@ export default function BillingPage() {
       </div>
     );
   }
+
+  // Determine which next billing date to display
+  const displayNextBillingDate = () => {
+    if (stripeNextBillingDate?.formattedDate) {
+      return stripeNextBillingDate.formattedDate;
+    }
+    if (subscriptionData?.nextBillingDate) {
+      return new Date(subscriptionData.nextBillingDate).toLocaleDateString();
+    }
+    return 'Not available';
+  };
 
   return (
     <div className="space-y-8">
@@ -203,12 +223,28 @@ export default function BillingPage() {
           <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
             <div>
               <h3 className="font-semibold text-gray-900">Next Billing Date</h3>
-              <p className="text-gray-600 text-sm">
-                {subscriptionData?.nextBillingDate 
-                  ? new Date(subscriptionData.nextBillingDate).toLocaleDateString()
-                  : 'Not available'
-                }
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-gray-600 text-sm">
+                  {nextBillingLoading ? (
+                    <span className="inline-flex items-center gap-2">
+                      <div className="h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                      Loading...
+                    </span>
+                  ) : (
+                    displayNextBillingDate()
+                  )}
+                </p>
+                {stripeNextBillingDate?.formattedDate && (
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                    Live from Stripe
+                  </span>
+                )}
+              </div>
+              {nextBillingError && (
+                <p className="text-xs text-red-600 mt-1">
+                  Error: {nextBillingError}
+                </p>
+              )}
             </div>
             <CalendarIcon className="w-5 h-5 text-gray-400" />
           </div>
@@ -246,14 +282,18 @@ export default function BillingPage() {
             className="flex items-center justify-center gap-3 p-6 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg group disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="p-3 rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors">
-              <CreditCardIcon className="w-6 h-6 text-blue-600" />
+              {updating ? (
+                <div className="h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <CreditCardIcon className="w-6 h-6 text-blue-600" />
+              )}
             </div>
             <div className="text-left">
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                Manage Billing
+                {updating ? 'Opening Billing Portal...' : 'Manage Billing'}
               </h3>
               <p className="text-gray-600 text-sm">
-                Update payment method, view invoices, and manage subscription
+                {updating ? 'Please wait...' : 'Update payment method, view invoices, and manage subscription'}
               </p>
             </div>
           </motion.button>
@@ -273,7 +313,7 @@ export default function BillingPage() {
                 Update Payment Method
               </h3>
               <p className="text-gray-600 text-sm">
-                Add or update your credit card information
+                Add or update your payment information
               </p>
             </div>
           </motion.button>

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { usePremiumUser } from "@/context/PremiumUserContext";
+import { usePremiumUser } from "@/hooks/usePremiumUser";
+import { useNextBillingDate } from "@/hooks/useNextBillingDate";
 import { 
   UserIcon, 
   ShieldCheckIcon, 
@@ -20,15 +21,22 @@ export default function AccountOverviewPage() {
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // Use the new hook to get accurate next billing date from Stripe
+  const { 
+    nextBillingDate: stripeNextBillingDate, 
+    loading: nextBillingLoading, 
+    error: nextBillingError 
+  } = useNextBillingDate(subscriptionData?.stripeCustomerId || null);
+
   useEffect(() => {
     const fetchSubscriptionData = async () => {
-      if (!user?.u_id) return;
+      if (!user?.id) return;
       
       try {
         const response = await fetch('/api/premium/account/subscription', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ u_id: user.u_id }),
+          body: JSON.stringify({ u_id: user.id }),
         });
         
         if (response.ok) {
@@ -43,7 +51,7 @@ export default function AccountOverviewPage() {
     };
 
     fetchSubscriptionData();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const quickActions = [
     {
@@ -76,6 +84,17 @@ export default function AccountOverviewPage() {
     }
   ];
 
+  // Determine which next billing date to display
+  const displayNextBillingDate = () => {
+    if (stripeNextBillingDate?.formattedDate) {
+      return stripeNextBillingDate.formattedDate;
+    }
+    if (subscriptionData?.nextBillingDate) {
+      return new Date(subscriptionData.nextBillingDate).toLocaleDateString();
+    }
+    return 'Not available';
+  };
+
   const accountStats = [
     {
       label: "Account Status",
@@ -92,8 +111,8 @@ export default function AccountOverviewPage() {
       bgColor: "bg-blue-100"
     },
     {
-      label: "Billing Cycle",
-      value: subscriptionData?.billingCycle || "Unknown",
+      label: "Next Billing",
+      value: nextBillingLoading ? "Loading..." : displayNextBillingDate(),
       icon: CalendarIcon,
       color: "text-purple-600",
       bgColor: "bg-purple-100"
@@ -134,7 +153,14 @@ export default function AccountOverviewPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">{stat.label}</p>
-                  <p className={`font-semibold ${stat.color}`}>{stat.value}</p>
+                  <div className="flex items-center gap-2">
+                    <p className={`font-semibold ${stat.color}`}>{stat.value}</p>
+                    {stat.label === "Next Billing" && stripeNextBillingDate?.formattedDate && (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                        Live
+                      </span>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             );
@@ -198,28 +224,17 @@ export default function AccountOverviewPage() {
         
         <div className="space-y-4">
           <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
-            <div className="p-2 rounded-lg bg-blue-100">
-              <CheckCircleIcon className="w-5 h-5 text-blue-600" />
+            <div className="p-3 rounded-lg bg-blue-100">
+              <CalendarIcon className="w-5 h-5 text-blue-600" />
             </div>
-            <div>
-              <p className="font-medium text-gray-900">Account accessed</p>
-              <p className="text-sm text-gray-600">Just now</p>
+            <div className="flex-1">
+              <p className="font-medium text-gray-900">Account Created</p>
+              <p className="text-sm text-gray-600">
+                Welcome to GMF Plus! Your account is now active.
+              </p>
             </div>
+            <span className="text-xs text-gray-500">Just now</span>
           </div>
-          
-          {subscriptionData?.lastLogin && (
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50/50">
-              <div className="p-2 rounded-lg bg-green-100">
-                <CalendarIcon className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-900">Last login</p>
-                <p className="text-sm text-gray-600">
-                  {new Date(subscriptionData.lastLogin).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          )}
         </div>
       </motion.div>
     </div>

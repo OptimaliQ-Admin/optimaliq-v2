@@ -23,10 +23,24 @@ export type PremiumUser = {
   phone?: string;
 };
 
+export type SubscriptionData = {
+  status: string;
+  plan: string;
+  billingCycle: string;
+  nextBillingDate: string;
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
+  amount: number;
+  currency: string;
+};
+
 type ContextType = {
   user: PremiumUser | null;
   setUser: (user: PremiumUser | null) => void;
   isUserLoaded: boolean;
+  subscription: SubscriptionData | null;
+  isSubscriptionLoaded: boolean;
+  refreshSubscription: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -34,12 +48,48 @@ const PremiumUserContext = createContext<ContextType>({
   user: null,
   setUser: () => {},
   isUserLoaded: false,
+  subscription: null,
+  isSubscriptionLoaded: false,
+  refreshSubscription: async () => {},
   logout: async () => {},
 });
 
 export const PremiumUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<PremiumUser | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
+  const [isSubscriptionLoaded, setIsSubscriptionLoaded] = useState(false);
+
+  // Fetch subscription data
+  const fetchSubscription = useCallback(async (userId: string) => {
+    try {
+      const response = await fetch('/api/premium/account/subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ u_id: userId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSubscription(data);
+      } else {
+        console.error('Failed to fetch subscription data');
+        setSubscription(null);
+      }
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+      setSubscription(null);
+    } finally {
+      setIsSubscriptionLoaded(true);
+    }
+  }, []);
+
+  // Refresh subscription data
+  const refreshSubscription = useCallback(async () => {
+    if (user?.u_id) {
+      await fetchSubscription(user.u_id);
+    }
+  }, [user?.u_id, fetchSubscription]);
 
   // Centralized logout function using the auth utility
   const logout = useCallback(async () => {
@@ -49,11 +99,13 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
       
       // Clear React context
       setUser(null);
+      setSubscription(null);
       
     } catch (error) {
       console.error("Error during logout:", error);
       // Even if cleanup fails, clear context
       setUser(null);
+      setSubscription(null);
     }
   }, []);
 
@@ -62,31 +114,42 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
     try {
       const stored = localStorage.getItem("tier2_user");
       if (stored) {
-        setUser(JSON.parse(stored));
+        const userData = JSON.parse(stored);
+        setUser(userData);
+        // Fetch subscription data for the user
+        if (userData?.u_id) {
+          fetchSubscription(userData.u_id);
+        }
       }
     } catch (err) {
       console.warn("❌ Failed to load cached Premium user.");
     } finally {
       setIsUserLoaded(true);
     }
-  }, []);
+  }, [fetchSubscription]);
 
   // Keep user cached in localStorage when it changes
   useEffect(() => {
     if (user) {
       localStorage.setItem("tier2_user", JSON.stringify(user));
+      // Fetch subscription data when user changes
+      fetchSubscription(user.u_id);
     } else {
       localStorage.removeItem("tier2_user");
+      setSubscription(null);
+      setIsSubscriptionLoaded(false);
     }
-  }, [user]);
+  }, [user, fetchSubscription]);
 
   // Listen for auth state changes
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_OUT') {
           // Clear everything when user signs out
           setUser(null);
+          setSubscription(null);
+          setIsSubscriptionLoaded(false);
           localStorage.clear();
           sessionStorage.clear();
         } else if (event === 'SIGNED_IN' && session?.user) {
@@ -96,11 +159,19 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => authSubscription.unsubscribe();
   }, []);
 
   return (
-    <PremiumUserContext.Provider value={{ user, setUser, isUserLoaded, logout }}>
+    <PremiumUserContext.Provider value={{ 
+      user, 
+      setUser, 
+      isUserLoaded, 
+      subscription,
+      isSubscriptionLoaded,
+      refreshSubscription,
+      logout 
+    }}>
       {children}
     </PremiumUserContext.Provider>
   );

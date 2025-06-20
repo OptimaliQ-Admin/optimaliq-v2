@@ -1,6 +1,7 @@
 // File: middleware.ts
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 // This middleware protects all /premium routes
 export async function middleware(req: NextRequest) {
@@ -9,25 +10,49 @@ export async function middleware(req: NextRequest) {
   // Create Supabase client with request/response context
   const supabase = createMiddlewareClient({ req, res });
 
-  // Check if user has a valid session
+  // Check if user is authenticated
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const isProtectedRoute = req.nextUrl.pathname.startsWith("/premium");
-  const isAuthRoute = req.nextUrl.pathname.startsWith("/subscribe");
-
-  // ✅ If accessing a protected page but not logged in, redirect to login
-  if (isProtectedRoute && !session) {
-    const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = "/subscribe/login";
-    redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
+  // If no session and trying to access premium routes, redirect to login
+  if (!session && req.nextUrl.pathname.startsWith('/premium')) {
+    const redirectUrl = new URL('/subscribe/login', req.url);
     return NextResponse.redirect(redirectUrl);
   }
 
-  // ✅ Prevent logged-in users from accessing login/signup again
-  if (isAuthRoute && session) {
-    return NextResponse.redirect(new URL("/premium/dashboard", req.url));
+  // If user is authenticated and trying to access premium routes, check subscription status
+  if (session && req.nextUrl.pathname.startsWith('/premium')) {
+    try {
+      // Get user's subscription status
+      const { data: subscription, error } = await supabase
+        .from('subscriptions')
+        .select('status')
+        .eq('u_id', session.user.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching subscription status:', error);
+        // If we can't fetch subscription, redirect to subscribe page
+        const redirectUrl = new URL('/subscribe', req.url);
+        return NextResponse.redirect(redirectUrl);
+      }
+
+      // Check if subscription is active
+      if (!subscription || subscription.status !== 'active') {
+        console.log(`User ${session.user.id} has inactive subscription (${subscription?.status || 'none'}), redirecting to subscribe`);
+        
+        // Redirect to subscribe page with a message
+        const redirectUrl = new URL('/subscribe', req.url);
+        redirectUrl.searchParams.set('message', 'subscription_required');
+        return NextResponse.redirect(redirectUrl);
+      }
+    } catch (error) {
+      console.error('Error in subscription check middleware:', error);
+      // If there's an error, redirect to subscribe page
+      const redirectUrl = new URL('/subscribe', req.url);
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   return res;
@@ -35,5 +60,15 @@ export async function middleware(req: NextRequest) {
 
 // ✅ Apply only to /premium and /subscribe routes
 export const config = {
-  matcher: ["/premium/:path*", "/subscribe/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+  ],
 };
