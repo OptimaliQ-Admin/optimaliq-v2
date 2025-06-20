@@ -14,19 +14,50 @@ export default function BillingPage() {
   const { user } = usePremiumUser();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [stripeCustomerId] = useState<string | null>(null);
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null);
+  const [customerIdLoading, setCustomerIdLoading] = useState(false);
 
   useEffect(() => {
+    const fetchCustomerId = async () => {
+      if (!user?.u_id) return;
+      
+      setCustomerIdLoading(true);
+      try {
+        const response = await fetch('/api/premium/account/subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ u_id: user.u_id }),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setStripeCustomerId(data.stripeCustomerId);
+        } else {
+          console.log('No subscription found for user');
+        }
+      } catch (error) {
+        console.log('Error fetching customer ID:', error);
+      } finally {
+        setCustomerIdLoading(false);
+        setLoading(false);
+      }
+    };
+
     // Simple loading state to ensure user context is loaded
     const timer = setTimeout(() => {
-      setLoading(false);
+      if (!user?.u_id) {
+        setLoading(false);
+      } else {
+        fetchCustomerId();
+      }
     }, 500);
+    
     return () => clearTimeout(timer);
-  }, []);
+  }, [user?.u_id]);
 
   const handleManageBilling = async () => {
     if (!stripeCustomerId) {
-      alert("Unable to access billing portal. Please contact support.");
+      alert("Unable to access billing portal. Please contact support to set up your billing account.");
       return;
     }
     
@@ -62,7 +93,7 @@ export default function BillingPage() {
 
   const handleUpdatePaymentMethod = async () => {
     if (!stripeCustomerId) {
-      alert("Unable to update payment method. Please contact support.");
+      alert("Unable to update payment method. Please contact support to set up your billing account.");
       return;
     }
     
@@ -148,18 +179,29 @@ export default function BillingPage() {
               Access your Stripe billing portal to view invoices, update payment methods, 
               and manage your subscription details.
             </p>
-            <button
-              onClick={handleManageBilling}
-              disabled={updating}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {updating ? (
+            {customerIdLoading ? (
+              <div className="flex items-center gap-2 text-blue-600">
                 <ArrowPathIcon className="w-5 h-5 animate-spin" />
-              ) : (
-                <CreditCardIcon className="w-5 h-5" />
-              )}
-              {updating ? 'Loading...' : 'Manage Billing'}
-            </button>
+                <span>Loading billing information...</span>
+              </div>
+            ) : stripeCustomerId ? (
+              <button
+                onClick={handleManageBilling}
+                disabled={updating}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {updating ? (
+                  <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                ) : (
+                  <CreditCardIcon className="w-5 h-5" />
+                )}
+                {updating ? 'Loading...' : 'Manage Billing'}
+              </button>
+            ) : (
+              <div className="text-amber-700 bg-amber-50 p-3 rounded-lg">
+                <p className="text-sm">Billing account not found. Please contact support to set up your billing information.</p>
+              </div>
+            )}
           </div>
 
           <div className="p-6 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50">
@@ -167,18 +209,29 @@ export default function BillingPage() {
             <p className="text-gray-700 mb-4">
               Add or update your payment method securely through Stripe.
             </p>
-            <button
-              onClick={handleUpdatePaymentMethod}
-              disabled={updating}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {updating ? (
+            {customerIdLoading ? (
+              <div className="flex items-center gap-2 text-green-600">
                 <ArrowPathIcon className="w-5 h-5 animate-spin" />
-              ) : (
-                <CreditCardIcon className="w-5 h-5" />
-              )}
-              {updating ? 'Loading...' : 'Update Payment Method'}
-            </button>
+                <span>Loading payment information...</span>
+              </div>
+            ) : stripeCustomerId ? (
+              <button
+                onClick={handleUpdatePaymentMethod}
+                disabled={updating}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {updating ? (
+                  <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                ) : (
+                  <CreditCardIcon className="w-5 h-5" />
+                )}
+                {updating ? 'Loading...' : 'Update Payment Method'}
+              </button>
+            ) : (
+              <div className="text-amber-700 bg-amber-50 p-3 rounded-lg">
+                <p className="text-sm">Payment method not found. Please contact support to set up your payment information.</p>
+              </div>
+            )}
           </div>
         </div>
       </motion.div>
