@@ -154,7 +154,7 @@ export default function SecurityPage() {
           <div className="p-4 rounded-xl bg-green-50 border border-green-200">
             <h3 className="font-semibold text-green-900 mb-2">Unique Password</h3>
             <p className="text-green-700 text-sm">
-              Don't reuse passwords from other accounts or services.
+              Don&apos;t reuse passwords from other accounts or services.
             </p>
           </div>
           
