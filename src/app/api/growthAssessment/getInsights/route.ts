@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     // Fetch stored answers for the user
     const { data: storedAnswers, error: fetchError } = await supabase
-      .from('growth_assessments')
+      .from('growth_assessment')
       .select('answers')
       .eq('u_id', u_id)
       .order('created_at', { ascending: false })

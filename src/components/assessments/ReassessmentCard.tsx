@@ -115,13 +115,15 @@ export default function ReassessmentCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
+        className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-all duration-200 h-full flex flex-col justify-between group"
       >
         <div className="mb-4">
-          <SectionTitleBar title="📈 Growth Progress Tracker" />
-          <p className="text-gray-500 text-sm leading-relaxed mt-2">
-            Measure your business growth and track improvements across all key areas every 30 days.
-          </p>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-2xl">📈</span>
+            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">Growth Progress Tracker</h3>
+          </div>
+          <div className="h-1 w-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mb-3" />
+          <p className="text-gray-500 text-base leading-relaxed">Measure your business growth and track improvements across all key areas every 30 days.</p>
         </div>
 
         {!canTakeReassessment && (

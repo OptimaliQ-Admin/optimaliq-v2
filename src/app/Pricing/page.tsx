@@ -78,6 +78,7 @@ export default function PricingPage() {
           </motion.div>
 
           {/* Social Proof */}
+          {/*
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -102,6 +103,7 @@ export default function PricingPage() {
               </div>
             </div>
           </motion.div>
+          */}
 
           {/* CTA Section */}
           <motion.div 

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     if (updates.email && (!isValidEmail(updates.email) || isDisposableEmail(updates.email))) {
       return NextResponse.json({ error: "Invalid or disposable email address." }, { status: 400 });
     }
-    if (updates.linkedin_url && !isValidLinkedInUrl(updates.linkedin_url)) {
+    if (updates.linkedin_url && updates.linkedin_url.trim() !== '' && !isValidLinkedInUrl(updates.linkedin_url)) {
       return NextResponse.json({ error: "Invalid LinkedIn profile URL." }, { status: 400 });
     }
 

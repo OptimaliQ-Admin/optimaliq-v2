@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
@@ -75,7 +76,7 @@ export default function ProfilePage() {
     if (form.email && (!isValidEmail(form.email) || isDisposableEmail(form.email))) {
       errors.email = 'Please enter a valid, non-disposable email address.';
     }
-    if (form.linkedin_url && !isValidLinkedInUrl(form.linkedin_url)) {
+    if (form.linkedin_url && form.linkedin_url.trim() !== '' && !isValidLinkedInUrl(form.linkedin_url)) {
       errors.linkedin_url = 'Please enter a valid LinkedIn profile URL.';
     }
     setValidationErrors(errors);
@@ -124,7 +125,13 @@ export default function ProfilePage() {
         <div className="flex items-center gap-6 mb-8">
           <div className="relative w-24 h-24">
             {profilePic ? (
-              <img src={profilePic} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg" />
+              <Image 
+                src={profilePic} 
+                alt={`${form.first_name} ${form.last_name} profile picture`}
+                width={96}
+                height={96}
+                className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg" 
+              />
             ) : (
               <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-3xl text-gray-400 border-4 border-white shadow-lg">?</div>
             )}

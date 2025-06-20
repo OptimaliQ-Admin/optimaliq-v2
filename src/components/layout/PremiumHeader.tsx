@@ -3,6 +3,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { usePremiumUser } from "@/context/PremiumUserContext";
@@ -64,9 +65,11 @@ export default function PremiumHeader() {
             className="flex items-center space-x-2 hover:opacity-80 transition"
           >
             {user?.profile_pic_url ? (
-              <img 
+              <Image 
                 src={user.profile_pic_url} 
-                alt="Profile" 
+                alt={`${user?.first_name || user?.email || 'User'} profile picture`}
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-full object-cover border-2 border-gray-300" 
               />
             ) : (

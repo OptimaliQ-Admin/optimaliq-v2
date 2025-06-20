@@ -71,7 +71,7 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
     if (!isValidEmail(userInfo.email) || isDisposableEmail(userInfo.email)) {
       errors.email = 'Please enter a valid, non-disposable email address.';
     }
-    if (userInfo.linkedin_url && !isValidLinkedInUrl(userInfo.linkedin_url)) {
+    if (userInfo.linkedin_url && userInfo.linkedin_url.trim() !== '' && !isValidLinkedInUrl(userInfo.linkedin_url)) {
       errors.linkedin_url = 'Please enter a valid LinkedIn profile URL.';
     }
     setValidationErrors(errors);

@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /premium/account/
+
+# Allow important pages
+Allow: /premium/
+Allow: /subscribe/
+Allow: /pricing/
+Allow: /growth-assessment/ 

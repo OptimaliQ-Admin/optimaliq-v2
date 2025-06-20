@@ -9,13 +9,102 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "OptimaliQ - AI-Powered Business Strategy",
-  description: "Smarter decisions, faster growth with real-time AI insights.",
+  title: {
+    default: "GMF Plus - AI-Powered Growth Management Framework",
+    template: "%s | GMF Plus"
+  },
+  description: "Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations. Get personalized growth strategies and competitive benchmarking.",
+  keywords: [
+    "business growth",
+    "AI strategy",
+    "growth assessment",
+    "business analytics",
+    "competitive benchmarking",
+    "strategic planning",
+    "business intelligence",
+    "growth framework",
+    "market insights",
+    "business optimization"
+  ],
+  authors: [{ name: "GMF Plus Team" }],
+  creator: "GMF Plus",
+  publisher: "GMF Plus",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://yourdomain.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://yourdomain.com',
+    siteName: 'GMF Plus',
+    title: 'GMF Plus - AI-Powered Growth Management Framework',
+    description: 'Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'GMF Plus - AI-Powered Growth Management Framework',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@gmfplus',
+    creator: '@gmfplus',
+    title: 'GMF Plus - AI-Powered Growth Management Framework',
+    description: 'Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.',
+    images: ['/images/twitter-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code',
+    yandex: 'your-yandex-verification-code',
+    yahoo: 'your-yahoo-verification-code',
+  },
+  category: 'business',
+  classification: 'business software',
+  other: {
+    'msapplication-TileColor': '#3b82f6',
+    'theme-color': '#3b82f6',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>
         {/* Only wrap "normal" pages in RootLayoutWrapper. 
             /premium and /subscribe will have their own layout wrappers. */}
