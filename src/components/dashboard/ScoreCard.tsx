@@ -44,9 +44,9 @@ export default function ScoreCard({
     
     return {
       vsIndustry: vsIndustry > 0 
-        ? `You&apos;re performing ${Math.round(vsIndustry)}% better than the typical company in your industry`
-        : `You&apos;re performing ${Math.round(Math.abs(vsIndustry))}% below the typical company in your industry`,
-      vsTopPerformer: `You&apos;re operating at ${Math.round(vsTopPerformer)}% of what the best companies in your industry achieve`,
+        ? `You're performing ${Math.round(vsIndustry)}% better than the typical company in your industry`
+        : `You're performing ${Math.round(Math.abs(vsIndustry))}% below the typical company in your industry`,
+      vsTopPerformer: `You're operating at ${Math.round(vsTopPerformer)}% of what the best companies in your industry achieve`,
       performanceZone: getPerformanceZone(score, topPerformer).zone
     };
   };
@@ -74,7 +74,7 @@ export default function ScoreCard({
       {/* Main Score Display */}
       <div className="text-center mb-6">
         <div className="text-4xl font-bold text-blue-600 mb-2">{score?.toFixed(1)}</div>
-        <div className="text-sm text-gray-600 font-medium">Overall Score</div>
+        <div className="text-sm text-gray-600 font-medium">Score</div>
       </div>
 
       {/* Performance Metrics */}
@@ -160,24 +160,6 @@ export default function ScoreCard({
         >
           Learn more →
         </motion.button>
-      )}
-
-      {/* Legend */}
-      {industryAvg !== undefined && topPerformer !== undefined && (
-        <div className="flex justify-center items-center gap-4 mt-4 pt-4 border-t border-gray-100 text-xs text-gray-600">
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-            <span>Your Score</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 border border-gray-600 rounded-full"></div>
-            <span>Industry Avg</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 border border-green-500 rounded-full"></div>
-            <span>Top Performers</span>
-          </div>
-        </div>
       )}
     </motion.div>
   );

@@ -8,8 +8,6 @@ import axios from "axios";
 import InsightLoading from "@/components/dashboard/InsightLoading";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
-import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
-import CapabilityGaugeCluster from "@/components/dashboard/CapabilityGaugeCluster";
 import InsightCard from "@/components/dashboard/InsightCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
@@ -128,6 +126,9 @@ export default function PremiumDashboardPage() {
   if (error) return <p className="text-center text-red-600 p-10">{error}</p>;
   if (!insights) return null;
 
+  const overallPerformance = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.topPerformerScore) * 100;
+  const industryPosition = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.industryAvgScore) * 100;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Dashboard Explanation Modal */}
@@ -193,21 +194,66 @@ export default function PremiumDashboardPage() {
             <ScoreCard
               title="Strategy"
               score={insights.strategy_score}
+              industryAvg={insights.industryAvgScore}
+              topPerformer={insights.topPerformerScore}
               description="Clarity, positioning, and strategic alignment."
               onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
             />
             <ScoreCard
               title="Process"
               score={insights.process_score}
+              industryAvg={insights.industryAvgScore}
+              topPerformer={insights.topPerformerScore}
               description="Consistency, execution, and scalability."
               onLearnMore={() => handleScoreClick("process", insights.process_score)}
             />
             <ScoreCard
               title="Technology"
               score={insights.technology_score}
+              industryAvg={insights.industryAvgScore}
+              topPerformer={insights.topPerformerScore}
               description="Growth, automation, and efficiency."
               onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
             />
+          </div>
+        </div>
+
+        {/* Performance Summary Section */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+          <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+            📊 Performance Summary
+          </h4>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600 mb-1">
+                +{Math.round(industryPosition - 100)}%
+              </div>
+              <div className="text-sm text-gray-600">Above Industry Average</div>
+              <div className="text-xs text-gray-500 mt-1">
+                You&apos;re performing {Math.round(industryPosition - 100)}% better than the typical company in your industry
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600 mb-1">
+                {Math.round(overallPerformance)}%
+              </div>
+              <div className="text-sm text-gray-600">of Top Performer Level</div>
+              <div className="text-xs text-gray-500 mt-1">
+                You&apos;re operating at {Math.round(overallPerformance)}% of what the best companies in your industry achieve
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600 mb-1">
+                Top {Math.round(100 - overallPerformance)}%
+              </div>
+              <div className="text-sm text-gray-600">Industry Percentile</div>
+              <div className="text-xs text-gray-500 mt-1">
+                You&apos;re in the top {Math.round(100 - overallPerformance)}% of companies in your industry
+              </div>
+            </div>
           </div>
         </div>
 
@@ -215,13 +261,6 @@ export default function PremiumDashboardPage() {
 
         {/* Analysis Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ExecutiveRadarChart
-            strategy={insights.strategy_score}
-            process={insights.process_score}
-            technology={insights.technology_score}
-            industryAvg={insights.industryAvgScore}
-            topPerformer={insights.topPerformerScore}
-          />
           <div className="space-y-6">
             <InsightCard 
               title="🚀 30-Day Growth Plan" 
@@ -232,17 +271,6 @@ export default function PremiumDashboardPage() {
             />
             <GrowthChart data={insights.chartData} />
           </div>
-        </div>
-
-        {/* New Capability Analysis Section */}
-        <div className="space-y-6">
-          <CapabilityGaugeCluster
-            strategy={insights.strategy_score}
-            process={insights.process_score}
-            technology={insights.technology_score}
-            industryAvg={insights.industryAvgScore}
-            topPerformer={insights.topPerformerScore}
-          />
         </div>
 
         {/* Strengths & Weaknesses Section */}
