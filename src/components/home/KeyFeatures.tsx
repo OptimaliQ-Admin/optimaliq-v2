@@ -149,15 +149,12 @@ export default function KeyFeatures() {
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Get your comprehensive growth report and personalized strategic recommendations in minutes.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link href="/growth-assessment">
                 <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   Get Your Free Growth Report
                 </button>
               </Link>
-              <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300">
-                Schedule Demo
-              </button>
             </div>
           </div>
         </motion.div>

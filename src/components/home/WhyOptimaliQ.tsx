@@ -140,15 +140,12 @@ export default function WhyOptimaliQ() {
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Join thousands of businesses that have accelerated their growth with AI-powered strategic intelligence.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link href="/growth-assessment">
                 <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   Unlock My Growth Plan
                 </button>
               </Link>
-              <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300">
-                Watch Demo
-              </button>
             </div>
           </div>
         </motion.div>

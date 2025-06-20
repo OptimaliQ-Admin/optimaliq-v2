@@ -151,12 +151,9 @@ export default function HowItWorks() {
             <p className="text-gray-600 mb-6">
               Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                 Start Free Assessment
-              </button>
-              <button className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-600 hover:text-blue-600 transition-all duration-300">
-                View Demo
               </button>
             </div>
           </div>

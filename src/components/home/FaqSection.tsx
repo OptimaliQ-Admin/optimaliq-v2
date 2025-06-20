@@ -120,30 +120,6 @@ export default function FaqSection() {
             </motion.div>
           ))}
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 lg:p-12 border border-blue-100 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Still Have Questions?</h3>
-            <p className="text-gray-600 mb-6">
-              Our team of strategic experts is here to help you understand how OptimaliQ can transform your business.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                Contact Support
-              </button>
-              <button className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-600 hover:text-blue-600 transition-all duration-300">
-                Schedule Demo
-              </button>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
