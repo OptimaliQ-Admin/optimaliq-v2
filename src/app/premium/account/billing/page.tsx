@@ -33,6 +33,7 @@ export default function BillingPage() {
     const fetchSubscriptionData = async () => {
       if (!user?.u_id) return;
       
+      setLoading(true);
       try {
         const response = await fetch('/api/premium/account/subscription', {
           method: 'POST',
@@ -42,10 +43,15 @@ export default function BillingPage() {
         
         if (response.ok) {
           const data = await response.json();
+          console.log("Subscription data fetched:", data);
           setSubscriptionData(data);
+        } else {
+          console.error("Failed to fetch subscription data:", response.status);
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Error details:", errorData);
         }
       } catch (error) {
-        console.error('Error fetching subscription data:', error);
+        console.error("Error fetching subscription data:", error);
       } finally {
         setLoading(false);
       }
@@ -55,10 +61,19 @@ export default function BillingPage() {
   }, [user?.u_id]);
 
   const handleManageBilling = async () => {
-    if (!subscriptionData?.stripeCustomerId) return;
+    console.log("Manage Billing clicked", { 
+      stripeCustomerId: subscriptionData?.stripeCustomerId,
+      subscriptionData 
+    });
+    
+    if (!subscriptionData?.stripeCustomerId) {
+      console.error("No Stripe customer ID available");
+      return;
+    }
     
     setUpdating(true);
     try {
+      console.log("Creating billing portal session...");
       const response = await fetch('/api/stripe/createBillingPortalSession', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,14 +83,24 @@ export default function BillingPage() {
         }),
       });
       
+      console.log("Billing portal response status:", response.status);
+      
       if (response.ok) {
-        const { url } = await response.json();
-        window.location.href = url;
+        const data = await response.json();
+        console.log("Billing portal session created:", data);
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error('No URL returned from billing portal session');
+        }
       } else {
-        throw new Error('Failed to create billing portal session');
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Billing portal error response:", errorData);
+        throw new Error(`Failed to create billing portal session: ${response.status}`);
       }
     } catch (error) {
       console.error('Error creating billing portal session:', error);
+      // You might want to show a user-friendly error message here
     } finally {
       setUpdating(false);
     }
