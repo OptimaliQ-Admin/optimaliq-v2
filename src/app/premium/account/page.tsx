@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-import { useNextBillingDate } from "@/hooks/useNextBillingDate";
 import { 
   UserIcon, 
   ShieldCheckIcon, 
@@ -22,13 +21,6 @@ export default function AccountOverviewPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  // Use the new hook to get accurate next billing date from Stripe
-  const { 
-    nextBillingDate: stripeNextBillingDate, 
-    loading: nextBillingLoading, 
-    error: nextBillingError 
-  } = useNextBillingDate(subscriptionData?.stripeCustomerId || null);
 
   useEffect(() => {
     const fetchSubscriptionData = async () => {
@@ -98,11 +90,12 @@ export default function AccountOverviewPage() {
 
   // Determine which next billing date to display
   const displayNextBillingDate = () => {
-    if (stripeNextBillingDate?.formattedDate) {
-      return stripeNextBillingDate.formattedDate;
-    }
     if (subscriptionData?.nextBillingDate) {
-      return new Date(subscriptionData.nextBillingDate).toLocaleDateString();
+      return new Date(subscriptionData.nextBillingDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
     }
     return 'Not available';
   };
@@ -124,7 +117,7 @@ export default function AccountOverviewPage() {
     },
     {
       label: "Next Billing",
-      value: nextBillingLoading ? "Loading..." : displayNextBillingDate(),
+      value: displayNextBillingDate(),
       icon: CalendarIcon,
       color: "text-purple-600",
       bgColor: "bg-purple-100"
@@ -181,7 +174,7 @@ export default function AccountOverviewPage() {
                   <p className="text-sm text-gray-600">{stat.label}</p>
                   <div className="flex items-center gap-2">
                     <p className={`font-semibold ${stat.color}`}>{stat.value}</p>
-                    {stat.label === "Next Billing" && stripeNextBillingDate?.formattedDate && (
+                    {stat.label === "Next Billing" && subscriptionData?.nextBillingDate && (
                       <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
                         Live
                       </span>

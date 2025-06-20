@@ -25,17 +25,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No user found" }, { status: 404 });
     }
 
-    // ✅ Update user's password
-    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
-      password,
-    });
+    // Update the user's password
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+      user.id,
+      { password: password }
+    );
 
     if (updateError) {
-      console.error("❌ Failed to update password:", updateError);
-      return NextResponse.json({ error: "Failed to set password" }, { status: 500 });
+      console.error("❌ Error updating password:", updateError);
+      return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
     }
 
-    console.log(`✅ Password successfully set for ${email}`);
+    console.log("✅ Password successfully set");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("❌ Unexpected server error:", error);

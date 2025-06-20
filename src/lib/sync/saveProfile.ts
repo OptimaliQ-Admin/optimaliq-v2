@@ -24,21 +24,21 @@ export async function saveProfileScores(
       updated_at: new Date().toISOString(),
     };
 
-    console.log(`📝 Upserting profile scores for ${u_id}:`, payload);
+    console.log("📝 Upserting profile scores");
 
     const { error } = await supabase
       .from("tier2_profiles")
       .upsert(payload, { onConflict: "u_id" });
 
     if (error) {
-      console.error("❌ Failed to save profile scores:", error);
-      return false;
+      console.error("❌ Error upserting profile scores:", error);
+      throw error;
     }
 
-    console.log("✅ Profile scores saved (inserted or updated) successfully.");
+    console.log("✅ Profile scores saved successfully");
     return true;
-  } catch (err: unknown) {
-    console.error("🔥 Unexpected error saving profile scores:", err);
-    return false;
+  } catch (error) {
+    console.error("❌ Failed to save profile scores:", error);
+    throw error;
   }
 }

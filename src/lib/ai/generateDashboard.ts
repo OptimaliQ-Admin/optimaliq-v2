@@ -93,7 +93,6 @@ Formatting rules:
     console.log("🧠 Business overview in assessment:", !!assessment.business_overview);
     console.log("🧠 Business overview in user:", !!user.business_overview);
     console.log("🧠 Business overview in userContext:", !!userContext.business_overview);
-    console.log("🧠 Business overview preview:", userContext.business_overview?.substring(0, 50) + "...");
 
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4.1-mini",

@@ -154,7 +154,7 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
           sessionStorage.clear();
         } else if (event === 'SIGNED_IN' && session?.user) {
           // Handle sign in - user will be set via login flow
-          console.log("User signed in:", session.user.email);
+          console.log("User signed in successfully");
         }
       }
     );

@@ -40,7 +40,7 @@ export async function middleware(req: NextRequest) {
 
       // Check if subscription is active
       if (!subscription || subscription.status !== 'active') {
-        console.log(`User ${session.user.id} has inactive subscription (${subscription?.status || 'none'}), redirecting to subscribe`);
+        console.log(`User has inactive subscription (${subscription?.status || 'none'}), redirecting to subscribe`);
         
         // Redirect to subscribe page with a message
         const redirectUrl = new URL('/subscribe', req.url);

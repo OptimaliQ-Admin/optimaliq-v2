@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
+  const supabase = createServerComponentClient({ cookies });
+  
   try {
-    const { u_id, ...updates } = await req.json();
-    if (!u_id) {
-      return NextResponse.json({ error: "Missing u_id" }, { status: 400 });
-    }
+    const { u_id, updates } = await req.json();
 
-    // Log the updates for debugging
-    console.log("📝 Updating user profile:", { u_id, updates });
+    console.log("📝 Updating user profile");
+
+    if (!u_id || !updates) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
 
     const { error } = await supabaseAdmin
       .from("tier2_users")

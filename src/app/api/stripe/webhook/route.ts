@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 }
 
 async function handleSubscriptionCreated(subscription: any) {
-  console.log("Handling subscription created:", subscription.id);
+  console.log("Handling subscription created successfully");
   
   const updateData = {
     status: subscription.status,
@@ -96,7 +96,7 @@ async function handleSubscriptionCreated(subscription: any) {
 }
 
 async function handleSubscriptionUpdated(subscription: any) {
-  console.log("Handling subscription updated:", subscription.id);
+  console.log("Handling subscription updated successfully");
   
   const updateData = {
     status: subscription.status,
@@ -123,7 +123,7 @@ async function handleSubscriptionUpdated(subscription: any) {
 }
 
 async function handleSubscriptionDeleted(subscription: any) {
-  console.log("Handling subscription deleted:", subscription.id);
+  console.log("Handling subscription deleted successfully");
   
   const updateData = {
     status: 'canceled',
@@ -147,7 +147,7 @@ async function handleSubscriptionDeleted(subscription: any) {
 }
 
 async function handlePaymentFailed(invoice: any) {
-  console.log("Handling payment failed:", invoice.id);
+  console.log("Handling payment failed successfully");
   
   if (!invoice.subscription) return;
 
@@ -172,7 +172,7 @@ async function handlePaymentFailed(invoice: any) {
 }
 
 async function handlePaymentSucceeded(invoice: any) {
-  console.log("Handling payment succeeded:", invoice.id);
+  console.log("Handling payment succeeded successfully");
   
   if (!invoice.subscription) return;
 
@@ -197,7 +197,7 @@ async function handlePaymentSucceeded(invoice: any) {
 }
 
 async function updateUserPremiumStatus(stripeCustomerId: string, isPremium: boolean) {
-  console.log(`Updating premium status for customer ${stripeCustomerId} to ${isPremium}`);
+  console.log(`Updating premium status to ${isPremium}`);
   
   // First, get the user ID from the subscriptions table
   const { data: subscription, error: subError } = await supabase
@@ -225,5 +225,5 @@ async function updateUserPremiumStatus(stripeCustomerId: string, isPremium: bool
     throw profileError;
   }
 
-  console.log(`Successfully updated premium status for user ${subscription.u_id} to ${isPremium}`);
+  console.log(`Successfully updated premium status to ${isPremium}`);
 }

@@ -15,11 +15,26 @@ const supabase = createClient(
 export async function POST(req: Request) {
   try {
     const { u_id } = await req.json(); // ✅ Ensure lowercase column name
-    console.log("🔍 Fetching stored answers for User ID:", u_id);
+    console.log("🔍 Fetching stored answers");
 
     if (!u_id) {
       return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
     }
+
+    // Fetch stored answers for the user
+    const { data: storedAnswers, error: fetchError } = await supabase
+      .from('growth_assessments')
+      .select('answers')
+      .eq('u_id', u_id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (fetchError || !storedAnswers) {
+      console.error("❌ Supabase Fetch Error (Answers):", fetchError);
+      return NextResponse.json({ error: "Failed to retrieve business responses" }, { status: 500 });
+    }
+    console.log("✅ Retrieved Business Responses:", storedAnswers);
 
     // ✅ Retrieve latest business assessment
     const { data: assessment, error: assessmentError } = await supabase

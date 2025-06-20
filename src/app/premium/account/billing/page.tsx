@@ -11,7 +11,6 @@ import {
   ArrowPathIcon 
 } from '@heroicons/react/24/outline';
 import { usePremiumUser } from '@/context/PremiumUserContext';
-import { useNextBillingDate } from '@/hooks/useNextBillingDate';
 
 interface SubscriptionData {
   status: string;
@@ -31,13 +30,6 @@ export default function BillingPage() {
   const [updating, setUpdating] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  // Use the new hook to get accurate next billing date from Stripe
-  const { 
-    nextBillingDate: stripeNextBillingDate, 
-    loading: nextBillingLoading, 
-    error: nextBillingError 
-  } = useNextBillingDate(subscriptionData?.stripeCustomerId || null);
 
   const fetchSubscriptionData = async () => {
     if (!user?.u_id) return;
@@ -173,11 +165,12 @@ export default function BillingPage() {
 
   // Determine which next billing date to display
   const displayNextBillingDate = () => {
-    if (stripeNextBillingDate?.formattedDate) {
-      return stripeNextBillingDate.formattedDate;
-    }
     if (subscriptionData?.nextBillingDate) {
-      return new Date(subscriptionData.nextBillingDate).toLocaleDateString();
+      return new Date(subscriptionData.nextBillingDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
     }
     return 'Not available';
   };
@@ -246,26 +239,14 @@ export default function BillingPage() {
               <h3 className="font-semibold text-gray-900">Next Billing Date</h3>
               <div className="flex items-center gap-2">
                 <p className="text-gray-600 text-sm">
-                  {nextBillingLoading ? (
-                    <span className="inline-flex items-center gap-2">
-                      <div className="h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                      Loading...
-                    </span>
-                  ) : (
-                    displayNextBillingDate()
-                  )}
+                  {displayNextBillingDate()}
                 </p>
-                {stripeNextBillingDate?.formattedDate && (
+                {subscriptionData?.nextBillingDate && (
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
                     Live from Stripe
                   </span>
                 )}
               </div>
-              {nextBillingError && (
-                <p className="text-xs text-red-600 mt-1">
-                  Error: {nextBillingError}
-                </p>
-              )}
             </div>
             <CalendarIcon className="w-5 h-5 text-gray-400" />
           </div>
@@ -338,44 +319,6 @@ export default function BillingPage() {
               </p>
             </div>
           </motion.button>
-        </div>
-      </motion.div>
-
-      {/* Billing Support */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8"
-      >
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Need Help?</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
-            <h3 className="font-semibold text-blue-900 mb-2">Billing Questions</h3>
-            <p className="text-blue-700 text-sm mb-3">
-              Have questions about your subscription or billing?
-            </p>
-            <a 
-              href="mailto:support@optimaliq.com" 
-              className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-            >
-              Contact Support →
-            </a>
-          </div>
-          
-          <div className="p-4 rounded-xl bg-green-50 border border-green-200">
-            <h3 className="font-semibold text-green-900 mb-2">Plan Changes</h3>
-            <p className="text-green-700 text-sm mb-3">
-              Want to upgrade, downgrade, or change your plan?
-            </p>
-            <a 
-              href="/Pricing" 
-              className="text-green-600 hover:text-green-800 font-medium text-sm"
-            >
-              View Plans →
-            </a>
-          </div>
         </div>
       </motion.div>
     </div>

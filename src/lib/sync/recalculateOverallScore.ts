@@ -55,7 +55,7 @@ export async function recalculateOverallScore(
   // Determine base_score weight based on user progress
   const baseScoreWeight = completedDeepAssessments >= 2 ? 0.15 : 0.25;
 
-  console.log(`📊 User ${userId} has completed ${completedDeepAssessments} deep assessments. Using base_score weight: ${baseScoreWeight * 100}%`);
+  console.log(`📊 User has completed ${completedDeepAssessments} deep assessments. Using base_score weight: ${baseScoreWeight * 100}%`);
 
   // Calculate weighted average of non-null scores
   let totalWeight = 0;

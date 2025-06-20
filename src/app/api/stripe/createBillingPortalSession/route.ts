@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { customerId, returnUrl } = await req.json();
 
-    console.log("Creating billing portal session for customer:", customerId);
+    console.log("Creating billing portal session");
 
     if (!customerId) {
       console.error("Missing customerId in request");
