@@ -9,6 +9,7 @@ import InsightLoading from "@/components/dashboard/InsightLoading";
 import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import ExecutiveRadarChart from "@/components/dashboard/ExecutiveRadarChart";
+import CapabilityGaugeCluster from "@/components/dashboard/CapabilityGaugeCluster";
 import InsightCard from "@/components/dashboard/InsightCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
@@ -231,6 +232,17 @@ export default function PremiumDashboardPage() {
             />
             <GrowthChart data={insights.chartData} />
           </div>
+        </div>
+
+        {/* New Capability Analysis Section */}
+        <div className="space-y-6">
+          <CapabilityGaugeCluster
+            strategy={insights.strategy_score}
+            process={insights.process_score}
+            technology={insights.technology_score}
+            industryAvg={insights.industryAvgScore}
+            topPerformer={insights.topPerformerScore}
+          />
         </div>
 
         {/* Strengths & Weaknesses Section */}
