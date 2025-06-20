@@ -1,59 +1,149 @@
 //src/components/home/FaqSection.tsx
 "use client";
 
+import { motion } from "framer-motion";
+import { useState } from "react";
+
 const faqs = [
   {
     question: "How does OptimaliQ compare to hiring a consultant?",
     answer:
-      "OptimaliQ delivers continuous, AI-powered insights instantly, while consulting firms charge high retainers for one-time reports.",
+      "OptimaliQ delivers continuous, AI-powered insights instantly, while consulting firms charge high retainers for one-time reports. Our platform provides real-time strategy optimization, competitive benchmarking, and predictive insights at a fraction of the cost.",
   },
   {
     question: "Can this work for small businesses?",
     answer:
-      "Yes! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with AI-driven insights that scale as you grow.",
+      "Absolutely! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with AI-driven insights that scale as you grow. Our platform is designed to provide value for businesses of all sizes.",
   },
   {
     question: "How does OptimaliQ predict growth?",
     answer:
-      "We analyze real-time industry data, past performance, and competitive benchmarks to provide accurate business forecasts.",
+      "We analyze real-time industry data, past performance, and competitive benchmarks using advanced machine learning algorithms to provide accurate business forecasts and strategic recommendations.",
   },
   {
     question: "Is my data secure?",
     answer:
-      "Absolutely. OptimaliQ follows strict data privacy policies and uses enterprise-grade security to protect your business data.",
+      "Absolutely. OptimaliQ follows strict data privacy policies and uses enterprise-grade security to protect your business data. We're SOC 2 compliant and never share your information with third parties.",
   },
   {
     question: "How often does OptimaliQ update insights?",
     answer:
-      "Our AI continuously learns and updates insights in real-time, ensuring you always have the latest competitive intelligence.",
+      "Our AI continuously learns and updates insights in real-time, ensuring you always have the latest competitive intelligence and market trends to inform your strategic decisions.",
+  },
+  {
+    question: "What kind of support do you provide?",
+    answer:
+      "We provide comprehensive support including onboarding, strategic consultation, and ongoing optimization. Our team of experts is available to help you maximize the value of your OptimaliQ investment.",
   },
 ];
 
 export default function FaqSection() {
-  return (
-    <section id="faq" className="py-20 bg-white">
-      <div className="max-w-6xl mx-auto text-center px-4">
-        {/* Section Title */}
-        <div className="relative flex items-center justify-center mb-10">
-          <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
-          <h2 className="text-4xl sm:text-5xl font-semibold text-gray-800">Frequently Asked Questions</h2>
-          <span className="flex-1 border-t-2 border-gray-300 mx-6 w-[100px]"></span>
-        </div>
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-        <div className="mt-10 max-w-4xl mx-auto space-y-4 text-left">
-          {faqs.map(({ question, answer }) => (
-            <details
-              key={question}
-              className="group bg-gray-100 p-5 rounded-lg shadow-md transition-all"
+  return (
+    <section id="faq" className="py-24 bg-white relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-6">
+        {/* Section Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <span className="w-2 h-2 bg-white rounded-full"></span>
+            FAQ
+          </div>
+          <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+            Frequently Asked{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Questions
+            </span>
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Everything you need to know about OptimaliQ's AI-powered strategic intelligence platform.
+          </p>
+        </motion.div>
+
+        {/* FAQ Grid */}
+        <div className="max-w-4xl mx-auto space-y-4">
+          {faqs.map(({ question, answer }, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <summary className="font-bold text-lg cursor-pointer flex justify-between items-center text-gray-800">
-                {question}
-                <span className="group-open:rotate-180 transition-transform text-xl">▼</span>
-              </summary>
-              <p className="mt-3 text-gray-700">{answer}</p>
-            </details>
+              <div 
+                className={`bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${
+                  openIndex === index ? 'ring-2 ring-blue-500' : ''
+                }`}
+              >
+                <button
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors duration-200"
+                >
+                  <h3 className="text-lg lg:text-xl font-semibold text-gray-900 pr-4">
+                    {question}
+                  </h3>
+                  <div className={`w-6 h-6 flex items-center justify-center transition-transform duration-300 ${
+                    openIndex === index ? 'rotate-180' : ''
+                  }`}>
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </button>
+                
+                <motion.div
+                  initial={false}
+                  animate={{ 
+                    height: openIndex === index ? 'auto' : 0,
+                    opacity: openIndex === index ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-6 pb-6">
+                    <div className="h-px bg-gradient-to-r from-blue-500 to-indigo-500 mb-4"></div>
+                    <p className="text-gray-600 leading-relaxed text-lg">
+                      {answer}
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           ))}
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-center mt-16"
+        >
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 lg:p-12 border border-blue-100 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Still Have Questions?</h3>
+            <p className="text-gray-600 mb-6">
+              Our team of strategic experts is here to help you understand how OptimaliQ can transform your business.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                Contact Support
+              </button>
+              <button className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-600 hover:text-blue-600 transition-all duration-300">
+                Schedule Demo
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
