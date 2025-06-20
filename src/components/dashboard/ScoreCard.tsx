@@ -6,6 +6,7 @@ import SectionTitleBar from "./SectionTitleBar";
 
 type ScoreCardProps = {
   title: string;
+  icon?: string;
   score: number;
   industryAvg?: number;
   topPerformer?: number;
@@ -15,6 +16,7 @@ type ScoreCardProps = {
 
 export default function ScoreCard({
   title,
+  icon,
   score,
   industryAvg,
   topPerformer,
@@ -63,7 +65,7 @@ export default function ScoreCard({
       className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
     >
       <div className="mb-4">
-        <SectionTitleBar title={title} />
+        <SectionTitleBar title={icon ? `${icon} ${title}` : title} />
         {description && (
           <p className="text-gray-500 text-sm leading-relaxed mt-2">
             {description}

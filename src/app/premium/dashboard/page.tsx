@@ -10,6 +10,7 @@ import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
 import InsightCard from "@/components/dashboard/InsightCard";
 import GrowthChart from "@/components/dashboard/GrowthChart";
+import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
@@ -182,17 +183,21 @@ export default function PremiumDashboardPage() {
         {/* Score Overview Section */}
         <div className="space-y-6">
           <SectionHeader title="🏆 Business Score Overview" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <ScoreCard
               title="Overall Score"
+              icon="🏆"
               score={insights.overall_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
-              description="Maturity across strategy, process, and technology."
-              onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
+              description="Your comprehensive growth maturity score"
+              onLearnMore={() => {
+                console.log("🚀 Learn More clicked for Overall Score");
+              }}
             />
             <ScoreCard
               title="Strategy"
+              icon="🎯"
               score={insights.strategy_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
@@ -201,6 +206,7 @@ export default function PremiumDashboardPage() {
             />
             <ScoreCard
               title="Process"
+              icon="⚙️"
               score={insights.process_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
@@ -209,6 +215,7 @@ export default function PremiumDashboardPage() {
             />
             <ScoreCard
               title="Technology"
+              icon="🚀"
               score={insights.technology_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
@@ -269,7 +276,17 @@ export default function PremiumDashboardPage() {
                 detail: item.expectedImpact 
               }))} 
             />
+          </div>
+          <div className="space-y-6">
             <GrowthChart data={insights.chartData} />
+            <PerformanceFunnelChart 
+              strategyScore={insights.strategy_score}
+              processScore={insights.process_score}
+              technologyScore={insights.technology_score}
+              overallScore={insights.overall_score}
+              industryAvg={insights.industryAvgScore}
+              topPerformer={insights.topPerformerScore}
+            />
           </div>
         </div>
 
