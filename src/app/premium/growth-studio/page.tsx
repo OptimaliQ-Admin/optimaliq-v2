@@ -10,14 +10,12 @@ import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
 
 import TrendInsightCard from "@/components/growthstudio/TrendInsightCard";
-import SimulatorPanel from "@/components/growthstudio/SimulatorPanel";
 import SimulationResults, { SimulationResult } from "@/components/growthstudio/SimulationResults";
 import SectionHeader from "@/components/growthstudio/SectionHeader";
-import StrategicQuadrantChart from "@/components/dashboard/StrategicQuadrantChart";
-import CompetitiveBenchmarkRadar from "@/components/dashboard/CompetitiveBenchmarkRadar";
+import StrategicAnalysisCard from "@/components/dashboard/StrategicAnalysisCard";
 import WhatIfScenarioSimulator from "@/components/dashboard/WhatIfScenarioSimulator";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
+import PageNavigation from "@/components/shared/PageNavigation";
 
 interface ProfileData {
   growth_studio_explanation_seen_at: string | null;
@@ -33,6 +31,14 @@ function GrowthStudioComponent() {
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
+
+  // Define page sections for navigation
+  const pageSections = [
+    { id: "overview", label: "Overview", icon: "📊" },
+    { id: "strategic-analysis", label: "Strategic Analysis", icon: "🎯" },
+    { id: "simulation", label: "Scenario Simulation", icon: "🔮" },
+    { id: "growth-levers", label: "Growth Levers", icon: "⚙️" },
+  ];
 
   // Check if user has seen growth studio explanation
   useEffect(() => {
@@ -111,53 +117,60 @@ function GrowthStudioComponent() {
         userId={userId}
       />
 
+      {/* Floating Page Navigation */}
+      <PageNavigation sections={pageSections} />
+
       <div className="max-w-[1920px] mx-auto p-8 space-y-10">
         {/* Header Section */}
         <motion.section 
+          id="overview"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="space-y-8"
         >
-          <SectionHeader
-            title="📈 Growth Studio"
-            subtitle="Explore curated trends and simulate how strategic improvements could impact your business."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <TrendInsightCard />
-            <SimulatorPanel onResult={handleRunSimulation} />
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold text-gray-900">🚀 Growth Studio</h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Your strategic command center for data-driven growth decisions. Explore trends, analyze positioning, and simulate scenarios to accelerate your business growth.
+            </p>
           </div>
+
+          {/* Growth Trends Card - Full Width */}
+          <TrendInsightCard />
         </motion.section>
 
         {/* Strategic Analysis Section */}
         <motion.section 
+          id="strategic-analysis"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="space-y-8"
         >
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">🎯 Strategic Analysis</h2>
-            <p className="text-gray-600">Comprehensive competitive positioning and benchmark analysis</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">🎯 Strategic Analysis</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Comprehensive competitive positioning and benchmark analysis to understand your market position
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <StrategicQuadrantChart userId={userId} />
-            <CompetitiveBenchmarkRadar userId={userId} />
-          </div>
+          <StrategicAnalysisCard userId={userId} />
         </motion.section>
 
         {/* Advanced Simulation Section */}
         <motion.section 
+          id="simulation"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-8"
         >
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">🔮 Advanced Scenario Simulation</h2>
-            <p className="text-gray-600">Interactive what-if analysis with real-time impact visualization</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">🔮 Advanced Scenario Simulation</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Interactive what-if analysis with real-time impact visualization to test strategic decisions
+            </p>
           </div>
           
           <WhatIfScenarioSimulator />
@@ -165,14 +178,17 @@ function GrowthStudioComponent() {
 
         {/* Growth Levers Section */}
         <motion.section 
+          id="growth-levers"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="space-y-8"
         >
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">⚙️ Growth Levers</h2>
-            <p className="text-gray-600">Strategic tools and insights to accelerate your growth</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">⚙️ Growth Levers</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Strategic tools and insights to accelerate your growth with actionable initiatives
+            </p>
           </div>
           
           <GrowthLeversCard />

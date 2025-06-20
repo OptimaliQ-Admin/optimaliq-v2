@@ -17,6 +17,7 @@ import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
 import DashboardExplanationModal from "@/components/modals/DashboardExplanationModal";
+import PageNavigation from "@/components/shared/PageNavigation";
 import dynamic from "next/dynamic";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 import { supabase } from "@/lib/supabase";
@@ -38,6 +39,15 @@ export default function PremiumDashboardPage() {
   const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showDashboardExplanation, setShowDashboardExplanation] = useState(false);
+
+  // Define page sections for navigation
+  const pageSections = [
+    { id: "score-overview", label: "Score Overview", icon: "🏆" },
+    { id: "performance-summary", label: "Performance Summary", icon: "📊" },
+    { id: "growth-analysis", label: "Growth Analysis", icon: "📈" },
+    { id: "performance-insights", label: "Performance Insights", icon: "🎯" },
+    { id: "market-intelligence", label: "Market Intelligence", icon: "🌍" },
+  ];
 
   useEffect(() => {
     if (!u_id) return;
@@ -141,6 +151,9 @@ export default function PremiumDashboardPage() {
         userId={u_id}
       />
 
+      {/* Floating Page Navigation */}
+      <PageNavigation sections={pageSections} />
+
       {/* Enhanced Welcome Toast */}
       {showWelcome && (
         <motion.div 
@@ -201,6 +214,7 @@ export default function PremiumDashboardPage() {
 
         {/* Score Overview Section */}
         <motion.section 
+          id="score-overview"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -251,6 +265,7 @@ export default function PremiumDashboardPage() {
 
         {/* Performance Summary Section */}
         <motion.section 
+          id="performance-summary"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -298,6 +313,7 @@ export default function PremiumDashboardPage() {
 
         {/* Analysis Section */}
         <motion.section 
+          id="growth-analysis"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -334,6 +350,7 @@ export default function PremiumDashboardPage() {
 
         {/* Strengths & Weaknesses Section */}
         <motion.section 
+          id="performance-insights"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -360,6 +377,7 @@ export default function PremiumDashboardPage() {
 
         {/* Market Insights Section */}
         <motion.section 
+          id="market-intelligence"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
