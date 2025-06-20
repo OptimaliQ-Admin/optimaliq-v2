@@ -107,101 +107,109 @@ export default function AssessmentCard({
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -5 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden group"
+        transition={{ duration: 0.4 }}
+        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
       >
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
-          <div className="flex items-center justify-between mb-2">
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-              <FaChartLine className="text-white text-lg" />
-            </div>
-            <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${statusInfo.bgColor} ${statusInfo.textColor}`}>
-              <StatusIcon className="text-xs" />
-              <span>{statusInfo.status}</span>
-            </div>
-          </div>
-          <h3 className="text-xl font-bold mb-2">{title}</h3>
-          <p className="text-blue-100 text-sm leading-relaxed">{description}</p>
+        <div className="mb-4">
+          <SectionTitleBar title={`📊 ${title}`} />
+          <p className="text-gray-500 text-sm leading-relaxed mt-2">
+            {description}
+          </p>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          {!hasTaken && (
+        {!hasTaken && (
+          <div className="text-center">
+            <div className="mb-6">
+              <div className="text-4xl font-bold text-gray-400 mb-2">--</div>
+              <div className="text-sm text-gray-600 font-medium">No Score Yet</div>
+            </div>
+            
             <motion.button
               onClick={handleClick}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <FaPlay className="text-sm" />
               <span>Start Assessment</span>
             </motion.button>
-          )}
+          </div>
+        )}
 
-          {hasTaken && !needsRetake && (
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-4">
-                  <FaCheckCircle className="text-green-600 text-sm" />
-                  <span className="text-green-700 text-sm font-semibold">Assessment Complete</span>
-                </div>
-                
-                <div className="mb-4">
-                  <span className="text-sm font-medium text-gray-500">Your Score:</span>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    {roundedScore?.toFixed(1)}
-                  </div>
-                  <span className="text-sm text-gray-500">out of 5.0</span>
-                </div>
-                
-                <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg">
-                  Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-                </p>
+        {hasTaken && !needsRetake && (
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              <div className="text-4xl font-bold text-blue-600 mb-2">{roundedScore?.toFixed(1)}</div>
+              <div className="text-sm text-gray-600 font-medium">Score</div>
+            </div>
+            
+            <div className="space-y-3 mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Status:</span>
+                <span className="text-sm font-semibold px-2 py-1 rounded-full bg-green-50 text-green-700">
+                  Completed
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Last Taken:</span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {format(new Date(lastTakenDate!), "MMM d, yyyy")}
+                </span>
               </div>
             </div>
-          )}
+            
+            <motion.button
+              onClick={handleClick}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 py-2 px-4 rounded-lg border border-blue-200 hover:border-blue-300 hover:bg-blue-50"
+            >
+              Retake Assessment →
+            </motion.button>
+          </div>
+        )}
 
-          {hasTaken && needsRetake && (
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full border border-yellow-200 mb-4">
-                  <FaExclamationTriangle className="text-yellow-600 text-sm" />
-                  <span className="text-yellow-700 text-sm font-semibold">Update Recommended</span>
-                </div>
-                
-                <div className="mb-4">
-                  <span className="text-sm font-medium text-gray-500">Previous Score:</span>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    {roundedScore?.toFixed(1)}
-                  </div>
-                  <span className="text-sm text-gray-500">out of 5.0</span>
-                </div>
-                
-                <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg mb-4">
-                  Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-                </p>
-                
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
-                  <p className="text-yellow-800 text-sm font-medium">
-                    Your assessment is over 30 days old. Consider retaking it to reflect recent changes.
-                  </p>
-                </div>
-                
-                <motion.button
-                  onClick={handleClick}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                >
-                  <FaPlay className="text-sm" />
-                  <span>Retake Assessment</span>
-                </motion.button>
+        {hasTaken && needsRetake && (
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              <div className="text-4xl font-bold text-yellow-600 mb-2">{roundedScore?.toFixed(1)}</div>
+              <div className="text-sm text-gray-600 font-medium">Previous Score</div>
+            </div>
+            
+            <div className="space-y-3 mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Status:</span>
+                <span className="text-sm font-semibold px-2 py-1 rounded-full bg-yellow-50 text-yellow-700">
+                  Needs Update
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Last Taken:</span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {format(new Date(lastTakenDate!), "MMM d, yyyy")}
+                </span>
               </div>
             </div>
-          )}
-        </div>
+            
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+              <p className="text-yellow-800 text-sm font-medium">
+                Your assessment is over 30 days old. Consider retaking it to reflect recent changes.
+              </p>
+            </div>
+            
+            <motion.button
+              onClick={handleClick}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              <FaPlay className="text-sm" />
+              <span>Retake Assessment</span>
+            </motion.button>
+          </div>
+        )}
       </motion.div>
 
       {slug in slugToAssessmentType && (

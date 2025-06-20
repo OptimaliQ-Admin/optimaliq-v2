@@ -98,7 +98,7 @@ export default function ReassessmentCard({
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6"
+        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
       >
         <div className="animate-pulse">
           <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -114,129 +114,115 @@ export default function ReassessmentCard({
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -5 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden group"
+        transition={{ duration: 0.4 }}
+        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
       >
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white">
-          <div className="flex items-center justify-between mb-2">
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-              <FaChartLine className="text-white text-lg" />
-            </div>
-            <div className="px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 flex items-center gap-1">
-              <FaCheckCircle className="text-xs" />
-              <span>Progress Tracker</span>
-            </div>
-          </div>
-          <h3 className="text-xl font-bold mb-2">Growth Progress Tracker</h3>
-          <p className="text-green-100 text-sm leading-relaxed">
+        <div className="mb-4">
+          <SectionTitleBar title="📈 Growth Progress Tracker" />
+          <p className="text-gray-500 text-sm leading-relaxed mt-2">
             Measure your business growth and track improvements across all key areas every 30 days.
           </p>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          {!canTakeReassessment && (
-            <div className="space-y-4">
-              {hasTaken ? (
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 mb-4">
-                    <FaClock className="text-blue-600 text-sm" />
-                    <span className="text-blue-700 text-sm font-semibold">Cooldown Period</span>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <span className="text-sm font-medium text-gray-500">Current Score:</span>
-                    <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      {roundedScore?.toFixed(1)}
-                    </div>
-                    <span className="text-sm text-gray-500">out of 5.0</span>
-                  </div>
-                  
-                  <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg mb-4">
-                    Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-                  </p>
-                  
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                    <p className="text-blue-800 text-sm font-medium">
-                      You can retake this assessment in {30 - (daysSinceLast || 0)} days to track your progress.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full border border-yellow-200 mb-4">
-                    <FaInfoCircle className="text-yellow-600 text-sm" />
-                    <span className="text-yellow-700 text-sm font-semibold">Establishing Baseline</span>
-                  </div>
-                  
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
-                    <p className="text-yellow-800 text-sm font-medium mb-3">
-                      You&apos;ve established a baseline. You&apos;ll be able to track your progress after 30 days.
-                    </p>
-                  </div>
+        {!canTakeReassessment && (
+          <div className="space-y-4">
+            {hasTaken ? (
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-blue-600 mb-2">{roundedScore?.toFixed(1)}</div>
+                <div className="text-sm text-gray-600 font-medium">Current Score</div>
+              </div>
+            ) : (
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-gray-400 mb-2">--</div>
+                <div className="text-sm text-gray-600 font-medium">No Score Yet</div>
+              </div>
+            )}
+            
+            <div className="space-y-3 mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Status:</span>
+                <span className="text-sm font-semibold px-2 py-1 rounded-full bg-blue-50 text-blue-700">
+                  Cooldown Period
+                </span>
+              </div>
+              
+              {hasTaken && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Last Taken:</span>
+                  <span className="text-sm font-semibold text-gray-800">
+                    {format(new Date(lastTakenDate!), "MMM d, yyyy")}
+                  </span>
                 </div>
               )}
-              
-              <motion.button
-                onClick={handleLearnMore}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-              >
-                <FaInfoCircle className="text-sm" />
-                <span>Learn More</span>
-              </motion.button>
             </div>
-          )}
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+              <p className="text-blue-800 text-sm font-medium">
+                {hasTaken 
+                  ? `You can retake this assessment in ${30 - (daysSinceLast || 0)} days to track your progress.`
+                  : "You've established a baseline. You'll be able to track your progress after 30 days."
+                }
+              </p>
+            </div>
+            
+            <motion.button
+              onClick={handleLearnMore}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 py-2 px-4 rounded-lg border border-blue-200 hover:border-blue-300 hover:bg-blue-50"
+            >
+              Learn More →
+            </motion.button>
+          </div>
+        )}
 
-          {canTakeReassessment && (
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-4">
-                  <FaCheckCircle className="text-green-600 text-sm" />
-                  <span className="text-green-700 text-sm font-semibold">Ready to Track Progress</span>
-                </div>
-                
-                {hasTaken && (
-                  <>
-                    <div className="mb-4">
-                      <span className="text-sm font-medium text-gray-500">Previous Score:</span>
-                      <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        {roundedScore?.toFixed(1)}
-                      </div>
-                      <span className="text-sm text-gray-500">out of 5.0</span>
-                    </div>
-                    
-                    <p className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg mb-4">
-                      Last taken on {format(new Date(lastTakenDate!), "MMMM d, yyyy")}
-                    </p>
-                  </>
-                )}
-                
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
-                  <p className="text-green-800 text-sm font-medium">
-                    {hasTaken ? "Ready to track your progress!" : "Ready to establish your baseline!"}
-                  </p>
-                  <p className="text-green-700 text-sm mt-1">
-                    Take this assessment to measure your growth and see how your business has evolved.
-                  </p>
-                </div>
-                
-                <motion.button
-                  onClick={() => setShowPrompt(true)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-xl text-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                >
-                  <FaPlay className="text-sm" />
-                  <span>{hasTaken ? "Retake Assessment" : "Start Assessment"}</span>
-                </motion.button>
+        {canTakeReassessment && (
+          <div className="space-y-4">
+            {hasTaken && (
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-green-600 mb-2">{roundedScore?.toFixed(1)}</div>
+                <div className="text-sm text-gray-600 font-medium">Previous Score</div>
               </div>
+            )}
+            
+            <div className="space-y-3 mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Status:</span>
+                <span className="text-sm font-semibold px-2 py-1 rounded-full bg-green-50 text-green-700">
+                  Ready to Track Progress
+                </span>
+              </div>
+              
+              {hasTaken && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Last Taken:</span>
+                  <span className="text-sm font-semibold text-gray-800">
+                    {format(new Date(lastTakenDate!), "MMM d, yyyy")}
+                  </span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+            
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+              <p className="text-green-800 text-sm font-medium">
+                {hasTaken 
+                  ? "It's time to retake your assessment and see how much you've improved!"
+                  : "You can now take your first reassessment to establish a baseline for tracking progress."
+                }
+              </p>
+            </div>
+            
+            <motion.button
+              onClick={handleStartAssessment}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              <FaPlay className="text-sm" />
+              <span>Start Reassessment</span>
+            </motion.button>
+          </div>
+        )}
       </motion.div>
 
       <ReassessmentLearnMoreModal

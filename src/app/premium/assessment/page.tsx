@@ -89,7 +89,7 @@ export default function AssessmentsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FaChartLine className="text-white text-2xl" />
@@ -102,8 +102,8 @@ export default function AssessmentsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="text-center bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
           <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FaRocket className="text-white text-2xl" />
           </div>
@@ -121,17 +121,14 @@ export default function AssessmentsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-6 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="max-w-[1920px] mx-auto p-8 space-y-10">
           {/* Header Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center"
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
               <FaChartLine className="text-sm" />
@@ -148,7 +145,7 @@ export default function AssessmentsPage() {
 
             {/* Feature Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
                   <FaLightbulb className="text-white text-xl" />
                 </div>
@@ -156,7 +153,7 @@ export default function AssessmentsPage() {
                 <p className="text-sm text-gray-600">Get personalized recommendations based on your unique business profile</p>
               </div>
 
-              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
                   <FaChartLine className="text-white text-xl" />
                 </div>
@@ -164,7 +161,7 @@ export default function AssessmentsPage() {
                 <p className="text-sm text-gray-600">Monitor your improvement over time with detailed analytics</p>
               </div>
 
-              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
                   <FaRocket className="text-white text-xl" />
                 </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
+import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import { FaCog, FaTools, FaDatabase, FaChartBar, FaShoppingCart, FaEnvelope } from "react-icons/fa";
 
 type TechToolsCardProps = {
@@ -82,7 +83,7 @@ export default function TechToolsCard({ userId }: TechToolsCardProps) {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 animate-pulse"
+        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 animate-pulse"
       >
         <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
         <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
@@ -95,79 +96,65 @@ export default function TechToolsCard({ userId }: TechToolsCardProps) {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden group"
+      transition={{ duration: 0.4 }}
+      className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 h-full"
     >
-      {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white">
-        <div className="flex items-center justify-between mb-2">
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-            <FaCog className="text-white text-lg" />
-          </div>
-          <div className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 flex items-center gap-1">
-            <FaTools className="text-xs" />
-            <span>Tech Stack</span>
-          </div>
-        </div>
-        <h3 className="text-xl font-bold mb-2">Current Technology Stack</h3>
-        <p className="text-purple-100 text-sm leading-relaxed">
+      <div className="mb-4">
+        <SectionTitleBar title="⚙️ Current Technology Stack" />
+        <p className="text-gray-500 text-sm leading-relaxed mt-2">
           Manage and track your technology infrastructure across all business areas.
         </p>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <p className="text-sm text-gray-500">Last updated: {getLastUpdated()}</p>
-          </div>
-          <motion.button
-            onClick={() => router.push("/premium/assessment/tech-tools")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold flex items-center gap-2"
-          >
-            <FaTools className="text-sm" />
-            <span>{techStack ? "Update Stack" : "Add Stack"}</span>
-          </motion.button>
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <p className="text-sm text-gray-500">Last updated: {getLastUpdated()}</p>
         </div>
-
-        {techStack ? (
-          <div className="grid grid-cols-2 gap-4">
-            {techCategories.map((category) => {
-              const Icon = category.icon;
-              const count = getCategoryCount(techStack[category.key as keyof TechStack] as string[]);
-              
-              return (
-                <motion.div 
-                  key={category.key}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`w-8 h-8 bg-gradient-to-r ${category.color} rounded-lg flex items-center justify-center`}>
-                      <Icon className="text-white text-sm" />
-                    </div>
-                    <h4 className="font-semibold text-gray-900">{category.label}</h4>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold text-gray-900">{count}</span> tools configured
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FaCog className="text-white text-2xl" />
-            </div>
-            <p className="text-gray-500 font-medium mb-2">No technology stack recorded yet</p>
-            <p className="text-sm text-gray-400">Click the button above to add your tech stack</p>
-          </div>
-        )}
+        <motion.button
+          onClick={() => router.push("/premium/assessment/tech-tools")}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold flex items-center gap-2"
+        >
+          <FaTools className="text-sm" />
+          <span>{techStack ? "Update Stack" : "Add Stack"}</span>
+        </motion.button>
       </div>
+
+      {techStack ? (
+        <div className="grid grid-cols-2 gap-4">
+          {techCategories.map((category) => {
+            const Icon = category.icon;
+            const count = getCategoryCount(techStack[category.key as keyof TechStack] as string[]);
+            
+            return (
+              <motion.div 
+                key={category.key}
+                whileHover={{ scale: 1.02 }}
+                className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`w-8 h-8 bg-gradient-to-r ${category.color} rounded-lg flex items-center justify-center`}>
+                    <Icon className="text-white text-sm" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900">{category.label}</h4>
+                </div>
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold text-gray-900">{count}</span> tools configured
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <FaCog className="text-white text-2xl" />
+          </div>
+          <p className="text-gray-500 font-medium mb-2">No technology stack recorded yet</p>
+          <p className="text-sm text-gray-400">Click the button above to add your tech stack</p>
+        </div>
+      )}
     </motion.div>
   );
 } 

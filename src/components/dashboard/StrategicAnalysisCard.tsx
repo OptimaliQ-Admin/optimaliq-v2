@@ -376,6 +376,66 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .style("fill", "#374151")
       .text("Process Score");
 
+    // Add axis tick marks (1-5)
+    const tickValues = [1, 2, 3, 4, 5];
+    
+    // X-axis tick marks (bottom)
+    svg
+      .selectAll(".x-tick")
+      .data(tickValues)
+      .enter()
+      .append("g")
+      .attr("class", "x-tick")
+      .attr("transform", d => `translate(${xScale(d)}, ${height + 10})`)
+      .each(function(d) {
+        const g = d3.select(this);
+        
+        // Tick line
+        g.append("line")
+          .attr("y1", 0)
+          .attr("y2", 6)
+          .style("stroke", "#6b7280")
+          .style("stroke-width", 2);
+        
+        // Tick label
+        g.append("text")
+          .attr("y", 20)
+          .attr("text-anchor", "middle")
+          .style("font-size", "14px")
+          .style("font-weight", "600")
+          .style("fill", "#374151")
+          .text(d);
+      });
+
+    // Y-axis tick marks (left)
+    svg
+      .selectAll(".y-tick")
+      .data(tickValues)
+      .enter()
+      .append("g")
+      .attr("class", "y-tick")
+      .attr("transform", d => `translate(-10, ${yScale(d)})`)
+      .each(function(d) {
+        const g = d3.select(this);
+        
+        // Tick line
+        g.append("line")
+          .attr("x1", 0)
+          .attr("x2", -6)
+          .style("stroke", "#6b7280")
+          .style("stroke-width", 2);
+        
+        // Tick label
+        g.append("text")
+          .attr("x", -15)
+          .attr("text-anchor", "end")
+          .attr("dominant-baseline", "middle")
+          .style("font-size", "14px")
+          .style("font-weight", "600")
+          .style("fill", "#374151")
+          .text(d);
+      });
+
     // Add data points with better spacing and visibility
     const points = svg
       .selectAll(".data-point")
