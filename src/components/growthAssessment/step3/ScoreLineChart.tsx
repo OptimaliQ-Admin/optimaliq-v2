@@ -164,7 +164,7 @@ export default function ScoreLineChart({ data, score }: Props) {
             <span className="text-2xl">📊</span>
             <div>
               <h4 className="font-semibold text-gray-900 text-sm">Diagnose. Prescribe. Simulate.</h4>
-              <p className="text-gray-600 text-xs">OptimaliQ doesn't just analyze your business—it runs simulations to show the ROI of fixing what's broken.</p>
+              <p className="text-gray-600 text-xs">OptimaliQ doesn&apos;t just analyze your business—it runs simulations to show the ROI of fixing what&apos;s broken.</p>
             </div>
           </div>
           
