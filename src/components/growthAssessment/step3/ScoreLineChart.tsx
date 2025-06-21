@@ -141,6 +141,41 @@ export default function ScoreLineChart({ data, score }: Props) {
             Start now • Cancel anytime
           </p>
         </div>
+
+        {/* Value Propositions */}
+        <div className="mt-8 space-y-4">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">🚀</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 text-sm">Built to Replace a $25K Consultant</h4>
+              <p className="text-gray-600 text-xs">Get strategic clarity, competitive benchmarks, and execution-ready roadmaps—without hiring a firm or waiting weeks.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">🧠</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 text-sm">Trained on 10,000+ High-Growth Playbooks</h4>
+              <p className="text-gray-600 text-xs">Our AI distills what the fastest-scaling companies are doing right now—and shows you how to apply it to your business today.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">📊</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 text-sm">Diagnose. Prescribe. Simulate.</h4>
+              <p className="text-gray-600 text-xs">OptimaliQ doesn't just analyze your business—it runs simulations to show the ROI of fixing what's broken.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">⚡</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 text-sm">From Gut Feeling to Growth Engine—in Under 10 Minutes</h4>
+              <p className="text-gray-600 text-xs">Plug in your data, and get a strategy that would take a human team months to build.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

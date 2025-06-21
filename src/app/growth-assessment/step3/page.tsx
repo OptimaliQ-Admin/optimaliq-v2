@@ -88,9 +88,36 @@ function Step3Component() {
     setShowSubscriptionPopup(false);
   };
 
+  const handleSubscribeClick = () => {
+    router.push("/subscribe");
+  };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        {/* Floating Subscribe Button */}
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50"
+        >
+          <button
+            onClick={handleSubscribeClick}
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
+          >
+            <div className="flex flex-col items-center gap-1">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span className="text-sm font-semibold whitespace-nowrap">Unlock Pro</span>
+            </div>
+            <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-xs font-bold text-white">→</span>
+            </div>
+          </button>
+        </motion.div>
+
         {/* Hero Section with Conversion Focus */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -253,28 +280,6 @@ function Step3Component() {
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   <span>Cancel anytime</span>
-                </div>
-              </div>
-
-              {/* Value Bullets */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 max-w-4xl mx-auto">
-                <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm">Weekly AI insights</span>
-                </div>
-                <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm">Industry benchmarks</span>
-                </div>
-                <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm">Personalized roadmaps</span>
                 </div>
               </div>
               

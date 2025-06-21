@@ -102,7 +102,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
               <p className="text-sm text-gray-500">Growth opportunity</p>
             </div>
           </div>
-          <div className="text-4xl font-extrabold text-purple-600 mb-1">+{(5 - score - 0.5).toFixed(1)} out of 5</div>
+          <div className="text-4xl font-extrabold text-purple-600 mb-1">+{(5 - score - 0.5).toFixed(1)} / 20%</div>
         </div>
         
         <div className="space-y-4">
