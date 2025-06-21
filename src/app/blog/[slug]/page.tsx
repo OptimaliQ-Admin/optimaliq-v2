@@ -67,9 +67,9 @@ export default function BlogPostPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
-          <p className="text-gray-600 mb-8">The article you&apos;re looking for doesn&apos;t exist.</p>
-          <Link href="/blog" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4 font-['Inter']">Article Not Found</h1>
+          <p className="text-gray-600 mb-8 font-['Inter']">The article you&apos;re looking for doesn&apos;t exist.</p>
+          <Link href="/blog" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-['Inter']">
             Back to Blog
           </Link>
         </div>
@@ -93,7 +93,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/20"
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/20 font-['Inter']"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
               {post.category}
@@ -103,7 +103,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-4xl lg:text-6xl font-bold text-white leading-tight"
+              className="text-4xl lg:text-6xl font-bold text-white leading-tight font-['Inter']"
             >
               {post.title}
             </motion.h1>
@@ -112,7 +112,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed font-['Inter']"
             >
               {post.excerpt}
             </motion.p>
@@ -126,16 +126,16 @@ export default function BlogPostPage() {
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">
+                  <span className="text-white text-lg font-bold font-['Inter']">
                     {post.author.split(' ').map(n => n[0]).join('')}
                   </span>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold">{post.author}</p>
-                  <p className="text-sm text-blue-200">{post.authorRole}</p>
+                  <p className="font-semibold font-['Inter']">{post.author}</p>
+                  <p className="text-sm text-blue-200 font-['Inter']">{post.authorRole}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-4 text-sm font-['Inter']">
                 <span>{post.readTime}</span>
                 <span>•</span>
                 <span>{post.views} views</span>
@@ -148,24 +148,37 @@ export default function BlogPostPage() {
       </motion.div>
 
       {/* Article Content */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-[750px] mx-auto px-6 py-16">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           className="bg-white rounded-2xl shadow-lg p-12"
         >
-          {/* Article Body */}
-          <div 
-            className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          {/* Article Body with Premium Typography */}
+          <article className="max-w-none text-left space-y-6 font-['Inter']">
+            <div 
+              className="prose prose-lg max-w-none
+                prose-headings:font-['Inter'] prose-headings:text-gray-900 prose-headings:font-semibold
+                prose-h1:text-4xl prose-h1:md:text-5xl prose-h1:font-bold prose-h1:leading-tight
+                prose-h2:text-2xl prose-h2:md:text-3xl prose-h2:font-semibold prose-h2:leading-snug
+                prose-h3:text-xl prose-h3:font-semibold prose-h3:leading-snug
+                prose-p:text-base prose-p:md:text-lg prose-p:font-normal prose-p:leading-relaxed prose-p:text-gray-700
+                prose-strong:text-gray-900 prose-strong:font-semibold
+                prose-ul:text-base prose-ul:md:text-lg prose-ul:text-gray-700
+                prose-li:text-base prose-li:md:text-lg prose-li:text-gray-700
+                prose-ol:text-base prose-ol:md:text-lg prose-ol:text-gray-700
+                prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-800
+                prose-a:text-blue-600 prose-a:hover:text-blue-800 prose-a:font-medium"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+          </article>
 
           {/* Tags */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span key={tag} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                <span key={tag} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium font-['Inter']">
                   {tag}
                 </span>
               ))}
@@ -174,8 +187,8 @@ export default function BlogPostPage() {
 
           {/* Author Bio */}
           <div className="mt-12 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">About the Author</h3>
-            <p className="text-gray-700 leading-relaxed">{post.authorBio}</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-3 font-['Inter']">About the Author</h3>
+            <p className="text-gray-700 leading-relaxed font-['Inter']">{post.authorBio}</p>
           </div>
         </motion.div>
 
@@ -186,7 +199,7 @@ export default function BlogPostPage() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-16"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Insights</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 font-['Inter']">Related Insights</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {post.relatedArticles.map((articleId) => {
               const relatedPost = blogPosts[articleId.toString() as keyof typeof blogPosts];
@@ -197,21 +210,21 @@ export default function BlogPostPage() {
                   <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
                     <div className="relative h-40 bg-gradient-to-br from-gray-200 to-gray-300">
                       <div className="absolute top-3 left-3">
-                        <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold font-['Inter']">
                           {relatedPost.category}
                         </span>
                       </div>
                     </div>
                     
                     <div className="p-5">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter']">
                         {relatedPost.title}
                       </h3>
-                      <p className="text-gray-600 mb-3 text-sm line-clamp-2">
+                      <p className="text-gray-600 mb-3 text-sm line-clamp-2 font-['Inter']">
                         {relatedPost.excerpt}
                       </p>
                       
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center justify-between text-xs text-gray-500 font-['Inter']">
                         <span>{relatedPost.readTime}</span>
                         <span>{relatedPost.views} views</span>
                       </div>
@@ -232,7 +245,7 @@ export default function BlogPostPage() {
         >
           <Link 
             href="/blog"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-300"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-300 font-['Inter']"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

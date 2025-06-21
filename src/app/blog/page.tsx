@@ -135,7 +135,7 @@ export default function BlogPage() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/20"
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/20 font-['Inter']"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
               Latest Insights
@@ -145,7 +145,7 @@ export default function BlogPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-5xl lg:text-7xl font-bold text-white leading-tight"
+              className="text-5xl lg:text-7xl font-bold text-white leading-tight font-['Inter']"
             >
               Strategic
               <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -157,7 +157,7 @@ export default function BlogPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed font-['Inter']"
             >
               Expert insights on business strategy, digital transformation, and operational excellence. 
               Join 50,000+ executives staying ahead of the curve.
@@ -176,7 +176,7 @@ export default function BlogPage() {
                   placeholder="Search insights, strategies, and expert analysis..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 pl-14 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-blue-200 focus:outline-none focus:ring-4 focus:ring-white/20 focus:border-white/40 transition-all duration-300"
+                  className="w-full px-6 py-4 pl-14 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-blue-200 focus:outline-none focus:ring-4 focus:ring-white/20 focus:border-white/40 transition-all duration-300 font-['Inter']"
                 />
                 <svg className="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -199,7 +199,7 @@ export default function BlogPage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <button
               onClick={() => setSelectedCategory("All")}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 font-['Inter'] ${
                 selectedCategory === "All"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
@@ -211,7 +211,7 @@ export default function BlogPage() {
               <button
                 key={category.name}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 font-['Inter'] ${
                   selectedCategory === category.name
                     ? "bg-blue-600 text-white shadow-lg"
                     : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
@@ -231,8 +231,8 @@ export default function BlogPage() {
           className="mb-16"
         >
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Featured Insights</h2>
-            <Link href="/blog/featured" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 font-['Inter']">Featured Insights</h2>
+            <Link href="/blog/featured" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 font-['Inter']">
               View All
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -254,12 +254,12 @@ export default function BlogPage() {
                     <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                       <div className="absolute top-4 left-4">
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold font-['Inter']">
                           {article.category}
                         </span>
                       </div>
                       <div className="absolute bottom-4 left-4 right-4">
-                        <div className="flex items-center gap-2 text-white text-sm">
+                        <div className="flex items-center gap-2 text-white text-sm font-['Inter']">
                           <span>{article.readTime}</span>
                           <span>•</span>
                           <span>{article.views} views</span>
@@ -268,26 +268,26 @@ export default function BlogPage() {
                     </div>
                     
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter']">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-gray-600 mb-4 line-clamp-3 font-['Inter']">
                         {article.excerpt}
                       </p>
                       
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
+                            <span className="text-white text-sm font-bold font-['Inter']">
                               {article.author.split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-gray-900">{article.author}</p>
-                            <p className="text-xs text-gray-500">{article.authorRole}</p>
+                            <p className="text-sm font-semibold text-gray-900 font-['Inter']">{article.author}</p>
+                            <p className="text-xs text-gray-500 font-['Inter']">{article.authorRole}</p>
                           </div>
                         </div>
-                        <span className="text-xs text-gray-400">{new Date(article.publishDate).toLocaleDateString()}</span>
+                        <span className="text-xs text-gray-400 font-['Inter']">{new Date(article.publishDate).toLocaleDateString()}</span>
                       </div>
                     </div>
                   </div>
@@ -305,8 +305,8 @@ export default function BlogPage() {
           className="mb-16"
         >
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Latest Insights</h2>
-            <Link href="/blog/latest" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 font-['Inter']">Latest Insights</h2>
+            <Link href="/blog/latest" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 font-['Inter']">
               View All
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -327,21 +327,21 @@ export default function BlogPage() {
                   <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group-hover:scale-105">
                     <div className="relative h-40 bg-gradient-to-br from-gray-200 to-gray-300">
                       <div className="absolute top-3 left-3">
-                        <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold font-['Inter']">
                           {article.category}
                         </span>
                       </div>
                     </div>
                     
                     <div className="p-5">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter']">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 mb-3 text-sm line-clamp-2">
+                      <p className="text-gray-600 mb-3 text-sm line-clamp-2 font-['Inter']">
                         {article.excerpt}
                       </p>
                       
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center justify-between text-xs text-gray-500 font-['Inter']">
                         <span>{article.readTime}</span>
                         <span>{article.views} views</span>
                       </div>
@@ -365,10 +365,10 @@ export default function BlogPage() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
           
           <div className="relative z-10">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-['Inter']">
               Stay Ahead of the Curve
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed font-['Inter']">
               Get weekly insights on strategy, operations, and digital transformation delivered to your inbox.
             </p>
             
@@ -376,14 +376,14 @@ export default function BlogPage() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/20"
+                className="flex-1 px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/20 font-['Inter']"
               />
-              <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-colors duration-300">
+              <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-colors duration-300 font-['Inter']">
                 Subscribe
               </button>
             </div>
             
-            <p className="text-sm text-blue-200 mt-4">
+            <p className="text-sm text-blue-200 mt-4 font-['Inter']">
               Join 50,000+ executives. No spam, unsubscribe anytime.
             </p>
           </div>
