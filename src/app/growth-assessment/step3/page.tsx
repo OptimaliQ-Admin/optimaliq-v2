@@ -7,7 +7,6 @@ import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardG
 import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
 import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 import { showToast } from "@/lib/utils/toast";
-import SectionHeader from "@/components/dashboard/SectionHeader";
 import SubscriptionPopup from "@/components/modals/SubscriptionPopup";
 import { motion } from "framer-motion";
 

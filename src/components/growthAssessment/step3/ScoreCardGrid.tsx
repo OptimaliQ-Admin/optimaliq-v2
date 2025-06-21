@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import GMFModal from "./GMFModal";
 import SocialProofCard from "./SocialProofCard";
 import { motion } from "framer-motion";

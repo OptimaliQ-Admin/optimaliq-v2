@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import { motion } from "framer-motion";
 
 const testimonials = [
@@ -84,7 +83,7 @@ export default function SocialProofCard() {
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
               </svg>
               <p className="text-gray-800 text-lg leading-relaxed font-medium px-8">
-                "{testimonials[currentIndex].quote}"
+                &ldquo;{testimonials[currentIndex].quote}&rdquo;
               </p>
             </div>
             

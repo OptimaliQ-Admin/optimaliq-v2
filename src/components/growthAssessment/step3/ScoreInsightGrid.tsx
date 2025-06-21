@@ -1,7 +1,6 @@
 // components/step3/ScoreInsightGrid.tsx
 "use client";
 
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
 import { motion } from "framer-motion";
 
 export default function ScoreInsightGrid({ insights, loading }: { insights: Record<string, string>, loading: boolean }) {
