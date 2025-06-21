@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const testimonials = [
   {
     name: "Katie",
-    quote: "OptimaliQ helped us identify 3 key bottlenecks we didn't know existed. Our growth rate increased 40% in 6 months.",
+    quote: "AI Insights helped us identify 3 key bottlenecks we didn't know existed. Our growth rate increased 40% in 6 months.",
     role: "CTO, E-commerce Platform"
   },
   {
@@ -45,7 +45,7 @@ export default function SocialProofCard() {
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-900">What Others Are Saying</h3>
-            <p className="text-sm text-gray-500">Join 2,000+ satisfied customers</p>
+            <p className="text-sm text-gray-500">Join other companies</p>
           </div>
         </div>
         
@@ -101,30 +101,6 @@ export default function SocialProofCard() {
             </div>
           </div>
         </motion.div>
-      </div>
-      
-      {/* Trust indicators */}
-      <div className="mt-8 pt-6 border-t border-blue-200">
-        <div className="flex items-center justify-center gap-6 text-xs text-gray-600">
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            Verified customer
-          </span>
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            Real results
-          </span>
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            Recent success
-          </span>
-        </div>
       </div>
     </motion.div>
   );

@@ -18,8 +18,8 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300 group"
       >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-2xl">📊</span>
             </div>
@@ -28,10 +28,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
               <p className="text-sm text-gray-500">Growth Maturity Framework</p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-4xl font-extrabold text-blue-600 mb-1">{score}</div>
-            <div className="text-sm text-gray-500">out of 5</div>
-          </div>
+          <div className="text-4xl font-extrabold text-blue-600 mb-1">{score} out of 5</div>
         </div>
         
         <div className="space-y-4">
@@ -62,8 +59,8 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300 group"
       >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-2xl">📈</span>
             </div>
@@ -72,10 +69,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
               <p className="text-sm text-gray-500">Top performers average</p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-4xl font-extrabold text-green-600 mb-1">4.2</div>
-            <div className="text-sm text-gray-500">out of 5</div>
-          </div>
+          <div className="text-4xl font-extrabold text-green-600 mb-1">4.2 out of 5</div>
         </div>
         
         <div className="space-y-4">
@@ -98,8 +92,8 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300 group"
       >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-2xl">🔍</span>
             </div>
@@ -108,10 +102,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
               <p className="text-sm text-gray-500">Growth opportunity</p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-4xl font-extrabold text-purple-600 mb-1">+{(5 - score - 0.5).toFixed(1)}</div>
-            <div className="text-sm text-gray-500">score points</div>
-          </div>
+          <div className="text-4xl font-extrabold text-purple-600 mb-1">+{(5 - score - 0.5).toFixed(1)} out of 5</div>
         </div>
         
         <div className="space-y-4">
