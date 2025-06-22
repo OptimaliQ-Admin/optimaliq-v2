@@ -1,14 +1,6 @@
-import { Metadata } from "next";
-import Link from "next/link";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Access Restricted - OptimaliQ",
-  description: "Due to regional data protection laws, OptimaliQ is currently unavailable in your location.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+import Link from "next/link";
 
 export default function BlockedPage() {
   return (
