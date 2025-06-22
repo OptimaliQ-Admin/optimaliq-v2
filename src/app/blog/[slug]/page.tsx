@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { getBlogPost } from "@/lib/data/blogPosts";
+import { sanitizeHTML } from "@/lib/utils/sanitization";
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -106,7 +107,7 @@ export default function BlogPostPage() {
           <article className="max-w-none text-left">
             <div 
               className="prose prose-optimaliq max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
             />
           </article>
 

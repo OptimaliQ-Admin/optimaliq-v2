@@ -35,12 +35,10 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
           setLastUpdated(format(created, "MMMM d, yyyy"));
 
           if (diffInDays > 7) {
-            const response = fetch("/api/cron/generateMarketInsight", {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`,
-                "Content-Type": "application/json",
-              },
+            await fetch("/api/dashboard/market_trends", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ industry, forceRefresh: true }),
             });
           }
         } else {

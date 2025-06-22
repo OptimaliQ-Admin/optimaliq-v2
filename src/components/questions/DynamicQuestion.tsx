@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { sanitizeInput } from "@/lib/utils/sanitization";
 
 type QuestionType = "select" | "multi_select" | "text_area";
 
@@ -41,7 +42,7 @@ export default function DynamicQuestion({
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             rows={4}
             value={selected as string}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(sanitizeInput(e.target.value))}
             placeholder="Type your answer here..."
           />
         </div>

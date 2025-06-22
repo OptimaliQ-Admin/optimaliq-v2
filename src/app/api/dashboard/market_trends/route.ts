@@ -63,3 +63,36 @@ export async function GET(req: Request) {
 
   return NextResponse.json(data);
 }
+
+// ✅ NEW: POST method to handle cron refresh server-side
+export async function POST(req: Request) {
+  try {
+    const { industry, forceRefresh } = await req.json();
+    
+    // Only trigger cron if forceRefresh is true
+    if (forceRefresh) {
+      console.log("🔄 Triggering market insight refresh for:", industry);
+      
+      // ✅ SECURITY FIX: Server-side cron call with proper secret
+      const cronResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/cron/generateMarketInsight`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${process.env.CRON_SECRET}`, // Server-side only
+        },
+      });
+      
+      if (!cronResponse.ok) {
+        console.warn("⚠️ Failed to trigger market insight refresh");
+      } else {
+        console.log("✅ Market insight refresh triggered successfully");
+      }
+    }
+    
+    // Return success response
+    return NextResponse.json({ success: true, refreshed: forceRefresh });
+    
+  } catch (error) {
+    console.error("❌ Error in market trends POST:", error);
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
+  }
+}

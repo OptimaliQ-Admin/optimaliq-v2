@@ -8,12 +8,15 @@ import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
-
+import { sanitizeAssessmentAnswers } from "@/lib/utils/sanitization";
 
 export async function POST(req: Request) {
   const supabase = createServerComponentClient({ cookies });
   try {
     const { formAnswers } = await req.json();
+
+    // Sanitize all form answers before processing
+    const sanitizedFormAnswers = sanitizeAssessmentAnswers(formAnswers);
 
     console.log("🚀 Starting onboarding assessment processing...");
 
@@ -44,26 +47,26 @@ export async function POST(req: Request) {
     }
 
     console.log("📝 Saving assessment answers...");
-    console.log("📋 Form answers include business_overview:", !!formAnswers.business_overview);
+    console.log("📋 Form answers include business_overview:", !!sanitizedFormAnswers.business_overview);
     
-    // ✅ Insert onboarding answers
+    // ✅ Insert onboarding answers (use sanitized answers)
     const { error: insertError } = await supabase
       .from("onboarding_assessments")
-      .insert([{ ...formAnswers, u_id: userId }]);
+      .insert([{ ...sanitizedFormAnswers, u_id: userId }]);
 
     if (insertError) {
       console.error("❌ Insert Error:", insertError);
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
-    // ✅ Save business_overview to tier2_profiles
-    if (formAnswers.business_overview) {
+    // ✅ Save business_overview to tier2_profiles (use sanitized answers)
+    if (sanitizedFormAnswers.business_overview) {
       console.log("💼 Saving business overview...");
       const { error: businessOverviewError } = await supabase
         .from("tier2_profiles")
         .upsert({
           u_id: userId,
-          business_overview: formAnswers.business_overview,
+          business_overview: sanitizedFormAnswers.business_overview,
         }, { onConflict: "u_id" });
 
       if (businessOverviewError) {
@@ -73,8 +76,8 @@ export async function POST(req: Request) {
     }
 
     console.log("🧠 Generating AI scores...");
-    // ✅ Run scoring
-    const aiScores = await generateDashboardScores(userData, formAnswers);
+    // ✅ Run scoring (use sanitized answers)
+    const aiScores = await generateDashboardScores(userData, sanitizedFormAnswers);
     if (!aiScores) {
       console.error("❌ AI scoring failed");
       return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });

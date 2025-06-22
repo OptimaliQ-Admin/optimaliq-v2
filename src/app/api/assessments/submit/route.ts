@@ -4,6 +4,7 @@ import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
 import { calculateScore } from "@/lib/scoring/calculateScore";
 import { logAssessmentInput, logAssessmentScore, logAssessmentError } from "@/lib/utils/logger";
 import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
+import { sanitizeAssessmentAnswers } from "@/lib/utils/sanitization";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -105,11 +106,14 @@ export async function POST(request: Request) {
   try {
     const { assessment, answers, score, userId } = await request.json();
 
-    // Log incoming request data
-    logAssessmentInput(assessment, { userId, score, answers });
+    // Sanitize all assessment answers before processing
+    const sanitizedAnswers = sanitizeAssessmentAnswers(answers);
 
-    if (!answers || !score || !userId || !assessment) {
-      const error = { error: "Missing required fields", details: { assessment, answers, score, userId } };
+    // Log incoming request data (use sanitized answers)
+    logAssessmentInput(assessment, { userId, score, answers: sanitizedAnswers });
+
+    if (!sanitizedAnswers || !score || !userId || !assessment) {
+      const error = { error: "Missing required fields", details: { assessment, answers: sanitizedAnswers, score, userId } };
       logAssessmentError(assessment, error);
       return NextResponse.json(error, { status: 400 });
     }
@@ -123,8 +127,8 @@ export async function POST(request: Request) {
     const questionConfigModule = await import(`@/lib/config/${assessment}_question_config.json`);
     const questionConfig = questionConfigModule.default;
 
-    // Calculate the final score
-    const finalScore = calculateScore(answers, score, questionConfig);
+    // Calculate the final score using sanitized answers
+    const finalScore = calculateScore(sanitizedAnswers, score, questionConfig);
 
     // Validate the final score
     if (typeof finalScore !== "number" || isNaN(finalScore)) {
@@ -134,7 +138,7 @@ export async function POST(request: Request) {
     // Log the calculated score
     logAssessmentScore(assessment, { userId, score: finalScore });
 
-    // Save score to score summary table (skip answer table since it doesn't exist)
+    // Save score to score summary table (use sanitized answers)
     const { error: scoreError } = await supabase
       .from(mapping.scoreTable)
       .upsert({
@@ -142,7 +146,7 @@ export async function POST(request: Request) {
         score: finalScore,
         gmf_score: score,
         bracket_key: normalizeScore(finalScore),
-        answers,
+        answers: sanitizedAnswers,
         created_at: new Date().toISOString()
       }, {
         onConflict: "u_id"
@@ -172,9 +176,9 @@ export async function POST(request: Request) {
     // Recalculate overall score
     await recalculateOverallScore(supabase, userId);
 
-    // For tech stack assessment, save the selected tools
+    // For tech stack assessment, save the selected tools (use sanitized answers)
     if (assessment === "tech_stack") {
-      const selectedTools = answers["current_tech_stack"];
+      const selectedTools = sanitizedAnswers["current_tech_stack"];
       if (selectedTools) {
         // Parse the selected tools and save to appropriate array fields
         const techStackData: any = {
