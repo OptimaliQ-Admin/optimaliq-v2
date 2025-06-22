@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAuditLogs, getAdminDashboardStats, isUserAdmin } from '@/lib/utils/auditLogger';
 import { useUser } from '@/lib/hooks/useUser';
 
 interface AuditLog {
@@ -27,6 +26,7 @@ export default function AdminDashboard() {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [stats, setStats] = useState<DashboardStats[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     table_name: '',
     operation: '',
@@ -34,33 +34,57 @@ export default function AdminDashboard() {
     end_date: '',
   });
 
+  const checkAdminStatus = useCallback(async () => {
+    if (!user?.u_id) return;
+    
+    try {
+      const response = await fetch('/api/admin/check-status');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setIsAdmin(data.isAdmin);
+        if (data.isAdmin) {
+          loadDashboardData();
+        }
+      } else {
+        setError(data.error || 'Failed to check admin status');
+        setIsAdmin(false);
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setError('Failed to check admin status');
+      setIsAdmin(false);
+    }
+  }, [user?.u_id]);
+
   const loadDashboardData = useCallback(async () => {
     setLoading(true);
+    setError(null);
+    
     try {
-      const [logs, dashboardStats] = await Promise.all([
-        getAuditLogs(filters, 50),
-        getAdminDashboardStats(),
-      ]);
+      const params = new URLSearchParams();
+      if (filters.table_name) params.append('table_name', filters.table_name);
+      if (filters.operation) params.append('operation', filters.operation);
+      if (filters.start_date) params.append('start_date', filters.start_date);
+      if (filters.end_date) params.append('end_date', filters.end_date);
+      params.append('limit', '50');
+
+      const response = await fetch(`/api/admin/dashboard?${params.toString()}`);
+      const data = await response.json();
       
-      setAuditLogs(logs);
-      setStats(dashboardStats);
+      if (response.ok) {
+        setAuditLogs(data.auditLogs || []);
+        setStats(data.stats || []);
+      } else {
+        setError(data.error || 'Failed to load dashboard data');
+      }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
   }, [filters]);
-
-  const checkAdminStatus = useCallback(async () => {
-    if (!user?.u_id) return;
-    
-    const adminStatus = await isUserAdmin(user.u_id);
-    setIsAdmin(adminStatus);
-    
-    if (adminStatus) {
-      loadDashboardData();
-    }
-  }, [user?.u_id, loadDashboardData]);
 
   useEffect(() => {
     checkAdminStatus();
@@ -99,6 +123,9 @@ export default function AdminDashboard() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
           <p className="text-gray-600">You don&apos;t have permission to access the admin dashboard.</p>
+          {error && (
+            <p className="text-red-600 mt-2 text-sm">{error}</p>
+          )}
         </div>
       </div>
     );
@@ -123,6 +150,13 @@ export default function AdminDashboard() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
           <p className="text-gray-600">System overview and audit logs</p>
         </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-800">{error}</p>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -1,13 +1,18 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { supabaseAdmin, isAdminClientAvailable } from "@/lib/supabaseAdmin";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from '@/lib/utils/validation';
 
 export async function POST(req: Request) {
-  const supabase = createServerComponentClient({ cookies });
-  
   try {
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      return NextResponse.json({ 
+        error: 'Admin client not configured. Please set SUPABASE_SERVICE_ROLE_KEY environment variable.' 
+      }, { status: 503 });
+    }
+
     const { u_id, updates } = await req.json();
 
     console.log("📝 Updating user profile");
@@ -24,7 +29,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid LinkedIn profile URL." }, { status: 400 });
     }
 
-    const { error } = await supabaseAdmin
+    const { error } = await supabaseAdmin!
       .from("tier2_users")
       .update(updates)
       .eq("u_id", u_id);

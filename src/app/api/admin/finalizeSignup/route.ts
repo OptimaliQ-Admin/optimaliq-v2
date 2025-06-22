@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { supabaseAdmin, isAdminClientAvailable } from "@/lib/supabaseAdmin";
 
 export async function POST(req: Request) {
   try {
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      return NextResponse.json({ 
+        error: 'Admin client not configured. Please set SUPABASE_SERVICE_ROLE_KEY environment variable.' 
+      }, { status: 503 });
+    }
+
     const { email, password, timezone, linkedin_url, agreed_terms, agreed_marketing } = await req.json();
 
     if (!email || !password) {
@@ -10,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ 1. Check user in tier2_users
-    const { data: tier2User, error: tier2Error } = await supabaseAdmin
+    const { data: tier2User, error: tier2Error } = await supabaseAdmin!
       .from("tier2_users")
       .select("*")
       .eq("email", email)
@@ -22,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ 2. Check user in Supabase Auth
-    const { data: userList, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+    const { data: userList, error: listError } = await supabaseAdmin!.auth.admin.listUsers();
     if (listError || !userList?.users) {
       console.error("❌ Error listing users:", listError);
       return NextResponse.json({ error: "Failed to list users" }, { status: 500 });
@@ -33,7 +40,7 @@ export async function POST(req: Request) {
     if (!authUser) {
       console.log("👤 User does not exist in Auth. Creating new user...");
 
-      const { data: createdUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+      const { data: createdUser, error: createError } = await supabaseAdmin!.auth.admin.createUser({
         email,
         password,
         email_confirm: true,
@@ -48,7 +55,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ 3. Update password
-    const { error: updatePasswordError } = await supabaseAdmin.auth.admin.updateUserById(authUser.id, {
+    const { error: updatePasswordError } = await supabaseAdmin!.auth.admin.updateUserById(authUser.id, {
       password,
     });
 
@@ -58,7 +65,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ 4. Update tier2_users with user ID and new data
-    const { error: updateTier2Error } = await supabaseAdmin
+    const { error: updateTier2Error } = await supabaseAdmin!
       .from("tier2_users")
       .update({
         u_id: authUser.id,
