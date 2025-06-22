@@ -43,15 +43,15 @@ export default function BlockedPage() {
           </p>
           
           <p className="text-sm">
-            We're working on expanding global access and implementing the necessary compliance measures to serve users in your region.
+            We&apos;re working on expanding global access and implementing the necessary compliance measures to serve users in your region.
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
             <h3 className="font-semibold text-blue-900 mb-2">What this means:</h3>
             <ul className="text-sm text-blue-800 space-y-1 text-left">
               <li>• Your region has strict data protection regulations</li>
-              <li>• We're ensuring full compliance before launching</li>
-              <li>• We're actively working on a solution</li>
+              <li>• We&apos;re ensuring full compliance before launching</li>
+              <li>• We&apos;re actively working on a solution</li>
             </ul>
           </div>
         </div>
