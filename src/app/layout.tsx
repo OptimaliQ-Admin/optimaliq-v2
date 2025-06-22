@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="manifest" href="/manifest.json" />
         
         {/* Usercentrics CMP - Consent Management Platform */}
-        <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"></script>
+        <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js" async></script>
         <script 
           id="usercentrics-cmp" 
           src="https://web.cmp.usercentrics.eu/ui/loader.js" 

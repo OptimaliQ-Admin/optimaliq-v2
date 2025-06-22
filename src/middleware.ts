@@ -2,8 +2,9 @@
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { GDPR_COUNTRIES, logGDPRAccessAttempt } from "@/lib/utils/gdpr";
 
-// This middleware protects all /premium routes and sets country code
+// This middleware protects all /premium routes, sets country code, and blocks GDPR regions
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
@@ -18,6 +19,20 @@ export async function middleware(req: NextRequest) {
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 30, // 30 days
   });
+
+  // Check if user is from a GDPR country and block access
+  if (GDPR_COUNTRIES.includes(country)) {
+    // Log the blocked access attempt
+    await logGDPRAccessAttempt(country, req.nextUrl.pathname, req.headers.get('user-agent') || undefined);
+    
+    // Don't block access to the blocked page itself to avoid redirect loops
+    if (req.nextUrl.pathname === '/blocked') {
+      return res;
+    }
+    
+    // Redirect to blocked page
+    return NextResponse.redirect(new URL("/blocked", req.url));
+  }
 
   // Create Supabase client with request/response context
   const supabase = createMiddlewareClient({ req, res });
