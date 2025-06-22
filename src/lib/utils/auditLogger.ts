@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseAdmin, isAdminClientAvailable } from '@/lib/supabaseAdmin';
 
 export interface AuditLogEntry {
   table_name: string;
@@ -15,7 +15,13 @@ export interface AuditLogEntry {
  */
 export async function logAuditEvent(entry: AuditLogEntry): Promise<void> {
   try {
-    const { error } = await supabaseAdmin
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      console.warn('Admin client not configured. Cannot log audit event.');
+      return;
+    }
+
+    const { error } = await supabaseAdmin!
       .from('audit_log')
       .insert({
         table_name: entry.table_name,
@@ -42,7 +48,13 @@ export async function logAuditEvent(entry: AuditLogEntry): Promise<void> {
  */
 export async function isUserAdmin(userId: string): Promise<boolean> {
   try {
-    const { data, error } = await supabaseAdmin
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      console.warn('Admin client not configured. Cannot check admin status.');
+      return false;
+    }
+
+    const { data, error } = await supabaseAdmin!
       .from('tier2_users')
       .select('role')
       .eq('u_id', userId)
@@ -74,7 +86,13 @@ export async function getAuditLogs(
   limit: number = 100
 ): Promise<any[]> {
   try {
-    let query = supabaseAdmin
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      console.warn('Admin client not configured. Cannot fetch audit logs.');
+      return [];
+    }
+
+    let query = supabaseAdmin!
       .from('audit_log')
       .select('*')
       .order('timestamp', { ascending: false })
@@ -115,7 +133,13 @@ export async function getAuditLogs(
  */
 export async function getAdminDashboardStats(): Promise<any> {
   try {
-    const { data, error } = await supabaseAdmin
+    // Check if admin client is available
+    if (!isAdminClientAvailable()) {
+      console.warn('Admin client not configured. Cannot fetch dashboard stats.');
+      return {};
+    }
+
+    const { data, error } = await supabaseAdmin!
       .from('admin_dashboard')
       .select('*');
 
