@@ -104,6 +104,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        
+        {/* Usercentrics CMP - Consent Management Platform */}
+        <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"></script>
+        <script 
+          id="usercentrics-cmp" 
+          src="https://web.cmp.usercentrics.eu/ui/loader.js" 
+          data-settings-id="6-e4t0p1FNb5Vx" 
+          async
+        ></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>
         {/* Only wrap "normal" pages in RootLayoutWrapper. 
