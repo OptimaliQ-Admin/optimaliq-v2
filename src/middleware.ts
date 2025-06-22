@@ -3,9 +3,21 @@ import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// This middleware protects all /premium routes
+// This middleware protects all /premium routes and sets country code
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+
+  // Get visitor's country from Vercel's geo data
+  const country = (req as any).geo?.country || "US"; // fallback to US
+  
+  // Set country code cookie for client-side usage
+  res.cookies.set("country_code", country, {
+    path: "/",
+    httpOnly: false, // Allow client-side access
+    secure: process.env.NODE_ENV === "production", // Secure in production
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+  });
 
   // Create Supabase client with request/response context
   const supabase = createMiddlewareClient({ req, res });
@@ -58,7 +70,7 @@ export async function middleware(req: NextRequest) {
   return res;
 }
 
-// ✅ Apply only to /premium and /subscribe routes
+// ✅ Apply to all routes except static assets
 export const config = {
   matcher: [
     /*
