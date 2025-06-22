@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { useUser } from '@/lib/hooks/useUser';
+import { usePremiumUser } from '@/context/PremiumUserContext';
 
 interface AuditLog {
   id: number;
@@ -21,7 +21,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const { user } = useUser();
+  const { user } = usePremiumUser();
   const [isAdmin, setIsAdmin] = useState(false);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [stats, setStats] = useState<DashboardStats[]>([]);
