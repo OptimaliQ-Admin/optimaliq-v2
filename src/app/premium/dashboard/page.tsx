@@ -237,9 +237,7 @@ export default function PremiumDashboardPage() {
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
               description="Your comprehensive growth maturity score"
-              onLearnMore={() => {
-                console.log("🚀 Learn More clicked for Overall Score");
-              }}
+              onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
             />
             <ScoreCard
               title="Strategy"
