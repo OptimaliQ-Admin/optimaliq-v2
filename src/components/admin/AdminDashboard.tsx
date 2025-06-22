@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getAuditLogs, getAdminDashboardStats, isUserAdmin } from '@/lib/utils/auditLogger';
 import { useUser } from '@/lib/hooks/useUser';
 
@@ -34,22 +34,7 @@ export default function AdminDashboard() {
     end_date: '',
   });
 
-  useEffect(() => {
-    checkAdminStatus();
-  }, [user]);
-
-  const checkAdminStatus = async () => {
-    if (!user?.u_id) return;
-    
-    const adminStatus = await isUserAdmin(user.u_id);
-    setIsAdmin(adminStatus);
-    
-    if (adminStatus) {
-      loadDashboardData();
-    }
-  };
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       const [logs, dashboardStats] = await Promise.all([
@@ -64,7 +49,22 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  const checkAdminStatus = useCallback(async () => {
+    if (!user?.u_id) return;
+    
+    const adminStatus = await isUserAdmin(user.u_id);
+    setIsAdmin(adminStatus);
+    
+    if (adminStatus) {
+      loadDashboardData();
+    }
+  }, [user?.u_id, loadDashboardData]);
+
+  useEffect(() => {
+    checkAdminStatus();
+  }, [checkAdminStatus]);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You don't have permission to access the admin dashboard.</p>
+          <p className="text-gray-600">You don&apos;t have permission to access the admin dashboard.</p>
         </div>
       </div>
     );
