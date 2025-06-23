@@ -15,12 +15,16 @@ export default function HeroSection() {
           className="space-y-8"
         >
           <h1 className="text-5xl font-bold text-gray-800">
-            Unlock Predictable Growth with AI-Driven Strategy
+            Smarter Decisions. Faster Growth. Powered by AI.
           </h1>
+          <h2 className="text-4xl font-bold text-gray-800">
+            OptimaliQ: Unlock Predictable Growth with AI-Driven Strategy
+          </h2>
           <p className="text-lg text-gray-600 mt-4">
-            Get instant AI-powered insights, track your business progress, and take action with a personalized 30-day plan—every month.
+            OptimaliQ delivers instant AI-powered insights, benchmarks, and personalized 30-day roadmaps to drive business performance.
           </p>
-          
+          {/* If you have a hero image or logo, add alt text here */}
+          {/* <img src="/images/hero-logo.png" alt="OptimaliQ logo - AI-powered business growth insights" className="mx-auto my-6" /> */}
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

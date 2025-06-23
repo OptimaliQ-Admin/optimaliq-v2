@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yourdomain.com/</loc>
+    <loc>https://optimaliq.ai/</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/pricing</loc>
+    <loc>https://optimaliq.ai/about</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://optimaliq.ai/pricing</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/subscribe</loc>
+    <loc>https://optimaliq.ai/subscribe</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/growth-assessment</loc>
+    <loc>https://optimaliq.ai/growth-assessment</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/premium/dashboard</loc>
+    <loc>https://optimaliq.ai/premium/dashboard</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/premium/growth-studio</loc>
+    <loc>https://optimaliq.ai/premium/growth-studio</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/premium/assessment</loc>
+    <loc>https://optimaliq.ai/premium/assessment</loc>
     <lastmod>2024-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

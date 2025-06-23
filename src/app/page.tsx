@@ -8,19 +8,19 @@ import FaqSection from "@/components/home/FaqSection";
 import PageNavigation from "@/components/shared/PageNavigation";
 
 export const metadata: Metadata = {
-  title: "AI-Powered Growth Management Framework",
-  description: "Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations. Get personalized growth strategies and competitive benchmarking.",
+  title: "OptimaliQ | AI-Powered Growth Strategy Platform",
+  description: "Smarter decisions. Faster growth. OptimaliQ helps businesses unlock opportunities with real-time AI insights and strategic benchmarking.",
   openGraph: {
-    title: "GMF Plus - AI-Powered Growth Management Framework",
-    description: "Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.",
-    url: "https://yourdomain.com",
-    siteName: "GMF Plus",
+    title: "OptimaliQ",
+    description: "Smarter decisions. Faster growth. Real-time AI insights for business performance.",
+    url: "https://optimaliq.ai",
+    siteName: "OptimaliQ",
     images: [
       {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "GMF Plus - AI-Powered Growth Management Framework",
+        alt: "OptimaliQ - AI-Powered Growth Strategy Platform",
       },
     ],
     locale: "en_US",
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GMF Plus - AI-Powered Growth Management Framework",
-    description: "Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.",
+    title: "OptimaliQ",
+    description: "Smarter decisions. Faster growth. Real-time AI insights for business performance.",
     images: ["/images/twitter-image.jpg"],
   },
   alternates: {
