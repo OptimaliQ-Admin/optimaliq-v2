@@ -1,17 +1,13 @@
+# *
 User-agent: *
 Allow: /
-
-# Sitemap location
-Sitemap: https://optimaliq.ai/sitemap.xml
-
-# Disallow admin and API routes
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/
 Disallow: /premium/account/
 
-# Allow important pages
-Allow: /premium/
-Allow: /subscribe/
-Allow: /pricing/
-Allow: /growth-assessment/ 
+# Host
+Host: https://optimaliq.ai
+
+# Sitemaps
+Sitemap: https://optimaliq.ai/sitemap.xml

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
+import Script from "next/script";
 import "@/app/globals.css";
 import RootLayoutWrapper from "@/components/layout/RootLayoutWrapper";
 import { Toaster } from "react-hot-toast";
@@ -104,17 +105,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        
-        {/* Usercentrics CMP - Consent Management Platform */}
-        <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js" async></script>
-        <script 
-          id="usercentrics-cmp" 
-          src="https://web.cmp.usercentrics.eu/ui/loader.js" 
-          data-settings-id="6-e4t0p1FNb5Vx" 
-          async
-        ></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>
+        {/* Usercentrics CMP - Must be loaded before any third-party scripts */}
+        <Script
+          src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          id="usercentrics-cmp"
+          src="https://web.cmp.usercentrics.eu/ui/loader.js"
+          data-settings-id="6-e4t0p1FNb5Vx"
+          strategy="beforeInteractive"
+        />
+        
         {/* Only wrap "normal" pages in RootLayoutWrapper. 
             /premium and /subscribe will have their own layout wrappers. */}
         <RootLayoutWrapper>
