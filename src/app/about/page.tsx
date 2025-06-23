@@ -120,7 +120,7 @@ export default function AboutPage() {
             className="text-center"
           >
             <p className="text-lg text-gray-700 leading-relaxed">
-              Whether you're a startup scaling operations or an established firm seeking a competitive edge, OptimaliQ gives you the clarity and confidence to move forward.
+              Whether you&apos;re a startup scaling operations or an established firm seeking a competitive edge, OptimaliQ gives you the clarity and confidence to move forward.
             </p>
           </motion.div>
         </div>
