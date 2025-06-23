@@ -8,6 +8,7 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import { PremiumUser } from "@/context/PremiumUserContext";
 import { formatPhoneForDisplay, stripPhoneFormatting } from "@/lib/utils/phoneFormatter";
 import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from "@/lib/utils/validation";
+import { toast } from "react-hot-toast";
 
 export default function ProfilePage() {
   const { user, setUser } = usePremiumUser();
@@ -60,7 +61,9 @@ export default function ProfilePage() {
       }
     } catch (err) {
       console.error('Error uploading profile picture:', err);
-      setError('Failed to upload profile picture.');
+      const errorMessage = 'Failed to upload profile picture.';
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setUploading(false);
     }
@@ -95,6 +98,7 @@ export default function ProfilePage() {
         throw new Error(data.error || 'Failed to update profile');
       }
       setSuccess(true);
+      toast.success("Saved successfully!");
       
       // Update user context with new data
       if (user) {
@@ -105,7 +109,9 @@ export default function ProfilePage() {
       }
     } catch (err) {
       console.error('Error updating profile:', err);
-      setError(err instanceof Error ? err.message : 'Failed to update profile');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update profile';
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setSaving(false);
     }

@@ -23,7 +23,7 @@ export default function TermsPage() {
             </div>
 
             <p className="text-lg mb-8">
-              Welcome to OptimaliQ.ai. These Terms of Service ("Terms") govern your access to and use of our platform, tools, insights, and services. By accessing or using our website or services, you agree to be bound by these Terms.
+              Welcome to OptimaliQ.ai. These Terms of Service (&quot;Terms&quot;) govern your access to and use of our platform, tools, insights, and services. By accessing or using our website or services, you agree to be bound by these Terms.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4">1. Use of Our Services</h2>

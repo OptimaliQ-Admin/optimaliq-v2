@@ -10,6 +10,7 @@ import LabeledSelect from "../../../components/shared/LabeledSelect";
 import SubmitButton from "../../../components/shared/SubmitButton";
 import FormSectionHeader from "../../../components/shared/FormSectionHeader";
 import { FaChartLine, FaShieldAlt, FaCheckCircle } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 export default function GrowthAssessmentStep2() {
   const router = useRouter();
@@ -54,7 +55,9 @@ export default function GrowthAssessmentStep2() {
     const missingFields = requiredFields.filter(field => !businessResponses[field as keyof typeof businessResponses]);
     
     if (missingFields.length > 0) {
-      setError(`Please fill in all required fields: ${missingFields.join(", ")}`);
+      const errorMessage = `Please fill in all required fields: ${missingFields.join(", ")}`;
+      toast.error(errorMessage);
+      setError(errorMessage);
       return false;
     }
     return true;
@@ -66,7 +69,9 @@ export default function GrowthAssessmentStep2() {
     setIsSubmitting(true);
 
     if (!userId) {
-      setError("User ID is missing. Please start again.");
+      const errorMessage = "User ID is missing. Please start again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
       setIsSubmitting(false);
       return;
     }
@@ -92,13 +97,18 @@ export default function GrowthAssessmentStep2() {
 
       if (upsertError) {
         console.error("Failed to save responses:", upsertError);
-        setError(`Failed to save responses: ${upsertError.message}`);
+        const errorMessage = `Failed to save responses: ${upsertError.message}`;
+        toast.error(errorMessage);
+        setError(errorMessage);
       } else {
+        toast.success("Assessment submitted!");
         router.push("/growth-assessment/analyzing");
       }
     } catch (err) {
       console.error("Unexpected error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      const errorMessage = "An unexpected error occurred. Please try again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
       setCooldown(10);

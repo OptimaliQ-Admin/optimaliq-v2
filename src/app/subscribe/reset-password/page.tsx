@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
 import PasswordInput from "@/components/shared/PasswordInput";
+import { toast } from "react-hot-toast";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -23,7 +24,9 @@ export default function ResetPasswordPage() {
     setError("");
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
+      const errorMessage = "Passwords do not match.";
+      toast.error(errorMessage);
+      setError(errorMessage);
       return;
     }
 
@@ -32,9 +35,12 @@ export default function ResetPasswordPage() {
     const { error } = await supabase.auth.updateUser({ password: form.password });
 
     if (error) {
-      setError(error.message);
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+      setError(errorMessage);
     } else {
       setSuccess(true);
+      toast.success("Password updated successfully!");
       setTimeout(() => router.push("/subscribe/login"), 2000);
     }
 

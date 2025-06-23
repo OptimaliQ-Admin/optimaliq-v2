@@ -21,7 +21,7 @@ export default function RefundPage() {
             </div>
 
             <p className="text-lg mb-8">
-              At OptimaliQ.ai, we're committed to delivering immediate, high-impact strategic insights from the moment you subscribe. To maintain the integrity of our platform and ensure fair use, our refund policy is outlined below.
+              At OptimaliQ.ai, we&apos;re committed to delivering immediate, high-impact strategic insights from the moment you subscribe. To maintain the integrity of our platform and ensure fair use, our refund policy is outlined below.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4">Monthly Subscriptions — Non-Refundable</h2>
@@ -31,7 +31,7 @@ export default function RefundPage() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4">Annual Subscriptions — 14-Day Partial Refund Eligibility</h2>
             <p className="mb-4">
-              If you've purchased an annual subscription, you may request a partial refund within 14 days of your purchase under the following conditions:
+              If you&apos;ve purchased an annual subscription, you may request a partial refund within 14 days of your purchase under the following conditions:
             </p>
             <ul className="list-disc pl-6 mb-6 space-y-2">
               <li>You have not excessively used the platform (e.g., bulk exports, data scraping, or multiple users under one license)</li>
@@ -90,16 +90,16 @@ export default function RefundPage() {
               <ol className="list-decimal pl-6 space-y-2">
                 <li>Log into your OptimaliQ account</li>
                 <li>Go to Account Settings → Billing</li>
-                <li>Click "Cancel Subscription"</li>
+                <li>Click &quot;Cancel Subscription&quot;</li>
                 <li>Confirm your cancellation</li>
-                <li>You'll receive a confirmation email</li>
+                <li>You&apos;ll receive a confirmation email</li>
               </ol>
             </div>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4">What Happens After Cancellation</h2>
             <ul className="list-disc pl-6 mb-6 space-y-2">
               <li>Your subscription will not renew</li>
-              <li>You'll retain access until the end of your current billing period</li>
+              <li>You&apos;ll retain access until the end of your current billing period</li>
               <li>Your data will be retained for 30 days after cancellation</li>
               <li>You can reactivate your subscription anytime</li>
             </ul>
@@ -112,7 +112,7 @@ export default function RefundPage() {
                   <a href="mailto:support@optimaliq.ai" className="text-blue-600 hover:text-blue-800 font-semibold">
                     support@optimaliq.ai
                   </a>{" "}
-                  — we're happy to help.
+                  — we&apos;re happy to help.
                 </p>
               </div>
             </div>

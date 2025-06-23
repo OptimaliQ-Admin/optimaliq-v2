@@ -34,7 +34,9 @@ export default function LoginPage() {
       });
 
       if (signInError || !signInData?.user?.id) {
-        setError("Invalid credentials or user not found.");
+        const errorMessage = signInError?.message || "Invalid email or password";
+        toast.error(errorMessage);
+        setError(errorMessage);
         setIsLoading(false);
         return;
       }
@@ -51,7 +53,9 @@ export default function LoginPage() {
       const result = await res.json();
 
       if (!res.ok) {
-        setError(result.error || "Failed to verify account.");
+        const errorMessage = result.error || "Failed to verify account";
+        toast.error(errorMessage);
+        setError(errorMessage);
         setIsLoading(false);
         return;
       }
@@ -66,7 +70,10 @@ export default function LoginPage() {
 
       setUser(profile); // ✅ set context
       const { data: sessionData } = await supabase.auth.getSession();
-console.log("🧠 Session after login:", sessionData);
+      console.log("🧠 Session after login:", sessionData);
+
+      // Add success toast
+      toast.success("Welcome back!");
 
       if (hasCompletedOnboarding) {
         router.push("/premium/dashboard");
@@ -75,7 +82,9 @@ console.log("🧠 Session after login:", sessionData);
       }
     } catch (error) {
       console.error("❌ Unexpected login error:", error);
-      setError("Unexpected error. Please try again.");
+      const errorMessage = "Unexpected error. Please try again.";
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

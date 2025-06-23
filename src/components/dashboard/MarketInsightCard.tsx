@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
 import SectionTitleBar from "./SectionTitleBar";
-import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function MarketInsightCard({ industry }: { industry: string }) {
   const [insight, setInsight] = useState<string | null>(null);
@@ -35,17 +35,29 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
           setLastUpdated(format(created, "MMMM d, yyyy"));
 
           if (diffInDays > 7) {
-            await fetch("/api/dashboard/market_trends", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ industry, forceRefresh: true }),
-            });
+            try {
+              const refreshRes = await fetch("/api/dashboard/market_trends", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ industry, forceRefresh: true }),
+              });
+              
+              if (refreshRes.ok) {
+                toast.success("Insights updated!");
+              } else {
+                toast.error("Failed to update insights");
+              }
+            } catch (refreshError) {
+              console.error("Error refreshing insights:", refreshError);
+              toast.error("Failed to update insights");
+            }
           }
         } else {
           console.warn("No valid insight found");
         }
       } catch (error) {
         console.error("Error fetching market insight:", error);
+        toast.error("Failed to load market insights");
       } finally {
         setLoading(false);
       }
