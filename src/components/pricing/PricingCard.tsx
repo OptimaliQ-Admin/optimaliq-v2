@@ -31,6 +31,24 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
 
   const isPopular = plan === "Accelerator";
 
+  // Calculate monthly equivalent for annual plans
+  const getDisplayPrice = () => {
+    if (price === "FREE") return "FREE";
+    
+    if (cycle === "annual") {
+      const monthlyEquivalent = Math.round(Number(price) / 12);
+      return `$${monthlyEquivalent}/Month`;
+    } else {
+      return `$${price}/mo`;
+    }
+  };
+
+  // Get the billing text
+  const getBillingText = () => {
+    if (price === "FREE") return "";
+    return cycle === "annual" ? "Billed annual" : "Billed monthly";
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -56,15 +74,10 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
         </h2>
         <div className="mb-2">
           <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            {price === "FREE" ? price : `$${price}`}
+            {getDisplayPrice()}
           </span>
-          {price !== "FREE" && (
-            <span className="text-lg font-medium text-gray-600">
-              {cycle === "monthly" ? "/mo" : "/year"}
-            </span>
-          )}
         </div>
-        <p className="text-gray-500 text-sm">Billed {cycle}</p>
+        <p className="text-gray-500 text-sm">{getBillingText()}</p>
       </div>
 
       {/* Features List */}

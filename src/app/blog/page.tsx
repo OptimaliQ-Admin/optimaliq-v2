@@ -176,6 +176,15 @@ export default function BlogPage() {
                   <Link href={`/blog/${post.id}`}>
                     <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group-hover:scale-105">
                       <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300">
+                        {post.image && (
+                          <Image
+                            src={post.image}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                         <div className="absolute top-4 left-4">
                           <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold font-['Inter']">
@@ -252,6 +261,15 @@ export default function BlogPage() {
                   <Link href={`/blog/${post.id}`}>
                     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group-hover:scale-105">
                       <div className="relative h-40 bg-gradient-to-br from-gray-200 to-gray-300">
+                        {post.image && (
+                          <Image
+                            src={post.image}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        )}
                         <div className="absolute top-3 left-3">
                           <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold font-['Inter']">
                             {post.category}
