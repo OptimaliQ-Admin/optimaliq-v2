@@ -21,16 +21,16 @@ export default function WhyOptimaliQ() {
         >
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
             <span className="w-2 h-2 bg-white rounded-full"></span>
-            Why Choose OptimaliQ
+            Why Choose <span className="text-blue-200">OptimaliQ</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
             The{" "}
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              OptimaliQ Advantage
+              <span className="text-blue-600">OptimaliQ</span> Advantage
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Your competitors are scaling faster by using AI to optimize strategy, streamline execution, and stay ahead of the market. OptimaliQ gives you that same edge — for less than the cost of one hour with a consultant.
+            Your competitors are scaling faster by using AI to optimize strategy, streamline execution, and stay ahead of the market. <span className="text-blue-600 font-semibold">OptimaliQ</span> gives you that same edge — for less than the cost of one hour with a consultant.
           </p>
         </motion.div>
 
@@ -47,7 +47,7 @@ export default function WhyOptimaliQ() {
               <thead>
                 <tr className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
                   <th className="p-6 text-left font-semibold text-lg">Feature</th>
-                  <th className="p-6 text-center font-semibold text-lg">OptimaliQ</th>
+                  <th className="p-6 text-center font-semibold text-lg"><span className="text-blue-200">OptimaliQ</span></th>
                   <th className="p-6 text-center font-semibold text-lg">Traditional Consulting</th>
                 </tr>
               </thead>

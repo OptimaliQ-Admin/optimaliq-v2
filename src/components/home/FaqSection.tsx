@@ -45,6 +45,18 @@ const faqs = [
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  // Function to render text with OptimaliQ in blue
+  const renderTextWithOptimaliQ = (text: string) => {
+    const parts = text.split(/(OptimaliQ)/g);
+    return parts.map((part, index) => 
+      part === 'OptimaliQ' ? (
+        <span key={index} className="text-blue-600 font-semibold">{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <section id="faq" className="py-24 bg-white relative overflow-hidden">
       {/* Background Pattern */}
@@ -70,7 +82,7 @@ export default function FaqSection() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Everything you need to know about OptimaliQ&apos;s AI-powered strategic intelligence platform.
+            Everything you need to know about <span className="text-blue-600 font-semibold">OptimaliQ</span>&apos;s AI-powered strategic intelligence platform.
           </p>
         </motion.div>
 
@@ -94,7 +106,7 @@ export default function FaqSection() {
                   className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors duration-200"
                 >
                   <h3 className="text-lg lg:text-xl font-semibold text-gray-900 pr-4">
-                    {question}
+                    {renderTextWithOptimaliQ(question)}
                   </h3>
                   <div className={`w-6 h-6 flex items-center justify-center transition-transform duration-300 ${
                     openIndex === index ? 'rotate-180' : ''
@@ -117,7 +129,7 @@ export default function FaqSection() {
                   <div className="px-6 pb-6">
                     <div className="h-px bg-gradient-to-r from-blue-500 to-indigo-500 mb-4"></div>
                     <p className="text-gray-600 leading-relaxed text-lg">
-                      {answer}
+                      {renderTextWithOptimaliQ(answer)}
                     </p>
                   </div>
                 </motion.div>

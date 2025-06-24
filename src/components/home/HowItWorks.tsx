@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const steps = [
   {
@@ -214,12 +215,25 @@ export default function HowItWorks() {
                 {/* Content */}
                 <div className="relative z-10 p-8 h-full flex flex-col">
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">You&apos;re Not Alone with OptimaliQ</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">You&apos;re Not Alone with <span className="text-blue-600">OptimaliQ</span></h3>
                   
                   {/* Description */}
                   <p className="text-gray-600 leading-relaxed flex-grow">
-                    While our AI delivers fast, intelligent insights — real growth takes a human touch. That&apos;s why every OptimaliQ user can access real experts for strategic check-ins and support. It&apos;s the best of both worlds: AI-powered scale, human-backed care.
+                    While our AI delivers fast, intelligent insights — real growth takes a human touch. That&apos;s why every <span className="text-blue-600 font-semibold">OptimaliQ</span> user can access real experts for strategic check-ins and support. It&apos;s the best of both worlds: AI-powered scale, human-backed care.
                   </p>
+
+                  {/* CTA Button */}
+                  <div className="mt-auto">
+                    <Link
+                      href="/strategy-support"
+                      className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-500/30 transition-all duration-300 w-full justify-center"
+                    >
+                      <span>Learn More</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </Link>
+                  </div>
 
                   {/* Bottom Accent */}
                   <div className="mt-6 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
