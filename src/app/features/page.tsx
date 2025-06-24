@@ -188,7 +188,7 @@ export default function FeaturesPage() {
               
               <div className="mt-6 p-4 bg-purple-50 rounded-lg">
                 <p className="text-sm text-purple-800">
-                  <strong>Position:</strong> You're ahead of industry average but trailing top performers. 
+                  <strong>Position:</strong> You&apos;re ahead of industry average but trailing top performers. 
                   Focus on AI adoption to close the gap.
                 </p>
               </div>
