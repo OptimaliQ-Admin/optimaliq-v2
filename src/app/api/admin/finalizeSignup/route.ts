@@ -16,6 +16,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    // Handles both new and recovered account creation
+    // If UUID exists in tier2_users, it will be updated with Auth user ID
     // ✅ 1. Check user in tier2_users
     const { data: tier2User, error: tier2Error } = await supabaseAdmin!
       .from("tier2_users")

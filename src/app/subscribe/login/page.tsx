@@ -34,6 +34,33 @@ export default function LoginPage() {
       });
 
       if (signInError || !signInData?.user?.id) {
+        // ✅ Check if this might be an incomplete user who paid but didn't complete account creation
+        try {
+          const recoveryResponse = await fetch("/api/admin/recoverIncompleteUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+          });
+
+          if (recoveryResponse.ok) {
+            const recoveryResult = await recoveryResponse.json();
+            
+            if (recoveryResult.needsAccountCompletion) {
+              // User paid but didn't complete account creation
+              localStorage.setItem("tier2_email", email);
+              localStorage.setItem("tier2_user_id", recoveryResult.userInfo.u_id);
+              localStorage.setItem("tier2_full_user_info", JSON.stringify(recoveryResult.userInfo));
+              
+              toast.error("Account setup incomplete. Please complete your account creation.");
+              router.push("/subscribe/recover-create-account");
+              return;
+            }
+          }
+        } catch (recoveryError) {
+          console.error("Error checking for incomplete user:", recoveryError);
+          // Continue with normal error handling
+        }
+
         const errorMessage = signInError?.message || "Invalid email or password";
         toast.error(errorMessage);
         setError(errorMessage);
