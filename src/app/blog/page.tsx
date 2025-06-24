@@ -192,10 +192,10 @@ export default function BlogPage() {
                       </div>
                       
                       <div className="p-6">
-                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter']">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter'] leading-relaxed">
                           {post.title}
                         </h3>
-                        <p className="text-gray-600 mb-4 line-clamp-3 font-['Inter']">
+                        <p className="text-gray-600 mb-4 line-clamp-3 font-['Inter'] text-base leading-relaxed">
                           {post.excerpt}
                         </p>
                         
@@ -207,7 +207,7 @@ export default function BlogPage() {
                               </span>
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-gray-900 font-['Inter']">{post.author}</p>
+                              <p className="text-xs font-semibold text-gray-900 font-['Inter']">{post.author.split(' ').map(n => n[0]).join('')}</p>
                               <p className="text-xs text-gray-500 font-['Inter']">{post.authorRole}</p>
                             </div>
                           </div>
@@ -260,10 +260,10 @@ export default function BlogPage() {
                       </div>
                       
                       <div className="p-5">
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter']">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 font-['Inter'] leading-relaxed">
                           {post.title}
                         </h3>
-                        <p className="text-gray-600 mb-3 text-sm line-clamp-2 font-['Inter']">
+                        <p className="text-gray-600 mb-3 text-sm line-clamp-2 font-['Inter'] leading-relaxed">
                           {post.excerpt}
                         </p>
                         

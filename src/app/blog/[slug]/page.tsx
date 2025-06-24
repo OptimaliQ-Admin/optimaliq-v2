@@ -79,7 +79,7 @@ export default function BlogPostPage() {
                   </span>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold font-['Inter']">{post.author}</p>
+                  <p className="font-semibold font-['Inter']">{post.author.split(' ').map(n => n[0]).join('')}</p>
                   <p className="text-sm text-blue-200 font-['Inter']">{post.authorRole}</p>
                 </div>
               </div>
@@ -106,7 +106,7 @@ export default function BlogPostPage() {
           {/* Article Body with Optimized Typography */}
           <article className="max-w-none text-left">
             <div 
-              className="prose prose-optimaliq max-w-none"
+              className="blog-content prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-normal prose-h1:text-gray-900 prose-h1:text-4xl prose-h1:mt-12 prose-h1:mb-6 prose-h2:text-blue-900 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-slate-700 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-2 prose-p:text-gray-700 prose-p:text-lg prose-p:leading-relaxed prose-p:mb-6 prose-p:tracking-normal prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:my-6 prose-ul:space-y-2 prose-li:text-gray-700 prose-li:text-lg prose-li:leading-relaxed prose-strong:text-gray-900 prose-strong:font-semibold px-4 sm:px-8"
               dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
             />
           </article>
@@ -125,6 +125,14 @@ export default function BlogPostPage() {
           {/* Author Bio */}
           <div className="mt-16 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
             <h3 className="text-xl font-bold text-gray-900 mb-4 font-['Inter']">About the Author</h3>
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold font-['Inter']">
+                  {post.author.split(' ').map(n => n[0]).join('')}
+                </span>
+              </div>
+              <span className="text-gray-700 font-semibold font-['Inter']">{post.authorRole}</span>
+            </div>
             <p className="text-gray-700 leading-relaxed text-lg font-['Inter']">{post.authorBio}</p>
           </div>
         </motion.div>
