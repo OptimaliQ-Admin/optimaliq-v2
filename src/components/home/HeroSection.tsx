@@ -18,7 +18,7 @@ export default function HeroSection() {
           priority
         />
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/15"></div>
+        <div className="absolute inset-0 bg-gray-500/20"></div>
       </div>
       
       {/* Content */}
