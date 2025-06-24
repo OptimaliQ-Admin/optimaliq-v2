@@ -36,7 +36,7 @@ export default function PricingPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed"
           >
-            Join 2,000+ companies using AI-powered insights to scale faster, optimize operations, and outperform competitors
+            Join other companies using AI-powered insights to scale faster, optimize operations, and outperform competitors.
           </motion.p>
 
           {/* Value Propositions */}
@@ -53,7 +53,7 @@ export default function PricingPage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">3x Faster Growth</h3>
-              <p className="text-gray-600">AI-powered insights help companies scale 3x faster than industry average</p>
+              <p className="text-gray-600">What if your strategy could evolve 3x faster than your competition?</p>
             </div>
             
             <div className="text-center">
@@ -63,7 +63,7 @@ export default function PricingPage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Proven Results</h3>
-              <p className="text-gray-600">94% of users see measurable improvements within 30 days</p>
+              <p className="text-gray-600">Users often see clearer priorities and faster execution within their first month</p>
             </div>
             
             <div className="text-center">
@@ -73,7 +73,7 @@ export default function PricingPage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">ROI Guaranteed</h3>
-              <p className="text-gray-600">Average customer sees 5x ROI within 6 months of implementation</p>
+              <p className="text-gray-600">Designed to deliver high ROI within the first 6 months — without long-term consulting fees</p>
             </div>
           </motion.div>
 
@@ -106,6 +106,7 @@ export default function PricingPage() {
           */}
 
           {/* CTA Section */}
+          {/*
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -135,6 +136,7 @@ export default function PricingPage() {
               </div>
             </div>
           </motion.div>
+          */}
         </motion.div>
 
         {/* Pricing Toggle */}

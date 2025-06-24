@@ -138,7 +138,7 @@ export default function WhyOptimaliQ() {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 lg:p-12 text-white shadow-2xl">
             <h3 className="text-3xl font-bold mb-4">Ready to Transform Your Business Strategy?</h3>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of businesses that have accelerated their growth with AI-powered strategic intelligence.
+              Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
             </p>
             <div className="flex justify-center">
               <Link href="/growth-assessment">

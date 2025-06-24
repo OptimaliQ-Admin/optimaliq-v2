@@ -23,7 +23,7 @@ const faqs = [
   {
     question: "Is my data secure?",
     answer:
-      "Absolutely. OptimaliQ follows strict data privacy policies and uses enterprise-grade security to protect your business data. We're SOC 2 compliant and never share your information with third parties.",
+      "Absolutely. OptimaliQ uses industry best practices to ensure your business data is protected. We follow strict data privacy protocols, implement enterprise-grade encryption, and never share your information with third parties. Your trust is our priority, and we continuously monitor and improve our security posture.",
   },
   {
     question: "How often does OptimaliQ update insights?",
