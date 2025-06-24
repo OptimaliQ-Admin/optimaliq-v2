@@ -26,7 +26,7 @@ export default function DataSecurityPage() {
           <div className="prose prose-lg max-w-none text-gray-700 font-['Inter']">
             <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
-                <strong>Our Commitment:</strong> OptimaliQ values your privacy and the confidentiality of your business data. Here's how we protect it.
+                <strong>Our Commitment:</strong> OptimaliQ values your privacy and the confidentiality of your business data. Here&apos;s how we protect it.
               </p>
             </div>
 
@@ -111,7 +111,7 @@ export default function DataSecurityPage() {
                 .
               </p>
               <p className="text-sm text-gray-600">
-                We're committed to transparency and will respond to your inquiries within 24 hours.
+                We&apos;re committed to transparency and will respond to your inquiries within 24 hours.
               </p>
             </div>
 
