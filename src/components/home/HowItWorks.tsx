@@ -144,18 +144,91 @@ export default function HowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center mt-16"
+          className="mt-16"
         >
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Transform Your Strategy?</h3>
-            <p className="text-gray-600 mb-6">
-              Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
-            </p>
-            <div className="flex justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                Start Free Assessment
-              </button>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Ready to Transform Your Strategy? */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="relative group"
+            >
+              <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden group-hover:shadow-2xl transition-all duration-500 h-full">
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src="/images/Blog/Digital Transformation.jpeg"
+                    alt="Digital Transformation"
+                    fill
+                    className="object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-500"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 p-8 h-full flex flex-col">
+                  {/* Title */}
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Transform Your Strategy?</h3>
+                  
+                  {/* Description */}
+                  <p className="text-gray-600 leading-relaxed flex-grow mb-6">
+                    Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
+                  </p>
+
+                  {/* CTA Button */}
+                  <div className="mt-auto">
+                    <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                      Start Free Assessment
+                    </button>
+                  </div>
+
+                  {/* Bottom Accent */}
+                  <div className="mt-6 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+              </div>
+            </motion.div>
+
+            {/* You're Not Alone with OptimaliQ */}
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="relative group"
+            >
+              <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden group-hover:shadow-2xl transition-all duration-500 h-full">
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src="/images/Blog/Modern Business Process Management.jpeg"
+                    alt="Modern Business Process Management"
+                    fill
+                    className="object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-500"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 p-8 h-full flex flex-col">
+                  {/* Title */}
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">You're Not Alone with OptimaliQ</h3>
+                  
+                  {/* Description */}
+                  <p className="text-gray-600 leading-relaxed flex-grow">
+                    While our AI delivers fast, intelligent insights — real growth takes a human touch. That's why every OptimaliQ user can access real experts for strategic check-ins and support. It's the best of both worlds: AI-powered scale, human-backed care.
+                  </p>
+
+                  {/* Bottom Accent */}
+                  <div className="mt-6 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100 opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

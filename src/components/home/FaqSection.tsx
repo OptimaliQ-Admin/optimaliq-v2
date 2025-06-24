@@ -16,6 +16,11 @@ const faqs = [
       "Absolutely! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with AI-driven insights that scale as you grow. Our platform is designed to provide value for businesses of all sizes.",
   },
   {
+    question: "Can I talk to a real person?",
+    answer:
+      "Absolutely. Our team offers live onboarding and optional strategy sessions to help you succeed.",
+  },
+  {
     question: "How does OptimaliQ predict growth?",
     answer:
       "We analyze real-time industry data, past performance, and competitive benchmarks using advanced machine learning algorithms to provide accurate business forecasts and strategic recommendations.",

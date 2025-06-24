@@ -18,7 +18,7 @@ export default function HeroSection() {
           priority
         />
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gray-500/20"></div>
+        <div className="absolute inset-0 bg-gray-400"></div>
       </div>
       
       {/* Content */}
@@ -38,7 +38,7 @@ export default function HeroSection() {
                 OptimaliQ: Unlock Predictable Growth with AI-Driven Strategy
               </h2>
               <p className="text-lg text-gray-100 mt-4">
-                OptimaliQ delivers instant AI-powered insights, benchmarks, and personalized 30-day roadmaps to drive business performance.
+                OptimaliQ delivers instant Instant AI insights + real strategic support when you need it.
               </p>
               
               {/* CTA Buttons */}
