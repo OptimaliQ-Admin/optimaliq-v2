@@ -24,7 +24,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 w-full">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-center">
+          <div className="flex justify-end">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

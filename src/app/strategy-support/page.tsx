@@ -142,7 +142,7 @@ export default function StrategySupportPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {[
               "A clear plan of action tailored to your goals",
               "Expert interpretation of your AI-generated insights",
@@ -150,7 +150,7 @@ export default function StrategySupportPage() {
               "Ongoing accountability and performance check-ins",
               "Answers to your toughest growth challenges"
             ].map((benefit, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200 text-center">
+              <div key={index} className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200 text-center w-full max-w-sm">
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-2xl text-white mx-auto mb-6">
                   ✓
                 </div>

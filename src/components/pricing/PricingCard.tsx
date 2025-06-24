@@ -6,7 +6,7 @@ interface PricingCardProps {
   plan: "Free" | "Accelerator" | "Strategic";
   price: number | string;
   cycle: "monthly" | "annual";
-  features: string[];
+  features: React.ReactNode[];
   disabled?: string[];
   cta: string;
 }
@@ -86,7 +86,7 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
         <ul className="space-y-3">
           {features.map((feature, index) => (
             <motion.li 
-              key={feature}
+              key={typeof feature === 'string' ? feature : index}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}

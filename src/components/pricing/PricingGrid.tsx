@@ -43,7 +43,7 @@ export default function PricingGrid({ billingCycle }: PricingGridProps) {
           "Industry Benchmarking & Competitive Positioning",
           "Personalized 30-Day Growth Plan (refreshed monthly)",
           "Business Simulation Tools for Scenario Planning",
-          "One Monthly Review Call with a Growth Advisor",
+          <a key="review-call" href="/strategy-support" className="text-blue-600 underline hover:text-blue-800 transition-colors">One Monthly Review Call with a Growth Advisor</a>,
           "Real-Time Market & Trend Insights (updated regularly)",
         ]}
         cta="Unlock Accelerator"
@@ -56,7 +56,7 @@ export default function PricingGrid({ billingCycle }: PricingGridProps) {
         cycle={billingCycle}
         features={[
           "Everything in Accelerator",
-          "Two Monthly 1:1 Strategy Sessions with an Executive Coach",
+          <a key="strategy-session" href="/strategy-support" className="text-blue-600 underline hover:text-blue-800 transition-colors">Two Monthly 1:1 Strategy Sessions with an Executive Coach</a>,
           "AI-Generated Strategic Growth Playbooks",
           "Quarterly Planning Support & Advanced Insights",
         ]}
