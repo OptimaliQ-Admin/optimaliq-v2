@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "@/app/globals.css";
 import RootLayoutWrapper from "@/components/layout/RootLayoutWrapper";
 import { Toaster } from "react-hot-toast";
@@ -219,6 +220,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             },
           }}
         />
+        
+        <Analytics />
       </body>
     </html>
   );
