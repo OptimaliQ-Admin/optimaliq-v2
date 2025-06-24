@@ -214,11 +214,11 @@ export default function HowItWorks() {
                 {/* Content */}
                 <div className="relative z-10 p-8 h-full flex flex-col">
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">You're Not Alone with OptimaliQ</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">You&apos;re Not Alone with OptimaliQ</h3>
                   
                   {/* Description */}
                   <p className="text-gray-600 leading-relaxed flex-grow">
-                    While our AI delivers fast, intelligent insights — real growth takes a human touch. That's why every OptimaliQ user can access real experts for strategic check-ins and support. It's the best of both worlds: AI-powered scale, human-backed care.
+                    While our AI delivers fast, intelligent insights — real growth takes a human touch. That&apos;s why every OptimaliQ user can access real experts for strategic check-ins and support. It&apos;s the best of both worlds: AI-powered scale, human-backed care.
                   </p>
 
                   {/* Bottom Accent */}
