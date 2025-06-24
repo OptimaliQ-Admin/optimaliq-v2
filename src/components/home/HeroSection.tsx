@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center">
+    <section id="hero" className="relative h-[70vh] flex items-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -18,7 +18,7 @@ export default function HeroSection() {
           priority
         />
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/15"></div>
       </div>
       
       {/* Content */}
@@ -29,15 +29,15 @@ export default function HeroSection() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="max-w-2xl text-right space-y-8"
+              className="max-w-2xl text-right space-y-6"
             >
-              <h1 className="text-5xl lg:text-6xl font-bold text-white">
+              <h1 className="text-4xl lg:text-5xl font-bold text-white">
                 Smarter Decisions. Faster Growth. Powered by AI.
               </h1>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white">
+              <h2 className="text-2xl lg:text-3xl font-bold text-white">
                 OptimaliQ: Unlock Predictable Growth with AI-Driven Strategy
               </h2>
-              <p className="text-xl text-gray-200 mt-4">
+              <p className="text-lg text-gray-100 mt-4">
                 OptimaliQ delivers instant AI-powered insights, benchmarks, and personalized 30-day roadmaps to drive business performance.
               </p>
               
