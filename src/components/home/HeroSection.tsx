@@ -31,13 +31,13 @@ export default function HeroSection() {
               transition={{ duration: 0.8 }}
               className="max-w-2xl text-right space-y-6"
             >
-              <h1 className="text-4xl lg:text-5xl font-bold text-white">
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-800">
                 Smarter Decisions. Faster Growth. Powered by AI.
               </h1>
-              <h2 className="text-2xl lg:text-3xl font-bold text-white">
-                OptimaliQ: Unlock Predictable Growth with AI-Driven Strategy
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-800">
+                <span className="text-blue-600">OptimaliQ</span>: Unlock Predictable Growth with AI-Driven Strategy
               </h2>
-              <p className="text-lg text-gray-100 mt-4">
+              <p className="text-lg text-gray-700 mt-4">
                 OptimaliQ delivers instant Instant AI insights + real strategic support when you need it.
               </p>
               
