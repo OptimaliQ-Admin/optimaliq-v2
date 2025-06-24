@@ -1,6 +1,7 @@
 //src/app/api/stripe/createCheckoutSession/route.ts
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
+import { PRICE_ID_MAP } from "@/lib/stripe/prices";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -12,15 +13,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Only Accelerator plan is supported for now
-    if (plan !== "accelerator") {
+    // Validate plan is supported
+    if (plan !== "accelerator" && plan !== "strategic") {
       return NextResponse.json({ error: "Unsupported plan" }, { status: 400 });
     }
 
-    const priceId =
-      billingCycle === "monthly"
-        ? process.env.STRIPE_PRICE_ACCELERATOR_MONTHLY
-        : process.env.STRIPE_PRICE_ACCELERATOR_ANNUAL;
+    // Get the correct price ID based on plan and billing cycle
+    const priceIdKey = `${plan}_${billingCycle}` as keyof typeof PRICE_ID_MAP;
+    const priceId = PRICE_ID_MAP[priceIdKey];
 
     if (!priceId) {
       return NextResponse.json({ error: "Stripe price ID not configured" }, { status: 500 });

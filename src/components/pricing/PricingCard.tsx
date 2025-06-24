@@ -58,7 +58,11 @@ export default function PricingCard({ plan, price, cycle, features, disabled = [
           <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             {price === "FREE" ? price : `$${price}`}
           </span>
-          {price !== "FREE" && <span className="text-lg font-medium text-gray-600">/mo</span>}
+          {price !== "FREE" && (
+            <span className="text-lg font-medium text-gray-600">
+              {cycle === "monthly" ? "/mo" : "/year"}
+            </span>
+          )}
         </div>
         <p className="text-gray-500 text-sm">Billed {cycle}</p>
       </div>

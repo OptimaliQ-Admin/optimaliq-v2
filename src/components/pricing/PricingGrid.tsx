@@ -6,7 +6,7 @@ interface PricingGridProps {
 
 export default function PricingGrid({ billingCycle }: PricingGridProps) {
   const pricing = {
-    annual: { accelerator: 249, strategic: 439 },
+    annual: { accelerator: 2988, strategic: 5268 },
     monthly: { accelerator: 329, strategic: 549 },
   };
 

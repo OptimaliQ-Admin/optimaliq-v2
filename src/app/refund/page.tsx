@@ -55,15 +55,15 @@ export default function RefundPage() {
                   <tbody>
                     <tr>
                       <td className="border border-gray-300 px-4 py-3 font-medium">Accelerator</td>
-                      <td className="border border-gray-300 px-4 py-3">$2,999</td>
+                      <td className="border border-gray-300 px-4 py-3">$2,988</td>
                       <td className="border border-gray-300 px-4 py-3">$329/month</td>
-                      <td className="border border-gray-300 px-4 py-3">$2,999 - ($329 × 2) = <strong>$2,341</strong></td>
+                      <td className="border border-gray-300 px-4 py-3">$2,988 - ($329 × 2) = <strong>$2,330</strong></td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-300 px-4 py-3 font-medium">Strategic</td>
-                      <td className="border border-gray-300 px-4 py-3">$4,999</td>
+                      <td className="border border-gray-300 px-4 py-3">$5,268</td>
                       <td className="border border-gray-300 px-4 py-3">$549/month</td>
-                      <td className="border border-gray-300 px-4 py-3">$4,999 - ($549 × 2) = <strong>$3,901</strong></td>
+                      <td className="border border-gray-300 px-4 py-3">$5,268 - ($549 × 2) = <strong>$4,170</strong></td>
                     </tr>
                   </tbody>
                 </table>
