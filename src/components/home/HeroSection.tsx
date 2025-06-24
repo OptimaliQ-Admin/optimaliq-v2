@@ -29,7 +29,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="max-w-2xl text-right space-y-6"
+              className="max-w-2xl text-right space-y-6 bg-white rounded-xl p-5 shadow-lg"
             >
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-800">
                 Smarter Decisions. Faster Growth. Powered by AI.
