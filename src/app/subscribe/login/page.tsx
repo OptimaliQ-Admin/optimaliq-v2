@@ -1,7 +1,7 @@
 //src/app/subscribe/login/page.tsx
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
@@ -16,6 +16,7 @@ function LoginPageContent() {
   const router = useRouter();
   const { setUser } = usePremiumUser();
   const searchParams = useSearchParams();
+  const emailCheckTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,8 +43,19 @@ function LoginPageContent() {
     }
   }, [searchParams]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (emailCheckTimeoutRef.current) {
+        clearTimeout(emailCheckTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const checkEmailStatus = async (emailToCheck: string) => {
-    if (!emailToCheck || !emailToCheck.includes('@')) return;
+    // More robust email validation - wait for a complete email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailToCheck || !emailRegex.test(emailToCheck)) return;
     
     setIsCheckingEmail(true);
     setEmailStatus(null);
@@ -91,14 +103,18 @@ function LoginPageContent() {
       setUserInfo(null);
     }
     
-    // Debounce email check
-    const timeoutId = setTimeout(() => {
-      if (newEmail && newEmail.includes('@')) {
+    // Clear any existing timeout
+    if (emailCheckTimeoutRef.current) {
+      clearTimeout(emailCheckTimeoutRef.current);
+    }
+    
+    // Debounce email check with longer delay and better validation
+    emailCheckTimeoutRef.current = setTimeout(() => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (newEmail && emailRegex.test(newEmail)) {
         checkEmailStatus(newEmail);
       }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
+    }, 1000); // Increased from 500ms to 1000ms
   };
 
   const handleCreateAccount = () => {

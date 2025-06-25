@@ -114,18 +114,6 @@ export default function InitialAssessmentPage() {
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-4xl mx-auto">
         <ProgressBar current={step} total={8} />
-        
-        {/* Test textarea for debugging */}
-        <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
-          <h3 className="font-bold mb-2">Test Spacebar (Debug)</h3>
-          <textarea 
-            className="w-full p-2 border rounded"
-            placeholder="Try typing with spacebar here..."
-            rows={3}
-          />
-          <p className="text-sm text-gray-600 mt-1">If spacebar works here but not below, the issue is with the question components.</p>
-        </div>
-        
         <div className="mt-10 bg-white p-6 rounded-lg shadow-lg">
           <AnimatePresence mode="wait">
             <motion.div
