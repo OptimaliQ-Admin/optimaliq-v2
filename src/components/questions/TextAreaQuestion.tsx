@@ -29,7 +29,7 @@ export default function TextAreaQuestion({
         className="mt-4 w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={value}
         maxLength={maxLength}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(sanitizeInput(e.target.value))}
         placeholder={placeholder}
       />
       <p className="text-sm text-gray-500 mt-1 text-right">

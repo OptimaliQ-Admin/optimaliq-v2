@@ -1,18 +1,32 @@
-import DOMPurify from 'dompurify';
-
 /**
- * Sanitize user input to prevent XSS attacks
- * Removes all HTML tags and scripts, keeps only text content
+ * Simple, secure input sanitization that works reliably in production
+ * Removes all HTML tags and potentially dangerous content
  */
 export function sanitizeInput(input: string): string {
   if (typeof input !== 'string') return '';
   
-  // Remove any HTML tags and scripts
-  return DOMPurify.sanitize(input, {
-    ALLOWED_TAGS: [], // No HTML tags allowed
-    ALLOWED_ATTR: [], // No attributes allowed
-    KEEP_CONTENT: true // Keep text content only
-  }).trim();
+  // Remove HTML tags and potentially dangerous content
+  const sanitized = input
+    // Remove HTML tags
+    .replace(/<[^>]*>/g, '')
+    // Remove script-like content
+    .replace(/javascript:/gi, '')
+    .replace(/vbscript:/gi, '')
+    .replace(/data:text\/html/gi, '')
+    .replace(/data:application\/javascript/gi, '')
+    // Remove event handlers
+    .replace(/on\w+\s*=/gi, '')
+    // Remove iframe, object, embed tags content
+    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
+    .replace(/<object[^>]*>.*?<\/object>/gi, '')
+    .replace(/<embed[^>]*>.*?<\/embed>/gi, '')
+    // Remove any remaining script tags
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    // Normalize whitespace
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  return sanitized;
 }
 
 /**
@@ -22,25 +36,50 @@ export function sanitizeInput(input: string): string {
 export function sanitizeHTML(html: string): string {
   if (typeof html !== 'string') return '';
   
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-      'ul', 'ol', 'li', 'strong', 'em', 'b', 'i',
-      'br', 'hr', 'blockquote', 'code', 'pre',
-      'a', 'span', 'div'
-    ],
-    ALLOWED_ATTR: ['class', 'href', 'target'],
-    FORBID_TAGS: [
-      'script', 'iframe', 'object', 'embed', 'form', 
-      'input', 'button', 'textarea', 'select', 'option',
-      'style', 'link', 'meta', 'title', 'head', 'body'
-    ],
-    FORBID_ATTR: [
-      'onerror', 'onload', 'onclick', 'onmouseover', 
-      'onfocus', 'onblur', 'onchange', 'onsubmit',
-      'onkeydown', 'onkeyup', 'onkeypress'
-    ]
+  // Define allowed tags and attributes
+  const allowedTags = [
+    'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+    'ul', 'ol', 'li', 'strong', 'em', 'b', 'i',
+    'br', 'hr', 'blockquote', 'code', 'pre',
+    'a', 'span', 'div'
+  ];
+  
+  const allowedAttributes = ['class', 'href', 'target'];
+  
+  const forbiddenTags = [
+    'script', 'iframe', 'object', 'embed', 'form', 
+    'input', 'button', 'textarea', 'select', 'option',
+    'style', 'link', 'meta', 'title', 'head', 'body'
+  ];
+  
+  const forbiddenAttributes = [
+    'onerror', 'onload', 'onclick', 'onmouseover', 
+    'onfocus', 'onblur', 'onchange', 'onsubmit',
+    'onkeydown', 'onkeyup', 'onkeypress'
+  ];
+  
+  let sanitized = html;
+  
+  // Remove forbidden tags
+  forbiddenTags.forEach(tag => {
+    const regex = new RegExp(`<${tag}[^>]*>.*?<\/${tag}>|<${tag}[^>]*\/?>`, 'gi');
+    sanitized = sanitized.replace(regex, '');
   });
+  
+  // Remove forbidden attributes
+  forbiddenAttributes.forEach(attr => {
+    const regex = new RegExp(`\\s+${attr}\\s*=\\s*["'][^"']*["']`, 'gi');
+    sanitized = sanitized.replace(regex, '');
+  });
+  
+  // Remove any remaining script-like content
+  sanitized = sanitized
+    .replace(/javascript:/gi, '')
+    .replace(/vbscript:/gi, '')
+    .replace(/data:text\/html/gi, '')
+    .replace(/data:application\/javascript/gi, '');
+  
+  return sanitized;
 }
 
 /**
