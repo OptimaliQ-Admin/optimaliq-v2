@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     description: 'Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/images/Hero_Background.jpeg',
         width: 1200,
         height: 630,
         alt: 'GMF Plus - AI-Powered Growth Management Framework',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     creator: '@gmfplus',
     title: 'GMF Plus - AI-Powered Growth Management Framework',
     description: 'Transform your business growth with AI-powered assessments, strategic insights, and data-driven recommendations.',
-    images: ['/images/twitter-image.jpg'],
+    images: ['/images/Hero_Background.jpeg'],
   },
   robots: {
     index: true,
@@ -89,10 +89,6 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   manifest: '/manifest.json',
@@ -158,8 +154,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>

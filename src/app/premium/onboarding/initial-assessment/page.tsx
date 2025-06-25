@@ -43,6 +43,21 @@ export default function InitialAssessmentPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  // Add keyboard event listener for testing
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      console.log("🔍 Key pressed:", e.key, "Code:", e.code);
+      if (e.key === " ") {
+        console.log("🔍 Spacebar pressed!");
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, []);
+
   const handleNext = async () => {
     const validator = stepValidators[step];
     if (validator && !validator(formAnswers)) {
