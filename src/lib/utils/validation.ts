@@ -1,7 +1,42 @@
-// LinkedIn: https://(www.)linkedin.com/in/{username}
+// LinkedIn: Accepts various formats including www.linkedin.com/in/{username}
 export function isValidLinkedInUrl(url: string): boolean {
-  const regex = /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9\-_%]+\/?$/;
-  return regex.test(url.trim());
+  // Trim whitespace and normalize the URL
+  const normalizedUrl = url.trim();
+  
+  // Handle various LinkedIn URL formats
+  const patterns = [
+    // https://www.linkedin.com/in/username
+    /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9\-_%]+\/?$/,
+    // www.linkedin.com/in/username
+    /^www\.linkedin\.com\/in\/[a-zA-Z0-9\-_%]+\/?$/,
+    // linkedin.com/in/username
+    /^linkedin\.com\/in\/[a-zA-Z0-9\-_%]+\/?$/
+  ];
+  
+  return patterns.some(pattern => pattern.test(normalizedUrl));
+}
+
+// Normalize LinkedIn URL to consistent format for database storage
+export function normalizeLinkedInUrl(url: string): string {
+  const trimmed = url.trim();
+  
+  // If it's already a full https URL, return as is
+  if (trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  
+  // If it starts with www., add https://
+  if (trimmed.startsWith('www.')) {
+    return `https://${trimmed}`;
+  }
+  
+  // If it starts with linkedin.com, add https://www.
+  if (trimmed.startsWith('linkedin.com')) {
+    return `https://www.${trimmed}`;
+  }
+  
+  // Default: assume it's a relative path and add https://www.linkedin.com
+  return `https://www.linkedin.com/${trimmed}`;
 }
 
 // Strong email regex

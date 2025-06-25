@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin, isAdminClientAvailable } from "@/lib/supabaseAdmin";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from '@/lib/utils/validation';
+import { isValidLinkedInUrl, isValidEmail, isDisposableEmail, normalizeLinkedInUrl } from '@/lib/utils/validation';
 
 export async function POST(req: Request) {
   try {
@@ -29,9 +29,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid LinkedIn profile URL." }, { status: 400 });
     }
 
+    // Normalize LinkedIn URL before saving
+    const normalizedUpdates = {
+      ...updates,
+      linkedin_url: updates.linkedin_url ? normalizeLinkedInUrl(updates.linkedin_url) : updates.linkedin_url
+    };
+
     const { error } = await supabaseAdmin!
       .from("tier2_users")
-      .update(updates)
+      .update(normalizedUpdates)
       .eq("u_id", u_id);
 
     if (error) {

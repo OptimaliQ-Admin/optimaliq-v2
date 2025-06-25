@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       mode: "subscription",
       customer_email: email,
+      allow_promotion_codes: true,
       line_items: [
         {
           price: priceId,

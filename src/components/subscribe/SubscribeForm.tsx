@@ -17,7 +17,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
 import { formatPhoneForDisplay, stripPhoneFormatting } from "@/lib/utils/phoneFormatter";
-import { isValidLinkedInUrl, isValidEmail, isDisposableEmail } from "@/lib/utils/validation";
+import { isValidLinkedInUrl, isValidEmail, isDisposableEmail, normalizeLinkedInUrl } from "@/lib/utils/validation";
 
 interface SubscribeFormProps {
   plan: "accelerator" | "strategic" | null;
@@ -156,9 +156,14 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
       }
 
       // 5. Save locally
+      const normalizedUserInfo = {
+        ...userInfo,
+        linkedin_url: userInfo.linkedin_url ? normalizeLinkedInUrl(userInfo.linkedin_url) : userInfo.linkedin_url
+      };
+      
       localStorage.setItem("tier2_user_id", userId);
       localStorage.setItem("tier2_email", userInfo.email);
-      localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
+      localStorage.setItem("tier2_full_user_info", JSON.stringify(normalizedUserInfo));
 
       // 6. Create Stripe checkout session
       const res = await fetch("/api/stripe/createCheckoutSession", {

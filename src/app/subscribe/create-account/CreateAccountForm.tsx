@@ -9,6 +9,7 @@ import LabeledSelect from "@/components/shared/LabeledSelect";
 import SubmitButton from "@/components/shared/SubmitButton";
 import { toast } from "react-hot-toast";
 import PasswordInput from "@/components/shared/PasswordInput";
+import { isValidLinkedInUrl, isValidEmail, isDisposableEmail, normalizeLinkedInUrl } from "@/lib/utils/validation";
 
 
 const timezoneOptions = [
@@ -108,13 +109,16 @@ const timezoneOptions = [
       }
 
       // ✅ 1. Call the new API that handles everything
+      const normalizedFormState = {
+        ...formState,
+        linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : formState.linkedin_url,
+        confirmPassword: undefined
+      };
+      
       const res = await fetch("/api/admin/finalizeSignup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formState,
-          confirmPassword: undefined
-        }),
+        body: JSON.stringify(normalizedFormState),
       });
 
       const result = await res.json();
