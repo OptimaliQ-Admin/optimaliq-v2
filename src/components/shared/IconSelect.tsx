@@ -4,16 +4,20 @@ import { IconType } from "react-icons";
 export function IconSelect({
   icon: Icon,
   name,
+  label,
   value,
   onChange,
   options,
 }: {
   icon: IconType;
   name: string;
+  label?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: string[];
 }) {
+  const displayLabel = label || name;
+  
   return (
     <div className="relative group">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -26,7 +30,7 @@ export function IconSelect({
         className="block w-full pl-12 pr-10 py-4 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg appearance-none cursor-pointer"
         required
       >
-        <option value="">Select {name}</option>
+        <option value="">Select {displayLabel}</option>
         {options.map((option) => (
           <option key={option} value={option}>{option}</option>
         ))}

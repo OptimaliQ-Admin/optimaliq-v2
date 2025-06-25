@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   try {
-    const { customerId, returnUrl } = await req.json();
+    const { customerId, returnUrl, configurationId } = await req.json();
 
     console.log("Creating billing portal session");
 
@@ -19,11 +19,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
     }
 
-    // Create billing portal session
-    const session = await stripe.billingPortal.sessions.create({
+    // Create billing portal session with optional configuration
+    const sessionParams: Stripe.BillingPortal.SessionCreateParams = {
       customer: customerId,
       return_url: returnUrl || `${process.env.NEXT_PUBLIC_APP_URL}/premium/account/billing`,
-    });
+    };
+
+    // Add configuration if provided
+    if (configurationId) {
+      sessionParams.configuration = configurationId;
+    }
+
+    const session = await stripe.billingPortal.sessions.create(sessionParams);
 
     console.log("Billing portal session created successfully:", { 
       sessionId: session.id, 
@@ -42,8 +49,14 @@ export async function POST(req: Request) {
       console.error("Stripe error message:", error.message);
     }
     
+    // Provide more helpful error message for configuration issues
+    let errorMessage = "Failed to create billing portal session";
+    if (error.message && error.message.includes("configuration")) {
+      errorMessage = "Stripe billing portal not configured. Please configure the customer portal in your Stripe dashboard at https://dashboard.stripe.com/settings/billing/portal";
+    }
+    
     return NextResponse.json({ 
-      error: "Failed to create billing portal session",
+      error: errorMessage,
       details: error.message || "Unknown error"
     }, { status: 500 });
   }

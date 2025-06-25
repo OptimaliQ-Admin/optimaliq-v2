@@ -81,7 +81,14 @@ export default function BillingPage() {
         }
       } else {
         const errorData = await response.json().catch(() => ({}));
-        alert(`Unable to access billing portal: ${errorData.error || 'Unknown error'}`);
+        const errorMessage = errorData.error || 'Unknown error';
+        
+        // Show more helpful message for configuration issues
+        if (errorMessage.includes('configuration') || errorMessage.includes('portal')) {
+          alert('Billing portal is not configured. Please contact support to set up the billing portal.');
+        } else {
+          alert(`Unable to access billing portal: ${errorMessage}`);
+        }
       }
     } catch (error) {
       console.error('Error creating billing portal session:', error);
@@ -185,18 +192,23 @@ export default function BillingPage() {
                 <span>Loading billing information...</span>
               </div>
             ) : stripeCustomerId ? (
-              <button
-                onClick={handleManageBilling}
-                disabled={updating}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {updating ? (
-                  <ArrowPathIcon className="w-5 h-5 animate-spin" />
-                ) : (
-                  <CreditCardIcon className="w-5 h-5" />
-                )}
-                {updating ? 'Loading...' : 'Manage Billing'}
-              </button>
+              <div className="space-y-3">
+                <button
+                  onClick={handleManageBilling}
+                  disabled={updating}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updating ? (
+                    <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <CreditCardIcon className="w-5 h-5" />
+                  )}
+                  {updating ? 'Loading...' : 'Manage Billing'}
+                </button>
+                <p className="text-xs text-gray-500">
+                  Note: If you encounter an error, the billing portal may need to be configured in the Stripe dashboard.
+                </p>
+              </div>
             ) : (
               <div className="text-amber-700 bg-amber-50 p-3 rounded-lg">
                 <p className="text-sm">Billing account not found. Please contact support to set up your billing information.</p>

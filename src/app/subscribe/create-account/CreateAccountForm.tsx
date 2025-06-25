@@ -108,35 +108,50 @@ const timezoneOptions = [
         return;
       }
 
-      // ✅ 1. Call the new API that handles everything
-      const normalizedFormState = {
-        ...formState,
-        linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : formState.linkedin_url,
-        confirmPassword: undefined
-      };
-      
-      const res = await fetch("/api/admin/finalizeSignup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(normalizedFormState),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        toast.error(`❌ ${result.error || "Failed to create account"}`);
+      // Validate terms and conditions acceptance
+      if (!formState.agreed_terms) {
+        toast.error("❌ You must agree to the terms and conditions to create an account.");
         return;
       }
 
-      // ✅ 2. Clean up localStorage
-      localStorage.removeItem("tier2_email");
-      localStorage.removeItem("tier2_user_id");
-      localStorage.removeItem("tier2_full_user_info");
+      setIsLoading(true);
 
-      toast.success("🎉 Account created! Redirecting to login...");
-      setTimeout(() => {
-        router.push("/subscribe/login");
-      }, 2000);
+      try {
+        // ✅ 1. Call the new API that handles everything
+        const normalizedFormState = {
+          ...formState,
+          linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : formState.linkedin_url,
+          confirmPassword: undefined
+        };
+        
+        const res = await fetch("/api/admin/finalizeSignup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(normalizedFormState),
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          toast.error(`❌ ${result.error || "Failed to create account"}`);
+          setIsLoading(false);
+          return;
+        }
+
+        // ✅ 2. Clean up localStorage
+        localStorage.removeItem("tier2_email");
+        localStorage.removeItem("tier2_user_id");
+        localStorage.removeItem("tier2_full_user_info");
+
+        toast.success("🎉 Account created! Redirecting to login...");
+        setTimeout(() => {
+          router.push("/subscribe/login");
+        }, 2000);
+      } catch (error) {
+        console.error("Error creating account:", error);
+        toast.error("❌ An unexpected error occurred. Please try again.");
+        setIsLoading(false);
+      }
     };
 
   return (
@@ -190,7 +205,7 @@ const timezoneOptions = [
         text="Create Account"
         isSubmitting={isLoading}
         type="submit" // ✅ Ensure it's type submit
-        disabled={isLoading}
+        disabled={isLoading || !formState.agreed_terms}
       />
     </form>
   );
