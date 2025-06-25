@@ -1,7 +1,7 @@
 //src/app/subscribe/login/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
@@ -12,7 +12,7 @@ import PasswordInput from "@/components/shared/PasswordInput";
 
 type EmailStatus = 'checking' | 'paid_no_account' | 'paid_with_account' | 'not_paid' | 'not_found' | null;
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const { setUser } = usePremiumUser();
   const searchParams = useSearchParams();
@@ -26,12 +26,14 @@ export default function LoginPage() {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [redirectMessage, setRedirectMessage] = useState<string | null>(null);
 
+  // Check for email parameter and redirect message on component mount
   useEffect(() => {
     const emailParam = searchParams.get("email");
     const messageParam = searchParams.get("message");
     
     if (emailParam) {
       setEmail(emailParam);
+      // Trigger email status check for pre-filled email
       checkEmailStatus(emailParam);
     }
     
@@ -369,5 +371,33 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+// Loading component for Suspense fallback
+function LoginPageLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded mb-6"></div>
+          <div className="space-y-4">
+            <div className="h-12 bg-gray-200 rounded"></div>
+            <div className="h-12 bg-gray-200 rounded"></div>
+            <div className="h-12 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginPageLoading />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }
