@@ -26,10 +26,10 @@ export default function TextAreaQuestion({
       {description && <p className="text-gray-600 mt-1">{description}</p>}
       <textarea
         rows={4}
-        className="mt-4 w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        className="mt-4 w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={value}
         maxLength={maxLength}
-        onChange={(e) => onChange(sanitizeInput(e.target.value))}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
       />
       <p className="text-sm text-gray-500 mt-1 text-right">
