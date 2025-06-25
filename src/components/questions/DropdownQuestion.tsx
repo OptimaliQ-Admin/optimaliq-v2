@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { sanitizeInput } from "@/lib/utils/sanitization";
 
 type Option = {
   value: string;
@@ -31,7 +30,7 @@ export default function DropdownQuestion({
       {description && <p className="text-gray-600 mt-1">{description}</p>}
       <select
         value={value}
-        onChange={(e) => onChange(sanitizeInput(e.target.value))}
+        onChange={(e) => onChange(e.target.value)}
         className="mt-4 w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="" disabled>
