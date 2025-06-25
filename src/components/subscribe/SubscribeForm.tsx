@@ -22,9 +22,10 @@ import { isValidLinkedInUrl, isValidEmail, isDisposableEmail, normalizeLinkedInU
 interface SubscribeFormProps {
   plan: "accelerator" | "strategic" | null;
   cycle: "monthly" | "annual" | null;
+  email?: string;
 }
 
-export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
+export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps) {
   const router = useRouter();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function SubscribeForm({ plan, cycle }: SubscribeFormProps) {
   const [userInfo, setUserInfo] = useState({
     first_name: "",
     last_name: "",
-    email: "",
+    email: email || "",
     phone: "",
     title: "",
     company: "",

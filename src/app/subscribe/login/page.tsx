@@ -1,30 +1,131 @@
 //src/app/subscribe/login/page.tsx
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import LabeledInput from "@/components/shared/LabeledInput";
 import SubmitButton from "@/components/shared/SubmitButton";
-import LoadingSpinner from "@/components/shared/LoadingSpinner"; // ✅ Make sure you have this
 import { toast } from "react-hot-toast";
 import PasswordInput from "@/components/shared/PasswordInput";
+
+type EmailStatus = 'checking' | 'paid_no_account' | 'paid_with_account' | 'not_paid' | 'not_found' | null;
 
 export default function LoginPage() {
   const router = useRouter();
   const { setUser } = usePremiumUser();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // ✅ new
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<EmailStatus>(null);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [redirectMessage, setRedirectMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    const emailParam = searchParams.get("email");
+    const messageParam = searchParams.get("message");
+    
+    if (emailParam) {
+      setEmail(emailParam);
+      checkEmailStatus(emailParam);
+    }
+    
+    if (messageParam) {
+      setRedirectMessage(messageParam);
+    }
+  }, [searchParams]);
+
+  const checkEmailStatus = async (emailToCheck: string) => {
+    if (!emailToCheck || !emailToCheck.includes('@')) return;
+    
+    setIsCheckingEmail(true);
+    setEmailStatus(null);
+    setError("");
+
+    try {
+      const response = await fetch("/api/auth/check-email-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailToCheck })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setEmailStatus(result.status);
+        setUserInfo(result.userInfo);
+        
+        // Show appropriate message based on status
+        if (result.status === 'paid_no_account') {
+          toast.success("We found your payment! Let's complete your account setup.");
+        } else if (result.status === 'not_paid') {
+          toast.success("Please subscribe to access OptimaliQ.");
+        } else if (result.status === 'not_found') {
+          toast.success("New to OptimaliQ? Create an account to get started.");
+        } else if (result.status === 'paid_with_account' && result.account_created) {
+          toast.success("Account found! Please log in with your password.");
+        }
+      } else {
+        console.error("Error checking email status");
+      }
+    } catch (error) {
+      console.error("Error checking email status:", error);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    
+    // Clear status when email changes
+    if (emailStatus) {
+      setEmailStatus(null);
+      setUserInfo(null);
+    }
+    
+    // Debounce email check
+    const timeoutId = setTimeout(() => {
+      if (newEmail && newEmail.includes('@')) {
+        checkEmailStatus(newEmail);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  };
+
+  const handleCreateAccount = () => {
+    if (emailStatus === 'paid_with_account' && userInfo?.account_created) {
+      // User already has an account - redirect back to login with message
+      const message = encodeURIComponent("Looks like you already have an account. Please log in.");
+      router.push(`/subscribe/login?email=${encodeURIComponent(email)}&message=${message}`);
+      return;
+    }
+    
+    if (emailStatus === 'paid_no_account' && userInfo) {
+      // User paid but needs to complete account
+      localStorage.setItem("tier2_email", userInfo.email);
+      localStorage.setItem("tier2_user_id", userInfo.u_id);
+      localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
+      router.push("/subscribe/recover-create-account");
+    } else if (emailStatus === 'not_paid' || emailStatus === 'not_found') {
+      // User needs to subscribe
+      router.push(`/subscribe?email=${encodeURIComponent(email)}`);
+    } else {
+      // Default to normal signup
+      router.push("/subscribe");
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setIsLoading(true); // ✅ show spinner
+    setIsLoading(true);
 
     try {
       // ✅ 1. Try login
@@ -117,48 +218,154 @@ export default function LoginPage() {
     }
   };
 
+  const getStatusMessage = () => {
+    switch (emailStatus) {
+      case 'paid_no_account':
+        return "We found your payment! Complete your account setup to get started.";
+      case 'paid_with_account':
+        return "Account exists. Please enter your password to continue.";
+      case 'not_paid':
+        return "Please subscribe to access OptimaliQ's premium features.";
+      case 'not_found':
+        return "New to OptimaliQ? Create an account to get started.";
+      default:
+        return "";
+    }
+  };
+
+  const getCreateAccountText = () => {
+    switch (emailStatus) {
+      case 'paid_no_account':
+        return "Complete Account Setup";
+      case 'not_paid':
+        return "Subscribe Now";
+      case 'not_found':
+        return "Create Account";
+      default:
+        return "Create Account";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
         <h1 className="text-2xl font-bold text-center text-gray-800">Welcome Back</h1>
         <p className="text-center text-sm text-gray-600 mb-6">Log in to access your dashboard</p>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <LabeledInput
-            label="Email"
-            name="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <PasswordInput
-            label="Password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-
-          <div className="text-right text-sm">
-            <a href="/subscribe/forgot-password" className="text-blue-600 hover:underline">
-              Forgot your password?
-            </a>
+        {/* Redirect Message Banner */}
+        {redirectMessage && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-blue-800">
+                  {decodeURIComponent(redirectMessage)}
+                </p>
+              </div>
+            </div>
           </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="relative">
+            <LabeledInput
+              label="Email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {isCheckingEmail && (
+              <div className="absolute right-3 top-10">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+              </div>
+            )}
+          </div>
+
+          {/* Status Message */}
+          {emailStatus && (
+            <div className={`p-3 rounded-lg text-sm ${
+              emailStatus === 'paid_no_account' ? 'bg-green-50 text-green-800 border border-green-200' :
+              emailStatus === 'paid_with_account' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+              emailStatus === 'not_paid' ? 'bg-yellow-50 text-yellow-800 border border-yellow-200' :
+              'bg-gray-50 text-gray-800 border border-gray-200'
+            }`}>
+              {getStatusMessage()}
+            </div>
+          )}
+
+          {/* Show password field only if user has an account */}
+          {(emailStatus === 'paid_with_account' || !emailStatus) && (
+            <>
+              <PasswordInput
+                label="Password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+
+              <div className="text-right text-sm">
+                <a href="/subscribe/forgot-password" className="text-blue-600 hover:underline">
+                  Forgot your password?
+                </a>
+              </div>
+            </>
+          )}
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <SubmitButton
-  text="Log In"
-  isSubmitting={isLoading}
-  type="submit" // ✅ Ensure it's type submit
-  disabled={isLoading}
-/>
+          {/* Action Buttons */}
+          <div className="space-y-3">
+            {/* Login Button - only show if user has account or no status yet */}
+            {(emailStatus === 'paid_with_account' || !emailStatus) && (
+              <SubmitButton
+                text="Log In"
+                isSubmitting={isLoading}
+                type="submit"
+                disabled={isLoading}
+              />
+            )}
 
-          )}
+            {/* Create Account/Subscribe Button - show for all other statuses */}
+            {emailStatus && emailStatus !== 'paid_with_account' && (
+              <button
+                type="button"
+                onClick={handleCreateAccount}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                {getCreateAccountText()}
+              </button>
+            )}
+
+            {/* Divider */}
+            {emailStatus && emailStatus !== 'paid_with_account' && (
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">or</span>
+                </div>
+              </div>
+            )}
+
+            {/* Create Account Link - always show */}
+            <div className="text-center">
+              <span className="text-gray-600 text-sm">Don&apos;t have an account? </span>
+              <button
+                type="button"
+                onClick={handleCreateAccount}
+                className="text-blue-600 hover:underline text-sm font-medium"
+              >
+                Create one here
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>

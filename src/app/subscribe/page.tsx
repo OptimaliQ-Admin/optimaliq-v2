@@ -17,6 +17,7 @@ function SubscribePageContent() {
   const plan = searchParams.get("plan") as "accelerator" | "strategic" | null;
   const cycle = searchParams.get("cycle") as "monthly" | "annual" | null;
   const message = searchParams.get("message");
+  const email = searchParams.get("email");
 
   useEffect(() => {
     const checkIfUserExists = async () => {
@@ -99,7 +100,7 @@ function SubscribePageContent() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
         >
           <SubscribeHeader />
-          <SubscribeForm plan={plan} cycle={cycle} />
+          <SubscribeForm plan={plan} cycle={cycle} email={email || undefined} />
         </motion.div>
       </div>
     </div>
