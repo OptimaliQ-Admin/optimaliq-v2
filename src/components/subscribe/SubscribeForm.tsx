@@ -325,6 +325,7 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
         <IconSelect
           icon={FaIndustry}
           name="industry"
+          label="Industry"
           value={userInfo.industry}
           onChange={handleChange}
           options={[
@@ -406,22 +407,6 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
                   Privacy Policy
                 </button>
                 {" "}and consent to the collection and processing of my data.
-              </label>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="marketing"
-                checked={legalConsent.marketing}
-                onChange={() => handleLegalConsentChange('marketing')}
-                className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label htmlFor="marketing" className="text-sm text-gray-700">
-                I would like to receive marketing communications, updates, and insights from OptimaliQ.ai
-                <span className="text-gray-500 text-xs block mt-1">
-                  You can unsubscribe at any time. This is optional.
-                </span>
               </label>
             </div>
           </div>

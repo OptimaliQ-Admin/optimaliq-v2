@@ -161,6 +161,7 @@ export default function GrowthAssessmentForm() {
             <IconSelect 
               icon={FaIndustry} 
               name="industry" 
+              label="Industry"
               value={userInfo.industry} 
               onChange={handleChange} 
               options={["E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail","Manufacturing","Consulting","Entertainment","Real Estate","Transportation","Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive","Construction","Legal","Nonprofit","Other"]} 
@@ -227,12 +228,6 @@ export default function GrowthAssessmentForm() {
                   </button>{" "}
                   and consent to receive your personalized business insights.
                 </p>
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>• We collect your name, email, industry, role, company size, and revenue range</p>
-                  <p>• Your data is used to generate personalized business insights</p>
-                  <p>• We do not sell your data to third parties</p>
-                  <p>• You can request data deletion at any time</p>
-                </div>
               </div>
             </div>
           </div>
