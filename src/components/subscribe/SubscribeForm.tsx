@@ -406,7 +406,7 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
                 >
                   Privacy Policy
                 </button>
-                {" "}and consent to the collection and processing of my data.
+                {" "}and agree to let OptimaliQ collect and use my information to personalize my experience.
               </label>
             </div>
           </div>

@@ -214,7 +214,7 @@ export default function GrowthAssessmentForm() {
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <label htmlFor="privacyConsent" className="text-sm font-medium text-gray-900">
-                    I consent to the collection and processing of my data
+                    I agree to let OptimaliQ collect and use my answers to personalize my experience.
                   </label>
                 </div>
                 <p className="text-xs text-gray-600 mb-2">
