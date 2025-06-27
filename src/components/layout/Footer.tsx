@@ -96,23 +96,23 @@ export default function Footer() {
         <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-600 mb-4 md:mb-0">
-              © {new Date().getFullYear()} OptimaliQ. All rights reserved.
-            </p>
+            © {new Date().getFullYear()} OptimaliQ. All rights reserved.
+          </p>
             <div className="flex items-center space-x-6">
-              <a 
-                href="https://linkedin.com/company/optimaliq" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
-                <FaLinkedin className="w-6 h-6" />
-              </a>
-              <a 
-                href="mailto:support@optimaliq.ai" 
-                className="text-blue-600 hover:text-blue-700 transition"
-              >
-                support@optimaliq.ai
-              </a>
+            <a 
+              href="https://linkedin.com/company/optimaliq" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-blue-600 transition"
+            >
+              <FaLinkedin className="w-6 h-6" />
+            </a>
+            <a 
+              href="mailto:support@optimaliq.ai" 
+              className="text-blue-600 hover:text-blue-700 transition"
+            >
+              support@optimaliq.ai
+            </a>
             </div>
           </div>
         </div>
