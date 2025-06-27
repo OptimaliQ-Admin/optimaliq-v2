@@ -173,8 +173,8 @@ export const blogPosts: Record<string, BlogPost> = {
     author: "Dr. Sarah Chen",
     authorRole: "AI Strategy Director",
     authorBio: "Dr. Sarah Chen is a leading expert in AI strategy with over 15 years of experience helping Fortune 500 companies implement AI-driven decision-making frameworks. She holds a PhD in Computer Science from MIT and has published over 50 peer-reviewed papers on AI applications in business.",
-    publishDate: "2024-01-15",
-    views: "12.5K",
+    publishDate: "2025-01-15",
+    views: "87",
     tags: ["Business Strategy", "AI", "Consulting", "Digital Transformation", "Leadership", "Data-Driven Decisions"],
     relatedArticles: [2, 4],
     featured: true,
@@ -188,10 +188,10 @@ export const blogPosts: Record<string, BlogPost> = {
     readTime: "15 min read",
     author: "Dr. Michael Thompson",
     authorRole: "Business Process Innovation Director",
-    publishDate: "2024-01-18",
+    publishDate: "2025-02-18",
     image: "/images/Blog/Modern Business Process Management.jpeg",
     featured: true,
-    views: "9.3K",
+    views: "73",
     tags: ["Business Process Management", "Operations", "Digital Transformation", "Strategy", "Leadership", "Innovation"],
     content: `
       <h2>Introduction</h2>
@@ -357,10 +357,10 @@ export const blogPosts: Record<string, BlogPost> = {
     readTime: "14 min read",
     author: "Dr. Sarah Chen",
     authorRole: "AI Strategy Director",
-    publishDate: "2024-01-22",
+    publishDate: "2025-03-22",
     image: "/images/Blog/The Growth Maturity Gap.jpeg",
     featured: true,
-    views: "8.7K",
+    views: "95",
     tags: ["Business Strategy", "Growth", "Leadership", "Transformation", "Innovation", "Organizational Development"],
     content: `
       <h2>Introduction</h2>

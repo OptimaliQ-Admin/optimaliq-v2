@@ -122,19 +122,6 @@ export default function BlogPostPage() {
             </div>
           </div>
 
-          {/* Author Bio */}
-          <div className="mt-16 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-['Inter']">About the Author</h3>
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold font-['Inter']">
-                  {post.author.split(' ').map(n => n[0]).join('')}
-                </span>
-              </div>
-              <span className="text-gray-700 font-semibold font-['Inter']">{post.authorRole}</span>
-            </div>
-            <p className="text-gray-700 leading-relaxed text-lg font-['Inter']">{post.authorBio}</p>
-          </div>
         </motion.div>
 
         {/* Related Articles */}

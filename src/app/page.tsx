@@ -4,6 +4,7 @@ import HeroSection from "@/components/home/HeroSection";
 import HowItWorks from "@/components/home/HowItWorks";
 import KeyFeatures from "@/components/home/KeyFeatures";
 import WhyOptimaliQ from "@/components/home/WhyOptimaliQ";
+import NewsletterSignup from "@/components/shared/NewsletterSignup";
 import FaqSection from "@/components/home/FaqSection";
 import PageNavigation from "@/components/shared/PageNavigation";
 
@@ -43,6 +44,7 @@ export default function HomePage() {
     { id: "how-it-works", label: "How It Works", icon: "⚙️" },
     { id: "key-features", label: "Features", icon: "✨" },
     { id: "why-optimaliq", label: "Why OptimaliQ", icon: "🎯" },
+    { id: "newsletter", label: "Newsletter", icon: "📧" },
     { id: "faq", label: "FAQ", icon: "❓" },
   ];
 
@@ -85,6 +87,14 @@ export default function HomePage() {
       <HowItWorks />
       <KeyFeatures />
       <WhyOptimaliQ />
+      <section id="newsletter" className="py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <NewsletterSignup 
+            variant="hero"
+            source="homepage_newsletter"
+          />
+        </div>
+      </section>
       <FaqSection />
     </>
   );

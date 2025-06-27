@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { usePremiumUser } from '@/context/PremiumUserContext';
+import EmailSubscriptionsManager from './EmailSubscriptionsManager';
 
 interface AuditLog {
   id: number;
@@ -20,6 +21,8 @@ interface DashboardStats {
   last_updated: string;
 }
 
+type TabType = 'overview' | 'audit-logs' | 'email-subscriptions';
+
 export default function AdminDashboard() {
   const { user } = usePremiumUser();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -27,6 +30,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [filters, setFilters] = useState({
     table_name: '',
     operation: '',
@@ -107,6 +111,12 @@ export default function AdminDashboard() {
     });
   };
 
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: '📊' },
+    { id: 'audit-logs', label: 'Audit Logs', icon: '📋' },
+    { id: 'email-subscriptions', label: 'Email Subscriptions', icon: '📧' },
+  ];
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
@@ -142,13 +152,212 @@ export default function AdminDashboard() {
     );
   }
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 capitalize">
+                    {stat.table_name.replace(/_/g, ' ')}
+                  </h3>
+                  <p className="text-3xl font-bold text-blue-600 mb-1">
+                    {stat.record_count?.toLocaleString() || '0'}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Last updated: {stat.last_updated ? new Date(stat.last_updated).toLocaleDateString() : 'N/A'}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => setActiveTab('audit-logs')}
+                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="text-2xl mb-2">📋</div>
+                  <h3 className="font-semibold text-gray-900">View Audit Logs</h3>
+                  <p className="text-sm text-gray-600">Monitor system activity and user actions</p>
+                </button>
+                <button
+                  onClick={() => setActiveTab('email-subscriptions')}
+                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="text-2xl mb-2">📧</div>
+                  <h3 className="font-semibold text-gray-900">Email Subscriptions</h3>
+                  <p className="text-sm text-gray-600">Manage newsletter subscribers</p>
+                </button>
+                <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                  <div className="text-2xl mb-2">⚙️</div>
+                  <h3 className="font-semibold text-gray-900">System Settings</h3>
+                  <p className="text-sm text-gray-600">Coming soon</p>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+
+      case 'audit-logs':
+        return (
+          <>
+            {/* Filters */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Audit Log Filters</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Table</label>
+                  <input
+                    type="text"
+                    value={filters.table_name}
+                    onChange={(e) => handleFilterChange('table_name', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., tier2_users"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Operation</label>
+                  <select
+                    value={filters.operation}
+                    onChange={(e) => handleFilterChange('operation', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">All Operations</option>
+                    <option value="SELECT">SELECT</option>
+                    <option value="INSERT">INSERT</option>
+                    <option value="UPDATE">UPDATE</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    value={filters.start_date}
+                    onChange={(e) => handleFilterChange('start_date', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                  <input
+                    type="date"
+                    value={filters.end_date}
+                    onChange={(e) => handleFilterChange('end_date', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-4 mt-4">
+                <button
+                  onClick={applyFilters}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Apply Filters
+                </button>
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+
+            {/* Audit Logs Table */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900">Recent Audit Logs</h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Timestamp
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Table
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Operation
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Record ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        IP Address
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {auditLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {new Date(log.timestamp).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {log.table_name}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            log.operation === 'INSERT' ? 'bg-green-100 text-green-800' :
+                            log.operation === 'UPDATE' ? 'bg-yellow-100 text-yellow-800' :
+                            log.operation === 'DELETE' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {log.operation}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {log.user_id ? log.user_id.substring(0, 8) + '...' : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {log.record_id ? log.record_id.substring(0, 8) + '...' : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {log.ip_address || 'N/A'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {auditLogs.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No audit logs found with the current filters.</p>
+                </div>
+              )}
+            </div>
+          </>
+        );
+
+      case 'email-subscriptions':
+        return <EmailSubscriptionsManager />;
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">System overview and audit logs</p>
+          <p className="text-gray-600">System overview and management tools</p>
         </div>
 
         {/* Error Display */}
@@ -158,156 +367,30 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 capitalize">
-                {stat.table_name.replace(/_/g, ' ')}
-              </h3>
-              <p className="text-3xl font-bold text-blue-600 mb-1">
-                {stat.record_count?.toLocaleString() || '0'}
-              </p>
-              <p className="text-sm text-gray-500">
-                Last updated: {stat.last_updated ? new Date(stat.last_updated).toLocaleDateString() : 'N/A'}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Audit Log Filters</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Table</label>
-              <input
-                type="text"
-                value={filters.table_name}
-                onChange={(e) => handleFilterChange('table_name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., tier2_users"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Operation</label>
-              <select
-                value={filters.operation}
-                onChange={(e) => handleFilterChange('operation', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Operations</option>
-                <option value="SELECT">SELECT</option>
-                <option value="INSERT">INSERT</option>
-                <option value="UPDATE">UPDATE</option>
-                <option value="DELETE">DELETE</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-              <input
-                type="date"
-                value={filters.start_date}
-                onChange={(e) => handleFilterChange('start_date', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-              <input
-                type="date"
-                value={filters.end_date}
-                onChange={(e) => handleFilterChange('end_date', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          <div className="flex gap-4 mt-4">
-            <button
-              onClick={applyFilters}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Apply Filters
-            </button>
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Clear Filters
-            </button>
+        {/* Tabs */}
+        <div className="bg-white rounded-lg shadow-md mb-8">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8 px-6" aria-label="Tabs">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as TabType)}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <span>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
           </div>
         </div>
 
-        {/* Audit Logs Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Recent Audit Logs</h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Timestamp
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Table
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Operation
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Record ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    IP Address
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {auditLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Date(log.timestamp).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {log.table_name}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        log.operation === 'INSERT' ? 'bg-green-100 text-green-800' :
-                        log.operation === 'UPDATE' ? 'bg-yellow-100 text-yellow-800' :
-                        log.operation === 'DELETE' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {log.operation}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {log.user_id ? log.user_id.substring(0, 8) + '...' : 'N/A'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {log.record_id ? log.record_id.substring(0, 8) + '...' : 'N/A'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {log.ip_address || 'N/A'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {auditLogs.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No audit logs found with the current filters.</p>
-            </div>
-          )}
-        </div>
+        {/* Tab Content */}
+        {renderTabContent()}
       </div>
     </div>
   );
