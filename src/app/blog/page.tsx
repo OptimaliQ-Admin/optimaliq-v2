@@ -35,17 +35,6 @@ export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter posts based on selected category and search query
-  const filteredPosts = allPosts.filter(post => {
-    const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
-    const matchesSearch = searchQuery === "" || 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    return matchesCategory && matchesSearch;
-  });
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Background Pattern */}

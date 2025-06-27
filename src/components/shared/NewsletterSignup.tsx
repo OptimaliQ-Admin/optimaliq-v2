@@ -27,24 +27,6 @@ export default function NewsletterSignup({
 }: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [subscriptionCount, setSubscriptionCount] = useState<number | null>(null);
-
-  // Fetch subscription count on component mount
-  useEffect(() => {
-    const fetchSubscriptionCount = async () => {
-      try {
-        const response = await fetch("/api/newsletter/subscribe");
-        if (response.ok) {
-          const data = await response.json();
-          setSubscriptionCount(data.count);
-        }
-      } catch (error) {
-        console.error("Failed to fetch subscription count:", error);
-      }
-    };
-
-    fetchSubscriptionCount();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,12 +55,6 @@ export default function NewsletterSignup({
       if (response.ok) {
         showToast.success(data.message);
         setEmail("");
-        // Refresh subscription count
-        const countResponse = await fetch("/api/newsletter/subscribe");
-        if (countResponse.ok) {
-          const countData = await countResponse.json();
-          setSubscriptionCount(countData.count);
-        }
       } else {
         showToast.error(data.error || "Failed to subscribe");
       }

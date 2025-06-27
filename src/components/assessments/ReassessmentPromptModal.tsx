@@ -46,14 +46,14 @@ export default function ReassessmentPromptModal({
           <div className="space-y-3 mb-6 text-left">
             <p className="text-gray-700">
               {hasTakenBefore 
-                ? "It's time to see how your business has evolved! Take the Growth Progress Tracker to measure improvements across all key areas."
-                : "You've been using OptimaliQ for 30+ days. Now it's time to establish your baseline and start tracking your growth journey."
+                ? "It&apos;s time to see how your business has evolved! Take the Growth Progress Tracker to measure improvements across all key areas."
+                : "You&apos;ve been using OptimaliQ for 30+ days. Now it&apos;s time to establish your baseline and start tracking your growth journey."
               }
             </p>
             
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-blue-800 text-sm font-medium">
-                What you'll get:
+                What you&apos;ll get:
               </p>
               <ul className="text-blue-700 text-sm mt-1 space-y-1">
                 <li>• Comprehensive business health score</li>
