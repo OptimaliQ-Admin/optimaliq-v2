@@ -10,6 +10,20 @@ import { toast } from "react-hot-toast";
 import PasswordInput from "@/components/shared/PasswordInput";
 import { normalizeLinkedInUrl } from "@/lib/utils/validation";
 
+interface TrialUser {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string | null;
+  company: string | null;
+  title: string | null;
+  trial_start_date: string;
+  trial_end_date: string;
+  status: 'active' | 'expired' | 'converted';
+  created_at: string;
+  updated_at: string;
+}
+
 const timezoneOptions = [
   { value: "-12:00", label: "(GMT -12:00) Eniwetok, Kwajalein" },
   { value: "-11:00", label: "(GMT -11:00) Midway Island, Samoa" },
@@ -50,7 +64,7 @@ export default function TrialSignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [trialUser, setTrialUser] = useState<any>(null);
+  const [trialUser, setTrialUser] = useState<TrialUser | null>(null);
 
   const [formState, setFormState] = useState({
     email: '',
@@ -66,6 +80,7 @@ export default function TrialSignupForm() {
     // Get email from URL params
     const email = searchParams.get('email');
     console.log("Email from URL params:", email);
+    console.log("All search params:", Object.fromEntries(searchParams.entries()));
     
     if (email) {
       setFormState(prev => ({ ...prev, email }));
@@ -80,6 +95,7 @@ export default function TrialSignupForm() {
   const fetchTrialUser = async (email: string) => {
     try {
       console.log("Fetching trial user for email:", email);
+      console.log("Email to search for (lowercase):", email.toLowerCase());
       
       // First, get all trial users with this email to check for duplicates
       const { data: allTrialUsers, error: fetchError } = await supabase
@@ -88,6 +104,7 @@ export default function TrialSignupForm() {
         .eq("email", email.toLowerCase());
 
       console.log("All trial users found:", allTrialUsers);
+      console.log("Fetch error:", fetchError);
 
       if (fetchError) {
         console.error("Supabase error:", fetchError);
@@ -98,6 +115,7 @@ export default function TrialSignupForm() {
 
       if (!allTrialUsers || allTrialUsers.length === 0) {
         console.log("No trial user found for email:", email);
+        console.log("Searched for:", email.toLowerCase());
         toast.error("Invalid or expired trial invitation. Please contact support.");
         router.push("/subscribe");
         return;
@@ -108,6 +126,7 @@ export default function TrialSignupForm() {
       if (allTrialUsers.length > 1) {
         console.log("Multiple trial users found, using most recent active one");
         const activeUsers = allTrialUsers.filter(user => user.status === 'active');
+        console.log("Active users:", activeUsers);
         if (activeUsers.length > 0) {
           // Sort by created_at descending and take the most recent
           trialUser = activeUsers.sort((a, b) => 
@@ -120,6 +139,7 @@ export default function TrialSignupForm() {
 
       if (!trialUser || trialUser.status !== 'active') {
         console.log("No active trial user found for email:", email);
+        console.log("Trial user found:", trialUser);
         toast.error("Invalid or expired trial invitation. Please contact support.");
         router.push("/subscribe");
         return;

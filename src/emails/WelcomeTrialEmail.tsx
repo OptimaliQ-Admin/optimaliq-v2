@@ -12,6 +12,7 @@ import {
 
 interface WelcomeTrialEmailProps {
   firstName: string;
+  email: string;
   companyName?: string;
   trialEndDate: string;
   dashboardUrl: string;
@@ -19,6 +20,7 @@ interface WelcomeTrialEmailProps {
 
 export default function WelcomeTrialEmail({
   firstName,
+  email,
   companyName,
   trialEndDate,
   dashboardUrl,
@@ -148,7 +150,7 @@ export default function WelcomeTrialEmail({
             {/* CTA Button */}
             <Section style={{ textAlign: 'center', margin: '32px 0' }}>
               <Button
-                href={`${dashboardUrl.split('?')[0].replace('/premium/dashboard', '/subscribe/trial-signup')}?email=${encodeURIComponent(firstName)}`}
+                href={`${dashboardUrl.split('?')[0].replace('/premium/dashboard', '/subscribe/trial-signup')}?email=${encodeURIComponent(email)}`}
                 style={{
                   backgroundColor: '#3b82f6',
                   color: '#ffffff',

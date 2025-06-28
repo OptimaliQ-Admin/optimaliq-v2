@@ -69,6 +69,7 @@ class EmailService {
     const html = await render(
       WelcomeTrialEmail({
         firstName: data.firstName,
+        email: data.to,
         companyName: data.companyName,
         trialEndDate: data.trialEndDate,
         dashboardUrl: data.dashboardUrl,

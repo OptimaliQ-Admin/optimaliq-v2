@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/utils/toast";
 
 interface TrialUser {
-  id: number;
+  id: string;
   email: string;
   first_name: string | null;
   last_name: string | null;
@@ -146,7 +146,7 @@ export default function TrialUserManager() {
     }
   };
 
-  const updateTrialUserStatus = async (id: number, status: string) => {
+  const updateTrialUserStatus = async (id: string, status: string) => {
     try {
       const { error } = await supabase
         .from("trial_users")
