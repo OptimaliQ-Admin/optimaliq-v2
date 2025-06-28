@@ -7,7 +7,6 @@ import {
   Link,
   Button,
   Section,
-  Img,
   Hr,
 } from '@react-email/components';
 
@@ -96,7 +95,7 @@ export default function WelcomeTrialEmail({
                 margin: '0 0 20px 0',
                 fontFamily: 'Inter, sans-serif',
               }}>
-                We're excited to help <strong>{companyName}</strong> unlock new growth opportunities and make data-driven decisions.
+                We&apos;re excited to help <strong>{companyName}</strong> unlock new growth opportunities and make data-driven decisions.
               </Text>
             )}
 
@@ -107,7 +106,7 @@ export default function WelcomeTrialEmail({
               margin: '0 0 32px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Here's what you can do right now:
+              Here&apos;s what you can do right now:
             </Text>
 
             {/* Feature highlights */}

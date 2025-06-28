@@ -242,7 +242,7 @@ export default function TrialExpiringSoonEmail({
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: '600',
                 }}>
-                  ⚠️ After your trial expires, you'll lose access to all your data and insights. Upgrade now to preserve your progress.
+                  ⚠️ After your trial expires, you&apos;ll lose access to all your data and insights. Upgrade now to preserve your progress.
                 </Text>
               </Section>
             )}

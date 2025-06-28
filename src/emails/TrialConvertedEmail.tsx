@@ -63,7 +63,7 @@ export default function TrialConvertedEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              You're all set with the {planName} plan
+              You&apos;re all set with the {planName} plan
             </Text>
           </Section>
 
@@ -86,7 +86,7 @@ export default function TrialConvertedEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Congratulations! You've successfully upgraded to the <strong>{planName}</strong> plan. You now have full access to all OptimaliQ features and your data is safely preserved.
+              Congratulations! You&apos;ve successfully upgraded to the <strong>{planName}</strong> plan. You now have full access to all OptimaliQ features and your data is safely preserved.
             </Text>
 
             <Text style={{
@@ -96,7 +96,7 @@ export default function TrialConvertedEmail({
               margin: '0 0 32px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Here's what's next to maximize your success:
+              Here&apos;s what&apos;s next to maximize your success:
             </Text>
 
             {/* Next steps */}

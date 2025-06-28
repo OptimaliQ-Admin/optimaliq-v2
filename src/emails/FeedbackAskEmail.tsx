@@ -59,7 +59,7 @@ export default function FeedbackAskEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              We'd love to hear from you
+              We&apos;d love to hear from you
             </Text>
           </Section>
 
@@ -82,7 +82,7 @@ export default function FeedbackAskEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              I hope you're finding OptimaliQ valuable for your business growth. As we continue to build and improve our platform, I'd love to get your thoughts on your experience so far.
+              I hope you&apos;re finding OptimaliQ valuable for your business growth. As we continue to build and improve our platform, I&apos;d love to get your thoughts on your experience so far.
             </Text>
 
             <Text style={{
@@ -180,7 +180,7 @@ export default function FeedbackAskEmail({
                 margin: '0',
                 fontFamily: 'Inter, sans-serif',
               }}>
-                Complete the feedback survey and we'll extend your trial by 7 days as a thank you for your valuable input.
+                Complete the feedback survey and we&apos;ll extend your trial by 7 days as a thank you for your valuable input.
               </Text>
             </Section>
 

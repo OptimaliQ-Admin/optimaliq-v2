@@ -82,7 +82,7 @@ export default function TrialExpiredEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Your OptimaliQ trial has expired. We've temporarily paused your account to preserve your data and insights.
+              Your OptimaliQ trial has expired. We&apos;ve temporarily paused your account to preserve your data and insights.
             </Text>
 
             <Text style={{
@@ -92,7 +92,7 @@ export default function TrialExpiredEmail({
               margin: '0 0 32px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Don't worry - you can easily reactivate your account and continue where you left off:
+              Don&apos;t worry - you can easily reactivate your account and continue where you left off:
             </Text>
 
             {/* What you'll get back */}
