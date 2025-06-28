@@ -81,31 +81,52 @@ export default function TrialSignupForm() {
     try {
       console.log("Fetching trial user for email:", email);
       
-      const { data, error } = await supabase
+      // First, get all trial users with this email to check for duplicates
+      const { data: allTrialUsers, error: fetchError } = await supabase
         .from("trial_users")
         .select("*")
-        .eq("email", email.toLowerCase())
-        .eq("status", "active")
-        .single();
+        .eq("email", email.toLowerCase());
 
-      console.log("Trial user lookup result:", { data, error });
+      console.log("All trial users found:", allTrialUsers);
 
-      if (error) {
-        console.error("Supabase error:", error);
-        toast.error(`Error validating trial invitation: ${error.message}`);
+      if (fetchError) {
+        console.error("Supabase error:", fetchError);
+        toast.error(`Error validating trial invitation: ${fetchError.message}`);
         router.push("/subscribe");
         return;
       }
 
-      if (!data) {
+      if (!allTrialUsers || allTrialUsers.length === 0) {
         console.log("No trial user found for email:", email);
         toast.error("Invalid or expired trial invitation. Please contact support.");
         router.push("/subscribe");
         return;
       }
 
-      console.log("Trial user found:", data);
-      setTrialUser(data);
+      // If multiple records exist, use the most recent active one
+      let trialUser = null;
+      if (allTrialUsers.length > 1) {
+        console.log("Multiple trial users found, using most recent active one");
+        const activeUsers = allTrialUsers.filter(user => user.status === 'active');
+        if (activeUsers.length > 0) {
+          // Sort by created_at descending and take the most recent
+          trialUser = activeUsers.sort((a, b) => 
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )[0];
+        }
+      } else {
+        trialUser = allTrialUsers[0];
+      }
+
+      if (!trialUser || trialUser.status !== 'active') {
+        console.log("No active trial user found for email:", email);
+        toast.error("Invalid or expired trial invitation. Please contact support.");
+        router.push("/subscribe");
+        return;
+      }
+
+      console.log("Trial user found:", trialUser);
+      setTrialUser(trialUser);
     } catch (error) {
       console.error("Error fetching trial user:", error);
       toast.error("Error validating trial invitation");
@@ -151,14 +172,27 @@ export default function TrialSignupForm() {
     setIsLoading(true);
 
     try {
+      // Clear any existing session to prevent refresh token conflicts
+      await supabase.auth.signOut();
+
       // Create Auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formState.email,
         password: formState.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/premium/dashboard`,
+        }
       });
 
-      if (authError || !authData.user) {
-        toast.error(`❌ ${authError?.message || "Failed to create account"}`);
+      if (authError) {
+        console.error("Auth error:", authError);
+        toast.error(`❌ ${authError.message || "Failed to create account"}`);
+        setIsLoading(false);
+        return;
+      }
+
+      if (!authData.user) {
+        toast.error("❌ Failed to create user account");
         setIsLoading(false);
         return;
       }
@@ -198,6 +232,20 @@ export default function TrialSignupForm() {
 
       toast.success("🎉 Account created successfully! Welcome to OptimaliQ!");
       
+      // Sign in the user immediately after signup
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formState.email,
+        password: formState.password,
+      });
+
+      if (signInError) {
+        console.error("Sign in error:", signInError);
+        // Still redirect to login page if auto-signin fails
+        toast.success("Account created! Please sign in to continue.");
+        router.push("/subscribe/login");
+        return;
+      }
+
       // Redirect to dashboard
       setTimeout(() => {
         router.push("/premium/dashboard");
