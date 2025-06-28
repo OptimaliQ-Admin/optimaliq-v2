@@ -65,8 +65,8 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(redirectUrl);
       }
 
-      // Check if subscription is active
-      if (!subscription || subscription.status !== 'active') {
+      // Check if subscription is active or trial
+      if (!subscription || (subscription.status !== 'active' && subscription.status !== 'trial')) {
         console.log(`User has inactive subscription (${subscription?.status || 'none'}), redirecting to subscribe`);
         
         // Redirect to subscribe page with a message

@@ -240,6 +240,26 @@ export default function TrialSignupForm() {
         return;
       }
 
+      // Create trial subscription record for the user
+      const { error: subscriptionError } = await supabase
+        .from("subscriptions")
+        .insert([{
+          u_id: authData.user.id,
+          plan: 'trial',
+          status: 'trial',
+          nextbillingdate: trialUser.trial_end_date,
+          createdat: trialUser.trial_start_date,
+          billingCycle: 'monthly',
+          stripe_subscription_id: null,
+          stripe_customer_id: null,
+          stripe_data: null
+        }]);
+
+      if (subscriptionError) {
+        console.error("Error creating trial subscription:", subscriptionError);
+        // Don't fail the signup process, just log the error
+      }
+
       // Update trial user status to converted
       const { error: trialUpdateError } = await supabase
         .from("trial_users")

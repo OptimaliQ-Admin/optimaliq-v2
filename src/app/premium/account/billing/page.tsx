@@ -193,18 +193,18 @@ export default function BillingPage() {
               </div>
             ) : stripeCustomerId ? (
               <div className="space-y-3">
-                <button
-                  onClick={handleManageBilling}
-                  disabled={updating}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {updating ? (
-                    <ArrowPathIcon className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <CreditCardIcon className="w-5 h-5" />
-                  )}
-                  {updating ? 'Loading...' : 'Manage Billing'}
-                </button>
+              <button
+                onClick={handleManageBilling}
+                disabled={updating}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {updating ? (
+                  <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                ) : (
+                  <CreditCardIcon className="w-5 h-5" />
+                )}
+                {updating ? 'Loading...' : 'Manage Billing'}
+              </button>
                 <p className="text-xs text-gray-500">
                   Note: If you encounter an error, the billing portal may need to be configured in the Stripe dashboard.
                 </p>

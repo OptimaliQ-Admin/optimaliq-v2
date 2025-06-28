@@ -88,7 +88,8 @@ export default function TrialUserManager() {
       const trialEndDate = new Date();
       trialEndDate.setDate(trialEndDate.getDate() + 30); // 30-day trial
 
-      const { error } = await supabase
+      // Create trial user
+      const { data: trialUserData, error: trialError } = await supabase
         .from("trial_users")
         .insert([{
           email: newTrialUser.email.toLowerCase(),
@@ -103,8 +104,8 @@ export default function TrialUserManager() {
         .select()
         .single();
 
-      if (error) {
-        console.error("Error creating trial user:", error);
+      if (trialError) {
+        console.error("Error creating trial user:", trialError);
         showToast.error("Failed to create trial user");
         return;
       }
