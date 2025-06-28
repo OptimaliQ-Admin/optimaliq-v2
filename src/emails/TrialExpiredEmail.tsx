@@ -51,7 +51,7 @@ export default function TrialExpiredEmail({
               margin: '0 0 8px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              ⏰ Trial Expired
+              Your <span style={{ color: '#3b82f6' }}>OptimaliQ</span> trial has ended
             </Text>
             <Text style={{
               color: '#d1d5db',
@@ -59,7 +59,7 @@ export default function TrialExpiredEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Your OptimaliQ trial has ended
+              Your OptimaliQ trial has expired. We&apos;ve temporarily paused your account to preserve your data and insights.
             </Text>
           </Section>
 
@@ -82,7 +82,7 @@ export default function TrialExpiredEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Your OptimaliQ trial has expired. We&apos;ve temporarily paused your account to preserve your data and insights.
+              Your <span style={{ color: '#3b82f6' }}>OptimaliQ</span> trial has expired. We&apos;ve temporarily paused your account to preserve your data and insights.
             </Text>
 
             <Text style={{
@@ -216,8 +216,8 @@ export default function TrialExpiredEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              We hope to see you back soon!<br />
-              The OptimaliQ Team
+              Best regards,<br />
+              The <span style={{ color: '#3b82f6' }}>OptimaliQ</span> Team
             </Text>
           </Section>
 
@@ -241,11 +241,11 @@ export default function TrialExpiredEmail({
             
             <Text style={{
               fontSize: '12px',
-              color: '#94a3b8',
+              color: '#64748b',
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              © 2025 OptimaliQ. All rights reserved.
+              © 2025 <span style={{ color: '#3b82f6' }}>OptimaliQ</span>. All rights reserved.
             </Text>
           </Section>
         </Container>

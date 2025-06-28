@@ -57,7 +57,7 @@ export default function TrialExpiringSoonEmail({
               margin: '0 0 8px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              {isUrgent ? '⚠️ Trial Expires Soon' : '⏰ Trial Ending Soon'}
+              ⏰ Your <span style={{ color: '#3b82f6' }}>OptimaliQ</span> trial is expiring soon
             </Text>
             <Text style={{
               color: '#fef3c7',
@@ -89,8 +89,8 @@ export default function TrialExpiringSoonEmail({
               fontFamily: 'Inter, sans-serif',
             }}>
               {isUrgent 
-                ? `Your OptimaliQ trial expires ${daysRemaining === 1 ? 'tomorrow' : `in ${daysRemaining} days`}. Don't lose access to your valuable insights and data!`
-                : `Your OptimaliQ trial will end on ${trialEndDate}. We'd love to keep helping you grow your business.`
+                ? `Your <span style={{ color: '#3b82f6' }}>OptimaliQ</span> trial expires ${daysRemaining === 1 ? 'tomorrow' : `in ${daysRemaining} days`}. Don't lose access to your valuable insights and data!`
+                : `Your <span style={{ color: '#3b82f6' }}>OptimaliQ</span> trial will end on ${trialEndDate}. We'd love to keep helping you grow your business.`
               }
             </Text>
 
@@ -265,7 +265,7 @@ export default function TrialExpiringSoonEmail({
               fontFamily: 'Inter, sans-serif',
             }}>
               Best regards,<br />
-              The OptimaliQ Team
+              The <span style={{ color: '#3b82f6' }}>OptimaliQ</span> Team
             </Text>
           </Section>
 
@@ -289,11 +289,11 @@ export default function TrialExpiringSoonEmail({
             
             <Text style={{
               fontSize: '12px',
-              color: '#94a3b8',
+              color: '#64748b',
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              © 2025 OptimaliQ. All rights reserved.
+              © 2025 <span style={{ color: '#3b82f6' }}>OptimaliQ</span>. All rights reserved.
             </Text>
           </Section>
         </Container>

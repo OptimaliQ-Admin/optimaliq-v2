@@ -55,7 +55,7 @@ export default function TrialConvertedEmail({
               margin: '0 0 8px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              🚀 Welcome to OptimaliQ!
+              🚀 Welcome to <span style={{ color: '#3b82f6' }}>OptimaliQ</span>!
             </Text>
             <Text style={{
               color: '#d1fae5',
@@ -86,7 +86,7 @@ export default function TrialConvertedEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Congratulations! You&apos;ve successfully upgraded to the <strong>{planName}</strong> plan. You now have full access to all OptimaliQ features and your data is safely preserved.
+              Congratulations! You&apos;ve successfully upgraded to our premium plan. You now have full access to all <span style={{ color: '#3b82f6' }}>OptimaliQ</span> features and your data is safely preserved.
             </Text>
 
             <Text style={{
@@ -211,7 +211,7 @@ export default function TrialConvertedEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Need help getting the most out of OptimaliQ? Our success team is here to support you with onboarding, best practices, and strategic guidance.
+              Need help getting the most out of <span style={{ color: '#3b82f6' }}>OptimaliQ</span>? Our success team is here to support you with onboarding, best practices, and strategic guidance.
             </Text>
 
             <Text style={{
@@ -221,8 +221,8 @@ export default function TrialConvertedEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Welcome to the OptimaliQ family!<br />
-              The OptimaliQ Team
+              Welcome to the <span style={{ color: '#3b82f6' }}>OptimaliQ</span> family!<br />
+              The <span style={{ color: '#3b82f6' }}>OptimaliQ</span> Team
             </Text>
           </Section>
 
@@ -246,11 +246,11 @@ export default function TrialConvertedEmail({
             
             <Text style={{
               fontSize: '12px',
-              color: '#94a3b8',
+              color: '#64748b',
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              © 2025 OptimaliQ. All rights reserved.
+              © 2025 <span style={{ color: '#3b82f6' }}>OptimaliQ</span>. All rights reserved.
             </Text>
           </Section>
         </Container>

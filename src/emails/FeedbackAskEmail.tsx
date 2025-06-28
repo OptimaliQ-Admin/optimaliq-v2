@@ -82,7 +82,7 @@ export default function FeedbackAskEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              I hope you&apos;re finding OptimaliQ valuable for your business growth. As we continue to build and improve our platform, I&apos;d love to get your thoughts on your experience so far.
+              I hope you&apos;re finding <span style={{ color: '#3b82f6' }}>OptimaliQ</span> valuable for your business growth. As we continue to build and improve our platform, I&apos;d love to get your thoughts on your experience so far.
             </Text>
 
             <Text style={{
@@ -103,7 +103,7 @@ export default function FeedbackAskEmail({
                 margin: '0 0 12px 0',
                 fontFamily: 'Inter, sans-serif',
               }}>
-                📊 <strong>How are you using OptimaliQ?</strong> - What features are most valuable?
+                📊 <strong>How are you using <span style={{ color: '#3b82f6' }}>OptimaliQ</span>?</strong> - What features are most valuable?
               </Text>
               <Text style={{
                 fontSize: '16px',
@@ -127,7 +127,7 @@ export default function FeedbackAskEmail({
                 margin: '0 0 12px 0',
                 fontFamily: 'Inter, sans-serif',
               }}>
-                ⭐ <strong>Overall experience</strong> - How would you rate OptimaliQ?
+                ⭐ <strong>Overall experience</strong> - How would you rate <span style={{ color: '#3b82f6' }}>OptimaliQ</span>?
               </Text>
             </Section>
 
@@ -201,9 +201,9 @@ export default function FeedbackAskEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Thank you for being part of the OptimaliQ community!<br />
+              Thank you for being part of the <span style={{ color: '#3b82f6' }}>OptimaliQ</span> community!<br />
               James<br />
-              <em>Founder, OptimaliQ</em>
+              <em>Founder, <span style={{ color: '#3b82f6' }}>OptimaliQ</span></em>
             </Text>
           </Section>
 
@@ -231,7 +231,7 @@ export default function FeedbackAskEmail({
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              © 2025 OptimaliQ. All rights reserved.
+              © 2025 <span style={{ color: '#3b82f6' }}>OptimaliQ</span>. All rights reserved.
             </Text>
           </Section>
         </Container>

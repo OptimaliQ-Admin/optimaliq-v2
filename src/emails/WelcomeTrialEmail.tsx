@@ -47,16 +47,16 @@ export default function WelcomeTrialEmail({
             textAlign: 'center',
           }}>
             <Text style={{
-              color: '#ffffff',
+              color: '#000000',
               fontSize: '28px',
               fontWeight: '700',
               margin: '0 0 8px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              🎉 Welcome to OptimaliQ
+              🎉 Welcome to <span style={{ color: '#3b82f6' }}>OptimaliQ</span>
             </Text>
             <Text style={{
-              color: '#e2e8f0',
+              color: '#000000',
               fontSize: '16px',
               margin: '0',
               fontFamily: 'Inter, sans-serif',
@@ -84,7 +84,7 @@ export default function WelcomeTrialEmail({
               margin: '0 0 20px 0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              Welcome to OptimaliQ! Your 30-day trial is now active and you have full access to all our AI-powered business insights and strategic tools.
+              Welcome to <span style={{ color: '#3b82f6' }}>OptimaliQ</span>! Your 30-day trial is now active and you have full access to all our AI-powered business insights and strategic tools.
             </Text>
 
             {companyName && (
@@ -148,7 +148,7 @@ export default function WelcomeTrialEmail({
             {/* CTA Button */}
             <Section style={{ textAlign: 'center', margin: '32px 0' }}>
               <Button
-                href={`/subscribe/trial-signup?email=${encodeURIComponent(firstName)}`}
+                href={`${dashboardUrl.split('?')[0].replace('/premium/dashboard', '/subscribe/trial-signup')}?email=${encodeURIComponent(firstName)}`}
                 style={{
                   backgroundColor: '#3b82f6',
                   color: '#ffffff',
@@ -231,7 +231,7 @@ export default function WelcomeTrialEmail({
               fontFamily: 'Inter, sans-serif',
             }}>
               Best regards,<br />
-              The OptimaliQ Team
+              The <span style={{ color: '#3b82f6' }}>OptimaliQ</span> Team
             </Text>
           </Section>
 
@@ -255,11 +255,11 @@ export default function WelcomeTrialEmail({
             
             <Text style={{
               fontSize: '12px',
-              color: '#94a3b8',
+              color: '#64748b',
               margin: '0',
               fontFamily: 'Inter, sans-serif',
             }}>
-              © 2025 OptimaliQ. All rights reserved.
+              © 2025 <span style={{ color: '#3b82f6' }}>OptimaliQ</span>. All rights reserved.
             </Text>
           </Section>
         </Container>
