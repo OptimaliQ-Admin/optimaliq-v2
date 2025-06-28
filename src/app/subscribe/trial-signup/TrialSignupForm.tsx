@@ -270,26 +270,12 @@ export default function TrialSignupForm() {
         console.error("Error updating trial user status:", trialUpdateError);
       }
 
-      toast.success("🎉 Account created successfully! Welcome to OptimaliQ!");
+      toast.success("🎉 Account created successfully! Please sign in to continue.");
       
-      // Sign in the user immediately after signup
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: formState.email,
-        password: formState.password,
-      });
-
-      if (signInError) {
-        console.error("Sign in error:", signInError);
-        // Still redirect to login page if auto-signin fails
-        toast.success("Account created! Please sign in to continue.");
-        router.push("/subscribe/login");
-        return;
-      }
-
-      // Redirect to dashboard
-      setTimeout(() => {
-        router.push("/premium/dashboard");
-      }, 2000);
+      // Always redirect to login page after successful account creation
+      // This is more reliable than trying to auto-signin
+      const successMessage = encodeURIComponent("Account created successfully! Please sign in to access your trial.");
+      router.push(`/subscribe/login?email=${encodeURIComponent(formState.email)}&message=${successMessage}`);
 
     } catch (error) {
       console.error("Error creating account:", error);
@@ -365,11 +351,16 @@ export default function TrialSignupForm() {
 
             <LabeledInput
               label="LinkedIn Profile (Optional)"
-              type="url"
+              type="text"
               name="linkedin_url"
               value={formState.linkedin_url}
               onChange={handleChange}
             />
+            {formState.linkedin_url && (
+              <p className="text-xs text-gray-500 -mt-4">
+                Format: www.linkedin.com/in/your-profile or https://www.linkedin.com/in/your-profile
+              </p>
+            )}
 
             <div className="space-y-4">
               <label className="flex items-start space-x-3">

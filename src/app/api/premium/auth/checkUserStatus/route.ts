@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       .eq("u_id", u_id)
       .maybeSingle();
 
-    const hasActiveSubscription = subscription?.status === "active";
+    const hasActiveSubscription = subscription?.status === "active" || subscription?.status === "trial";
 
     // Fetch onboarding
     const { data, error } = await supabaseAdmin!
