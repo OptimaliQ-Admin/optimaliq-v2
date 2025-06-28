@@ -117,7 +117,7 @@ const timezoneOptions = [
       setIsLoading(true);
 
       try {
-        // ✅ 1. Call the new API that handles everything
+      // ✅ 1. Call the new API that handles everything
         const normalizedFormState = {
           ...formState,
           linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : formState.linkedin_url,
@@ -128,25 +128,25 @@ const timezoneOptions = [
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(normalizedFormState),
-        });
+      });
 
-        const result = await res.json();
+      const result = await res.json();
 
-        if (!res.ok) {
-          toast.error(`❌ ${result.error || "Failed to create account"}`);
+      if (!res.ok) {
+        toast.error(`❌ ${result.error || "Failed to create account"}`);
           setIsLoading(false);
-          return;
-        }
+        return;
+      }
 
-        // ✅ 2. Clean up localStorage
-        localStorage.removeItem("tier2_email");
-        localStorage.removeItem("tier2_user_id");
-        localStorage.removeItem("tier2_full_user_info");
+      // ✅ 2. Clean up localStorage
+      localStorage.removeItem("tier2_email");
+      localStorage.removeItem("tier2_user_id");
+      localStorage.removeItem("tier2_full_user_info");
 
-        toast.success("🎉 Account created! Redirecting to login...");
-        setTimeout(() => {
-          router.push("/subscribe/login");
-        }, 2000);
+      toast.success("🎉 Account created! Redirecting to login...");
+      setTimeout(() => {
+        router.push("/subscribe/login");
+      }, 2000);
       } catch (error) {
         console.error("Error creating account:", error);
         toast.error("❌ An unexpected error occurred. Please try again.");

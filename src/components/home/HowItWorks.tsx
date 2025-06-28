@@ -170,19 +170,19 @@ export default function HowItWorks() {
                 {/* Content */}
                 <div className="relative z-10 p-8 h-full flex flex-col">
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Transform Your Strategy?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Transform Your Strategy?</h3>
                   
                   {/* Description */}
                   <p className="text-gray-600 leading-relaxed flex-grow mb-6">
-                    Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
-                  </p>
+              Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
+            </p>
 
                   {/* CTA Button */}
                   <div className="mt-auto">
                     <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                      Start Free Assessment
-                    </button>
-                  </div>
+                Start Free Assessment
+              </button>
+            </div>
 
                   {/* Bottom Accent */}
                   <div className="mt-6 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>

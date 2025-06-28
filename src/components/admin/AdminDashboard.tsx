@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { usePremiumUser } from '@/context/PremiumUserContext';
 import EmailSubscriptionsManager from './EmailSubscriptionsManager';
+import TrialUserManager from './TrialUserManager';
 
 interface AuditLog {
   id: number;
@@ -21,7 +22,7 @@ interface DashboardStats {
   last_updated: string;
 }
 
-type TabType = 'overview' | 'audit-logs' | 'email-subscriptions';
+type TabType = 'overview' | 'audit-logs' | 'email-subscriptions' | 'trial-users';
 
 export default function AdminDashboard() {
   const { user } = usePremiumUser();
@@ -115,6 +116,7 @@ export default function AdminDashboard() {
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'audit-logs', label: 'Audit Logs', icon: '📋' },
     { id: 'email-subscriptions', label: 'Email Subscriptions', icon: '📧' },
+    { id: 'trial-users', label: 'Trial Users', icon: '🎯' },
   ];
 
   if (!user) {
@@ -194,11 +196,14 @@ export default function AdminDashboard() {
                   <h3 className="font-semibold text-gray-900">Email Subscriptions</h3>
                   <p className="text-sm text-gray-600">Manage newsletter subscribers</p>
                 </button>
-                <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                  <div className="text-2xl mb-2">⚙️</div>
-                  <h3 className="font-semibold text-gray-900">System Settings</h3>
-                  <p className="text-sm text-gray-600">Coming soon</p>
-                </div>
+                <button
+                  onClick={() => setActiveTab('trial-users')}
+                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="text-2xl mb-2">🎯</div>
+                  <h3 className="font-semibold text-gray-900">Trial Users</h3>
+                  <p className="text-sm text-gray-600">Manage 30-day trial users</p>
+                </button>
               </div>
             </div>
           </>
@@ -345,6 +350,9 @@ export default function AdminDashboard() {
 
       case 'email-subscriptions':
         return <EmailSubscriptionsManager />;
+
+      case 'trial-users':
+        return <TrialUserManager />;
 
       default:
         return null;
