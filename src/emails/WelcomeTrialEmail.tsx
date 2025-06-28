@@ -148,7 +148,7 @@ export default function WelcomeTrialEmail({
             {/* CTA Button */}
             <Section style={{ textAlign: 'center', margin: '32px 0' }}>
               <Button
-                href={`${dashboardUrl.replace('/premium/dashboard', '/subscribe/trial-signup')}?email=${encodeURIComponent(firstName)}`}
+                href={`/subscribe/trial-signup?email=${encodeURIComponent(firstName)}`}
                 style={{
                   backgroundColor: '#3b82f6',
                   color: '#ffffff',

@@ -65,14 +65,22 @@ export default function TrialSignupForm() {
   useEffect(() => {
     // Get email from URL params
     const email = searchParams.get('email');
+    console.log("Email from URL params:", email);
+    
     if (email) {
       setFormState(prev => ({ ...prev, email }));
       fetchTrialUser(email);
+    } else {
+      console.log("No email parameter found in URL");
+      toast.error("Missing email parameter in trial invitation");
+      router.push("/subscribe");
     }
   }, [searchParams]);
 
   const fetchTrialUser = async (email: string) => {
     try {
+      console.log("Fetching trial user for email:", email);
+      
       const { data, error } = await supabase
         .from("trial_users")
         .select("*")
@@ -80,12 +88,23 @@ export default function TrialSignupForm() {
         .eq("status", "active")
         .single();
 
-      if (error || !data) {
-        toast.error("Invalid or expired trial invitation");
+      console.log("Trial user lookup result:", { data, error });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        toast.error(`Error validating trial invitation: ${error.message}`);
         router.push("/subscribe");
         return;
       }
 
+      if (!data) {
+        console.log("No trial user found for email:", email);
+        toast.error("Invalid or expired trial invitation. Please contact support.");
+        router.push("/subscribe");
+        return;
+      }
+
+      console.log("Trial user found:", data);
       setTrialUser(data);
     } catch (error) {
       console.error("Error fetching trial user:", error);
@@ -215,8 +234,9 @@ export default function TrialSignupForm() {
               Welcome, {trialUser.first_name}! Let&apos;s get your OptimaliQ trial account set up.
             </p>
             <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-800">
-                🎉 You have a 30-day free trial of OptimaliQ Premium
+              <p className="text-sm text-gray-900">
+                🎉 You have a 30-day free trial of{" "}
+                <span className="text-blue-600 font-semibold">OptimaliQ</span> Premium
               </p>
             </div>
           </div>
