@@ -23,8 +23,8 @@ export default function SubscriptionStatusBanner({
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Show banner if subscription is not active
-    if (subscriptionStatus && subscriptionStatus !== 'active' && !dismissed) {
+    // Show banner if subscription is not active or trial
+    if (subscriptionStatus && subscriptionStatus !== 'active' && subscriptionStatus !== 'trial' && !dismissed) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -39,6 +39,16 @@ export default function SubscriptionStatusBanner({
 
   const getBannerContent = () => {
     switch (subscriptionStatus) {
+      case 'trial':
+        return {
+          title: '🎉 Welcome to Your Trial!',
+          message: 'You have full access to all OptimaliQ premium features for 30 days.',
+          icon: CheckCircleIcon,
+          color: 'bg-green-50 border-green-200 text-green-800',
+          iconColor: 'text-green-600',
+          actionText: 'Upgrade Now',
+          actionHref: '/subscribe'
+        };
       case 'canceled':
         return {
           title: 'Subscription Canceled',

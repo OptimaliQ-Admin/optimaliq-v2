@@ -356,11 +356,6 @@ export default function TrialSignupForm() {
               value={formState.linkedin_url}
               onChange={handleChange}
             />
-            {formState.linkedin_url && (
-              <p className="text-xs text-gray-500 -mt-4">
-                Format: www.linkedin.com/in/your-profile or https://www.linkedin.com/in/your-profile
-              </p>
-            )}
 
             <div className="space-y-4">
               <label className="flex items-start space-x-3">
