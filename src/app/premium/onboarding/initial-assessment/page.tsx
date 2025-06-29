@@ -49,7 +49,7 @@ export default function InitialAssessmentPage() {
     } else {
       setLoading(false);
     }
-  }, [user?.u_id, isUserLoaded, router]);
+  }, [user, isUserLoaded, router]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -153,10 +153,10 @@ export default function InitialAssessmentPage() {
           className="text-center mb-8"
         >
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Let's Build Your Growth Strategy
+            Let&apos;s Build Your Growth Strategy
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We'll analyze your business and create a personalized growth roadmap
+            We&apos;ll analyze your business and create a personalized growth roadmap
           </p>
         </motion.div>
 

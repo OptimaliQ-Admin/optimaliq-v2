@@ -88,7 +88,7 @@ export default function AnalyzingPage() {
             Analyzing Your Business
           </h1>
           <p className="text-lg text-gray-600">
-            We're building your personalized growth strategy
+            We&apos;re building your personalized growth strategy
           </p>
         </motion.div>
 
