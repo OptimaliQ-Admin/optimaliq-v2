@@ -151,14 +151,8 @@ export default function BlogPage() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="mb-16"
           >
-            <div className="flex items-center justify-between mb-8">
+            <div className="mb-8">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 font-['Inter']">Featured Insights</h2>
-              <Link href="/blog/featured" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 font-['Inter']">
-                View All
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -206,17 +200,6 @@ export default function BlogPage() {
                         </p>
                         
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                              <span className="text-white text-sm font-bold font-['Inter']">
-                                {post.author.split(' ').map(n => n[0]).join('')}
-                              </span>
-                            </div>
-                            <div>
-                              <p className="text-xs font-semibold text-gray-900 font-['Inter']">{post.author.split(' ').map(n => n[0]).join('')}</p>
-                              <p className="text-xs text-gray-500 font-['Inter']">{post.authorRole}</p>
-                            </div>
-                          </div>
                           <span className="text-xs text-gray-400 font-['Inter']">{new Date(post.publishDate).toLocaleDateString()}</span>
                         </div>
                       </div>
@@ -236,14 +219,8 @@ export default function BlogPage() {
             transition={{ duration: 0.8, delay: 0.9 }}
             className="mb-16"
           >
-            <div className="flex items-center justify-between mb-8">
+            <div className="mb-8">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 font-['Inter']">Latest Insights</h2>
-              <Link href="/blog/latest" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 font-['Inter']">
-                View All
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

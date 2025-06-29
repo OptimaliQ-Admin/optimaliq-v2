@@ -1002,7 +1002,7 @@ export const getAllBlogPosts = (): BlogPost[] => {
 };
 
 export const getFeaturedPosts = (): BlogPost[] => {
-  return getAllBlogPosts().filter(post => post.featured);
+  return getAllBlogPosts().filter(post => post.featured).slice(0, 3);
 };
 
 export const getRecentPosts = (limit: number = 6): BlogPost[] => {

@@ -71,19 +71,8 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex items-center justify-center gap-6 text-blue-100"
+              className="flex items-center justify-center gap-4 text-blue-100"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-bold font-['Inter']">
-                    {post.author.split(' ').map(n => n[0]).join('')}
-                  </span>
-                </div>
-                <div className="text-left">
-                  <p className="font-semibold font-['Inter']">{post.author.split(' ').map(n => n[0]).join('')}</p>
-                  <p className="text-sm text-blue-200 font-['Inter']">{post.authorRole}</p>
-                </div>
-              </div>
               <div className="flex items-center gap-4 text-sm font-['Inter']">
                 <span>{post.readTime}</span>
                 <span>•</span>
@@ -121,6 +110,17 @@ export default function BlogPostPage() {
                 </span>
               ))}
             </div>
+          </div>
+
+          {/* About the Author */}
+          <div className="mt-16 pt-8 border-t border-gray-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-4 font-['Inter']">About the Author</h3>
+            <p className="text-gray-700 text-lg leading-relaxed font-['Inter']">
+              This article was curated by the <strong>OptimaliQ Strategy Team</strong>—a cross-functional group of strategists, technologists, and industry advisors who specialize in helping businesses unlock growth through better decision-making, modern operating models, and AI-powered insights.
+            </p>
+            <p className="text-gray-700 text-lg leading-relaxed mt-4 font-['Inter']">
+              At OptimaliQ, we don't just write about transformation—we architect it alongside top-performing companies every day. Every insight shared here is grounded in experience, data, and a relentless commitment to actionable clarity.
+            </p>
           </div>
 
         </motion.div>
