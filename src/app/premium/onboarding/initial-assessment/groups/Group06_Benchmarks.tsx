@@ -35,62 +35,61 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
   const fundingSelected = answers["funding_status"] || [];
   
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-10">
       {/* Question 16: Insights & Benchmarks */}
-      <MultiSelectQuestion
-        question="What type of insights or benchmarks would be most valuable to you right now?"
-        description="Select all that apply"
-        options={[
-          { value: "competitor_comparison", label: "Competitor comparison" },
-          { value: "revenue_growth", label: "Revenue growth levers" },
-          { value: "retention", label: "Retention improvements" },
-          { value: "efficiency", label: "Operational efficiency plays" },
-          { value: "industry_best_practices", label: "Industry best practices" },
-          { value: "automation", label: "Process automation opportunities" },
-          { value: "tech_stack", label: "Tech stack recommendations" },
-          { value: "funnel_analysis", label: "Marketing & sales funnel analysis" },
-          { value: "other", label: "Other (please describe)" },
-        ]}
-        selected={Array.isArray(benchmarkSelected) ? benchmarkSelected : []}
-        onChange={(val) => onAnswer("benchmark_preferences", val)}
-        maxSelect={6}
-      />
+<MultiSelectQuestion
+  question="What type of insights or benchmarks would be most valuable to you right now?"
+  description="Select all that apply"
+  options={[
+    { value: "competitor_comparison", label: "Competitor comparison" },
+    { value: "revenue_growth", label: "Revenue growth levers" },
+    { value: "retention", label: "Retention improvements" },
+    { value: "efficiency", label: "Operational efficiency plays" },
+    { value: "industry_best_practices", label: "Industry best practices" },
+    { value: "automation", label: "Process automation opportunities" },
+    { value: "tech_stack", label: "Tech stack recommendations" },
+    { value: "funnel_analysis", label: "Marketing & sales funnel analysis" },
+    { value: "other", label: "Other (please describe)" },
+  ]}
+  selected={Array.isArray(benchmarkSelected) ? benchmarkSelected : []}
+  onChange={(val) => onAnswer("benchmark_preferences", val)}
+  maxSelect={6}
+/>
 
-      {/* Conditionally show "Other" field */}
-      {Array.isArray(benchmarkSelected) && benchmarkSelected.includes("other") && (
-        <TextAreaQuestion
-          question="Please describe the other insights or benchmarks"
-          placeholder="Describe any additional insights or benchmarks..."
-          value={getStringAnswer(answers["benchmark_preferences_other"])}
-          onChange={(val) => onAnswer("benchmark_preferences_other", val)}
-          maxLength={50}
-        />
+{/* Conditionally show "Other" field */}
+{Array.isArray(benchmarkSelected) && benchmarkSelected.includes("other") && (
+  <TextAreaQuestion
+    question="Please describe the other insights or benchmarks"
+    placeholder="Describe any additional insights or benchmarks..."
+    value={getStringAnswer(answers["benchmark_preferences_other"])}
+    onChange={(val) => onAnswer("benchmark_preferences_other", val)}
+    maxLength={50}
+  />
       )}
 
       {/* Question 17: Capital/Funding Status */}
-      <MultipleChoiceQuestion
-        question="Are you currently raising capital or preparing for an exit?"
-        options={[
-          { value: "raising_now", label: "Yes, actively raising" },
-          { value: "early_planning", label: "In early planning stages" },
-          { value: "preparing_exit", label: "Preparing for acquisition or sale" },
-          { value: "not_planned", label: "No, not on the roadmap" },
-          { value: "other", label: "Other (please describe)" },
-        ]}
-        value={typeof fundingSelected === "string" ? fundingSelected : ""}
-        onChange={(val) => onAnswer("funding_status", val)}
-        variant="cards"
-      />
+<MultipleChoiceQuestion
+  question="Are you currently raising capital or preparing for an exit?"
+  options={[
+    { value: "raising_now", label: "Yes, actively raising" },
+    { value: "early_planning", label: "In early planning stages" },
+    { value: "preparing_exit", label: "Preparing for acquisition or sale" },
+    { value: "not_planned", label: "No, not on the roadmap" },
+    { value: "other", label: "Other (please describe)" },
+  ]}
+  value={typeof fundingSelected === "string" ? fundingSelected : ""}
+  onChange={(val) => onAnswer("funding_status", val)}
+/>
 
-      {/* Conditionally show "Other" field */}
-      {typeof fundingSelected === "string" && fundingSelected.includes("other") && (
-        <TextAreaQuestion
-          question="Please describe the other ways you are currently raising capital or preparing for an exit"
-          placeholder="Describe any how you are preparing..."
-          value={getStringAnswer(answers["funding_status_other"])}
-          onChange={(val) => onAnswer("funding_status_other", val)}
-          maxLength={50}
-        />
+{/* Conditionally show "Other" field */}
+{typeof fundingSelected === "string" && fundingSelected.includes("other") && (
+  <TextAreaQuestion
+    question="Please describe the other ways you are currently raising capital or preparing for an exit"
+    placeholder="Describe any how you are preparing..."
+    value={getStringAnswer(answers["funding_status_other"])}
+    onChange={(val) => onAnswer("funding_status_other", val)}
+    maxLength={50}
+  />
       )}
 
       {/* Question 18: Growth Pace */}
@@ -106,7 +105,6 @@ export default function Group06_Benchmarks({ answers, onAnswer }: Props) {
         ]}
         value={getStringAnswer(answers["growth_pace"])}
         onChange={(val) => onAnswer("growth_pace", val)}
-        variant="cards"
       />
     </div>
   );

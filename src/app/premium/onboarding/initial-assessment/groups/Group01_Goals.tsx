@@ -41,7 +41,7 @@ export default function Group01_Goals({ answers, onAnswer }: Props) {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="p-6 max-w-2xl mx-auto">
       {/* Question 1: Growth Metrics */}
       <MultiSelectQuestion
         question="What metrics do you track most closely to measure growth?"

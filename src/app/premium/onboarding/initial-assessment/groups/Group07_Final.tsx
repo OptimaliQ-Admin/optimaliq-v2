@@ -27,12 +27,12 @@ type Props = {
 
 export default function Group07_Final({ answers, onAnswer }: Props) {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-10">
       {/* Question 19: Unresolved Issue */}
       <TextAreaQuestion
-        question="What's one thing you know you need to fix—but haven't yet?"
-        description="Be honest. What's been nagging at you that keeps getting deprioritized?"
-        placeholder="Example: We know our onboarding process is hurting retention, but haven't made time to redesign it."
+        question="What’s one thing you know you need to fix—but haven’t yet?"
+        description="Be honest. What’s been nagging at you that keeps getting deprioritized?"
+        placeholder="Example: We know our onboarding process is hurting retention, but haven’t made time to redesign it."
         value={getStringAnswer(answers["unresolved_issue"])}
         onChange={(val) => onAnswer("unresolved_issue", val)}
         maxLength={300}
@@ -40,16 +40,15 @@ export default function Group07_Final({ answers, onAnswer }: Props) {
 
       {/* Question 20: Final Confirmation */}
       <MultipleChoiceQuestion
-        question="Are You Ready to Commit?"
-        description="Ready to level up? This path is built for ambitious businesses willing to do the work. Are you in?"
-        options={[
-          { value: "yes_ready", label: "✅ Yes — I'm ready to grow." },
-          { value: "no_not_ready", label: "❌ No — not at this time." },
-        ]}
-        value={getStringAnswer(answers["final_confirmation"])}
-        onChange={(val) => onAnswer("final_confirmation", val)}
-        variant="cards"
-      />
+  question="Are You Ready to Commit?"
+  description="Ready to level up? This path is built for ambitious businesses willing to do the work. Are you in?"
+  options={[
+    { value: "yes_ready", label: "✅ Yes — I’m ready to grow." },
+    { value: "no_not_ready", label: "❌ No — not at this time." },
+  ]}
+  value={getStringAnswer(answers["final_confirmation"])}
+  onChange={(val) => onAnswer("final_confirmation", val)}
+/>
     </div>
   );
 }

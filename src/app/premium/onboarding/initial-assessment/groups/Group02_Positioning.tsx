@@ -31,7 +31,7 @@ type Props = {
 
 export default function Group02_Positioning({ answers, onAnswer }: Props) {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-8">
       {/* Question 4: Differentiator */}
       <TextAreaQuestion
         question="What makes your business hard to compete with?"
@@ -43,31 +43,32 @@ export default function Group02_Positioning({ answers, onAnswer }: Props) {
       />
 
       {/* Question 5: Customer Perception */}
-      <TextAreaQuestion
-        question="How would your customers describe your brand in one sentence?"
-        description="Imagine you're reading an online review or hearing feedback—what would they say?"
-        placeholder="E.g., A scrappy but responsive team that delivers results quickly."
-        value={getStringAnswer(answers["brand_perception"])}
-        onChange={(val) => onAnswer("brand_perception", val)}
-        maxLength={300}
-      />
+<TextAreaQuestion
+  question="How would your customers describe your brand in one sentence?"
+  description="Imagine you're reading an online review or hearing feedback—what would they say?"
+  placeholder="E.g., A scrappy but responsive team that delivers results quickly."
+  value={getStringAnswer(answers["brand_perception"])}
+  onChange={(val) => onAnswer("brand_perception", val)}
+  maxLength={300}
+/>
+
 
       {/* Question 6: Strategic Decision-Making */}
-      <MultipleChoiceQuestion
-        question="How do you currently make big strategic decisions?"
-        description="When facing big bets—new product, pricing changes, growth pivots—what guides you?"
-        options={[
-          { value: "gut_feel", label: "Mostly gut instinct or experience" },
-          { value: "data_driven", label: "Primarily based on data and analytics" },
-          { value: "team_alignment", label: "Collective input and cross-functional alignment" },
-          { value: "executive_top_down", label: "Top-down executive leadership" },
-          { value: "board_pressure", label: "Board or investor direction" },
-          { value: "mixed", label: "A mix of the above" },
-        ]}
-        value={getStringAnswer(answers["strategy_decision_method"])}
-        onChange={(val) => onAnswer("strategy_decision_method", val)}
-        variant="cards"
-      />
+<MultipleChoiceQuestion
+  question="How do you currently make big strategic decisions?"
+  description="When facing big bets—new product, pricing changes, growth pivots—what guides you?"
+  options={[
+    { value: "gut_feel", label: "Mostly gut instinct or experience" },
+    { value: "data_driven", label: "Primarily based on data and analytics" },
+    { value: "team_alignment", label: "Collective input and cross-functional alignment" },
+    { value: "executive_top_down", label: "Top-down executive leadership" },
+    { value: "board_pressure", label: "Board or investor direction" },
+    { value: "mixed", label: "A mix of the above" },
+  ]}
+  value={getStringAnswer(answers["strategy_decision_method"])}
+  onChange={(val) => onAnswer("strategy_decision_method", val)}
+/>
+
     </div>
   );
 }

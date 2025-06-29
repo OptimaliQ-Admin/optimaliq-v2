@@ -31,41 +31,40 @@ type Props = {
 export default function Group05_Clarity({ answers, onAnswer }: Props) {
   const teamSelected = answers["team_alignment"] || [];
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-10">
       {/* Question 13: Decision Bottlenecks */}
       <TextAreaQuestion
         question="What kind of business decisions are hardest for you to make right now?"
         description="Hiring? Prioritization? Marketing spend? Pricing? Something else?"
-        placeholder="Be honest. What's slowing you down the most right now?"
+        placeholder="Be honest. What’s slowing you down the most right now?"
         value={getStringAnswer(answers["decision_bottlenecks"])}
         onChange={(val) => onAnswer("decision_bottlenecks", val)}
         maxLength={300}
       />
 
       {/* Question 14: Team Alignment */}
-      <MultipleChoiceQuestion
-        question="How aligned is your team on company goals and direction?"
-        options={[
-          { value: "fully_aligned", label: "Fully aligned and collaborative" },
-          { value: "mostly_aligned", label: "Mostly aligned, occasional friction" },
-          { value: "some_misalignment", label: "Some misalignment across departments" },
-          { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
-          { value: "other", label: "Other (please describe)" },
-        ]}
-        value={typeof teamSelected === "string" ? teamSelected : ""}
-        onChange={(val) => onAnswer("team_alignment", val)}
-        variant="cards"
-      />
+<MultipleChoiceQuestion
+  question="How aligned is your team on company goals and direction?"
+  options={[
+    { value: "fully_aligned", label: "Fully aligned and collaborative" },
+    { value: "mostly_aligned", label: "Mostly aligned, occasional friction" },
+    { value: "some_misalignment", label: "Some misalignment across departments" },
+    { value: "not_aligned", label: "No clear alignment — teams are working in silos" },
+    { value: "other", label: "Other (please describe)" },
+  ]}
+  value={typeof teamSelected === "string" ? teamSelected : ""}
+  onChange={(val) => onAnswer("team_alignment", val)}
+/>
 
-      {/* Conditionally show "Other" field */}
-      {typeof teamSelected === "string" && teamSelected.includes("other") && (
-        <TextAreaQuestion
-          question="Please describe the alignment of your team"
-          placeholder="Describe the alignment of your team..."
-          value={getStringAnswer(answers["team_alignment_other"])}
-          onChange={(val) => onAnswer("team_alignment_other", val)}
-          maxLength={50}
-        />
+{/* Conditionally show "Other" field */}
+{typeof teamSelected === "string" && teamSelected.includes("other") && (
+  <TextAreaQuestion
+    question="Please describe the alignment of your team"
+    placeholder="Describe the alignment of your team..."
+    value={getStringAnswer(answers["team_alignment_other"])}
+    onChange={(val) => onAnswer("team_alignment_other", val)}
+    maxLength={50}
+  />
       )}
 
       {/* Question 15: Future State */}

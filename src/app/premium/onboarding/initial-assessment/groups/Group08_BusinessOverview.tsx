@@ -22,7 +22,7 @@ type Props = {
 
 export default function Group08_BusinessOverview({ answers, onAnswer }: Props) {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-10">
       {/* Business Overview Question */}
       <TextAreaQuestion
         question="Briefly describe what your business offers, who you serve, and how you deliver value."

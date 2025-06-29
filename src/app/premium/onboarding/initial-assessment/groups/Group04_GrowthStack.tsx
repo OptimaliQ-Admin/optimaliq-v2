@@ -34,7 +34,7 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
   const acquisitionSelected = answers["acquisition_channels"] || [];
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+    <div className="space-y-10">
       {/* Question 10: Acquisition Channels */}
       <MultiSelectQuestion
         question="Which acquisition channels are driving meaningful results today?"
@@ -74,20 +74,19 @@ export default function Group04_GrowthStack({ answers, onAnswer }: Props) {
         description="How well-integrated and effective is your current tech stack?"
         options={[
           { value: "integrated", label: "Everything is integrated and works seamlessly" },
-          { value: "partially_integrated", label: "Some systems talk to each other, others don't" },
+          { value: "partially_integrated", label: "Some systems talk to each other, others don’t" },
           { value: "siloed", label: "Tools are siloed or require manual workarounds" },
-          { value: "early_stage", label: "We're still selecting or onboarding core platforms" },
+          { value: "early_stage", label: "We’re still selecting or onboarding core platforms" },
           { value: "unsure", label: "Unsure / Other" },
         ]}
         value={getStringAnswer(answers["tech_maturity"])}
         onChange={(val) => onAnswer("tech_maturity", val)}
-        variant="cards"
       />
 
       {/* Question 12: Retention Strategy */}
       <TextAreaQuestion
         question="What are your current retention levers?"
-        description="How do you keep customers coming back? What's your hook or lifecycle play?"
+        description="How do you keep customers coming back? What’s your hook or lifecycle play?"
         placeholder="E.g., Email drip campaigns, customer success outreach, loyalty programs..."
         value={getStringAnswer(answers["retention_strategy"])}
         onChange={(val) => onAnswer("retention_strategy", val)}
