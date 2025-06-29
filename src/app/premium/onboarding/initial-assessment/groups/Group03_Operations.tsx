@@ -203,15 +203,9 @@ const TECH_STACK_OPTIONS: Record<string, { value: string; label: string }[]> = {
 
 export function isGroup03Complete(answers: AssessmentAnswers): boolean {
   return (
-    typeof answers["team_size"] === "string" &&
-    answers["team_size"].trim().length > 0 &&
-
-    typeof answers["tech_stack"] === "object" &&
-    Array.isArray(answers["tech_stack"]) &&
-    answers["tech_stack"].length > 0 &&
-
-    typeof answers["operational_challenges"] === "string" &&
-    answers["operational_challenges"].trim().length > 0
+    Array.isArray(answers["tech_stack"]) && answers["tech_stack"].length > 0 &&
+    Array.isArray(answers["business_priorities"]) && answers["business_priorities"].length > 0 &&
+    typeof answers["process_discipline"] === "string" && answers["process_discipline"].trim().length > 0
   );
 }
 
@@ -238,25 +232,7 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
-      {/* Question 7: Team Size */}
-      <MultipleChoiceQuestion
-        question="How many people are on your core team?"
-        description="Include full-time employees and key contractors who work on your business regularly."
-        options={[
-          { value: "1", label: "Just me (solo founder)" },
-          { value: "2-5", label: "2-5 people" },
-          { value: "6-10", label: "6-10 people" },
-          { value: "11-25", label: "11-25 people" },
-          { value: "26-50", label: "26-50 people" },
-          { value: "51-100", label: "51-100 people" },
-          { value: "100+", label: "100+ people" },
-        ]}
-        value={getStringAnswer(answers["team_size"])}
-        onChange={(val) => onAnswer("team_size", val)}
-        variant="cards"
-      />
-
-      {/* Question 8: Tech Stack */}
+      {/* Question 1: Tech Stack Overview */}
       <div className="space-y-6">
         <div>
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -371,14 +347,31 @@ export default function Group03_Operations({ answers, onAnswer }: Props) {
           maxLength={200}
         />
       )}
-      {/* Question 9: Operational Challenges */}
-      <TextAreaQuestion
-        question="What are your biggest operational challenges right now?"
-        description="What's slowing you down or causing friction in your day-to-day operations?"
-        placeholder="E.g., Manual data entry between systems, inconsistent processes across teams, lack of real-time visibility..."
-        value={getStringAnswer(answers["operational_challenges"])}
-        onChange={(val) => onAnswer("operational_challenges", val)}
-        maxLength={300}
+      {/* Question 2: Rank Business Priorities */}
+      <DragSortQuestion
+        question="Rank the following priorities from most to least important to your business right now."
+        description="Drag to reorder. Top = most important."
+        items={
+          Array.isArray(answers["business_priorities"])
+            ? answers["business_priorities"]
+            : ["Growth", "Profitability", "Efficiency", "Innovation", "Brand Equity"]
+        }
+        onChange={(val) => onAnswer("business_priorities", val)}
+      />
+      {/* Question 3: Process Maturity */}
+      <MultipleChoiceQuestion
+        question="Describe your internal process discipline."
+        description="Select the statement that best reflects your company today."
+        options={[
+          { value: "1", label: "Everything is ad hoc" },
+          { value: "2", label: "Some structure, but mostly reactive" },
+          { value: "3", label: "We have defined processes, but they're not consistently followed" },
+          { value: "4", label: "Most departments follow documented processes" },
+          { value: "5", label: "Processes are standardized, automated, and continuously optimized" },
+        ]}
+        value={getStringAnswer(answers["process_discipline"])}
+        onChange={(val) => onAnswer("process_discipline", val)}
+        variant="cards"
       />
     </div>
   );
