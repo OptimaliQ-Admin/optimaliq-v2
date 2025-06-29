@@ -119,7 +119,7 @@ export default function BlogPostPage() {
               This article was curated by the <strong>OptimaliQ Strategy Team</strong>—a cross-functional group of strategists, technologists, and industry advisors who specialize in helping businesses unlock growth through better decision-making, modern operating models, and AI-powered insights.
             </p>
             <p className="text-gray-700 text-lg leading-relaxed mt-4 font-['Inter']">
-              At OptimaliQ, we don't just write about transformation—we architect it alongside top-performing companies every day. Every insight shared here is grounded in experience, data, and a relentless commitment to actionable clarity.
+              At OptimaliQ, we don&apos;t just write about transformation—we architect it alongside top-performing companies every day. Every insight shared here is grounded in experience, data, and a relentless commitment to actionable clarity.
             </p>
           </div>
 
