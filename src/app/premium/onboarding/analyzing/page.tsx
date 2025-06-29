@@ -1,148 +1,121 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { 
-  SparklesIcon, 
-  ChartBarIcon, 
-  LightBulbIcon, 
-  RocketLaunchIcon 
-} from "@heroicons/react/24/outline";
-import React from "react";
+import { usePremiumUser } from "@/context/PremiumUserContext";
+import { showToast } from "@/lib/utils/toast";
 
-const analyzingSteps = [
-  {
-    icon: ChartBarIcon,
-    title: "Analyzing your metrics",
-    description: "Processing your growth data and performance indicators"
-  },
-  {
-    icon: LightBulbIcon,
-    title: "Identifying opportunities",
-    description: "Finding high-impact growth levers for your business"
-  },
-  {
-    icon: RocketLaunchIcon,
-    title: "Building your strategy",
-    description: "Creating your personalized growth roadmap"
-  }
+const statements = [
+  "Bringing 20 years of battlefield strategy to your business.",
+  "One insight can change everything.",
+  "Smart businesses don't guess—they measure.",
+  "Turning complexity into clarity, one model at a time.",
+  "If you can't scale it, you can't sell it.",
+  "We don't just diagnose. We prescribe transformation.",
+  "Clarity isn't a luxury—it's your growth engine.",
+  "You can't fix what you don't understand.",
+  "OptimaliQ reveals what your gut instinct misses.",
+  "Benchmark your way to category leadership.",
 ];
 
-export default function AnalyzingPage() {
+export default function OnboardingAnalyzingPage() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const progressRef = useRef(0);
+  const { user } = usePremiumUser();
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    // Simulate analysis progress
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + 2;
-        progressRef.current = newProgress;
+      setIndex((prev) => (prev + 1) % statements.length);
+    }, 2200);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!user?.u_id) {
+      showToast.error("User session expired. Please log in again.");
+      router.push("/subscribe/login");
+      return;
+    }
+
+    // Get the assessment data from localStorage (stored by the initial assessment page)
+    const assessmentData = localStorage.getItem("onboarding_assessment_data");
+    
+    if (!assessmentData) {
+      showToast.error("Assessment data not found. Please start over.");
+      router.push("/premium/onboarding/initial-assessment");
+      return;
+    }
+
+    const processAssessment = async () => {
+      try {
+        const formAnswers = JSON.parse(assessmentData);
         
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          // Redirect to dashboard after completion
-          setTimeout(() => {
-            router.push("/premium/dashboard");
-          }, 1000);
-          return 100;
+        // Submit the assessment
+        const response = await fetch("/api/premium/onboarding/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            u_id: user.u_id, 
+            formAnswers: formAnswers 
+          }),
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || "Failed to process assessment");
         }
-        return newProgress;
-      });
-    }, 100);
 
-    // Update current step based on progress
-    const stepInterval = setInterval(() => {
-      const currentProgress = progressRef.current;
-      if (currentProgress < 30) {
-        setCurrentStep(0);
-      } else if (currentProgress < 70) {
-        setCurrentStep(1);
-      } else {
-        setCurrentStep(2);
+        // Clear the stored data
+        localStorage.removeItem("onboarding_assessment_data");
+        
+        // Show success and redirect to dashboard
+        showToast.success("Assessment completed successfully!");
+        router.push("/premium/dashboard");
+        
+      } catch (err) {
+        console.error("Assessment processing error:", err);
+        setError(err instanceof Error ? err.message : "Failed to process assessment");
+        setIsProcessing(false);
       }
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-      clearInterval(stepInterval);
     };
-  }, [router]);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-      <div className="max-w-2xl mx-auto text-center px-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
-        >
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <SparklesIcon className="w-10 h-10 text-white" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Analyzing Your Business
-          </h1>
-          <p className="text-lg text-gray-600">
-            We&apos;re building your personalized growth strategy
-          </p>
-        </motion.div>
+    // Start processing after a brief delay to show the analyzing state
+    const timer = setTimeout(processAssessment, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [user?.u_id, router]);
 
-        {/* Progress Bar */}
-        <div className="mb-12">
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-4">
-            <motion.div
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-          <p className="text-sm text-gray-600">{Math.round(progress)}% Complete</p>
-        </div>
-
-        {/* Current Step */}
-        <motion.div
-          key={currentStep}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
-              {React.createElement(analyzingSteps[currentStep].icon, { className: "w-6 h-6 text-white" })}
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              {analyzingSteps[currentStep].title}
-            </h2>
-          </div>
-          <p className="text-gray-600">{analyzingSteps[currentStep].description}</p>
-        </motion.div>
-
-        {/* Animated Dots */}
-        <div className="flex justify-center space-x-2">
-          {[0, 1, 2].map((index) => (
-            <motion.div
-              key={index}
-              className={`w-3 h-3 rounded-full ${
-                index === currentStep ? "bg-blue-500" : "bg-gray-300"
-              }`}
-              animate={{
-                scale: index === currentStep ? [1, 1.2, 1] : 1,
-              }}
-              transition={{
-                duration: 1,
-                repeat: index === currentStep ? Infinity : 0,
-              }}
-            />
-          ))}
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center">
+          <div className="text-red-500 text-6xl mb-4">❌</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Processing Error</h1>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button
+            onClick={() => router.push("/premium/onboarding/initial-assessment")}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
+            Try Again
+          </button>
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center text-center space-y-6">
+      <h1 className="text-3xl font-bold text-blue-700">Analyzing your data...</h1>
+      <p className="text-xl text-gray-700 italic max-w-xl transition-opacity duration-500 ease-in-out">
+        {statements[index]}
+      </p>
+      <div className="mt-4 w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="animate-pulse bg-blue-600 h-full w-2/3 rounded-full" />
+      </div>
+      <p className="text-sm text-gray-400">Powered by OptimaliQ.ai</p>
     </div>
-  );
+  );  
 } 
