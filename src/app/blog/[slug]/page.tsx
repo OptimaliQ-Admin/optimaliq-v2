@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { getBlogPost } from "@/lib/data/blogPosts";
 import { sanitizeHTML } from "@/lib/utils/sanitization";
 
@@ -141,6 +142,16 @@ export default function BlogPostPage() {
                 <Link key={articleId} href={`/blog/${articleId}`}>
                   <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
                     <div className="relative h-40 bg-gradient-to-br from-gray-200 to-gray-300">
+                      {relatedPost.image && (
+                        <Image
+                          src={relatedPost.image}
+                          alt={relatedPost.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                       <div className="absolute top-3 left-3">
                         <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold font-['Inter']">
                           {relatedPost.category}
