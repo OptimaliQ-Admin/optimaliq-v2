@@ -1,3 +1,4 @@
+//src/app/subscribe/thank-you/page.tsx
 import {  Suspense } from "react";
 import Stripe from "stripe";
 import { supabaseAdmin, isAdminClientAvailable } from "@/lib/supabaseAdmin";
