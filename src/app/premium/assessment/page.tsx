@@ -154,38 +154,93 @@ export default function AssessmentsPage() {
         <PageNavigation sections={pageSections} />
 
         <div className="max-w-[1920px] mx-auto p-8 space-y-16">
+          {/* Header Section */}
+          <motion.div 
+            id="header"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent"
+            >
+              Strategic Business Assessments
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
+            >
+              Comprehensive evaluations to measure and improve your business performance across all critical areas.
+            </motion.p>
+
+            {/* Enhanced Feature Cards */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
+            >
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaLightbulb className="text-white text-2xl" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">AI-Powered Insights</h3>
+                <p className="text-gray-600 leading-relaxed">Get personalized recommendations based on your unique business profile</p>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaChartLine className="text-white text-2xl" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Progress Tracking</h3>
+                <p className="text-gray-600 leading-relaxed">Monitor your improvement over time with detailed analytics</p>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaRocket className="text-white text-2xl" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Actionable Plans</h3>
+                <p className="text-gray-600 leading-relaxed">Receive specific strategies to accelerate your growth</p>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaBullseye className="text-white text-2xl" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Strategic Focus</h3>
+                <p className="text-gray-600 leading-relaxed">Identify key areas for improvement and strategic opportunities</p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
           {/* Business Assessments Section */}
           <motion.div 
             id="business-assessments"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
             className="space-y-8"
           >
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-center"
-            >
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent"
-              >
-                Strategic Business Assessments
-              </motion.h1>
-              
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
-              >
-                Evaluate your core business operations and identify opportunities for optimization
-              </motion.p>
-            </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="bpm"
