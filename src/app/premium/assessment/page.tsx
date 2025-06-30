@@ -11,7 +11,7 @@ import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 import TechToolsCard from "@/components/assessment/TechToolsCard";
 import AssessmentExplanationModal from "@/components/modals/AssessmentExplanationModal";
 import PageNavigation from "@/components/shared/PageNavigation";
-import { FaChartLine, FaLightbulb, FaRocket } from "react-icons/fa";
+import { FaChartLine, FaLightbulb, FaRocket, FaBullseye, FaCogs, FaBrain, FaUsers, FaShieldAlt } from "react-icons/fa";
 
 type AssessmentSlug = keyof typeof assessmentFieldMap;
 type ProfileData = Record<string, number | string | null> & {
@@ -99,12 +99,24 @@ export default function AssessmentsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <FaChartLine className="text-white text-2xl" />
-          </div>
-          <p className="text-gray-600">Loading assessments...</p>
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl"
+          >
+            <FaChartLine className="text-white text-3xl" />
+          </motion.div>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-gray-600 text-lg font-medium"
+          >
+            Loading assessments...
+          </motion.p>
         </div>
       </div>
     );
@@ -112,83 +124,134 @@ export default function AssessmentsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
-          <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <FaRocket className="text-white text-2xl" />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="text-center bg-white rounded-3xl p-12 shadow-2xl border border-gray-200 max-w-md mx-4"
+        >
+          <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <FaRocket className="text-white text-3xl" />
           </div>
-          <p className="text-red-600 mb-4 text-lg">{error}</p>
-          <button
+          <p className="text-red-600 mb-6 text-lg font-semibold">{error}</p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => window.location.reload()}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-xl hover:shadow-2xl font-semibold"
           >
             Try Again
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
         {/* Floating Page Navigation */}
         <PageNavigation sections={pageSections} />
 
-        <div className="max-w-[1920px] mx-auto p-8 space-y-10">
+        <div className="max-w-[1920px] mx-auto p-8 space-y-16">
           {/* Header Section */}
           <motion.div 
             id="header"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent"
+            >
               Strategic Business Assessments
-            </h1>
+            </motion.h1>
             
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
+            >
               Comprehensive evaluations to measure and improve your business performance across all critical areas.
-            </p>
+            </motion.p>
 
-            {/* Feature Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <FaLightbulb className="text-white text-xl" />
+            {/* Enhanced Feature Cards */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
+            >
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaLightbulb className="text-white text-2xl" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
-                <p className="text-sm text-gray-600">Get personalized recommendations based on your unique business profile</p>
-              </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">AI-Powered Insights</h3>
+                <p className="text-gray-600 leading-relaxed">Get personalized recommendations based on your unique business profile</p>
+              </motion.div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <FaChartLine className="text-white text-xl" />
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaChartLine className="text-white text-2xl" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Progress Tracking</h3>
-                <p className="text-sm text-gray-600">Monitor your improvement over time with detailed analytics</p>
-              </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Progress Tracking</h3>
+                <p className="text-gray-600 leading-relaxed">Monitor your improvement over time with detailed analytics</p>
+              </motion.div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <FaRocket className="text-white text-xl" />
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaRocket className="text-white text-2xl" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Actionable Plans</h3>
-                <p className="text-sm text-gray-600">Receive specific strategies to accelerate your growth</p>
-              </div>
-            </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Actionable Plans</h3>
+                <p className="text-gray-600 leading-relaxed">Receive specific strategies to accelerate your growth</p>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300">
+                  <FaBullseye className="text-white text-2xl" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Strategic Focus</h3>
+                <p className="text-gray-600 leading-relaxed">Identify key areas for improvement and strategic opportunities</p>
+              </motion.div>
+            </motion.div>
           </motion.div>
 
           {/* Business Assessments Section */}
           <motion.div 
             id="business-assessments"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="space-y-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Business Process Assessments</h2>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaCogs className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Business Process Assessments</h2>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Evaluate your core business operations and identify opportunities for optimization
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="bpm"
@@ -220,12 +283,22 @@ export default function AssessmentsPage() {
           {/* Technology Assessments Section */}
           <motion.div 
             id="technology-assessments"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="space-y-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Technology Assessments</h2>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaBrain className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Technology Assessments</h2>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Assess your digital capabilities and technology readiness for growth
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="tech_stack"
@@ -257,12 +330,22 @@ export default function AssessmentsPage() {
           {/* Strategy Assessments Section */}
           <motion.div 
             id="strategy-assessments"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="space-y-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Strategy & Leadership Assessments</h2>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaBullseye className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Strategy & Leadership Assessments</h2>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Evaluate your strategic planning, competitive position, and team effectiveness
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="strategic_maturity"
@@ -293,12 +376,22 @@ export default function AssessmentsPage() {
 
           {/* Customer Experience Assessment */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, delay: 1.4 }}
+            className="space-y-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Customer Experience Assessment</h2>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaUsers className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Customer Experience Assessment</h2>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Understand your customer experience performance and opportunities for improvement
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="customer_experience"
@@ -314,12 +407,22 @@ export default function AssessmentsPage() {
           {/* Progress Tracking Section */}
           <motion.div 
             id="progress-tracking"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="space-y-6"
+            transition={{ duration: 0.8, delay: 1.6 }}
+            className="space-y-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Progress Tracking & Technology</h2>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaShieldAlt className="text-white text-xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Progress Tracking & Technology</h2>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Monitor your growth journey and manage your technology infrastructure
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <ReassessmentCard
                 score={assessmentData.reassessment?.score ?? null}

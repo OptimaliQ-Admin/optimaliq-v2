@@ -7,8 +7,7 @@ import { format, differenceInDays } from "date-fns";
 import AssessmentIntroModal, {
   AssessmentType,
 } from "./AssessmentIntroModal"; 
-import SectionTitleBar from "@/components/dashboard/SectionTitleBar";
-import { FaChartLine, FaCheckCircle, FaExclamationTriangle, FaPlay } from "react-icons/fa";
+import { FaChartLine, FaCheckCircle, FaExclamationTriangle, FaPlay, FaArrowRight, FaClock, FaTrophy } from "react-icons/fa";
 
 const slugToAssessmentType: Record<string, AssessmentType> = {
   bpm: "BPM",
@@ -24,19 +23,19 @@ const slugToAssessmentType: Record<string, AssessmentType> = {
   reassessment: "reassessment",
 };
 
-// Icon mapping for each assessment type
-const assessmentIcons: Record<string, string> = {
-  bpm: "⚙️",
-  sales: "💰",
-  tech_stack: "💻",
-  strategic_maturity: "🎯",
-  marketing_effectiveness: "📢",
-  ai_readiness: "🤖",
-  competitive_benchmarking: "📊",
-  customer_experience: "👥",
-  digital_transformation: "🚀",
-  leadership: "👑",
-  reassessment: "📈",
+// Enhanced icon mapping for each assessment type
+const assessmentIcons: Record<string, { icon: string; color: string; bgColor: string }> = {
+  bpm: { icon: "⚙️", color: "from-blue-500 to-blue-600", bgColor: "bg-blue-50" },
+  sales: { icon: "💰", color: "from-green-500 to-green-600", bgColor: "bg-green-50" },
+  tech_stack: { icon: "💻", color: "from-purple-500 to-purple-600", bgColor: "bg-purple-50" },
+  strategic_maturity: { icon: "🎯", color: "from-indigo-500 to-indigo-600", bgColor: "bg-indigo-50" },
+  marketing_effectiveness: { icon: "📢", color: "from-pink-500 to-pink-600", bgColor: "bg-pink-50" },
+  ai_readiness: { icon: "🤖", color: "from-cyan-500 to-cyan-600", bgColor: "bg-cyan-50" },
+  competitive_benchmarking: { icon: "📊", color: "from-orange-500 to-orange-600", bgColor: "bg-orange-50" },
+  customer_experience: { icon: "👥", color: "from-teal-500 to-teal-600", bgColor: "bg-teal-50" },
+  digital_transformation: { icon: "🚀", color: "from-red-500 to-red-600", bgColor: "bg-red-50" },
+  leadership: { icon: "👑", color: "from-yellow-500 to-yellow-600", bgColor: "bg-yellow-50" },
+  reassessment: { icon: "📈", color: "from-emerald-500 to-emerald-600", bgColor: "bg-emerald-50" },
 };
 
 type AssessmentCardProps = {
@@ -89,7 +88,9 @@ export default function AssessmentCard({
         icon: FaPlay,
         bgColor: "bg-gray-50",
         borderColor: "border-gray-200",
-        textColor: "text-gray-600"
+        textColor: "text-gray-600",
+        buttonColor: "from-blue-500 to-indigo-600",
+        buttonHover: "from-blue-600 to-indigo-700"
       };
     }
     
@@ -100,7 +101,9 @@ export default function AssessmentCard({
         icon: FaExclamationTriangle,
         bgColor: "bg-yellow-50",
         borderColor: "border-yellow-200",
-        textColor: "text-yellow-700"
+        textColor: "text-yellow-700",
+        buttonColor: "from-yellow-500 to-yellow-600",
+        buttonHover: "from-yellow-600 to-yellow-700"
       };
     }
     
@@ -110,124 +113,168 @@ export default function AssessmentCard({
       icon: FaCheckCircle,
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
-      textColor: "text-green-700"
+      textColor: "text-green-700",
+      buttonColor: "from-green-500 to-green-600",
+      buttonHover: "from-green-600 to-green-700"
     };
   };
 
   const statusInfo = getStatusInfo();
   const StatusIcon = statusInfo.icon;
-  const assessmentIcon = assessmentIcons[slug] || "📊";
+  const assessmentIcon = assessmentIcons[slug] || { icon: "📊", color: "from-gray-500 to-gray-600", bgColor: "bg-gray-50" };
 
   return (
     <>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -4 }}
         transition={{ duration: 0.4 }}
-        className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-all duration-200 h-full flex flex-col justify-between group"
+        className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group overflow-hidden relative"
       >
-        <div className="mb-4">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl">{assessmentIcon}</span>
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">{title}</h3>
-          </div>
-          <div className="h-1 w-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mb-3" />
-          <p className="text-gray-500 text-base leading-relaxed">{description}</p>
-        </div>
-
-        {!hasTaken && (
-          <div className="text-center flex-1 flex flex-col justify-center">
-            <div className="mb-6">
-              <div className="text-5xl font-extrabold text-gray-300 mb-2 tracking-tight">--</div>
-              <div className="text-base text-gray-500 font-medium">No Score Yet</div>
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-blue-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className="relative z-10 p-8">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className={`w-16 h-16 bg-gradient-to-r ${assessmentIcon.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                <span className="text-2xl">{assessmentIcon.icon}</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200 mb-1">
+                  {title}
+                </h3>
+                <div className="flex items-center gap-2">
+                  <div className={`h-2 w-8 bg-gradient-to-r ${assessmentIcon.color} rounded-full`} />
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${assessmentIcon.bgColor} ${assessmentIcon.color.replace('from-', 'text-').replace(' to-', '')}`}>
+                    {assessmentIcon.icon} Assessment
+                  </span>
+                </div>
+              </div>
             </div>
             
-            <motion.button
-              onClick={handleClick}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg text-base font-semibold shadow-sm hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <FaPlay className="text-base" />
-              <span>Start Assessment</span>
-            </motion.button>
+            {/* Status Badge */}
+            <span className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-semibold border shadow-sm ${statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor}`}>
+              <StatusIcon className="text-sm" />
+              {statusInfo.status}
+            </span>
           </div>
-        )}
 
-        {hasTaken && !needsRetake && (
-          <div className="space-y-4 flex-1 flex flex-col justify-center">
-            <div className="text-center mb-6">
-              <div className="text-5xl font-extrabold text-blue-600 mb-2 tracking-tight drop-shadow-sm">{roundedScore?.toFixed(1)}</div>
-              <div className="text-base text-gray-500 font-medium">Score</div>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Status:</span>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-200 shadow-sm">Completed</span>
+          {/* Description */}
+          <p className="text-gray-600 text-base leading-relaxed mb-8">{description}</p>
+
+          {/* Content based on status */}
+          {!hasTaken && (
+            <div className="text-center">
+              <div className="mb-8">
+                <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                  <FaChartLine className="text-gray-400 text-3xl" />
+                </div>
+                <div className="text-3xl font-extrabold text-gray-300 mb-2 tracking-tight">--</div>
+                <div className="text-sm text-gray-500 font-medium">No Score Yet</div>
               </div>
               
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Last Taken:</span>
-                <span className="text-sm font-semibold text-gray-800">{format(new Date(lastTakenDate!), "MMM d, yyyy")}</span>
+              <motion.button
+                onClick={handleClick}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-xl text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-blue-400/30"
+              >
+                <FaPlay className="text-sm" />
+                <span>Start Assessment</span>
+                <FaArrowRight className="text-sm" />
+              </motion.button>
+            </div>
+          )}
+
+          {hasTaken && !needsRetake && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="relative inline-block">
+                  <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                    <FaTrophy className="text-green-500 text-3xl" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                    <FaCheckCircle className="text-white text-sm" />
+                  </div>
+                </div>
+                <div className="text-4xl font-extrabold text-green-600 mb-2 tracking-tight drop-shadow-sm">{roundedScore?.toFixed(1)}</div>
+                <div className="text-sm text-gray-600 font-medium">Current Score</div>
               </div>
               
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Days Since:</span>
-                <span className="text-sm font-semibold text-gray-800">{daysSinceLast} days</span>
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Last Taken:</span>
+                    <span className="text-sm font-semibold text-gray-800">{format(new Date(lastTakenDate!), "MMM d, yyyy")}</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Days Since:</span>
+                    <span className="text-sm font-semibold text-gray-800">{daysSinceLast} days</span>
+                  </div>
+                </div>
+                
+                <div className="mt-3 pt-3 border-t border-green-200">
+                  <p className="text-green-800 text-xs font-medium flex items-center gap-2">
+                    <FaCheckCircle className="text-green-600" />
+                    Assessment completed recently. You can retake after 30 days to track progress.
+                  </p>
+                </div>
               </div>
             </div>
-            
-            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-2">
-              <p className="text-green-800 text-xs font-medium">
-                Assessment completed recently. You can retake this assessment after 30 days to track your progress.
-              </p>
-            </div>
-          </div>
-        )}
+          )}
 
-        {hasTaken && needsRetake && (
-          <div className="space-y-4 flex-1 flex flex-col justify-center">
-            <div className="text-center mb-6">
-              <div className="text-5xl font-extrabold text-yellow-600 mb-2 tracking-tight drop-shadow-sm">{roundedScore?.toFixed(1)}</div>
-              <div className="text-base text-gray-500 font-medium">Previous Score</div>
-            </div>
-            
-            <div className="space-y-3 mb-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Status:</span>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-sm">Needs Update</span>
+          {hasTaken && needsRetake && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="relative inline-block">
+                  <div className="w-24 h-24 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                    <FaClock className="text-yellow-500 text-3xl" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                    <FaExclamationTriangle className="text-white text-sm" />
+                  </div>
+                </div>
+                <div className="text-4xl font-extrabold text-yellow-600 mb-2 tracking-tight drop-shadow-sm">{roundedScore?.toFixed(1)}</div>
+                <div className="text-sm text-gray-600 font-medium">Previous Score</div>
               </div>
               
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Last Taken:</span>
-                <span className="text-sm font-semibold text-gray-800">{format(new Date(lastTakenDate!), "MMM d, yyyy")}</span>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Last Taken:</span>
+                    <span className="text-sm font-semibold text-gray-800">{format(new Date(lastTakenDate!), "MMM d, yyyy")}</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Days Since:</span>
+                    <span className="text-sm font-semibold text-gray-800">{daysSinceLast} days</span>
+                  </div>
+                </div>
+                
+                <div className="mt-3 pt-3 border-t border-yellow-200">
+                  <p className="text-yellow-800 text-xs font-medium flex items-center gap-2">
+                    <FaExclamationTriangle className="text-yellow-600" />
+                    It&apos;s been over 30 days. Retake now to keep your progress up to date.
+                  </p>
+                </div>
               </div>
+              
+              <motion.button
+                onClick={handleClick}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-4 rounded-xl text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-yellow-400/30"
+              >
+                <FaPlay className="text-sm" />
+                <span>Retake Assessment</span>
+                <FaArrowRight className="text-sm" />
+              </motion.button>
             </div>
-            
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-2">
-              <p className="text-yellow-800 text-xs font-medium">
-                It&apos;s been over 30 days since your last assessment. Retake now to keep your progress up to date.
-              </p>
-            </div>
-            <motion.button
-              onClick={handleClick}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-white py-3 rounded-lg text-base font-semibold shadow-sm hover:from-yellow-500 hover:to-yellow-700 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 mt-2"
-            >
-              <FaPlay className="text-base" />
-              <span>Retake Assessment</span>
-            </motion.button>
-          </div>
-        )}
-
-        {/* Status Badge */}
-        <div className="mt-6 flex justify-end">
-          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border shadow-sm ${statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor}`}>
-            <StatusIcon className="text-base" />
-            {statusInfo.status}
-          </span>
+          )}
         </div>
       </motion.div>
 

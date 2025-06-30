@@ -45,6 +45,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "agile_crm", label: "Agile CRM", description: "All-in-one CRM solution" },
     { value: "apptivo", label: "Apptivo", description: "Business app suite" },
     { value: "bigin", label: "Bigin by Zoho CRM", description: "Simple CRM for small business" },
+    { value: "other_crm", label: "Other CRM/Sales Tool", description: "Custom CRM or sales tool not listed" },
   ],
   "Marketing & Email": [
     { value: "mailchimp", label: "Mailchimp", description: "Email marketing automation" },
@@ -72,6 +73,8 @@ const TECH_STACK_CATEGORIES = {
     { value: "zendesk_chat", label: "Zendesk Chat", description: "Live chat and messaging" },
     { value: "tawk_to", label: "Tawk.to", description: "Free live chat widget" },
     { value: "crisp", label: "Crisp", description: "Customer messaging platform" },
+    { value: "sap_emarsys", label: "SAP Emarsys", description: "Marketing automation and customer engagement platform" },
+    { value: "other_marketing", label: "Other Marketing/Email Tool", description: "Custom marketing or email tool not listed" },
   ],
   "Ecommerce & POS": [
     { value: "shopify", label: "Shopify", description: "E-commerce platform" },
@@ -98,6 +101,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "aloha", label: "Aloha", description: "Restaurant POS system" },
     { value: "revel", label: "Revel", description: "iPad POS system" },
     { value: "touchbistro", label: "TouchBistro", description: "Restaurant POS" },
+    { value: "other_ecommerce", label: "Other E-commerce/POS Tool", description: "Custom e-commerce or POS tool not listed" },
   ],
   "Analytics & BI": [
     { value: "google_analytics", label: "Google Analytics", description: "Web analytics platform" },
@@ -124,6 +128,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "sessioncam", label: "SessionCam", description: "Session recording" },
     { value: "inspectlet", label: "Inspectlet", description: "User behavior analytics" },
     { value: "smartlook", label: "Smartlook", description: "User behavior analytics" },
+    { value: "other_analytics", label: "Other Analytics/BI Tool", description: "Custom analytics or BI tool not listed" },
   ],
   "Project Management": [
     { value: "asana", label: "Asana", description: "Project management platform" },
@@ -149,6 +154,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "skype", label: "Skype", description: "Communication platform" },
     { value: "gotomeeting", label: "GoToMeeting", description: "Video conferencing" },
     { value: "join_me", label: "Join.me", description: "Screen sharing and meetings" },
+    { value: "other_pm", label: "Other Project Management Tool", description: "Custom project management tool not listed" },
   ],
   "Finance & Accounting": [
     { value: "quickbooks", label: "QuickBooks", description: "Accounting software" },
@@ -174,6 +180,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "authorize_net", label: "Authorize.net", description: "Payment gateway" },
     { value: "worldpay", label: "Worldpay", description: "Payment processing" },
     { value: "merchant_services", label: "Merchant Services", description: "Payment processing" },
+    { value: "other_finance", label: "Other Finance/Accounting Tool", description: "Custom finance or accounting tool not listed" },
   ],
   "Customer Support": [
     { value: "zendesk", label: "Zendesk", description: "Customer service platform" },
@@ -199,6 +206,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "mattermost", label: "Mattermost", description: "Open source team collaboration" },
     { value: "discord", label: "Discord", description: "Communication platform" },
     { value: "slack", label: "Slack", description: "Team communication platform" },
+    { value: "other_support", label: "Other Customer Support Tool", description: "Custom customer support tool not listed" },
   ],
   "Customer Data Platforms": [
     { value: "segment", label: "Segment", description: "Customer data platform" },
@@ -224,6 +232,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "redshift", label: "Amazon Redshift", description: "Cloud data warehouse" },
     { value: "databricks", label: "Databricks", description: "Data engineering platform" },
     { value: "looker", label: "Looker", description: "Business intelligence platform" },
+    { value: "other_cdp", label: "Other Customer Data Platform", description: "Custom customer data platform not listed" },
   ],
   "Other Tools": [
     { value: "github", label: "GitHub", description: "Code repository & collaboration" },
@@ -251,6 +260,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "visme", label: "Visme", description: "Visual content creator" },
     { value: "snapseed", label: "Snapseed", description: "Photo editing app" },
     { value: "lightroom", label: "Lightroom", description: "Photo editing software" },
+    { value: "other_tools", label: "Other Tool", description: "Custom tool not listed in any category" },
   ],
 };
 
