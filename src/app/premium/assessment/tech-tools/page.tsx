@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import { showToast } from "@/lib/utils/toast";
 import { supabase } from "@/lib/supabase";
+import { motion } from "framer-motion";
+import { FaArrowLeft, FaSave, FaCog, FaDatabase, FaChartBar, FaShoppingCart, FaEnvelope, FaUsers } from "react-icons/fa";
 
 type TechToolsAnswers = {
   usesCRM: boolean;
@@ -160,6 +162,51 @@ const techOptions = {
   ]
 };
 
+const categoryConfig = {
+  crm: {
+    title: "CRM & Sales",
+    icon: FaDatabase,
+    color: "from-blue-500 to-blue-600",
+    bgColor: "bg-blue-50",
+    description: "Customer relationship management and sales automation tools"
+  },
+  esp: {
+    title: "Marketing & Email",
+    icon: FaEnvelope,
+    color: "from-green-500 to-green-600",
+    bgColor: "bg-green-50",
+    description: "Email marketing and marketing automation platforms"
+  },
+  analytics: {
+    title: "Analytics & BI",
+    icon: FaChartBar,
+    color: "from-purple-500 to-purple-600",
+    bgColor: "bg-purple-50",
+    description: "Business intelligence and analytics solutions"
+  },
+  cdp: {
+    title: "Customer Data Platforms",
+    icon: FaUsers,
+    color: "from-indigo-500 to-indigo-600",
+    bgColor: "bg-indigo-50",
+    description: "Customer data platforms and data management"
+  },
+  erp: {
+    title: "Finance & Accounting",
+    icon: FaCog,
+    color: "from-orange-500 to-orange-600",
+    bgColor: "bg-orange-50",
+    description: "Enterprise resource planning and financial systems"
+  },
+  commerce: {
+    title: "Ecommerce & POS",
+    icon: FaShoppingCart,
+    color: "from-red-500 to-red-600",
+    bgColor: "bg-red-50",
+    description: "E-commerce platforms and point of sale systems"
+  }
+};
+
 export default function TechToolsAssessment() {
   const router = useRouter();
   const { user } = usePremiumUser();
@@ -254,272 +301,187 @@ export default function TechToolsAssessment() {
     }
   };
 
+  const getSelectedCount = (category: keyof typeof techOptions) => {
+    const categoryKey = category as keyof TechToolsAnswers;
+    const toolsKey = `${categoryKey}Tools` as keyof TechToolsAnswers;
+    return (answers[toolsKey] as string[])?.length || 0;
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Current Technology Stack</h1>
-        
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      <div className="max-w-6xl mx-auto p-8">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-4 mb-6">
+            <motion.button
+              onClick={() => router.push("/premium/assessment")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+            >
+              <FaArrowLeft className="text-gray-600 text-lg" />
+            </motion.button>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">What platforms or tools are central to your operations?</h1>
+              <p className="text-xl text-gray-600">Select the technologies that power your business across all key areas.</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Tech Stack Categories */}
         <div className="space-y-8">
-          {/* CRM Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesCRM}
-                  onChange={(e) => setAnswers({ ...answers, usesCRM: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use a CRM system?</span>
-              </label>
-            </div>
-            
-            {answers.usesCRM && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which CRM technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.crm.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.crmTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.crmTools, tool]
-                            : answers.crmTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, crmTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          {Object.entries(categoryConfig).map(([category, config], index) => {
+            const Icon = config.icon;
+            const categoryKey = category as keyof typeof techOptions;
+            const isEnabled = answers[`uses${categoryKey.toUpperCase()}` as keyof TechToolsAnswers] as boolean;
+            const selectedCount = getSelectedCount(categoryKey);
 
-          {/* ESP Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesESP}
-                  onChange={(e) => setAnswers({ ...answers, usesESP: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use an Email Service Provider (ESP)?</span>
-              </label>
-            </div>
-            
-            {answers.usesESP && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which ESP technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.esp.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.espTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.espTools, tool]
-                            : answers.espTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, espTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
+            return (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+              >
+                {/* Category Header */}
+                <div className="p-8 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-16 h-16 bg-gradient-to-r ${config.color} rounded-2xl flex items-center justify-center shadow-lg`}>
+                        <Icon className="text-white text-2xl" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-1">{config.title}</h2>
+                        <p className="text-gray-600">{config.description}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-gray-900">{selectedCount}</div>
+                        <div className="text-sm text-gray-500">Selected</div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={isEnabled}
+                          onChange={(e) => {
+                            const newAnswers = { ...answers };
+                            newAnswers[`uses${categoryKey.toUpperCase()}` as keyof TechToolsAnswers] = e.target.checked as any;
+                            if (!e.target.checked) {
+                              newAnswers[`${categoryKey}Tools` as keyof TechToolsAnswers] = [] as any;
+                            }
+                            setAnswers(newAnswers);
+                          }}
+                          className="sr-only"
+                        />
+                        <div className={`w-14 h-7 rounded-full transition-all duration-300 ${
+                          isEnabled ? 'bg-gradient-to-r ' + config.color : 'bg-gray-200'
+                        }`}>
+                          <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                            isEnabled ? 'translate-x-7' : 'translate-x-1'
+                          }`} />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
 
-          {/* Analytics Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesAnalytics}
-                  onChange={(e) => setAnswers({ ...answers, usesAnalytics: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use Analytics tools?</span>
-              </label>
-            </div>
-            
-            {answers.usesAnalytics && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which Analytics technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.analytics.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.analyticsTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.analyticsTools, tool]
-                            : answers.analyticsTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, analyticsTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* CDP Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesCDP}
-                  onChange={(e) => setAnswers({ ...answers, usesCDP: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use a Customer Data Platform (CDP)?</span>
-              </label>
-            </div>
-            
-            {answers.usesCDP && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which CDP technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.cdp.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.cdpTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.cdpTools, tool]
-                            : answers.cdpTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, cdpTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ERP Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesERP}
-                  onChange={(e) => setAnswers({ ...answers, usesERP: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use an ERP system?</span>
-              </label>
-            </div>
-            
-            {answers.usesERP && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which ERP technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.erp.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.erpTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.erpTools, tool]
-                            : answers.erpTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, erpTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Commerce Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="mb-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={answers.usesCommerce}
-                  onChange={(e) => setAnswers({ ...answers, usesCommerce: e.target.checked })}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="text-lg font-medium">Do you use E-commerce tools?</span>
-              </label>
-            </div>
-            
-            {answers.usesCommerce && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Which E-commerce technologies do you use?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {techOptions.commerce.map((tool) => (
-                    <label key={tool} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={answers.commerceTools.includes(tool)}
-                        onChange={(e) => {
-                          const newTools = e.target.checked
-                            ? [...answers.commerceTools, tool]
-                            : answers.commerceTools.filter((t) => t !== tool);
-                          setAnswers({ ...answers, commerceTools: newTools });
-                        }}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="text-sm">{tool}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+                {/* Tools Selection */}
+                {isEnabled && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="p-8"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {techOptions[categoryKey].map((tool) => {
+                        const isSelected = (answers[`${categoryKey}Tools` as keyof TechToolsAnswers] as string[])?.includes(tool);
+                        
+                        return (
+                          <motion.label
+                            key={tool}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                              isSelected
+                                ? `border-${config.color.split('-')[1]}-500 bg-${config.color.split('-')[1]}-50`
+                                : 'border-gray-200 bg-white hover:border-gray-300'
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={(e) => {
+                                const newAnswers = { ...answers };
+                                const toolsKey = `${categoryKey}Tools` as keyof TechToolsAnswers;
+                                const currentTools = newAnswers[toolsKey] as string[];
+                                
+                                if (e.target.checked) {
+                                  newAnswers[toolsKey] = [...currentTools, tool] as any;
+                                } else {
+                                  newAnswers[toolsKey] = currentTools.filter(t => t !== tool) as any;
+                                }
+                                
+                                setAnswers(newAnswers);
+                              }}
+                              className="sr-only"
+                            />
+                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center mr-3 transition-all duration-300 ${
+                              isSelected
+                                ? `border-${config.color.split('-')[1]}-500 bg-${config.color.split('-')[1]}-500`
+                                : 'border-gray-300'
+                            }`}>
+                              {isSelected && (
+                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </div>
+                            <span className={`font-medium transition-colors duration-300 ${
+                              isSelected ? `text-${config.color.split('-')[1]}-700` : 'text-gray-700'
+                            }`}>
+                              {tool}
+                            </span>
+                          </motion.label>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
 
-        <div className="mt-8 flex justify-end">
-          <button
+        {/* Submit Button */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-12 flex justify-end"
+        >
+          <motion.button
             onClick={handleSubmit}
             disabled={loading}
-            className={`px-6 py-2 rounded ${
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 ${
               loading
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+                ? "bg-gray-400 cursor-not-allowed text-white"
+                : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
             }`}
           >
-            {loading ? "Saving..." : "Save Tech Stack"}
-          </button>
-        </div>
+            <FaSave className="text-xl" />
+            {loading ? "Saving..." : "Save Technology Stack"}
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );

@@ -154,52 +154,38 @@ export default function AssessmentsPage() {
         <PageNavigation sections={pageSections} />
 
         <div className="max-w-[1920px] mx-auto p-8 space-y-16">
-          {/* Header Section */}
-          <motion.div 
-            id="header"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent"
-            >
-              Strategic Business Assessments
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
-            >
-              Comprehensive evaluations to measure and improve your business performance across all critical areas.
-            </motion.p>
-          </motion.div>
-
           {/* Business Assessments Section */}
           <motion.div 
             id="business-assessments"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <FaCogs className="text-white text-xl" />
-                </div>
-                <h2 className="text-3xl font-bold text-gray-900">Business Process Assessments</h2>
-              </div>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-center"
+            >
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent"
+              >
+                Strategic Business Assessments
+              </motion.h1>
+              
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
+              >
                 Evaluate your core business operations and identify opportunities for optimization
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
                 slug="bpm"
