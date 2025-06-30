@@ -186,12 +186,11 @@ export default function GrowthLeversCard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className={`group relative p-4 rounded-lg border transition-all duration-200 cursor-pointer ${
+            className={`group relative p-4 rounded-lg border transition-all duration-200 ${
               lever.isCompleted
                 ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-sm"
                 : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300"
             }`}
-            onClick={() => handleLeverToggle(index)}
           >
             <div className="flex items-start gap-3">
               <div className="relative">

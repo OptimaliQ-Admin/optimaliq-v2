@@ -559,10 +559,10 @@ export default function TechToolsAssessment() {
                   {category && <category.icon className="text-gray-400 text-4xl" />}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  {category?.label} Category Disabled
+                  No {category?.label} tools selected
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  Enable this category to start selecting your {category?.label.toLowerCase()} tools
+                  If you use any {category?.label.toLowerCase()} tools, click "Yes" above to start adding them to your tech stack.
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -570,7 +570,7 @@ export default function TechToolsAssessment() {
                   onClick={() => toggleCategory(activeCategory)}
                   className={`px-6 py-3 rounded-xl font-semibold bg-gradient-to-r ${category?.color} text-white shadow-lg hover:shadow-xl transition-all duration-300`}
                 >
-                  Enable {category?.label}
+                  Add {category?.label} Tools
                 </motion.button>
               </motion.div>
             )}
