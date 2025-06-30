@@ -17,7 +17,6 @@ import {
   FaSave, 
   FaArrowLeft,
   FaSearch,
-  FaPlus,
   FaTimes
 } from "react-icons/fa";
 
@@ -562,7 +561,7 @@ export default function TechToolsAssessment() {
                   No {category?.label} tools selected
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  If you use any {category?.label.toLowerCase()} tools, click "Yes" above to start adding them to your tech stack.
+                  If you use any {category?.label.toLowerCase()} tools, click &quot;Yes&quot; above to start adding them to your tech stack.
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
