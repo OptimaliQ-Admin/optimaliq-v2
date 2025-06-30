@@ -60,6 +60,30 @@ const timezoneOptions = [
   { value: "+12:00", label: "(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka" },
 ];
 
+const industryOptions = [
+  { value: "E-commerce", label: "E-commerce" },
+  { value: "Finance", label: "Finance" },
+  { value: "SaaS", label: "SaaS" },
+  { value: "Education", label: "Education" },
+  { value: "Technology", label: "Technology" },
+  { value: "Healthcare", label: "Healthcare" },
+  { value: "Retail", label: "Retail" },
+  { value: "Manufacturing", label: "Manufacturing" },
+  { value: "Consulting", label: "Consulting" },
+  { value: "Entertainment", label: "Entertainment" },
+  { value: "Real Estate", label: "Real Estate" },
+  { value: "Transportation", label: "Transportation" },
+  { value: "Hospitality", label: "Hospitality" },
+  { value: "Energy", label: "Energy" },
+  { value: "Telecommunications", label: "Telecommunications" },
+  { value: "Pharmaceuticals", label: "Pharmaceuticals" },
+  { value: "Automotive", label: "Automotive" },
+  { value: "Construction", label: "Construction" },
+  { value: "Legal", label: "Legal" },
+  { value: "Nonprofit", label: "Nonprofit" },
+  { value: "Other", label: "Other" },
+];
+
 export default function TrialSignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -74,6 +98,7 @@ export default function TrialSignupForm() {
     linkedin_url: '',
     agreed_terms: false,
     agreed_marketing: false,
+    industry: '',
   });
 
   useEffect(() => {
@@ -168,6 +193,11 @@ export default function TrialSignupForm() {
       return;
     }
 
+    if (!formState.industry) {
+      toast.error("❌ Please select your industry.");
+      return;
+    }
+
     if (formState.password.length < 12) {
       toast.error("❌ Password must be at least 12 characters.");
       return;
@@ -231,6 +261,7 @@ export default function TrialSignupForm() {
           linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : null,
           agreed_terms: formState.agreed_terms,
           agreed_marketing: formState.agreed_marketing,
+          industry: formState.industry,
         }]);
 
       if (tier2Error) {
@@ -355,6 +386,14 @@ export default function TrialSignupForm() {
               name="linkedin_url"
               value={formState.linkedin_url}
               onChange={handleChange}
+            />
+
+            <LabeledSelect
+              label="Industry *"
+              name="industry"
+              value={formState.industry}
+              onChange={handleChange}
+              options={industryOptions}
             />
 
             <div className="space-y-4">
