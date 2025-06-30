@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import TextAreaQuestion from "@/components/questions/TextAreaQuestion";
+import EnhancedTextAreaQuestion from "@/components/questions/EnhancedTextAreaQuestion";
 import {
   getStringAnswer,
   type AssessmentAnswers,
@@ -22,15 +22,16 @@ type Props = {
 
 export default function Group08_BusinessOverview({ answers, onAnswer }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="max-w-4xl mx-auto space-y-12">
       {/* Business Overview Question */}
-      <TextAreaQuestion
+      <EnhancedTextAreaQuestion
         question="Briefly describe what your business offers, who you serve, and how you deliver value."
-        description="This helps us personalize insights and recommendations that make sense for your model."
-        placeholder="Example: We provide SaaS project management software for small to medium-sized marketing agencies. Our platform helps teams collaborate on client projects, track time, and deliver results on time and budget."
+        description="This helps us personalize insights and recommendations that make sense for your model. Be specific about your product/service, target customers, and unique value proposition."
+        placeholder="Example: We provide SaaS project management software for small to medium-sized marketing agencies. Our platform helps teams collaborate on client projects, track time, and deliver results on time and budget. We differentiate through our industry-specific templates and integrations with popular marketing tools."
         value={getStringAnswer(answers["business_overview"])}
         onChange={(val) => onAnswer("business_overview", val)}
-        maxLength={500}
+        maxLength={600}
+        rows={6}
       />
     </div>
   );
