@@ -181,7 +181,7 @@ const TECH_STACK_CATEGORIES = {
     { value: "freshdesk", label: "Freshdesk", description: "Customer support software" },
     { value: "help_scout", label: "Help Scout", description: "Customer support platform" },
     { value: "zoho_desk", label: "Zoho Desk", description: "Customer service software" },
-    { value: "kayako", label: "Kayako", label: "Customer service platform" },
+    { value: "kayako", label: "Kayako", description: "Customer service platform" },
     { value: "groove", label: "Groove", description: "Customer support software" },
     { value: "desk", label: "Desk.com", description: "Customer support platform" },
     { value: "happyfox", label: "HappyFox", description: "Help desk software" },
