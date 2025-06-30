@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const features = [
   {
     icon: "📊",
-    title: "AI-Powered Business Assessments",
+    title: "Intelligent Business Assessments",
     description:
       "Instantly analyze your business health, identify strategy gaps, and uncover optimization potential.",
     color: "from-blue-500 to-blue-600",
@@ -17,7 +17,7 @@ const features = [
     icon: "⚡",
     title: "Real-Time Strategy Optimization",
     description:
-      "Adapt dynamically with AI-driven insights, adjusting your business strategy as new data emerges.",
+      "Adapt dynamically with intelligent insights, adjusting your business strategy as new data emerges.",
     color: "from-purple-500 to-purple-600",
     bgColor: "from-purple-50 to-purple-100",
   },
@@ -131,7 +131,7 @@ export default function KeyFeatures() {
             </div>
             <div>
               <div className="text-3xl lg:text-4xl font-bold text-orange-600 mb-2">24/7</div>
-              <div className="text-sm text-gray-600">AI-Driven Strategy Updates</div>
+              <div className="text-sm text-gray-600">Intelligent Strategy Updates</div>
             </div>
           </div>
         </motion.div>

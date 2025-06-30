@@ -8,12 +8,12 @@ const faqs = [
   {
     question: "How does OptimaliQ compare to hiring a consultant?",
     answer:
-      "OptimaliQ delivers continuous, AI-powered insights instantly, while consulting firms charge high retainers for one-time reports. Our platform provides real-time strategy optimization, competitive benchmarking, and predictive insights at a fraction of the cost.",
+      "OptimaliQ delivers continuous, intelligent insights instantly, while consulting firms charge high retainers for one-time reports. Our platform provides real-time strategy optimization, competitive benchmarking, and predictive insights at a fraction of the cost.",
   },
   {
     question: "Can this work for small businesses?",
     answer:
-      "Absolutely! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with AI-driven insights that scale as you grow. Our platform is designed to provide value for businesses of all sizes.",
+      "Absolutely! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with intelligent insights that scale as you grow. Our platform is designed to provide value for businesses of all sizes.",
   },
   {
     question: "Can I talk to a real person?",
@@ -23,7 +23,7 @@ const faqs = [
   {
     question: "How does OptimaliQ predict growth?",
     answer:
-      "We analyze real-time industry data, past performance, and competitive benchmarks using advanced machine learning algorithms to provide accurate business forecasts and strategic recommendations.",
+      "We analyze real-time industry data, past performance, and competitive benchmarks using advanced intelligent algorithms to provide accurate business forecasts and strategic recommendations.",
   },
   {
     question: "Is my data secure?",
@@ -33,7 +33,7 @@ const faqs = [
   {
     question: "How often does OptimaliQ update insights?",
     answer:
-      "Our AI continuously learns and updates insights in real-time, ensuring you always have the latest competitive intelligence and market trends to inform your strategic decisions.",
+      "Our intelligent platform continuously learns and updates insights in real-time, ensuring you always have the latest competitive intelligence and market trends to inform your strategic decisions.",
   },
   {
     question: "What kind of support do you provide?",
@@ -82,7 +82,7 @@ export default function FaqSection() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Everything you need to know about <span className="text-blue-600 font-semibold">OptimaliQ</span>&apos;s AI-powered strategic intelligence platform.
+            Everything you need to know about <span className="text-blue-600 font-semibold">OptimaliQ</span>&apos;s intelligent strategic platform.
           </p>
         </motion.div>
 

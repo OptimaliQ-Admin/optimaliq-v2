@@ -25,7 +25,7 @@ const steps = [
     title: "Data-Driven Insights",
     description: (
       <>
-        Harnessing <strong>machine learning across industries</strong>, we provide customized insights tailored to your business objectives.  
+        Harnessing <strong>intelligent data analysis across industries</strong>, we provide customized insights tailored to your business objectives.  
         Our models analyze real-world trends, market shifts, and operational data to help you <strong>identify opportunities, mitigate risks, and drive scalable growth.</strong>
       </>
     ),
@@ -76,7 +76,7 @@ export default function HowItWorks() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Our proven methodology combines AI-powered analysis with strategic execution to deliver measurable business impact.
+            Our proven methodology combines intelligent analysis with strategic execution to deliver measurable business impact.
           </p>
         </motion.div>
 
@@ -174,7 +174,7 @@ export default function HowItWorks() {
                   
                   {/* Description */}
                   <p className="text-gray-600 leading-relaxed flex-grow mb-6">
-              Join thousands of businesses that have accelerated their growth with AI-powered strategic insights.
+              Join thousands of businesses that have accelerated their growth with intelligent strategic insights.
             </p>
 
                   {/* CTA Button */}

@@ -32,13 +32,13 @@ export default function HeroSection() {
               className="max-w-4xl text-center space-y-8 bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20"
         >
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-            Smarter Decisions. Faster Growth. Powered by AI.
+            Smarter Decisions. Faster Growth. Powered by Intelligent Insights.
           </h1>
               <h2 className="text-2xl lg:text-3xl font-semibold text-gray-700 leading-relaxed">
-                <span className="text-blue-600 font-bold">OptimaliQ</span>: Unlock Predictable Growth with AI-Driven Strategy
+                <span className="text-blue-600 font-bold">OptimaliQ</span>: Unlock Predictable Growth with Intelligent Strategy
           </h2>
               <p className="text-xl text-gray-600 mt-6 max-w-3xl mx-auto leading-relaxed">
-                OptimaliQ delivers instant Instant AI insights + real strategic support when you need it.
+                OptimaliQ delivers instant business insights and real strategic support—powered by intelligent systems and expert guidance.
           </p>
               
           {/* CTA Buttons */}

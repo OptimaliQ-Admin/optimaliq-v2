@@ -9,11 +9,11 @@ import FaqSection from "@/components/home/FaqSection";
 import PageNavigation from "@/components/shared/PageNavigation";
 
 export const metadata: Metadata = {
-  title: "OptimaliQ | AI-Powered Growth Strategy Platform",
-  description: "Smarter decisions. Faster growth. OptimaliQ helps businesses unlock opportunities with real-time AI insights and strategic benchmarking.",
+  title: "OptimaliQ | Intelligent Growth Strategy Platform for Smart Business Decisions",
+  description: "Make faster, smarter business decisions with OptimaliQ—an intelligent growth platform that delivers real-time insights, strategy benchmarking, and tailored 30-day growth plans.",
   openGraph: {
     title: "OptimaliQ",
-    description: "Smarter decisions. Faster growth. Real-time AI insights for business performance.",
+    description: "Make faster, smarter business decisions with OptimaliQ—an intelligent growth platform that delivers real-time insights, strategy benchmarking, and tailored 30-day growth plans.",
     url: "https://optimaliq.ai",
     siteName: "OptimaliQ",
     images: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "OptimaliQ - AI-Powered Growth Strategy Platform",
+        alt: "OptimaliQ - Intelligent Growth Strategy Platform",
       },
     ],
     locale: "en_US",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "OptimaliQ",
-    description: "Smarter decisions. Faster growth. Real-time AI insights for business performance.",
+    description: "Make faster, smarter business decisions with OptimaliQ—an intelligent growth platform that delivers real-time insights, strategy benchmarking, and tailored 30-day growth plans.",
     images: ["/images/twitter-image.jpg"],
   },
   alternates: {
@@ -51,9 +51,9 @@ export default function HomePage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "GMF Plus",
-    "description": "AI-powered growth management framework for businesses",
-    "url": "https://yourdomain.com",
+    "name": "OptimaliQ",
+    "description": "Intelligent growth strategy platform for smart business decisions",
+    "url": "https://optimaliq.ai",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": {
@@ -64,11 +64,11 @@ export default function HomePage() {
     },
     "provider": {
       "@type": "Organization",
-      "name": "GMF Plus",
-      "url": "https://yourdomain.com"
+      "name": "OptimaliQ",
+      "url": "https://optimaliq.ai"
     },
     "featureList": [
-      "AI-powered growth assessment",
+      "Intelligent growth assessment",
       "Strategic insights and recommendations",
       "Competitive benchmarking",
       "Data-driven growth strategies",
