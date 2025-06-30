@@ -435,26 +435,40 @@ export default function TechToolsAssessment() {
               </div>
               <div>
                 <h2 className="text-3xl font-bold">{category?.label}</h2>
-                <p className="text-white/80">Select the tools you use in this category</p>
+                <p className="text-white/80">Let us know if you use any tools in this area. This helps us tailor your experience.</p>
               </div>
             </div>
-            
-            {/* Enable/Disable Toggle */}
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => toggleCategory(activeCategory)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                  isEnabled 
-                    ? 'bg-white text-blue-600 shadow-lg' 
-                    : 'bg-white/20 hover:bg-white/30'
-                }`}
-              >
-                {isEnabled ? 'Enabled' : 'Enable Category'}
-              </motion.button>
+            {/* Friendly Yes/No Question Toggle */}
+            <div className="flex items-center gap-6 mt-2">
+              <span className="text-lg font-semibold text-white">
+                Do you use any {category?.label.toLowerCase()}?
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => !isEnabled && toggleCategory(activeCategory)}
+                  className={`px-6 py-2 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/60 ${
+                    isEnabled
+                      ? 'bg-white text-blue-700 shadow-lg border-2 border-white'
+                      : 'bg-white/20 text-white border-2 border-white/30 hover:bg-white/30'
+                  }`}
+                  aria-pressed={isEnabled}
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => isEnabled && toggleCategory(activeCategory)}
+                  className={`px-6 py-2 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/60 ${
+                    !isEnabled
+                      ? 'bg-white text-blue-700 shadow-lg border-2 border-white'
+                      : 'bg-white/20 text-white border-2 border-white/30 hover:bg-white/30'
+                  }`}
+                  aria-pressed={!isEnabled}
+                >
+                  No
+                </button>
+              </div>
               {isEnabled && (
-                <span className="text-white/80">
+                <span className="text-white/80 ml-4">
                   {selectedTools.length} tool{selectedTools.length !== 1 ? 's' : ''} selected
                 </span>
               )}
