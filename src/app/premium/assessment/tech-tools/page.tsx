@@ -529,7 +529,7 @@ export default function TechToolsAssessment() {
                 {filteredTools(tools).length === 0 && (
                   <div className="text-center py-12">
                     <FaSearch className="text-gray-400 text-4xl mx-auto mb-4" />
-                    <p className="text-gray-500">No tools found matching "{searchTerm}"</p>
+                    <p className="text-gray-500">No tools found matching &quot;{searchTerm}&quot;</p>
                   </div>
                 )}
               </motion.div>
