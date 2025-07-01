@@ -82,22 +82,22 @@ export default function GrowthAssessmentStep2() {
     }
 
     try {
-      const { error: upsertError } = await supabase
-        .from("growth_assessment")
-        .upsert(
-          [
-            {
-              u_id: userId,
-              ...businessResponses,
-              submittedat: new Date().toISOString(),
-            },
-          ],
-          { onConflict: "u_id" }
-        );
+      // Use API endpoint to save assessment data
+      const response = await fetch('/api/growth-assessment/save-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          u_id: userId,
+          ...businessResponses,
+          submittedat: new Date().toISOString(),
+        }),
+      });
 
-      if (upsertError) {
-        console.error("Failed to save responses:", upsertError);
-        const errorMessage = `Failed to save responses: ${upsertError.message}`;
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = `Failed to save responses: ${errorData.error}`;
         toast.error(errorMessage);
         setError(errorMessage);
       } else {

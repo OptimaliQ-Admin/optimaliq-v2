@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
-import { supabase } from "@/lib/supabase";
 import { IconInput } from "@/components/shared/IconInput";
 import { IconSelect } from "@/components/shared/IconSelect";
 import {
@@ -60,52 +59,23 @@ export default function GrowthAssessmentForm() {
     }
   
     try {
-      // 🔍 Check for existing user by email
-      const { data: existingUser, error: fetchError } = await supabase
-        .from("growth_users")
-        .select("u_id")
-        .eq("email", userInfo.email)
-        .maybeSingle();
-  
-      if (fetchError) {
-        console.error("❌ Error checking user:", fetchError);
-        showToast.error("Unable to check user. Try again.");
+      // Use API endpoint to handle user creation/update
+      const response = await fetch('/api/growth-assessment/manage-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userInfo }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        showToast.error(errorData.error || "Failed to process user data. Try again.");
         setIsSubmitting(false);
         return;
       }
-  
-      let userId: string;
-  
-      if (existingUser?.u_id) {
-        userId = existingUser.u_id;
-  
-        const { error: updateError } = await supabase
-          .from("growth_users")
-          .update(userInfo)
-          .eq("u_id", userId);
-  
-        if (updateError) {
-          console.error("❌ Error updating user:", updateError);
-          showToast.error("Failed to update user. Try again.");
-          setIsSubmitting(false);
-          return;
-        }
-      } else {
-        const { data: newUser, error: insertError } = await supabase
-          .from("growth_users")
-          .insert([userInfo])
-          .select("u_id")
-          .single();
-  
-        if (insertError || !newUser?.u_id) {
-          console.error("❌ Error creating user:", insertError);
-          showToast.error("Failed to create user. Try again.");
-          setIsSubmitting(false);
-          return;
-        }
-  
-        userId = newUser.u_id;
-      }
+
+      const { userId } = await response.json();
   
       // ✅ Store ID securely in localStorage
       localStorage.setItem("u_id", userId);

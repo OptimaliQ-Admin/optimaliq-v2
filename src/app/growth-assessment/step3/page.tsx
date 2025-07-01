@@ -2,13 +2,19 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "src/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardGrid";
 import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
 import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
 import { showToast } from "@/lib/utils/toast";
 import SubscriptionPopup from "@/components/modals/SubscriptionPopup";
 import { motion } from "framer-motion";
+
+// Create service role client for growth assessment flow
+const supabaseService = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! // Using anon key for client-side
+);
 
 function Step3Component() {
   const router = useRouter();
@@ -50,15 +56,23 @@ function Step3Component() {
   const fetchInsights = async (u_id: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("growth_insights")
-        .select("strategy_score, strategy_insight, process_score, process_insight, technology_score, technology_insight, overall_score")
-        .eq("u_id", u_id)
-        .order("generatedat", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      // Use API endpoint instead of direct client access to bypass RLS
+      const response = await fetch('/api/growth-assessment/get-insights', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ u_id }),
+      });
 
-      if (error || !data) {
+      if (!response.ok) {
+        console.error('Failed to fetch insights');
+        return;
+      }
+
+      const data = await response.json();
+      
+      if (!data) {
         return;
       }
 
@@ -78,6 +92,8 @@ function Step3Component() {
         { month: "6 Months", score: Math.min(5, roundedScore + 1) },
         { month: "12 Months", score: Math.min(5, roundedScore + 2) },
       ]);
+    } catch (error) {
+      console.error('Error fetching insights:', error);
     } finally {
       setLoading(false);
       localStorage.removeItem("u_id");

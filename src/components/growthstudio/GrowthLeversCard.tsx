@@ -57,32 +57,30 @@ export default function GrowthLeversCard() {
   };
 
   const handleLeverToggle = async (index: number) => {
+    if (!user?.u_id) return;
+
+    // Optimistically update the UI
+    const updatedLevers = [...levers];
+    const newStatus = !updatedLevers[index].isCompleted;
+    updatedLevers[index].isCompleted = newStatus;
+    setLevers(updatedLevers);
+
     try {
-      const updatedLevers = [...levers];
-      const newStatus = !updatedLevers[index].isCompleted;
-      updatedLevers[index].isCompleted = newStatus;
-      setLevers(updatedLevers);
-
-      // If completing a lever, show confetti
-      if (newStatus) {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 3000);
-      }
-
-      // Upsert the progress directly with Supabase
-      const { error: upsertError } = await supabase
-        .from("growth_lever_progress")
-        .upsert({
-          u_id: user?.u_id,
+      // Use API endpoint to update lever progress
+      const response = await fetch('/api/growth_studio/levers/progress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          u_id: user.u_id,
           lever_text: updatedLevers[index].text,
           is_completed: newStatus,
-          updated_at: new Date().toISOString(),
-        }, {
-          onConflict: 'u_id,lever_text'
-        });
+        }),
+      });
 
-      if (upsertError) {
-        throw upsertError;
+      if (!response.ok) {
+        throw new Error('Failed to update lever progress');
       }
     } catch (err) {
       console.error("Error updating lever:", err);
