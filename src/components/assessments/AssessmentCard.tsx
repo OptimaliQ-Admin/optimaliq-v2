@@ -41,8 +41,8 @@ const assessmentIcons: Record<string, { icon: string; color: string; bgColor: st
 
 interface TeamMember {
   id: string;
-  name: string;
-  email: string;
+  member_name: string;
+  member_email: string;
   role: string;
 }
 
@@ -135,13 +135,19 @@ export default function AssessmentCard({
     try {
       const requestData = {
         u_id: user?.u_id,
-        inviteeEmail: member.email,
-        inviteeName: member.name,
+        inviteeEmail: member.member_email,
+        inviteeName: member.member_name,
         assessmentType: slug,
         customMessage: `Please complete the ${title} assessment to help improve our organization's capabilities.`
       };
       
       console.log('AssessmentCard - Sending request data:', requestData);
+      console.log('AssessmentCard - Request data validation:', {
+        hasUId: !!requestData.u_id,
+        hasEmail: !!requestData.inviteeEmail,
+        hasName: !!requestData.inviteeName,
+        hasType: !!requestData.assessmentType
+      });
       
       const response = await fetch('/api/assessment-delegation/send-invitation', {
         method: 'POST',
@@ -151,21 +157,22 @@ export default function AssessmentCard({
         body: JSON.stringify(requestData),
       });
 
+      console.log('AssessmentCard - Response status:', response.status);
       const result = await response.json();
-      console.log('AssessmentCard - Response:', result);
+      console.log('AssessmentCard - Response data:', result);
 
       if (response.ok) {
         setShowTeamDropdown(false);
         setSelectedMember(null);
         // Show success message
-        alert(`Invitation sent successfully to ${member.name}!`);
+        alert(`Invitation sent successfully to ${member.member_name}!`);
       } else {
         console.error('Error sending invitation:', result);
-        alert(`Failed to send invitation: ${result.error || 'Unknown error'}`);
+        alert(`Failed to send invitation: ${result.error}`);
       }
     } catch (error) {
       console.error('Error sending invitation:', error);
-      alert('Failed to send invitation. Please try again.');
+      alert('Failed to send invitation: Network error');
     } finally {
       setSendingInvitation(false);
     }
@@ -408,7 +415,7 @@ export default function AssessmentCard({
                 className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               >
                 <span className="text-sm text-gray-600">
-                  {selectedMember ? `${selectedMember.name} (${selectedMember.email})` : 'Select a team member...'}
+                  {selectedMember ? `${selectedMember.member_name} (${selectedMember.member_email})` : 'Select a team member...'}
                 </span>
                 <FaChevronDown className={`text-gray-400 text-xs transition-transform duration-200 ${showTeamDropdown ? 'rotate-180' : ''}`} />
               </button>
@@ -434,9 +441,9 @@ export default function AssessmentCard({
                           <div className="flex items-center justify-between">
                             <div>
                               <div className="text-sm font-medium text-gray-900">
-                                {member.name} {member.role && `- ${member.role}`}
+                                {member.member_name} {member.role && `- ${member.role}`}
                               </div>
-                              <div className="text-xs text-gray-500">{member.email}</div>
+                              <div className="text-xs text-gray-500">{member.member_email}</div>
                             </div>
                           </div>
                         </button>
