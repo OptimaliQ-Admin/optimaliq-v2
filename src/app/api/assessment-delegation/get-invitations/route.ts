@@ -9,8 +9,41 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    const { u_id } = await req.json();
+    const { u_id, invitationToken } = await req.json();
 
+    // Handle single invitation lookup (for invited assessments)
+    if (invitationToken) {
+      const { data: invitation, error: invitationError } = await supabase
+        .from('assessment_invitations')
+        .select(`
+          *,
+          inviter:tier2_users!inviter_u_id(first_name, last_name, company_name)
+        `)
+        .eq('invitation_token', invitationToken)
+        .single();
+
+      if (invitationError) {
+        console.error('Error fetching invitation:', invitationError);
+        return NextResponse.json(
+          { error: 'Invitation not found or expired' },
+          { status: 404 }
+        );
+      }
+
+      // Add inviter name to the response
+      const inviterName = invitation.inviter 
+        ? `${invitation.inviter.first_name || ''} ${invitation.inviter.last_name || ''}`.trim()
+        : 'Team Member';
+
+      return NextResponse.json({
+        invitation: {
+          ...invitation,
+          inviter_name: inviterName
+        }
+      });
+    }
+
+    // Handle user invitations (existing functionality)
     if (!u_id) {
       return NextResponse.json(
         { error: 'User ID is required' },
