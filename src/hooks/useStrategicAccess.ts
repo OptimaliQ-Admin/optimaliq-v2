@@ -55,25 +55,25 @@ export function useStrategicAccess(): StrategicAccess {
           return;
         }
 
-        // Check if user has Strategic subscription
-        const { data: subscription, error: subscriptionError } = await supabase
+        // Check if user has Strategic subscription - filter by specific user ID
+        const { data: subscriptions, error: subscriptionError } = await supabase
           .from("subscriptions")
-          .select("plan, status")
+          .select("plan, status, u_id")
           .eq("u_id", userId)
-          .eq("status", "active")
-          .single();
+          .eq("status", "active");
 
-        console.log("📊 Subscription query result:", { subscription, subscriptionError });
+        console.log("📊 Subscription query result:", { subscriptions, subscriptionError });
 
         if (subscriptionError) {
           console.error("❌ Subscription query error:", subscriptionError);
           throw subscriptionError;
         }
 
-        const hasStrategicAccess = subscription?.plan === 'strategic';
+        // Check if any of the user's active subscriptions are strategic
+        const hasStrategicAccess = subscriptions?.some(sub => sub.plan === 'strategic') || false;
+        
         console.log("✅ Strategic access result:", { 
-          plan: subscription?.plan, 
-          status: subscription?.status, 
+          subscriptions: subscriptions,
           hasAccess: hasStrategicAccess 
         });
         

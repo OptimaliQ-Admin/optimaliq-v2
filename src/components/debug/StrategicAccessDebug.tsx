@@ -16,7 +16,7 @@ interface SessionInfo {
 }
 
 interface SubscriptionInfo {
-  subscription: any;
+  subscriptions: any[];
   subscriptionError: any;
 }
 
@@ -38,14 +38,13 @@ export default function StrategicAccessDebug() {
 
         if (userId) {
           // Get subscription info directly
-          const { data: subscription, error: subscriptionError } = await supabase
+          const { data: subscriptions, error: subscriptionError } = await supabase
             .from("subscriptions")
             .select("plan, status, u_id")
             .eq("u_id", userId)
-            .eq("status", "active")
-            .single();
+            .eq("status", "active");
           
-          setSubscriptionInfo({ subscription, subscriptionError });
+          setSubscriptionInfo({ subscriptions: subscriptions || [], subscriptionError });
         }
       } catch (error) {
         console.error("Debug error:", error);
@@ -90,9 +89,14 @@ export default function StrategicAccessDebug() {
         <div>
           <strong>Direct DB Query:</strong>
           <div className="ml-2">
-            <div>Plan: {subscriptionInfo?.subscription?.plan || "None"}</div>
-            <div>Status: {subscriptionInfo?.subscription?.status || "None"}</div>
-            <div>U_ID: {subscriptionInfo?.subscription?.u_id || "None"}</div>
+            <div>Found {subscriptionInfo?.subscriptions?.length || 0} active subscriptions:</div>
+            {subscriptionInfo?.subscriptions?.map((sub, index) => (
+              <div key={index} className="ml-2 mt-1 p-1 bg-gray-100 rounded">
+                <div>Plan: {sub.plan}</div>
+                <div>Status: {sub.status}</div>
+                <div>U_ID: {sub.u_id}</div>
+              </div>
+            ))}
             {subscriptionInfo?.subscriptionError && (
               <div className="text-red-500">Error: {subscriptionInfo.subscriptionError.message}</div>
             )}
@@ -102,7 +106,7 @@ export default function StrategicAccessDebug() {
         <div>
           <strong>Expected:</strong>
           <div className="ml-2">
-            <div>Plan should be: &quot;strategic&quot;</div>
+            <div>At least one subscription with plan: &quot;strategic&quot;</div>
             <div>Status should be: &quot;active&quot;</div>
             <div>U_ID should match session user ID</div>
           </div>
