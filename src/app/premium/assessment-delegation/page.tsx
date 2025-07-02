@@ -33,20 +33,13 @@ export default function AssessmentDelegationPage() {
   const router = useRouter();
   const { hasAccess, loading: accessLoading, error: accessError } = useStrategicAccess();
   const { user: premiumUser, isUserLoaded } = usePremiumUser();
-  const [invitations, setInvitations] = useState<AssessmentInvitation[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [invitations, setInvitations] = useState<AssessmentInvitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [showInviteForm, setShowInviteForm] = useState(false);
   const [showTeamForm, setShowTeamForm] = useState(false);
-  
-  // Form states
-  const [inviteeEmail, setInviteeEmail] = useState('');
-  const [inviteeName, setInviteeName] = useState('');
-  const [assessmentType, setAssessmentType] = useState('sales');
-  const [customMessage, setCustomMessage] = useState('');
-  const [memberEmail, setMemberEmail] = useState('');
   const [memberName, setMemberName] = useState('');
+  const [memberEmail, setMemberEmail] = useState('');
   const [memberRole, setMemberRole] = useState('employee');
 
   useEffect(() => {
@@ -70,94 +63,42 @@ export default function AssessmentDelegationPage() {
   }, [hasAccess, accessLoading, isUserLoaded, premiumUser, router]);
 
   const loadData = async () => {
+    if (!premiumUser?.u_id) return;
+    
     try {
       setLoading(true);
       
-      if (!premiumUser?.u_id) {
-        console.log('No user ID available');
-        return;
-      }
-
-      // Get user's invitations
-      const invitationsResponse = await fetch('/api/assessment-delegation/get-invitations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          u_id: premiumUser.u_id
-        }),
-      });
-
-      if (invitationsResponse.ok) {
-        const { invitations: invitationsData } = await invitationsResponse.json();
-        setInvitations(invitationsData || []);
-      }
-
-      // Get team members
+      // Load team members
       const teamResponse = await fetch('/api/assessment-delegation/get-team-members', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          u_id: premiumUser.u_id
-        }),
+        body: JSON.stringify({ u_id: premiumUser.u_id }),
       });
 
       if (teamResponse.ok) {
-        const { teamMembers: teamData } = await teamResponse.json();
-        setTeamMembers(teamData || []);
+        const teamData = await teamResponse.json();
+        setTeamMembers(teamData.teamMembers || []);
       }
 
-    } catch (error) {
-      console.error('Error loading data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const sendInvitation = async () => {
-    try {
-      setSending(true);
-      
-      if (!premiumUser?.u_id) {
-        throw new Error('User not authenticated');
-      }
-
-      const response = await fetch('/api/assessment-delegation/send-invitation', {
+      // Load invitations
+      const invitationsResponse = await fetch('/api/assessment-delegation/get-invitations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          u_id: premiumUser.u_id,
-          inviteeEmail,
-          inviteeName,
-          assessmentType,
-          customMessage
-        }),
+        body: JSON.stringify({ u_id: premiumUser.u_id }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to send invitation');
+      if (invitationsResponse.ok) {
+        const invitationsData = await invitationsResponse.json();
+        setInvitations(invitationsData.invitations || []);
       }
-
-      // Reset form
-      setInviteeEmail('');
-      setInviteeName('');
-      setAssessmentType('sales');
-      setCustomMessage('');
-      setShowInviteForm(false);
-
-      // Reload data
-      await loadData();
-
-    } catch (error: any) {
-      alert('Error sending invitation: ' + error.message);
+    } catch (error) {
+      console.error('Error loading data:', error);
     } finally {
-      setSending(false);
+      setLoading(false);
     }
   };
 
@@ -404,98 +345,20 @@ export default function AssessmentDelegationPage() {
             </CardContent>
           </Card>
 
-          {/* Invitations Section */}
+          {/* Invitations Tracking Section */}
           <Card>
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold flex items-center gap-2">
                   <Send className="h-5 w-5" />
-                  Assessment Invitations
+                  Sent Invitations
                 </h2>
-                <Button
-                  onClick={() => setShowInviteForm(!showInviteForm)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm"
-                >
-                  <Plus className="h-4 w-4" />
-                  Send Invitation
-                </Button>
+                <span className="text-sm text-gray-500">
+                  {invitations.filter(inv => inv.status === 'pending').length} pending
+                </span>
               </div>
             </div>
             <CardContent>
-              {showInviteForm && (
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label htmlFor="inviteeName">Name</Label>
-                      <Input
-                        id="inviteeName"
-                        value={inviteeName}
-                        onChange={(e) => setInviteeName(e.target.value)}
-                        placeholder="Enter invitee name"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="inviteeEmail">Email</Label>
-                      <Input
-                        id="inviteeEmail"
-                        type="email"
-                        value={inviteeEmail}
-                        onChange={(e) => setInviteeEmail(e.target.value)}
-                        placeholder="Enter invitee email"
-                      />
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <Label htmlFor="assessmentType">Assessment Type</Label>
-                    <select
-                      id="assessmentType"
-                      value={assessmentType}
-                      onChange={(e) => setAssessmentType(e.target.value)}
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="sales">Sales Performance</option>
-                      <option value="marketing_effectiveness">Marketing Effectiveness</option>
-                      <option value="tech_stack">Technology Stack</option>
-                      <option value="strategic_maturity">Strategic Maturity</option>
-                      <option value="ai_readiness">AI Readiness</option>
-                    </select>
-                  </div>
-                  <div className="mb-4">
-                    <Label htmlFor="customMessage">Custom Message (Optional)</Label>
-                    <textarea
-                      id="customMessage"
-                      value={customMessage}
-                      onChange={(e) => setCustomMessage(e.target.value)}
-                      placeholder="Add a personal message..."
-                      rows={3}
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={sendInvitation}
-                      disabled={sending || !inviteeName || !inviteeEmail}
-                      className="px-3 py-1.5 text-sm"
-                    >
-                      {sending ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                          Sending...
-                        </>
-                      ) : (
-                        'Send Invitation'
-                      )}
-                    </Button>
-                    <Button
-                      onClick={() => setShowInviteForm(false)}
-                      className="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-medium"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-
               <div className="space-y-3">
                 {invitations.map((invitation) => (
                   <div
@@ -521,6 +384,9 @@ export default function AssessmentDelegationPage() {
                               Score: {invitation.score}
                             </span>
                           )}
+                          <span className="text-gray-500">
+                            Sent: {new Date(invitation.created_at).toLocaleDateString()}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -528,7 +394,7 @@ export default function AssessmentDelegationPage() {
                 ))}
                 {invitations.length === 0 && (
                   <p className="text-gray-500 text-center py-8">
-                    No invitations sent yet. Send your first invitation to get started.
+                    No invitations sent yet. Use the assessment cards to invite team members.
                   </p>
                 )}
               </div>

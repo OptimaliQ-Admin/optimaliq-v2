@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     // Send invitation email
     try {
-      const invitationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/assessment-invitation/${invitationToken}`;
+      const invitationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/premium/assessment/${assessmentType}?invitation=${invitationToken}`;
       
       console.log('Sending email to:', inviteeEmail, 'with URL:', invitationUrl);
       

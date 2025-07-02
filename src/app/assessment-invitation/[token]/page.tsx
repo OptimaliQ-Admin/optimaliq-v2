@@ -122,49 +122,6 @@ export default function AssessmentInvitationPage() {
         { key: 'integration_needs', label: 'What integration challenges do you face?', type: 'textarea' },
         { key: 'tech_budget', label: 'What is your technology budget?', type: 'number' },
         { key: 'tech_goals', label: 'What technology improvements are you seeking?', type: 'textarea' }
-      ],
-      bpm: [
-        { key: 'process_documentation', label: 'How well are your business processes documented?', type: 'textarea' },
-        { key: 'process_automation', label: 'What processes are currently automated?', type: 'textarea' },
-        { key: 'process_metrics', label: 'What key performance indicators do you track for your processes?', type: 'textarea' },
-        { key: 'process_improvement', label: 'What process improvement initiatives are you currently working on?', type: 'textarea' },
-        { key: 'process_challenges', label: 'What are your biggest process-related challenges?', type: 'textarea' }
-      ],
-      strategic_maturity: [
-        { key: 'strategic_planning', label: 'How often do you conduct strategic planning sessions?', type: 'textarea' },
-        { key: 'strategic_goals', label: 'What are your primary strategic goals?', type: 'textarea' },
-        { key: 'strategic_execution', label: 'How well do you execute on your strategic initiatives?', type: 'textarea' },
-        { key: 'strategic_alignment', label: 'How aligned are your teams with your strategic objectives?', type: 'textarea' }
-      ],
-      ai_readiness: [
-        { key: 'ai_awareness', label: 'How familiar is your team with AI technologies?', type: 'textarea' },
-        { key: 'ai_use_cases', label: 'What AI use cases are you considering or implementing?', type: 'textarea' },
-        { key: 'ai_data_quality', label: 'How would you rate the quality of your data for AI applications?', type: 'textarea' },
-        { key: 'ai_skills', label: 'What AI-related skills does your team currently have?', type: 'textarea' }
-      ],
-      competitive_benchmarking: [
-        { key: 'competitor_analysis', label: 'How do you currently analyze your competitors?', type: 'textarea' },
-        { key: 'market_position', label: 'How would you describe your current market position?', type: 'textarea' },
-        { key: 'competitive_advantages', label: 'What are your main competitive advantages?', type: 'textarea' },
-        { key: 'benchmarking_metrics', label: 'What metrics do you use to benchmark against competitors?', type: 'textarea' }
-      ],
-      customer_experience: [
-        { key: 'customer_journey', label: 'How do you map and understand your customer journey?', type: 'textarea' },
-        { key: 'customer_feedback', label: 'How do you collect and act on customer feedback?', type: 'textarea' },
-        { key: 'customer_satisfaction', label: 'What measures do you use to track customer satisfaction?', type: 'textarea' },
-        { key: 'customer_retention', label: 'How do you work to improve customer retention?', type: 'textarea' }
-      ],
-      digital_transformation: [
-        { key: 'digital_initiatives', label: 'What digital transformation initiatives are you currently pursuing?', type: 'textarea' },
-        { key: 'digital_culture', label: 'How would you describe your organization\'s digital culture?', type: 'textarea' },
-        { key: 'digital_skills', label: 'What digital skills does your team need to develop?', type: 'textarea' },
-        { key: 'digital_goals', label: 'What are your primary digital transformation goals?', type: 'textarea' }
-      ],
-      leadership: [
-        { key: 'leadership_style', label: 'How would you describe your leadership approach?', type: 'textarea' },
-        { key: 'team_development', label: 'How do you develop and mentor your team members?', type: 'textarea' },
-        { key: 'decision_making', label: 'How do you approach important business decisions?', type: 'textarea' },
-        { key: 'leadership_challenges', label: 'What are your biggest leadership challenges?', type: 'textarea' }
       ]
     };
 
