@@ -50,7 +50,20 @@ export default function AssessmentDelegationPage() {
   const [memberRole, setMemberRole] = useState('employee');
 
   useEffect(() => {
-    loadData();
+    // Check authentication status first
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Initial auth check:', { user: !!user, userId: user?.id });
+      
+      if (user) {
+        loadData();
+      } else {
+        console.log('No authenticated user found');
+        setLoading(false);
+      }
+    };
+    
+    checkAuth();
   }, []);
 
   const loadData = async () => {
@@ -98,10 +111,12 @@ export default function AssessmentDelegationPage() {
     try {
       setSending(true);
       
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      console.log('User check:', { user, userError });
       if (!user) throw new Error('User not authenticated');
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log('Session check:', { session: !!session, hasToken: !!session?.access_token, sessionError });
       if (!session?.access_token) throw new Error('No access token available');
 
       const response = await fetch('/api/assessment-delegation/send-invitation', {
@@ -144,10 +159,12 @@ export default function AssessmentDelegationPage() {
     try {
       setSending(true);
       
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      console.log('User check (add team member):', { user, userError });
       if (!user) throw new Error('User not authenticated');
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log('Session check (add team member):', { session: !!session, hasToken: !!session?.access_token, sessionError });
       if (!session?.access_token) throw new Error('No access token available');
 
       const response = await fetch('/api/assessment-delegation/add-team-member', {

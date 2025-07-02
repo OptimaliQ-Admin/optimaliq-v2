@@ -20,20 +20,26 @@ export async function POST(request: NextRequest) {
 
     // Get authenticated user
     const authHeader = request.headers.get('authorization');
+    console.log('Auth header received (add team member):', authHeader ? 'Present' : 'Missing');
+    
     if (!authHeader) {
+      console.log('No authorization header found (add team member)');
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized - No authorization header' },
         { status: 401 }
       );
     }
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
-    );
+    const token = authHeader.replace('Bearer ', '');
+    console.log('Token extracted (add team member):', token ? 'Present' : 'Missing');
+    
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    console.log('Auth result (add team member):', { user: !!user, error: authError });
 
     if (authError || !user) {
+      console.log('Authentication failed (add team member):', { authError, user: !!user });
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized - Invalid token' },
         { status: 401 }
       );
     }
