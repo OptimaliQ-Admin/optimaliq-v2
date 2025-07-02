@@ -5,6 +5,7 @@ import { PremiumUserProvider, usePremiumUser } from "@/context/PremiumUserContex
 import PremiumHeader from "@/components/layout/PremiumHeader";
 import PremiumSidebar from "@/components/layout/PremiumSidebar";
 import SubscriptionStatusBanner from "@/components/shared/SubscriptionStatusBanner";
+import StrategicAccessDebug from "@/components/debug/StrategicAccessDebug";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { usePathname } from "next/navigation";
 
@@ -40,6 +41,9 @@ function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
           </main>
         </div>
       </div>
+      
+      {/* Debug component - remove this after fixing the issue */}
+      <StrategicAccessDebug />
     </>
   );
 }
