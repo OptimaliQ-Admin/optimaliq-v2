@@ -5,7 +5,7 @@ import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import DynamicStepRenderer from "@/components/questions/DynamicStepRenderer";
-import { type AssessmentAnswers } from "@/lib/types/AssessmentAnswers";
+import { type AssessmentAnswers, type AssessmentAnswerValue } from "@/lib/types/AssessmentAnswers";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { isDynamicStepValid } from "@/lib/validation/isDynamicStepValid";
 import { assessmentIntros, AssessmentType } from "@/components/assessments/AssessmentIntroModal";
@@ -21,6 +21,17 @@ interface InvitationData {
   status: 'pending' | 'completed' | 'expired';
   expires_at: string;
   custom_message: string | null;
+}
+
+interface SubmissionData {
+  assessment: string;
+  answers: AssessmentAnswers;
+  score: number;
+  userId: string;
+  invitationToken?: string;
+  inviteeName?: string;
+  inviteeEmail?: string;
+  inviterUserId?: string;
 }
 
 export default function DynamicAssessmentPage() {
@@ -229,7 +240,7 @@ export default function DynamicAssessmentPage() {
     setError(null);
 
     try {
-      const submissionData: any = {
+      const submissionData: SubmissionData = {
         assessment: slug,
         answers: formAnswers,
         score: score,
@@ -238,7 +249,7 @@ export default function DynamicAssessmentPage() {
 
       // Add invitation data if this is an invited assessment
       if (isInvitedAssessment && invitationData) {
-        submissionData.invitationToken = invitationToken;
+        submissionData.invitationToken = invitationToken || undefined;
         submissionData.inviteeName = invitationData.invitee_name;
         submissionData.inviteeEmail = invitationData.invitee_email;
         submissionData.inviterUserId = invitationData.inviter_u_id;
@@ -278,7 +289,7 @@ export default function DynamicAssessmentPage() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleAnswer = (key: string, value: any) => {
+  const handleAnswer = (key: string, value: AssessmentAnswerValue) => {
     setFormAnswers((prev) => ({
       ...prev,
       [key]: value
@@ -344,7 +355,7 @@ if (slug in slugToAssessmentType) {
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-blue-900 mb-1">
-                  You've been invited to complete this assessment
+                  You&apos;ve been invited to complete this assessment
                 </h3>
                 <p className="text-sm text-blue-700 mb-2">
                   <span className="font-medium">{invitationData.invitee_name}</span> has been invited to complete the {title} assessment.
