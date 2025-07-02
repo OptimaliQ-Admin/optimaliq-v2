@@ -12,7 +12,10 @@ export async function POST(req: NextRequest) {
   try {
     const { u_id, inviteeEmail, inviteeName, assessmentType, customMessage } = await req.json();
 
+    console.log('Send invitation request:', { u_id, inviteeEmail, inviteeName, assessmentType });
+
     if (!u_id || !inviteeEmail || !inviteeName || !assessmentType) {
+      console.error('Missing required fields:', { u_id, inviteeEmail, inviteeName, assessmentType });
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
@@ -27,7 +30,10 @@ export async function POST(req: NextRequest) {
       .eq('status', 'active')
       .single();
 
+    console.log('Subscription check:', { subscription, subscriptionError });
+
     if (!subscription || subscription.plan !== 'strategic') {
+      console.error('Subscription check failed:', { subscription, subscriptionError });
       return NextResponse.json(
         { error: 'Assessment delegation requires Strategic plan subscription' },
         { status: 403 }
@@ -35,11 +41,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Get inviter information for email
-    const { data: inviterInfo } = await supabase
+    const { data: inviterInfo, error: inviterError } = await supabase
       .from('tier2_users')
       .select('first_name, last_name, company')
       .eq('u_id', u_id)
       .single();
+
+    console.log('Inviter info:', { inviterInfo, inviterError });
 
     // Generate invitation token
     const invitationToken = crypto.randomUUID();
@@ -47,6 +55,8 @@ export async function POST(req: NextRequest) {
     // Set expiration (7 days from now)
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
+
+    console.log('Creating invitation with token:', invitationToken);
 
     // Create invitation record
     const { data: invitation, error: insertError } = await supabase
@@ -63,10 +73,12 @@ export async function POST(req: NextRequest) {
       .select()
       .single();
 
+    console.log('Invitation creation result:', { invitation, insertError });
+
     if (insertError) {
       console.error('Error creating invitation:', insertError);
       return NextResponse.json(
-        { error: 'Failed to create invitation' },
+        { error: 'Failed to create invitation: ' + insertError.message },
         { status: 500 }
       );
     }
@@ -74,6 +86,8 @@ export async function POST(req: NextRequest) {
     // Send invitation email
     try {
       const invitationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/assessment-invitation/${invitationToken}`;
+      
+      console.log('Sending email to:', inviteeEmail, 'with URL:', invitationUrl);
       
       await emailService.sendAssessmentInvitationEmail({
         to: inviteeEmail,
@@ -86,6 +100,8 @@ export async function POST(req: NextRequest) {
         expiresAt: expiresAt.toLocaleDateString(),
         customMessage
       });
+
+      console.log('Email sent successfully');
     } catch (emailError) {
       console.error('Error sending invitation email:', emailError);
       // Don't fail the request if email fails, just log it
@@ -99,7 +115,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error('Error in send-invitation:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error: ' + error.message },
       { status: 500 }
     );
   }

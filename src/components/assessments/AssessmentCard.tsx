@@ -136,16 +136,20 @@ export default function AssessmentCard({
         }),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
         setShowTeamDropdown(false);
         setSelectedMember(null);
-        // You could add a toast notification here
+        // Show success message
+        alert(`Invitation sent successfully to ${member.name}!`);
       } else {
-        const error = await response.json();
-        console.error('Error sending invitation:', error);
+        console.error('Error sending invitation:', result);
+        alert(`Failed to send invitation: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error sending invitation:', error);
+      alert('Failed to send invitation. Please try again.');
     } finally {
       setSendingInvitation(false);
     }
@@ -413,11 +417,10 @@ export default function AssessmentCard({
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {member.name} {member.role && `- ${member.role}`}
+                              </div>
                               <div className="text-xs text-gray-500">{member.email}</div>
-                              {member.role && (
-                                <div className="text-xs text-gray-400">{member.role}</div>
-                              )}
                             </div>
                           </div>
                         </button>
