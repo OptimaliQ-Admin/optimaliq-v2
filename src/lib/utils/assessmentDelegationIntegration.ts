@@ -173,8 +173,10 @@ async function processQuestionDelegationResults(
       .single();
 
     const existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
-    let mergedData = { ...existingData };
-
+    
+    // Build the merged data by creating a new object with all the delegation answers
+    const mergedData = { ...existingData };
+    
     // Merge all delegation answers
     for (const delegation of delegations) {
       if (delegation.answers) {
