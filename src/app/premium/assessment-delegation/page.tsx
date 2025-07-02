@@ -57,29 +57,34 @@ export default function AssessmentDelegationPage() {
     try {
       setLoading(true);
       
-      // Get user's invitations
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data: invitationsData } = await supabase
-        .from('assessment_invitations')
-        .select('*')
-        .eq('inviter_u_id', user.id)
-        .order('created_at', { ascending: false });
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) return;
 
-      if (invitationsData) {
-        setInvitations(invitationsData);
+      // Get user's invitations
+      const invitationsResponse = await fetch('/api/assessment-delegation/get-invitations', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (invitationsResponse.ok) {
+        const { invitations: invitationsData } = await invitationsResponse.json();
+        setInvitations(invitationsData || []);
       }
 
       // Get team members
-      const { data: teamData } = await supabase
-        .from('team_members')
-        .select('*')
-        .eq('owner_u_id', user.id)
-        .order('created_at', { ascending: false });
+      const teamResponse = await fetch('/api/assessment-delegation/get-team-members', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
 
-      if (teamData) {
-        setTeamMembers(teamData);
+      if (teamResponse.ok) {
+        const { teamMembers: teamData } = await teamResponse.json();
+        setTeamMembers(teamData || []);
       }
 
     } catch (error) {
@@ -96,10 +101,14 @@ export default function AssessmentDelegationPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('No access token available');
+
       const response = await fetch('/api/assessment-delegation/send-invitation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           inviteeEmail,
@@ -110,7 +119,8 @@ export default function AssessmentDelegationPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send invitation');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send invitation');
       }
 
       // Reset form
@@ -137,16 +147,26 @@ export default function AssessmentDelegationPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      const { error } = await supabase
-        .from('team_members')
-        .insert({
-          owner_u_id: user.id,
-          member_email: memberEmail,
-          member_name: memberName,
-          role: memberRole
-        });
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('No access token available');
 
-      if (error) throw error;
+      const response = await fetch('/api/assessment-delegation/add-team-member', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          memberEmail,
+          memberName,
+          memberRole
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add team member');
+      }
 
       // Reset form
       setMemberEmail('');
@@ -168,12 +188,24 @@ export default function AssessmentDelegationPage() {
     if (!confirm('Are you sure you want to remove this team member?')) return;
 
     try {
-      const { error } = await supabase
-        .from('team_members')
-        .delete()
-        .eq('id', memberId);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('No access token available');
 
-      if (error) throw error;
+      const response = await fetch('/api/assessment-delegation/remove-team-member', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          memberId
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to remove team member');
+      }
 
       await loadData();
     } catch (error: any) {
