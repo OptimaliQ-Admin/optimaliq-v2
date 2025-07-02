@@ -1,6 +1,7 @@
 "use client";
 
 import { useStrategicAccess } from "@/hooks/useStrategicAccess";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
@@ -21,6 +22,7 @@ interface SubscriptionInfo {
 
 export default function StrategicAccessDebug() {
   const { hasAccess, loading, error } = useStrategicAccess();
+  const { user: premiumUser, subscription: contextSubscription } = usePremiumUser();
   const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null);
   const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo | null>(null);
 
@@ -31,12 +33,15 @@ export default function StrategicAccessDebug() {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         setSessionInfo({ session, sessionError });
 
-        if (session?.user) {
+        // Get user ID from either source
+        const userId = premiumUser?.u_id || session?.user?.id;
+
+        if (userId) {
           // Get subscription info directly
           const { data: subscription, error: subscriptionError } = await supabase
             .from("subscriptions")
             .select("plan, status, u_id")
-            .eq("u_id", session.user.id)
+            .eq("u_id", userId)
             .eq("status", "active")
             .single();
           
@@ -48,7 +53,7 @@ export default function StrategicAccessDebug() {
     };
 
     debugAccess();
-  }, []);
+  }, [premiumUser?.u_id]);
 
   return (
     <div className="fixed bottom-4 right-4 bg-white border border-gray-300 rounded-lg p-4 shadow-lg max-w-md z-50">
@@ -65,7 +70,17 @@ export default function StrategicAccessDebug() {
         </div>
 
         <div>
-          <strong>Session:</strong>
+          <strong>PremiumUserContext:</strong>
+          <div className="ml-2">
+            <div>User ID: {premiumUser?.u_id || "None"}</div>
+            <div>Email: {premiumUser?.email || "None"}</div>
+            <div>Plan: {contextSubscription?.plan || "None"}</div>
+            <div>Status: {contextSubscription?.status || "None"}</div>
+          </div>
+        </div>
+
+        <div>
+          <strong>Supabase Session:</strong>
           <div className="ml-2">
             <div>User ID: {sessionInfo?.session?.user?.id || "None"}</div>
             <div>Email: {sessionInfo?.session?.user?.email || "None"}</div>
@@ -73,7 +88,7 @@ export default function StrategicAccessDebug() {
         </div>
 
         <div>
-          <strong>Subscription:</strong>
+          <strong>Direct DB Query:</strong>
           <div className="ml-2">
             <div>Plan: {subscriptionInfo?.subscription?.plan || "None"}</div>
             <div>Status: {subscriptionInfo?.subscription?.status || "None"}</div>
