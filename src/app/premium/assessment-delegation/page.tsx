@@ -235,8 +235,7 @@ export default function AssessmentDelegationPage() {
                 </h2>
                 <Button
                   onClick={() => setShowTeamForm(!showTeamForm)}
-                  size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm"
                 >
                   <Plus className="h-4 w-4" />
                   Add Member
@@ -285,7 +284,7 @@ export default function AssessmentDelegationPage() {
                     <Button
                       onClick={addTeamMember}
                       disabled={sending || !memberName || !memberEmail}
-                      size="sm"
+                      className="px-3 py-1.5 text-sm"
                     >
                       {sending ? (
                         <>
@@ -298,8 +297,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowTeamForm(false)}
-                      variant="outline"
-                      size="sm"
+                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                     >
                       Cancel
                     </Button>
@@ -322,9 +320,7 @@ export default function AssessmentDelegationPage() {
                     </div>
                     <Button
                       onClick={() => removeTeamMember(member.id)}
-                      variant="outline"
-                      size="sm"
-                      className="text-red-600 hover:text-red-700"
+                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -349,8 +345,7 @@ export default function AssessmentDelegationPage() {
                 </h2>
                 <Button
                   onClick={() => setShowInviteForm(!showInviteForm)}
-                  size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm"
                 >
                   <Plus className="h-4 w-4" />
                   Send Invitation
@@ -411,7 +406,7 @@ export default function AssessmentDelegationPage() {
                     <Button
                       onClick={sendInvitation}
                       disabled={sending || !inviteeName || !inviteeEmail}
-                      size="sm"
+                      className="px-3 py-1.5 text-sm"
                     >
                       {sending ? (
                         <>
@@ -424,8 +419,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowInviteForm(false)}
-                      variant="outline"
-                      size="sm"
+                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                     >
                       Cancel
                     </Button>
