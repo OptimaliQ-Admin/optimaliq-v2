@@ -70,6 +70,10 @@ class EmailService {
     html: string,
     from: string = EMAIL_SENDERS.SUPPORT
   ) {
+    if (!resend) {
+      throw new Error('Resend client not available. Please set RESEND_API_KEY environment variable.');
+    }
+
     try {
       const result = await resend.emails.send({
         from,
