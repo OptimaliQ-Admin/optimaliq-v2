@@ -25,6 +25,7 @@ export default function StrategicAccessDebug() {
   const { user: premiumUser, subscription: contextSubscription } = usePremiumUser();
   const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null);
   const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo | null>(null);
+  const [allSubscriptions, setAllSubscriptions] = useState<any[]>([]);
 
   useEffect(() => {
     const debugAccess = async () => {
@@ -37,13 +38,25 @@ export default function StrategicAccessDebug() {
         const userId = premiumUser?.u_id || session?.user?.id;
 
         if (userId) {
-          // Get subscription info directly
+          console.log("🔍 Debugging for user ID:", userId);
+          
+          // First, let's see ALL subscriptions for this user (without status filter)
+          const { data: allSubs, error: allSubsError } = await supabase
+            .from("subscriptions")
+            .select("plan, status, u_id")
+            .eq("u_id", userId);
+          
+          console.log("📊 All subscriptions for user:", { allSubs, allSubsError });
+          setAllSubscriptions(allSubs || []);
+
+          // Then get active subscriptions
           const { data: subscriptions, error: subscriptionError } = await supabase
             .from("subscriptions")
             .select("plan, status, u_id")
             .eq("u_id", userId)
             .eq("status", "active");
           
+          console.log("📊 Active subscriptions for user:", { subscriptions, subscriptionError });
           setSubscriptionInfo({ subscriptions: subscriptions || [], subscriptionError });
         }
       } catch (error) {
@@ -87,11 +100,25 @@ export default function StrategicAccessDebug() {
         </div>
 
         <div>
-          <strong>Direct DB Query:</strong>
+          <strong>All Subscriptions (no status filter):</strong>
+          <div className="ml-2">
+            <div>Found {allSubscriptions?.length || 0} total subscriptions:</div>
+            {allSubscriptions?.map((sub, index) => (
+              <div key={index} className="ml-2 mt-1 p-1 bg-yellow-100 rounded">
+                <div>Plan: {sub.plan}</div>
+                <div>Status: {sub.status}</div>
+                <div>U_ID: {sub.u_id}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <strong>Active Subscriptions Only:</strong>
           <div className="ml-2">
             <div>Found {subscriptionInfo?.subscriptions?.length || 0} active subscriptions:</div>
             {subscriptionInfo?.subscriptions?.map((sub, index) => (
-              <div key={index} className="ml-2 mt-1 p-1 bg-gray-100 rounded">
+              <div key={index} className="ml-2 mt-1 p-1 bg-green-100 rounded">
                 <div>Plan: {sub.plan}</div>
                 <div>Status: {sub.status}</div>
                 <div>U_ID: {sub.u_id}</div>

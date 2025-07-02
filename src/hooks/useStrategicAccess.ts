@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import { usePremiumUser } from "@/context/PremiumUserContext";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface StrategicAccess {
   hasAccess: boolean;
@@ -25,59 +19,33 @@ export function useStrategicAccess(): StrategicAccess {
         setLoading(true);
         setError(null);
 
-        let userId: string | null = null;
-
-        // First try to get user ID from PremiumUserContext
-        if (premiumUser?.u_id) {
-          userId = premiumUser.u_id;
-          console.log("🔍 Using user ID from PremiumUserContext:", userId);
-        } else {
-          // Fallback to Supabase auth session
-          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-          
-          if (sessionError) {
-            throw sessionError;
-          }
-
-          if (!session?.user) {
-            console.log("🔍 No Supabase session found");
-            setHasAccess(false);
-            return;
-          }
-
-          userId = session.user.id;
-          console.log("🔍 Using user ID from Supabase session:", userId);
-        }
-
-        if (!userId) {
-          console.log("🔍 No user ID found from either source");
+        if (!premiumUser?.u_id) {
+          console.log("🔍 No user ID from PremiumUserContext");
           setHasAccess(false);
           return;
         }
 
-        // Check if user has Strategic subscription - filter by specific user ID
-        const { data: subscriptions, error: subscriptionError } = await supabase
-          .from("subscriptions")
-          .select("plan, status, u_id")
-          .eq("u_id", userId)
-          .eq("status", "active");
+        console.log("🔍 Using user ID from PremiumUserContext:", premiumUser.u_id);
 
-        console.log("📊 Subscription query result:", { subscriptions, subscriptionError });
+        // Use server-side API call to bypass RLS policies
+        const response = await fetch('/api/premium/auth/checkStrategicAccess', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            u_id: premiumUser.u_id
+          })
+        });
 
-        if (subscriptionError) {
-          console.error("❌ Subscription query error:", subscriptionError);
-          throw subscriptionError;
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Check if any of the user's active subscriptions are strategic
-        const hasStrategicAccess = subscriptions?.some(sub => sub.plan === 'strategic') || false;
+        const data = await response.json();
+        console.log("✅ Strategic access API result:", data);
         
-        console.log("✅ Strategic access result:", { 
-          subscriptions: subscriptions,
-          hasAccess: hasStrategicAccess 
-        });
-        
-        setHasAccess(hasStrategicAccess);
+        setHasAccess(data.hasAccess || false);
 
       } catch (error: any) {
         console.error("Error checking Strategic access:", error);
@@ -89,20 +57,7 @@ export function useStrategicAccess(): StrategicAccess {
     };
 
     checkAccess();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        checkAccess();
-      } else {
-        setHasAccess(false);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [premiumUser?.u_id, subscription]);
+  }, [premiumUser?.u_id]);
 
   return { hasAccess, loading, error };
 } 
