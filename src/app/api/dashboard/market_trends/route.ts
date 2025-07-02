@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       console.log("🔄 Triggering market insight refresh for:", industry);
       
       // ✅ SECURITY FIX: Server-side cron call with proper secret
-      const cronResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/cron/generateMarketInsight`, {
+      const cronResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/api/cron/generateMarketInsight`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${process.env.CRON_SECRET}`, // Server-side only

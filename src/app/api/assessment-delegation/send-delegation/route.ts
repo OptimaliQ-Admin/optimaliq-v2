@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     // Send delegation email
-    const delegationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/question-delegation/${delegationToken}`;
+    const delegationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/question-delegation/${delegationToken}`;
     
     await emailService.sendQuestionDelegationEmail({
       to: delegateEmail,
