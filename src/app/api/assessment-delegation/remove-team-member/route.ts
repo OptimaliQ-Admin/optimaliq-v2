@@ -1,58 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
-  ? createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    )
-  : null;
+// Use service role key to bypass RLS policies
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function DELETE(request: NextRequest) {
   try {
-    if (!supabase) {
-      return NextResponse.json(
-        { error: 'Database connection not available' },
-        { status: 500 }
-      );
-    }
+    const { u_id, memberId } = await request.json();
 
-    const { memberId } = await request.json();
-
-    // Validate input
-    if (!memberId) {
+    if (!u_id || !memberId) {
       return NextResponse.json(
-        { error: 'Missing member ID' },
+        { error: 'User ID and member ID are required' },
         { status: 400 }
       );
     }
 
-    // Get authenticated user
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
-    );
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    // Check subscription level (Strategic plan required)
-    const { data: subscription } = await supabase
-      .from('subscriptions')
-      .select('plan, status')
-      .eq('u_id', user.id)
-      .eq('status', 'active')
+    // Check if user has Strategic subscription
+    const { data: subscription, error: subscriptionError } = await supabase
+      .from("subscriptions")
+      .select("plan, status")
+      .eq("u_id", u_id)
+      .eq("status", "active")
       .single();
 
     if (!subscription || subscription.plan !== 'strategic') {
@@ -63,11 +34,11 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Verify the team member belongs to the user
-    const { data: teamMember } = await supabase
+    const { data: teamMember, error: teamMemberError } = await supabase
       .from('team_members')
       .select('id')
       .eq('id', memberId)
-      .eq('owner_u_id', user.id)
+      .eq('owner_u_id', u_id)
       .single();
 
     if (!teamMember) {
@@ -82,7 +53,7 @@ export async function DELETE(request: NextRequest) {
       .from('team_members')
       .delete()
       .eq('id', memberId)
-      .eq('owner_u_id', user.id);
+      .eq('owner_u_id', u_id);
 
     if (deleteError) {
       console.error('Error deleting team member:', deleteError);
@@ -97,7 +68,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Team member removed successfully'
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error removing team member:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

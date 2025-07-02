@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Send, Users, Clock, CheckCircle, XCircle, Plus, Trash2 } from 'lucide-react';
-import AuthDebug from './auth-debug';
 import { useStrategicAccess } from '@/hooks/useStrategicAccess';
 import { usePremiumUser } from '@/context/PremiumUserContext';
 import { useRouter } from 'next/navigation';
@@ -287,11 +286,6 @@ export default function AssessmentDelegationPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Debug component - remove this after fixing the issue */}
-        <div className="mb-4">
-          <AuthDebug />
-        </div>
-        
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Delegation</h1>
           <p className="text-gray-600">
@@ -372,7 +366,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowTeamForm(false)}
-                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="px-3 py-1.5 text-sm bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200"
                     >
                       Cancel
                     </Button>
@@ -395,7 +389,7 @@ export default function AssessmentDelegationPage() {
                     </div>
                     <Button
                       onClick={() => removeTeamMember(member.id)}
-                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="px-3 py-1.5 text-sm bg-red-50 border border-red-200 text-red-700 hover:bg-red-100 hover:border-red-300"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -494,7 +488,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowInviteForm(false)}
-                      className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="px-3 py-1.5 text-sm bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200"
                     >
                       Cancel
                     </Button>
