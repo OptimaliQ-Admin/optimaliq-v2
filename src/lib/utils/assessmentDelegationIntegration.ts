@@ -122,13 +122,14 @@ async function processAssessmentTypeResults(
       .eq('u_id', userId)
       .single();
 
-    let existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
+    const existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
+    let mergedData = { ...existingData };
 
     // Merge all invitation answers
     for (const invitation of invitations) {
       if (invitation.answers) {
-        existingData = {
-          ...existingData,
+        mergedData = {
+          ...mergedData,
           ...invitation.answers,
           // Add metadata about who answered what
           [`${invitation.invitee_email}_answered_at`]: invitation.completed_at,
@@ -141,7 +142,7 @@ async function processAssessmentTypeResults(
     const { error } = await supabase
       .from('tier2_profiles')
       .update({
-        [`${assessmentType}_assessment_data`]: existingData,
+        [`${assessmentType}_assessment_data`]: mergedData,
         [`${assessmentType}_last_updated`]: new Date().toISOString()
       })
       .eq('u_id', userId);
@@ -171,16 +172,17 @@ async function processQuestionDelegationResults(
       .eq('u_id', userId)
       .single();
 
-    let existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
+    const existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
+    let mergedData = { ...existingData };
 
     // Merge all delegation answers
     for (const delegation of delegations) {
       if (delegation.answers) {
         // Add each delegated question answer
         for (const [questionKey, answer] of Object.entries(delegation.answers)) {
-          existingData[questionKey] = answer;
-          existingData[`${questionKey}_delegated_to`] = delegation.delegate_email;
-          existingData[`${questionKey}_delegated_at`] = delegation.completed_at;
+          mergedData[questionKey] = answer;
+          mergedData[`${questionKey}_delegated_to`] = delegation.delegate_email;
+          mergedData[`${questionKey}_delegated_at`] = delegation.completed_at;
         }
       }
     }
@@ -189,7 +191,7 @@ async function processQuestionDelegationResults(
     const { error } = await supabase
       .from('tier2_profiles')
       .update({
-        [`${assessmentType}_assessment_data`]: existingData,
+        [`${assessmentType}_assessment_data`]: mergedData,
         [`${assessmentType}_last_updated`]: new Date().toISOString()
       })
       .eq('u_id', userId);
