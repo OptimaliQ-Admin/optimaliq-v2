@@ -99,6 +99,8 @@ export default function AssessmentCard({
 
   const loadTeamMembers = async () => {
     setLoadingTeam(true);
+    console.log('AssessmentCard - Loading team members for user:', user?.u_id);
+    
     try {
       const response = await fetch('/api/assessment-delegation/get-team-members', {
         method: 'POST',
@@ -110,7 +112,10 @@ export default function AssessmentCard({
 
       if (response.ok) {
         const data = await response.json();
+        console.log('AssessmentCard - Team members loaded:', data);
         setTeamMembers(data.teamMembers || []);
+      } else {
+        console.error('AssessmentCard - Failed to load team members:', response.status);
       }
     } catch (error) {
       console.error('Error loading team members:', error);
@@ -121,22 +126,33 @@ export default function AssessmentCard({
 
   const handleSendInvitation = async (member: TeamMember) => {
     setSendingInvitation(true);
+    
+    // Debug logging
+    console.log('AssessmentCard - User context:', user);
+    console.log('AssessmentCard - Member data:', member);
+    console.log('AssessmentCard - Assessment slug:', slug);
+    
     try {
+      const requestData = {
+        u_id: user?.u_id,
+        inviteeEmail: member.email,
+        inviteeName: member.name,
+        assessmentType: slug,
+        customMessage: `Please complete the ${title} assessment to help improve our organization's capabilities.`
+      };
+      
+      console.log('AssessmentCard - Sending request data:', requestData);
+      
       const response = await fetch('/api/assessment-delegation/send-invitation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          u_id: user?.u_id,
-          inviteeEmail: member.email,
-          inviteeName: member.name,
-          assessmentType: slug,
-          customMessage: `Please complete the ${title} assessment to help improve our organization's capabilities.`
-        }),
+        body: JSON.stringify(requestData),
       });
 
       const result = await response.json();
+      console.log('AssessmentCard - Response:', result);
 
       if (response.ok) {
         setShowTeamDropdown(false);

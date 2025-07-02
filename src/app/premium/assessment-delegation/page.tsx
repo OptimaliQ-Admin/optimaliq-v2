@@ -366,7 +366,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowTeamForm(false)}
-                      className="px-3 py-1.5 text-sm bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200"
+                      className="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-medium"
                     >
                       Cancel
                     </Button>
@@ -389,7 +389,7 @@ export default function AssessmentDelegationPage() {
                     </div>
                     <Button
                       onClick={() => removeTeamMember(member.id)}
-                      className="px-3 py-1.5 text-sm bg-red-50 border border-red-200 text-red-700 hover:bg-red-100 hover:border-red-300"
+                      className="px-3 py-1.5 text-sm bg-red-100 border-2 border-red-300 text-red-700 hover:bg-red-200 hover:border-red-400 font-medium"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -488,7 +488,7 @@ export default function AssessmentDelegationPage() {
                     </Button>
                     <Button
                       onClick={() => setShowInviteForm(false)}
-                      className="px-3 py-1.5 text-sm bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200"
+                      className="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-medium"
                     >
                       Cancel
                     </Button>
