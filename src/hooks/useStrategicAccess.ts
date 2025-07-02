@@ -46,7 +46,7 @@ export function useStrategicAccess(): StrategicAccess {
           throw subscriptionError;
         }
 
-        setHasAccess(subscription?.plan === 'Strategic');
+        setHasAccess(subscription?.plan === 'strategic');
 
       } catch (error: any) {
         console.error("Error checking Strategic access:", error);

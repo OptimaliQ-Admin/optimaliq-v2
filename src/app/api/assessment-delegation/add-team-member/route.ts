@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       .eq('status', 'active')
       .single();
 
-    if (!subscription || subscription.plan !== 'Strategic') {
+    if (!subscription || subscription.plan !== 'strategic') {
       return NextResponse.json(
         { error: 'Assessment delegation requires Strategic plan subscription' },
         { status: 403 }
