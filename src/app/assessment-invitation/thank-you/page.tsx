@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, Users, ArrowRight } from 'lucide-react';
 
-export default function ThankYouPage() {
+function ThankYouContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [invitationData, setInvitationData] = useState<any>(null);
@@ -113,5 +113,20 @@ export default function ThankYouPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    }>
+      <ThankYouContent />
+    </Suspense>
   );
 } 
