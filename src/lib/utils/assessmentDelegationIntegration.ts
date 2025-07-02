@@ -8,7 +8,7 @@ const supabase = createClient(
 export interface DelegatedAssessmentResult {
   inviter_u_id: string;
   assessment_type: string;
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
   score: number | null;
   completed_at: string;
   invitee_name: string;
@@ -19,7 +19,7 @@ export interface DelegatedQuestionResult {
   delegator_u_id: string;
   assessment_type: string;
   question_keys: string[];
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
   completed_at: string;
   delegate_name: string;
   delegate_email: string;
@@ -48,13 +48,13 @@ export async function integrateAssessmentInvitations(userId: string): Promise<vo
     }
 
     // Group invitations by assessment type
-    const invitationsByType = invitations.reduce((acc: Record<string, any[]>, invitation) => {
+    const invitationsByType = invitations.reduce((acc: Record<string, DelegatedAssessmentResult[]>, invitation) => {
       if (!acc[invitation.assessment_type]) {
         acc[invitation.assessment_type] = [];
       }
       acc[invitation.assessment_type].push(invitation);
       return acc;
-    }, {} as Record<string, any[]>);
+    }, {} as Record<string, DelegatedAssessmentResult[]>);
 
     // Process each assessment type
     for (const [assessmentType, typeInvitations] of Object.entries(invitationsByType)) {
@@ -88,13 +88,13 @@ export async function integrateQuestionDelegations(userId: string): Promise<void
     }
 
     // Group delegations by assessment type
-    const delegationsByType = delegations.reduce((acc: Record<string, any[]>, delegation) => {
+    const delegationsByType = delegations.reduce((acc: Record<string, DelegatedQuestionResult[]>, delegation) => {
       if (!acc[delegation.assessment_type]) {
         acc[delegation.assessment_type] = [];
       }
       acc[delegation.assessment_type].push(delegation);
       return acc;
-    }, {} as Record<string, any[]>);
+    }, {} as Record<string, DelegatedQuestionResult[]>);
 
     // Process each assessment type
     for (const [assessmentType, typeDelegations] of Object.entries(delegationsByType)) {
@@ -112,7 +112,7 @@ export async function integrateQuestionDelegations(userId: string): Promise<void
 async function processAssessmentTypeResults(
   userId: string, 
   assessmentType: string, 
-  invitations: any[]
+  invitations: DelegatedAssessmentResult[]
 ): Promise<void> {
   try {
     // Get existing assessment data for this user and type
@@ -122,7 +122,7 @@ async function processAssessmentTypeResults(
       .eq('u_id', userId)
       .single();
 
-    let existingData = (existingAssessment as any)?.[`${assessmentType}_assessment_data`] || {};
+    let existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
 
     // Merge all invitation answers
     for (const invitation of invitations) {
@@ -161,7 +161,7 @@ async function processAssessmentTypeResults(
 async function processQuestionDelegationResults(
   userId: string, 
   assessmentType: string, 
-  delegations: any[]
+  delegations: DelegatedQuestionResult[]
 ): Promise<void> {
   try {
     // Get existing assessment data for this user and type
@@ -171,7 +171,7 @@ async function processQuestionDelegationResults(
       .eq('u_id', userId)
       .single();
 
-    let existingData = (existingAssessment as any)?.[`${assessmentType}_assessment_data`] || {};
+    let existingData = ((existingAssessment as unknown as Record<string, unknown>)?.[`${assessmentType}_assessment_data`] as Record<string, unknown>) || {};
 
     // Merge all delegation answers
     for (const delegation of delegations) {

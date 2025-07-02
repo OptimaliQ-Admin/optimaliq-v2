@@ -68,7 +68,7 @@ export default function AssessmentInvitationEmail({
               fontFamily: 'Inter, sans-serif',
               opacity: 0.9,
             }}>
-              Help improve your organization's performance
+              Help improve your organization&apos;s performance
             </Text>
           </Section>
 
