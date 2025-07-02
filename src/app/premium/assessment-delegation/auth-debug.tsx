@@ -23,11 +23,12 @@ export default function AuthDebug() {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         console.log('Session check:', { session, sessionError });
 
-        // Check if we can access the database
-        const { data: profileData, error: profileError } = await supabase
-          .from('tier2_profiles')
-          .select('subscription_tier')
-          .limit(1);
+        // Check if we can access the database and get subscription info
+        const { data: subscriptionData, error: subscriptionError } = await supabase
+          .from('subscriptions')
+          .select('plan, status')
+          .eq('u_id', user?.id)
+          .single();
 
         setAuthStatus({
           user: user ? { id: user.id, email: user.email } : null,
@@ -37,8 +38,8 @@ export default function AuthDebug() {
             refresh_token: session.refresh_token ? 'Present' : 'Missing'
           } : null,
           sessionError,
-          profileData,
-          profileError
+          subscriptionData,
+          subscriptionError
         });
       } catch (error: any) {
         console.error('Auth check error:', error);

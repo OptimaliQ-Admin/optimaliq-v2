@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import { useStrategicAccess } from "@/hooks/useStrategicAccess";
 import {
   ChartBarIcon,
   RocketLaunchIcon,
@@ -24,6 +25,7 @@ const navItems = [
 
 export default function PremiumSidebar() {
   const { user } = usePremiumUser();
+  const { hasAccess: hasStrategicAccess } = useStrategicAccess();
   const [collapsed, setCollapsed] = useState(true);
   const router = useRouter();
 
@@ -53,16 +55,23 @@ export default function PremiumSidebar() {
       </div>
 
       <nav className="flex-1 px-2 space-y-2">
-        {navItems.map((item) => (
-          <button
-            key={item.href}
-            onClick={() => handleNavigation(item.href)}
-            className="w-full flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
-          >
-            <span className="mr-3 text-white">{item.icon}</span>
-            <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
-          </button>
-        ))}
+        {navItems.map((item) => {
+          // Hide Team Delegation if user doesn't have Strategic access
+          if (item.href === "/premium/assessment-delegation" && !hasStrategicAccess) {
+            return null;
+          }
+          
+          return (
+            <button
+              key={item.href}
+              onClick={() => handleNavigation(item.href)}
+              className="w-full flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
+            >
+              <span className="mr-3 text-white">{item.icon}</span>
+              <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">

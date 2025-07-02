@@ -29,13 +29,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Check subscription level (Strategic plan required)
-    const { data: profile } = await supabase
-      .from('tier2_profiles')
-      .select('subscription_tier')
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('plan, status')
       .eq('u_id', user.id)
+      .eq('status', 'active')
       .single();
 
-    if (!profile || profile.subscription_tier !== 'strategic') {
+    if (!subscription || subscription.plan !== 'Strategic') {
       return NextResponse.json(
         { error: 'Assessment delegation requires Strategic plan subscription' },
         { status: 403 }

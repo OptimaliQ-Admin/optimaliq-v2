@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Send, Users, Clock, CheckCircle, XCircle, Plus, Trash2 } from 'lucide-react';
 import AuthDebug from './auth-debug';
+import { useStrategicAccess } from '@/hooks/useStrategicAccess';
+import { useRouter } from 'next/navigation';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,6 +36,8 @@ interface TeamMember {
 }
 
 export default function AssessmentDelegationPage() {
+  const router = useRouter();
+  const { hasAccess, loading: accessLoading, error: accessError } = useStrategicAccess();
   const [invitations, setInvitations] = useState<AssessmentInvitation[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,21 +55,30 @@ export default function AssessmentDelegationPage() {
   const [memberRole, setMemberRole] = useState('employee');
 
   useEffect(() => {
-    // Check authentication status first
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log('Initial auth check:', { user: !!user, userId: user?.id });
-      
-      if (user) {
-        loadData();
-      } else {
-        console.log('No authenticated user found');
-        setLoading(false);
+    // Check if user has Strategic access
+    if (!accessLoading) {
+      if (!hasAccess) {
+        console.log('User does not have Strategic access, redirecting...');
+        router.push('/premium/dashboard');
+        return;
       }
-    };
-    
-    checkAuth();
-  }, []);
+      
+      // Check authentication status first
+      const checkAuth = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        console.log('Initial auth check:', { user: !!user, userId: user?.id });
+        
+        if (user) {
+          loadData();
+        } else {
+          console.log('No authenticated user found');
+          setLoading(false);
+        }
+      };
+      
+      checkAuth();
+    }
+  }, [hasAccess, accessLoading, router]);
 
   const loadData = async () => {
     try {
@@ -253,12 +266,31 @@ export default function AssessmentDelegationPage() {
     }
   };
 
-  if (loading) {
+  if (accessLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
           <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Restricted</h2>
+          <p className="text-gray-600 mb-4">
+            Assessment delegation is only available with the Strategic plan.
+          </p>
+          <button
+            onClick={() => router.push('/premium/dashboard')}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Back to Dashboard
+          </button>
         </div>
       </div>
     );
