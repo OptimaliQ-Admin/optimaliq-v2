@@ -9,10 +9,20 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+interface SessionInfo {
+  session: any;
+  sessionError: any;
+}
+
+interface SubscriptionInfo {
+  subscription: any;
+  subscriptionError: any;
+}
+
 export default function StrategicAccessDebug() {
   const { hasAccess, loading, error } = useStrategicAccess();
-  const [sessionInfo, setSessionInfo] = useState<any>(null);
-  const [subscriptionInfo, setSubscriptionInfo] = useState<any>(null);
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null);
+  const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo | null>(null);
 
   useEffect(() => {
     const debugAccess = async () => {
@@ -77,8 +87,8 @@ export default function StrategicAccessDebug() {
         <div>
           <strong>Expected:</strong>
           <div className="ml-2">
-            <div>Plan should be: "strategic"</div>
-            <div>Status should be: "active"</div>
+            <div>Plan should be: &quot;strategic&quot;</div>
+            <div>Status should be: &quot;active&quot;</div>
             <div>U_ID should match session user ID</div>
           </div>
         </div>
