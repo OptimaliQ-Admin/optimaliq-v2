@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,12 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Send, Users, Clock, CheckCircle, XCircle, Plus, Trash2 } from 'lucide-react';
 import AuthDebug from './auth-debug';
 import { useStrategicAccess } from '@/hooks/useStrategicAccess';
+import { usePremiumUser } from '@/context/PremiumUserContext';
 import { useRouter } from 'next/navigation';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface AssessmentInvitation {
   id: string;
@@ -38,6 +33,7 @@ interface TeamMember {
 export default function AssessmentDelegationPage() {
   const router = useRouter();
   const { hasAccess, loading: accessLoading, error: accessError } = useStrategicAccess();
+  const { user: premiumUser, isUserLoaded } = usePremiumUser();
   const [invitations, setInvitations] = useState<AssessmentInvitation[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,46 +51,43 @@ export default function AssessmentDelegationPage() {
   const [memberRole, setMemberRole] = useState('employee');
 
   useEffect(() => {
-    // Check if user has Strategic access
-    if (!accessLoading) {
+    // Check if user has Strategic access and is loaded
+    if (!accessLoading && isUserLoaded) {
       if (!hasAccess) {
         console.log('User does not have Strategic access, redirecting...');
         router.push('/premium/dashboard');
         return;
       }
       
-      // Check authentication status first
-      const checkAuth = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        console.log('Initial auth check:', { user: !!user, userId: user?.id });
-        
-        if (user) {
-          loadData();
-        } else {
-          console.log('No authenticated user found');
-          setLoading(false);
-        }
-      };
+      if (!premiumUser) {
+        console.log('No authenticated user found');
+        setLoading(false);
+        return;
+      }
       
-      checkAuth();
+      console.log('User authenticated via PremiumUserContext:', premiumUser.u_id);
+      loadData();
     }
-  }, [hasAccess, accessLoading, router]);
+  }, [hasAccess, accessLoading, isUserLoaded, premiumUser, router]);
 
   const loadData = async () => {
     try {
       setLoading(true);
       
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.access_token) return;
+      if (!premiumUser?.u_id) {
+        console.log('No user ID available');
+        return;
+      }
 
       // Get user's invitations
       const invitationsResponse = await fetch('/api/assessment-delegation/get-invitations', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          u_id: premiumUser.u_id
+        }),
       });
 
       if (invitationsResponse.ok) {
@@ -104,9 +97,13 @@ export default function AssessmentDelegationPage() {
 
       // Get team members
       const teamResponse = await fetch('/api/assessment-delegation/get-team-members', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          u_id: premiumUser.u_id
+        }),
       });
 
       if (teamResponse.ok) {
@@ -125,21 +122,17 @@ export default function AssessmentDelegationPage() {
     try {
       setSending(true);
       
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      console.log('User check:', { user, userError });
-      if (!user) throw new Error('User not authenticated');
-
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      console.log('Session check:', { session: !!session, hasToken: !!session?.access_token, sessionError });
-      if (!session?.access_token) throw new Error('No access token available');
+      if (!premiumUser?.u_id) {
+        throw new Error('User not authenticated');
+      }
 
       const response = await fetch('/api/assessment-delegation/send-invitation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
+          u_id: premiumUser.u_id,
           inviteeEmail,
           inviteeName,
           assessmentType,
@@ -173,21 +166,17 @@ export default function AssessmentDelegationPage() {
     try {
       setSending(true);
       
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      console.log('User check (add team member):', { user, userError });
-      if (!user) throw new Error('User not authenticated');
-
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      console.log('Session check (add team member):', { session: !!session, hasToken: !!session?.access_token, sessionError });
-      if (!session?.access_token) throw new Error('No access token available');
+      if (!premiumUser?.u_id) {
+        throw new Error('User not authenticated');
+      }
 
       const response = await fetch('/api/assessment-delegation/add-team-member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
+          u_id: premiumUser.u_id,
           memberEmail,
           memberName,
           memberRole
@@ -216,19 +205,18 @@ export default function AssessmentDelegationPage() {
   };
 
   const removeTeamMember = async (memberId: string) => {
-    if (!confirm('Are you sure you want to remove this team member?')) return;
-
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.access_token) throw new Error('No access token available');
+      if (!premiumUser?.u_id) {
+        throw new Error('User not authenticated');
+      }
 
       const response = await fetch('/api/assessment-delegation/remove-team-member', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
+          u_id: premiumUser.u_id,
           memberId
         }),
       });
