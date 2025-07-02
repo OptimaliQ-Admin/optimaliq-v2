@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Send, Users, Clock, CheckCircle, XCircle, Plus, Trash2 } from 'lucide-react';
+import AuthDebug from './auth-debug';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -266,6 +267,11 @@ export default function AssessmentDelegationPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
+        {/* Debug component - remove this after fixing the issue */}
+        <div className="mb-4">
+          <AuthDebug />
+        </div>
+        
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Delegation</h1>
           <p className="text-gray-600">
