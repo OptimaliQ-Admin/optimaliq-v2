@@ -15,6 +15,20 @@ function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
 
   // Check if we're in onboarding flow
   const isOnboarding = pathname?.startsWith("/premium/onboarding");
+  
+  // Check if this is an assessment invitation (skip auth check)
+  const isAssessmentInvitation = pathname?.startsWith("/premium/assessment/") && 
+    typeof window !== 'undefined' && 
+    new URLSearchParams(window.location.search).has('invitation');
+
+  // Skip auth check for assessment invitations
+  if (isAssessmentInvitation) {
+    return (
+      <main className="min-h-screen bg-white text-gray-900">
+        {children}
+      </main>
+    );
+  }
 
   if (checking || !isSubscriptionLoaded) {
     return (
