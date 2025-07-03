@@ -44,12 +44,22 @@ export async function middleware(req: NextRequest) {
 
   // If no session and trying to access premium routes, redirect to login
   if (!session && req.nextUrl.pathname.startsWith('/premium')) {
+    // Allow access to assessment invitations without authentication
+    if (req.nextUrl.pathname.startsWith('/premium/assessment/') && req.nextUrl.searchParams.has('invitation')) {
+      return res;
+    }
+    
     const redirectUrl = new URL('/subscribe/login', req.url);
     return NextResponse.redirect(redirectUrl);
   }
 
   // If user is authenticated and trying to access premium routes, check subscription status
   if (session && req.nextUrl.pathname.startsWith('/premium')) {
+    // Skip subscription check for assessment invitations
+    if (req.nextUrl.pathname.startsWith('/premium/assessment/') && req.nextUrl.searchParams.has('invitation')) {
+      return res;
+    }
+    
     try {
       // Get user's subscription status
       const { data: subscription, error } = await supabase

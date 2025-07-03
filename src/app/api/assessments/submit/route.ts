@@ -6,10 +6,12 @@ import { logAssessmentInput, logAssessmentScore, logAssessmentError } from "@/li
 import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 import { sanitizeAssessmentAnswers } from "@/lib/utils/sanitization";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    )
+  : null;
 
 type AssessmentMapping = {
   answerTable: string;
@@ -104,7 +106,14 @@ function normalizeScore(score: number): string {
 
 export async function POST(request: Request) {
   try {
-    const { assessment, answers, score, userId } = await request.json();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection not available' },
+        { status: 500 }
+      );
+    }
+
+    const { assessment, answers, score, userId, invitationToken, inviteeName, inviteeEmail, inviterUserId } = await request.json();
 
     // Sanitize all assessment answers before processing
     const sanitizedAnswers = sanitizeAssessmentAnswers(answers);
@@ -171,6 +180,26 @@ export async function POST(request: Request) {
     if (profileError) {
       console.error("❌ Failed to update profile:", profileError);
       throw new Error("Failed to update profile");
+    }
+
+    // If this is an invited assessment, update the invitation record
+    if (invitationToken && inviteeName && inviteeEmail && inviterUserId) {
+      const { error: invitationError } = await supabase
+        .from('assessment_invitations')
+        .update({
+          status: 'completed',
+          completed_at: new Date().toISOString(),
+          answers: sanitizedAnswers,
+          score: finalScore,
+          invitee_name: inviteeName,
+          invitee_email: inviteeEmail
+        })
+        .eq('invitation_token', invitationToken);
+
+      if (invitationError) {
+        console.error("❌ Failed to update invitation:", invitationError);
+        // Don't throw error here as the main assessment was successful
+      }
     }
 
     // Recalculate overall score

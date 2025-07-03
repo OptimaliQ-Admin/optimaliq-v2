@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { format, differenceInDays } from "date-fns";
 import AssessmentIntroModal, {
   AssessmentType,
 } from "./AssessmentIntroModal"; 
-import { FaChartLine, FaCheckCircle, FaExclamationTriangle, FaPlay, FaArrowRight, FaClock, FaTrophy } from "react-icons/fa";
+import { FaChartLine, FaCheckCircle, FaExclamationTriangle, FaPlay, FaArrowRight, FaClock, FaTrophy, FaUsers, FaChevronDown, FaEnvelope } from "react-icons/fa";
+import { usePremiumUser } from "@/context/PremiumUserContext";
 
 const slugToAssessmentType: Record<string, AssessmentType> = {
   bpm: "BPM",
@@ -38,6 +39,13 @@ const assessmentIcons: Record<string, { icon: string; color: string; bgColor: st
   reassessment: { icon: "📈", color: "from-emerald-500 to-emerald-600", bgColor: "bg-emerald-50" },
 };
 
+interface TeamMember {
+  id: string;
+  member_name: string;
+  member_email: string;
+  role: string;
+}
+
 type AssessmentCardProps = {
   slug: string;
   title: string;
@@ -56,7 +64,119 @@ export default function AssessmentCard({
   userId,
 }: AssessmentCardProps) {
   const router = useRouter();
+  const { user } = usePremiumUser();
   const [showIntro, setShowIntro] = useState(false);
+  const [showTeamDropdown, setShowTeamDropdown] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loadingTeam, setLoadingTeam] = useState(false);
+  const [sendingInvitation, setSendingInvitation] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Load team members when component mounts
+  useEffect(() => {
+    if (user?.u_id) {
+      loadTeamMembers();
+    }
+  }, [user?.u_id]);
+
+  // Handle clicking outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowTeamDropdown(false);
+      }
+    };
+
+    if (showTeamDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTeamDropdown]);
+
+  const loadTeamMembers = async () => {
+    setLoadingTeam(true);
+    console.log('AssessmentCard - Loading team members for user:', user?.u_id);
+    
+    try {
+      const response = await fetch('/api/assessment-delegation/get-team-members', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ u_id: user?.u_id }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('AssessmentCard - Team members loaded:', data);
+        setTeamMembers(data.teamMembers || []);
+      } else {
+        console.error('AssessmentCard - Failed to load team members:', response.status);
+      }
+    } catch (error) {
+      console.error('Error loading team members:', error);
+    } finally {
+      setLoadingTeam(false);
+    }
+  };
+
+  const handleSendInvitation = async (member: TeamMember) => {
+    setSendingInvitation(true);
+    
+    // Debug logging
+    console.log('AssessmentCard - User context:', user);
+    console.log('AssessmentCard - Member data:', member);
+    console.log('AssessmentCard - Assessment slug:', slug);
+    
+    try {
+      const requestData = {
+        u_id: user?.u_id,
+        inviteeEmail: member.member_email,
+        inviteeName: member.member_name,
+        assessmentType: slug,
+        customMessage: `Please complete the ${title} assessment to help improve our organization's capabilities.`
+      };
+      
+      console.log('AssessmentCard - Sending request data:', requestData);
+      console.log('AssessmentCard - Request data validation:', {
+        hasUId: !!requestData.u_id,
+        hasEmail: !!requestData.inviteeEmail,
+        hasName: !!requestData.inviteeName,
+        hasType: !!requestData.assessmentType
+      });
+      
+      const response = await fetch('/api/assessment-delegation/send-invitation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      console.log('AssessmentCard - Response status:', response.status);
+      const result = await response.json();
+      console.log('AssessmentCard - Response data:', result);
+
+      if (response.ok) {
+        setShowTeamDropdown(false);
+        setSelectedMember(null);
+        // Show success message
+        alert(`Invitation sent successfully to ${member.member_name}!`);
+      } else {
+        console.error('Error sending invitation:', result);
+        alert(`Failed to send invitation: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error sending invitation:', error);
+      alert('Failed to send invitation: Network error');
+    } finally {
+      setSendingInvitation(false);
+    }
+  };
 
   const handleClick = () => {
     setShowIntro(true);
@@ -276,6 +396,107 @@ export default function AssessmentCard({
             </div>
           )}
         </div>
+
+        {/* Team Invitation Section */}
+        {teamMembers.length > 0 && (
+          <div className="border-t border-gray-100 p-6 bg-gray-50/50">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <FaUsers className="text-gray-500" />
+                Invite Team Member
+              </h4>
+              <span className="text-xs text-gray-500">{teamMembers.length} team member{teamMembers.length !== 1 ? 's' : ''}</span>
+            </div>
+            
+            <div className="relative">
+              <button
+                onClick={() => setShowTeamDropdown(!showTeamDropdown)}
+                disabled={sendingInvitation}
+                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              >
+                <span className="text-sm text-gray-600">
+                  {selectedMember ? `${selectedMember.member_name} (${selectedMember.member_email})` : 'Select a team member...'}
+                </span>
+                <FaChevronDown className={`text-gray-400 text-xs transition-transform duration-200 ${showTeamDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showTeamDropdown && (
+                <div ref={dropdownRef} className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {loadingTeam ? (
+                    <div className="p-4 text-center text-gray-500">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                      Loading team members...
+                    </div>
+                  ) : (
+                    <>
+                      {teamMembers.map((member) => (
+                        <button
+                          key={member.id}
+                          onClick={() => {
+                            setSelectedMember(member);
+                            setShowTeamDropdown(false);
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-150"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {member.member_name} {member.role && `- ${member.role}`}
+                              </div>
+                              <div className="text-xs text-gray-500">{member.member_email}</div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {selectedMember && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => handleSendInvitation(selectedMember)}
+                    disabled={sendingInvitation}
+                    className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {sendingInvitation ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <FaEnvelope className="text-sm" />
+                        Send Invitation
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-3 text-xs text-gray-500">
+              <p>Team members will receive an email with a link to complete this assessment.</p>
+            </div>
+          </div>
+        )}
+
+        {/* No Team Members Message */}
+        {teamMembers.length === 0 && !loadingTeam && (
+          <div className="border-t border-gray-100 p-6 bg-gray-50/50">
+            <div className="text-center">
+              <FaUsers className="text-gray-400 text-xl mx-auto mb-2" />
+              <p className="text-sm text-gray-600 mb-3">No team members added yet</p>
+              <button
+                onClick={() => router.push('/premium/assessment-delegation')}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200"
+              >
+                Manage Team Members →
+              </button>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {slug in slugToAssessmentType && (

@@ -16,8 +16,8 @@ export async function POST(req: Request) {
       customer: customerId,
       mode: "setup",
       payment_method_types: ["card"],
-      success_url: returnUrl || `${process.env.NEXT_PUBLIC_APP_URL}/premium/account/billing?success=true`,
-      cancel_url: returnUrl || `${process.env.NEXT_PUBLIC_APP_URL}/premium/account/billing?canceled=true`,
+      success_url: returnUrl || `${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/premium/account/billing?success=true`,
+      cancel_url: returnUrl || `${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/premium/account/billing?canceled=true`,
     });
 
     return NextResponse.json({ url: session.url });

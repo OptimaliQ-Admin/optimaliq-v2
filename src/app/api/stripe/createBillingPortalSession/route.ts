@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     // Create billing portal session with optional configuration
     const sessionParams: Stripe.BillingPortal.SessionCreateParams = {
       customer: customerId,
-      return_url: returnUrl || `${process.env.NEXT_PUBLIC_APP_URL}/premium/account/billing`,
+      return_url: returnUrl || `${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/premium/account/billing`,
     };
 
     // Add configuration if provided

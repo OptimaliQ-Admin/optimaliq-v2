@@ -6,22 +6,26 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
+import { useStrategicAccess } from "@/hooks/useStrategicAccess";
 import {
   ChartBarIcon,
   RocketLaunchIcon,
   PencilSquareIcon,
   UserIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 
 const navItems = [
   { href: "/premium/dashboard", icon: <ChartBarIcon className="w-5 h-5" />, label: "Dashboard" },
   { href: "/premium/growth-studio", icon: <RocketLaunchIcon className="w-5 h-5" />, label: "Growth Studio" },
   { href: "/premium/assessment", icon: <PencilSquareIcon className="w-5 h-5" />, label: "Assessment" },
+  { href: "/premium/assessment-delegation", icon: <UsersIcon className="w-5 h-5" />, label: "Team Delegation" },
   { href: "/premium/account", icon: <UserIcon className="w-5 h-5" />, label: "Account" },
 ];
 
 export default function PremiumSidebar() {
   const { user } = usePremiumUser();
+  const { hasAccess: hasStrategicAccess } = useStrategicAccess();
   const [collapsed, setCollapsed] = useState(true);
   const router = useRouter();
 
@@ -51,16 +55,23 @@ export default function PremiumSidebar() {
       </div>
 
       <nav className="flex-1 px-2 space-y-2">
-        {navItems.map((item) => (
-          <button
-            key={item.href}
-            onClick={() => handleNavigation(item.href)}
-            className="w-full flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
-          >
-            <span className="mr-3 text-white">{item.icon}</span>
-            <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
-          </button>
-        ))}
+        {navItems.map((item) => {
+          // Hide Team Delegation if user doesn't have Strategic access
+          if (item.href === "/premium/assessment-delegation" && !hasStrategicAccess) {
+            return null;
+          }
+          
+          return (
+            <button
+              key={item.href}
+              onClick={() => handleNavigation(item.href)}
+              className="w-full flex items-center p-2 rounded-md hover:bg-optimaliq-dark transition-colors"
+            >
+              <span className="mr-3 text-white">{item.icon}</span>
+              <span className={cn("text-sm font-semibold transition-opacity duration-200", collapsed && "opacity-0 invisible")}>{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <div className="p-4 border-t border-optimaliq-dark text-xs text-white/70">

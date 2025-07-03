@@ -68,7 +68,7 @@ export async function GET() {
 
         // Send trial expired email
         try {
-          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://optimaliq.ai';
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai';
           await emailService.sendTrialExpiredEmail({
             to: trial.tier2_users.email,
             firstName: trial.tier2_users.first_name,
