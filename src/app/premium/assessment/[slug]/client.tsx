@@ -73,6 +73,8 @@ export default function DynamicAssessmentPage() {
     const loadInvitationData = async () => {
       if (!invitationToken) return;
 
+      console.log('🔍 Loading invitation data for token:', invitationToken);
+
       try {
         const response = await fetch('/api/assessment-delegation/get-invitations', {
           method: 'POST',
@@ -82,9 +84,14 @@ export default function DynamicAssessmentPage() {
           body: JSON.stringify({ invitationToken }),
         });
 
+        console.log('📡 API response status:', response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log('📦 API response data:', data);
+          
           if (data.invitation) {
+            console.log('✅ Setting invitation data:', data.invitation);
             setInvitationData(data.invitation);
             setIsInvitedAssessment(true);
             
@@ -100,15 +107,17 @@ export default function DynamicAssessmentPage() {
               return;
             }
           } else {
+            console.log('❌ No invitation data in response');
             setError("Invalid or expired invitation link.");
             return;
           }
         } else {
+          console.log('❌ API response not ok:', response.status);
           setError("Failed to load invitation data.");
           return;
         }
       } catch (error) {
-        console.error("Error loading invitation data:", error);
+        console.error("❌ Error loading invitation data:", error);
         setError("Failed to load invitation data.");
         return;
       }
@@ -161,11 +170,19 @@ export default function DynamicAssessmentPage() {
 
   useEffect(() => {
     const fetchScore = async () => {
+      console.log('🔍 Fetching score - isInvitedAssessment:', isInvitedAssessment, 'invitationData:', invitationData);
+      
       // For invited assessments, we need to wait for invitation data
-      if (isInvitedAssessment && !invitationData) return;
+      if (isInvitedAssessment && !invitationData) {
+        console.log('⏳ Waiting for invitation data...');
+        return;
+      }
       
       // For regular assessments, we need user ID
-      if (!isInvitedAssessment && !user?.u_id && !skipCheck) return;
+      if (!isInvitedAssessment && !user?.u_id && !skipCheck) {
+        console.log('⏳ Waiting for user ID...');
+        return;
+      }
 
       try {
         let targetUserId = user?.u_id;
@@ -173,12 +190,18 @@ export default function DynamicAssessmentPage() {
         // For invited assessments, use the inviter's user ID
         if (isInvitedAssessment && invitationData) {
           targetUserId = invitationData.inviter_u_id;
+          console.log('🎯 Using inviter user ID:', targetUserId);
+        } else {
+          console.log('🎯 Using current user ID:', targetUserId);
         }
 
         if (!targetUserId) {
+          console.log('❌ No target user ID found');
           setError("Unable to determine user for assessment.");
           return;
         }
+
+        console.log('🔍 Fetching score for user ID:', targetUserId);
 
         const { data, error } = await supabase
           .from("tier2_dashboard_insights")
@@ -187,10 +210,12 @@ export default function DynamicAssessmentPage() {
           .single();
 
         if (error || !data?.overall_score) {
+          console.log('❌ Error fetching score:', error, 'data:', data);
           setError("Unable to load assessment score.");
           return;
         }
 
+        console.log('✅ Score loaded:', data.overall_score);
         setScore(data.overall_score);
         setLoading(false);
       } catch (err) {
