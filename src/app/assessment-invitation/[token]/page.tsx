@@ -34,7 +34,7 @@ interface InviterInfo {
   email: string;
   first_name: string;
   last_name: string;
-  company_name: string;
+  company: string;
 }
 
 export default function AssessmentInvitationPage() {
@@ -82,7 +82,7 @@ export default function AssessmentInvitationPage() {
       // Get inviter information
       const { data: inviterData, error: inviterError } = await supabase
         .from('tier2_users')
-        .select('email, first_name, last_name, company_name')
+        .select('email, first_name, last_name, company')
         .eq('u_id', invitationData.inviter_u_id)
         .single();
 
@@ -233,7 +233,7 @@ export default function AssessmentInvitationPage() {
                   <p className="text-sm text-gray-600 mb-1">Invited by:</p>
                   <p className="font-medium">
                     {inviterInfo.first_name} {inviterInfo.last_name}
-                    {inviterInfo.company_name && ` from ${inviterInfo.company_name}`}
+                    {inviterInfo.company && ` from ${inviterInfo.company}`}
                   </p>
                 </div>
               )}

@@ -34,7 +34,7 @@ interface DelegatorInfo {
   email: string;
   first_name: string;
   last_name: string;
-  company_name: string;
+  company: string;
 }
 
 export default function QuestionDelegationPage() {
@@ -81,7 +81,7 @@ export default function QuestionDelegationPage() {
       // Get delegator information
       const { data: delegatorData, error: delegatorError } = await supabase
         .from('tier2_users')
-        .select('email, first_name, last_name, company_name')
+        .select('email, first_name, last_name, company')
         .eq('u_id', delegationData.delegator_u_id)
         .single();
 
@@ -225,7 +225,7 @@ export default function QuestionDelegationPage() {
                   <p className="text-sm text-gray-600 mb-1">Delegated by:</p>
                   <p className="font-medium">
                     {delegatorInfo.first_name} {delegatorInfo.last_name}
-                    {delegatorInfo.company_name && ` from ${delegatorInfo.company_name}`}
+                    {delegatorInfo.company && ` from ${delegatorInfo.company}`}
                   </p>
                 </div>
               )}
