@@ -9,6 +9,14 @@ import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreIn
 import { showToast } from "@/lib/utils/toast";
 import SubscriptionPopup from "@/components/modals/SubscriptionPopup";
 import { motion } from "framer-motion";
+import { 
+  CheckCircleIcon,
+  SparklesIcon,
+  ChartBarIcon,
+  ArrowTrendingUpIcon,
+  CurrencyDollarIcon,
+  ClockIcon
+} from "@heroicons/react/24/outline";
 
 // Create service role client for growth assessment flow
 const supabaseService = createClient(
@@ -120,12 +128,10 @@ function Step3Component() {
         >
           <button
             onClick={handleSubscribeClick}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
           >
             <div className="flex flex-col items-center gap-1">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+              <SparklesIcon className="w-5 h-5" />
               <span className="text-sm font-semibold whitespace-nowrap">Unlock Pro</span>
             </div>
             <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
@@ -144,17 +150,17 @@ function Step3Component() {
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
           
-          <div className="relative max-w-7xl mx-auto px-6 py-16">
+          <div className="relative max-w-7xl mx-auto px-6 py-20">
             <div className="text-center space-y-8">
               {/* Success Badge */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg"
               >
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                Analysis Complete
+                <CheckCircleIcon className="w-5 h-5" />
+                <span>Analysis Complete</span>
               </motion.div>
 
               {/* Main Headline */}
@@ -190,19 +196,15 @@ function Step3Component() {
               >
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+                    <ChartBarIcon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Real-Time Analytics</h3>
                   <p className="text-gray-600">Track your progress with live benchmarks and industry comparisons</p>
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <SparklesIcon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
                   <p className="text-gray-600">Get personalized recommendations that drive measurable results</p>
@@ -210,9 +212,7 @@ function Step3Component() {
                 
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
+                    <CurrencyDollarIcon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Proven ROI</h3>
                   <p className="text-gray-600">Average 3x faster growth and 40% efficiency improvements</p>
@@ -223,13 +223,13 @@ function Step3Component() {
         </motion.div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-6 pb-16 space-y-16">
+        <div className="max-w-7xl mx-auto px-6 pb-20 space-y-20">
           {/* Score Overview Section */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="space-y-8"
+            className="space-y-12"
           >
             <div className="text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -280,21 +280,15 @@ function Step3Component() {
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
                 <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+                  <CheckCircleIcon className="w-6 h-6" />
                   <span>Instant access</span>
                 </div>
                 <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+                  <CheckCircleIcon className="w-6 h-6" />
                   <span>No long-term contracts</span>
                 </div>
                 <div className="flex items-center gap-3 text-blue-100">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+                  <CheckCircleIcon className="w-6 h-6" />
                   <span>Cancel anytime</span>
                 </div>
               </div>
@@ -325,9 +319,7 @@ export default function Step3Page() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+            <ChartBarIcon className="w-8 h-8 text-white" />
           </div>
           <p className="text-gray-600 font-medium">Loading your insights...</p>
         </div>
