@@ -8,8 +8,8 @@ import { supabase } from "src/lib/supabase";
 import LabeledInput from "../../../components/shared/LabeledInput";
 import LabeledSelect from "../../../components/shared/LabeledSelect";
 import SubmitButton from "../../../components/shared/SubmitButton";
-import FormSectionHeader from "../../../components/shared/FormSectionHeader";
-import { FaChartLine, FaShieldAlt, FaCheckCircle } from "react-icons/fa";
+
+import { FaChartLine, FaShieldAlt, FaCheckCircle, FaLightbulb } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 
 export default function GrowthAssessmentStep2() {
@@ -132,11 +132,22 @@ export default function GrowthAssessmentStep2() {
           <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FaShieldAlt className="text-white text-2xl" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tell Us About Your Business</h1>
-          <p className="text-gray-600">Help us understand your current challenges and opportunities.</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Build Your Growth Roadmap</h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed mb-4">
+            Answer a few quick questions to receive custom insights on how to scale your business effectively.
+          </p>
+          
+          <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <FaLightbulb className="text-yellow-500" />
+              <span>AI-powered insights</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span>Personalized recommendations</span>
+            </div>
+          </div>
         </div>
-
-        <FormSectionHeader />
 
         {error && (
           <motion.div 
