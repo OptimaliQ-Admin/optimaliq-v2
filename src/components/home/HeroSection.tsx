@@ -38,16 +38,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.8 }}
                 className="space-y-8"
               >
-                {/* Enhanced Badge */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <Badge variant="primary" size="lg" icon="rocket">
-                    AI-Powered Growth Platform
-                  </Badge>
-                </motion.div>
+
 
                 {/* Enhanced Headline */}
                 <motion.h1
@@ -73,7 +64,7 @@ export default function HeroSection() {
                   Unlock predictable growth with AI-driven strategy insights and real-time competitive benchmarking.
                 </motion.p>
 
-                {/* Enhanced CTA Buttons */}
+                {/* Enhanced CTA Button */}
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -89,17 +80,6 @@ export default function HeroSection() {
                     className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800"
                   >
                     Start Free Growth Audit
-                  </Button>
-                  
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    href="/#how-it-works"
-                    icon="play"
-                    iconPosition="left"
-                    className="text-lg px-8 py-4 border-white/30 text-white hover:bg-white/10"
-                  >
-                    Watch Demo
                   </Button>
                 </motion.div>
 

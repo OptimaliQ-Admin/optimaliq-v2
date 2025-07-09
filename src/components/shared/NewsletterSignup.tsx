@@ -16,11 +16,11 @@ interface NewsletterSignupProps {
 }
 
 export default function NewsletterSignup({
-  title = "Stay Ahead of the Curve",
-  description = "Get weekly insights on strategy, operations, and digital transformation delivered to your inbox.",
+  title = "Ready to Unlock Your Growth Potential?",
+  description = "Get your comprehensive growth report and personalized strategic recommendations in minutes.",
   placeholder = "Enter your email",
-  buttonText = "Subscribe",
-  footerText = "Join other executives. No spam, unsubscribe anytime.",
+  buttonText = "Get My Free Report",
+  footerText = "Join 500+ executives. No spam, unsubscribe anytime.",
   className = "",
   variant = "default",
   source = "blog_newsletter"
