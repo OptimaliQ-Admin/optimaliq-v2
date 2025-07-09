@@ -8,12 +8,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Main Footer Content */}
         <Grid.Container maxWidth="7xl">
-          <Grid.Row cols={4} gap="xl" className="mb-12">
+          <Grid.Row gap="xl" className="mb-12">
             {/* Logo and Tagline */}
             <Grid.Col span={3}>
               <div className="space-y-6">
                 <Link href="/" className="inline-block">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold text-white">
                     OptimaliQ
                   </div>
                 </Link>
@@ -143,12 +143,12 @@ export default function Footer() {
 
           {/* Bottom Section */}
           <div className="border-t border-white/20 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-300 mb-4 md:mb-0">
-                © {new Date().getFullYear()} OptimaliQ. All rights reserved.
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-gray-300 text-center md:text-left">
+                © {new Date().getFullYear()} <span className="text-white font-semibold">OptimaliQ</span>. All rights reserved.
               </p>
               <div className="flex items-center gap-6">
-                <span className="text-gray-400 text-sm">Made with ❤️ for growth-focused businesses</span>
+                <span className="text-gray-400 text-sm text-center md:text-right">Made with ❤️ for growth-focused businesses</span>
               </div>
             </div>
           </div>

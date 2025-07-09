@@ -137,16 +137,16 @@ export default function PerformanceMetrics({
           {score > industryAvg ? (
             <div className="flex items-start gap-2 text-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-gray-700">
-                You're performing <strong>{Math.round((score / industryAvg - 1) * 100)}% better</strong> than the industry average
-              </span>
+                             <span className="text-gray-700">
+                 You&apos;re performing <strong>{Math.round((score / industryAvg - 1) * 100)}% better</strong> than the industry average
+               </span>
             </div>
           ) : (
             <div className="flex items-start gap-2 text-sm">
               <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-gray-700">
-                You're <strong>{Math.round((1 - score / industryAvg) * 100)}% below</strong> the industry average
-              </span>
+                             <span className="text-gray-700">
+                 You&apos;re <strong>{Math.round((1 - score / industryAvg) * 100)}% below</strong> the industry average
+               </span>
             </div>
           )}
           
