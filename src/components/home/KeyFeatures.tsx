@@ -164,15 +164,15 @@ export default function KeyFeatures() {
               </div>
               <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Ready to Unlock Your Growth Potential?</h3>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Get your comprehensive growth report and personalized strategic recommendations in minutes.
-              </p>
+              Get your comprehensive growth report and personalized strategic recommendations in minutes.
+            </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href="/growth-assessment">
+              <Link href="/growth-assessment">
                   <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                    Get Your Free Growth Report
+                  Get Your Free Growth Report
                     <ArrowRightIcon className="w-5 h-5" />
-                  </button>
-                </Link>
+                </button>
+              </Link>
                 <p className="text-sm text-gray-500">No credit card required • 5-minute assessment</p>
               </div>
             </div>

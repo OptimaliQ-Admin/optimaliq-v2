@@ -127,10 +127,10 @@ export default function GrowthAssessmentForm() {
           <div className="space-y-4">
           <FormField
             label="Full Name"
-            name="name"
+              name="name" 
             type="text"
-            value={userInfo.name}
-            onChange={handleChange}
+              value={userInfo.name} 
+              onChange={handleChange} 
             placeholder="Enter your full name"
             error={validationErrors.name}
             required
@@ -141,23 +141,23 @@ export default function GrowthAssessmentForm() {
           
           <FormField
             label="Email Address"
-            name="email"
-            type="email"
-            value={userInfo.email}
-            onChange={handleChange}
+              name="email" 
+              type="email" 
+              value={userInfo.email} 
+              onChange={handleChange} 
             placeholder="Enter your email address"
             error={validationErrors.email}
             required
             maxLength={250}
             icon={<EnvelopeIcon className="w-5 h-5" />}
             helperText="We'll send your assessment results here"
-          />
+            />
           
           <FormSelect
             label="Industry"
-            name="industry"
-            value={userInfo.industry}
-            onChange={handleChange}
+              name="industry" 
+              value={userInfo.industry} 
+              onChange={handleChange} 
             options={[
               { value: "E-commerce", label: "E-commerce" },
               { value: "Finance", label: "Finance" },
@@ -190,23 +190,23 @@ export default function GrowthAssessmentForm() {
           
           <FormField
             label="Job Role"
-            name="role"
+              name="role" 
             type="text"
-            value={userInfo.role}
-            onChange={handleChange}
+              value={userInfo.role} 
+              onChange={handleChange} 
             placeholder="e.g., CEO, Marketing Manager, Founder"
             error={validationErrors.role}
             required
             maxLength={250}
             icon={<BriefcaseIcon className="w-5 h-5" />}
             helperText="Your role helps us tailor recommendations"
-          />
+            />
           
           <FormSelect
             label="Company Size"
-            name="companysize"
-            value={userInfo.companysize}
-            onChange={handleChange}
+              name="companysize" 
+              value={userInfo.companysize} 
+              onChange={handleChange} 
             options={[
               { value: "1-10", label: "1-10 employees" },
               { value: "11-50", label: "11-50 employees" },
@@ -224,9 +224,9 @@ export default function GrowthAssessmentForm() {
           
           <FormSelect
             label="Revenue Range"
-            name="revenuerange"
-            value={userInfo.revenuerange}
-            onChange={handleChange}
+              name="revenuerange" 
+              value={userInfo.revenuerange} 
+              onChange={handleChange} 
             options={[
               { value: "<$100K", label: "Under $100K" },
               { value: "$100K-$500K", label: "$100K - $500K" },
@@ -240,8 +240,8 @@ export default function GrowthAssessmentForm() {
             required
             icon={<CurrencyDollarIcon className="w-5 h-5" />}
             helperText="Revenue helps us benchmark your performance"
-          />
-        </div>
+            />
+          </div>
 
           {/* ReCAPTCHA */}
           <div className="pt-1 flex justify-center">

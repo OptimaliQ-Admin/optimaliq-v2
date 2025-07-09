@@ -52,19 +52,19 @@ function QuadrantLabels({ xAxisLabel, yAxisLabel }: QuadrantLabelsProps) {
       {/* Quadrant labels */}
       <div className="absolute top-4 left-4 text-xs font-semibold text-gray-400">
         High Growth
-      </div>
+            </div>
       <div className="absolute top-4 right-4 text-xs font-semibold text-gray-400">
         High Market Share
-      </div>
+            </div>
       <div className="absolute bottom-4 left-4 text-xs font-semibold text-gray-400">
         Emerging
-      </div>
+            </div>
       <div className="absolute bottom-4 right-4 text-xs font-semibold text-gray-400">
         Mature
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 export default function QuadrantChart({
   data,
@@ -105,7 +105,7 @@ export default function QuadrantChart({
     onPointClick?.(point);
   };
 
-  return (
+    return (
     <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -138,9 +138,9 @@ export default function QuadrantChart({
           {data.map((point, index) => {
             const x = ((point.x - minX) / (maxX - minX)) * 100;
             const y = 100 - ((point.y - minY) / (maxY - minY)) * 100; // Invert Y for SVG coordinates
-            
-            return (
-              <motion.div
+
+  return (
+    <motion.div
                 key={point.name}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
                 style={{
@@ -169,9 +169,9 @@ export default function QuadrantChart({
                   <motion.div
                     className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-10"
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                  >
+    >
                     <div className="font-semibold">{point.name}</div>
                     <div className="text-gray-300">
                       {xAxisLabel}: {point.x.toFixed(1)}%
@@ -256,8 +256,8 @@ export default function QuadrantChart({
               <span className="text-gray-600">{yAxisLabel}:</span>
               <span className="font-semibold ml-2">{selectedPoint.y.toFixed(1)}%</span>
             </div>
-          </div>
-        </motion.div>
+      </div>
+    </motion.div>
       )}
     </div>
   );

@@ -47,12 +47,12 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         <div className="flex items-center gap-4 mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
             <ChartBarIcon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">GMF+ Score</h3>
+              <p className="text-sm text-gray-500">Growth Maturity Framework</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">GMF+ Score</h3>
-            <p className="text-sm text-gray-500">Growth Maturity Framework</p>
-          </div>
-        </div>
         
         <div className="mb-6">
           <div className="flex items-baseline gap-2 mb-2">
@@ -96,12 +96,12 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         <div className="flex items-center gap-4 mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
             <ArrowTrendingUpIcon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">Industry Benchmark</h3>
+              <p className="text-sm text-gray-500">Top performers average</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">Industry Benchmark</h3>
-            <p className="text-sm text-gray-500">Top performers average</p>
-          </div>
-        </div>
         
         <div className="mb-6">
           <div className="flex items-baseline gap-2 mb-2">
@@ -126,7 +126,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
                 <p className="text-emerald-800 text-sm font-medium mb-1">Pro tip</p>
                 <p className="text-emerald-700 text-xs">
                   Top performers focus on data-driven decision making and continuous optimization
-                </p>
+            </p>
               </div>
             </div>
           </div>
@@ -143,12 +143,12 @@ export default function ScoreCardGrid({ score }: { score: number }) {
         <div className="flex items-center gap-4 mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
             <MagnifyingGlassIcon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">Optimization Potential</h3>
+              <p className="text-sm text-gray-500">Growth opportunity</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">Optimization Potential</h3>
-            <p className="text-sm text-gray-500">Growth opportunity</p>
-          </div>
-        </div>
         
         <div className="mb-6">
           <div className="flex items-baseline gap-2 mb-2">
@@ -173,7 +173,7 @@ export default function ScoreCardGrid({ score }: { score: number }) {
                 <p className="text-purple-800 text-sm font-medium mb-1">Unlock advanced features</p>
                 <p className="text-purple-700 text-xs">
                   Get predictive modeling and personalized roadmaps with OptimaliQ Pro
-                </p>
+            </p>
               </div>
             </div>
           </div>

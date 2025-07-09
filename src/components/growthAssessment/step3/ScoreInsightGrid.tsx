@@ -70,37 +70,37 @@ export default function ScoreInsightGrid({ insights, loading }: { insights: Reco
             const IconComponent = config.icon;
             
             return (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group"
-              >
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group"
+            >
                 <div className={`bg-gradient-to-r ${config.bgGradient} rounded-xl p-6 border ${config.borderColor} transition-all duration-300 hover:shadow-lg hover:scale-[1.02]`}>
-                  <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4">
                     <div className={`w-10 h-10 bg-gradient-to-r ${config.gradient} rounded-lg flex items-center justify-center shadow-md flex-shrink-0`}>
                       <IconComponent className="w-5 h-5 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-lg font-bold text-gray-900 mb-3 capitalize">
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-lg font-bold text-gray-900 mb-3 capitalize">
                         {key} Optimization
-                      </h4>
-                      <p className="text-gray-700 leading-relaxed text-sm">
-                        {value}
-                      </p>
-                      
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                    </h4>
+                    <p className="text-gray-700 leading-relaxed text-sm">
+                      {value}
+                    </p>
+                    
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
                           <SparklesIcon className="w-3 h-3 text-blue-500" />
-                          <span>AI-generated recommendation</span>
-                        </div>
+                        <span>AI-generated recommendation</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
+            </motion.div>
             );
           })}
           

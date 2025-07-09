@@ -65,12 +65,12 @@ export default function HeroSection() {
                 </motion.p>
 
                 {/* Enhanced CTA Button */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+        <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
                   className="flex flex-col sm:flex-row gap-4"
-                >
+        >
                   <Button
                     size="lg"
                     variant="primary"
@@ -103,7 +103,7 @@ export default function HeroSection() {
                     <span className="text-sm">Instant Results</span>
                   </div>
                 </motion.div>
-              </motion.div>
+            </motion.div>
             </Grid.Col>
             
             {/* Enhanced Visual Section */}
@@ -167,7 +167,7 @@ export default function HeroSection() {
                     <Icon name="trending-up" size="sm" className="text-blue-400" />
                     <span className="text-xs text-white">+15% ROI</span>
                   </div>
-                </motion.div>
+            </motion.div>
 
                 <motion.div
                   animate={{ y: [10, -10, 10] }}
@@ -177,8 +177,8 @@ export default function HeroSection() {
                   <div className="flex items-center gap-2">
                     <Icon name="target" size="sm" className="text-green-400" />
                     <span className="text-xs text-white">Goal Achieved</span>
-                  </div>
-                </motion.div>
+          </div>
+        </motion.div>
               </motion.div>
             </Grid.Col>
           </Grid.Row>

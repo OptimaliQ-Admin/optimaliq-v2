@@ -146,7 +146,7 @@ export const CardContent: React.FC<CardContentProps> = ({
     <div
       className={cn(
         padding !== 'none' && paddingClasses[padding],
-        className
+      className
       )}
     >
       {children}

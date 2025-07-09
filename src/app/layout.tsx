@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "@/app/globals.css";
 import RootLayoutWrapper from "@/components/layout/RootLayoutWrapper";
 import { Toaster } from "react-hot-toast";
+import { PerformanceInitializer } from "@/components/performance/PerformanceInitializer";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -185,6 +186,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RootLayoutWrapper>
           {children}
         </RootLayoutWrapper>
+
+        <PerformanceInitializer />
 
         <Toaster
           position="top-center"

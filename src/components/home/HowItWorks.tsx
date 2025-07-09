@@ -180,16 +180,16 @@ export default function HowItWorks() {
                   {/* Description */}
                   <p className="text-gray-600 leading-relaxed flex-grow mb-6">
                     Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
-                  </p>
+            </p>
 
                   {/* CTA Button */}
                   <div className="mt-auto">
                     <Link href="/growth-assessment">
                       <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                         Unlock My Growth Plan
-                      </button>
+              </button>
                     </Link>
-                  </div>
+            </div>
 
                   {/* Bottom Accent */}
                   <div className="mt-6 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>

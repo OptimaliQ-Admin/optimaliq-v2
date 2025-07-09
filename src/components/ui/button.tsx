@@ -75,7 +75,7 @@ export const Button: React.FC<ButtonProps> = ({
     buttonVariants[variant],
     buttonSizes[size],
     fullWidth && 'w-full',
-    className
+        className
   );
 
   const iconClasses = cn(

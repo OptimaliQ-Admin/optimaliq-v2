@@ -154,15 +154,15 @@ export default function WhyOptimaliQ() {
               </div>
               <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Ready to Transform Your Business Strategy?</h3>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
-              </p>
+              Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
+            </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href="/growth-assessment">
+              <Link href="/growth-assessment">
                   <button className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                    Unlock My Growth Plan
+                  Unlock My Growth Plan
                     <ArrowRightIcon className="w-5 h-5" />
-                  </button>
-                </Link>
+                </button>
+              </Link>
                 <p className="text-sm text-gray-500">Join 500+ executives • Free strategic assessment</p>
               </div>
             </div>

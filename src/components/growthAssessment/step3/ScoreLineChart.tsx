@@ -137,16 +137,16 @@ export default function ScoreLineChart({ data, score }: Props) {
             />
             
             <Tooltip content={<CustomTooltip />} />
-            
-            {/* Target Maturity Zone */}
-            <ReferenceArea
-              y1={3.8}
+
+          {/* Target Maturity Zone */}
+          <ReferenceArea
+            y1={3.8}
               y2={5}
-              fill="#10b981"
+            fill="#10b981"
               fillOpacity={0.08}
-              stroke="none"
-            />
-            
+            stroke="none"
+          />
+
             {/* Area under the line */}
             <Area
               type="monotone"
@@ -156,9 +156,9 @@ export default function ScoreLineChart({ data, score }: Props) {
             />
             
             {/* Main line */}
-            <Line
-              type="monotone"
-              dataKey="score"
+          <Line
+            type="monotone"
+            dataKey="score"
               stroke="url(#lineGradient)"
               strokeWidth={3}
               dot={(props) => {
@@ -192,38 +192,38 @@ export default function ScoreLineChart({ data, score }: Props) {
                   </g>
                 );
               }}
-            />
-            
+          />
+
             {/* Current score reference line */}
-            <ReferenceLine
-              y={score}
+          <ReferenceLine
+            y={score}
               stroke="#f59e0b"
-              strokeDasharray="4 4"
-              strokeWidth={2}
-              label={{
-                position: "right",
+            strokeDasharray="4 4"
+            strokeWidth={2}
+            label={{
+              position: "right",
                 value: `Current: ${score.toFixed(1)}`,
                 fill: "#f59e0b",
-                fontSize: 12,
-                fontWeight: 600,
-              }}
-            />
-            
+              fontSize: 12,
+              fontWeight: 600,
+            }}
+          />
+
             {/* Target zone label */}
-            <ReferenceLine
+          <ReferenceLine
               y={4.2}
-              stroke="none"
-              label={{
-                position: "left",
-                value: "Target Maturity Zone",
-                fill: "#10b981",
-                fontSize: 11,
+            stroke="none"
+            label={{
+              position: "left",
+              value: "Target Maturity Zone",
+              fill: "#10b981",
+              fontSize: 11,
                 fontWeight: 600,
-              }}
-            />
+            }}
+          />
           </AreaChart>
-        </ResponsiveContainer>
-      </div>
+      </ResponsiveContainer>
+        </div>
 
       {/* Enhanced Legend */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
@@ -232,9 +232,9 @@ export default function ScoreLineChart({ data, score }: Props) {
           <div>
             <div className="text-sm font-semibold text-gray-900">Projection</div>
             <div className="text-xs text-gray-500">Growth path</div>
-          </div>
         </div>
-        
+        </div>
+
         <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
           <div className="w-3 h-3 rounded-full bg-amber-500"></div>
           <div>
@@ -250,33 +250,33 @@ export default function ScoreLineChart({ data, score }: Props) {
             <div className="text-xs text-gray-500">Maturity level</div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
           <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-          <div>
+            <div>
             <div className="text-sm font-semibold text-gray-900">Potential</div>
             <div className="text-xs text-gray-500">Growth opportunity</div>
           </div>
-        </div>
-      </div>
-
+            </div>
+          </div>
+          
       {/* Key Insights */}
       <div className="mt-8 space-y-4">
         <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
           <LightBulbIcon className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-          <div>
+            <div>
             <h4 className="font-semibold text-gray-900 text-sm mb-1">Strategic Insight</h4>
             <p className="text-gray-700 text-sm">
               Your current score of <span className="font-semibold text-blue-600">{score.toFixed(1)}</span> indicates 
               a <span className="font-semibold">{getScoreLabel(score)}</span> stage. With targeted improvements, 
               you can reach maturity within <span className="font-semibold text-emerald-600">6-12 months</span>.
             </p>
+            </div>
           </div>
-        </div>
-        
+          
         <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-100">
           <CheckCircleIcon className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-          <div>
+            <div>
             <h4 className="font-semibold text-gray-900 text-sm mb-1">Growth Opportunity</h4>
             <p className="text-gray-700 text-sm">
               Top performers average <span className="font-semibold text-emerald-600">4.2/5.0</span>. 
@@ -309,8 +309,8 @@ export default function ScoreLineChart({ data, score }: Props) {
             <CheckCircleIcon className="w-3 h-3 text-emerald-400" />
             AI recommendations
           </span>
-        </div>
       </div>
+    </div>
     </motion.div>
   );
 }
