@@ -4,6 +4,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { 
+  ChartBarIcon, 
+  CpuChipIcon, 
+  RocketLaunchIcon
+} from "@heroicons/react/24/outline";
 
 const steps = [
   {
@@ -16,7 +21,7 @@ const steps = [
       </>
     ),
     image: "/images/Step1_Background.jpeg",
-    icon: "📊",
+    icon: ChartBarIcon,
     color: "from-blue-500 to-blue-600",
     bgColor: "from-blue-50 to-blue-100",
   },
@@ -30,7 +35,7 @@ const steps = [
       </>
     ),
     image: "/images/Real-Time_Insights.jpeg",
-    icon: "🤖",
+    icon: CpuChipIcon,
     color: "from-purple-500 to-purple-600",
     bgColor: "from-purple-50 to-purple-100",
   },
@@ -44,7 +49,7 @@ const steps = [
       </>
     ),
     image: "/images/Optimize_Scale.jpeg",
-    icon: "🚀",
+    icon: RocketLaunchIcon,
     color: "from-green-500 to-green-600",
     bgColor: "from-green-50 to-green-100",
   },
@@ -82,7 +87,7 @@ export default function HowItWorks() {
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {steps.map(({ id, title, description, image, icon, color, bgColor }, index) => (
+          {steps.map(({ id, title, description, image, icon: IconComponent, color, bgColor }, index) => (
             <motion.div 
               key={id}
               initial={{ opacity: 0, y: 30 }}
@@ -113,8 +118,8 @@ export default function HowItWorks() {
                 {/* Content */}
                 <div className="relative z-10 p-8 h-full flex flex-col">
                   {/* Icon */}
-                  <div className={`w-16 h-16 bg-gradient-to-r ${color} rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg`}>
-                    {icon}
+                  <div className={`w-16 h-16 bg-gradient-to-r ${color} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}>
+                    <IconComponent className="w-8 h-8 text-white" />
                   </div>
 
                   {/* Title */}
