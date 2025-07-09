@@ -332,7 +332,7 @@ export const animationUtils = {
   },
 
   // Get appropriate animation based on user preference
-  getAccessibleAnimation: (animation: any) => {
+  getAccessibleAnimation: (animation: Record<string, unknown>) => {
     if (animationUtils.prefersReducedMotion()) {
       return performanceAnimations.accessible;
     }
@@ -340,9 +340,9 @@ export const animationUtils = {
   },
 
   // Debounce animation to prevent excessive re-renders
-  debounce: (func: Function, wait: number) => {
+  debounce: <T extends (...args: unknown[]) => void>(func: T, wait: number) => {
     let timeout: NodeJS.Timeout;
-    return function executedFunction(...args: any[]) {
+    return function executedFunction(...args: Parameters<T>) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);
@@ -353,9 +353,9 @@ export const animationUtils = {
   },
 
   // Throttle animation for performance
-  throttle: (func: Function, limit: number) => {
+  throttle: <T extends (...args: unknown[]) => void>(func: T, limit: number) => {
     let inThrottle: boolean;
-    return function executedFunction(this: any, ...args: any[]) {
+    return function executedFunction(this: unknown, ...args: Parameters<T>) {
       if (!inThrottle) {
         func.apply(this, args);
         inThrottle = true;
@@ -366,9 +366,11 @@ export const animationUtils = {
 };
 
 // Export default animation configuration
-export default {
+const animationConfig = {
   animations,
   animationVariants,
   performanceAnimations,
   animationUtils
-}; 
+};
+
+export default animationConfig; 
