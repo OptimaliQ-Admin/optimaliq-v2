@@ -104,16 +104,21 @@ export default function NewsletterSignup({
 
       case "hero":
         return (
-          <div className={`bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-12 text-white text-center relative overflow-hidden ${className}`}>
-            <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-32 translate-x-32"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
+          <div className={`bg-white rounded-3xl shadow-xl border border-gray-200 p-12 text-center relative overflow-hidden ${className}`}>
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-50"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full -translate-y-32 translate-x-32"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-100 rounded-full translate-y-24 -translate-x-24"></div>
             
             <div className="relative z-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-['Inter']">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                <span className="w-2 h-2 bg-white rounded-full"></span>
+                Stay Updated
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-['Inter'] text-gray-900">
                 {title}
               </h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed font-['Inter']">
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-['Inter']">
                 {description}
               </p>
               
@@ -123,19 +128,19 @@ export default function NewsletterSignup({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={placeholder}
-                  className="flex-1 px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/20 font-['Inter']"
+                  className="flex-1 px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 border border-gray-300 font-['Inter']"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-['Inter']"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-['Inter']"
                 >
                   {loading ? "Subscribing..." : buttonText}
                 </button>
               </form>
               
-              <p className="text-sm text-blue-200 mt-4 font-['Inter']">
+              <p className="text-sm text-gray-500 mt-4 font-['Inter']">
                 {footerText}
               </p>
             </div>

@@ -3,6 +3,12 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { 
+  CurrencyDollarIcon, 
+  BoltIcon, 
+  TagIcon,
+  ArrowRightIcon
+} from "@heroicons/react/24/outline";
 
 export default function WhyOptimaliQ() {
   return (
@@ -97,8 +103,8 @@ export default function WhyOptimaliQ() {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
         >
           <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-3xl text-white mx-auto mb-6">
-              💰
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <CurrencyDollarIcon className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-4">Cost Effective</h3>
             <p className="text-gray-600">
@@ -107,8 +113,8 @@ export default function WhyOptimaliQ() {
           </div>
           
           <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl text-white mx-auto mb-6">
-              ⚡
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <BoltIcon className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-4">Lightning Fast</h3>
             <p className="text-gray-600">
@@ -117,8 +123,8 @@ export default function WhyOptimaliQ() {
           </div>
           
           <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl text-white mx-auto mb-6">
-              🎯
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <TagIcon className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-4">Always Relevant</h3>
             <p className="text-gray-600">
@@ -135,17 +141,30 @@ export default function WhyOptimaliQ() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center"
         >
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 lg:p-12 text-white shadow-2xl">
-            <h3 className="text-3xl font-bold mb-4">Ready to Transform Your Business Strategy?</h3>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
-            </p>
-            <div className="flex justify-center">
-              <Link href="/growth-assessment">
-                <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  Unlock My Growth Plan
-                </button>
-              </Link>
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 lg:p-12 relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-purple-50 opacity-50"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-100 rounded-full translate-y-12 -translate-x-12"></div>
+            
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                <span className="w-2 h-2 bg-white rounded-full"></span>
+                Transform Your Business
+              </div>
+              <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Ready to Transform Your Business Strategy?</h3>
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Join a growing wave of businesses using AI-powered strategic intelligence to scale smarter and faster.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href="/growth-assessment">
+                  <button className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2">
+                    Unlock My Growth Plan
+                    <ArrowRightIcon className="w-5 h-5" />
+                  </button>
+                </Link>
+                <p className="text-sm text-gray-500">Join 500+ executives • Free strategic assessment</p>
+              </div>
             </div>
           </div>
         </motion.div>

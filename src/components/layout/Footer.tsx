@@ -77,7 +77,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link href="/terms" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center gap-2 group">
-                      <Icon name="file-text" size="sm" className="text-blue-400 group-hover:scale-110 transition-transform" />
+                      <Icon name="shield-check" size="sm" className="text-blue-400 group-hover:scale-110 transition-transform" />
                       Terms of Use
                     </Link>
                   </li>
@@ -126,14 +126,6 @@ export default function Footer() {
                       className="text-gray-300 hover:text-blue-400 transition-colors duration-300 p-2 rounded-lg hover:bg-white/10"
                     >
                       <FaLinkedin className="w-5 h-5" />
-                    </a>
-                    <a 
-                      href="https://twitter.com/optimaliq" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300 p-2 rounded-lg hover:bg-white/10"
-                    >
-                      <FaTwitter className="w-5 h-5" />
                     </a>
                   </div>
                 </div>
