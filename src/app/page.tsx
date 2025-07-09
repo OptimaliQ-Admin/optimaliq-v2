@@ -4,6 +4,7 @@ import HeroSection from "@/components/home/HeroSection";
 import HowItWorks from "@/components/home/HowItWorks";
 import KeyFeatures from "@/components/home/KeyFeatures";
 import WhyOptimaliQ from "@/components/home/WhyOptimaliQ";
+import TrustIndicators from "@/components/home/TrustIndicators";
 import NewsletterSignup from "@/components/shared/NewsletterSignup";
 import FaqSection from "@/components/home/FaqSection";
 import PageNavigation from "@/components/shared/PageNavigation";
@@ -41,6 +42,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const pageSections = [
     { id: "hero", label: "Home", icon: "🏠" },
+    { id: "trust-indicators", label: "Trust", icon: "🛡️" },
     { id: "how-it-works", label: "How It Works", icon: "⚙️" },
     { id: "key-features", label: "Features", icon: "✨" },
     { id: "why-optimaliq", label: "Why OptimaliQ", icon: "🎯" },
@@ -84,6 +86,7 @@ export default function HomePage() {
       />
       <PageNavigation sections={pageSections} />
       <HeroSection />
+      <TrustIndicators />
       <HowItWorks />
       <KeyFeatures />
       <WhyOptimaliQ />

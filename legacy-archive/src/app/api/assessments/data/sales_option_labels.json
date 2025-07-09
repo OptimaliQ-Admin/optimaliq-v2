@@ -1,0 +1,211 @@
+{
+  "lead_generation": {
+    "no_consistent_method": "We don't have a consistent method",
+    "referrals_only": "Referrals and word of mouth",
+    "occasional_outreach": "Occasional outreach or events",
+    "digital_channels": "Website or social media inquiries"
+  },
+  "sales_process": {
+    "no_process": "No process - each sale is different",
+    "loose_outline": "We follow a loose outline",
+    "key_steps": "We have a few key steps we try to follow",
+    "defined_process": "Yes - we use a defined process from lead to close"
+  },
+  "pipeline_tracking": {
+    "no_tracking": "We don't track it",
+    "manual_spreadsheet": "Manually in a spreadsheet",
+    "basic_crm": "In a basic CRM (e.g. HubSpot, Salesforce)",
+    "structured_system": "In a structured system with deal stages and forecasts"
+  },
+  "sales_team": {
+    "founder_only": "The founder or owner",
+    "single_rep": "One salesperson",
+    "small_team": "A small team",
+    "dedicated_department": "A dedicated structured sales department"
+  },
+  "follow_ups": {
+    "inconsistent": "Inconsistently or not at all",
+    "manual_reminders": "We try but sometimes forget",
+    "basic_system": "We have a basic reminder system",
+    "automated": "We have automated or scheduled follow ups"
+  },
+  "lead_qualification": {
+    "no_qualification": "We talk to anyone interested",
+    "basic_questions": "We ask a few questions during discovery",
+    "basic_criteria": "We use basic criteria (e.g. budget, need)",
+    "scoring_framework": "We follow a lead scoring or qualification framework"
+  },
+  "pricing_proposals": {
+    "ad_hoc": "We make up pricing as we go",
+    "price_list": "We have a price list or one pager",
+    "templated": "We use a templated proposal or quote",
+    "structured": "We tailor pricing with a defined structure"
+  },
+  "sales_metrics": {
+    "lead_sources": "Lead sources",
+    "conversion_rates": "Deal stage conversion rates",
+    "time_to_close": "Time to close",
+    "win_loss": "Win/loss reasons",
+    "activity": "Sales activity (calls, emails)"
+  },
+  "lead_assignment": {
+    "unassigned": "Leads are unassigned or handled ad hoc",
+    "manual_assignment": "They're assigned manually by the owner/leader",
+    "self_managed": "Each rep manages their own leads independently",
+    "routed": "Leads are routed based on role, territory, or fit"
+  },
+  "forecast_confidence": {
+    "not_confident": "Not confident at all",
+    "rough_ideas": "Somewhat - we have rough ideas",
+    "some_metrics": "Mostly - we track some metrics",
+    "data_driven": "Very confident - we forecast based on deal data"
+  },
+  "pipeline_review": {
+    "rarely": "Rarely, only when needed",
+    "occasional": "Occasionally when checking progress",
+    "weekly": "Weekly",
+    "daily": "Daily or during structured reviews"
+  },
+  "sales_discovery": {
+    "informal": "Very informal, we go with gut feel",
+    "basic_questions": "We ask some basic qualifying questions",
+    "structured": "We use a checklist or structured discovery",
+    "formal_framework": "We use a formal framework (e.g. MEDDIC, BANT)"
+  },
+  "deal_progression": {
+    "no_tracking": "We don't track it systematically",
+    "manual_notes": "In notes or spreadsheets",
+    "basic_crm": "In our CRM with basic stages",
+    "detailed_tracking": "With detailed stages and metrics"
+  },
+  "stage_consistency": {
+    "skip_stages": "We skip or rush through stages",
+    "loose_steps": "We loosely follow a set of steps",
+    "track_movement": "We track movement but not always accurately",
+    "methodical": "We move deals methodically through stages"
+  },
+  "sales_stages": {
+    "not_defined": "Not defined",
+    "loosely_defined": "Some stages are loosely defined",
+    "defined_not_used": "Defined, but not consistently used",
+    "clearly_documented": "Clearly documented and used for tracking"
+  },
+  "pipeline_accuracy": {
+    "not_accurate": "Not accurate at all",
+    "somewhat_accurate": "Somewhat accurate",
+    "mostly_accurate": "Mostly accurate, with occasional cleanups",
+    "very_accurate": "Very accurate and regularly maintained"
+  },
+  "lead_prioritization": {
+    "most_recent": "We work whatever is most recent",
+    "gut_feel": "We prioritize based on gut feel",
+    "deal_size": "We prioritize based on deal size or engagement",
+    "scoring_criteria": "We use scoring or qualification criteria"
+  },
+  "follow_up_tracking": {
+    "no_tracking": "We don't track follow-ups well",
+    "calendar_reminders": "We rely on calendar or reminders",
+    "crm_tasks": "We have tasks inside our CRM",
+    "automation": "We use automation or sequences to manage follow-ups"
+  },
+  "sales_operations": {
+    "pipeline_reviews": "Regular pipeline reviews",
+    "forecasting": "Forecasting reports",
+    "conversion_tracking": "Deal stage conversion tracking",
+    "enablement": "Sales enablement content",
+    "dashboards": "Performance dashboards"
+  },
+  "sales_preparation": {
+    "wing_it": "We wing it",
+    "glance_notes": "We glance at past notes or emails",
+    "checklist": "We follow a checklist or sales script",
+    "prep_research": "We prep with research, context, and a discovery framework"
+  },
+  "interaction_documentation": {
+    "rarely": "Rarely",
+    "big_deals": "Only for big deals",
+    "most_calls": "Most calls are noted in the CRM",
+    "every_interaction": "Every interaction is logged and searchable"
+  },
+  "handoff_process": {
+    "no_handoff": "We don't really have a handoff",
+    "inconsistent": "It's inconsistent",
+    "mostly_smooth": "It's mostly smooth, but has gaps",
+    "standardized": "It's standardized and clearly defined"
+  },
+  "sales_activities": {
+    "no_tracking": "No one tracks them",
+    "manual_tracking": "They're tracked in emails or notes",
+    "basic_tool": "We track them in a spreadsheet or tool",
+    "crm_guided": "We use a CRM that guides next steps"
+  },
+  "sales_targets": {
+    "no_targets": "We don't have targets",
+    "rep_tracked": "Each rep tracks their own goals",
+    "infrequent_review": "We set goals but don't review them often",
+    "regular_review": "We track and review goals regularly"
+  },
+  "sales_reporting": {
+    "no_reporting": "No reporting",
+    "basic_reports": "We have basic reports",
+    "weekly_metrics": "We track key metrics weekly",
+    "real_time": "We have real-time dashboards"
+  },
+  "strategy_adjustment": {
+    "reactive": "We react to issues after they occur",
+    "weekly_review": "We review metrics weekly",
+    "proactive": "We proactively adjust based on data",
+    "forecasting": "We run forecasts and modeling"
+  },
+  "deal_insights": {
+    "call_recordings": "Call recordings",
+    "crm_notes": "CRM notes",
+    "chat_messages": "Slack or chat messages",
+    "deal_reviews": "Deal review meetings",
+    "rep_feedback": "Rep feedback"
+  },
+  "sales_enablement": {
+    "no_enablement": "No formal enablement",
+    "basic_training": "Basic onboarding training",
+    "regular_training": "Regular training sessions",
+    "continuous_learning": "Continuous learning program"
+  },
+  "sales_analytics": {
+    "win_loss": "Win/loss analysis",
+    "stage_conversion": "Stage conversion rates",
+    "forecast_accuracy": "Forecast accuracy",
+    "deal_quality": "Deal quality metrics",
+    "rep_coaching": "Rep coaching metrics"
+  },
+  "deal_monitoring": {
+    "too_late": "Too late to intervene",
+    "manual_monitoring": "Manual monitoring",
+    "dashboards": "Using dashboards",
+    "modeled_stages": "Modeled by stage"
+  },
+  "lead_qualification_method": {
+    "gut_feel": "Gut feel",
+    "call_history": "Call history",
+    "lead_fit": "Lead fit scoring",
+    "multi_factor": "Multi-factor scoring"
+  },
+  "best_practices": {
+    "not_shared": "Not shared",
+    "tips_informal": "Tips shared informally",
+    "best_practice_reviews": "Best practice reviews",
+    "documented_trained": "Documented and trained"
+  },
+  "performance_review": {
+    "occasionally": "Occasionally",
+    "monthly": "Monthly",
+    "weekly": "Weekly",
+    "operating_cadence": "Operating cadence"
+  },
+  "sales_tools": {
+    "spreadsheets": "Spreadsheets",
+    "crm_dashboards": "CRM dashboards",
+    "call_review": "Call review",
+    "coaching_platforms": "Coaching platforms",
+    "sales_scorecards": "Sales scorecards"
+  }
+} 

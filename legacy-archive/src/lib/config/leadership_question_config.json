@@ -1,0 +1,1063 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "role_clarity",
+          "label": "How clearly defined are leadership roles and responsibilities in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_defined", "label": "Not defined at all", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat defined", "score": 2 },
+            { "value": "mostly", "label": "Mostly clear", "score": 3 },
+            { "value": "very_clear", "label": "Very clear and structured", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "goal_communication",
+          "label": "How consistently does your leadership team communicate the company's goals or vision?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes", "score": 2 },
+            { "value": "mostly", "label": "Mostly", "score": 3 },
+            { "value": "always", "label": "Always", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "trust_level",
+          "label": "How would you describe the level of trust among your leadership and team members?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low — there's skepticism or conflict", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we work around issues", "score": 2 },
+            { "value": "good", "label": "Good — mostly supportive", "score": 3 },
+            { "value": "high", "label": "High — we trust and collaborate openly", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "performance_assessment",
+          "label": "What methods do you use to assess team or individual performance?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None", "score": 1 },
+            { "value": "occasional", "label": "Occasional feedback", "score": 2 },
+            { "value": "annual", "label": "Annual reviews", "score": 3 },
+            { "value": "regular", "label": "Regular check-ins with clear KPIs", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "meeting_frequency",
+          "label": "How often do you hold structured team or department meetings?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "monthly", "label": "Monthly", "score": 3 },
+            { "value": "weekly", "label": "Weekly or more", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "leadership_culture",
+          "label": "Which of the following are true about your leadership culture?",
+          "type": "multi_select",
+          "options": [
+            { "value": "centralized", "label": "Decisions are centralized", "score": 1 },
+            { "value": "no_feedback", "label": "Feedback is rare", "score": 1 },
+            { "value": "resistant", "label": "There's resistance to change", "score": 1 },
+            { "value": "silos", "label": "Teams work in silos", "score": 1 },
+            { "value": "unclear", "label": "Accountability is unclear", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "conflict_handling",
+          "label": "How does your team typically handle conflict or disagreement?",
+          "type": "select",
+          "options": [
+            { "value": "avoid", "label": "Avoid or ignore it", "score": 1 },
+            { "value": "play_out", "label": "Let it play out", "score": 2 },
+            { "value": "escalate", "label": "Address it when it escalates", "score": 3 },
+            { "value": "early", "label": "Address it early and constructively", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "current_challenge",
+          "label": "What is the biggest leadership challenge you're facing right now?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "improvement_opportunity",
+          "label": "What's one thing your leadership team could do to improve team performance?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "behavior_improvement",
+          "label": "If you could improve one leadership behavior in your organization, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "performance_review",
+          "label": "How often does your leadership team review performance and alignment?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or only when there are issues", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally during team meetings", "score": 2 },
+            { "value": "monthly", "label": "Monthly or quarterly reviews", "score": 3 },
+            { "value": "regular", "label": "Regular, structured performance and strategy sessions", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "decision_making",
+          "label": "What best describes how your team makes important decisions?",
+          "type": "select",
+          "options": [
+            { "value": "one_person", "label": "One person typically makes the final call", "score": 1 },
+            { "value": "informal", "label": "A few leaders discuss and decide informally", "score": 2 },
+            { "value": "consensus", "label": "Decisions are made by consensus", "score": 3 },
+            { "value": "structured", "label": "We use a structured process for major decisions", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "alignment_tools",
+          "label": "Which of the following tools or practices do you use to support leadership alignment?",
+          "type": "multi_select",
+          "options": [
+            { "value": "weekly_meetings", "label": "Weekly leadership meetings", "score": 1 },
+            { "value": "kpi_dashboards", "label": "Shared KPI dashboards", "score": 1 },
+            { "value": "planning_sessions", "label": "Strategic planning sessions", "score": 1 },
+            { "value": "alignment_workshops", "label": "Cross-functional alignment workshops", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "role_definition",
+          "label": "How are roles and responsibilities defined across your leadership team?",
+          "type": "select",
+          "options": [
+            { "value": "not_defined", "label": "Not clearly defined", "score": 1 },
+            { "value": "understood", "label": "Generally understood but not documented", "score": 2 },
+            { "value": "documented", "label": "Documented and mostly followed", "score": 3 },
+            { "value": "clearly_defined", "label": "Clearly defined, documented, and reviewed regularly", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "feedback_process",
+          "label": "How do you gather and act on feedback from your team?",
+          "type": "select",
+          "options": [
+            { "value": "no_feedback", "label": "We don't regularly ask for feedback", "score": 1 },
+            { "value": "informal", "label": "Feedback is shared informally", "score": 2 },
+            { "value": "periodic", "label": "We do periodic surveys or check-ins", "score": 3 },
+            { "value": "structured", "label": "We have structured feedback loops and action plans", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you in your leadership team's ability to scale with the business?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — major gaps exist", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident — we're learning as we go", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident — team is growing into roles", "score": 3 },
+            { "value": "very", "label": "Very confident — team is highly capable and aligned", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "2": [
+        {
+          "key": "development_approach",
+          "label": "What is your current approach to leadership development?",
+          "type": "select",
+          "options": [
+            { "value": "no_development", "label": "No formal development", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc learning or mentorship", "score": 2 },
+            { "value": "some_training", "label": "Some external coaching or training", "score": 3 },
+            { "value": "ongoing", "label": "Ongoing structured development", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "current_misalignment",
+          "label": "What is the biggest area of misalignment within your leadership team today?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "current_challenge",
+          "label": "What's one leadership challenge you're currently working to solve?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "improvement_area",
+          "label": "If your leadership team could improve one area right now, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "check_in_frequency",
+          "label": "How consistently do team leads conduct check-ins or performance conversations?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or only when issues arise", "score": 1 },
+            { "value": "monthly", "label": "Monthly", "score": 2 },
+            { "value": "biweekly", "label": "Bi-weekly or project-based", "score": 3 },
+            { "value": "weekly", "label": "Weekly or during defined 1:1s", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "goal_alignment",
+          "label": "What's your current process for aligning leadership goals with team objectives?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "No alignment process", "score": 1 },
+            { "value": "loose", "label": "We share goals loosely", "score": 2 },
+            { "value": "okrs", "label": "Leaders set team OKRs or priorities", "score": 3 },
+            { "value": "cascade", "label": "Goals cascade from company strategy", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "regular_activities",
+          "label": "Which of the following leadership activities happen regularly?",
+          "type": "multi_select",
+          "options": [
+            { "value": "goal_setting", "label": "Goal setting or OKRs", "score": 1 },
+            { "value": "feedback", "label": "Feedback sessions", "score": 1 },
+            { "value": "coaching", "label": "Coaching or mentoring", "score": 1 },
+            { "value": "recognition", "label": "Recognition or rewards", "score": 1 },
+            { "value": "training", "label": "Training or development plans", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "cross_functional",
+          "label": "How are cross-functional efforts typically managed?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc coordination", "score": 1 },
+            { "value": "occasional", "label": "Leads meet occasionally", "score": 2 },
+            { "value": "standups", "label": "Regular cross-functional standups", "score": 3 },
+            { "value": "collaborative", "label": "Collaborative planning with shared metrics", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "leadership_style",
+          "label": "How would your team describe your leadership style?",
+          "type": "select",
+          "options": [
+            { "value": "directive", "label": "Directive or reactive", "score": 1 },
+            { "value": "supportive", "label": "Supportive but inconsistent", "score": 2 },
+            { "value": "empowering", "label": "Empowering with check-ins", "score": 3 },
+            { "value": "proactive", "label": "Proactive and strategic", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "emerging_leaders",
+          "label": "Do you have a system in place for identifying and developing emerging leaders?",
+          "type": "select",
+          "options": [
+            { "value": "no_system", "label": "No system in place", "score": 1 },
+            { "value": "informal", "label": "We recognize talent informally", "score": 2 },
+            { "value": "manager_recommend", "label": "Managers recommend people for growth", "score": 3 },
+            { "value": "structured", "label": "Structured path with criteria and plans", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "conflict_handling",
+          "label": "How do you handle conflicts or misalignment among teams or departments?",
+          "type": "select",
+          "options": [
+            { "value": "unresolved", "label": "They often linger unresolved", "score": 1 },
+            { "value": "case_by_case", "label": "Handled individually or case by case", "score": 2 },
+            { "value": "escalated", "label": "Escalated through leadership", "score": 3 },
+            { "value": "structured", "label": "Resolved through structured feedback loops", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "team_friction",
+          "label": "What's the most recent leadership decision that created team friction—and why?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "desired_behavior",
+          "label": "What's one behavior you'd like to see more consistently from your leadership team?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "effectiveness_improvement",
+          "label": "What's one thing you know would improve leadership effectiveness in your company?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "goal_tracking",
+          "label": "How are leadership goals tracked and communicated across departments?",
+          "type": "select",
+          "options": [
+            { "value": "not_tracked", "label": "They're not clearly tracked", "score": 1 },
+            { "value": "meetings", "label": "Occasionally discussed in meetings", "score": 2 },
+            { "value": "informal", "label": "Tracked via informal systems or docs", "score": 3 },
+            { "value": "dashboards", "label": "Shared and monitored in dashboards or tools", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "one_on_one_consistency",
+          "label": "How consistent are 1:1 meetings or coaching sessions between leaders and team members?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "Inconsistent or not held", "score": 1 },
+            { "value": "sporadic", "label": "Held sporadically", "score": 2 },
+            { "value": "regular", "label": "Regular but unstructured", "score": 3 },
+            { "value": "consistent", "label": "Held consistently with agendas and follow-up", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "leadership_practices",
+          "label": "Which of the following leadership practices are in place?",
+          "type": "multi_select",
+          "options": [
+            { "value": "performance_checkins", "label": "Performance check-ins", "score": 1 },
+            { "value": "retrospectives", "label": "Team retrospectives", "score": 1 },
+            { "value": "coaching_plans", "label": "Coaching plans", "score": 1 },
+            { "value": "career_paths", "label": "Internal promotions or career paths", "score": 1 },
+            { "value": "satisfaction_surveys", "label": "Employee satisfaction surveys", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "kpi_alignment",
+          "label": "How are team-level KPIs connected to leadership goals?",
+          "type": "select",
+          "options": [
+            { "value": "disconnected", "label": "They're disconnected or unclear", "score": 1 },
+            { "value": "loose", "label": "They loosely align", "score": 2 },
+            { "value": "high_level", "label": "They're linked at a high level", "score": 3 },
+            { "value": "aligned", "label": "They're aligned and tracked together", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "development_approach",
+          "label": "What's your current approach to leadership development and training?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None or ad hoc", "score": 1 },
+            { "value": "occasional", "label": "Occasional sessions", "score": 2 },
+            { "value": "basic", "label": "Basic manager enablement", "score": 3 },
+            { "value": "structured", "label": "Structured training and peer support", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "feedback_gathering",
+          "label": "How do leaders gather feedback from employees?",
+          "type": "select",
+          "options": [
+            { "value": "no_feedback", "label": "We don't gather feedback", "score": 1 },
+            { "value": "occasional_surveys", "label": "Occasionally via surveys", "score": 2 },
+            { "value": "meetings", "label": "Through meetings or reviews", "score": 3 },
+            { "value": "regular", "label": "Regular surveys and open feedback channels", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "priority_communication",
+          "label": "How effectively are cross-functional priorities communicated by leadership?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely communicated", "score": 1 },
+            { "value": "high_level", "label": "Shared at high-level meetings", "score": 2 },
+            { "value": "departmental", "label": "Discussed within departments", "score": 3 },
+            { "value": "aligned", "label": "Aligned and cascaded regularly", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "successful_behavior",
+          "label": "What's one leadership behavior or practice that has helped your team perform better?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "current_challenge",
+          "label": "What's the biggest leadership-related challenge your team faces today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you that your leadership practices can scale with your company?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we'll need to reinvent them", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we'll need more structure", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we're developing good practices", "score": 3 },
+            { "value": "very", "label": "Very — we've built scalable leadership systems", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "performance_tracking",
+          "label": "How does your leadership team track and manage performance across departments?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Mostly ad hoc or informal reviews", "score": 1 },
+            { "value": "team_specific", "label": "Each team has its own system", "score": 2 },
+            { "value": "shared_scorecards", "label": "We use shared scorecards or KPIs", "score": 3 },
+            { "value": "company_wide", "label": "We use company-wide dashboards and aligned metrics", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "goal_review",
+          "label": "How often are company goals or OKRs revisited and reviewed?",
+          "type": "select",
+          "options": [
+            { "value": "yearly", "label": "Only at the beginning or end of the year", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly", "score": 2 },
+            { "value": "monthly", "label": "Monthly check-ins", "score": 3 },
+            { "value": "weekly", "label": "Integrated into weekly operations", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "leadership_rhythm",
+          "label": "Which of the following are embedded into your leadership rhythm?",
+          "type": "multi_select",
+          "options": [
+            { "value": "weekly_syncs", "label": "Weekly leadership syncs", "score": 1 },
+            { "value": "cross_functional", "label": "Cross-functional reviews", "score": 1 },
+            { "value": "retrospectives", "label": "Team retrospectives", "score": 1 },
+            { "value": "culture_reviews", "label": "Culture or engagement reviews", "score": 1 },
+            { "value": "talent_checkins", "label": "Talent development check-ins", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "priority_alignment",
+          "label": "How do you ensure alignment across leadership on company priorities?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "We don't — priorities are often unclear", "score": 1 },
+            { "value": "fades", "label": "We align during planning, but it fades", "score": 2 },
+            { "value": "okrs", "label": "We use OKRs or shared docs", "score": 3 },
+            { "value": "cadence", "label": "We operate on a cadence with full visibility", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you in your leadership team's ability to scale with company growth?",
+          "type": "select",
+          "options": [
+            { "value": "not_sure", "label": "We're not sure — we may need new leaders", "score": 1 },
+            { "value": "mostly", "label": "Mostly confident — some growth needed", "score": 2 },
+            { "value": "confident", "label": "Confident — leadership is adapting well", "score": 3 },
+            { "value": "very", "label": "Very confident — we're growing with the business", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "effectiveness_evaluation",
+          "label": "How is leadership effectiveness evaluated today?",
+          "type": "select",
+          "options": [
+            { "value": "not_evaluated", "label": "It's not really evaluated", "score": 1 },
+            { "value": "informal", "label": "Via 1:1s or informal feedback", "score": 2 },
+            { "value": "performance", "label": "Through team performance or KPIs", "score": 3 },
+            { "value": "structured", "label": "Via structured 360 reviews or assessments", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "accountability",
+          "label": "How does your company handle accountability across leadership roles?",
+          "type": "select",
+          "options": [
+            { "value": "avoid", "label": "We avoid direct accountability", "score": 1 },
+            { "value": "reactive", "label": "It's discussed if problems arise", "score": 2 },
+            { "value": "meetings", "label": "We hold each other accountable in meetings", "score": 3 },
+            { "value": "transparent", "label": "We track ownership and outcomes transparently", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "alignment_example",
+          "label": "What's a recent example of strong leadership alignment leading to a business win?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "operating_gap",
+          "label": "What's a gap you've noticed in your leadership team's current operating system?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "improvement_priority",
+          "label": "If you could improve one leadership behavior or system right now, what would it be?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "goal_setting",
+          "label": "How does your leadership team set and communicate quarterly or annual goals?",
+          "type": "select",
+          "options": [
+            { "value": "independent", "label": "Each department sets its own goals independently", "score": 1 },
+            { "value": "top_down", "label": "Goals are set top-down and reviewed quarterly", "score": 2 },
+            { "value": "co_create", "label": "We co-create goals across departments with clear alignment", "score": 3 },
+            { "value": "okrs", "label": "We use OKRs or similar framework reviewed company-wide", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "development_approach",
+          "label": "Which of the following best describes your approach to leadership development?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc training or learning", "score": 1 },
+            { "value": "occasional", "label": "Occasional coaching or team offsites", "score": 2 },
+            { "value": "structured", "label": "Structured development plans and coaching", "score": 3 },
+            { "value": "continuous", "label": "Leadership development is continuous and measured", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "collaboration_rituals",
+          "label": "What types of collaboration rituals or leadership forums exist today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "weekly_meetings", "label": "Weekly leadership meetings", "score": 1 },
+            { "value": "quarterly_offsites", "label": "Quarterly offsites or reviews", "score": 1 },
+            { "value": "cross_functional", "label": "Cross-functional initiative teams", "score": 1 },
+            { "value": "scorecard_reviews", "label": "Scorecard or OKR reviews", "score": 1 },
+            { "value": "town_halls", "label": "Executive town halls or comms", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "goal_cascade",
+          "label": "How do you ensure that goals and accountability cascade through the organization?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "It's unclear — depends on each team", "score": 1 },
+            { "value": "informal", "label": "We use email, docs, or verbal updates", "score": 2 },
+            { "value": "shared_tools", "label": "We use shared dashboards or software", "score": 3 },
+            { "value": "formal", "label": "We cascade and track progress formally", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "team_health_signals",
+          "label": "What signals do you use to monitor team health and alignment?",
+          "type": "multi_select",
+          "options": [
+            { "value": "feedback", "label": "1:1 feedback or manager reports", "score": 1 },
+            { "value": "surveys", "label": "Team surveys or engagement scores", "score": 1 },
+            { "value": "performance", "label": "Retention or performance data", "score": 1 },
+            { "value": "execution", "label": "Cross-team execution metrics", "score": 1 },
+            { "value": "pulse", "label": "Pulse feedback or skip-level reviews", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "behavior_refinement",
+          "label": "What's your process for refining leadership behaviors or communication practices?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "We don't have a process", "score": 1 },
+            { "value": "post_issue", "label": "We reflect post-issue or quarterly", "score": 2 },
+            { "value": "retros", "label": "We review in retros or coaching", "score": 3 },
+            { "value": "active", "label": "We actively monitor and evolve", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "values_modeling",
+          "label": "How consistently are company values modeled by leaders across the org?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "Inconsistently or only in certain departments", "score": 1 },
+            { "value": "occasional", "label": "Leaders reference values occasionally", "score": 2 },
+            { "value": "coaching", "label": "Most leaders use them in day-to-day coaching", "score": 3 },
+            { "value": "evaluated", "label": "Values are part of how we evaluate and lead", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "current_challenge",
+          "label": "What's one challenge you're working to improve across your leadership team today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "misalignment_handling",
+          "label": "How do you handle misalignment or performance issues within the leadership team?",
+          "type": "select",
+          "options": [
+            { "value": "ignore", "label": "We usually ignore them", "score": 1 },
+            { "value": "informal", "label": "We raise issues informally", "score": 2 },
+            { "value": "coaching", "label": "We address through 1:1s or coaching", "score": 3 },
+            { "value": "formal", "label": "We use formal feedback and accountability", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "scaling_preparedness",
+          "label": "How prepared is your leadership team to scale and lead a 2x–3x larger organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not at all prepared", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — a few leaders are ready", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we've grown together so far", "score": 3 },
+            { "value": "very", "label": "Very — we're developing toward that scale", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategic_focus",
+          "label": "How often do your leadership team meetings focus on strategic priorities and long-term vision?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — mostly focused on immediate issues", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — we revisit strategy quarterly", "score": 2 },
+            { "value": "frequently", "label": "Frequently — strategic topics are a regular agenda item", "score": 3 },
+            { "value": "always", "label": "Always — strategy and vision are core to every leadership sync", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "development_components",
+          "label": "Which of the following are part of your leadership development approach?",
+          "type": "multi_select",
+          "options": [
+            { "value": "coaching", "label": "Leadership coaching or mentoring", "score": 1 },
+            { "value": "feedback", "label": "360-degree feedback", "score": 1 },
+            { "value": "succession", "label": "Succession planning", "score": 1 },
+            { "value": "education", "label": "Executive education or training", "score": 1 },
+            { "value": "projects", "label": "Cross-functional project ownership", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "effectiveness_evaluation",
+          "label": "How is leadership effectiveness evaluated across the organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_evaluated", "label": "It's not formally evaluated", "score": 1 },
+            { "value": "performance", "label": "Based on team performance or KPIs", "score": 2 },
+            { "value": "feedback", "label": "Through feedback and reviews", "score": 3 },
+            { "value": "structured", "label": "Via structured assessments and leadership scorecards", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "cross_functional",
+          "label": "What is your leadership team's approach to cross-functional collaboration?",
+          "type": "select",
+          "options": [
+            { "value": "silos", "label": "Leaders work mostly in silos", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc collaboration as needed", "score": 2 },
+            { "value": "regular", "label": "Regular cross-functional meetings", "score": 3 },
+            { "value": "integrated", "label": "Integrated planning and shared ownership", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "values_reinforcement",
+          "label": "What systems are in place to reinforce company values and vision across teams?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "We rely on informal communication", "score": 1 },
+            { "value": "onboarding", "label": "Shared during onboarding or all-hands", "score": 2 },
+            { "value": "reviews", "label": "Built into reviews or OKRs", "score": 3 },
+            { "value": "rituals", "label": "Reinforced through rituals, storytelling, and culture ops", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "successful_practice",
+          "label": "What's one leadership practice you've institutionalized that has significantly improved team alignment?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "decision_making",
+          "label": "How are major decisions typically made across your leadership team?",
+          "type": "select",
+          "options": [
+            { "value": "top_down", "label": "Top-down with limited discussion", "score": 1 },
+            { "value": "consensus", "label": "Consensus-driven with some inefficiencies", "score": 2 },
+            { "value": "role_based", "label": "Role-based with shared accountability", "score": 3 },
+            { "value": "rapid", "label": "Rapid alignment through clear frameworks", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "rewarded_behaviors",
+          "label": "Which of the following behaviors are encouraged and rewarded at the leadership level?",
+          "type": "multi_select",
+          "options": [
+            { "value": "vulnerability", "label": "Vulnerability and self-awareness", "score": 1 },
+            { "value": "mentorship", "label": "Mentorship and talent development", "score": 1 },
+            { "value": "collaboration", "label": "Cross-team collaboration", "score": 1 },
+            { "value": "excellence", "label": "Operational excellence", "score": 1 },
+            { "value": "customer", "label": "Customer obsession", "score": 1 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "innovation_role",
+          "label": "What role does your leadership team play in fostering innovation?",
+          "type": "select",
+          "options": [
+            { "value": "no_focus", "label": "Little to no focus on innovation", "score": 1 },
+            { "value": "occasional", "label": "Occasional brainstorming or pilots", "score": 2 },
+            { "value": "dedicated", "label": "Dedicated time and resources for innovation", "score": 3 },
+            { "value": "embedded", "label": "Innovation is embedded into leadership goals and metrics", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you in your leadership team's ability to scale with the company?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we need outside hires", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we're developing our team", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident — we have the right structure and talent", "score": 3 },
+            { "value": "very", "label": "Very confident — our leadership bench is deep and scalable", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "change_adaptation",
+          "label": "How does your leadership team adapt its approach during times of rapid change or uncertainty?",
+          "type": "select",
+          "options": [
+            { "value": "maintain", "label": "They maintain existing processes", "score": 1 },
+            { "value": "reactive", "label": "They make reactive decisions as needed", "score": 2 },
+            { "value": "limited", "label": "They adjust plans with limited input", "score": 3 },
+            { "value": "proactive", "label": "They lead proactive change with transparency and resilience", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "development_components",
+          "label": "Which of the following are embedded into your leadership development programs?",
+          "type": "multi_select",
+          "options": [
+            { "value": "coaching", "label": "Coaching and mentoring", "score": 1 },
+            { "value": "emotional", "label": "Emotional intelligence training", "score": 1 },
+            { "value": "strategic", "label": "Strategic decision-making", "score": 1 },
+            { "value": "collaboration", "label": "Cross-functional collaboration", "score": 1 },
+            { "value": "succession", "label": "Succession planning", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "practice_evaluation",
+          "label": "How are leadership practices evaluated and improved over time?",
+          "type": "select",
+          "options": [
+            { "value": "no_evaluation", "label": "There's no formal evaluation", "score": 1 },
+            { "value": "occasional", "label": "Occasional 360 reviews or feedback sessions", "score": 2 },
+            { "value": "regular", "label": "Regular pulse checks and team surveys", "score": 3 },
+            { "value": "ongoing", "label": "Ongoing leadership KPIs, retros, and feedback loops", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "consistent_behavior",
+          "label": "What's one leadership behavior or trait your team models consistently?",
+          "type": "text_area",
+          "order": 4
+        },
+        {
+          "key": "talent_confidence",
+          "label": "How confident are you that your leadership team can attract, retain, and grow top talent in a competitive environment?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "highly", "label": "Highly confident — it's our strength", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "goal_communication",
+          "label": "How are goals and performance expectations communicated across departments?",
+          "type": "select",
+          "options": [
+            { "value": "infrequent", "label": "Infrequently or top-down", "score": 1 },
+            { "value": "occasional", "label": "Shared occasionally in meetings", "score": 2 },
+            { "value": "regular", "label": "Regularly through dashboards or reports", "score": 3 },
+            { "value": "aligned", "label": "Aligned, visible, and reinforced across teams", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "learning_systems",
+          "label": "What systems are in place to support team learning and development?",
+          "type": "multi_select",
+          "options": [
+            { "value": "budgets", "label": "Learning budgets", "score": 1 },
+            { "value": "tools", "label": "On-demand learning tools", "score": 1 },
+            { "value": "peer", "label": "Peer learning or knowledge sharing", "score": 1 },
+            { "value": "structured", "label": "Structured L&D programs", "score": 1 },
+            { "value": "career", "label": "Career pathing or internal mobility", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "future_evolution",
+          "label": "What's one aspect of your leadership style or structure that you plan to evolve in the next year?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "recognition_approach",
+          "label": "How are your top-performing teams or individuals recognized and rewarded?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "Informal recognition or bonuses", "score": 1 },
+            { "value": "shoutouts", "label": "Monthly or quarterly shoutouts", "score": 2 },
+            { "value": "structured", "label": "Structured performance-based rewards", "score": 3 },
+            { "value": "strategic", "label": "Strategic recognition tied to business goals and culture", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "culture_relationship",
+          "label": "How would you describe the relationship between your leadership team and company culture?",
+          "type": "select",
+          "options": [
+            { "value": "separate", "label": "Culture is separate from leadership", "score": 1 },
+            { "value": "informal", "label": "Leaders influence culture informally", "score": 2 },
+            { "value": "shared", "label": "Culture is a shared focus in leadership decisions", "score": 3 },
+            { "value": "active", "label": "Leadership actively shapes and models the culture", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "cultural_modeling",
+          "label": "How does leadership actively model and reinforce cultural values and performance expectations?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "Inconsistently or only in messaging", "score": 1 },
+            { "value": "occasional", "label": "Occasionally in key moments", "score": 2 },
+            { "value": "routine", "label": "Routinely through behavior and rituals", "score": 3 },
+            { "value": "consistent", "label": "Consistently through systems, recognition, and accountability", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "embedded_practices",
+          "label": "Which of the following leadership practices are fully embedded into your operating model?",
+          "type": "multi_select",
+          "options": [
+            { "value": "alignment", "label": "Executive alignment and shared goals", "score": 1 },
+            { "value": "communication", "label": "Transparent communication loops", "score": 1 },
+            { "value": "learning", "label": "Leader-led learning and development", "score": 1 },
+            { "value": "reviews", "label": "Cross-functional performance reviews", "score": 1 },
+            { "value": "planning", "label": "Strategic scenario planning and response", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "team_empowerment",
+          "label": "How do leaders ensure their teams are high-performing, empowered, and aligned?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Through ad hoc support or review", "score": 1 },
+            { "value": "delegated", "label": "Through delegated team leads", "score": 2 },
+            { "value": "coaching", "label": "Through coaching, feedback, and tools", "score": 3 },
+            { "value": "systemic", "label": "Through systemic enablement, rituals, and data", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "competitive_edge",
+          "label": "What's one leadership behavior or system that gives your company a clear edge?",
+          "type": "text_area",
+          "order": 4
+        },
+        {
+          "key": "leader_accountability",
+          "label": "How are leaders held accountable for performance, culture, and innovation?",
+          "type": "select",
+          "options": [
+            { "value": "executive", "label": "Primarily by executive team feedback", "score": 1 },
+            { "value": "reviews", "label": "Through reviews or board discussions", "score": 2 },
+            { "value": "okrs", "label": "Via OKRs, team feedback, and performance data", "score": 3 },
+            { "value": "peer", "label": "Through peer visibility and company-wide reporting", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "capability_evolution",
+          "label": "How often do leaders evolve their own capabilities to match business needs?",
+          "type": "select",
+          "options": [
+            { "value": "occasional", "label": "Occasionally via coaching or feedback", "score": 1 },
+            { "value": "offsites", "label": "During leadership offsites or reviews", "score": 2 },
+            { "value": "routine", "label": "Routinely through personal development", "score": 3 },
+            { "value": "continuous", "label": "Continuously through structured learning and adaptation", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "next_gen_development",
+          "label": "What are the primary ways you develop next-generation leaders?",
+          "type": "select",
+          "options": [
+            { "value": "organic", "label": "Through experience and organic growth", "score": 1 },
+            { "value": "mentorship", "label": "Via mentorship or leadership exposure", "score": 2 },
+            { "value": "rotational", "label": "With rotational programs or initiatives", "score": 3 },
+            { "value": "formal", "label": "With a formal leadership development framework", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "alignment_system",
+          "label": "What's your most effective system for driving alignment between teams?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "priority_cascade",
+          "label": "How are executive priorities cascaded across the organization?",
+          "type": "select",
+          "options": [
+            { "value": "high_level", "label": "Via high-level all-hands or Slack messages", "score": 1 },
+            { "value": "quarterly", "label": "During quarterly planning cycles", "score": 2 },
+            { "value": "okrs", "label": "Through OKRs and team planning", "score": 3 },
+            { "value": "integrated", "label": "Through integrated strategic communication rituals", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "change_confidence",
+          "label": "How confident are you that your leadership team can lead the company through major change or reinvention?",
+          "type": "select",
+          "options": [
+            { "value": "somewhat", "label": "Somewhat confident", "score": 1 },
+            { "value": "with_support", "label": "Confident with outside support", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident — we've done it before", "score": 3 },
+            { "value": "highly", "label": "Highly confident — it's part of our DNA", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

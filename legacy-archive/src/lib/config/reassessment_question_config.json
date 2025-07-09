@@ -1,0 +1,2173 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "priority_clarity",
+          "label": "Have you made any progress clarifying your top 3 business priorities since your last assessment?",
+          "type": "select",
+          "options": [
+            { "value": "yes", "label": "Yes — we've clearly defined them", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we've discussed but not finalized", "score": 2 },
+            { "value": "no", "label": "No — we're still reacting week to week", "score": 3 },
+            { "value": "unsure", "label": "Not sure what our priorities should be", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "improvement_approach",
+          "label": "Which of the following best describes how you've approached improvement efforts over the last 30 days?",
+          "type": "select",
+          "options": [
+            { "value": "no_progress", "label": "We haven't made much progress", "score": 1 },
+            { "value": "exploring", "label": "We've started exploring ideas", "score": 2 },
+            { "value": "concrete_steps", "label": "We've taken 1–2 concrete steps", "score": 3 },
+            { "value": "focused_plan", "label": "We've committed to a focused plan", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "stuck_areas",
+          "label": "Where do you feel the most stuck today?",
+          "type": "select",
+          "options": [
+            { "value": "strategy", "label": "Strategy — we lack direction", "score": 1 },
+            { "value": "process", "label": "Process — we're too reactive", "score": 2 },
+            { "value": "tech", "label": "Tech — we don't have the right tools", "score": 3 },
+            { "value": "team", "label": "Team — unclear roles or alignment", "score": 4 },
+            { "value": "everything", "label": "Everything feels stuck", "score": 5 },
+            { "value": "unsure", "label": "I'm not sure where to start", "score": 6 }
+          ],
+          "order": 3
+        },
+        {
+          "key": "priority_review_frequency",
+          "label": "How often do you revisit or review your business priorities?",
+          "type": "select",
+          "options": [
+            { "value": "weekly", "label": "Weekly — it's part of our rhythm", "score": 1 },
+            { "value": "monthly", "label": "Monthly — during check-ins or meetings", "score": 2 },
+            { "value": "rarely", "label": "Rarely — only when something breaks", "score": 3 },
+            { "value": "never", "label": "Never — we don't have a review process", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "initiative_follow_through",
+          "label": "How would you describe your team's ability to follow through on initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "very_limited", "label": "Very limited — we start things but don't finish", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we follow through occasionally", "score": 2 },
+            { "value": "moderate", "label": "Moderate — we complete some initiatives", "score": 3 },
+            { "value": "strong", "label": "Strong — we finish what we start", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "core_process_definition",
+          "label": "How well defined are your core business processes right now?",
+          "type": "select",
+          "options": [
+            { "value": "not_defined", "label": "Not defined at all", "score": 1 },
+            { "value": "roughly_defined", "label": "Roughly defined but not documented", "score": 2 },
+            { "value": "documented", "label": "Documented but not consistently followed", "score": 3 },
+            { "value": "clear", "label": "Clear and followed consistently", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "handoff_smoothness",
+          "label": "When a task needs to be handed off, how smooth is the transition?",
+          "type": "select",
+          "options": [
+            { "value": "very_unclear", "label": "Very unclear — it usually falls through the cracks", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we improvise as needed", "score": 2 },
+            { "value": "mostly_smooth", "label": "Mostly smooth — we have informal handoffs", "score": 3 },
+            { "value": "very_smooth", "label": "Very smooth — handoffs are built into our process", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "1": [
+        {
+          "key": "workflow_use",
+          "label": "What best describes your team's use of workflows or standard procedures?",
+          "type": "select",
+          "options": [
+            { "value": "verbal", "label": "We rely on verbal direction or ad hoc communication", "score": 1 },
+            { "value": "inconsistent", "label": "We have a few habits, but they're inconsistent", "score": 2 },
+            { "value": "checklists", "label": "We use informal checklists or templates", "score": 3 },
+            { "value": "repeatable", "label": "We have clear, repeatable workflows", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "progress_tracking",
+          "label": "How do you track progress on repeatable work or recurring tasks?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track it", "score": 1 },
+            { "value": "manual", "label": "It's tracked manually in spreadsheets or notes", "score": 2 },
+            { "value": "some_tools", "label": "We track some tasks in tools like Trello or Asana", "score": 3 },
+            { "value": "consistent", "label": "We consistently track all key workflows", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_blockers",
+          "label": "How often does lack of process slow down your team's momentum?",
+          "type": "select",
+          "options": [
+            { "value": "very_often", "label": "Very often — it's a major blocker", "score": 1 },
+            { "value": "regularly", "label": "Regularly — we lose time figuring things out", "score": 2 },
+            { "value": "occasionally", "label": "Occasionally — it causes delays", "score": 3 },
+            { "value": "rarely", "label": "Rarely — our processes are not the issue", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tech_stack",
+          "label": "How would you describe your current tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "very_limited", "label": "Very limited — we rely on basic tools only", "score": 1 },
+            { "value": "patchwork", "label": "Patchwork — lots of tools but no integration", "score": 2 },
+            { "value": "some_structure", "label": "Some structure — tools are starting to work together", "score": 3 },
+            { "value": "solid_foundation", "label": "Solid foundation — tools are aligned to needs", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "tool_selection",
+          "label": "Which best describes how your team chooses new software or tools?",
+          "type": "select",
+          "options": [
+            { "value": "randomly", "label": "Randomly — based on what's easy or free", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc — we try things and see what sticks", "score": 2 },
+            { "value": "strategically", "label": "Somewhat strategically — based on needs", "score": 3 },
+            { "value": "intentional", "label": "Very intentionally — based on business goals", "score": 4 }
+          ],
+          "order": 12
+        },
+        {
+          "key": "tool_effectiveness",
+          "label": "How do you feel about your team's ability to use your current tools effectively?",
+          "type": "select",
+          "options": [
+            { "value": "overwhelmed", "label": "We're overwhelmed or undertrained", "score": 1 },
+            { "value": "fraction", "label": "We use only a fraction of what's available", "score": 2 },
+            { "value": "getting_better", "label": "We're getting better but still learning", "score": 3 },
+            { "value": "effective", "label": "We use most tools effectively", "score": 4 }
+          ],
+          "order": 13
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_recovery",
+          "label": "When a tool or system breaks, how quickly can your team recover?",
+          "type": "select",
+          "options": [
+            { "value": "major_disruption", "label": "It usually causes major disruption", "score": 1 },
+            { "value": "slows_down", "label": "It slows us down but we adapt", "score": 2 },
+            { "value": "recover_quickly", "label": "We recover quickly in most cases", "score": 3 },
+            { "value": "backup_plans", "label": "We have backup plans and recover seamlessly", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "tech_limitations",
+          "label": "How often do tech limitations hold back your growth or efficiency?",
+          "type": "select",
+          "options": [
+            { "value": "constantly", "label": "Constantly — it's a major blocker", "score": 1 },
+            { "value": "frequently", "label": "Frequently — we feel the friction", "score": 2 },
+            { "value": "occasionally", "label": "Occasionally — it causes slowdowns", "score": 3 },
+            { "value": "rarely", "label": "Rarely — our tools support us well", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategy_clarity",
+          "label": "How clear is your organization's strategy right now?",
+          "type": "select",
+          "options": [
+            { "value": "very_unclear", "label": "Very unclear — we're just reacting", "score": 1 },
+            { "value": "somewhat_clear", "label": "Somewhat clear — we have ideas but no direction", "score": 2 },
+            { "value": "moderately_clear", "label": "Moderately clear — we have a direction but it shifts often", "score": 3 },
+            { "value": "very_clear", "label": "Very clear — we have a defined strategy", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "strategy_alignment",
+          "label": "Which of these best describes how your team aligns around strategy?",
+          "type": "select",
+          "options": [
+            { "value": "no_alignment", "label": "No alignment — everyone's doing their own thing", "score": 1 },
+            { "value": "low_alignment", "label": "Low alignment — we talk but don't act on it", "score": 2 },
+            { "value": "some_alignment", "label": "Some alignment — we try to coordinate", "score": 3 },
+            { "value": "strong_alignment", "label": "Strong alignment — we're working toward shared goals", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "goal_review_frequency",
+          "label": "How frequently do you revisit your goals or strategic plan?",
+          "type": "select",
+          "options": [
+            { "value": "no_plan", "label": "We don't have a strategic plan", "score": 1 },
+            { "value": "once_twice_year", "label": "Once or twice a year", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "monthly_or_more", "label": "Monthly or more frequently", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "strategy_influence",
+          "label": "What best describes how strategy influences day-to-day decisions?",
+          "type": "select",
+          "options": [
+            { "value": "doesnt_influence", "label": "It doesn't — we act on instinct", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — it's loosely connected", "score": 2 },
+            { "value": "often", "label": "Often — we check decisions against our strategy", "score": 3 },
+            { "value": "always", "label": "Always — our actions reflect the strategy clearly", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategy_scaling_confidence",
+          "label": "How confident are you that your current strategy can scale with your business?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident at all", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "very_confident", "label": "Very confident", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "priority_change",
+          "label": "Have your top priorities changed since your last assessment?",
+          "type": "select",
+          "options": [
+            { "value": "refocused", "label": "Yes — we've totally refocused", "score": 1 },
+            { "value": "refined", "label": "Slightly — we've refined some goals", "score": 2 },
+            { "value": "no_change", "label": "No — still aligned to original goals", "score": 3 },
+            { "value": "not_clarified", "label": "We still haven't clarified our priorities", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "progress_areas",
+          "label": "Which of the following have you made progress on?",
+          "type": "multi_select",
+          "options": [
+            { "value": "goals", "label": "Setting clear business goals", "score": 1 },
+            { "value": "leadership", "label": "Aligning leadership", "score": 2 },
+            { "value": "decision_making", "label": "Improving decision-making", "score": 3 },
+            { "value": "responsibilities", "label": "Defining responsibilities", "score": 4 },
+            { "value": "nothing", "label": "Nothing yet — we're still figuring it out", "score": 5 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "most_improved_area",
+          "label": "What part of the business has seen the most improvement since your last assessment?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "alignment_confidence",
+          "label": "How confident are you that your team is aligned on where the business is headed?",
+          "type": "select",
+          "options": [
+            { "value": "very_confident", "label": "Very confident — we're aligned and committed", "score": 1 },
+            { "value": "mostly", "label": "Mostly — some areas are still unclear", "score": 2 },
+            { "value": "slightly", "label": "Slightly — we talk about direction, but lack clarity", "score": 3 },
+            { "value": "not_confident", "label": "Not confident — everyone's doing their own thing", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "investment_area",
+          "label": "What's the one area you know you need to invest more time or energy into right now?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "process_consistency",
+          "label": "How consistent are your core processes from team to team?",
+          "type": "select",
+          "options": [
+            { "value": "very_inconsistent", "label": "Very inconsistent — everyone does things differently", "score": 1 },
+            { "value": "somewhat_inconsistent", "label": "Somewhat inconsistent — we share templates but not habits", "score": 2 },
+            { "value": "mostly_consistent", "label": "Mostly consistent — key processes are shared", "score": 3 },
+            { "value": "very_consistent", "label": "Very consistent — we operate with shared systems", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "process_documentation",
+          "label": "What best describes your team's documentation of processes?",
+          "type": "select",
+          "options": [
+            { "value": "no_documentation", "label": "No documentation — it's all verbal", "score": 1 },
+            { "value": "informal", "label": "Some processes are written down informally", "score": 2 },
+            { "value": "documented", "label": "Most key processes are documented and shared", "score": 3 },
+            { "value": "well_documented", "label": "All major workflows are well documented and accessible", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "1": [
+        {
+          "key": "onboarding_ease",
+          "label": "When a new hire joins, how easy is it to onboard them into your processes?",
+          "type": "select",
+          "options": [
+            { "value": "very_difficult", "label": "Very difficult — we rely on shadowing", "score": 1 },
+            { "value": "challenging", "label": "Challenging — we lack standard onboarding steps", "score": 2 },
+            { "value": "fairly_smooth", "label": "Fairly smooth — we have onboarding materials", "score": 3 },
+            { "value": "easy", "label": "Easy — we have structured onboarding for each role", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "handoff_quality",
+          "label": "How well are handoffs between teams or roles currently working?",
+          "type": "select",
+          "options": [
+            { "value": "poorly", "label": "Poorly — things fall through often", "score": 1 },
+            { "value": "depends", "label": "So-so — it depends on who's involved", "score": 2 },
+            { "value": "mostly_good", "label": "Mostly good — handled with some structure", "score": 3 },
+            { "value": "very_smooth", "label": "Very smooth — handoffs are defined and tracked", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_review_frequency",
+          "label": "How often are your team's processes reviewed or improved?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we set them once and forget them", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only when something breaks", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — we adjust as we go", "score": 3 },
+            { "value": "often", "label": "Often — we regularly review and refine", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tech_integration",
+          "label": "How well integrated is your current tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — tools operate in silos", "score": 1 },
+            { "value": "some_connect", "label": "Some tools connect, but many do not", "score": 2 },
+            { "value": "mostly_connected", "label": "Mostly connected — data flows across most systems", "score": 3 },
+            { "value": "fully_integrated", "label": "Fully integrated — tools work seamlessly together", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "tech_issues_frequency",
+          "label": "How often do tech issues or workarounds slow down your team?",
+          "type": "select",
+          "options": [
+            { "value": "very_often", "label": "Very often — it's a major blocker", "score": 1 },
+            { "value": "regularly", "label": "Regularly — workarounds are common", "score": 2 },
+            { "value": "occasionally", "label": "Occasionally — manageable but annoying", "score": 3 },
+            { "value": "rarely", "label": "Rarely — our tools support us well", "score": 4 }
+          ],
+          "order": 12
+        },
+        {
+          "key": "tool_ownership_clarity",
+          "label": "How clear is tool ownership across your team?",
+          "type": "select",
+          "options": [
+            { "value": "very_unclear", "label": "Very unclear — no one owns anything", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — a few people manage tools ad hoc", "score": 2 },
+            { "value": "mostly_clear", "label": "Mostly clear — ownership is assigned for key tools", "score": 3 },
+            { "value": "very_clear", "label": "Very clear — each system has an owner and SOPs", "score": 4 }
+          ],
+          "order": 13
+        }
+      ],
+      "2": [
+        {
+          "key": "reporting_effectiveness",
+          "label": "How effectively do you use reporting or analytics features in your tools?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "We don't use them at all", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — only basic metrics", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we review key dashboards", "score": 3 },
+            { "value": "very_effectively", "label": "Very effectively — insights drive action", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "tool_satisfaction",
+          "label": "What's your general satisfaction with your current toolset?",
+          "type": "select",
+          "options": [
+            { "value": "not_satisfied", "label": "Not satisfied — it's holding us back", "score": 1 },
+            { "value": "mixed", "label": "Mixed — some tools work, others don't", "score": 2 },
+            { "value": "mostly_satisfied", "label": "Mostly satisfied — just a few gaps", "score": 3 },
+            { "value": "very_satisfied", "label": "Very satisfied — our tools support our goals", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategy_review_frequency",
+          "label": "How often do you step back to assess strategic progress?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we're too busy reacting", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — during quarterly reviews", "score": 2 },
+            { "value": "monthly", "label": "Monthly — part of leadership check-ins", "score": 3 },
+            { "value": "frequently", "label": "Frequently — strategy guides ongoing actions", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "activity_strategy_connection",
+          "label": "How connected are your daily activities to your broader strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_connected", "label": "Not connected — we operate on instinct", "score": 1 },
+            { "value": "loosely", "label": "Loosely — we try to stay aligned", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we use goals to guide priorities", "score": 3 },
+            { "value": "very", "label": "Very — everything maps back to strategy", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "decision_making_process",
+          "label": "What describes your strategic decision-making process?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc — decisions are made in the moment", "score": 1 },
+            { "value": "tactical", "label": "Tactical — we prioritize urgent tasks only", "score": 2 },
+            { "value": "deliberate", "label": "Deliberate — we plan with some foresight", "score": 3 },
+            { "value": "strategic", "label": "Strategic — decisions reflect long-term goals", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "progress_measurement_frequency",
+          "label": "How frequently do you measure progress toward strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "dont_track", "label": "We don't track it", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only at year-end", "score": 2 },
+            { "value": "quarterly_monthly", "label": "Quarterly or monthly", "score": 3 },
+            { "value": "weekly", "label": "We track it weekly with updates", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "leadership_alignment",
+          "label": "How aligned is your leadership team on strategic direction?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — conflicting priorities", "score": 1 },
+            { "value": "partially_aligned", "label": "Partially aligned — shared vision but unclear plan", "score": 2 },
+            { "value": "mostly_aligned", "label": "Mostly aligned — strategy is agreed upon", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully aligned — we're executing in sync", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "progress_consistency",
+          "label": "How consistent has your progress been since your last assessment?",
+          "type": "select",
+          "options": [
+            { "value": "very_consistent", "label": "Very consistent — we've stayed focused", "score": 1 },
+            { "value": "somewhat_consistent", "label": "Somewhat consistent — a few steps forward, some setbacks", "score": 2 },
+            { "value": "inconsistent", "label": "Inconsistent — progress in one area, stalled in others", "score": 3 },
+            { "value": "not_consistent", "label": "Not consistent at all — we keep shifting focus", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "business_rhythm",
+          "label": "Which of the following best describes your current business rhythm?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "Still mostly reactive", "score": 1 },
+            { "value": "some_structure", "label": "Some structure, but inconsistent follow-through", "score": 2 },
+            { "value": "mostly_structured", "label": "Mostly structured, but room for improvement", "score": 3 },
+            { "value": "defined_cadence", "label": "We operate on a defined cadence with regular reviews", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "internal_challenge",
+          "label": "What's the biggest internal challenge you're working to improve right now?",
+          "type": "multi_select",
+          "options": [
+            { "value": "leadership_alignment", "label": "Leadership alignment", "score": 1 },
+            { "value": "hiring_delegation", "label": "Hiring and delegation", "score": 2 },
+            { "value": "time_focus", "label": "Time and focus", "score": 3 },
+            { "value": "accountability", "label": "Accountability and follow-through", "score": 4 },
+            { "value": "clarity_success", "label": "Clarity on what success looks like", "score": 5 },
+            { "value": "other", "label": "Other", "score": 6 }
+          ],
+          "order": 3
+        },
+        {
+          "key": "responsibility_clarity",
+          "label": "How clearly are responsibilities and ownership defined across your business?",
+          "type": "select",
+          "options": [
+            { "value": "very_unclear", "label": "Still very unclear or ad hoc", "score": 1 },
+            { "value": "key_roles", "label": "Defined for key roles only", "score": 2 },
+            { "value": "mostly_defined", "label": "Mostly defined, but not always followed", "score": 3 },
+            { "value": "fully_documented", "label": "Fully documented and aligned", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "recent_system",
+          "label": "What's one system, ritual, or process you've added recently that's working well?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "process_consistency",
+          "label": "How consistently are your processes followed across different teams?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — it depends entirely on the team", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — key steps get skipped often", "score": 2 },
+            { "value": "mostly", "label": "Mostly — people follow what's in place", "score": 3 },
+            { "value": "very_consistently", "label": "Very consistently — expectations are clear and enforced", "score": 4 }
+          ],
+          "order": 6
+        },
+        {
+          "key": "recurring_issues",
+          "label": "How often are recurring issues tied back to broken or missing processes?",
+          "type": "select",
+          "options": [
+            { "value": "always", "label": "Always — we don't have root cause processes", "score": 1 },
+            { "value": "frequently", "label": "Frequently — we keep fixing the same things", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — we're starting to address root causes", "score": 3 },
+            { "value": "rarely", "label": "Rarely — we solve and prevent repeat issues", "score": 4 }
+          ],
+          "order": 7
+        }
+      ],
+      "1": [
+        {
+          "key": "process_improvement_approach",
+          "label": "What best describes how your team approaches continuous process improvement?",
+          "type": "select",
+          "options": [
+            { "value": "dont_improve", "label": "We don't — processes are set and forgotten", "score": 1 },
+            { "value": "react_only", "label": "We react only when something breaks", "score": 2 },
+            { "value": "occasional", "label": "We occasionally improve based on feedback", "score": 3 },
+            { "value": "actively_review", "label": "We actively review and evolve processes", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "gap_response_speed",
+          "label": "When process gaps are identified, how quickly are they addressed?",
+          "type": "select",
+          "options": [
+            { "value": "linger", "label": "They linger — no one owns the fix", "score": 1 },
+            { "value": "slowly", "label": "Slowly — we get to them eventually", "score": 2 },
+            { "value": "quickly", "label": "Quickly — we usually make improvements within weeks", "score": 3 },
+            { "value": "immediately", "label": "Immediately — we have a clear system for addressing gaps", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "workflow_visibility",
+          "label": "How visible are your key workflows and SOPs to the team?",
+          "type": "select",
+          "options": [
+            { "value": "not_visible", "label": "Not visible — only in someone's head", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — available but hard to access", "score": 2 },
+            { "value": "mostly", "label": "Mostly — documented and shared internally", "score": 3 },
+            { "value": "fully_visible", "label": "Fully visible — accessible and part of onboarding", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tool_collaboration",
+          "label": "How well are your tools supporting collaboration across the business?",
+          "type": "select",
+          "options": [
+            { "value": "poorly", "label": "Poorly — tools are siloed or unused", "score": 1 },
+            { "value": "decently", "label": "Decently — but not integrated or efficient", "score": 2 },
+            { "value": "well", "label": "Well — they support most team needs", "score": 3 },
+            { "value": "very_well", "label": "Very well — tools enable seamless collaboration", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "tool_evaluation_frequency",
+          "label": "How often are you evaluating whether your current tools still meet your needs?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we just keep using what we have", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only when something breaks", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — when new needs emerge", "score": 3 },
+            { "value": "regularly", "label": "Regularly — we review and optimize our stack", "score": 4 }
+          ],
+          "order": 12
+        },
+        {
+          "key": "data_accessibility",
+          "label": "How accessible is data from your systems for decision-making?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — we can't get reliable data", "score": 1 },
+            { "value": "limited", "label": "Limited — some data is available but messy", "score": 2 },
+            { "value": "accessible", "label": "Accessible — we can find what we need with effort", "score": 3 },
+            { "value": "very_accessible", "label": "Very accessible — reports and dashboards are ready to go", "score": 4 }
+          ],
+          "order": 13
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_training_support",
+          "label": "How do you train or support your team in using tools effectively?",
+          "type": "select",
+          "options": [
+            { "value": "dont_train", "label": "We don't — it's trial and error", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc — we help as needed", "score": 2 },
+            { "value": "basic_training", "label": "We have some basic training or documentation", "score": 3 },
+            { "value": "structured_onboarding", "label": "We have structured onboarding and tool support", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "tool_selection_rollout",
+          "label": "What best describes how your tools are selected and rolled out?",
+          "type": "select",
+          "options": [
+            { "value": "individually", "label": "Individually — everyone picks what they want", "score": 1 },
+            { "value": "by_team", "label": "By team — chosen for tactical needs only", "score": 2 },
+            { "value": "strategically", "label": "Strategically — based on cross-team use", "score": 3 },
+            { "value": "holistically", "label": "Holistically — aligned to company-wide systems", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "vision_clarity",
+          "label": "How clear is your long-term vision or strategic direction?",
+          "type": "select",
+          "options": [
+            { "value": "not_clear", "label": "Not clear — we're still figuring things out", "score": 1 },
+            { "value": "somewhat_clear", "label": "Somewhat clear — we have a rough idea", "score": 2 },
+            { "value": "mostly_clear", "label": "Mostly clear — we've defined the path", "score": 3 },
+            { "value": "very_clear", "label": "Very clear — our vision drives everything we do", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "strategy_update_frequency",
+          "label": "How often do you update your strategy based on what you're learning?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — strategy is fixed and outdated", "score": 1 },
+            { "value": "rarely", "label": "Rarely — we adjust once or twice a year", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — updates follow major milestones", "score": 3 },
+            { "value": "regularly", "label": "Regularly — we evolve strategy as we grow", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "leadership_involvement",
+          "label": "How involved is your full leadership team in shaping strategic direction?",
+          "type": "select",
+          "options": [
+            { "value": "not_involved", "label": "Not involved — one person drives it all", "score": 1 },
+            { "value": "somewhat_involved", "label": "Somewhat involved — input is limited", "score": 2 },
+            { "value": "mostly_involved", "label": "Mostly involved — we collaborate when needed", "score": 3 },
+            { "value": "fully_involved", "label": "Fully involved — strategy is built together", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "strategy_communication",
+          "label": "How often is strategy discussed or reinforced with the broader team?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — strategy lives in a doc somewhere", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only during big meetings", "score": 2 },
+            { "value": "occasionally", "label": "Occasionally — some regular communication", "score": 3 },
+            { "value": "frequently", "label": "Frequently — part of how we operate", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategy_growth_confidence",
+          "label": "How confident are you that your current strategy supports growth?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — it feels disconnected", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident — there are gaps", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident — we're heading the right direction", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — strategy aligns with growth goals", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "momentum_maintenance",
+          "label": "Since your last assessment, how well have you maintained momentum toward your goals?",
+          "type": "select",
+          "options": [
+            { "value": "very_well", "label": "Very well — we're executing consistently", "score": 1 },
+            { "value": "moderately", "label": "Moderately — we've had a few bumps", "score": 2 },
+            { "value": "not_great", "label": "Not great — progress has slowed", "score": 3 },
+            { "value": "stalled", "label": "We've stalled or lost focus", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "improvement_areas",
+          "label": "Which of the following areas have seen tangible improvements in the last 30 days?",
+          "type": "multi_select",
+          "options": [
+            { "value": "goal_clarity", "label": "Goal clarity and prioritization", "score": 1 },
+            { "value": "team_collaboration", "label": "Team collaboration and alignment", "score": 1 },
+            { "value": "operational_consistency", "label": "Operational consistency", "score": 1 },
+            { "value": "decision_making", "label": "Decision-making speed", "score": 1 },
+            { "value": "none", "label": "None of the above yet", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "friction_areas",
+          "label": "Where are you still experiencing friction or resistance?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "progress_tracking_effectiveness",
+          "label": "How effectively is your team tracking and reviewing progress?",
+          "type": "select",
+          "options": [
+            { "value": "very_effectively", "label": "Very effectively — we review regularly and act on insights", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we track progress but don't always reflect on it", "score": 2 },
+            { "value": "ineffectively", "label": "Ineffectively — reviews are inconsistent or surface-level", "score": 3 },
+            { "value": "not_tracking", "label": "We aren't actively tracking progress", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "specific_changes",
+          "label": "What's one specific change or win you're proud of since your last assessment?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "process_support",
+          "label": "How well are your processes supporting day-to-day operations?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — we're always improvising", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — they help but often need workarounds", "score": 2 },
+            { "value": "mostly", "label": "Mostly — processes support most activities", "score": 3 },
+            { "value": "very_well", "label": "Very well — our operations run smoothly", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "process_standardization",
+          "label": "How standardized are processes across different departments or teams?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — everyone has their own way", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — some consistency, but varies widely", "score": 2 },
+            { "value": "mostly", "label": "Mostly — major processes are shared", "score": 3 },
+            { "value": "very", "label": "Very — we follow unified standards org-wide", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "process_improvement_suggestions",
+          "label": "How often do team members suggest improvements to existing processes?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — improvements are top-down only", "score": 1 },
+            { "value": "rarely", "label": "Rarely — suggestions happen but don't go far", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — ideas are heard and tested", "score": 3 },
+            { "value": "often", "label": "Often — we actively encourage team feedback", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_adaptation",
+          "label": "When priorities shift, how quickly do your processes adapt?",
+          "type": "select",
+          "options": [
+            { "value": "not_quickly", "label": "Not quickly — changes disrupt everything", "score": 1 },
+            { "value": "slowly", "label": "Slowly — adjustments take time", "score": 2 },
+            { "value": "fairly_quickly", "label": "Fairly quickly — we adapt with some friction", "score": 3 },
+            { "value": "very_quickly", "label": "Very quickly — we're built for agility", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_documentation",
+          "label": "How do you document and share process updates?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — it's verbal or informal only", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — via emails or ad hoc docs", "score": 2 },
+            { "value": "usually", "label": "Usually — we update shared documentation", "score": 3 },
+            { "value": "always", "label": "Always — we have a clear system for updates", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tool_performance_tracking",
+          "label": "How well do your tools support performance tracking and accountability?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — we rely on manual tracking or memory", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we track basics but miss depth", "score": 2 },
+            { "value": "well", "label": "Well — we have visibility into key metrics", "score": 3 },
+            { "value": "very_well", "label": "Very well — tools make performance easy to measure", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "data_accuracy_confidence",
+          "label": "How confident are you in your data accuracy across systems?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — data is often wrong or missing", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we spot-check important info", "score": 2 },
+            { "value": "mostly", "label": "Mostly — data is generally reliable", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — data drives decisions", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "system_integration",
+          "label": "How are you currently managing integrations between systems?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — tools operate independently", "score": 1 },
+            { "value": "manual", "label": "Some are manually synced", "score": 2 },
+            { "value": "basic_automation", "label": "Most are connected via basic automation", "score": 3 },
+            { "value": "fully_integrated", "label": "Fully integrated — everything talks to each other", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "tool_utilization",
+          "label": "How well do team members utilize the key tools available to them?",
+          "type": "select",
+          "options": [
+            { "value": "poorly", "label": "Poorly — most don't know how to use them", "score": 1 },
+            { "value": "okay", "label": "Okay — usage is inconsistent", "score": 2 },
+            { "value": "mostly", "label": "Mostly — most team members use tools effectively", "score": 3 },
+            { "value": "very_well", "label": "Very well — tools are embedded in how we work", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "tool_updates",
+          "label": "How often are new tools or upgrades rolled out to support efficiency?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we're using outdated tools", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — only when necessary", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we evaluate and adopt strategically", "score": 3 },
+            { "value": "frequently", "label": "Frequently — we invest in continuous improvement", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategy_execution_alignment",
+          "label": "How aligned is your short-term execution with your longer-term strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — we operate in the now", "score": 1 },
+            { "value": "partially", "label": "Partially — we try to balance both", "score": 2 },
+            { "value": "mostly_aligned", "label": "Mostly aligned — strategy guides most of our actions", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully aligned — short-term moves support big-picture goals", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "strategy_assumption_review",
+          "label": "How often do you revisit strategic assumptions or bets?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we're operating on legacy thinking", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only when something goes wrong", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — during planning cycles", "score": 3 },
+            { "value": "frequently", "label": "Frequently — we test and refine continuously", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "strategic_prioritization",
+          "label": "How effective is your team at prioritizing based on strategic impact?",
+          "type": "select",
+          "options": [
+            { "value": "not_effective", "label": "Not effective — urgent tasks always win", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — strategy sometimes informs prioritization", "score": 2 },
+            { "value": "mostly", "label": "Mostly — impact drives most major decisions", "score": 3 },
+            { "value": "very", "label": "Very — strategy is central to prioritization", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "strategy_scaling_confidence",
+          "label": "How confident are you in your ability to scale the current strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — it won't scale as-is", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we see risks", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we've thought through growth steps", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — strategy is built for scale", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategy_communication",
+          "label": "How often do you communicate strategic goals with the broader team?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — strategy is siloed", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — only when asked", "score": 2 },
+            { "value": "regularly", "label": "Regularly — part of team check-ins", "score": 3 },
+            { "value": "frequently", "label": "Frequently — strategy is part of our culture", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "improvement_sustainability",
+          "label": "How would you describe your team's ability to sustain improvements over time?",
+          "type": "select",
+          "options": [
+            { "value": "strong", "label": "Strong — we've built good habits and systems", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we follow through most of the time", "score": 2 },
+            { "value": "fragile", "label": "Fragile — a few setbacks throw us off", "score": 3 },
+            { "value": "weak", "label": "Weak — we struggle to maintain consistency", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "improvement_areas",
+          "label": "Which areas are now operating more smoothly compared to 30 days ago?",
+          "type": "multi_select",
+          "options": [
+            { "value": "strategic_focus", "label": "Strategic focus", "score": 1 },
+            { "value": "internal_processes", "label": "Internal processes", "score": 2 },
+            { "value": "cross_functional", "label": "Cross-functional communication", "score": 3 },
+            { "value": "tech_usage", "label": "Technology usage", "score": 4 },
+            { "value": "none", "label": "None — progress hasn't held", "score": 5 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "growth_limitations",
+          "label": "What's still limiting your ability to scale or accelerate growth?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "issue_proactivity",
+          "label": "How proactive is your team in identifying and solving issues before they escalate?",
+          "type": "select",
+          "options": [
+            { "value": "very_proactive", "label": "Very proactive — we catch and solve early", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we react quickly but don't always see it coming", "score": 2 },
+            { "value": "inconsistent", "label": "Inconsistent — we're often caught off guard", "score": 3 },
+            { "value": "not_proactive", "label": "Not proactive — issues linger too long", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "improvement_focus",
+          "label": "What's one improvement you've made that you want to double down on?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "process_scalability",
+          "label": "How scalable are your current internal processes?",
+          "type": "select",
+          "options": [
+            { "value": "not_scalable", "label": "Not scalable — they rely too much on individuals", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — basic structure exists", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we're starting to document and refine", "score": 3 },
+            { "value": "very", "label": "Very — we've built for repeatability and growth", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "process_adoption",
+          "label": "How do you ensure process changes are adopted consistently across teams?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "We don't — adoption is inconsistent", "score": 1 },
+            { "value": "informally", "label": "Informally — we ask teams to adjust", "score": 2 },
+            { "value": "formally", "label": "Formally — we roll out changes with documentation", "score": 3 },
+            { "value": "intentionally", "label": "Very intentionally — we train and reinforce new ways of working", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "operational_issues",
+          "label": "What describes how your team addresses recurring operational issues?",
+          "type": "select",
+          "options": [
+            { "value": "tolerate", "label": "We tolerate them — they're part of the job", "score": 1 },
+            { "value": "react", "label": "We address them as they arise", "score": 2 },
+            { "value": "track", "label": "We track them and assign ownership", "score": 3 },
+            { "value": "prevent", "label": "We prevent them with root-cause fixes", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_innovation",
+          "label": "How often do your processes enable vs. restrict innovation?",
+          "type": "select",
+          "options": [
+            { "value": "block", "label": "They often block innovation", "score": 1 },
+            { "value": "friction", "label": "They sometimes create friction", "score": 2 },
+            { "value": "enable", "label": "They mostly enable new ideas", "score": 3 },
+            { "value": "support", "label": "They're designed to support adaptability", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "success_metrics",
+          "label": "How clearly are success metrics tied to each process or workflow?",
+          "type": "select",
+          "options": [
+            { "value": "not_defined", "label": "Not defined at all", "score": 1 },
+            { "value": "loosely", "label": "Loosely connected to outcomes", "score": 2 },
+            { "value": "mostly", "label": "Mostly aligned with KPIs", "score": 3 },
+            { "value": "clearly", "label": "Clearly defined and tracked consistently", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "system_satisfaction",
+          "label": "How satisfied are you with your current systems' ability to support day-to-day work?",
+          "type": "select",
+          "options": [
+            { "value": "not_satisfied", "label": "Not satisfied — we hit constant friction", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — tools work but have gaps", "score": 2 },
+            { "value": "mostly", "label": "Mostly — they support our needs", "score": 3 },
+            { "value": "very", "label": "Very — they empower our daily work", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "feature_management",
+          "label": "How do you manage feature requests or improvements for your current tools?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "We don't — it's ad hoc or ignored", "score": 1 },
+            { "value": "informal", "label": "We informally collect suggestions", "score": 2 },
+            { "value": "track", "label": "We track and prioritize requests regularly", "score": 3 },
+            { "value": "formal", "label": "We have a formal intake and improvement process", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "workflow_alignment",
+          "label": "How aligned are your systems with the actual workflows people use?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — systems create workarounds", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — tools fit some workflows", "score": 2 },
+            { "value": "mostly", "label": "Mostly — systems follow how people work", "score": 3 },
+            { "value": "fully", "label": "Fully — systems are mapped to real-world execution", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "automation_use",
+          "label": "What best describes your use of automation today?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "Minimal — we handle most things manually", "score": 1 },
+            { "value": "basic", "label": "Basic — some simple rules or triggers", "score": 2 },
+            { "value": "moderate", "label": "Moderate — key areas are automated", "score": 3 },
+            { "value": "advanced", "label": "Advanced — automation is embedded in workflows", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "system_training",
+          "label": "How do you manage training for new systems or upgrades?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "No formal training — people figure it out", "score": 1 },
+            { "value": "basic_docs", "label": "We offer basic help docs or FAQs", "score": 2 },
+            { "value": "hands_on", "label": "We provide hands-on guidance when needed", "score": 3 },
+            { "value": "formal", "label": "We run onboarding and formal training regularly", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategy_reflection",
+          "label": "How frequently does your team reflect on progress toward long-term goals?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we're focused on today's work", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — during major check-ins", "score": 2 },
+            { "value": "regularly", "label": "Regularly — strategy is reviewed and refined", "score": 3 },
+            { "value": "consistently", "label": "Consistently — strategy drives team focus", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "initiative_alignment",
+          "label": "How aligned are your current initiatives with your stated strategy?",
+          "type": "select",
+          "options": [
+            { "value": "poorly", "label": "Poorly — we're misaligned or distracted", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — most initiatives connect back", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we track and prioritize strategic alignment", "score": 3 },
+            { "value": "fully", "label": "Fully — initiatives are directly mapped to goals", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "strategy_understanding",
+          "label": "How clearly do team members understand the company's strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — strategy feels distant", "score": 1 },
+            { "value": "a_little", "label": "A little — they've heard the big ideas", "score": 2 },
+            { "value": "mostly", "label": "Mostly — they understand our direction", "score": 3 },
+            { "value": "very_clearly", "label": "Very clearly — they see how their work connects", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "risk_taking",
+          "label": "What best describes your current approach to strategic risk-taking?",
+          "type": "select",
+          "options": [
+            { "value": "avoidant", "label": "Avoidant — we stick to safe bets", "score": 1 },
+            { "value": "cautious", "label": "Cautious — we test but rarely commit", "score": 2 },
+            { "value": "proactive", "label": "Proactive — we explore calculated risks", "score": 3 },
+            { "value": "bold", "label": "Bold — we pursue innovations aligned to strategy", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategy_adaptation",
+          "label": "How prepared are you to adjust your strategy based on performance data?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not prepared — data isn't used for strategy", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we react to trends when needed", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we adapt based on quarterly reviews", "score": 3 },
+            { "value": "very", "label": "Very — we have real-time strategic feedback loops", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "self_correction_confidence",
+          "label": "How confident are you in your team's ability to self-correct and stay on track?",
+          "type": "select",
+          "options": [
+            { "value": "very_confident", "label": "Very confident — we adjust quickly and effectively", "score": 1 },
+            { "value": "mostly_confident", "label": "Mostly confident — we realign when needed", "score": 2 },
+            { "value": "somewhat", "label": "Somewhat — it depends on the situation", "score": 3 },
+            { "value": "not_confident", "label": "Not confident — we struggle without external pressure", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strength_areas",
+          "label": "Which of the following have become strengths in the past 30 days?",
+          "type": "multi_select",
+          "options": [
+            { "value": "goal_execution", "label": "Goal execution", "score": 1 },
+            { "value": "cross_team_collaboration", "label": "Cross-team collaboration", "score": 1 },
+            { "value": "meeting_cadences", "label": "Meeting cadences and rituals", "score": 1 },
+            { "value": "data_decision_making", "label": "Use of data in decision-making", "score": 1 },
+            { "value": "delegation", "label": "Delegation and ownership", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "emerging_challenges",
+          "label": "What emerging challenge or blind spot is starting to concern you?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "strategy_review_frequency",
+          "label": "How often do you step back to review strategy and realign your efforts?",
+          "type": "select",
+          "options": [
+            { "value": "weekly", "label": "Weekly — it's built into our rhythm", "score": 1 },
+            { "value": "biweekly", "label": "Biweekly — we do it, but not often enough", "score": 2 },
+            { "value": "monthly", "label": "Monthly — only during planning cycles", "score": 3 },
+            { "value": "rarely", "label": "Rarely — we're mostly heads-down", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "competitive_advantage_focus",
+          "label": "What's one area where you're aiming to turn a strength into a competitive advantage?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "operational_scale_confidence",
+          "label": "How confident are you in your operational capacity to scale?",
+          "type": "select",
+          "options": [
+            { "value": "very", "label": "Very — we're built to grow", "score": 1 },
+            { "value": "mostly", "label": "Mostly — a few adjustments needed", "score": 2 },
+            { "value": "somewhat", "label": "Somewhat — scale will be bumpy", "score": 3 },
+            { "value": "not_confident", "label": "Not confident — we'll hit bottlenecks quickly", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "process_optimization",
+          "label": "How consistently are processes measured and optimized?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we assume they're working", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — when issues come up", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we review and adjust quarterly", "score": 3 },
+            { "value": "continuously", "label": "Continuously — we test and optimize regularly", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "handoff_quality",
+          "label": "What best describes your approach to handoffs between roles or teams?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "Unclear — lots of confusion still", "score": 1 },
+            { "value": "improving", "label": "Improving — we've reduced the friction", "score": 2 },
+            { "value": "strong", "label": "Strong — transitions are mostly smooth", "score": 3 },
+            { "value": "excellent", "label": "Excellent — handoffs are clean and seamless", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "autonomy_alignment_balance",
+          "label": "How well do processes support autonomy without sacrificing alignment?",
+          "type": "select",
+          "options": [
+            { "value": "poorly", "label": "Poorly — people work in silos", "score": 1 },
+            { "value": "decently", "label": "Decently — with some overlap and gaps", "score": 2 },
+            { "value": "well", "label": "Well — team members stay aligned but independent", "score": 3 },
+            { "value": "extremely_well", "label": "Extremely well — autonomy and alignment are balanced", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "process_improvement_sharing",
+          "label": "How do you ensure process improvements are shared across the org?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — they stay local", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — through informal updates", "score": 2 },
+            { "value": "often", "label": "Often — shared through meetings or docs", "score": 3 },
+            { "value": "always", "label": "Always — we centralize and communicate changes", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tool_roi_assessment",
+          "label": "How proactive are you in assessing the ROI of tools and platforms?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — we don't track tool ROI", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — only when cost becomes an issue", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we assess value and fit", "score": 3 },
+            { "value": "always", "label": "Always — ROI guides ongoing investments", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "tech_stack_scalability",
+          "label": "How scalable is your current tech stack for future growth?",
+          "type": "select",
+          "options": [
+            { "value": "not_scalable", "label": "Not scalable — we'll outgrow it fast", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — parts need reworking", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we've thought ahead", "score": 3 },
+            { "value": "fully", "label": "Fully — built for long-term scale", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "automation_usage",
+          "label": "What best describes how automation is used in your business today?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "Minimal — most work is manual", "score": 1 },
+            { "value": "basic", "label": "Basic — a few core tasks are automated", "score": 2 },
+            { "value": "broad", "label": "Broad — automation is in key workflows", "score": 3 },
+            { "value": "extensive", "label": "Extensive — automation is a strategic advantage", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "tech_evaluation_process",
+          "label": "How do you evaluate new tech before implementing?",
+          "type": "select",
+          "options": [
+            { "value": "gut_feel", "label": "We test based on gut or urgency", "score": 1 },
+            { "value": "needs_based", "label": "We assess based on needs and timing", "score": 2 },
+            { "value": "defined_process", "label": "We follow a defined evaluation process", "score": 3 },
+            { "value": "rigorous", "label": "We include stakeholders and test rigorously", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "team_training_level",
+          "label": "How well trained is your team on the systems they use daily?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — most people figure it out themselves", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — a few resources are available", "score": 2 },
+            { "value": "well", "label": "Well — training is provided regularly", "score": 3 },
+            { "value": "extremely_well", "label": "Extremely well — ongoing learning is part of our culture", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategic_initiative_tracking",
+          "label": "How do you track the effectiveness of strategic initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — we rely on intuition", "score": 1 },
+            { "value": "lightly", "label": "Lightly — we look at lagging results", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we track KPIs but miss some outcomes", "score": 3 },
+            { "value": "fully", "label": "Fully — we measure impact and adjust fast", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "leadership_alignment",
+          "label": "How aligned is your leadership team on long-term priorities?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — competing priorities persist", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — regular misalignment arises", "score": 2 },
+            { "value": "mostly", "label": "Mostly — minor gaps exist", "score": 3 },
+            { "value": "fully", "label": "Fully aligned — priorities are shared and reinforced", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "market_strategy_fit",
+          "label": "How frequently do you assess whether your strategy still fits the market?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we haven't reevaluated in a long time", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — in response to disruption", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly — part of our routine", "score": 3 },
+            { "value": "continuously", "label": "Continuously — we scan and adjust as needed", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "pivot_confidence",
+          "label": "How confident are you in your ability to pivot without losing momentum?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — change would derail us", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we pivot slowly", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we adapt with some bumps", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — we pivot and stay focused", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategy_connection",
+          "label": "How clearly do teams connect their work to broader strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "They don't — strategy feels disconnected", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — alignment varies by team", "score": 2 },
+            { "value": "mostly", "label": "Mostly — people understand their role", "score": 3 },
+            { "value": "very_clearly", "label": "Very clearly — strategy drives team execution", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "performance_sustainability",
+          "label": "How well is your team sustaining high performance without burning out?",
+          "type": "select",
+          "options": [
+            { "value": "very_well", "label": "Very well — we're productive and energized", "score": 1 },
+            { "value": "mostly", "label": "Mostly — we push hard but manage recovery", "score": 2 },
+            { "value": "some_strain", "label": "Some strain — burnout signs are emerging", "score": 3 },
+            { "value": "poorly", "label": "Poorly — we're overextended", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "performance_support_areas",
+          "label": "Which of these areas are helping you sustain performance and momentum?",
+          "type": "multi_select",
+          "options": [
+            { "value": "clear_priorities", "label": "Clear priorities and vision", "score": 1 },
+            { "value": "strong_leadership", "label": "Strong leadership and communication", "score": 1 },
+            { "value": "effective_systems", "label": "Effective planning and execution systems", "score": 1 },
+            { "value": "team_dynamics", "label": "Healthy team dynamics", "score": 1 },
+            { "value": "automation", "label": "Use of automation and tooling", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "next_frontier",
+          "label": "What's the next frontier you're preparing to tackle?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "capability_building",
+          "label": "How intentionally are you investing in long-term capability building (people, systems, tech)?",
+          "type": "select",
+          "options": [
+            { "value": "very_intentional", "label": "Very intentionally — it's a core focus", "score": 1 },
+            { "value": "moderately", "label": "Moderately — we're improving steadily", "score": 2 },
+            { "value": "infrequently", "label": "Infrequently — we're mostly focused on delivery", "score": 3 },
+            { "value": "not_intentional", "label": "Not intentionally — it hasn't been prioritized", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "internal_advantage",
+          "label": "What's one internal advantage you believe you can amplify further?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "process_adaptability",
+          "label": "How adaptable are your internal processes to evolving business needs?",
+          "type": "select",
+          "options": [
+            { "value": "not_adaptable", "label": "Not adaptable — they require full rework", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — updates are slow and reactive", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we adjust when needed", "score": 3 },
+            { "value": "highly", "label": "Highly — processes are flexible and scalable", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "process_monitoring",
+          "label": "What best describes how you monitor process effectiveness?",
+          "type": "select",
+          "options": [
+            { "value": "dont_monitor", "label": "We don't monitor it formally", "score": 1 },
+            { "value": "anecdotal", "label": "We use anecdotal feedback and gut feel", "score": 2 },
+            { "value": "occasional_kpis", "label": "We track key process KPIs occasionally", "score": 3 },
+            { "value": "regular_optimization", "label": "We regularly measure and optimize based on performance", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "workflow_sunset",
+          "label": "How often do you sunset or replace outdated workflows?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — legacy processes persist", "score": 1 },
+            { "value": "rarely", "label": "Rarely — only when issues arise", "score": 2 },
+            { "value": "sometimes", "label": "Sometimes — based on team feedback", "score": 3 },
+            { "value": "often", "label": "Often — we proactively streamline and modernize", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "best_practices_sharing",
+          "label": "How does your team share best practices across roles and departments?",
+          "type": "select",
+          "options": [
+            { "value": "dont_share", "label": "We don't — knowledge stays siloed", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — shared informally", "score": 2 },
+            { "value": "regularly", "label": "Regularly — through meetings or channels", "score": 3 },
+            { "value": "consistently", "label": "Consistently — best practices are documented and reinforced", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "operational_maturity",
+          "label": "How would you rate your operational maturity overall?",
+          "type": "select",
+          "options": [
+            { "value": "emerging", "label": "Emerging — still building consistency", "score": 1 },
+            { "value": "developing", "label": "Developing — we're stable but not optimized", "score": 2 },
+            { "value": "mature", "label": "Mature — we execute with confidence", "score": 3 },
+            { "value": "advanced", "label": "Advanced — we optimize for continuous improvement", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tool_integration",
+          "label": "How seamlessly do your tools integrate with internal workflows?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all — we rely on manual workarounds", "score": 1 },
+            { "value": "partially", "label": "Partially — integrations are limited", "score": 2 },
+            { "value": "mostly", "label": "Mostly — systems connect where needed", "score": 3 },
+            { "value": "fully", "label": "Fully — tools integrate across workflows smoothly", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "tool_adoption_strategy",
+          "label": "How strategic is your approach to evaluating and adopting new tools?",
+          "type": "select",
+          "options": [
+            { "value": "not_strategic", "label": "Not strategic — we buy based on need", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we loosely evaluate options", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we have a tool selection process", "score": 3 },
+            { "value": "highly", "label": "Highly strategic — adoption is roadmap-driven", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "advanced_features_usage",
+          "label": "What best describes how your team uses advanced features (automation, analytics, AI)?",
+          "type": "select",
+          "options": [
+            { "value": "dont_use", "label": "We don't — only basic usage", "score": 1 },
+            { "value": "some_usage", "label": "Some usage — pockets of functionality", "score": 2 },
+            { "value": "regular_usage", "label": "Regular usage — key workflows enhanced", "score": 3 },
+            { "value": "extensive", "label": "Extensive — advanced features are fully leveraged", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "tool_retirement",
+          "label": "How often do you retire redundant or underused tools?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never — we accumulate tools over time", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — after long delays", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we review and streamline", "score": 3 },
+            { "value": "consistently", "label": "Consistently — tool usage is tightly managed", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "update_management",
+          "label": "How does your team stay current with platform or system updates?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — people figure it out as needed", "score": 1 },
+            { "value": "informally", "label": "Some updates are shared informally", "score": 2 },
+            { "value": "champions", "label": "We have champions who track and communicate updates", "score": 3 },
+            { "value": "integrated", "label": "Updates are integrated into enablement and training", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "market_alignment",
+          "label": "How aligned is your strategy with future market shifts and disruptions?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — we're focused on present needs", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we monitor trends but don't act", "score": 2 },
+            { "value": "mostly", "label": "Mostly aligned — we adjust direction as needed", "score": 3 },
+            { "value": "fully", "label": "Fully aligned — future-readiness is built in", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "long_term_execution",
+          "label": "How confident are you in your team's ability to execute on long-term strategy?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — we struggle to think long-term", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident — gaps in execution persist", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident — plans are in motion", "score": 3 },
+            { "value": "very", "label": "Very confident — our team can scale and deliver", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "strategy_execution_balance",
+          "label": "What best describes how you balance strategic focus with day-to-day execution?",
+          "type": "select",
+          "options": [
+            { "value": "dont_balance", "label": "We don't — it's one or the other", "score": 1 },
+            { "value": "some_balance", "label": "Some balance — but we lean reactive", "score": 2 },
+            { "value": "mostly", "label": "Mostly balanced — strategy drives operations", "score": 3 },
+            { "value": "strong", "label": "Strong balance — we execute and evolve simultaneously", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "external_input_involvement",
+          "label": "How often do you involve external inputs (market, customer, advisors) in strategic planning?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — strategy is built internally only", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — informally consulted", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we gather outside perspectives", "score": 3 },
+            { "value": "always", "label": "Always — external insight informs every decision", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "competitive_advantages",
+          "label": "How clearly are your competitive advantages defined and reinforced?",
+          "type": "select",
+          "options": [
+            { "value": "not_defined", "label": "Not defined — we haven't clarified them", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — loosely understood", "score": 2 },
+            { "value": "mostly", "label": "Mostly — defined and used in positioning", "score": 3 },
+            { "value": "fully", "label": "Fully — clearly defined and built into execution", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "excellence_growth_balance",
+          "label": "How are you maintaining excellence while preparing for the next level of growth?",
+          "type": "select",
+          "options": [
+            { "value": "balancing_well", "label": "We're balancing both well — focused and future-ready", "score": 1 },
+            { "value": "strong_but_need_priority", "label": "We're strong now but need to prioritize what's next", "score": 2 },
+            { "value": "stretched_thin", "label": "We're executing well but stretched too thin", "score": 3 },
+            { "value": "focused_today", "label": "We're focused on today — not ready for what's next", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "future_capabilities",
+          "label": "Which of these future-facing capabilities are you actively building?",
+          "type": "multi_select",
+          "options": [
+            { "value": "scalable_systems", "label": "Scalable systems and infrastructure", "score": 1 },
+            { "value": "leadership_dev", "label": "Leadership development", "score": 1 },
+            { "value": "advanced_analytics", "label": "Advanced analytics and insights", "score": 1 },
+            { "value": "strategic_partnerships", "label": "Strategic partnerships", "score": 1 },
+            { "value": "culture_experience", "label": "Culture and employee experience", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "performance_risks",
+          "label": "What potential risks or blind spots could impact your ability to sustain high performance?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "vision_proactivity",
+          "label": "How proactive are you in setting the vision for where your business should go next?",
+          "type": "select",
+          "options": [
+            { "value": "very_proactive", "label": "Very proactive — we're always evolving", "score": 1 },
+            { "value": "moderately", "label": "Moderately — we review it regularly", "score": 2 },
+            { "value": "somewhat", "label": "Somewhat — we update when needed", "score": 3 },
+            { "value": "not_proactive", "label": "Not proactive — we haven't looked ahead lately", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "bold_move",
+          "label": "What's one bold move or innovation you're exploring right now?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "leadership_delegation",
+          "label": "How clearly are responsibilities delegated across layers of leadership?",
+          "type": "select",
+          "options": [
+            { "value": "not_clear", "label": "Not clear — decisions bottleneck at the top", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat clear — depends on the situation", "score": 2 },
+            { "value": "mostly", "label": "Mostly clear — leaders act with autonomy", "score": 3 },
+            { "value": "very_clear", "label": "Very clear — roles and decision rights are crystalized", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "practice_scaling",
+          "label": "How often are your best internal practices turned into scalable playbooks?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — they stay in silos", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — shared informally", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we document what works", "score": 3 },
+            { "value": "always", "label": "Always — we turn wins into institutional knowledge", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "process_experimentation_balance",
+          "label": "How well does your team balance process excellence with experimentation?",
+          "type": "select",
+          "options": [
+            { "value": "dont_balance", "label": "We don't — structure kills creativity", "score": 1 },
+            { "value": "struggle", "label": "We struggle to find that balance", "score": 2 },
+            { "value": "generally", "label": "We generally encourage both", "score": 3 },
+            { "value": "built_culture", "label": "We've built a culture of discipline and innovation", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "ritual_alignment",
+          "label": "How aligned are your rituals (meetings, reviews, standups) with business outcomes?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — meetings feel like a formality", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat aligned — but inconsistent value", "score": 2 },
+            { "value": "mostly", "label": "Mostly aligned — they reinforce accountability", "score": 3 },
+            { "value": "fully", "label": "Fully aligned — every ritual drives strategic action", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "scale_preparation",
+          "label": "How prepared are your internal operations to handle rapid scale?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not prepared — we'll be overwhelmed", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — basic foundations exist", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we've modeled and tested scale", "score": 3 },
+            { "value": "fully", "label": "Fully — we're scale-ready across functions", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "emerging_tech_evaluation",
+          "label": "How strategically are you evaluating emerging technologies (AI, ML, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "not_evaluating", "label": "We're not — too early for us", "score": 1 },
+            { "value": "lightly", "label": "Lightly — we're keeping an eye on trends", "score": 2 },
+            { "value": "actively", "label": "Actively — we're assessing fit and value", "score": 3 },
+            { "value": "deeply", "label": "Deeply — we've begun pilots or integrations", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "performance_visibility",
+          "label": "How well are your tools supporting real-time visibility into key performance areas?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — data is delayed or missing", "score": 1 },
+            { "value": "moderately", "label": "Moderately — we get partial visibility", "score": 2 },
+            { "value": "well", "label": "Well — most areas are tracked in near real time", "score": 3 },
+            { "value": "extremely_well", "label": "Extremely well — we have live dashboards and alerts", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "tech_debt_handling",
+          "label": "How do you handle tech debt or system limitations at this stage?",
+          "type": "select",
+          "options": [
+            { "value": "ignore", "label": "We ignore it — it slows us down", "score": 1 },
+            { "value": "patch", "label": "We patch issues reactively", "score": 2 },
+            { "value": "prioritized", "label": "We have a prioritized backlog and roadmap", "score": 3 },
+            { "value": "proactive", "label": "We invest proactively to stay ahead", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "tool_reevaluation",
+          "label": "How often do you reevaluate tooling based on evolving business needs?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we stay with what works", "score": 1 },
+            { "value": "annually", "label": "Annually — during budget cycles", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly — we review usage and gaps", "score": 3 },
+            { "value": "continuously", "label": "Continuously — we assess needs and optimize", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "platform_adoption",
+          "label": "How does your organization approach cross-functional platform adoption?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc — each team chooses their own", "score": 1 },
+            { "value": "light_coordination", "label": "Light coordination — minimal overlap", "score": 2 },
+            { "value": "strategic", "label": "Strategic — tools serve multiple teams", "score": 3 },
+            { "value": "unified", "label": "Unified — platforms are aligned across departments", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategic_posture",
+          "label": "How would you describe your organization's strategic posture?",
+          "type": "select",
+          "options": [
+            { "value": "defensive", "label": "Defensive — focused on protecting current success", "score": 1 },
+            { "value": "cautious", "label": "Cautious — hesitant to overextend", "score": 2 },
+            { "value": "active", "label": "Active — pursuing new growth areas", "score": 3 },
+            { "value": "aggressive", "label": "Aggressive — positioning to lead the category", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "vision_communication",
+          "label": "How consistently is your vision communicated across all levels of the org?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistently", "label": "Inconsistently — it gets lost after leadership", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat consistently — middle managers carry it", "score": 2 },
+            { "value": "mostly", "label": "Mostly consistently — reinforced in most touchpoints", "score": 3 },
+            { "value": "fully", "label": "Fully consistently — it's part of the culture", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "strategic_testing",
+          "label": "How frequently are you testing strategic bets or new markets?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — our focus is narrow and stable", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — small pilots only", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we run structured experiments", "score": 3 },
+            { "value": "continuously", "label": "Continuously — testing and iteration are built in", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "investment_alignment",
+          "label": "How aligned are your strategic investments with long-term competitive advantage?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not aligned — investments are opportunistic", "score": 1 },
+            { "value": "loosely", "label": "Loosely aligned — some clear connections", "score": 2 },
+            { "value": "mostly", "label": "Mostly aligned — most investments support strategy", "score": 3 },
+            { "value": "fully", "label": "Fully aligned — every bet is linked to advantage", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "strategic_clarity_confidence",
+          "label": "What's your confidence level in maintaining strategic clarity as complexity grows?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low — complexity clouds direction", "score": 1 },
+            { "value": "medium", "label": "Medium — we're trying to hold focus", "score": 2 },
+            { "value": "high", "label": "High — we have frameworks to guide us", "score": 3 },
+            { "value": "very_high", "label": "Very high — clarity strengthens as we grow", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "high_performance_focus",
+          "label": "What's your focus now that core operations are consistently high-performing?",
+          "type": "select",
+          "options": [
+            { "value": "scaling_quality", "label": "Scaling without losing quality", "score": 1 },
+            { "value": "new_growth", "label": "Developing new growth engines", "score": 2 },
+            { "value": "codifying", "label": "Codifying what works across the org", "score": 3 },
+            { "value": "staying_agile", "label": "Staying agile while optimizing further", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "team_evolution",
+          "label": "Which of the following reflects how your team has evolved in the last 30 days?",
+          "type": "multi_select",
+          "options": [
+            { "value": "cross_functional", "label": "Deeper cross-functional trust", "score": 1 },
+            { "value": "decision_making", "label": "Faster decision-making", "score": 1 },
+            { "value": "ownership", "label": "Higher ownership and initiative", "score": 1 },
+            { "value": "focus", "label": "Tighter focus on priorities", "score": 1 },
+            { "value": "all", "label": "All of the above", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "future_proofing",
+          "label": "What area feels most important to future-proof right now?",
+          "type": "text_area",
+          "order": 3
+        },
+        {
+          "key": "assumption_validation",
+          "label": "How regularly do you revalidate assumptions behind your success?",
+          "type": "select",
+          "options": [
+            { "value": "continuously", "label": "Continuously — we challenge our thinking often", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly — it's part of our review cycle", "score": 2 },
+            { "value": "occasionally", "label": "Occasionally — during strategic planning", "score": 3 },
+            { "value": "rarely", "label": "Rarely — we've been on autopilot lately", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "practice_protection",
+          "label": "What's one practice or mindset you want to protect as you grow?",
+          "type": "text_area",
+          "order": 5
+        },
+        {
+          "key": "workflow_refinement",
+          "label": "How often do your teams proactively refine workflows before issues arise?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we only improve when needed", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes — we act after small signs", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we anticipate and adjust", "score": 3 },
+            { "value": "continuously", "label": "Continuously — it's part of our culture", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "1": [
+        {
+          "key": "process_innovation_balance",
+          "label": "How do you ensure process excellence doesn't slow innovation?",
+          "type": "select",
+          "options": [
+            { "value": "figuring_out", "label": "We're still figuring that out", "score": 1 },
+            { "value": "flexibility", "label": "We allow flexibility for special projects", "score": 2 },
+            { "value": "adjust_boundaries", "label": "We adjust boundaries based on context", "score": 3 },
+            { "value": "built_systems", "label": "We've built systems that support both", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "improvement_rhythm",
+          "label": "What best describes your internal rhythm for continuous improvement?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc — people improve on their own", "score": 1 },
+            { "value": "team_based", "label": "Team-based — leaders drive most changes", "score": 2 },
+            { "value": "integrated", "label": "Integrated — improvements are part of reviews", "score": 3 },
+            { "value": "cultural", "label": "Cultural — everyone contributes to iteration", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "workflow_strategy_alignment",
+          "label": "How aligned are frontline workflows with strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "loosely", "label": "Loosely — execution sometimes drifts", "score": 1 },
+            { "value": "mostly", "label": "Mostly — people know what matters", "score": 2 },
+            { "value": "strongly", "label": "Strongly — alignment drives decision-making", "score": 3 },
+            { "value": "fully", "label": "Fully — workflows directly reflect strategy", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "inefficiency_identification",
+          "label": "How do you identify internal inefficiencies at this stage?",
+          "type": "select",
+          "options": [
+            { "value": "lagging", "label": "Through lagging indicators only", "score": 1 },
+            { "value": "feedback", "label": "Feedback from high performers", "score": 2 },
+            { "value": "proactive", "label": "Proactive data and pattern analysis", "score": 3 },
+            { "value": "real_time", "label": "Real-time pulse across the org", "score": 4 }
+          ],
+          "order": 10
+        },
+        {
+          "key": "tech_disruption_management",
+          "label": "How do you stay ahead of technology disruption while scaling?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — it's a growing concern", "score": 1 },
+            { "value": "monitor", "label": "We monitor and react as needed", "score": 2 },
+            { "value": "quarterly", "label": "We evaluate tools quarterly", "score": 3 },
+            { "value": "lead", "label": "We lead with innovation and experimentation", "score": 4 }
+          ],
+          "order": 11
+        },
+        {
+          "key": "ai_analytics_usage",
+          "label": "How effectively do you leverage AI or advanced analytics in daily decisions?",
+          "type": "select",
+          "options": [
+            { "value": "not_yet", "label": "Not yet — we rely on traditional methods", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — we're testing in pockets", "score": 2 },
+            { "value": "frequently", "label": "Frequently — supports key workflows", "score": 3 },
+            { "value": "heavily", "label": "Heavily — it's built into core decision-making", "score": 4 }
+          ],
+          "order": 12
+        }
+      ],
+      "2": [
+        {
+          "key": "architecture_scalability",
+          "label": "How scalable is your current architecture for new business models or lines?",
+          "type": "select",
+          "options": [
+            { "value": "not_ready", "label": "Not ready — would require major rework", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — scalable in limited ways", "score": 2 },
+            { "value": "mostly", "label": "Mostly — could support moderate expansion", "score": 3 },
+            { "value": "fully", "label": "Fully — built to extend across models", "score": 4 }
+          ],
+          "order": 13
+        },
+        {
+          "key": "tech_differentiation",
+          "label": "How well does your tech stack support differentiation vs. just efficiency?",
+          "type": "select",
+          "options": [
+            { "value": "basic", "label": "Only supports basic execution", "score": 1 },
+            { "value": "some_edge", "label": "Enables some competitive edge", "score": 2 },
+            { "value": "several", "label": "Drives several differentiators", "score": 3 },
+            { "value": "key_position", "label": "Is a key part of our market position", "score": 4 }
+          ],
+          "order": 14
+        },
+        {
+          "key": "tool_operationalization",
+          "label": "How prepared is your team to absorb and operationalize new tools?",
+          "type": "select",
+          "options": [
+            { "value": "struggle", "label": "We struggle with adoption", "score": 1 },
+            { "value": "slow_effective", "label": "We adapt slowly but effectively", "score": 2 },
+            { "value": "consistent", "label": "We onboard and train consistently", "score": 3 },
+            { "value": "seamless", "label": "We integrate seamlessly with agility", "score": 4 }
+          ],
+          "order": 15
+        },
+        {
+          "key": "strategic_ambition",
+          "label": "How ambitious is your strategic planning at this stage?",
+          "type": "select",
+          "options": [
+            { "value": "cautious", "label": "Cautious — focused on stability", "score": 1 },
+            { "value": "pragmatic", "label": "Pragmatic — balancing risk and growth", "score": 2 },
+            { "value": "bold", "label": "Bold — aiming for big breakthroughs", "score": 3 },
+            { "value": "visionary", "label": "Visionary — redefining what's possible", "score": 4 }
+          ],
+          "order": 16
+        },
+        {
+          "key": "value_proposition_review",
+          "label": "How often do you revisit your value proposition and market positioning?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — our positioning is fixed", "score": 1 },
+            { "value": "annually", "label": "Annually — during planning cycles", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly — we evaluate trends", "score": 3 },
+            { "value": "continuously", "label": "Continuously — we evolve in real-time", "score": 4 }
+          ],
+          "order": 17
+        },
+        {
+          "key": "strategy_stress_testing",
+          "label": "How do you ensure strategy is stress-tested under multiple future scenarios?",
+          "type": "select",
+          "options": [
+            { "value": "dont", "label": "We don't — it's linear", "score": 1 },
+            { "value": "occasionally", "label": "We occasionally run scenario workshops", "score": 2 },
+            { "value": "test", "label": "We test with models and what-ifs", "score": 3 },
+            { "value": "simulate", "label": "We simulate and plan for volatility often", "score": 4 }
+          ],
+          "order": 18
+        },
+        {
+          "key": "strategic_bet_alignment",
+          "label": "How aligned are strategic bets with core strengths and capabilities?",
+          "type": "select",
+          "options": [
+            { "value": "weak", "label": "Weak alignment — we chase ideas", "score": 1 },
+            { "value": "some", "label": "Some alignment — strategy is evolving", "score": 2 },
+            { "value": "strong", "label": "Strong alignment — we play to our strengths", "score": 3 },
+            { "value": "full", "label": "Full alignment — we scale what we're best at", "score": 4 }
+          ],
+          "order": 19
+        },
+        {
+          "key": "leadership_confidence",
+          "label": "What's your confidence level in sustaining category leadership or disruption?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low — we may not keep up", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we need to sharpen focus", "score": 2 },
+            { "value": "high", "label": "High — we're positioned for leadership", "score": 3 },
+            { "value": "very_high", "label": "Very high — we're defining the future", "score": 4 }
+          ],
+          "order": 20
+        }
+      ]
+    }
+  }
+} 

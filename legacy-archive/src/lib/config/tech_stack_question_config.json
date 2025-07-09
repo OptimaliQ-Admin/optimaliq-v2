@@ -1,0 +1,1231 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "current_tools",
+          "label": "What tools or software do you currently use to manage your day-to-day operations?",
+          "type": "multi_select",
+          "options": [
+            { "value": "google_microsoft", "label": "Google Workspace / Microsoft 365", "score": 1 },
+            { "value": "spreadsheets", "label": "Spreadsheets", "score": 1 },
+            { "value": "email_marketing", "label": "Email marketing platform", "score": 1 },
+            { "value": "crm", "label": "CRM (Customer Relationship Management)", "score": 1 },
+            { "value": "ecommerce", "label": "Ecommerce / POS system", "score": 1 },
+            { "value": "none", "label": "None or unsure", "score": 1 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "software_inventory",
+          "label": "Do you have a central place where you keep track of all the software your business uses?",
+          "type": "select",
+          "options": [
+            { "value": "no_list", "label": "No — we don't have a list", "score": 1 },
+            { "value": "notes_spreadsheet", "label": "It's tracked in someone's notes or spreadsheet", "score": 2 },
+            { "value": "shared_team", "label": "Yes — it's shared with the team", "score": 3 },
+            { "value": "formal_system", "label": "Yes — we use a formal software inventory system", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_selection",
+          "label": "How do you decide which tools to buy or use?",
+          "type": "select",
+          "options": [
+            { "value": "finders_choice", "label": "Based on whoever finds something they like", "score": 1 },
+            { "value": "try_free", "label": "We try free tools and see what works", "score": 2 },
+            { "value": "manager_picks", "label": "A manager usually picks tools", "score": 3 },
+            { "value": "defined_process", "label": "We follow a defined evaluation process", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "tool_ownership",
+          "label": "Do you know which teams or people are using each tool in your business?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "No — it's unclear", "score": 1 },
+            { "value": "rough_idea", "label": "We have a rough idea", "score": 2 },
+            { "value": "mostly_know", "label": "We mostly know", "score": 3 },
+            { "value": "clear_ownership", "label": "Yes — every tool has an owner", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "unused_software",
+          "label": "Have you ever realized your team was paying for software they weren't using?",
+          "type": "select",
+          "options": [
+            { "value": "many_times", "label": "Yes — many times", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "rarely", "label": "Rarely", "score": 3 },
+            { "value": "never", "label": "Never", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "offboarding_access",
+          "label": "If a team member leaves, how do you know what software accounts they had access to?",
+          "type": "select",
+          "options": [
+            { "value": "case_by_case", "label": "We don't — it's handled case by case", "score": 1 },
+            { "value": "disable_known", "label": "We try to disable known tools", "score": 2 },
+            { "value": "it_checks", "label": "IT/ops checks when offboarding", "score": 3 },
+            { "value": "checklist", "label": "We have a checklist tied to each role", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_integration",
+          "label": "How well do your tools work together or share data?",
+          "type": "select",
+          "options": [
+            { "value": "no_integration", "label": "They don't — we use copy/paste or re-entry", "score": 1 },
+            { "value": "few_connect", "label": "A few tools connect, but not many", "score": 2 },
+            { "value": "most_share", "label": "Most tools share some data", "score": 3 },
+            { "value": "well_integrated", "label": "They're well-integrated", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "frustrating_tool",
+          "label": "What tool or system feels the most frustrating or outdated in your business today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "automation_usage",
+          "label": "Do you use any automation to eliminate manual tasks (e.g. Zapier, integrations, scheduling)?",
+          "type": "select",
+          "options": [
+            { "value": "no_automation", "label": "No automation at all", "score": 1 },
+            { "value": "tried_basic", "label": "We've tried some basic tools", "score": 2 },
+            { "value": "some_automation", "label": "Some automation is used regularly", "score": 3 },
+            { "value": "heavy_automation", "label": "We heavily rely on automation", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "tool_upgrade",
+          "label": "If you could replace or upgrade one tool in your business today, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "tool_fit",
+          "label": "How confident are you that your team is using the best tools for their workflows?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_confident", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly_confident", "label": "Mostly confident", "score": 3 },
+            { "value": "very_confident", "label": "Very confident", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "tool_visibility",
+          "label": "Do you know which software is used by each team or department?",
+          "type": "select",
+          "options": [
+            { "value": "not_tracked", "label": "No — it's not tracked", "score": 1 },
+            { "value": "rough_idea", "label": "Somewhat — we have a rough idea", "score": 2 },
+            { "value": "mostly_visible", "label": "Mostly — we have visibility across teams", "score": 3 },
+            { "value": "ownership_map", "label": "Yes — we maintain a tool ownership map", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_selection",
+          "label": "What's the primary way you discover or decide to add new tools?",
+          "type": "select",
+          "options": [
+            { "value": "immediate_needs", "label": "Based on immediate needs or pain points", "score": 1 },
+            { "value": "referrals", "label": "Based on referrals or team preference", "score": 2 },
+            { "value": "research", "label": "Based on research and demos", "score": 3 },
+            { "value": "requirements", "label": "Based on business requirements and evaluation criteria", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "redundancy",
+          "label": "Do you ever find overlapping tools being used for the same purpose (e.g. two CRMs, two email platforms)?",
+          "type": "select",
+          "options": [
+            { "value": "frequently", "label": "Frequently", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "rarely", "label": "Rarely", "score": 3 },
+            { "value": "never", "label": "Never", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "stack_review",
+          "label": "Do you review your tech stack regularly to remove or consolidate underused tools?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "No — we haven't done this", "score": 1 },
+            { "value": "occasionally", "label": "Once in a while", "score": 2 },
+            { "value": "annually", "label": "Annually", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly or more", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "cost_management",
+          "label": "How do you track costs related to your software tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track them specifically", "score": 1 },
+            { "value": "spreadsheets", "label": "We track them in spreadsheets", "score": 2 },
+            { "value": "finance_review", "label": "Finance or ops reviews the invoices", "score": 3 },
+            { "value": "saas_management", "label": "We use a system to manage SaaS spending", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_types",
+          "label": "Which of the following tool types do you actively use in your business?",
+          "type": "multi_select",
+          "options": [
+            { "value": "crm", "label": "CRM", "score": 1 },
+            { "value": "project_management", "label": "Project management", "score": 1 },
+            { "value": "marketing_automation", "label": "Marketing automation", "score": 1 },
+            { "value": "ecommerce", "label": "Ecommerce/POS", "score": 1 },
+            { "value": "customer_support", "label": "Customer support", "score": 1 },
+            { "value": "data_analytics", "label": "Data & analytics tools", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "efficiency",
+          "label": "How often do your tools create more work instead of saving time (due to limitations or manual steps)?",
+          "type": "select",
+          "options": [
+            { "value": "very_often", "label": "Very often", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes", "score": 2 },
+            { "value": "rarely", "label": "Rarely", "score": 3 },
+            { "value": "almost_never", "label": "Almost never", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "pain_points",
+          "label": "What's the biggest tech-related challenge your team is dealing with right now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scalability",
+          "label": "Do you feel your tech stack is helping or hurting your ability to scale the business?",
+          "type": "select",
+          "options": [
+            { "value": "slowing_down", "label": "It's slowing us down", "score": 1 },
+            { "value": "mixed", "label": "It's a mix of both", "score": 2 },
+            { "value": "helping_some", "label": "It's helping in some areas", "score": 3 },
+            { "value": "growth_driver", "label": "It's a key driver of our growth", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "integration",
+          "label": "Do you currently have any integrations set up between your tools (e.g. CRM + Email, Ecommerce + Analytics)?",
+          "type": "select",
+          "options": [
+            { "value": "disconnected", "label": "No — our tools are disconnected", "score": 1 },
+            { "value": "manual_connect", "label": "A few tools are connected manually", "score": 2 },
+            { "value": "third_party", "label": "Some tools are connected through third-party platforms", "score": 3 },
+            { "value": "integrated", "label": "Yes — we've integrated key systems", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "tool_value",
+          "label": "How often do you evaluate whether your tools are actually delivering value to the business?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "yearly", "label": "Once per year", "score": 3 },
+            { "value": "regularly", "label": "Regularly as part of reviews", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "data_visibility",
+          "label": "Do you know what data is shared between your tools?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "some_idea", "label": "Some idea, but not mapped", "score": 2 },
+            { "value": "mostly_clear", "label": "Mostly clear", "score": 3 },
+            { "value": "fully_documented", "label": "Fully documented data flows", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "platform_ownership",
+          "label": "Who is responsible for maintaining or managing your core software platforms (CRM, email, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "no_owner", "label": "No one formally owns them", "score": 1 },
+            { "value": "shared_teams", "label": "It's shared across teams", "score": 2 },
+            { "value": "single_owner", "label": "One person manages each tool", "score": 3 },
+            { "value": "tech_ops", "label": "We have a tech/ops function with ownership", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "tool_consistency",
+          "label": "Do your teams use your tech stack consistently and follow shared processes inside the tools?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "Not really — everyone uses tools differently", "score": 1 },
+            { "value": "some_consistency", "label": "Some consistency in key teams", "score": 2 },
+            { "value": "mostly_consistent", "label": "Mostly consistent usage", "score": 3 },
+            { "value": "fully_standardized", "label": "Fully standardized across teams", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "common_issues",
+          "label": "Which of these problems do you experience with your current tools?",
+          "type": "multi_select",
+          "options": [
+            { "value": "duplicate_data", "label": "Duplicate or messy data", "score": 1 },
+            { "value": "manual_work", "label": "Manual work that should be automated", "score": 1 },
+            { "value": "confusion", "label": "Confusion about where to find things", "score": 1 },
+            { "value": "poor_reporting", "label": "Poor reporting", "score": 1 },
+            { "value": "underutilized", "label": "Tools not used to full potential", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "training_process",
+          "label": "When you launch new tools, how is training handled?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "There is no formal training", "score": 1 },
+            { "value": "quick_intro", "label": "A quick intro or handoff from IT/team", "score": 2 },
+            { "value": "documented", "label": "We document setup steps or walkthroughs", "score": 3 },
+            { "value": "structured", "label": "We run structured training and refreshers", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "modernization_needs",
+          "label": "If you had to improve one part of your tech stack today, what would it be and why?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "license_management",
+          "label": "How are you currently tracking software licenses, users, and renewals?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track this", "score": 1 },
+            { "value": "spreadsheet", "label": "One person owns it in a spreadsheet", "score": 2 },
+            { "value": "finance_ops", "label": "It's managed by finance/ops", "score": 3 },
+            { "value": "saas_tool", "label": "We use a SaaS management tool", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "growth_alignment",
+          "label": "How well does your current tech stack support your long-term growth plan?",
+          "type": "select",
+          "options": [
+            { "value": "bottleneck", "label": "It's a major bottleneck", "score": 1 },
+            { "value": "current_only", "label": "It meets current needs but not future", "score": 2 },
+            { "value": "mostly_aligned", "label": "It's mostly aligned with our plan", "score": 3 },
+            { "value": "fully_aligned", "label": "It's fully aligned and scalable", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "stack_optimization",
+          "label": "How confident are you that your current tech stack is optimized (right tools, right use, right integrations)?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat_optimized", "label": "Somewhat optimized", "score": 2 },
+            { "value": "mostly_optimized", "label": "Mostly optimized", "score": 3 },
+            { "value": "fully_optimized", "label": "Fully optimized and efficient", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "cleanup_process",
+          "label": "Do you have a regular process to clean up, retire, or consolidate underused or outdated tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "No formal process", "score": 1 },
+            { "value": "budgeting", "label": "Occasionally during budgeting", "score": 2 },
+            { "value": "annually", "label": "Annually or as needed", "score": 3 },
+            { "value": "fixed_schedule", "label": "Yes — it's reviewed on a fixed schedule", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_decision_making",
+          "label": "How are decisions made about adopting new technology?",
+          "type": "select",
+          "options": [
+            { "value": "team_need", "label": "Based on team need or urgency", "score": 1 },
+            { "value": "cost_compatibility", "label": "Based on cost and compatibility", "score": 2 },
+            { "value": "integration_fit", "label": "Based on integration and process fit", "score": 3 },
+            { "value": "formal_process", "label": "Through a formal review and approval process", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "redundancy_management",
+          "label": "Are any tools in your stack currently duplicated or overlapping in functionality?",
+          "type": "select",
+          "options": [
+            { "value": "multiple_overlaps", "label": "Yes — multiple overlaps", "score": 1 },
+            { "value": "some_overlap", "label": "Some overlap in specific areas", "score": 2 },
+            { "value": "minimal_overlap", "label": "Minimal overlap, being phased out", "score": 3 },
+            { "value": "no_duplication", "label": "No duplication — everything has a clear role", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "data_reporting",
+          "label": "Do your tools integrate into a central data/reporting system (e.g. dashboard, BI, CDP)?",
+          "type": "select",
+          "options": [
+            { "value": "no_centralization", "label": "No centralized data layer", "score": 1 },
+            { "value": "manual_sync", "label": "Some manual exports or syncing", "score": 2 },
+            { "value": "partial_integration", "label": "Several tools connect to shared data/reporting", "score": 3 },
+            { "value": "real_time", "label": "Yes — real-time reporting across the stack", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "stack_maturity_indicators",
+          "label": "Which of these are true about your tech stack today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "tool_ownership", "label": "We have documented tool ownership", "score": 1 },
+            { "value": "central_inventory", "label": "We have a central inventory of all tools", "score": 1 },
+            { "value": "process_mapping", "label": "We've mapped tool-to-process connections", "score": 1 },
+            { "value": "usage_metrics", "label": "We track usage and performance metrics", "score": 1 },
+            { "value": "architecture_view", "label": "We have a stack diagram or architecture view", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "stack_blockers",
+          "label": "How frequently do your teams encounter blockers due to tool limitations or lack of integrations?",
+          "type": "select",
+          "options": [
+            { "value": "weekly", "label": "Weekly", "score": 1 },
+            { "value": "monthly", "label": "Monthly", "score": 2 },
+            { "value": "rarely", "label": "Rarely", "score": 3 },
+            { "value": "almost_never", "label": "Almost never", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "data_architecture",
+          "label": "Do you have a &quot;single source of truth&quot; for customer, operational, or financial data?",
+          "type": "select",
+          "options": [
+            { "value": "no_unification", "label": "No — data lives in different tools", "score": 1 },
+            { "value": "partial_unification", "label": "Partially — we consolidate some data", "score": 2 },
+            { "value": "mostly_unified", "label": "Mostly — data flows into 1–2 core platforms", "score": 3 },
+            { "value": "fully_unified", "label": "Yes — we have a unified data architecture", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "underutilization",
+          "label": "What is the most underutilized tool in your stack, and why isn't it being used fully?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "stack_risks",
+          "label": "If your tech stack stays the same for the next 12 months, what risks would that create?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "roi_review",
+          "label": "How often do you review the effectiveness and ROI of your core platforms (CRM, ESP, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely or never", "score": 1 },
+            { "value": "yearly", "label": "Once per year", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly", "score": 3 },
+            { "value": "continuous", "label": "Reviewed continuously by ops or leadership", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "team_alignment",
+          "label": "Do your internal teams align on how tools are used (e.g. shared playbooks, standard workflows)?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not really — usage varies", "score": 1 },
+            { "value": "some_alignment", "label": "Some shared practices", "score": 2 },
+            { "value": "mostly_aligned", "label": "Mostly aligned, with some gaps", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully standardized across functions", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_performance",
+          "label": "How do you currently measure the performance of tools in your stack?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't formally measure", "score": 1 },
+            { "value": "usage_tracking", "label": "We track usage or satisfaction", "score": 2 },
+            { "value": "kpi_tracking", "label": "We tie tools to business KPIs", "score": 3 },
+            { "value": "benchmarking", "label": "We benchmark tool impact across workflows", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "automation",
+          "label": "To what extent is automation used in your current toolset?",
+          "type": "select",
+          "options": [
+            { "value": "very_little", "label": "Very little", "score": 1 },
+            { "value": "few_tasks", "label": "Used for a few repetitive tasks", "score": 2 },
+            { "value": "many_teams", "label": "Many teams rely on automation", "score": 3 },
+            { "value": "fully_automated", "label": "Automation is baked into most workflows", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "stack_capabilities",
+          "label": "Which of the following statements describe your tech stack today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "low_code", "label": "We use low-code tools or workflow builders", "score": 1 },
+            { "value": "api_integration", "label": "Tools are integrated through APIs or middleware", "score": 1 },
+            { "value": "admin_monitoring", "label": "Admins monitor system uptime or sync errors", "score": 1 },
+            { "value": "user_config", "label": "Business users can configure tools without IT", "score": 1 },
+            { "value": "team_training", "label": "Teams are trained on stack-wide best practices", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "data_quality",
+          "label": "What level of visibility do you have into data quality across your systems?",
+          "type": "select",
+          "options": [
+            { "value": "no_visibility", "label": "No visibility", "score": 1 },
+            { "value": "reactive", "label": "We notice issues after the fact", "score": 2 },
+            { "value": "some_monitoring", "label": "Some monitoring in place", "score": 3 },
+            { "value": "full_audit", "label": "We audit and report on data integrity", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "documentation",
+          "label": "Do you maintain a central source of documentation for your tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "no_docs", "label": "No formal documentation", "score": 1 },
+            { "value": "individual_notes", "label": "Some individual notes or guides", "score": 2 },
+            { "value": "partial_docs", "label": "We have partial documentation", "score": 3 },
+            { "value": "full_docs", "label": "Yes — structured and accessible for all teams", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "tool_selection",
+          "label": "When selecting a new tool, how often is integration or long-term fit considered upfront?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we focus on short-term use", "score": 1 },
+            { "value": "sometimes", "label": "Sometimes, if it's a major tool", "score": 2 },
+            { "value": "usually", "label": "Usually discussed before purchase", "score": 3 },
+            { "value": "always", "label": "Always — it's a required part of vendor review", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "automation_opportunity",
+          "label": "What's one integration or automation you've been putting off that would save time or effort?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scalability",
+          "label": "How prepared is your current stack to scale with your customer volume and team size over the next 12–18 months?",
+          "type": "select",
+          "options": [
+            { "value": "not_ready", "label": "Not ready", "score": 1 },
+            { "value": "some_limitations", "label": "Some systems will hold us back", "score": 2 },
+            { "value": "mostly_scalable", "label": "Mostly scalable with tuning", "score": 3 },
+            { "value": "fully_scalable", "label": "Fully scalable and future-proof", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "ownership",
+          "label": "How is ownership of tools and platforms defined across your organization?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "Tool owners are unclear", "score": 1 },
+            { "value": "informal", "label": "Ownership is informal or undocumented", "score": 2 },
+            { "value": "designated", "label": "Most tools have designated owners", "score": 3 },
+            { "value": "formalized", "label": "Ownership is formalized and cross-functional", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "audit_frequency",
+          "label": "How often do you audit your tech stack for efficiency, cost, and redundancy?",
+          "type": "select",
+          "options": [
+            { "value": "on_demand", "label": "Only when prompted (e.g. budget cuts)", "score": 1 },
+            { "value": "yearly", "label": "Once a year", "score": 2 },
+            { "value": "biannual", "label": "Twice a year", "score": 3 },
+            { "value": "quarterly", "label": "Quarterly or as part of strategy cycles", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_metrics",
+          "label": "Do you track tool-level performance metrics such as usage, time savings, or business impact?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "No tracking in place", "score": 1 },
+            { "value": "usage_only", "label": "We track usage data only", "score": 2 },
+            { "value": "process_kpis", "label": "We link tools to process KPIs", "score": 3 },
+            { "value": "roi_tracking", "label": "We measure ROI and efficiency across tools", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "governance",
+          "label": "Which teams or roles are responsible for stack-wide governance or integration strategy?",
+          "type": "select",
+          "options": [
+            { "value": "no_governance", "label": "No clear governance", "score": 1 },
+            { "value": "shared_it_ops", "label": "Shared across IT and ops", "score": 2 },
+            { "value": "dedicated_team", "label": "Owned by a RevOps, BizOps, or IT team", "score": 3 },
+            { "value": "governance_committee", "label": "Managed by a dedicated governance committee or center of excellence", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "management_practices",
+          "label": "Which of these practices are part of your ongoing stack management today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "budget_accountability", "label": "Budget accountability by tool owner", "score": 1 },
+            { "value": "vendor_reviews", "label": "Quarterly vendor reviews", "score": 1 },
+            { "value": "usage_analysis", "label": "Usage trend analysis", "score": 1 },
+            { "value": "integration_monitoring", "label": "Integration performance monitoring", "score": 1 },
+            { "value": "security_tracking", "label": "Security and compliance tracking", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "performance_monitoring",
+          "label": "How easily can you identify stack-related bottlenecks in your business performance?",
+          "type": "select",
+          "options": [
+            { "value": "unclear", "label": "It's unclear where tech creates drag", "score": 1 },
+            { "value": "reactive", "label": "Sometimes we find the problem after impact", "score": 2 },
+            { "value": "feedback_loops", "label": "We use feedback loops or ticket analysis", "score": 3 },
+            { "value": "proactive", "label": "We proactively surface stack friction through monitoring", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "collaboration",
+          "label": "How well do your internal systems support team collaboration and workflow handoffs?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — lots of gaps", "score": 1 },
+            { "value": "mixed", "label": "Some tools are siloed, others integrated", "score": 2 },
+            { "value": "mostly_supported", "label": "Most tools support collaboration", "score": 3 },
+            { "value": "seamless", "label": "We have seamless, automated cross-tool workflows", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "planning_involvement",
+          "label": "How frequently do your team(s) or departments participate in technology planning?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — IT decides", "score": 1 },
+            { "value": "annual", "label": "During annual planning", "score": 2 },
+            { "value": "major_tools", "label": "When major tools are introduced", "score": 3 },
+            { "value": "regular", "label": "Regularly involved in roadmap conversations", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "overbuilt_tools",
+          "label": "What part of your current tech stack feels overbuilt, underused, or inefficient — and why?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "innovation_support",
+          "label": "How confident are you that your current tech stack enables innovation across teams (marketing, sales, ops, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "constraint", "label": "It's more of a constraint", "score": 1 },
+            { "value": "some_innovation", "label": "Some innovation, but not seamless", "score": 2 },
+            { "value": "key_areas", "label": "Supports innovation in key areas", "score": 3 },
+            { "value": "fully_enabled", "label": "It actively enables innovation and experimentation", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategic_alignment",
+          "label": "To what extent is your tech stack aligned with company-wide strategic goals?",
+          "type": "select",
+          "options": [
+            { "value": "no_alignment", "label": "No alignment — tools serve operational needs only", "score": 1 },
+            { "value": "partial_alignment", "label": "Partial alignment in specific areas", "score": 2 },
+            { "value": "mostly_aligned", "label": "Mostly aligned with company initiatives", "score": 3 },
+            { "value": "fully_aligned", "label": "Fully aligned and reviewed with leadership", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "growth_evaluation",
+          "label": "How do you evaluate whether tools are enabling or limiting growth in key areas (sales, CX, ops)?",
+          "type": "select",
+          "options": [
+            { "value": "gut_feel", "label": "Gut feel or anecdotal", "score": 1 },
+            { "value": "team_feedback", "label": "Team feedback and usage", "score": 2 },
+            { "value": "kpi_measurement", "label": "Measured against KPIs or business outcomes", "score": 3 },
+            { "value": "strategic_framework", "label": "Tied to strategic enablement frameworks", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "owner_metrics",
+          "label": "Do your platform administrators or tool owners have performance metrics tied to their roles?",
+          "type": "select",
+          "options": [
+            { "value": "no_expectations", "label": "No performance expectations", "score": 1 },
+            { "value": "basic_metrics", "label": "Basic adoption or ticket metrics", "score": 2 },
+            { "value": "operational_kpis", "label": "Platform goals tied to operational KPIs", "score": 3 },
+            { "value": "business_value", "label": "Clear accountability linked to business value", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "stack_review_frequency",
+          "label": "How frequently do you map or re-evaluate the entire stack for gaps, overlaps, or inefficiencies?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely", "score": 1 },
+            { "value": "yearly", "label": "Once a year", "score": 2 },
+            { "value": "biannual", "label": "Twice a year", "score": 3 },
+            { "value": "quarterly", "label": "Part of quarterly or agile planning", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "stack_performance_eval",
+          "label": "Which of the following are true about how you evaluate your stack's performance?",
+          "type": "multi_select",
+          "options": [
+            { "value": "vendor_tracking", "label": "We track vendor performance", "score": 1 },
+            { "value": "scoring_rubric", "label": "We use a standard scoring rubric", "score": 1 },
+            { "value": "cost_impact", "label": "We model cost vs. impact per tool", "score": 1 },
+            { "value": "user_surveys", "label": "We survey internal users regularly", "score": 1 },
+            { "value": "tool_kpis", "label": "We use dashboards to track tool KPIs", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "stack_governance",
+          "label": "Do you have a formalized governance model or framework for your stack?",
+          "type": "select",
+          "options": [
+            { "value": "no_governance", "label": "No — decisions are ad hoc", "score": 1 },
+            { "value": "shared_guidance", "label": "There's some shared guidance", "score": 2 },
+            { "value": "internal_process", "label": "We follow an internal process or policy", "score": 3 },
+            { "value": "formal_model", "label": "We use a documented, enforced governance model", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "stack_scalability",
+          "label": "How scalable is your current stack as new markets, teams, or products are added?",
+          "type": "select",
+          "options": [
+            { "value": "not_scalable", "label": "Not scalable — each addition is complex", "score": 1 },
+            { "value": "partially_scalable", "label": "Partially scalable with effort", "score": 2 },
+            { "value": "mostly_scalable", "label": "Mostly scalable with configuration", "score": 3 },
+            { "value": "fully_scalable", "label": "Fully modular and ready to scale", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "personalization",
+          "label": "To what extent do you use your stack for personalization, segmentation, or advanced targeting?",
+          "type": "select",
+          "options": [
+            { "value": "no_data", "label": "We don't have the data connected", "score": 1 },
+            { "value": "basic_targeting", "label": "Some teams use basic targeting", "score": 2 },
+            { "value": "segmentation", "label": "Most teams use segmentation features", "score": 3 },
+            { "value": "advanced_targeting", "label": "Advanced targeting is a core capability", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "improvement_opportunity",
+          "label": "What's one area of your stack that should be reinvented, retired, or reinvested in — and why?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "experimentation",
+          "label": "How well do your systems support a test-and-learn or experimentation culture?",
+          "type": "select",
+          "options": [
+            { "value": "not_well", "label": "Not well — limited flexibility", "score": 1 },
+            { "value": "with_workarounds", "label": "Possible but requires workarounds", "score": 2 },
+            { "value": "some_systems", "label": "Testing is built into some systems", "score": 3 },
+            { "value": "fully_enabled", "label": "Fully enabled for rapid testing and iteration", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "stack_influence",
+          "label": "How often does your tech stack directly influence strategic decisions (e.g. product, market, org)?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "frequently", "label": "Frequently", "score": 3 },
+            { "value": "always", "label": "Always — it's part of strategic planning", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "ai_usage",
+          "label": "To what extent do you use AI, machine learning, or predictive logic in your stack today?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "pilot_areas", "label": "In a few pilot areas", "score": 2 },
+            { "value": "key_functions", "label": "In key functions like CX or targeting", "score": 3 },
+            { "value": "integrated", "label": "Integrated across multiple workflows and platforms", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "governance_controls",
+          "label": "Which of the following do you actively manage through your stack governance model?",
+          "type": "multi_select",
+          "options": [
+            { "value": "tool_kpis", "label": "Tool performance KPIs", "score": 1 },
+            { "value": "cost_optimization", "label": "Cost optimization", "score": 1 },
+            { "value": "compliance", "label": "Compliance & access control", "score": 1 },
+            { "value": "process_alignment", "label": "Process-to-platform alignment", "score": 1 },
+            { "value": "innovation", "label": "Innovation pipeline", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "change_modeling",
+          "label": "Do you model future stack changes (e.g. tools, integrations, roles) before rollout?",
+          "type": "select",
+          "options": [
+            { "value": "no_modeling", "label": "No — we launch and adapt", "score": 1 },
+            { "value": "major_initiatives", "label": "Some modeling in major initiatives", "score": 2 },
+            { "value": "most_changes", "label": "Most major changes are mapped", "score": 3 },
+            { "value": "simulate_test", "label": "Yes — we simulate and test before rollout", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "stack_flexibility",
+          "label": "How easily can you adapt your stack to a major business change (e.g. acquisition, product shift, new market)?",
+          "type": "select",
+          "options": [
+            { "value": "difficult", "label": "Difficult — requires rework", "score": 1 },
+            { "value": "heavy_lift", "label": "Adaptable with heavy lift", "score": 2 },
+            { "value": "modular", "label": "Modular — adjustments take weeks", "score": 3 },
+            { "value": "agile", "label": "Extremely agile — we adapt in days", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "cx_enablement",
+          "label": "How are you leveraging your stack to enhance customer experience (CX)?",
+          "type": "select",
+          "options": [
+            { "value": "not_used", "label": "We aren't using it for CX", "score": 1 },
+            { "value": "data_personalization", "label": "Some data used for personalization", "score": 2 },
+            { "value": "partial_automation", "label": "CX is partially automated and dynamic", "score": 3 },
+            { "value": "real_time", "label": "Our stack drives real-time, personalized journeys", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "innovation_process",
+          "label": "How do you ensure continuous innovation within your stack?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We react to business needs", "score": 1 },
+            { "value": "annual_review", "label": "We review tools and gaps annually", "score": 2 },
+            { "value": "innovation_pilots", "label": "We run internal innovation pilots", "score": 3 },
+            { "value": "built_in", "label": "Innovation is built into stack roadmap and governance", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "stack_fatigue",
+          "label": "What's your current approach to managing stack sprawl and platform fatigue?",
+          "type": "select",
+          "options": [
+            { "value": "not_addressed", "label": "Not currently addressed", "score": 1 },
+            { "value": "case_by_case", "label": "Reviewed case-by-case", "score": 2 },
+            { "value": "consolidation", "label": "Managed via consolidation plans", "score": 3 },
+            { "value": "optimized", "label": "Actively optimized across the org", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "innovation_example",
+          "label": "What's the most innovative use of your tech stack you've implemented in the past year?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "future_readiness",
+          "label": "How confident are you that your stack will support the next 3 years of growth and innovation?",
+          "type": "select",
+          "options": [
+            { "value": "need_overhaul", "label": "We'll need to overhaul major parts", "score": 1 },
+            { "value": "mostly_scalable", "label": "Mostly scalable, but not future-ready", "score": 2 },
+            { "value": "well_positioned", "label": "Well-positioned with minor upgrades", "score": 3 },
+            { "value": "future_ready", "label": "Fully future-ready and designed for evolution", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "competitive_edge",
+          "label": "How does your tech stack differentiate your business in the market or with your customers?",
+          "type": "text_area",
+          "order": 1
+        },
+        {
+          "key": "strategic_capabilities",
+          "label": "Which of these strategic capabilities are supported directly by your stack today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "predictive_insights", "label": "Predictive customer insights", "score": 1 },
+            { "value": "real_time_personalization", "label": "Real-time personalization", "score": 1 },
+            { "value": "experimentation", "label": "Experimentation & rapid iteration", "score": 1 },
+            { "value": "ai_decision", "label": "AI-driven decision support", "score": 1 },
+            { "value": "revenue_modeling", "label": "Revenue modeling or forecasting", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "stack_strategy",
+          "label": "Do you have a formal \"stack strategy\" as part of your business or innovation roadmap?",
+          "type": "select",
+          "options": [
+            { "value": "not_central", "label": "No — tools support strategy but aren't central", "score": 1 },
+            { "value": "planning_alignment", "label": "Some alignment with planning cycles", "score": 2 },
+            { "value": "own_roadmap", "label": "Yes — our stack has its own roadmap", "score": 3 },
+            { "value": "drives_transformation", "label": "Yes — the stack strategy drives transformation", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "tech_adoption",
+          "label": "How are new technologies (e.g. AI agents, composable platforms, LLMs) evaluated and integrated?",
+          "type": "select",
+          "options": [
+            { "value": "not_part", "label": "Not part of our process", "score": 1 },
+            { "value": "occasional", "label": "Discussed occasionally", "score": 2 },
+            { "value": "active_programs", "label": "Piloted or evaluated in active programs", "score": 3 },
+            { "value": "fast_tracked", "label": "Fast-tracked via innovation team or CoE", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "stack_decision_model",
+          "label": "To what extent are stack decisions made with business unit involvement vs. centralized leadership?",
+          "type": "select",
+          "options": [
+            { "value": "it_ops", "label": "Mostly IT/ops decision-making", "score": 1 },
+            { "value": "consulted", "label": "Business teams are consulted", "score": 2 },
+            { "value": "co_led", "label": "Co-led by business + platform leaders", "score": 3 },
+            { "value": "collaborative", "label": "Fully collaborative, tied to OKRs and CX", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "innovation_support",
+          "label": "How does your organization support continuous innovation in its tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc updates or vendor input", "score": 1 },
+            { "value": "team_led", "label": "Innovation is team-led, but fragmented", "score": 2 },
+            { "value": "frequent_pilots", "label": "Pilots and internal tools are frequent", "score": 3 },
+            { "value": "structured", "label": "Stack innovation is structured, funded, and roadmap-driven", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "future_capability",
+          "label": "What's one emerging capability or future trend you're actively building toward?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "performance_reporting",
+          "label": "How is stack performance evaluated across departments (marketing, sales, service, ops, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "different_metrics", "label": "Each team tracks different metrics", "score": 1 },
+            { "value": "shared_dashboards", "label": "Shared dashboards for some platforms", "score": 2 },
+            { "value": "coordinated", "label": "Coordinated reporting & insights", "score": 3 },
+            { "value": "cross_functional", "label": "Full-stack performance is tracked cross-functionally", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "architecture_flexibility",
+          "label": "How flexible is your current architecture to plug in new tools, data sources, or channels?",
+          "type": "select",
+          "options": [
+            { "value": "brittle", "label": "Very difficult or brittle", "score": 1 },
+            { "value": "heavy_support", "label": "Requires heavy dev or vendor support", "score": 2 },
+            { "value": "plug_play", "label": "Mostly plug-and-play", "score": 3 },
+            { "value": "composable", "label": "Fully composable / API-first by design", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "stack_north_star",
+          "label": "What is your \"North Star\" for your tech stack over the next 12–18 months?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "finalQuestions": [
+    {
+      "key": "current_tech_stack",
+      "label": "Which technologies does your team currently use?",
+      "type": "multi_select",
+      "categories": {
+        "CRM": [
+          "Agile CRM",
+          "Apptivo",
+          "Bigin by Zoho CRM",
+          "Capsule CRM",
+          "Close CRM",
+          "Copper",
+          "Creatio",
+          "Freshsales (Freshworks)",
+          "HubSpot CRM",
+          "Insightly",
+          "Keap (formerly Infusionsoft)",
+          "Less Annoying CRM",
+          "Microsoft Dynamics 365",
+          "Monday.com CRM",
+          "Nimble",
+          "Nutshell",
+          "Oracle NetSuite CRM",
+          "Pipedrive",
+          "SAP Sales Cloud",
+          "Salesforce",
+          "SugarCRM",
+          "Vtiger",
+          "Zendesk Sell",
+          "Zoho CRM",
+          "None",
+          "Other"
+        ],
+        "ESP": [
+          "Acoustic Campaign (formerly IBM Watson)",
+          "ActiveCampaign",
+          "Adobe Campaign",
+          "AWeber",
+          "Benchmark Email",
+          "Blueshift",
+          "Braze",
+          "Campaign Monitor",
+          "Constant Contact",
+          "dotdigital",
+          "Drip",
+          "GetResponse",
+          "HubSpot Marketing Hub",
+          "Iterable",
+          "Klaviyo",
+          "Listrak",
+          "Mailchimp",
+          "MailerLite",
+          "Mailjet",
+          "Moosend",
+          "Omnisend",
+          "Oracle Eloqua",
+          "SAP Emarsys",
+          "Salesforce Marketing Cloud",
+          "Sendinblue (Brevo)",
+          "SharpSpring",
+          "None",
+          "Other"
+        ],
+        "Analytics": [
+          "Adobe Analytics",
+          "Amplitude",
+          "Chartio (acquired by Atlassian)",
+          "Countly",
+          "Crazy Egg",
+          "Domo",
+          "FullStory",
+          "Google Analytics (GA4)",
+          "Heap",
+          "Hotjar (behavior + feedback)",
+          "Kissmetrics",
+          "Looker (Google)",
+          "Matomo",
+          "Metabase",
+          "Mixpanel",
+          "Piwik PRO",
+          "Plausible Analytics",
+          "Power BI",
+          "Qlik Sense",
+          "Redash",
+          "Segment (for behavioral tracking)",
+          "Sisense",
+          "Snowplow",
+          "Tableau",
+          "Zoho Analytics",
+          "None",
+          "Other"
+        ],
+        "CDP": [
+          "ActionIQ",
+          "Adobe Real-Time CDP",
+          "Amperity",
+          "Bloomreach Engagement",
+          "BlueConic",
+          "Celebrus",
+          "Commanders Act",
+          "Exponea (Bloomreach)",
+          "Lexer",
+          "Lytics",
+          "Meiro",
+          "MetaRouter",
+          "mParticle",
+          "NGDATA",
+          "Oracle Unity",
+          "RudderStack",
+          "Salesforce Data Cloud (formerly Customer 360 Audiences)",
+          "SAP Customer Data Cloud",
+          "Segment (Twilio)",
+          "Simon Data",
+          "Tealium AudienceStream",
+          "Totango",
+          "Treasure Data",
+          "Zeotap",
+          "Zeta Global",
+          "None",
+          "Other"
+        ]
+      }
+    }
+  ]
+} 

@@ -1,0 +1,30 @@
+# Node + Next.js
+node_modules/
+.next/
+dist/
+out/
+coverage/
+
+# Logs
+*.log
+
+# Environment variables
+.env*
+.env.local
+
+# System / IDE stuff
+.DS_Store
+.vscode/
+.idea/
+
+# Python / ML files
+ML/
+*.csv
+*.pkl
+*.py
+__pycache__/
+venv/
+virtual/
+for/
+ml_env/
+test_openai.py

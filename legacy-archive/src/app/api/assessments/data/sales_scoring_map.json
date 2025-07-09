@@ -1,0 +1,603 @@
+{
+  "score_1": {
+    "lead_generation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_consistent_method": 1,
+        "referrals_only": 2,
+        "occasional_outreach": 3,
+        "digital_channels": 4
+      }
+    },
+    "sales_process": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_process": 1,
+        "loose_outline": 2,
+        "key_steps": 3,
+        "defined_process": 4
+      }
+    },
+    "pipeline_tracking": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_tracking": 1,
+        "manual_spreadsheet": 2,
+        "basic_crm": 3,
+        "structured_system": 4
+      }
+    },
+    "sales_team": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "founder_only": 1,
+        "single_rep": 2,
+        "small_team": 3,
+        "dedicated_department": 4
+      }
+    },
+    "follow_ups": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "inconsistent": 1,
+        "manual_reminders": 2,
+        "basic_system": 3,
+        "automated": 4
+      }
+    },
+    "lead_qualification": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_qualification": 1,
+        "basic_questions": 2,
+        "basic_criteria": 3,
+        "scoring_framework": 4
+      }
+    },
+    "pricing_proposals": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "ad_hoc": 1,
+        "price_list": 2,
+        "templated": 3,
+        "structured": 4
+      }
+    },
+    "sales_metrics": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "lead_sources": 1,
+        "conversion_rates": 2,
+        "time_to_close": 3,
+        "win_loss": 4,
+        "activity": 5
+      }
+    }
+  },
+  "score_1_5": {
+    "lead_assignment": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "unassigned_leads": 1,
+        "manual_assign": 2,
+        "self_service": 3,
+        "automated_routing": 4
+      }
+    },
+    "forecast_confidence": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "low_confidence": 1,
+        "basic_forecast": 2,
+        "data_based": 3,
+        "high_confidence": 4
+      }
+    },
+    "pipeline_review": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "infrequent_review": 1,
+        "monthly_review": 2,
+        "biweekly_review": 3,
+        "weekly_review": 4
+      }
+    },
+    "sales_discovery": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "casual_discovery": 1,
+        "basic_discovery": 2,
+        "guided_discovery": 3,
+        "formal_discovery": 4
+      }
+    },
+    "deal_progression": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_tracking": 1,
+        "manual_tracking": 2,
+        "crm_tracking": 3,
+        "advanced_tracking": 4
+      }
+    },
+    "stage_consistency": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "inconsistent_stages": 1,
+        "basic_consistency": 2,
+        "stage_tracking": 3,
+        "strict_stages": 4
+      }
+    }
+  },
+  "score_2": {
+    "sales_stages": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "undefined_stages": 1,
+        "loose_stages": 2,
+        "defined_stages": 3,
+        "formal_stages": 4
+      }
+    },
+    "pipeline_accuracy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "low_accuracy": 1,
+        "partial_accuracy": 2,
+        "good_accuracy": 3,
+        "high_accuracy": 4
+      }
+    },
+    "lead_prioritization": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "recent_first": 1,
+        "intuitive": 2,
+        "value_based": 3,
+        "scored_leads": 4
+      }
+    },
+    "followup_management": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "manual_followup": 1,
+        "calendar_followup": 2,
+        "task_followup": 3,
+        "automated_followup": 4
+      }
+    },
+    "sales_preparation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "minimal_prep": 1,
+        "basic_prep": 2,
+        "guided_prep": 3,
+        "comprehensive_prep": 4
+      }
+    },
+    "call_documentation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "rare_documentation": 1,
+        "key_calls": 2,
+        "most_calls": 3,
+        "all_calls": 4
+      }
+    },
+    "handoff_process": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_handoff": 1,
+        "informal_handoff": 2,
+        "standard_handoff": 3,
+        "formal_handoff": 4
+      }
+    }
+  },
+  "score_2_5": {
+    "activity_management": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_activity_tracking": 1,
+        "manual_activity_log": 2,
+        "basic_activity_crm": 3,
+        "automated_activity": 4
+      }
+    },
+    "sales_targets": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_sales_targets": 1,
+        "basic_team_targets": 2,
+        "individual_targets": 3,
+        "detailed_kpi_targets": 4
+      }
+    },
+    "reporting_system": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_sales_reports": 1,
+        "basic_sales_reports": 2,
+        "monthly_sales_reports": 3,
+        "real_time_sales_reports": 4
+      }
+    },
+    "strategy_adjustment": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "reactive_strategy": 1,
+        "ad_hoc_strategy": 2,
+        "regular_strategy_review": 3,
+        "structured_strategy": 4
+      }
+    },
+    "performance_review": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_performance_review": 1,
+        "occasional_review": 2,
+        "weekly_review": 3,
+        "structured_review": 4
+      }
+    },
+    "sales_communication": {
+      "type": "multi_select",
+      "weight": 1,
+      "values": {
+        "sales_call_records": 1,
+        "sales_chat_history": 2,
+        "sales_crm_notes": 3,
+        "sales_deal_reviews": 4
+      }
+    },
+    "pipeline_management": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "skip_pipeline_stages": 1,
+        "partial_pipeline": 2,
+        "track_pipeline": 3,
+        "stage_by_stage": 4
+      }
+    }
+  },
+  "score_3": {
+    "deal_velocity": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_velocity_tracking": 1,
+        "basic_velocity": 2,
+        "stage_velocity": 3,
+        "optimized_velocity": 4
+      }
+    },
+    "forecast_accuracy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "inconsistent_forecast": 1,
+        "somewhat_accurate": 2,
+        "mostly_accurate": 3,
+        "highly_accurate": 4
+      }
+    },
+    "sales_optimization": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_optimization": 1,
+        "basic_optimization": 2,
+        "structured_optimization": 3,
+        "advanced_optimization": 4
+      }
+    },
+    "performance_analytics": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_analytics": 1,
+        "monthly_analytics": 2,
+        "weekly_analytics": 3,
+        "real_time_analytics": 4
+      }
+    },
+    "sales_metrics": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_metrics": 1,
+        "basic_metrics": 2,
+        "detailed_metrics": 3,
+        "advanced_metrics": 4
+      }
+    },
+    "pricing_strategy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "fixed_pricing": 1,
+        "basic_pricing": 2,
+        "detailed_pricing": 3,
+        "dynamic_pricing": 4
+      }
+    }
+  },
+  "score_3_5": {
+    "roi_measurement": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_roi_tracking": 1,
+        "basic_roi": 2,
+        "detailed_roi": 3,
+        "advanced_roi": 4
+      }
+    },
+    "sales_effectiveness": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_effectiveness": 1,
+        "basic_effectiveness": 2,
+        "structured_effectiveness": 3,
+        "comprehensive_effectiveness": 4
+      }
+    },
+    "sales_optimization": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_optimization": 1,
+        "basic_optimization": 2,
+        "structured_optimization": 3,
+        "advanced_optimization": 4
+      }
+    },
+    "performance_monitoring": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_monitoring": 1,
+        "monthly_monitoring": 2,
+        "weekly_monitoring": 3,
+        "real_time_monitoring": 4
+      }
+    },
+    "sales_analytics": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_analytics": 1,
+        "basic_analytics": 2,
+        "detailed_analytics": 3,
+        "advanced_analytics": 4
+      }
+    },
+    "pricing_optimization": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "fixed_pricing": 1,
+        "basic_pricing": 2,
+        "detailed_pricing": 3,
+        "dynamic_pricing": 4
+      }
+    }
+  },
+  "score_4": {
+    "data_driven_strategy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_data_usage": 1,
+        "basic_data_sharing": 2,
+        "integrated_data": 3,
+        "data_driven_decisions": 4
+      }
+    },
+    "sales_methodology": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_methodology": 1,
+        "basic_methodology": 2,
+        "structured_methodology": 3,
+        "advanced_methodology": 4
+      }
+    },
+    "sales_intelligence": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_intelligence": 1,
+        "activity_intelligence": 2,
+        "advanced_intelligence": 3,
+        "ai_intelligence": 4
+      }
+    },
+    "resource_allocation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_resource_planning": 1,
+        "basic_allocation": 2,
+        "structured_allocation": 3,
+        "dynamic_allocation": 4
+      }
+    },
+    "lead_scoring": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_lead_scoring": 1,
+        "basic_scoring": 2,
+        "structured_scoring": 3,
+        "advanced_scoring": 4
+      }
+    },
+    "process_adaptation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "static_process": 1,
+        "basic_monitoring": 2,
+        "regular_updates": 3,
+        "dynamic_adaptation": 4
+      }
+    }
+  },
+  "score_4_5": {
+    "team_capacity": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_capacity_planning": 1,
+        "basic_capacity": 2,
+        "detailed_capacity": 3,
+        "optimized_capacity": 4
+      }
+    },
+    "sales_experimentation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_experimentation": 1,
+        "basic_testing": 2,
+        "structured_testing": 3,
+        "advanced_testing": 4
+      }
+    },
+    "sales_insights": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_insights": 1,
+        "activity_insights": 2,
+        "advanced_insights": 3,
+        "ai_insights": 4
+      }
+    },
+    "resource_planning": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_resource_planning": 1,
+        "basic_planning": 2,
+        "structured_planning": 3,
+        "dynamic_planning": 4
+      }
+    },
+    "lead_evaluation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_evaluation": 1,
+        "basic_evaluation": 2,
+        "structured_evaluation": 3,
+        "advanced_evaluation": 4
+      }
+    },
+    "process_evolution": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "static_process": 1,
+        "basic_evolution": 2,
+        "regular_evolution": 3,
+        "dynamic_evolution": 4
+      }
+    }
+  },
+  "score_5": {
+    "customer_feedback": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_customer_feedback": 1,
+        "basic_feedback": 2,
+        "regular_feedback": 3,
+        "strategic_feedback": 4
+      }
+    },
+    "sales_culture": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_sales_culture": 1,
+        "basic_culture": 2,
+        "structured_culture": 3,
+        "advanced_culture": 4
+      }
+    },
+    "sales_automation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "basic_automation": 1,
+        "activity_automation": 2,
+        "advanced_automation": 3,
+        "ai_automation": 4
+      }
+    },
+    "resource_strategy": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_resource_strategy": 1,
+        "basic_strategy": 2,
+        "structured_strategy": 3,
+        "dynamic_strategy": 4
+      }
+    },
+    "opportunity_assessment": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "no_assessment": 1,
+        "basic_assessment": 2,
+        "structured_assessment": 3,
+        "advanced_assessment": 4
+      }
+    },
+    "process_innovation": {
+      "type": "multiple_choice",
+      "weight": 1,
+      "values": {
+        "static_innovation": 1,
+        "basic_innovation": 2,
+        "regular_innovation": 3,
+        "dynamic_innovation": 4
+      }
+    }
+  }
+}
+    
+    

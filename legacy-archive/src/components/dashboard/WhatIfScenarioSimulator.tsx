@@ -1,0 +1,538 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import * as d3 from "d3";
+import { motion } from "framer-motion";
+import SectionHeader from "./SectionHeader";
+
+interface SimulationResult {
+  revenueImpact: number;
+  costSavings: number;
+  efficiencyGain: number;
+}
+
+interface SimulationData {
+  strategyChange: number;
+  processChange: number;
+  techChange: number;
+  revenue: number;
+  costs: number;
+  efficiency: number;
+}
+
+export default function WhatIfScenarioSimulator() {
+  const [simulationData, setSimulationData] = useState<SimulationData>({
+    strategyChange: 0,
+    processChange: 0,
+    techChange: 0,
+    revenue: 100000,
+    costs: 50000,
+    efficiency: 50
+  });
+  
+  const [results, setResults] = useState<SimulationResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [aiInsight, setAiInsight] = useState<string | null>(null);
+  const [insightLoading, setInsightLoading] = useState(false);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Calculate impact in real-time
+  const calculateImpact = (data: SimulationData): SimulationResult => {
+    const strategyWeight = 0.6;
+    const processWeight = 0.3;
+    const techWeight = 0.4;
+
+    const strategyEffect = Math.pow(Math.abs(data.strategyChange), 1.1) * Math.sign(data.strategyChange);
+    const processEffect = Math.pow(Math.abs(data.processChange), 1.05) * Math.sign(data.processChange);
+    const techEffect = Math.pow(Math.abs(data.techChange), 1.05) * Math.sign(data.techChange);
+
+    const efficiencyMultiplier = (100 - data.efficiency) / 100;
+
+    const revenueImpact = Math.round(
+      (strategyEffect * strategyWeight + processEffect * processWeight + techEffect * techWeight) *
+      data.revenue * 0.12
+    );
+
+    const costSavings = Math.round(
+      (strategyEffect * 0.4 + techEffect * 0.6) * data.costs * 0.07
+    );
+
+    const efficiencyGain = Math.round(
+      (processEffect + techEffect) * 1.8 * efficiencyMultiplier * 10
+    ) / 10;
+
+    return { revenueImpact, costSavings, efficiencyGain };
+  };
+
+  // Generate AI insights
+  const generateAIInsight = async (result: SimulationResult) => {
+    setInsightLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch("/api/growth_studio/commentary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to generate AI insight");
+      }
+
+      const data = await res.json();
+      setAiInsight(data.summary || null);
+    } catch (err) {
+      console.error("❌ Failed to generate AI insight:", err);
+      setError("Failed to generate AI insight. Please try again.");
+      setAiInsight(null);
+    } finally {
+      setInsightLoading(false);
+    }
+  };
+
+  // Update results when simulation data changes
+  useEffect(() => {
+    const newResults = calculateImpact(simulationData);
+    setResults(newResults);
+    
+    // Update chart data
+    const newChartData = [
+      { category: "Revenue Impact", value: newResults.revenueImpact, color: "#10b981", icon: "📈" },
+      { category: "Cost Savings", value: newResults.costSavings, color: "#3b82f6", icon: "💸" },
+      { category: "Efficiency Gain", value: newResults.efficiencyGain, color: "#f59e0b", icon: "⚙️" }
+    ];
+    setChartData(newChartData);
+  }, [simulationData]);
+
+  // Render chart
+  useEffect(() => {
+    if (!svgRef.current || chartData.length === 0) return;
+
+    // Clear previous chart
+    d3.select(svgRef.current).selectAll("*").remove();
+
+    // Setup dimensions
+    const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+    const width = svgRef.current.clientWidth - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+
+    // Create SVG
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Add background with gradient
+    const backgroundGradient = svg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", "simulatorBackgroundGradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%");
+
+    backgroundGradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#f8fafc")
+      .attr("stop-opacity", 0.8);
+
+    backgroundGradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#ffffff")
+      .attr("stop-opacity", 0.3);
+
+    svg
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill", "url(#simulatorBackgroundGradient)")
+      .style("rx", "12")
+      .style("ry", "12")
+      .style("filter", "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05))");
+
+    // Create scales
+    const xScale = d3
+      .scaleBand()
+      .domain(chartData.map(d => d.category))
+      .range([0, width])
+      .padding(0.3);
+
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(chartData, d => d.value) || 0])
+      .range([height, 0]);
+
+    // Add bars with gradients
+    chartData.forEach((d, i) => {
+      const barGradient = svg.append("defs").append("linearGradient")
+        .attr("id", `barGradient${i}`)
+        .attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
+      
+      barGradient.append("stop").attr("offset", "0%").attr("stop-color", d.color).attr("stop-opacity", 0.8);
+      barGradient.append("stop").attr("offset", "100%").attr("stop-color", d.color).attr("stop-opacity", 0.4);
+
+      const barWidth = xScale.bandwidth();
+      const barHeight = height - yScale(d.value);
+      const barX = xScale(d.category) || 0;
+      const barY = yScale(d.value);
+
+      // Add bar
+      svg
+        .append("rect")
+        .attr("x", barX)
+        .attr("y", barY)
+        .attr("width", barWidth)
+        .attr("height", barHeight)
+        .style("fill", `url(#barGradient${i})`)
+        .style("stroke", d.color)
+        .style("stroke-width", 1.5)
+        .style("rx", "6")
+        .style("ry", "6")
+        .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
+        .style("transition", "all 0.3s ease")
+        .on("mouseover", function() {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("filter", "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))")
+            .style("opacity", 0.9);
+        })
+        .on("mouseout", function() {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
+            .style("opacity", 1);
+        });
+
+      // Add value labels
+      svg
+        .append("text")
+        .attr("x", barX + barWidth / 2)
+        .attr("y", barY - 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("font-weight", "600")
+        .style("fill", "#374151")
+        .text(d.category === "Efficiency Gain" ? `${d.value}%` : `$${(d.value / 1000).toFixed(0)}k`);
+
+      // Add category labels
+      svg
+        .append("text")
+        .attr("x", barX + barWidth / 2)
+        .attr("y", height + 20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("font-weight", "500")
+        .style("fill", "#6b7280")
+        .text(d.category);
+    });
+
+    // Add axis lines
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", height)
+      .attr("y2", height)
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
+
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("y1", 0)
+      .attr("y2", height)
+      .style("stroke", "#d1d5db")
+      .style("stroke-width", 1.5);
+
+  }, [chartData]);
+
+  const handleSliderChange = (field: keyof SimulationData, value: number) => {
+    setSimulationData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleInputChange = (field: keyof SimulationData, value: number) => {
+    setSimulationData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const runSimulation = async () => {
+    setLoading(true);
+    setError(null);
+    
+    // Simulate processing time
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const newResults = calculateImpact(simulationData);
+    setResults(newResults);
+    
+    // Generate AI insight
+    await generateAIInsight(newResults);
+    
+    setLoading(false);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-all duration-300"
+    >
+      <SectionHeader title="🔮 What-If Scenario Simulator" subtitle="Adjust metrics to see how improvements in strategy, process, and tech affect business outcomes" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Controls Panel */}
+        <div className="space-y-6">
+          {/* Strategy Slider */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <span className="text-lg">🎯</span>
+                Strategy Change
+              </label>
+              <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                {simulationData.strategyChange > 0 ? '+' : ''}{simulationData.strategyChange}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={simulationData.strategyChange}
+              onChange={(e) => handleSliderChange('strategyChange', parseFloat(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>-2 (Decline)</span>
+              <span>0 (No Change)</span>
+              <span>+2 (Improvement)</span>
+            </div>
+          </div>
+
+          {/* Process Slider */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <span className="text-lg">⚙️</span>
+                Process Change
+              </label>
+              <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                {simulationData.processChange > 0 ? '+' : ''}{simulationData.processChange}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={simulationData.processChange}
+              onChange={(e) => handleSliderChange('processChange', parseFloat(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>-2 (Decline)</span>
+              <span>0 (No Change)</span>
+              <span>+2 (Improvement)</span>
+            </div>
+          </div>
+
+          {/* Technology Slider */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <span className="text-lg">🚀</span>
+                Technology Change
+              </label>
+              <span className="text-sm font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
+                {simulationData.techChange > 0 ? '+' : ''}{simulationData.techChange}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={simulationData.techChange}
+              onChange={(e) => handleSliderChange('techChange', parseFloat(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>-2 (Decline)</span>
+              <span>0 (No Change)</span>
+              <span>+2 (Improvement)</span>
+            </div>
+          </div>
+
+          {/* Business Metrics */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-gray-900 text-sm">Business Metrics</h4>
+            
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Annual Revenue ($)</label>
+                <input
+                  type="number"
+                  value={simulationData.revenue}
+                  onChange={(e) => handleInputChange('revenue', Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Annual Costs ($)</label>
+                <input
+                  type="number"
+                  value={simulationData.costs}
+                  onChange={(e) => handleInputChange('costs', Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Current Efficiency (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={simulationData.efficiency}
+                  onChange={(e) => handleInputChange('efficiency', Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Run Simulation Button */}
+          <button
+            onClick={runSimulation}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                Running Simulation...
+              </span>
+            ) : (
+              "Run Advanced Simulation"
+            )}
+          </button>
+
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Results Chart */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold text-gray-900">Impact Analysis</h4>
+            <div className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
+              Real-time Preview
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 rounded-lg p-4">
+            <svg ref={svgRef} className="w-full" style={{ height: "300px" }} />
+          </div>
+
+          {/* AI Strategic Insight */}
+          {aiInsight && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
+            >
+              <div className="flex items-start gap-3">
+                <div className="text-blue-600 text-lg mt-0.5">💡</div>
+                <div>
+                  <h5 className="font-semibold text-blue-900 text-sm mb-1">Strategic Insight:</h5>
+                  <p className="text-blue-800 text-sm leading-relaxed">{aiInsight}</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {insightLoading && (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                <span className="text-sm text-gray-600">Generating AI insights...</span>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Stats */}
+          {results && (
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="text-lg font-bold text-green-700">
+                  ${(results.revenueImpact / 1000).toFixed(0)}k
+                </div>
+                <div className="text-xs text-green-600">Revenue Impact</div>
+              </div>
+              <div className="text-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-lg font-bold text-blue-700">
+                  ${(results.costSavings / 1000).toFixed(0)}k
+                </div>
+                <div className="text-xs text-blue-600">Cost Savings</div>
+              </div>
+              <div className="text-center p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div className="text-lg font-bold text-yellow-700">
+                  {results.efficiencyGain.toFixed(1)}%
+                </div>
+                <div className="text-xs text-yellow-600">Efficiency Gain</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Salesforce-style footer */}
+      <div className="mt-6 pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <span className="flex items-center gap-1">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            AI-powered simulation
+          </span>
+          <span className="text-blue-600 font-medium">OptimaliQ.ai</span>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .slider::-webkit-slider-thumb {
+          appearance: none;
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slider::-moz-range-thumb {
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+      `}</style>
+    </motion.div>
+  );
+} 

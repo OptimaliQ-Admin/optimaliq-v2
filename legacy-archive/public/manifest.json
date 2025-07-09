@@ -1,0 +1,21 @@
+{
+  "name": "GMF Plus - Growth Management Framework",
+  "short_name": "GMF Plus",
+  "description": "AI-powered growth assessment and strategic planning platform for businesses",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"],
+  "lang": "en-US",
+  "scope": "/"
+} 

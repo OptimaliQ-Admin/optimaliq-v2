@@ -1,0 +1,1063 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "ai_familiarity",
+          "label": "How familiar are you with the concept of AI and automation in business operations?",
+          "type": "select",
+          "options": [
+            { "value": "not_at_all", "label": "Not at all", "score": 1 },
+            { "value": "heard_of", "label": "I've heard of it", "score": 2 },
+            { "value": "somewhat", "label": "Somewhat familiar", "score": 3 },
+            { "value": "very", "label": "Very familiar", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "current_usage",
+          "label": "Are you currently using any AI or automation tools in your business?",
+          "type": "select",
+          "options": [
+            { "value": "no", "label": "No", "score": 1 },
+            { "value": "not_sure", "label": "Not sure", "score": 2 },
+            { "value": "experimenting", "label": "We're experimenting with one or two tools", "score": 3 },
+            { "value": "yes_few", "label": "Yes, in a few workflows", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "manual_tasks",
+          "label": "What tasks are currently done manually that you wish could be automated?",
+          "type": "text_area",
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "biggest_hesitation",
+          "label": "What's your biggest hesitation when it comes to using AI or automation?",
+          "type": "select",
+          "options": [
+            { "value": "too_complex", "label": "Too complex", "score": 1 },
+            { "value": "too_expensive", "label": "Too expensive", "score": 2 },
+            { "value": "not_sure_start", "label": "Not sure where to start", "score": 3 },
+            { "value": "not_relevant", "label": "Not sure if it's relevant to us", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "automation_areas",
+          "label": "Which of the following areas could benefit most from automation?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing", "label": "Marketing", "score": 1 },
+            { "value": "customer_service", "label": "Customer service", "score": 1 },
+            { "value": "sales", "label": "Sales outreach", "score": 1 },
+            { "value": "finance", "label": "Finance & accounting", "score": 1 },
+            { "value": "hr", "label": "HR", "score": 1 },
+            { "value": "inventory", "label": "Inventory or supply chain", "score": 1 },
+            { "value": "none", "label": "None / not sure", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "data_collection",
+          "label": "Do you currently collect any customer or operational data that could be used for automation?",
+          "type": "select",
+          "options": [
+            { "value": "no", "label": "No", "score": 1 },
+            { "value": "spreadsheets", "label": "Only in spreadsheets", "score": 2 },
+            { "value": "unused", "label": "Some tools collect it but we don't use it", "score": 3 },
+            { "value": "yes_reports", "label": "Yes, we use it for reports", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "automation_ownership",
+          "label": "Who in your organization is responsible for exploring or leading automation efforts?",
+          "type": "select",
+          "options": [
+            { "value": "no_one", "label": "No one", "score": 1 },
+            { "value": "ad_hoc", "label": "Ad hoc by team leads", "score": 2 },
+            { "value": "tech_savvy", "label": "A tech-savvy employee", "score": 3 },
+            { "value": "dedicated", "label": "We have a dedicated owner or team", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "experimentation_openness",
+          "label": "How would you describe your openness to experimenting with AI tools in your business?",
+          "type": "select",
+          "options": [
+            { "value": "not_interested", "label": "Not interested", "score": 1 },
+            { "value": "cautious", "label": "Open but cautious", "score": 2 },
+            { "value": "curious", "label": "Curious and exploring options", "score": 3 },
+            { "value": "excited", "label": "Excited and ready to start", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "success_vision",
+          "label": "What would success look like if you implemented AI in your business today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "biggest_question",
+          "label": "What's the biggest question you have about using AI or automation in your business?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "current_automation",
+          "label": "What types of automation are currently in place in your business processes?",
+          "type": "multi_select",
+          "options": [
+            { "value": "email_marketing", "label": "Email or marketing automation", "score": 1 },
+            { "value": "support_chatbots", "label": "Customer support chatbots", "score": 1 },
+            { "value": "finance_billing", "label": "Finance or billing automation", "score": 1 },
+            { "value": "workflow", "label": "Basic workflow automation (e.g., Zapier)", "score": 1 },
+            { "value": "none", "label": "None of the above", "score": 1 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "automation_ownership",
+          "label": "Who is currently responsible for exploring or implementing AI/automation in your company?",
+          "type": "select",
+          "options": [
+            { "value": "no_one", "label": "No one yet", "score": 1 },
+            { "value": "individual", "label": "Individual team members on their own", "score": 2 },
+            { "value": "ops_tech", "label": "Ops/tech lead with limited time", "score": 3 },
+            { "value": "dedicated", "label": "Dedicated owner exploring solutions", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "tool_evaluation",
+          "label": "How do you evaluate whether automation or AI tools are worth adopting?",
+          "type": "select",
+          "options": [
+            { "value": "not_evaluated", "label": "We haven't evaluated anything yet", "score": 1 },
+            { "value": "cost_savings", "label": "We look for cost savings or efficiency", "score": 2 },
+            { "value": "ease_of_use", "label": "We evaluate based on ease of use", "score": 3 },
+            { "value": "roi_business", "label": "We assess based on ROI or business case", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "implementation_challenge",
+          "label": "What is the biggest challenge you face in implementing AI or automation?",
+          "type": "text_area",
+          "order": 4
+        },
+        {
+          "key": "automation_areas",
+          "label": "Which areas of the business would benefit most from automation?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing", "label": "Marketing or lead gen", "score": 1 },
+            { "value": "customer_service", "label": "Customer service or support", "score": 1 },
+            { "value": "operations", "label": "Operations or fulfillment", "score": 1 },
+            { "value": "finance", "label": "Finance or reporting", "score": 1 },
+            { "value": "collaboration", "label": "Internal collaboration or workflows", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "explored_tools",
+          "label": "What tools or platforms have you explored for automation or AI?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_training",
+          "label": "How do you train your team to work with or adopt new automation tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "We don't provide training", "score": 1 },
+            { "value": "informal", "label": "Informal training or videos", "score": 2 },
+            { "value": "champions", "label": "Internal champions or demos", "score": 3 },
+            { "value": "structured", "label": "Structured onboarding and documentation", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "implementation_confidence",
+          "label": "How confident are you in your team's ability to implement AI or automation tools?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "very", "label": "Very confident", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "next_automation",
+          "label": "If you had one area to automate next, what would it be and why?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "confidence_boosters",
+          "label": "What would make you feel more confident in your ability to use AI/automation effectively?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "automation_usage",
+          "label": "Which of the following best describes your current use of automation tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_use", "label": "We don't use automation tools", "score": 1 },
+            { "value": "basic", "label": "We use basic email or task automation", "score": 2 },
+            { "value": "partial", "label": "We've implemented automation in 1–2 departments", "score": 3 },
+            { "value": "regular", "label": "Automation is part of our regular workflows", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "automated_tasks",
+          "label": "What types of tasks are currently automated in your business?",
+          "type": "multi_select",
+          "options": [
+            { "value": "email_marketing", "label": "Email marketing or follow-ups", "score": 1 },
+            { "value": "crm_workflows", "label": "CRM updates or workflows", "score": 1 },
+            { "value": "finance", "label": "Finance or reporting tasks", "score": 1 },
+            { "value": "inventory", "label": "Inventory or fulfillment", "score": 1 },
+            { "value": "support", "label": "Customer support", "score": 1 },
+            { "value": "none", "label": "We haven't automated anything yet", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "team_perception",
+          "label": "What is your team's general perception of automation and AI?",
+          "type": "select",
+          "options": [
+            { "value": "skeptical", "label": "Skeptical — we're not sure it's worth it", "score": 1 },
+            { "value": "curious", "label": "Curious — we're starting to explore it", "score": 2 },
+            { "value": "positive", "label": "Positive — we see the benefits", "score": 3 },
+            { "value": "excited", "label": "Excited — we want to do more", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "automation_evaluation",
+          "label": "How do you evaluate which areas to automate?",
+          "type": "select",
+          "options": [
+            { "value": "no_method", "label": "We don't have a method", "score": 1 },
+            { "value": "time_consuming", "label": "We look at time-consuming tasks", "score": 2 },
+            { "value": "roi_feedback", "label": "We assess based on ROI or team feedback", "score": 3 },
+            { "value": "process_audit", "label": "We use process audits or external help", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "implementation_barriers",
+          "label": "Which of the following are barriers to implementing automation or AI?",
+          "type": "multi_select",
+          "options": [
+            { "value": "cost", "label": "Cost or budget constraints", "score": 1 },
+            { "value": "expertise", "label": "Lack of internal expertise", "score": 1 },
+            { "value": "complexity", "label": "Complexity or fear of breaking things", "score": 1 },
+            { "value": "business_case", "label": "No clear business case", "score": 1 },
+            { "value": "uncertainty", "label": "Not sure where to start", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "team_training",
+          "label": "How do you train or upskill team members on digital or automation tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "We don't provide training", "score": 1 },
+            { "value": "occasional", "label": "Occasional tutorials or support", "score": 2 },
+            { "value": "formal", "label": "We provide formal training sessions", "score": 3 },
+            { "value": "enablement", "label": "We have enablement materials and champions", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "tool_frustrations",
+          "label": "What's the biggest frustration your team has with current tools or systems?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "adoption_confidence",
+          "label": "What would make you more confident in adopting AI or automation solutions?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "tech_integration",
+          "label": "How integrated are your automation tools with the rest of your tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "not_integrated", "label": "Not integrated", "score": 1 },
+            { "value": "manual", "label": "Manually connected", "score": 2 },
+            { "value": "partial", "label": "Partially integrated through APIs", "score": 3 },
+            { "value": "full", "label": "Fully integrated and synchronized", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "future_automation",
+          "label": "What's one workflow you would love to automate but haven't yet?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "current_usage",
+          "label": "How are AI or automation technologies currently used across your business?",
+          "type": "select",
+          "options": [
+            { "value": "no_use", "label": "We don't use them", "score": 1 },
+            { "value": "few_features", "label": "We use a few AI features in tools (e.g., email subject lines)", "score": 2 },
+            { "value": "standalone", "label": "We've implemented a few standalone automation flows", "score": 3 },
+            { "value": "multiple", "label": "We use automation in multiple workflows or departments", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "benefit_areas",
+          "label": "Which areas have benefited most from automation or AI so far?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing", "label": "Marketing", "score": 1 },
+            { "value": "support", "label": "Customer support", "score": 1 },
+            { "value": "operations", "label": "Operations/logistics", "score": 1 },
+            { "value": "finance", "label": "Finance", "score": 1 },
+            { "value": "sales", "label": "Sales enablement", "score": 1 },
+            { "value": "none", "label": "We haven't seen any benefits yet", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "automation_planning",
+          "label": "How do you decide where to apply automation or AI next?",
+          "type": "select",
+          "options": [
+            { "value": "no_plan", "label": "We don't have a plan", "score": 1 },
+            { "value": "tool_based", "label": "We choose based on tools we use", "score": 2 },
+            { "value": "time_saving", "label": "We look for time-saving opportunities", "score": 3 },
+            { "value": "roi_assessment", "label": "We assess ROI and business value before building", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "automation_goals",
+          "label": "What are your top goals for using automation or AI?",
+          "type": "multi_select",
+          "options": [
+            { "value": "save_time", "label": "Save time on manual tasks", "score": 1 },
+            { "value": "faster_response", "label": "Respond to customers faster", "score": 1 },
+            { "value": "improve_accuracy", "label": "Improve accuracy or consistency", "score": 1 },
+            { "value": "generate_insights", "label": "Generate insights or recommendations", "score": 1 },
+            { "value": "scale_efforts", "label": "Scale efforts without hiring", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "governance",
+          "label": "How is AI/automation governed or managed in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "not_managed", "label": "It's not managed", "score": 1 },
+            { "value": "team_managed", "label": "Teams manage their own automation", "score": 2 },
+            { "value": "shared_oversight", "label": "We have shared oversight or documentation", "score": 3 },
+            { "value": "dedicated_team", "label": "There's a dedicated person or team", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "performance_tracking",
+          "label": "How do you ensure automations or AI features are performing as expected?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track performance", "score": 1 },
+            { "value": "occasional_review", "label": "We review results occasionally", "score": 2 },
+            { "value": "dashboards", "label": "We use dashboards or alerts", "score": 3 },
+            { "value": "regular_optimization", "label": "We optimize regularly based on data", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "team_training",
+          "label": "How do you train your team on using AI/automation tools?",
+          "type": "select",
+          "options": [
+            { "value": "no_training", "label": "We don't provide training", "score": 1 },
+            { "value": "guides", "label": "We share links or guides", "score": 2 },
+            { "value": "demos", "label": "We run team demos or onboarding sessions", "score": 3 },
+            { "value": "structured", "label": "We offer structured enablement or learning plans", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "benefit_area",
+          "label": "What's one area of your business you think could benefit most from automation today?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "concerns",
+          "label": "What's your biggest fear or concern about using AI or automation?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "growth_confidence",
+          "label": "How confident are you that AI and automation will help you grow your business in the next year?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "very", "label": "Very confident", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "initiative_prioritization",
+          "label": "How are AI initiatives prioritized within your organization?",
+          "type": "select",
+          "options": [
+            { "value": "vendor_driven", "label": "We react to vendor suggestions or buzz", "score": 1 },
+            { "value": "capacity_based", "label": "We prioritize based on capacity or experimentation", "score": 2 },
+            { "value": "business_value", "label": "We tie initiatives to business needs and value", "score": 3 },
+            { "value": "framework_based", "label": "We use a framework to evaluate ROI, feasibility, and urgency", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "ai_capabilities",
+          "label": "Which of the following AI capabilities are currently in production across teams?",
+          "type": "multi_select",
+          "options": [
+            { "value": "lead_scoring", "label": "Lead scoring or recommendations", "score": 1 },
+            { "value": "customer_segmentation", "label": "Customer segmentation or predictions", "score": 1 },
+            { "value": "chatbots", "label": "Chatbots or virtual assistants", "score": 1 },
+            { "value": "content_personalization", "label": "Content personalization or generation", "score": 1 },
+            { "value": "ai_analytics", "label": "AI-powered dashboards or analytics", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "business_user_enablement",
+          "label": "How are business users enabled to experiment with or deploy AI-powered tools?",
+          "type": "select",
+          "options": [
+            { "value": "restricted", "label": "They aren't — AI use is restricted to technical teams", "score": 1 },
+            { "value": "core_platforms", "label": "They use AI inside core platforms (e.g., CRM, email)", "score": 2 },
+            { "value": "occasional_access", "label": "They get occasional access to AI tools or prototypes", "score": 3 },
+            { "value": "fully_supported", "label": "They're supported by training, guardrails, and experimentation space", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "ai_experience_review",
+          "label": "How often do you review or update AI-driven experiences (e.g., journeys, recommendations, chatbots)?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — set it and forget it", "score": 1 },
+            { "value": "reactive", "label": "When something breaks or feels off", "score": 2 },
+            { "value": "quarterly", "label": "On a quarterly or campaign cycle", "score": 3 },
+            { "value": "continuous", "label": "Continuously based on performance and testing", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "responsible_ai_training",
+          "label": "How are your teams trained or enabled to use AI responsibly?",
+          "type": "select",
+          "options": [
+            { "value": "not_addressed", "label": "We haven't addressed this yet", "score": 1 },
+            { "value": "guidance", "label": "We provide guidance or internal best practices", "score": 2 },
+            { "value": "team_training", "label": "We offer team-based training or documentation", "score": 3 },
+            { "value": "formal_policy", "label": "We've implemented a formal AI policy or framework", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "ai_governance",
+          "label": "What governance or review process exists around AI implementation?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None — teams launch what they want", "score": 1 },
+            { "value": "post_launch", "label": "We review AI projects after launch", "score": 2 },
+            { "value": "functional_review", "label": "New AI tools are reviewed by IT, legal, or ops", "score": 3 },
+            { "value": "cross_functional", "label": "We have a cross-functional AI governance council", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "surprising_use_case",
+          "label": "What is one AI use case you've implemented or explored that surprised you?",
+          "type": "text_area",
+          "order": 7
+        },
+        {
+          "key": "scaling_challenge",
+          "label": "What is your current biggest challenge in scaling or expanding your use of AI?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "success_measurement",
+          "label": "How is the success of AI initiatives currently measured?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure success directly", "score": 1 },
+            { "value": "usage_feedback", "label": "We track usage or user feedback", "score": 2 },
+            { "value": "performance_baseline", "label": "We track performance vs. non-AI baselines", "score": 3 },
+            { "value": "business_outcomes", "label": "We evaluate based on business outcomes or ROI", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "expansion_preparedness",
+          "label": "How prepared is your organization to expand its use of AI across departments?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not prepared — we're still exploring use cases", "score": 1 },
+            { "value": "partially", "label": "Partially — a few teams are ready", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we're actively planning expansion", "score": 3 },
+            { "value": "fully", "label": "Fully — we're scaling with playbooks and shared infrastructure", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "impact_evaluation",
+          "label": "How do you evaluate the impact of AI and automation on team efficiency or output?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track it", "score": 1 },
+            { "value": "anecdotal", "label": "Anecdotal feedback only", "score": 2 },
+            { "value": "efficiency", "label": "We look at efficiency or time saved", "score": 3 },
+            { "value": "roi", "label": "We measure ROI or key output gains", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "solution_customization",
+          "label": "What level of customization do you apply to AI/automation solutions?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None — we use default settings", "score": 1 },
+            { "value": "some_workflows", "label": "Some workflows tailored by team", "score": 2 },
+            { "value": "custom_scripts", "label": "Custom scripts or logic per function", "score": 3 },
+            { "value": "integrated_systems", "label": "Integrated systems with domain-specific tuning", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "team_embedding",
+          "label": "Which roles or teams have AI/automation embedded in daily workflows?",
+          "type": "multi_select",
+          "options": [
+            { "value": "marketing_sales", "label": "Marketing or sales", "score": 1 },
+            { "value": "customer_service", "label": "Customer service or support", "score": 1 },
+            { "value": "finance_ops", "label": "Finance or ops", "score": 1 },
+            { "value": "product_engineering", "label": "Product or engineering", "score": 1 },
+            { "value": "hr_recruiting", "label": "HR or recruiting", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "business_alignment",
+          "label": "How do you ensure your AI and automation efforts align with business outcomes?",
+          "type": "select",
+          "options": [
+            { "value": "no_alignment", "label": "We don't have alignment today", "score": 1 },
+            { "value": "usage_only", "label": "We track usage but not impact", "score": 2 },
+            { "value": "okr_alignment", "label": "We align projects to OKRs or KPIs", "score": 3 },
+            { "value": "outcome_based", "label": "Initiatives are scoped based on measurable outcomes", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "governance_approach",
+          "label": "What's your company's approach to AI/automation governance?",
+          "type": "select",
+          "options": [
+            { "value": "no_oversight", "label": "There is no formal oversight", "score": 1 },
+            { "value": "best_practices", "label": "Some best practices are shared", "score": 2 },
+            { "value": "periodic_review", "label": "Teams review risks or usage periodically", "score": 3 },
+            { "value": "org_policies", "label": "We have policies and governance at the org level", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "automation_drivers",
+          "label": "Which of the following are used to drive automation or AI insights in your org?",
+          "type": "multi_select",
+          "options": [
+            { "value": "data_pipelines", "label": "Data pipelines", "score": 1 },
+            { "value": "cdp", "label": "Customer data platforms (CDP)", "score": 1 },
+            { "value": "bi_tools", "label": "Business intelligence tools", "score": 1 },
+            { "value": "embedded_analytics", "label": "Embedded analytics or LLMs", "score": 1 },
+            { "value": "process_mining", "label": "Process mining or orchestration engines", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "scaling_preparedness",
+          "label": "How prepared is your organization to scale AI and automation projects across teams?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "We're not prepared", "score": 1 },
+            { "value": "testing_scale", "label": "We're testing scale with one or two teams", "score": 2 },
+            { "value": "function_scale", "label": "We're prepared to scale within a function", "score": 3 },
+            { "value": "org_scale", "label": "We're ready to scale org-wide", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "next_automation",
+          "label": "What's one process or function you're planning to automate next?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "team_engagement",
+          "label": "How do you ensure your team remains engaged and informed around AI/automation initiatives?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "We don't — communication is ad hoc", "score": 1 },
+            { "value": "all_hands", "label": "We share updates during all-hands", "score": 2 },
+            { "value": "project_launch", "label": "We train teams when projects launch", "score": 3 },
+            { "value": "enablement_loops", "label": "We run enablement and feedback loops", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "next_level_impact",
+          "label": "What would help you unlock the next level of impact from AI or automation?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "performance_monitoring",
+          "label": "How do you monitor the performance and ROI of AI systems across business functions?",
+          "type": "select",
+          "options": [
+            { "value": "no_monitoring", "label": "We don't monitor it consistently", "score": 1 },
+            { "value": "dashboards", "label": "We have reporting dashboards", "score": 2 },
+            { "value": "business_metrics", "label": "We tie outputs to key business metrics", "score": 3 },
+            { "value": "roi_modeling", "label": "We model financial and operational ROI across teams", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "deployment_model",
+          "label": "Which of the following best describe your AI deployment model?",
+          "type": "multi_select",
+          "options": [
+            { "value": "cloud_tools", "label": "Cloud-based AI tools", "score": 1 },
+            { "value": "embedded_ai", "label": "Embedded AI in software stack", "score": 1 },
+            { "value": "internal_models", "label": "Internal models or algorithms", "score": 1 },
+            { "value": "ai_agents", "label": "AI agents for decision support", "score": 1 },
+            { "value": "edge_computing", "label": "Edge computing or on-device AI", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "ai_governance",
+          "label": "How does your organization handle AI governance and risk?",
+          "type": "select",
+          "options": [
+            { "value": "no_processes", "label": "We don't have formal processes", "score": 1 },
+            { "value": "output_monitoring", "label": "We monitor outputs and adjust as needed", "score": 2 },
+            { "value": "ethical_guidelines", "label": "We follow internal ethical guidelines and checks", "score": 3 },
+            { "value": "governance_framework", "label": "We have a governance framework and audit processes", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "use_case_improvement",
+          "label": "How often are AI use cases revisited and improved?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — most projects are static", "score": 1 },
+            { "value": "performance_based", "label": "We optimize based on performance", "score": 2 },
+            { "value": "quarterly", "label": "We revisit use cases quarterly", "score": 3 },
+            { "value": "continuous", "label": "We run continuous improvement loops", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "employee_training",
+          "label": "What training or support is provided to employees around AI systems?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "Very little or none", "score": 1 },
+            { "value": "documentation", "label": "Documentation or onboarding", "score": 2 },
+            { "value": "department_training", "label": "Training by use case or department", "score": 3 },
+            { "value": "formal_enablement", "label": "Formal enablement, onboarding, and support", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "workflow_integration",
+          "label": "How integrated is AI into your key workflows or customer experiences?",
+          "type": "select",
+          "options": [
+            { "value": "internal_tasks", "label": "It's used for small internal tasks", "score": 1 },
+            { "value": "some_workflows", "label": "It's embedded in some workflows", "score": 2 },
+            { "value": "customer_facing", "label": "It supports customer-facing use cases", "score": 3 },
+            { "value": "foundational", "label": "It's foundational to multiple systems and journeys", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "user_satisfaction",
+          "label": "How do you measure user satisfaction with AI-powered experiences?",
+          "type": "select",
+          "options": [
+            { "value": "no_measurement", "label": "We don't measure it", "score": 1 },
+            { "value": "occasional_feedback", "label": "We collect feedback occasionally", "score": 2 },
+            { "value": "usage_metrics", "label": "We track NPS, usage, or task success", "score": 3 },
+            { "value": "comprehensive", "label": "We measure satisfaction, adoption, and business impact", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "scaling_concern",
+          "label": "What's your biggest concern around scaling AI across the organization?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "success_story",
+          "label": "What's one success story or impact you've seen from AI so far?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you that your AI approach will scale effectively in the next 12 months?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat confident", "score": 2 },
+            { "value": "mostly", "label": "Mostly confident", "score": 3 },
+            { "value": "very", "label": "Very confident", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "model_validation",
+          "label": "How do you validate AI models before deploying them into production environments?",
+          "type": "select",
+          "options": [
+            { "value": "manual_review", "label": "Manual review and testing", "score": 1 },
+            { "value": "automated_testing", "label": "Automated testing pipelines", "score": 2 },
+            { "value": "peer_review", "label": "Peer-reviewed by internal experts", "score": 3 },
+            { "value": "mlops", "label": "Formal MLOps and validation workflows", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "ai_lifecycle",
+          "label": "Which of the following are standard practices in your AI lifecycle?",
+          "type": "multi_select",
+          "options": [
+            { "value": "model_versioning", "label": "Model versioning", "score": 1 },
+            { "value": "bias_checks", "label": "Bias and fairness checks", "score": 1 },
+            { "value": "drift_detection", "label": "Drift detection", "score": 1 },
+            { "value": "performance_benchmarking", "label": "Performance benchmarking", "score": 1 },
+            { "value": "governance_reviews", "label": "Governance reviews", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "governance_structures",
+          "label": "What governance structures support responsible AI use in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "None or informal", "score": 1 },
+            { "value": "basic_policy", "label": "Basic policy documents", "score": 2 },
+            { "value": "review_committee", "label": "Cross-functional review committee", "score": 3 },
+            { "value": "ethics_board", "label": "Dedicated AI ethics board with decision authority", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "business_differentiation",
+          "label": "What role does your AI capability play in differentiating your business?",
+          "type": "select",
+          "options": [
+            { "value": "limited", "label": "Limited role", "score": 1 },
+            { "value": "efficiency", "label": "Supports efficiency", "score": 2 },
+            { "value": "key_features", "label": "Drives key product or service features", "score": 3 },
+            { "value": "core_advantage", "label": "Core to our market advantage", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "scaling_preparedness",
+          "label": "How prepared is your team to scale AI solutions globally or across divisions?",
+          "type": "select",
+          "options": [
+            { "value": "not_prepared", "label": "Not prepared", "score": 1 },
+            { "value": "specific_areas", "label": "Prepared in specific areas", "score": 2 },
+            { "value": "mostly_prepared", "label": "Mostly prepared with resources", "score": 3 },
+            { "value": "fully_ready", "label": "Fully ready with scalable frameworks", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "external_partnerships",
+          "label": "What external partnerships or ecosystems support your AI innovation today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "academic", "label": "Academic or research partners", "score": 1 },
+            { "value": "ai_vendors", "label": "AI-focused vendors", "score": 1 },
+            { "value": "cloud_providers", "label": "Cloud or infrastructure providers", "score": 1 },
+            { "value": "industry_groups", "label": "Industry consortia or standards groups", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "insight_sharing",
+          "label": "How are AI insights shared and applied across the organization?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely shared", "score": 1 },
+            { "value": "reports", "label": "Shared in reports", "score": 2 },
+            { "value": "cross_functional", "label": "Discussed in cross-functional planning", "score": 3 },
+            { "value": "real_time", "label": "Integrated into real-time workflows and decisions", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "scalable_solution",
+          "label": "What's the most scalable or high-impact AI solution you've developed or implemented?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "future_investment",
+          "label": "How are you investing in future AI capabilities or infrastructure?",
+          "type": "select",
+          "options": [
+            { "value": "no_plans", "label": "No active plans", "score": 1 },
+            { "value": "exploring", "label": "Exploring options", "score": 2 },
+            { "value": "pilots", "label": "Investing in pilots or platforms", "score": 3 },
+            { "value": "strategic", "label": "Building for long-term strategic growth", "score": 4 }
+          ],
+          "order": 9
+        },
+        {
+          "key": "competitive_confidence",
+          "label": "How confident are you that AI will deliver measurable competitive advantage in the next 12–24 months?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low confidence", "score": 1 },
+            { "value": "moderate", "label": "Moderate confidence", "score": 2 },
+            { "value": "high", "label": "High confidence", "score": 3 },
+            { "value": "certain", "label": "Certain — it's already happening", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "ethical_governance",
+          "label": "How does your organization govern the ethical use of AI across business functions?",
+          "type": "select",
+          "options": [
+            { "value": "no_policy", "label": "We don't have a formal AI ethics policy", "score": 1 },
+            { "value": "informal", "label": "We have informal guidelines", "score": 2 },
+            { "value": "defined_principles", "label": "We follow defined principles with oversight", "score": 3 },
+            { "value": "integrated", "label": "AI ethics is integrated into governance and reviewed regularly", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "model_explainability",
+          "label": "What's your level of AI model explainability and auditability?",
+          "type": "select",
+          "options": [
+            { "value": "no_understanding", "label": "We don't understand how models make decisions", "score": 1 },
+            { "value": "performance_only", "label": "We track performance but not decisions", "score": 2 },
+            { "value": "decision_logging", "label": "We log model decisions and provide rationale when needed", "score": 3 },
+            { "value": "explainable_ai", "label": "We prioritize explainable AI with audit trails for compliance", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "operating_model",
+          "label": "Which of the following best describes your organization's AI operating model?",
+          "type": "select",
+          "options": [
+            { "value": "ad_hoc", "label": "Ad hoc — teams run their own initiatives", "score": 1 },
+            { "value": "centralized", "label": "Centralized AI team supporting all units", "score": 2 },
+            { "value": "federated", "label": "Federated model with shared AI infrastructure", "score": 3 },
+            { "value": "embedded", "label": "Fully embedded — AI is a core part of business operations", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "advanced_capabilities",
+          "label": "Which of the following advanced AI capabilities are in use today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "reinforcement_learning", "label": "Reinforcement learning", "score": 1 },
+            { "value": "real_time_retraining", "label": "Real-time model retraining", "score": 1 },
+            { "value": "synthetic_data", "label": "Synthetic data generation", "score": 1 },
+            { "value": "multi_modal", "label": "Multi-modal model deployment", "score": 1 },
+            { "value": "custom_llms", "label": "Custom LLMs and fine-tuned GPTs", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "workflow_integration",
+          "label": "How is AI integrated into cross-functional workflows (e.g., sales, support, product)?",
+          "type": "select",
+          "options": [
+            { "value": "isolated", "label": "AI is used in isolated use cases", "score": 1 },
+            { "value": "internal_workflows", "label": "AI supports a few internal workflows", "score": 2 },
+            { "value": "multiple_functions", "label": "AI drives multiple functions with shared context", "score": 3 },
+            { "value": "connective_tissue", "label": "AI is the connective tissue across business operations", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "transformative_initiative",
+          "label": "What's the most transformative AI initiative your company has executed recently?",
+          "type": "text_area",
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "model_monitoring",
+          "label": "How does your team ensure model performance and data drift are monitored in production?",
+          "type": "select",
+          "options": [
+            { "value": "no_monitoring", "label": "We don't monitor for drift or accuracy", "score": 1 },
+            { "value": "periodic_review", "label": "We review model performance periodically", "score": 2 },
+            { "value": "alerting", "label": "We use alerting and diagnostics for core models", "score": 3 },
+            { "value": "mlops", "label": "We use MLOps pipelines for real-time monitoring and retraining", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "talent_strategy",
+          "label": "What does your organization's AI talent strategy look like?",
+          "type": "select",
+          "options": [
+            { "value": "contractors", "label": "We rely on contractors or consultants", "score": 1 },
+            { "value": "few_scientists", "label": "We have a few internal data scientists", "score": 2 },
+            { "value": "centralized_team", "label": "We've built a centralized AI team", "score": 3 },
+            { "value": "internal_training", "label": "We're investing in internal AI training across functions", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "competitive_moat",
+          "label": "What part of your AI strategy do you consider a competitive moat or differentiator?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you that your AI capabilities will scale with your business over the next 2 years?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we're still building", "score": 2 },
+            { "value": "mostly", "label": "Mostly — systems are maturing", "score": 3 },
+            { "value": "fully", "label": "Fully confident — we're built for scale", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

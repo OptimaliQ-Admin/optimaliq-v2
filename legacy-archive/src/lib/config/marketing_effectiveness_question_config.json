@@ -1,0 +1,1098 @@
+{
+  "score_1": {
+    "groups": {
+      "0": [
+        {
+          "key": "campaign_frequency",
+          "label": "How often do you run marketing campaigns to promote your business?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "We don't run any campaigns", "score": 1 },
+            { "value": "occasional", "label": "Occasionally, when we have time", "score": 2 },
+            { "value": "few_times", "label": "A few times a year", "score": 3 },
+            { "value": "monthly_plus", "label": "We run them monthly or more", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "customer_acquisition",
+          "label": "What is the main way customers currently find your business?",
+          "type": "select",
+          "options": [
+            { "value": "referrals", "label": "Referrals or word of mouth", "score": 1 },
+            { "value": "social_events", "label": "Social media or local events", "score": 2 },
+            { "value": "paid_ads", "label": "Paid ads or promotions", "score": 3 },
+            { "value": "organic_search", "label": "Organic search or inbound content", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "ideal_customer",
+          "label": "Do you have a clear picture of who your ideal customer is?",
+          "type": "select",
+          "options": [
+            { "value": "not_really", "label": "Not really", "score": 1 },
+            { "value": "general_idea", "label": "We have a general idea", "score": 2 },
+            { "value": "some_personas", "label": "We have some customer personas", "score": 3 },
+            { "value": "documented", "label": "Yes — we've documented and validated them", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "content_frequency",
+          "label": "How often do you create or share marketing content (emails, blogs, videos, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "never", "label": "Never", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally", "score": 2 },
+            { "value": "monthly", "label": "At least monthly", "score": 3 },
+            { "value": "weekly", "label": "Weekly or more", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "marketing_strategy",
+          "label": "How would you describe your marketing strategy?",
+          "type": "select",
+          "options": [
+            { "value": "none", "label": "We don't have one", "score": 1 },
+            { "value": "in_heads", "label": "It's in our heads", "score": 2 },
+            { "value": "some_goals", "label": "We have some goals and tactics", "score": 3 },
+            { "value": "structured", "label": "We follow a structured marketing plan", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "marketing_channels",
+          "label": "Which of the following channels do you currently use?",
+          "type": "multi_select",
+          "options": [
+            { "value": "email", "label": "Email marketing", "score": 1 },
+            { "value": "organic_social", "label": "Organic social (Instagram, LinkedIn, etc.)", "score": 1 },
+            { "value": "paid_ads", "label": "Paid ads (Google, Meta, etc.)", "score": 1 },
+            { "value": "seo", "label": "SEO / Website content", "score": 1 },
+            { "value": "events", "label": "Events or in-person outreach", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "results_tracking",
+          "label": "How do you track the results of your marketing efforts?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track results", "score": 1 },
+            { "value": "basic_metrics", "label": "We look at basic metrics (likes, clicks)", "score": 2 },
+            { "value": "analytics_tools", "label": "We use tools like Google Analytics or email reports", "score": 3 },
+            { "value": "kpi_tracking", "label": "We track performance against goals or KPIs", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "cac_knowledge",
+          "label": "Do you know how much it costs to acquire a new customer (CAC)?",
+          "type": "select",
+          "options": [
+            { "value": "no_idea", "label": "No idea", "score": 1 },
+            { "value": "rough_estimate", "label": "We have a rough estimate", "score": 2 },
+            { "value": "not_used", "label": "Yes, but we don't use it to make decisions", "score": 3 },
+            { "value": "actively_managed", "label": "Yes, and we manage campaigns to improve it", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "biggest_challenge",
+          "label": "What's the biggest challenge you face with marketing today?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "improvement_priority",
+          "label": "If you could improve one part of your marketing right now, what would it be and why?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_1_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "campaign_decision",
+          "label": "How do you decide which marketing campaigns or tactics to run?",
+          "type": "select",
+          "options": [
+            { "value": "gut_instinct", "label": "Based on gut instinct or urgency", "score": 1 },
+            { "value": "follow_others", "label": "Based on what others are doing", "score": 2 },
+            { "value": "past_results", "label": "Based on past results or trends", "score": 3 },
+            { "value": "data_driven", "label": "Based on goals, customer insights, and data", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "marketing_consistency",
+          "label": "How consistent are your marketing efforts across the year?",
+          "type": "select",
+          "options": [
+            { "value": "very_inconsistent", "label": "Very inconsistent", "score": 1 },
+            { "value": "occasional_bursts", "label": "We have occasional bursts of activity", "score": 2 },
+            { "value": "loose_schedule", "label": "We have a loose schedule", "score": 3 },
+            { "value": "planned_calendar", "label": "We follow a planned calendar or cadence", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "messaging_consistency",
+          "label": "Do you have defined messaging or positioning that's used across your marketing channels?",
+          "type": "select",
+          "options": [
+            { "value": "not_yet", "label": "Not yet — it changes often", "score": 1 },
+            { "value": "core_ideas", "label": "We have a few core ideas", "score": 2 },
+            { "value": "most_content", "label": "Yes — we use it in most of our content", "score": 3 },
+            { "value": "clear_consistent", "label": "Absolutely — we have clear, consistent messaging", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "engagement_followup",
+          "label": "What happens after someone engages with your marketing (clicks, signs up, visits site)?",
+          "type": "select",
+          "options": [
+            { "value": "not_tracked", "label": "Nothing really — it's not tracked", "score": 1 },
+            { "value": "hope_reach_out", "label": "We hope they reach out", "score": 2 },
+            { "value": "manual_followup", "label": "We follow up manually", "score": 3 },
+            { "value": "defined_process", "label": "There's a defined nurture or sales process", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "marketing_tools",
+          "label": "Which of the following do you currently use in your marketing?",
+          "type": "multi_select",
+          "options": [
+            { "value": "customer_personas", "label": "Customer personas", "score": 1 },
+            { "value": "campaign_calendar", "label": "Campaign calendar", "score": 1 },
+            { "value": "email_automation", "label": "Email automation", "score": 1 },
+            { "value": "ab_testing", "label": "A/B testing", "score": 1 },
+            { "value": "lead_capture", "label": "Lead capture forms", "score": 1 },
+            { "value": "website_analytics", "label": "Website analytics", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "performance_review",
+          "label": "How frequently do you review what's working vs. what's not in your marketing?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally, when things feel off", "score": 2 },
+            { "value": "monthly", "label": "Monthly", "score": 3 },
+            { "value": "weekly", "label": "Weekly or continuously", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "sales_alignment",
+          "label": "How are your marketing efforts tied to your sales or revenue goals?",
+          "type": "select",
+          "options": [
+            { "value": "not_tied", "label": "They're not tied together", "score": 1 },
+            { "value": "hope_drives", "label": "We hope marketing drives sales", "score": 2 },
+            { "value": "track_influenced", "label": "We track marketing-influenced revenue", "score": 3 },
+            { "value": "attribute_forecast", "label": "We attribute and forecast marketing contribution", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "intentional_marketing",
+          "label": "What percentage of your marketing feels intentional vs. reactive?",
+          "type": "select",
+          "options": [
+            { "value": "mostly_reactive", "label": "Mostly reactive", "score": 1 },
+            { "value": "half_and_half", "label": "About half and half", "score": 2 },
+            { "value": "mostly_intentional", "label": "Mostly intentional", "score": 3 },
+            { "value": "nearly_all_strategic", "label": "Nearly all of it is strategic", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "confident_content",
+          "label": "What type of content or campaigns do you feel most confident creating right now?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "budget_allocation",
+          "label": "If you had 20% more budget or time for marketing, how would you use it?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2": {
+    "groups": {
+      "0": [
+        {
+          "key": "success_measurement",
+          "label": "How do you measure the success of your marketing efforts?",
+          "type": "select",
+          "options": [
+            { "value": "gut_feel", "label": "Based on gut feel or team input", "score": 1 },
+            { "value": "reach_engagement", "label": "We track reach and engagement", "score": 2 },
+            { "value": "leads_inquiries", "label": "We measure leads or inquiries", "score": 3 },
+            { "value": "conversions_revenue", "label": "We tie results to conversions and revenue", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "customer_journey",
+          "label": "Do you have a defined customer journey or funnel mapped out?",
+          "type": "select",
+          "options": [
+            { "value": "no_mapping", "label": "No — we operate campaign by campaign", "score": 1 },
+            { "value": "rough_idea", "label": "We have a rough idea", "score": 2 },
+            { "value": "documented_stages", "label": "We've documented the stages", "score": 3 },
+            { "value": "mapped_aligned", "label": "We've mapped it and aligned content to each stage", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "audience_segmentation",
+          "label": "How often do you segment your audience for campaigns or content?",
+          "type": "select",
+          "options": [
+            { "value": "no_segmentation", "label": "We don't segment", "score": 1 },
+            { "value": "occasional", "label": "Occasionally by list or region", "score": 2 },
+            { "value": "frequently", "label": "Frequently by behavior or persona", "score": 3 },
+            { "value": "always", "label": "Always — segmentation is core to our strategy", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "marketing_tools",
+          "label": "What tools or platforms do you use to manage your marketing?",
+          "type": "multi_select",
+          "options": [
+            { "value": "email_crm", "label": "Email marketing or CRM", "score": 1 },
+            { "value": "social_scheduler", "label": "Social media scheduler", "score": 1 },
+            { "value": "paid_platforms", "label": "Google Ads or paid platforms", "score": 1 },
+            { "value": "analytics", "label": "Analytics dashboards", "score": 1 },
+            { "value": "cms", "label": "CMS or landing page tools", "score": 1 },
+            { "value": "none", "label": "None of these", "score": 1 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "tool_integration",
+          "label": "How connected are your marketing tools and systems?",
+          "type": "select",
+          "options": [
+            { "value": "not_connected", "label": "Not at all", "score": 1 },
+            { "value": "manual_sync", "label": "Some manual exports or syncs", "score": 2 },
+            { "value": "most_connected", "label": "Most are connected via integrations", "score": 3 },
+            { "value": "fully_integrated", "label": "Fully integrated for real-time insights", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "content_production",
+          "label": "What kind of marketing content are you producing consistently?",
+          "type": "select",
+          "options": [
+            { "value": "no_regular", "label": "We don't produce content regularly", "score": 1 },
+            { "value": "social_emails", "label": "Social posts or emails", "score": 2 },
+            { "value": "blogs_videos", "label": "Blogs, videos, or newsletters", "score": 3 },
+            { "value": "thought_leadership", "label": "Thought leadership and nurture journeys", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "brand_consistency",
+          "label": "How would you describe your brand consistency across marketing channels?",
+          "type": "select",
+          "options": [
+            { "value": "inconsistent", "label": "Inconsistent — varies by platform", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat consistent", "score": 2 },
+            { "value": "mostly", "label": "Mostly on-brand", "score": 3 },
+            { "value": "fully", "label": "Fully consistent across all touchpoints", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "sales_pipeline_confidence",
+          "label": "What's your level of confidence in how marketing supports your sales pipeline?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low — we're not sure how it connects", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we generate leads", "score": 2 },
+            { "value": "high", "label": "High — we track influence and conversion", "score": 3 },
+            { "value": "very_high", "label": "Very high — marketing drives pipeline health", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "recent_experiment",
+          "label": "What's one marketing experiment or test you've run recently? What was the outcome?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "untapped_potential",
+          "label": "What part of your marketing do you think has the most untapped potential?",
+          "type": "text_area",
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_2_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "roi_assessment",
+          "label": "How do you assess the ROI of your marketing efforts?",
+          "type": "select",
+          "options": [
+            { "value": "no_calculation", "label": "We don't calculate ROI", "score": 1 },
+            { "value": "cost_vs_traffic", "label": "We look at cost vs. traffic or leads", "score": 2 },
+            { "value": "major_channels", "label": "We track ROI for major channels", "score": 3 },
+            { "value": "all_campaigns", "label": "ROI is calculated across all campaigns", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "campaign_optimization",
+          "label": "How often do you test and optimize your campaigns or content?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — we launch and hope", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — a few A/B tests", "score": 2 },
+            { "value": "regularly", "label": "Regularly — we test multiple variations", "score": 3 },
+            { "value": "always", "label": "Always — testing is built into every launch", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "performance_metrics",
+          "label": "Which of the following performance metrics do you track consistently?",
+          "type": "multi_select",
+          "options": [
+            { "value": "open_click", "label": "Open/click rates", "score": 1 },
+            { "value": "conversion", "label": "Conversion rates", "score": 1 },
+            { "value": "cpl", "label": "Cost per lead (CPL)", "score": 1 },
+            { "value": "roas", "label": "Return on ad spend (ROAS)", "score": 1 },
+            { "value": "cac", "label": "Customer acquisition cost (CAC)", "score": 1 },
+            { "value": "ltv", "label": "Lifetime value (LTV)", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "automation_workflows",
+          "label": "Do you have automated workflows or nurture journeys in place?",
+          "type": "select",
+          "options": [
+            { "value": "no_automation", "label": "No automation in place", "score": 1 },
+            { "value": "basic_welcome", "label": "Basic welcome or follow-up series", "score": 2 },
+            { "value": "multiple_nurtures", "label": "Multiple nurtures tied to content or actions", "score": 3 },
+            { "value": "full_funnel", "label": "Full-funnel automation tied to behavior and scoring", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "sales_alignment",
+          "label": "How are marketing and sales currently aligned in your organization?",
+          "type": "select",
+          "options": [
+            { "value": "independent", "label": "They operate independently", "score": 1 },
+            { "value": "manual_share", "label": "They share leads manually", "score": 2 },
+            { "value": "meet_discuss", "label": "We meet to discuss goals and handoffs", "score": 3 },
+            { "value": "fully_aligned", "label": "Goals, systems, and messaging are aligned", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "lead_quality_confidence",
+          "label": "How confident are you in the quality of leads your marketing generates?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident", "score": 1 },
+            { "value": "mixed_results", "label": "Mixed results", "score": 2 },
+            { "value": "mostly_good", "label": "Mostly good quality", "score": 3 },
+            { "value": "highly_confident", "label": "Highly confident — we attract the right people", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "lead_nurturing",
+          "label": "Which of the following best describes your lead nurturing strategy?",
+          "type": "select",
+          "options": [
+            { "value": "no_nurturing", "label": "We don't nurture leads", "score": 1 },
+            { "value": "occasional_followup", "label": "We send occasional follow-up emails", "score": 2 },
+            { "value": "funnel_campaigns", "label": "We have campaigns tied to funnel stages", "score": 3 },
+            { "value": "personalized_journeys", "label": "We run personalized, multichannel journeys", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "goal_process",
+          "label": "What's your current process for setting and reviewing marketing goals?",
+          "type": "select",
+          "options": [
+            { "value": "no_process", "label": "No formal process", "score": 1 },
+            { "value": "quarterly_informal", "label": "Set quarterly, reviewed informally", "score": 2 },
+            { "value": "kpi_monthly", "label": "Tied to business KPIs, reviewed monthly", "score": 3 },
+            { "value": "structured", "label": "Structured planning, reporting, and retrospectives", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "underperforming_area",
+          "label": "What's one thing you know is underperforming but haven't addressed yet?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "system_scalability",
+          "label": "How scalable are your current marketing systems if you doubled your lead volume tomorrow?",
+          "type": "select",
+          "options": [
+            { "value": "not_scalable", "label": "Not scalable at all", "score": 1 },
+            { "value": "struggle_manage", "label": "We'd struggle but manage", "score": 2 },
+            { "value": "scale_effort", "label": "We'd scale with some effort", "score": 3 },
+            { "value": "fully_scalable", "label": "Fully scalable with minimal changes", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3": {
+    "groups": {
+      "0": [
+        {
+          "key": "revenue_attribution",
+          "label": "How do you evaluate which campaigns or channels are contributing to revenue?",
+          "type": "select",
+          "options": [
+            { "value": "single_touch", "label": "We track single-touch attribution", "score": 1 },
+            { "value": "first_last_touch", "label": "We use first/last-touch models", "score": 2 },
+            { "value": "manual_combination", "label": "We combine several data points manually", "score": 3 },
+            { "value": "multi_touch", "label": "We use multi-touch attribution modeling", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "audience_segmentation",
+          "label": "Which best describes your current audience segmentation strategy?",
+          "type": "select",
+          "options": [
+            { "value": "geography_lists", "label": "We segment by geography or lists", "score": 1 },
+            { "value": "persona_lifecycle", "label": "We segment by persona or lifecycle", "score": 2 },
+            { "value": "behavior_engagement", "label": "We segment based on behavior and engagement", "score": 3 },
+            { "value": "dynamic_adapt", "label": "Segmentation is dynamic and adapts in real time", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "funnel_alignment",
+          "label": "How aligned are your marketing messages to each stage of the funnel?",
+          "type": "select",
+          "options": [
+            { "value": "same_all_stages", "label": "It's the same across all stages", "score": 1 },
+            { "value": "light_tailoring", "label": "Lightly tailored by campaign", "score": 2 },
+            { "value": "stage_specific", "label": "We use stage-specific content", "score": 3 },
+            { "value": "mapped_messaging", "label": "Each stage has mapped messaging, channels, and assets", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "lead_reactivation",
+          "label": "What's your current strategy for re-engaging cold or inactive leads?",
+          "type": "select",
+          "options": [
+            { "value": "no_strategy", "label": "We don't have one", "score": 1 },
+            { "value": "occasional_emails", "label": "We send occasional 'last chance' emails", "score": 2 },
+            { "value": "reactivation_sequence", "label": "We have a reactivation sequence", "score": 3 },
+            { "value": "behavior_triggers", "label": "We use behavior-based triggers and scoring", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "reporting_stack",
+          "label": "Which of the following are part of your marketing reporting stack?",
+          "type": "multi_select",
+          "options": [
+            { "value": "real_time_dashboards", "label": "Real-time dashboards", "score": 1 },
+            { "value": "funnel_reports", "label": "Funnel conversion reports", "score": 1 },
+            { "value": "attribution_tracking", "label": "Attribution or revenue influence tracking", "score": 1 },
+            { "value": "campaign_benchmarking", "label": "Campaign performance benchmarking", "score": 1 },
+            { "value": "forecasting", "label": "Forecasting or ROI modeling", "score": 1 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "mql_definition",
+          "label": "How do you define 'marketing qualified leads' (MQLs) today?",
+          "type": "select",
+          "options": [
+            { "value": "no_definition", "label": "We don't use that term", "score": 1 },
+            { "value": "activity_based", "label": "Based on activity (e.g., email opens)", "score": 2 },
+            { "value": "fit_behavior", "label": "Based on fit and behavior (e.g., lead scoring)", "score": 3 },
+            { "value": "conversion_intent", "label": "Based on conversion likelihood and buying intent", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "creative_testing",
+          "label": "What's your current approach to creative testing and optimization?",
+          "type": "select",
+          "options": [
+            { "value": "no_testing", "label": "We don't test creative", "score": 1 },
+            { "value": "subject_headlines", "label": "We test subject lines or headlines", "score": 2 },
+            { "value": "ab_multivariate", "label": "We run A/B and multivariate tests", "score": 3 },
+            { "value": "every_campaign", "label": "Creative testing is part of every campaign", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "lifecycle_marketing",
+          "label": "How are your campaigns connected to lifecycle marketing or post-sale engagement?",
+          "type": "select",
+          "options": [
+            { "value": "acquisition_focus", "label": "We focus mostly on acquisition", "score": 1 },
+            { "value": "occasional_retention", "label": "We occasionally run retention campaigns", "score": 2 },
+            { "value": "upsell_onboarding", "label": "We include upsell or onboarding journeys", "score": 3 },
+            { "value": "full_lifecycle", "label": "Campaigns span full lifecycle across touchpoints", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "expansion_plans",
+          "label": "What is one channel or strategy you're considering expanding into, and why?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you that your marketing strategy will continue to scale effectively in the next 12 months?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — it's already straining", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we're adjusting as we go", "score": 2 },
+            { "value": "mostly", "label": "Mostly — it's solid with room to grow", "score": 3 },
+            { "value": "highly_confident", "label": "Highly confident — we've built it to scale", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_3_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "channel_coordination",
+          "label": "How are your marketing campaigns coordinated across multiple channels (email, social, ads, SMS, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "separate", "label": "Channels operate separately", "score": 1 },
+            { "value": "aligned_planning", "label": "Channels are aligned during planning", "score": 2 },
+            { "value": "sync_messaging", "label": "We sync messaging across key campaigns", "score": 3 },
+            { "value": "orchestrated", "label": "We run orchestrated multi-channel journeys", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "ltv_tracking",
+          "label": "How do you track the long-term value of leads or customers (LTV)?",
+          "type": "select",
+          "options": [
+            { "value": "no_tracking", "label": "We don't track LTV", "score": 1 },
+            { "value": "estimate", "label": "We estimate based on retention or purchase", "score": 2 },
+            { "value": "quarterly", "label": "We report on it quarterly", "score": 3 },
+            { "value": "core_kpi", "label": "It's a core KPI in marketing planning", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "lifecycle_campaigns",
+          "label": "Which customer lifecycle stages do you have dedicated campaigns for?",
+          "type": "multi_select",
+          "options": [
+            { "value": "acquisition", "label": "Acquisition", "score": 1 },
+            { "value": "onboarding", "label": "Onboarding", "score": 1 },
+            { "value": "retention", "label": "Retention", "score": 1 },
+            { "value": "winback", "label": "Win-back/reactivation", "score": 1 },
+            { "value": "advocacy", "label": "Advocacy/referral", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "creative_refresh",
+          "label": "How often do you update or refresh your campaign creative or messaging?",
+          "type": "select",
+          "options": [
+            { "value": "performance_drops", "label": "Only when performance drops", "score": 1 },
+            { "value": "quarterly", "label": "Quarterly or during planning", "score": 2 },
+            { "value": "monthly", "label": "Monthly", "score": 3 },
+            { "value": "continuous", "label": "Continuously, based on testing and insights", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "brand_consistency",
+          "label": "How do you ensure brand consistency across paid, owned, and earned channels?",
+          "type": "select",
+          "options": [
+            { "value": "no_monitoring", "label": "We don't monitor it closely", "score": 1 },
+            { "value": "shared_guidelines", "label": "Guidelines are shared with teams", "score": 2 },
+            { "value": "content_review", "label": "Content is reviewed by brand or comms", "score": 3 },
+            { "value": "governance", "label": "We use a governance process with automation or review", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "personalization_level",
+          "label": "What's your current level of personalization across campaigns?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "Minimal — mostly batch content", "score": 1 },
+            { "value": "name_firmographics", "label": "Personalized by name or firmographics", "score": 2 },
+            { "value": "behavior_lifecycle", "label": "Tailored by behavior or lifecycle", "score": 3 },
+            { "value": "fully_dynamic", "label": "Fully dynamic, personalized experiences across channels", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "performance_analysis",
+          "label": "Which of the following elements are part of your campaign performance analysis?",
+          "type": "multi_select",
+          "options": [
+            { "value": "ab_test", "label": "A/B test results", "score": 1 },
+            { "value": "attribution", "label": "Attribution modeling", "score": 1 },
+            { "value": "segment", "label": "Segment performance", "score": 1 },
+            { "value": "channel", "label": "Channel comparison", "score": 1 },
+            { "value": "funnel", "label": "Funnel velocity", "score": 1 },
+            { "value": "predictive", "label": "Predictive uplift or forecasting", "score": 1 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "team_alignment",
+          "label": "How is your marketing team aligned with sales or customer success?",
+          "type": "select",
+          "options": [
+            { "value": "independent", "label": "We operate independently", "score": 1 },
+            { "value": "shared_goals", "label": "We share goals but meet infrequently", "score": 2 },
+            { "value": "plan_together", "label": "We plan and review together", "score": 3 },
+            { "value": "shared_systems", "label": "We have shared dashboards, SLAs, and playbooks", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "process_refinement",
+          "label": "What's one process or system you're actively refining to improve marketing performance?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "forecasting_confidence",
+          "label": "How confident are you in your ability to forecast future pipeline and revenue based on marketing performance?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — forecasting is guesswork", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — we look at past performance", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we use attribution and historical data", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — forecasting is part of our system", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategic_influence",
+          "label": "How does marketing performance influence strategic planning in your company?",
+          "type": "select",
+          "options": [
+            { "value": "no_influence", "label": "It doesn't", "score": 1 },
+            { "value": "occasional_review", "label": "It's reviewed occasionally by leadership", "score": 2 },
+            { "value": "planning_cycles", "label": "It's considered during planning cycles", "score": 3 },
+            { "value": "core_driver", "label": "It's a core driver of quarterly/annual strategy", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategy_evolution",
+          "label": "How do you continuously evolve your marketing strategy and tactics?",
+          "type": "select",
+          "options": [
+            { "value": "when_stops", "label": "When things stop working", "score": 1 },
+            { "value": "campaign_results", "label": "Based on campaign results", "score": 2 },
+            { "value": "quarterly_reviews", "label": "Through structured quarterly reviews", "score": 3 },
+            { "value": "continuous", "label": "Continuously via experimentation and insights", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "planning_process",
+          "label": "Which of the following are built into your marketing planning process?",
+          "type": "multi_select",
+          "options": [
+            { "value": "forecast", "label": "Forecast models", "score": 1 },
+            { "value": "revenue_mapping", "label": "Revenue influence mapping", "score": 1 },
+            { "value": "scenario", "label": "Scenario planning", "score": 1 },
+            { "value": "capacity", "label": "Capacity planning", "score": 1 },
+            { "value": "retrospectives", "label": "Campaign retrospectives", "score": 1 },
+            { "value": "budget", "label": "Budget allocation models", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "scaling_confidence",
+          "label": "How confident are you in your ability to scale marketing efforts without losing performance?",
+          "type": "select",
+          "options": [
+            { "value": "not_confident", "label": "Not confident — scaling hurts results", "score": 1 },
+            { "value": "somewhat", "label": "Somewhat — it depends on the channel", "score": 2 },
+            { "value": "mostly", "label": "Mostly — we've optimized most systems", "score": 3 },
+            { "value": "very_confident", "label": "Very confident — we've built for scale", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "team_collaboration",
+          "label": "How does your team collaborate on marketing goals and execution?",
+          "type": "select",
+          "options": [
+            { "value": "silos", "label": "We operate in silos", "score": 1 },
+            { "value": "check_in", "label": "We check in as needed", "score": 2 },
+            { "value": "shared_tools", "label": "We use shared tools and workflows", "score": 3 },
+            { "value": "unified", "label": "We run a unified operating model with full transparency", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "tech_stack_management",
+          "label": "How do you evaluate and manage your marketing tech stack?",
+          "type": "select",
+          "options": [
+            { "value": "price_features", "label": "Based on price or features", "score": 1 },
+            { "value": "team_requests", "label": "We adopt what teams request", "score": 2 },
+            { "value": "strategy_based", "label": "Tools are selected based on strategy", "score": 3 },
+            { "value": "mapped_metrics", "label": "Our stack is mapped to goals, usage, and performance metrics", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "personalization_level",
+          "label": "How personalized are your marketing experiences across channels?",
+          "type": "select",
+          "options": [
+            { "value": "light", "label": "Light personalization (name, company)", "score": 1 },
+            { "value": "some", "label": "Some segmentation (by persona or stage)", "score": 2 },
+            { "value": "dynamic", "label": "Dynamic based on behavior and lifecycle", "score": 3 },
+            { "value": "hyper", "label": "Hyper-personalized with real-time content and automation", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "experimentation_level",
+          "label": "What level of experimentation do you run across campaigns and channels?",
+          "type": "select",
+          "options": [
+            { "value": "minimal", "label": "Minimal — mostly repeatable playbooks", "score": 1 },
+            { "value": "some", "label": "Some testing in individual campaigns", "score": 2 },
+            { "value": "regular", "label": "Regular A/B or multivariate testing", "score": 3 },
+            { "value": "rapid", "label": "We run rapid experimentation cycles across functions", "score": 4 }
+          ],
+          "order": 8
+        },
+        {
+          "key": "performance_risk",
+          "label": "What's the biggest risk to your marketing performance over the next 6–12 months?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "market_adaptation",
+          "label": "How well does your marketing team anticipate and adapt to market changes or audience behavior?",
+          "type": "select",
+          "options": [
+            { "value": "react_late", "label": "We usually react late", "score": 1 },
+            { "value": "monitor_adjust", "label": "We monitor and adjust over time", "score": 2 },
+            { "value": "adapt_quickly", "label": "We adapt quickly based on signals", "score": 3 },
+            { "value": "anticipate", "label": "We anticipate change and proactively evolve", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_4_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "campaign_evolution",
+          "label": "To what extent do your marketing campaigns evolve based on real-time customer behavior or market conditions?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — campaigns are static", "score": 1 },
+            { "value": "occasionally", "label": "Occasionally — we pause or adjust when needed", "score": 2 },
+            { "value": "frequently", "label": "Frequently — we adapt based on live data", "score": 3 },
+            { "value": "continuously", "label": "Continuously — campaigns optimize automatically or dynamically", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "strategic_alignment",
+          "label": "How are your marketing goals aligned with your company's strategic bets (new markets, products, etc.)?",
+          "type": "select",
+          "options": [
+            { "value": "not_aligned", "label": "Not clearly aligned", "score": 1 },
+            { "value": "after_fact", "label": "They align after the fact", "score": 2 },
+            { "value": "quarterly_planning", "label": "Part of marketing's quarterly planning", "score": 3 },
+            { "value": "fully_integrated", "label": "Strategy and marketing planning are fully integrated", "score": 4 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "forward_capabilities",
+          "label": "Which of these forward-looking capabilities are part of your marketing org today?",
+          "type": "multi_select",
+          "options": [
+            { "value": "predictive", "label": "Predictive analytics", "score": 1 },
+            { "value": "real_time", "label": "Real-time personalization", "score": 1 },
+            { "value": "mix_modeling", "label": "Marketing mix modeling", "score": 1 },
+            { "value": "lifecycle_forecast", "label": "Lifecycle revenue forecasting", "score": 1 },
+            { "value": "ai_optimization", "label": "AI-driven content or campaign optimization", "score": 1 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "customer_profiles",
+          "label": "How often do you revisit and revise your ideal customer profiles or buyer journeys?",
+          "type": "select",
+          "options": [
+            { "value": "rarely", "label": "Rarely — they stay mostly the same", "score": 1 },
+            { "value": "annually", "label": "Annually during planning", "score": 2 },
+            { "value": "quarterly", "label": "Quarterly based on feedback or data", "score": 3 },
+            { "value": "continuously", "label": "Continuously, with customer insights at the center", "score": 4 }
+          ],
+          "order": 4
+        },
+        {
+          "key": "forecasting_confidence",
+          "label": "How confident are you in marketing's ability to forecast pipeline, revenue, or customer retention?",
+          "type": "select",
+          "options": [
+            { "value": "low", "label": "Low confidence — too many unknowns", "score": 1 },
+            { "value": "moderate", "label": "Moderate — we model based on history", "score": 2 },
+            { "value": "high", "label": "High — our forecasts are reliable", "score": 3 },
+            { "value": "very_high", "label": "Very high — forecasting is part of real-time planning", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "innovation_balance",
+          "label": "How do you balance innovation with optimization in your campaigns?",
+          "type": "select",
+          "options": [
+            { "value": "mostly_optimize", "label": "We mostly optimize what we know", "score": 1 },
+            { "value": "occasionally_test", "label": "We occasionally test bold ideas", "score": 2 },
+            { "value": "ratio_budget", "label": "We have a ratio or budget for both", "score": 3 },
+            { "value": "parallel_tracks", "label": "Innovation and optimization are managed in parallel tracks", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "gtm_influence",
+          "label": "How involved is marketing in influencing product, pricing, or go-to-market decisions?",
+          "type": "select",
+          "options": [
+            { "value": "not_involved", "label": "Not involved", "score": 1 },
+            { "value": "occasionally_consulted", "label": "Occasionally consulted", "score": 2 },
+            { "value": "key_stakeholder", "label": "A key stakeholder in launches", "score": 3 },
+            { "value": "deeply_integrated", "label": "Deeply integrated in GTM strategy and planning", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "future_proofed",
+          "label": "What part of your marketing is most future-proofed (built for scale, adaptability, and automation)?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "reinvention_plans",
+          "label": "What's one area of marketing you're planning to reinvent or reimagine this year?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "marketing_role",
+          "label": "How would you describe the role marketing plays in your business today?",
+          "type": "select",
+          "options": [
+            { "value": "support", "label": "Support function", "score": 1 },
+            { "value": "growth", "label": "Growth engine", "score": 2 },
+            { "value": "strategic", "label": "Strategic driver of innovation", "score": 3 },
+            { "value": "core", "label": "Core to company identity and evolution", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  },
+  "score_5": {
+    "groups": {
+      "0": [
+        {
+          "key": "strategic_direction",
+          "label": "How does your marketing organization shape the company's strategic direction and innovation roadmap?",
+          "type": "select",
+          "options": [
+            { "value": "supports", "label": "It supports strategy, but doesn't shape it", "score": 1 },
+            { "value": "provides_insights", "label": "Marketing provides insights and ideas", "score": 2 },
+            { "value": "co_leads", "label": "Marketing co-leads innovation planning", "score": 3 },
+            { "value": "drives_transformation", "label": "Marketing drives transformation across teams and markets", "score": 4 }
+          ],
+          "order": 1
+        },
+        {
+          "key": "advanced_capabilities",
+          "label": "Which advanced capabilities are fully operational in your marketing strategy?",
+          "type": "multi_select",
+          "options": [
+            { "value": "predictive_segmentation", "label": "Predictive and behavioral segmentation", "score": 1 },
+            { "value": "ai_content", "label": "AI-generated content or campaign flows", "score": 1 },
+            { "value": "journey_orchestration", "label": "Unified customer journey orchestration", "score": 1 },
+            { "value": "real_time_optimization", "label": "Real-time performance optimization", "score": 1 },
+            { "value": "brand_innovation", "label": "Brand-led product and experience innovation", "score": 1 }
+          ],
+          "order": 2
+        },
+        {
+          "key": "innovation_enablement",
+          "label": "How do you enable your team to operate at the edge of innovation and agility?",
+          "type": "select",
+          "options": [
+            { "value": "informal", "label": "Innovation happens informally", "score": 1 },
+            { "value": "occasional_sprints", "label": "We run occasional sprints or pilots", "score": 2 },
+            { "value": "formal_workflows", "label": "We have formal innovation workflows", "score": 3 },
+            { "value": "operating_principle", "label": "Innovation is a shared operating principle with time, tools, and KPIs", "score": 4 }
+          ],
+          "order": 3
+        }
+      ],
+      "1": [
+        {
+          "key": "strategic_role",
+          "label": "What's the most strategic role marketing plays in your business right now?",
+          "type": "text_area",
+          "order": 4
+        },
+        {
+          "key": "market_opportunities",
+          "label": "How are you using customer insights to shape market opportunities before competitors do?",
+          "type": "select",
+          "options": [
+            { "value": "reactive", "label": "We respond to customer needs reactively", "score": 1 },
+            { "value": "feedback_guided", "label": "We use customer feedback to guide offers", "score": 2 },
+            { "value": "analyze_trends", "label": "We analyze behavior and trends to identify gaps", "score": 3 },
+            { "value": "anticipate_demand", "label": "We anticipate and shape demand using insight and modeling", "score": 4 }
+          ],
+          "order": 5
+        },
+        {
+          "key": "brand_relevance",
+          "label": "How do you ensure your brand stays relevant and resonant as markets evolve?",
+          "type": "select",
+          "options": [
+            { "value": "few_years", "label": "We evolve branding every few years", "score": 1 },
+            { "value": "monitor_trends", "label": "We monitor trends and update key elements", "score": 2 },
+            { "value": "quarterly_review", "label": "We review and refine brand quarterly", "score": 3 },
+            { "value": "living_asset", "label": "Brand is a living asset informed by data and audience signals", "score": 4 }
+          ],
+          "order": 6
+        }
+      ],
+      "2": [
+        {
+          "key": "long_term_value",
+          "label": "How does marketing contribute to building long-term value across the business?",
+          "type": "select",
+          "options": [
+            { "value": "lead_gen", "label": "Through lead generation", "score": 1 },
+            { "value": "acquisition", "label": "Through acquisition and engagement", "score": 2 },
+            { "value": "retention", "label": "Through retention and customer growth", "score": 3 },
+            { "value": "total_lifecycle", "label": "Through total lifecycle, cultural impact, and market position", "score": 4 }
+          ],
+          "order": 7
+        },
+        {
+          "key": "competitive_advantage",
+          "label": "What part of your marketing has become a competitive advantage in your space?",
+          "type": "text_area",
+          "order": 8
+        },
+        {
+          "key": "future_vision",
+          "label": "What does world-class marketing look like for your team in 18 months?",
+          "type": "text_area",
+          "order": 9
+        },
+        {
+          "key": "market_shift_preparation",
+          "label": "How prepared is your marketing org to lead the business through a market shift or reinvention?",
+          "type": "select",
+          "options": [
+            { "value": "needs_adjustment", "label": "We would need major adjustments", "score": 1 },
+            { "value": "pivot_leadership", "label": "We could pivot with strong leadership", "score": 2 },
+            { "value": "prepared_systems", "label": "We're prepared with systems and playbooks", "score": 3 },
+            { "value": "already_positioned", "label": "We're already positioned to lead through change", "score": 4 }
+          ],
+          "order": 10
+        }
+      ]
+    }
+  }
+} 

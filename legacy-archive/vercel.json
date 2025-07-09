@@ -1,0 +1,32 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generateMarketInsight",
+      "schedule": "*/5 1-3 * * 2"
+    },
+    {
+      "path": "/api/cron/generateBusinessTrends",
+      "schedule": "0 1 * * 1"
+    },
+    {
+      "path": "/api/cron/generateMarketingPlaybook",
+      "schedule": "0 2 */14 * *"
+    },
+    {
+      "path": "/api/cron/strategic-trends",
+      "schedule": "0 2 */14 * *"
+    },
+    {
+      "path": "/api/cron/check-trial-expiration",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/send-trial-expiring-notifications",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-trial-records",
+      "schedule": "0 3 * * 1"
+    }
+  ]
+}
