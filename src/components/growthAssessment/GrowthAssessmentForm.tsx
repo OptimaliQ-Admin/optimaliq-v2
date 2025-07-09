@@ -101,14 +101,14 @@ export default function GrowthAssessmentForm() {
       className="relative"
     >
       {/* Background Card */}
-      <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl border border-white/20 p-8 lg:p-10 w-full max-w-lg mx-auto">
+      <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl border border-white/20 p-6 lg:p-8 w-full max-w-lg mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <ShieldCheckIcon className="text-white w-8 h-8" />
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+            <ShieldCheckIcon className="text-white w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Yourself</h2>
-          <p className="text-gray-600">We&rsquo;ll tailor insights to your business needs.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-1">Tell Us About Yourself</h2>
+          <p className="text-sm text-gray-600">We&rsquo;ll tailor insights to your business needs.</p>
         </div>
 
                 {/* Progress Indicator */}
@@ -122,9 +122,9 @@ export default function GrowthAssessmentForm() {
           className="mb-8"
         />
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Form Fields */}
-          <div className="space-y-6">
+          <div className="space-y-4">
           <FormField
             label="Full Name"
             name="name"
@@ -244,7 +244,7 @@ export default function GrowthAssessmentForm() {
         </div>
 
           {/* ReCAPTCHA */}
-          <div className="pt-2 flex justify-center">
+          <div className="pt-1 flex justify-center">
             <ReCAPTCHA 
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string} 
               onChange={(token) => setCaptchaToken(token)} 
@@ -252,11 +252,11 @@ export default function GrowthAssessmentForm() {
           </div>
 
           {/* Privacy Consent */}
-          <div className="space-y-3">
-                      <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <LockClosedIcon className="text-blue-600 mt-1 flex-shrink-0 w-5 h-5" />
+          <div className="space-y-2">
+            <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <LockClosedIcon className="text-blue-600 mt-1 flex-shrink-0 w-4 h-4" />
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-1">
                   <input
                     type="checkbox"
                     id="privacyConsent"
@@ -268,7 +268,7 @@ export default function GrowthAssessmentForm() {
                     I agree to let OptimaliQ collect and use my answers to personalize my experience.
                   </label>
                 </div>
-                <p className="text-xs text-gray-600 mb-2">
+                <p className="text-xs text-gray-600">
                   By checking this box, you agree to our{" "}
                   <button
                     type="button"
@@ -293,13 +293,13 @@ export default function GrowthAssessmentForm() {
             isSubmitting={isSubmitting}
             nextLabel="Continue to Assessment"
             previousLabel="Back"
-            className="mt-8"
+            className="mt-6"
           />
 
           {/* Trust Message */}
-          <div className="text-center pt-4">
-            <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
-              <ShieldCheckIcon className="text-green-500 w-4 h-4" />
+          <div className="text-center pt-2">
+            <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+              <ShieldCheckIcon className="text-green-500 w-3 h-3" />
               <span>No spam. No sales pitches. Just data-driven insights.</span>
             </p>
           </div>

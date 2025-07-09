@@ -8,7 +8,7 @@ export default function FormHeader() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="relative text-left flex flex-col justify-center h-full space-y-8"
+      className="relative text-left flex flex-col justify-center h-full space-y-6"
     >
       {/* Badge */}
       <motion.div
@@ -53,30 +53,30 @@ export default function FormHeader() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6"
       >
-        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
-            <FaLightbulb className="text-white text-xl" />
+        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-3">
+            <FaLightbulb className="text-white text-lg" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Strategic Insights</h3>
-          <p className="text-sm text-gray-600">Discover hidden growth opportunities with AI-powered analysis</p>
+          <h3 className="font-semibold text-gray-900 mb-1 text-sm">Strategic Insights</h3>
+          <p className="text-xs text-gray-600">Discover hidden growth opportunities with AI-powered analysis</p>
         </div>
 
-        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-4">
-            <FaChartLine className="text-white text-xl" />
+        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-3">
+            <FaChartLine className="text-white text-lg" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Data-Driven</h3>
-          <p className="text-sm text-gray-600">Benchmark against industry leaders and track your progress</p>
+          <h3 className="font-semibold text-gray-900 mb-1 text-sm">Data-Driven</h3>
+          <p className="text-xs text-gray-600">Benchmark against industry leaders and track your progress</p>
         </div>
 
-        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-4">
-            <FaRocket className="text-white text-xl" />
+        <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-3">
+            <FaRocket className="text-white text-lg" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Actionable Plans</h3>
-          <p className="text-sm text-gray-600">Get personalized roadmaps to accelerate your growth</p>
+          <h3 className="font-semibold text-gray-900 mb-1 text-sm">Actionable Plans</h3>
+          <p className="text-xs text-gray-600">Get personalized roadmaps to accelerate your growth</p>
         </div>
       </motion.div>
 
@@ -85,7 +85,7 @@ export default function FormHeader() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.7 }}
-        className="flex items-center gap-8 pt-8 border-t border-gray-200"
+        className="flex items-center gap-6 pt-6 border-t border-gray-200"
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>

@@ -157,7 +157,7 @@ export default function FormField({
 
       {/* Helper Text */}
       {helperText && !hasError && !hasSuccess && (
-        <p className="text-sm text-gray-500">{helperText}</p>
+        <p className="text-xs text-gray-500">{helperText}</p>
       )}
 
       {/* Error Message */}

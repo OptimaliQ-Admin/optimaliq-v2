@@ -8,7 +8,7 @@ export default function TrustFooter() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.8 }}
-      className="relative w-full bg-white/60 backdrop-blur-sm border-t border-white/20 py-8 mt-16"
+      className="relative w-full bg-white/60 backdrop-blur-sm border-t border-white/20 py-6 mt-12"
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
