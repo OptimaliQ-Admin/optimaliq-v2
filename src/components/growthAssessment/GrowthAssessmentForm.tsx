@@ -5,13 +5,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
-import { IconInput } from "@/components/shared/IconInput";
-import { IconSelect } from "@/components/shared/IconSelect";
+import FormField from "@/components/shared/FormField";
+import FormSelect from "@/components/shared/FormSelect";
+import ProgressIndicator from "@/components/growthAssessment/ProgressIndicator";
+import FormNavigation from "@/components/shared/FormNavigation";
 import {
-  FaUser, FaEnvelope, FaIndustry, FaBriefcase,
-  FaBuilding, FaDollarSign, FaShieldAlt, FaCheckCircle,
-  FaLock, FaEye, FaEyeSlash
-} from "react-icons/fa";
+  UserIcon, EnvelopeIcon, BuildingOfficeIcon, BriefcaseIcon,
+  BuildingLibraryIcon, CurrencyDollarIcon, ShieldCheckIcon, CheckCircleIcon,
+  LockClosedIcon
+} from "@heroicons/react/24/outline";
 import { showToast } from "@/lib/utils/toast";
 
 export default function GrowthAssessmentForm() {
@@ -24,6 +26,7 @@ export default function GrowthAssessmentForm() {
     companysize: "",
     revenuerange: "",
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [privacyConsent, setPrivacyConsent] = useState(false);
@@ -102,65 +105,143 @@ export default function GrowthAssessmentForm() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <FaShieldAlt className="text-white text-2xl" />
+            <ShieldCheckIcon className="text-white w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Yourself</h2>
           <p className="text-gray-600">We&rsquo;ll tailor insights to your business needs.</p>
         </div>
 
+                {/* Progress Indicator */}
+        <ProgressIndicator
+          currentStep={1}
+          totalSteps={2}
+          steps={[
+            { title: 'Business Overview', description: 'Tell us about yourself', status: 'current' as const },
+            { title: 'Growth Assessment', description: 'Answer strategic questions', status: 'upcoming' as const }
+          ]}
+          className="mb-8"
+        />
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Form Fields */}
-          <div className="space-y-5">
-            <IconInput 
-              icon={FaUser} 
-              name="name" 
-              maxLength={30} 
-              value={userInfo.name} 
-              onChange={handleChange} 
-              placeholder="Your Name" 
-            />
-            <IconInput 
-              icon={FaEnvelope} 
-              name="email" 
-              maxLength={250} 
-              type="email" 
-              value={userInfo.email} 
-              onChange={handleChange} 
-              placeholder="Your Email" 
-            />
-            <IconSelect 
-              icon={FaIndustry} 
-              name="industry" 
-              label="Industry"
-              value={userInfo.industry} 
-              onChange={handleChange} 
-              options={["E-commerce","Finance","SaaS","Education","Technology","Healthcare","Retail","Manufacturing","Consulting","Entertainment","Real Estate","Transportation","Hospitality","Energy","Telecommunications","Pharmaceuticals","Automotive","Construction","Legal","Nonprofit","Other"]} 
-            />
-            <IconInput 
-              icon={FaBriefcase} 
-              name="role" 
-              maxLength={250} 
-              value={userInfo.role} 
-              onChange={handleChange} 
-              placeholder="Your Role" 
-            />
-            <IconSelect 
-              icon={FaBuilding} 
-              name="companysize" 
-              label="Company Size"
-              value={userInfo.companysize} 
-              onChange={handleChange} 
-              options={["1-10","11-50","51-200","201-500","501-1000","1000+"]} 
-            />
-            <IconSelect 
-              icon={FaDollarSign} 
-              name="revenuerange" 
-              label="Revenue Range"
-              value={userInfo.revenuerange} 
-              onChange={handleChange} 
-              options={["<$100K","$100K-$500K","$500K-$1M","$1M-$10M","$10M-$50M","$50M+"]} 
-            />
-          </div>
+          <div className="space-y-6">
+          <FormField
+            label="Full Name"
+            name="name"
+            type="text"
+            value={userInfo.name}
+            onChange={handleChange}
+            placeholder="Enter your full name"
+            error={validationErrors.name}
+            required
+            maxLength={30}
+            icon={<UserIcon className="w-5 h-5" />}
+            helperText="We'll use this to personalize your experience"
+          />
+          
+          <FormField
+            label="Email Address"
+            name="email"
+            type="email"
+            value={userInfo.email}
+            onChange={handleChange}
+            placeholder="Enter your email address"
+            error={validationErrors.email}
+            required
+            maxLength={250}
+            icon={<EnvelopeIcon className="w-5 h-5" />}
+            helperText="We'll send your assessment results here"
+          />
+          
+          <FormSelect
+            label="Industry"
+            name="industry"
+            value={userInfo.industry}
+            onChange={handleChange}
+            options={[
+              { value: "E-commerce", label: "E-commerce" },
+              { value: "Finance", label: "Finance" },
+              { value: "SaaS", label: "SaaS" },
+              { value: "Education", label: "Education" },
+              { value: "Technology", label: "Technology" },
+              { value: "Healthcare", label: "Healthcare" },
+              { value: "Retail", label: "Retail" },
+              { value: "Manufacturing", label: "Manufacturing" },
+              { value: "Consulting", label: "Consulting" },
+              { value: "Entertainment", label: "Entertainment" },
+              { value: "Real Estate", label: "Real Estate" },
+              { value: "Transportation", label: "Transportation" },
+              { value: "Hospitality", label: "Hospitality" },
+              { value: "Energy", label: "Energy" },
+              { value: "Telecommunications", label: "Telecommunications" },
+              { value: "Pharmaceuticals", label: "Pharmaceuticals" },
+              { value: "Automotive", label: "Automotive" },
+              { value: "Construction", label: "Construction" },
+              { value: "Legal", label: "Legal" },
+              { value: "Nonprofit", label: "Nonprofit" },
+              { value: "Other", label: "Other" }
+            ]}
+            placeholder="Select your industry"
+            error={validationErrors.industry}
+            required
+            icon={<BuildingOfficeIcon className="w-5 h-5" />}
+            helperText="This helps us provide industry-specific insights"
+          />
+          
+          <FormField
+            label="Job Role"
+            name="role"
+            type="text"
+            value={userInfo.role}
+            onChange={handleChange}
+            placeholder="e.g., CEO, Marketing Manager, Founder"
+            error={validationErrors.role}
+            required
+            maxLength={250}
+            icon={<BriefcaseIcon className="w-5 h-5" />}
+            helperText="Your role helps us tailor recommendations"
+          />
+          
+          <FormSelect
+            label="Company Size"
+            name="companysize"
+            value={userInfo.companysize}
+            onChange={handleChange}
+            options={[
+              { value: "1-10", label: "1-10 employees" },
+              { value: "11-50", label: "11-50 employees" },
+              { value: "51-200", label: "51-200 employees" },
+              { value: "201-500", label: "201-500 employees" },
+              { value: "501-1000", label: "501-1000 employees" },
+              { value: "1000+", label: "1000+ employees" }
+            ]}
+            placeholder="Select company size"
+            error={validationErrors.companysize}
+            required
+            icon={<BuildingLibraryIcon className="w-5 h-5" />}
+            helperText="Company size affects growth strategies"
+          />
+          
+          <FormSelect
+            label="Revenue Range"
+            name="revenuerange"
+            value={userInfo.revenuerange}
+            onChange={handleChange}
+            options={[
+              { value: "<$100K", label: "Under $100K" },
+              { value: "$100K-$500K", label: "$100K - $500K" },
+              { value: "$500K-$1M", label: "$500K - $1M" },
+              { value: "$1M-$10M", label: "$1M - $10M" },
+              { value: "$10M-$50M", label: "$10M - $50M" },
+              { value: "$50M+", label: "$50M+" }
+            ]}
+            placeholder="Select revenue range"
+            error={validationErrors.revenuerange}
+            required
+            icon={<CurrencyDollarIcon className="w-5 h-5" />}
+            helperText="Revenue helps us benchmark your performance"
+          />
+        </div>
 
           {/* ReCAPTCHA */}
           <div className="pt-2 flex justify-center">
@@ -172,8 +253,8 @@ export default function GrowthAssessmentForm() {
 
           {/* Privacy Consent */}
           <div className="space-y-3">
-            <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <FaLock className="text-blue-600 mt-1 flex-shrink-0" />
+                      <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <LockClosedIcon className="text-blue-600 mt-1 flex-shrink-0 w-5 h-5" />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <input
@@ -202,46 +283,27 @@ export default function GrowthAssessmentForm() {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <motion.button 
-            type="submit" 
-            disabled={isSubmitting || !privacyConsent}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isSubmitting ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <FaCheckCircle className="text-lg" />
-                <span>Get My Free Insights</span>
-              </>
-            )}
-          </motion.button>
+          {/* Form Navigation */}
+          <FormNavigation
+            currentStep={1}
+            totalSteps={2}
+            onNext={() => handleSubmit(new Event('submit') as any)}
+            onPrevious={() => {}}
+            isValid={Object.values(userInfo).every(value => value.trim() !== '') && privacyConsent && !!captchaToken}
+            isSubmitting={isSubmitting}
+            nextLabel="Continue to Assessment"
+            previousLabel="Back"
+            className="mt-8"
+          />
 
           {/* Trust Message */}
           <div className="text-center pt-4">
             <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
-              <FaShieldAlt className="text-green-500" />
+              <ShieldCheckIcon className="text-green-500 w-4 h-4" />
               <span>No spam. No sales pitches. Just data-driven insights.</span>
             </p>
           </div>
         </form>
-
-        {/* Progress Indicator */}
-        <div className="mt-8 pt-6 border-t border-gray-100">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Step 1 of 2</span>
-            </span>
-            <span className="text-blue-600 font-medium">OptimaliQ.ai</span>
-          </div>
-        </div>
       </div>
 
       {/* Privacy Policy Modal */}
@@ -251,7 +313,7 @@ export default function GrowthAssessmentForm() {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <FaLock className="text-blue-600" />
+                  <LockClosedIcon className="text-blue-600 w-5 h-5" />
                   Privacy Policy
                 </h3>
                 <button
