@@ -7,6 +7,7 @@ import PremiumSidebar from "@/components/layout/PremiumSidebar";
 import SubscriptionStatusBanner from "@/components/shared/SubscriptionStatusBanner";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { usePathname } from "next/navigation";
+import { ModalProvider } from "@/components/modals/ModalProvider";
 
 function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
   const { checking } = useRequireAuth(); // get checking status
@@ -24,9 +25,11 @@ function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
   // Skip auth check for assessment invitations
   if (isAssessmentInvitation) {
     return (
-      <main className="min-h-screen bg-white text-gray-900">
-        {children}
-      </main>
+      <ModalProvider>
+        <main className="min-h-screen bg-white text-gray-900">
+          {children}
+        </main>
+      </ModalProvider>
     );
   }
 
@@ -39,7 +42,7 @@ function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <ModalProvider>
       {/* Subscription Status Banner */}
       <SubscriptionStatusBanner 
         subscriptionStatus={subscription?.status}
@@ -54,7 +57,7 @@ function PremiumLayoutContent({ children }: { children: React.ReactNode }) {
           </main>
         </div>
       </div>
-    </>
+    </ModalProvider>
   );
 }
 
