@@ -7,9 +7,10 @@ import { usePremiumUser } from "@/context/PremiumUserContext";
 import axios from "axios";
 import { motion } from "framer-motion";
 import InsightLoading from "@/components/dashboard/InsightLoading";
-import SectionHeader from "@/components/dashboard/SectionHeader";
-import ScoreCard from "@/components/dashboard/ScoreCard";
-import InsightCard from "@/components/dashboard/InsightCard";
+import EnterpriseDashboardHeader from "@/components/dashboard/EnterpriseDashboardHeader";
+import EnterpriseScoreCard from "@/components/dashboard/EnterpriseScoreCard";
+import EnterpriseInsightCard from "@/components/dashboard/EnterpriseInsightCard";
+import EnterprisePerformanceSummary from "@/components/dashboard/EnterprisePerformanceSummary";
 import GrowthChart from "@/components/dashboard/GrowthChart";
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
@@ -20,6 +21,15 @@ import PageNavigation from "@/components/shared/PageNavigation";
 import dynamic from "next/dynamic";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 import { supabase } from "@/lib/supabase";
+import { 
+  TrophyIcon,
+  TagIcon,
+  CogIcon,
+  BoltIcon,
+  ArrowTrendingUpIcon,
+  StarIcon,
+  ChartBarIcon
+} from "@heroicons/react/24/outline";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
 
@@ -150,8 +160,39 @@ export default function PremiumDashboardPage() {
   const overallPerformance = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.topPerformerScore) * 100;
   const industryPosition = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.industryAvgScore) * 100;
 
+  // Performance metrics for the summary component
+  const performanceMetrics = [
+    {
+      label: "Above Industry Average",
+      value: Math.round(industryPosition - 100),
+      unit: "%",
+      trend: Math.round(industryPosition - 100),
+      description: `You're performing ${Math.round(industryPosition - 100)}% better than the typical company in your industry`,
+      color: "#10b981",
+      icon: ArrowTrendingUpIcon
+    },
+    {
+      label: "Top Performer Level",
+      value: Math.round(overallPerformance),
+      unit: "%",
+      trend: Math.round(overallPerformance) - 50,
+      description: `You're operating at ${Math.round(overallPerformance)}% of what the best companies in your industry achieve`,
+      color: "#3b82f6",
+      icon: StarIcon
+    },
+    {
+      label: "Industry Percentile",
+      value: Math.round(100 - overallPerformance),
+      unit: "%",
+      trend: Math.round(100 - overallPerformance) - 50,
+      description: `You're in the top ${Math.round(100 - overallPerformance)}% of companies in your industry`,
+      color: "#8b5cf6",
+      icon: TrophyIcon
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Dashboard Explanation Modal */}
       <DashboardExplanationModal
         isOpen={showDashboardExplanation}
@@ -170,7 +211,7 @@ export default function PremiumDashboardPage() {
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           className="fixed top-6 right-6 z-50"
         >
-          <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-200 max-w-sm backdrop-blur-sm">
+          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border border-white/20 max-w-sm">
             <div className="flex justify-between items-start">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -196,13 +237,13 @@ export default function PremiumDashboardPage() {
         </motion.div>
       )}
 
-      <div className="max-w-[1920px] mx-auto p-8 space-y-10">
+      <div className="max-w-[1920px] mx-auto p-8 space-y-12">
         {/* Assessment Reminder */}
         {insights.promptRetake && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-xl shadow-sm"
+            className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-2xl shadow-lg backdrop-blur-sm"
           >
             <div className="flex items-start gap-3">
               <div className="text-yellow-600 text-xl">🕒</div>
@@ -220,6 +261,20 @@ export default function PremiumDashboardPage() {
           </motion.div>
         )}
 
+        {/* Enterprise Dashboard Header */}
+        <EnterpriseDashboardHeader
+          title="Business Intelligence Dashboard"
+          subtitle="Comprehensive growth maturity assessment and strategic insights"
+          lastUpdated={new Date().toISOString()}
+          refreshInterval={300000} // 5 minutes
+          onRefresh={() => window.location.reload()}
+          user={{
+            name: user?.first_name,
+            email: user?.email
+          }}
+          notifications={3}
+        />
+
         {/* Score Overview Section */}
         <motion.section 
           id="score-overview"
@@ -228,9 +283,15 @@ export default function PremiumDashboardPage() {
           transition={{ duration: 0.5 }}
           className="space-y-8"
         >
-          <SectionHeader title="🏆 Business Score Overview" subtitle="Your comprehensive growth maturity assessment across key business areas" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <ScoreCard
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">🏆 Business Score Overview</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Your comprehensive growth maturity assessment across key business areas
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <EnterpriseScoreCard
               title="Overall Score"
               icon="🏆"
               score={insights.overall_score}
@@ -238,8 +299,9 @@ export default function PremiumDashboardPage() {
               topPerformer={insights.topPerformerScore}
               description="Your comprehensive growth maturity score"
               onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
+              category="overall"
             />
-            <ScoreCard
+            <EnterpriseScoreCard
               title="Strategy"
               icon="🎯"
               score={insights.strategy_score}
@@ -247,8 +309,9 @@ export default function PremiumDashboardPage() {
               topPerformer={insights.topPerformerScore}
               description="Clarity, positioning, and strategic alignment."
               onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
+              category="strategy"
             />
-            <ScoreCard
+            <EnterpriseScoreCard
               title="Process"
               icon="⚙️"
               score={insights.process_score}
@@ -256,8 +319,9 @@ export default function PremiumDashboardPage() {
               topPerformer={insights.topPerformerScore}
               description="Consistency, execution, and scalability."
               onLearnMore={() => handleScoreClick("process", insights.process_score)}
+              category="process"
             />
-            <ScoreCard
+            <EnterpriseScoreCard
               title="Technology"
               icon="🚀"
               score={insights.technology_score}
@@ -265,6 +329,7 @@ export default function PremiumDashboardPage() {
               topPerformer={insights.topPerformerScore}
               description="Growth, automation, and efficiency."
               onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
+              category="technology"
             />
           </div>
         </motion.section>
@@ -275,44 +340,9 @@ export default function PremiumDashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-8 border border-blue-100 shadow-sm"
+          className="space-y-8"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-2xl">📊</div>
-            <h4 className="font-bold text-gray-900 text-xl">Performance Summary</h4>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-green-600 mb-2 group-hover:text-green-700 transition-colors duration-200">
-                +{Math.round(industryPosition - 100)}%
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">Above Industry Average</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re performing {Math.round(industryPosition - 100)}% better than the typical company in your industry
-              </div>
-            </div>
-            
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors duration-200">
-                {Math.round(overallPerformance)}%
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">of Top Performer Level</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re operating at {Math.round(overallPerformance)}% of what the best companies in your industry achieve
-              </div>
-            </div>
-            
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-purple-600 mb-2 group-hover:text-purple-700 transition-colors duration-200">
-                Top {Math.round(100 - overallPerformance)}%
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">Industry Percentile</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re in the top {Math.round(100 - overallPerformance)}% of companies in your industry
-              </div>
-            </div>
-          </div>
+          <EnterprisePerformanceSummary metrics={performanceMetrics} />
         </motion.section>
 
         <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
@@ -325,16 +355,24 @@ export default function PremiumDashboardPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-8"
         >
-          <SectionHeader title="📈 Growth Analysis & Planning" subtitle="Strategic insights and actionable growth recommendations" />
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">📈 Growth Analysis & Planning</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Strategic insights and actionable growth recommendations
+            </p>
+          </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-1">
-              <InsightCard 
+              <EnterpriseInsightCard 
                 title="🚀 30-Day Growth Plan" 
                 items={insights.roadmap.map(item => ({ 
                   label: item.task, 
-                  detail: item.expectedImpact 
+                  detail: item.expectedImpact,
+                  priority: 'high' as const,
+                  impact: 'positive' as const
                 }))} 
+                type="roadmap"
               />
             </div>
             <div className="lg:col-span-2 space-y-8">
@@ -359,21 +397,31 @@ export default function PremiumDashboardPage() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="space-y-8"
         >
-          <SectionHeader title="🎯 Performance Insights" subtitle="Key strengths to leverage and areas for strategic improvement" />
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">🎯 Performance Insights</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Key strengths to leverage and areas for strategic improvement
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <InsightCard 
+            <EnterpriseInsightCard 
               title="✅ Key Strengths" 
               items={insights.strengths.map(item => ({ 
                 label: item.title, 
-                detail: item.impact 
+                detail: item.impact,
+                impact: 'positive' as const
               }))} 
+              type="strengths"
             />
-            <InsightCard 
+            <EnterpriseInsightCard 
               title="🚨 Areas for Improvement" 
               items={insights.weaknesses.map(item => ({ 
                 label: item.title, 
-                detail: item.impact 
+                detail: item.impact,
+                impact: 'negative' as const
               }))} 
+              type="weaknesses"
             />
           </div>
         </motion.section>
@@ -386,7 +434,13 @@ export default function PremiumDashboardPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="space-y-8"
         >
-          <SectionHeader title="🌍 Market Intelligence" subtitle="Real-time insights and strategic market guidance" />
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">🌍 Market Intelligence</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Real-time insights and strategic market guidance
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
             <BusinessTrendCard />
