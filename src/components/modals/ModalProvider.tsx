@@ -109,14 +109,14 @@ function Modal({ config, onClose }: ModalProps) {
       {/* Backdrop */}
       {showBackdrop && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
           onClick={handleBackdropClick}
           aria-hidden="true"
         />
       )}
 
       {/* Modal container */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="flex min-h-full items-center justify-center p-4 relative z-10">
         <div 
           className={`bg-white rounded-xl shadow-2xl w-full ${sizeClasses[size]} ${className}`}
           role="dialog"
