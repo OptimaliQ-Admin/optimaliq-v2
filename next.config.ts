@@ -2,7 +2,6 @@
 const nextConfig = {
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@heroicons/react', 'framer-motion', 'lucide-react'],
     turbo: {
       rules: {

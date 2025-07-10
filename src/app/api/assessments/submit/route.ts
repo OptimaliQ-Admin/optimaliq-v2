@@ -6,13 +6,6 @@ import { logAssessmentInput, logAssessmentScore, logAssessmentError } from "@/li
 import { recalculateOverallScore } from "@/lib/sync/recalculateOverallScore";
 import { sanitizeAssessmentAnswers } from "@/lib/utils/sanitization";
 
-const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
-  ? createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    )
-  : null;
-
 type AssessmentMapping = {
   answerTable: string;
   scoreTable: string;
@@ -105,6 +98,13 @@ function normalizeScore(score: number): string {
 }
 
 export async function POST(request: Request) {
+  const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+    ? createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      )
+    : null;
+
   try {
     if (!supabase) {
       return NextResponse.json(

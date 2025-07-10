@@ -4,15 +4,12 @@ import { getErrorMessage } from "@/utils/errorHandler";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY!;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-
 export async function GET(req: Request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
   const authHeader = req.headers.get("Authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -22,7 +19,7 @@ export async function GET(req: Request) {
 
   try {
     // 1. Fetch top general business news headlines
-    const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API_KEY}`);
+    const newsRes = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${process.env.FINNHUB_API_KEY}`);
     const newsJson = await newsRes.json();
 
     const headlines = newsJson.slice(0, 5).map((n: any) => `- "${n.headline}"`).join("\n");
@@ -65,7 +62,7 @@ Guidance:
     const gptRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

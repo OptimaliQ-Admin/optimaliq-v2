@@ -2,11 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -28,9 +23,13 @@ const scoreLabels = {
   reassessment_score: "Reassessment",
 };
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
   try {
-    const { u_id } = await request.json();
+    const { u_id } = await req.json();
 
     if (!u_id) {
       return NextResponse.json(
