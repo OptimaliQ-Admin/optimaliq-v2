@@ -21,7 +21,7 @@ import dynamic from "next/dynamic";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 import { supabase } from "@/lib/supabase";
 
-const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
+const MarketInsightCard = dynamic(() => import("@/components/dashboard/EnhancedMarketInsightCard"), { ssr: false });
 
 interface ProfileData {
   dashboard_explanation_seen_at: string | null;
