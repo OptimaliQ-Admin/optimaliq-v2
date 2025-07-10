@@ -19,7 +19,10 @@ import {
   ChevronRightIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  SparklesIcon,
+  RocketLaunchIcon,
+  ShieldCheckIcon
 } from "@heroicons/react/24/outline";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 import { supabase } from "@/lib/supabase";
@@ -28,10 +31,18 @@ import dynamic from "next/dynamic";
 // Dynamic imports for better performance
 const EnterpriseScoreCard = dynamic(() => import("@/components/dashboard/EnterpriseScoreCard"), { ssr: false });
 const EnterpriseInsightCard = dynamic(() => import("@/components/dashboard/EnterpriseInsightCard"), { ssr: false });
-const EnterpriseChart = dynamic(() => import("@/components/dashboard/EnterpriseChart"), { ssr: false });
 const EnterpriseTrendCard = dynamic(() => import("@/components/dashboard/EnterpriseTrendCard"), { ssr: false });
 const EnterpriseMarketCard = dynamic(() => import("@/components/dashboard/EnterpriseMarketCard"), { ssr: false });
 const EnterpriseLoading = dynamic(() => import("@/components/dashboard/EnterpriseLoading"), { ssr: false });
+
+// Original dashboard components
+const GrowthChart = dynamic(() => import("@/components/dashboard/GrowthChart"), { ssr: false });
+const PerformanceFunnelChart = dynamic(() => import("@/components/dashboard/PerformanceFunnelChart"), { ssr: false });
+const ScoreContextModal = dynamic(() => import("@/components/dashboard/ScoreContextModal"), { ssr: false });
+const BusinessTrendCard = dynamic(() => import("@/components/dashboard/BusinessTrendCard"), { ssr: false });
+const MarketingPlaybookCard = dynamic(() => import("@/components/dashboard/MarketingPlaybookCard"), { ssr: false });
+const MarketInsightCard = dynamic(() => import("@/components/dashboard/MarketInsightCard"), { ssr: false });
+const DashboardExplanationModal = dynamic(() => import("@/components/modals/DashboardExplanationModal"), { ssr: false });
 
 interface ProfileData {
   dashboard_explanation_seen_at: string | null;
@@ -45,7 +56,9 @@ export default function PremiumDashboardPage() {
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
   const [showWelcome, setShowWelcome] = useState(false);
+  const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDashboardExplanation, setShowDashboardExplanation] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -68,7 +81,6 @@ export default function PremiumDashboardPage() {
           setError(res.data.error);
         } else {
           setInsights(res.data);
-          setLastUpdated(new Date());
         }
       } catch (err) {
         console.error("Error fetching insights:", err);
@@ -90,6 +102,36 @@ export default function PremiumDashboardPage() {
         quote: "Welcome back! Let's grow your business today.",
         author: "OptimaliQ"
       }));
+  }, [u_id]);
+
+  // Check if user has seen dashboard explanation
+  useEffect(() => {
+    if (!u_id) return;
+
+    const checkDashboardExplanation = async () => {
+      try {
+        const { data: profileData, error } = await supabase
+          .from("tier2_profiles")
+          .select("dashboard_explanation_seen_at")
+          .eq("u_id", u_id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile data:", error);
+          return;
+        }
+
+        const hasSeenExplanation = (profileData as ProfileData).dashboard_explanation_seen_at !== null;
+        
+        if (!hasSeenExplanation) {
+          setShowDashboardExplanation(true);
+        }
+      } catch (err) {
+        console.error("Error checking dashboard explanation status:", err);
+      }
+    };
+
+    checkDashboardExplanation();
   }, [u_id]);
 
   const handleRefresh = async () => {
@@ -122,6 +164,19 @@ export default function PremiumDashboardPage() {
     }
   }, [showWelcome]);
 
+  const handleScoreClick = async (category: string, score: number) => {
+    try {
+      const res = await axios.post("/api/dashboard/scorecard_insights", {
+        category,
+        score,
+        industry: insights?.industry || "other",
+      });
+      setModalData(res.data);
+    } catch (err) {
+      console.error("Failed to fetch modal insights:", err);
+    }
+  };
+
   if (!u_id || loading) return <EnterpriseLoading />;
   if (error) {
     return (
@@ -149,24 +204,68 @@ export default function PremiumDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Enterprise Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                  <ChartBarIcon className="w-6 h-6 text-white" />
+      {/* Dashboard Explanation Modal */}
+      <DashboardExplanationModal
+        isOpen={showDashboardExplanation}
+        onClose={() => setShowDashboardExplanation(false)}
+        userId={u_id}
+      />
+
+      {/* Enhanced Welcome Toast */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-6 right-6 z-50"
+          >
+            <div className="bg-white rounded-2xl shadow-2xl border border-blue-100 p-6 max-w-sm">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <SparklesIcon className="w-6 h-6 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">Business Intelligence Dashboard</h1>
-                  <p className="text-sm text-gray-500">Real-time insights and strategic analysis</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 mb-1">
+                    Welcome back{welcomeData.firstName ? `, ${welcomeData.firstName}` : ''}!
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                    {welcomeData.quote}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">— {welcomeData.author}</span>
+                    <button
+                      onClick={() => setShowWelcome(false)}
+                      className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Enterprise Header */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
+                <RocketLaunchIcon className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Growth Command Center</h1>
+                <p className="text-sm text-gray-600">Enterprise Dashboard</p>
+              </div>
+            </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <ClockIcon className="w-4 h-4" />
                 <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
               </div>
@@ -174,97 +273,32 @@ export default function PremiumDashboardPage() {
               <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
               >
                 <ArrowPathIcon className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
+                <span className="hidden sm:inline">Refresh</span>
               </button>
               
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">
-                <BellIcon className="w-5 h-5" />
-              </button>
-              
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">
-                <Cog6ToothIcon className="w-5 h-5" />
-              </button>
-              
-              <div className="flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-2">
-                <UserCircleIcon className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-medium text-gray-700">{user?.first_name || 'User'}</span>
-                <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center gap-2">
+                <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                  <BellIcon className="w-5 h-5" />
+                </button>
+                <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                  <Cog6ToothIcon className="w-5 h-5" />
+                </button>
+                <button className="flex items-center gap-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span className="hidden sm:inline text-sm font-medium">Account</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Welcome Toast */}
-      <AnimatePresence>
-        {showWelcome && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-20 right-6 z-50"
-          >
-            <div className="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200 max-w-sm backdrop-blur-sm">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Welcome back, {welcomeData.firstName || 'there'}! 👋
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    &ldquo;{welcomeData.quote}&rdquo;
-                  </p>
-                  <p className="text-gray-500 text-xs mt-2 font-medium">
-                    — {welcomeData.author}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowWelcome(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200 ml-4"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main Dashboard Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Assessment Reminder */}
-        {insights.promptRetake && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 mb-8"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <InformationCircleIcon className="w-6 h-6 text-amber-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-amber-900 mb-2">Assessment Update Required</h3>
-                <p className="text-amber-800 mb-4">
-                  Your last assessment was over 30 days ago. Please retake your assessment to keep your insights current and accurate.
-                </p>
-                <a 
-                  href="/premium/onboarding/initial-assessment" 
-                  className="inline-flex items-center space-x-2 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors duration-200 font-medium"
-                >
-                  <span>Retake Assessment</span>
-                  <ChevronRightIcon className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Score Overview Section */}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Performance Overview Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -274,45 +308,39 @@ export default function PremiumDashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Performance Overview</h2>
-              <p className="text-gray-600">Your comprehensive business maturity assessment across key areas</p>
+              <p className="text-gray-600">Real-time insights across all business dimensions</p>
             </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>Live Data</span>
+            <div className="flex items-center gap-2">
+              <ShieldCheckIcon className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-medium text-green-600">Live Data</span>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <EnterpriseScoreCard
-              title="Overall Score"
-              score={insights.overall_score}
-              industryAvg={insights.industryAvgScore}
-              topPerformer={insights.topPerformerScore}
-              description="Comprehensive growth maturity"
-              trend="up"
-              trendValue="+12%"
-              icon="🏆"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <EnterpriseScoreCard
               title="Strategy"
               score={insights.strategy_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
-              description="Clarity and positioning"
+              description="Strategic planning & execution"
               trend="up"
-              trendValue="+8%"
+              trendValue="+12%"
               icon="🎯"
+              onClick={() => handleScoreClick('strategy', insights.strategy_score)}
             />
+            
             <EnterpriseScoreCard
               title="Process"
               score={insights.process_score}
               industryAvg={insights.industryAvgScore}
               topPerformer={insights.topPerformerScore}
-              description="Execution and scalability"
-              trend="down"
-              trendValue="-3%"
+              description="Operational efficiency"
+              trend="stable"
+              trendValue="+5%"
               icon="⚙️"
+              onClick={() => handleScoreClick('process', insights.process_score)}
             />
+            
             <EnterpriseScoreCard
               title="Technology"
               score={insights.technology_score}
@@ -322,89 +350,157 @@ export default function PremiumDashboardPage() {
               trend="up"
               trendValue="+15%"
               icon="🚀"
+              onClick={() => handleScoreClick('technology', insights.technology_score)}
             />
           </div>
         </motion.section>
 
-        {/* Performance Analysis Section */}
+        {/* Performance Summary Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Growth Trends</h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <ArrowTrendingUpIcon className="w-4 h-4" />
-                  <span>Last 30 days</span>
-                </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Performance Summary</h3>
+                <p className="text-gray-600">How you compare to industry benchmarks</p>
               </div>
-              <EnterpriseChart 
-                data={insights.chartData || []}
-                type="line"
-                height={300}
-              />
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <ArrowTrendingUpIcon className="w-4 h-4" />
+                <span>Real-time metrics</span>
+              </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Performance Funnel</h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <ChartBarIcon className="w-4 h-4" />
-                  <span>Conversion rates</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center group">
+                <div className="text-3xl font-bold text-green-600 mb-2 group-hover:text-green-700 transition-colors duration-200">
+                  +{Math.round(industryPosition - 100)}%
+                </div>
+                <div className="text-sm font-semibold text-gray-700 mb-2">Above Industry Average</div>
+                <div className="text-xs text-gray-600 leading-relaxed">
+                  You&apos;re performing {Math.round(industryPosition - 100)}% better than the typical company in your industry
                 </div>
               </div>
-              <EnterpriseChart 
-                data={insights.chartData || []}
-                type="funnel"
-                height={300}
-              />
+              
+              <div className="text-center group">
+                <div className="text-3xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors duration-200">
+                  {Math.round(overallPerformance)}%
+                </div>
+                <div className="text-sm font-semibold text-gray-700 mb-2">of Top Performer Level</div>
+                <div className="text-xs text-gray-600 leading-relaxed">
+                  You&apos;re operating at {Math.round(overallPerformance)}% of what the best companies in your industry achieve
+                </div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="text-3xl font-bold text-purple-600 mb-2 group-hover:text-purple-700 transition-colors duration-200">
+                  Top {Math.round(100 - overallPerformance)}%
+                </div>
+                <div className="text-sm font-semibold text-gray-700 mb-2">Industry Percentile</div>
+                <div className="text-xs text-gray-600 leading-relaxed">
+                  You&apos;re in the top {Math.round(100 - overallPerformance)}% of companies in your industry
+                </div>
+              </div>
             </div>
           </div>
         </motion.section>
 
-        {/* Insights Section */}
+        {/* Analysis Section */}
         <motion.section 
+          id="growth-analysis"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-8"
+          className="space-y-8 mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Strategic Insights</h2>
-              <p className="text-gray-600">Key strengths to leverage and areas for improvement</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Growth Analysis & Planning</h2>
+              <p className="text-gray-600">Strategic insights and actionable growth recommendations</p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-2">
               <LightBulbIcon className="w-5 h-5 text-blue-600" />
               <span className="text-sm font-medium text-blue-600">AI-Powered</span>
             </div>
           </div>
           
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-1">
+              <EnterpriseInsightCard 
+                title="🚀 30-Day Growth Plan" 
+                items={insights.roadmap.map(item => ({ 
+                  label: item.task, 
+                  detail: item.expectedImpact,
+                  type: 'strength' as const
+                }))} 
+                icon="📋"
+                color="blue"
+              />
+            </div>
+            <div className="lg:col-span-2 space-y-8">
+              <GrowthChart data={insights.chartData} />
+              <PerformanceFunnelChart 
+                strategyScore={insights.strategy_score}
+                processScore={insights.process_score}
+                technologyScore={insights.technology_score}
+                overallScore={insights.overall_score}
+                industryAvg={insights.industryAvgScore}
+                topPerformer={insights.topPerformerScore}
+              />
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Strengths & Weaknesses Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mb-8"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <EnterpriseInsightCard 
-              title="Key Strengths"
-              items={insights.strengths.map(item => ({ 
-                label: item.title, 
-                detail: item.impact,
-                type: 'strength'
-              }))}
-              icon="✅"
-              color="green"
-            />
-            <EnterpriseInsightCard 
-              title="Areas for Improvement"
-              items={insights.weaknesses.map(item => ({ 
-                label: item.title, 
-                detail: item.impact,
-                type: 'improvement'
-              }))}
-              icon="🚨"
-              color="red"
-            />
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                  <CheckCircleIcon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Key Strengths</h3>
+                  <p className="text-sm text-gray-600">Areas where you excel</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {insights.strengths.map((strength, index) => (
+                  <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-100">
+                    <h4 className="font-semibold text-green-900 mb-1">{strength.title}</h4>
+                    <p className="text-sm text-green-700">{strength.impact}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+                  <ExclamationTriangleIcon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Improvement Areas</h3>
+                  <p className="text-sm text-gray-600">Opportunities for growth</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {insights.weaknesses.map((weakness, index) => (
+                  <div key={index} className="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                    <h4 className="font-semibold text-orange-900 mb-1">{weakness.title}</h4>
+                    <p className="text-sm text-orange-700">{weakness.impact}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.section>
 
@@ -412,82 +508,80 @@ export default function PremiumDashboardPage() {
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
           className="mb-8"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Market Intelligence</h2>
-              <p className="text-gray-600">Real-time market insights and strategic guidance</p>
+              <p className="text-gray-600">Industry insights and competitive analysis</p>
             </div>
-            <div className="flex items-center space-x-2">
-              <GlobeAltIcon className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-medium text-green-600">Live Data</span>
+            <div className="flex items-center gap-2">
+              <GlobeAltIcon className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium text-blue-600">Live Data</span>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <EnterpriseMarketCard industry={(insights.industry || "other").trim().toLowerCase()} />
-            <EnterpriseTrendCard />
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Marketing Playbook</h3>
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 text-sm font-bold">MP</span>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">
-                AI-generated marketing strategies tailored to your industry and performance data.
-              </p>
-              <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-                View Playbook
-              </button>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <BusinessTrendCard />
+            <MarketingPlaybookCard />
+          </div>
+          
+          <div className="mt-8">
+            <MarketInsightCard industry={insights.industry || "other"} />
           </div>
         </motion.section>
 
-        {/* Quick Actions */}
+        {/* Quick Actions Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mb-8"
         >
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <ChartBarIcon className="w-5 h-5 text-blue-600" />
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">Quick Actions</h3>
+                <p className="text-sm text-gray-600">Common tasks and shortcuts</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button className="flex flex-col items-center gap-3 p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors duration-200 group">
+                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <ChartBarIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <p className="font-medium text-gray-900">Run Assessment</p>
-                  <p className="text-sm text-gray-500">Update your scores</p>
-                </div>
+                <span className="text-sm font-medium text-gray-900">New Assessment</span>
               </button>
               
-              <button className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <ArrowTrendingUpIcon className="w-5 h-5 text-green-600" />
+              <button className="flex flex-col items-center gap-3 p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors duration-200 group">
+                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <ArrowTrendingUpIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <p className="font-medium text-gray-900">Growth Studio</p>
-                  <p className="text-sm text-gray-500">Explore scenarios</p>
-                </div>
+                <span className="text-sm font-medium text-gray-900">Growth Studio</span>
               </button>
               
-              <button className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <LightBulbIcon className="w-5 h-5 text-purple-600" />
+              <button className="flex flex-col items-center gap-3 p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200 group">
+                <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <LightBulbIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <p className="font-medium text-gray-900">Get Insights</p>
-                  <p className="text-sm text-gray-500">AI recommendations</p>
+                <span className="text-sm font-medium text-gray-900">AI Insights</span>
+              </button>
+              
+              <button className="flex flex-col items-center gap-3 p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors duration-200 group">
+                <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <Cog6ToothIcon className="w-5 h-5 text-white" />
                 </div>
+                <span className="text-sm font-medium text-gray-900">Settings</span>
               </button>
             </div>
           </div>
         </motion.section>
       </div>
+
+      {/* Score Context Modal */}
+      <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
     </div>
   );
 }

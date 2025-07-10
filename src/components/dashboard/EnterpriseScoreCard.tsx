@@ -12,6 +12,7 @@ interface EnterpriseScoreCardProps {
   trend: "up" | "down" | "stable";
   trendValue: string;
   icon: string;
+  onClick?: () => void;
 }
 
 export default function EnterpriseScoreCard({
@@ -22,7 +23,8 @@ export default function EnterpriseScoreCard({
   description,
   trend,
   trendValue,
-  icon
+  icon,
+  onClick
 }: EnterpriseScoreCardProps) {
   const getScoreColor = (score: number, topPerformer: number) => {
     const percentage = (score / topPerformer) * 100;
@@ -63,7 +65,8 @@ export default function EnterpriseScoreCard({
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={`bg-white rounded-2xl shadow-sm border ${getScoreBorderColor(score, topPerformer)} p-6 hover:shadow-lg transition-all duration-200`}
+      className={`bg-white rounded-2xl shadow-sm border ${getScoreBorderColor(score, topPerformer)} p-6 hover:shadow-lg transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
