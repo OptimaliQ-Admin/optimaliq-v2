@@ -18,7 +18,7 @@ export interface Event {
 export interface EventHandler {
   id: string
   eventType: string
-  handler: Function
+  handler: (event: Event) => Promise<void> | void
   priority: number
   enabled: boolean
 }
@@ -88,7 +88,7 @@ export class EventBus {
   /**
    * Register an event listener
    */
-  on(eventType: string, handler: Function, priority: number = 0): string {
+  on(eventType: string, handler: (event: Event) => Promise<void> | void, priority: number = 0): string {
     const handlerId = this.generateHandlerId()
     
     if (!this.listeners.has(eventType)) {
@@ -114,7 +114,7 @@ export class EventBus {
   /**
    * Register a one-time event listener
    */
-  once(eventType: string, handler: Function, priority: number = 0): string {
+  once(eventType: string, handler: (event: Event) => Promise<void> | void, priority: number = 0): string {
     const wrappedHandler = async (event: Event) => {
       await handler(event)
       this.off(eventType, wrappedHandler)
@@ -126,7 +126,7 @@ export class EventBus {
   /**
    * Remove an event listener
    */
-  off(eventType: string, handler: Function): void {
+  off(eventType: string, handler: (event: Event) => Promise<void> | void): void {
     const listeners = this.listeners.get(eventType) || []
     const index = listeners.findIndex(l => l.handler === handler)
     

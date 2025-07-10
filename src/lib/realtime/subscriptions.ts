@@ -33,7 +33,7 @@ export class RealtimeManager {
   )
   
   private subscriptions: Map<string, RealtimeChannel> = new Map()
-  private eventListeners: Map<string, Function[]> = new Map()
+  private eventListeners: Map<string, ((data: any) => void)[]> = new Map()
 
   /**
    * Subscribe to dashboard updates for a specific user
@@ -382,7 +382,7 @@ export class RealtimeManager {
   /**
    * Add event listener
    */
-  on(eventType: string, listener: Function) {
+  on(eventType: string, listener: (data: any) => void) {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, [])
     }
@@ -392,7 +392,7 @@ export class RealtimeManager {
   /**
    * Remove event listener
    */
-  off(eventType: string, listener: Function) {
+  off(eventType: string, listener: (data: any) => void) {
     const listeners = this.eventListeners.get(eventType) || []
     const index = listeners.indexOf(listener)
     if (index > -1) {

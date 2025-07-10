@@ -154,14 +154,14 @@ export class AIClient {
           // Log successful request
           if (this.config.enableLogging) {
             await this.logger.logRequest({
-              requestId,
+              request_id: requestId,
               provider: provider.name,
               model: result.model,
               apirequest: prompt,
               apiresponse: JSON.stringify(result.content),
               tokensused: result.tokensUsed,
               latency: result.latency,
-              error_message: null,
+              error_message: undefined,
               fallback_used: provider.name !== this.config.defaultProvider,
               model_version: result.metadata.version,
               u_id: null // Will be set by calling service

@@ -152,24 +152,11 @@ class SimpleEnhancedMarketInsightsTester {
       const missingTypes = expectedTypes.filter(type => !(type in types));
 
       if (missingTypes.length > 0) {
-        this.addResult('AI Analysis Types', false, `Missing types: ${missingTypes.join(', ')}`);
+        this.addResult('Type Definitions', false, `Missing types: ${missingTypes.join(', ')}`);
         return;
       }
 
-      this.addResult('AI Analysis Types', true, undefined, { types: expectedTypes });
-
-      // Test 2: Check type structure
-      const marketSizeType = types.MarketSizeData;
-      const growthRateType = types.GrowthRateData;
-      const competitionType = types.CompetitionData;
-      const sentimentType = types.SentimentData;
-
-      this.addResult('Type Structure', true, undefined, {
-        marketSize: typeof marketSizeType,
-        growthRate: typeof growthRateType,
-        competition: typeof competitionType,
-        sentiment: typeof sentimentType
-      });
+      this.addResult('Type Definitions', true, undefined, { types: expectedTypes });
 
     } catch (error) {
       this.addResult('Type Definitions', false, error instanceof Error ? error.message : 'Unknown error');

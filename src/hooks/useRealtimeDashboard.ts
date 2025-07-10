@@ -34,7 +34,7 @@ export function useRealtimeDashboard(userId: string) {
   const [channels, setChannels] = useState<string[]>([])
   
   const realtimeManagerRef = useRef<RealtimeManager | null>(null)
-  const eventHandlersRef = useRef<Map<string, Function>>(new Map())
+  const eventHandlersRef = useRef<Map<string, (data: any) => void>>(new Map())
 
   // Initialize real-time manager
   useEffect(() => {
@@ -263,7 +263,7 @@ export function useRealtimeDashboard(userId: string) {
   }, [userId])
 
   // Subscribe to custom events
-  const subscribeToCustomEvent = useCallback((eventType: string, handler: Function) => {
+  const subscribeToCustomEvent = useCallback((eventType: string, handler: (data: any) => void) => {
     if (!realtimeManagerRef.current) return
 
     realtimeManagerRef.current.on(eventType, handler)
