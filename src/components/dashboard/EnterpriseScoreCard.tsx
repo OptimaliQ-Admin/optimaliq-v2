@@ -148,7 +148,7 @@ export default function EnterpriseScoreCard({
   };
 
   const performanceZone = topPerformer ? getPerformanceZone(score, topPerformer) : null;
-  const trend = industryAvg ? getTrendDirection(score, industryAvg) : null;
+  const trendDirection = industryAvg ? getTrendDirection(score, industryAvg) : null;
   const vsTopPerformer = topPerformer ? Math.round((score / topPerformer) * 100) : 0;
 
   return (
@@ -203,21 +203,21 @@ export default function EnterpriseScoreCard({
             </div>
             
             {/* Trend Indicator */}
-            {trend && (
+            {trendDirection && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring" }}
                 className={`flex items-center gap-1 px-3 py-1 rounded-full ${
-                  trend.direction === "up" ? "bg-green-100 text-green-700" :
-                  trend.direction === "down" ? "bg-red-100 text-red-700" :
+                  trendDirection.direction === "up" ? "bg-green-100 text-green-700" :
+                  trendDirection.direction === "down" ? "bg-red-100 text-red-700" :
                   "bg-gray-100 text-gray-700"
                 }`}
               >
-                <trend.icon className="w-4 h-4" />
+                <trendDirection.icon className="w-4 h-4" />
                 <span className="text-sm font-semibold">
-                  {trend.direction === "up" ? "+" : trend.direction === "down" ? "-" : ""}
-                  {trend.percentage}%
+                  {trendDirection.direction === "up" ? "+" : trendDirection.direction === "down" ? "-" : ""}
+                  {trendDirection.percentage}%
                 </span>
               </motion.div>
             )}
