@@ -24,7 +24,7 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  const { title, insight, industry, dataSources, confidenceScore, lastUpdated } = data;
+  const { title, insight, industry, dataSources, lastUpdated } = data;
 
   const getSentimentColor = (score: number) => {
     if (score >= 70) return 'text-green-600';
@@ -48,14 +48,21 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
   };
 
   const formatLastUpdated = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
-
-  const getConfidenceColor = (score: number) => {
-    if (score >= 0.8) return 'text-green-600';
-    if (score >= 0.6) return 'text-orange-600';
-    return 'text-red-600';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return 'Recently';
+      }
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return 'Recently';
+    }
   };
 
   return (
@@ -85,28 +92,6 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
         {/* Content */}
         <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
           <div className="p-6 space-y-6">
-            {/* Confidence Score */}
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-gray-600" />
-                <span className="font-medium text-gray-700">Analysis Confidence</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`font-semibold ${getConfidenceColor(confidenceScore)}`}>
-                  {(confidenceScore * 100).toFixed(0)}%
-                </span>
-                <div className="w-20 bg-gray-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${
-                      confidenceScore >= 0.8 ? 'bg-green-500' :
-                      confidenceScore >= 0.6 ? 'bg-orange-500' : 'bg-red-500'
-                    }`}
-                    style={{ width: `${confidenceScore * 100}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* Market Metrics Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Market Size */}
@@ -221,21 +206,6 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
               </div>
             </div>
 
-            {/* Data Sources */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Data Sources</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {Object.entries(dataSources).map(([source, enabled]) => (
-                  <div key={source} className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${enabled ? 'bg-green-500' : 'bg-gray-300'}`} />
-                    <span className="text-sm font-medium capitalize">
-                      {source.replace('_', ' ')}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Full AI Insight */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center gap-2 mb-4">
@@ -282,6 +252,21 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
                     Consider market size of {insight.marketSize.value} for expansion planning
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Data Sources - Small and at bottom */}
+            <div className="bg-gray-50 rounded-lg p-3">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Data Sources</h4>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(dataSources).map(([source, enabled]) => (
+                  <div key={source} className="flex items-center gap-1">
+                    <div className={`w-2 h-2 rounded-full ${enabled ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <span className="text-xs text-gray-600 capitalize">
+                      {source.replace('_', ' ')}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

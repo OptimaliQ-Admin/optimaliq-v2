@@ -29,6 +29,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
   const { openModal } = useModal();
 
   const fetchMarketInsight = async (forceRefresh = false) => {
+    console.log('🔍 Fetching market insight for industry:', industry, 'forceRefresh:', forceRefresh);
     setLoading(true);
     setError(null);
 
@@ -40,6 +41,8 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       const method = forceRefresh ? 'POST' : 'GET';
       const body = forceRefresh ? JSON.stringify({ industry }) : undefined;
 
+      console.log('🌐 Making request to:', url, 'method:', method);
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -48,15 +51,20 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
         body,
       });
 
+      console.log('📡 Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Failed to fetch market insight');
+        const errorText = await response.text();
+        console.error('❌ API Error:', response.status, errorText);
+        throw new Error(`Failed to fetch market insight: ${response.status} ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('✅ Market insight data received:', data);
       setInsightData(data);
     } catch (err) {
+      console.error('💥 Error fetching market insight:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error('Error fetching market insight:', err);
     } finally {
       setLoading(false);
     }

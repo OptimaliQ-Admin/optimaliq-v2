@@ -19,6 +19,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Industry is required' }, { status: 400 });
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await supabase
+      .from('enhanced_market_insights')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError) {
+      console.error('Table does not exist or access denied:', tableCheckError);
+      // Generate insight without storing
+      const insight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry);
+      return NextResponse.json({
+        insight,
+        cached: false,
+        storageError: true,
+        message: 'Database table not available, insight generated but not stored'
+      });
+    }
+
     // Check if user has recent insights for this industry (within 1 hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const { data: existingInsight } = await supabase
@@ -76,7 +94,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         insight,
         cached: false,
-        storageError: true
+        storageError: true,
+        message: 'Insight generated but storage failed'
       });
     }
 
@@ -111,6 +130,17 @@ export async function GET(request: NextRequest) {
 
     if (!industry) {
       return NextResponse.json({ error: 'Industry parameter is required' }, { status: 400 });
+    }
+
+    // Check if table exists first
+    const { error: tableCheckError } = await supabase
+      .from('enhanced_market_insights')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError) {
+      console.error('Table does not exist or access denied:', tableCheckError);
+      return NextResponse.json({ error: 'Market insights not available' }, { status: 503 });
     }
 
     // Get latest insight for this industry
