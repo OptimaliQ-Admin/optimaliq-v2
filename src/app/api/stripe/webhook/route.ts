@@ -8,6 +8,11 @@ export async function POST(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+  
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-05-28.basil",
+  });
+  
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
 
@@ -35,23 +40,23 @@ export async function POST(req: NextRequest) {
   try {
     switch (event.type) {
       case "customer.subscription.created":
-        await handleSubscriptionCreated(event.data.object as any);
+        await handleSubscriptionCreated(event.data.object as any, supabase);
         break;
 
       case "customer.subscription.updated":
-        await handleSubscriptionUpdated(event.data.object as any);
+        await handleSubscriptionUpdated(event.data.object as any, supabase);
         break;
 
       case "customer.subscription.deleted":
-        await handleSubscriptionDeleted(event.data.object as any);
+        await handleSubscriptionDeleted(event.data.object as any, supabase);
         break;
 
       case "invoice.payment_failed":
-        await handlePaymentFailed(event.data.object as any);
+        await handlePaymentFailed(event.data.object as any, supabase);
         break;
 
       case "invoice.payment_succeeded":
-        await handlePaymentSucceeded(event.data.object as any);
+        await handlePaymentSucceeded(event.data.object as any, supabase);
         break;
 
       default:
@@ -65,7 +70,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function handleSubscriptionCreated(subscription: any) {
+async function handleSubscriptionCreated(subscription: any, supabase: any) {
   console.log("Handling subscription created successfully");
   
   const updateData = {
@@ -90,10 +95,10 @@ async function handleSubscriptionCreated(subscription: any) {
   }
 
   // Update user's premium status
-  await updateUserPremiumStatus(subscription.customer as string, subscription.status === 'active');
+  await updateUserPremiumStatus(subscription.customer as string, subscription.status === 'active', supabase);
 }
 
-async function handleSubscriptionUpdated(subscription: any) {
+async function handleSubscriptionUpdated(subscription: any, supabase: any) {
   console.log("Handling subscription updated successfully");
   
   const updateData = {
@@ -117,10 +122,10 @@ async function handleSubscriptionUpdated(subscription: any) {
   }
 
   // Update user's premium status
-  await updateUserPremiumStatus(subscription.customer as string, subscription.status === 'active');
+  await updateUserPremiumStatus(subscription.customer as string, subscription.status === 'active', supabase);
 }
 
-async function handleSubscriptionDeleted(subscription: any) {
+async function handleSubscriptionDeleted(subscription: any, supabase: any) {
   console.log("Handling subscription deleted successfully");
   
   const updateData = {
@@ -141,10 +146,10 @@ async function handleSubscriptionDeleted(subscription: any) {
   }
 
   // Update user's premium status to false
-  await updateUserPremiumStatus(subscription.customer as string, false);
+  await updateUserPremiumStatus(subscription.customer as string, false, supabase);
 }
 
-async function handlePaymentFailed(invoice: any) {
+async function handlePaymentFailed(invoice: any, supabase: any) {
   console.log("Handling payment failed successfully");
   
   if (!invoice.subscription) return;
@@ -166,10 +171,10 @@ async function handlePaymentFailed(invoice: any) {
   }
 
   // Update user's premium status to false for past_due
-  await updateUserPremiumStatus(invoice.customer as string, false);
+  await updateUserPremiumStatus(invoice.customer as string, false, supabase);
 }
 
-async function handlePaymentSucceeded(invoice: any) {
+async function handlePaymentSucceeded(invoice: any, supabase: any) {
   console.log("Handling payment succeeded successfully");
   
   if (!invoice.subscription) return;
@@ -191,37 +196,37 @@ async function handlePaymentSucceeded(invoice: any) {
   }
 
   // Update user's premium status to true
-  await updateUserPremiumStatus(invoice.customer as string, true);
+  await updateUserPremiumStatus(invoice.customer as string, true, supabase);
 }
 
-async function updateUserPremiumStatus(stripeCustomerId: string, isPremium: boolean) {
+async function updateUserPremiumStatus(stripeCustomerId: string, isPremium: boolean, supabase: any) {
   console.log(`Updating premium status to ${isPremium}`);
   
   // First, get the user ID from the subscriptions table
-  const { data: subscription, error: subError } = await supabase
+  const { data: subscriptionData, error: subscriptionError } = await supabase
     .from("subscriptions")
-    .select("u_id")
+    .select("user_id")
     .eq("stripe_customer_id", stripeCustomerId)
     .single();
 
-  if (subError || !subscription) {
-    console.error("Error finding subscription for customer:", stripeCustomerId, subError);
+  if (subscriptionError || !subscriptionData) {
+    console.error("Error finding subscription for customer:", stripeCustomerId);
     return;
   }
 
-  // Update the user's premium status in profiles table
-  const { error: profileError } = await supabase
-    .from("profiles")
+  // Update the user's premium status
+  const { error: userError } = await supabase
+    .from("users")
     .update({ 
       is_premium: isPremium,
       updated_at: new Date().toISOString()
     })
-    .eq("id", subscription.u_id);
+    .eq("id", subscriptionData.user_id);
 
-  if (profileError) {
-    console.error("Error updating user premium status:", profileError);
-    throw profileError;
+  if (userError) {
+    console.error("Error updating user premium status:", userError);
+    throw userError;
   }
 
-  console.log(`Successfully updated premium status to ${isPremium}`);
+  console.log(`Successfully updated premium status for user ${subscriptionData.user_id} to ${isPremium}`);
 }
