@@ -1,19 +1,33 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { authenticateUser, createAuthErrorResponse, validateRequiredFields } from "@/lib/auth/apiAuth";
 
-export async function POST(req: Request) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+export async function POST(req: NextRequest) {
   try {
-    const { u_id } = await req.json();
-
-    if (!u_id) {
-      return NextResponse.json({ error: "Missing User ID in request" }, { status: 400 });
+    const body = await req.json();
+    
+    // Validate required fields
+    const validation = validateRequiredFields(body, ['u_id']);
+    if (!validation.valid) {
+      return NextResponse.json({ 
+        error: "Missing required fields", 
+        missingFields: validation.missingFields 
+      }, { status: 400 });
     }
 
-    // Fetch insights using service role client
+    const { u_id } = body;
+
+    // Authenticate user and verify they can access this data
+    const authResult = await authenticateUser(req, u_id);
+    if (!authResult.success) {
+      return createAuthErrorResponse(authResult);
+    }
+
+    // Use authenticated client (anon key with RLS) instead of service role
+    const supabase = createRouteHandlerClient({ cookies });
+
+    // Fetch insights - RLS will ensure user can only access their own data
     const { data, error } = await supabase
       .from("growth_insights")
       .select("strategy_score, strategy_insight, process_score, process_insight, technology_score, technology_insight, overall_score")
