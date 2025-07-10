@@ -87,14 +87,16 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence Report`,
       content: (
         <EnhancedAIInsightModal
-          isOpen={true}
-          onClose={() => {}} // Will be handled by the modal system
           data={{
             title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence Report`,
             insight: insightData.insight,
             industry,
-            dataSources: insightData.insight.dataSources,
-            confidenceScore: insightData.insight.confidenceScore,
+            dataSources: {
+              finnhub: true,
+              alpha_vantage: true,
+              news_api: true
+            },
+            confidenceScore: insightData.insight.confidenceScore || 85,
             lastUpdated: insightData.createdAt
           }}
         />
@@ -127,6 +129,9 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
     if (score >= 40) return 'Neutral';
     return 'Negative';
   };
+
+  // Map SaaS to technology for ticker
+  const tickerIndustry = industry.toLowerCase() === 'saas' ? 'technology' : industry;
 
   if (error) {
     return (
@@ -265,7 +270,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
           <div className="mt-4">
             <div className="bg-gray-50 rounded-xl p-3">
               <h3 className="text-sm font-medium text-gray-700 mb-2">Live Market Data</h3>
-              <TradingViewTicker industry={industry} />
+              <TradingViewTicker industry={tickerIndustry} className="w-full h-12 mb-4" />
             </div>
           </div>
 

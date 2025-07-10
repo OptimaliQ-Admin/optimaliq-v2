@@ -5,8 +5,6 @@ import { X, TrendingUp, TrendingDown, Minus, BarChart3, Target, Lightbulb, Alert
 import { EnhancedMarketInsight } from '@/lib/ai/enhancedMarketAnalysis';
 
 interface EnhancedAIInsightModalProps {
-  isOpen: boolean;
-  onClose: () => void;
   data: {
     title: string;
     insight: EnhancedMarketInsight;
@@ -18,12 +16,8 @@ interface EnhancedAIInsightModalProps {
 }
 
 const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
-  isOpen,
-  onClose,
   data
 }) => {
-  if (!isOpen) return null;
-
   const { title, insight, industry, dataSources, lastUpdated } = data;
 
   const getSentimentColor = (score: number) => {

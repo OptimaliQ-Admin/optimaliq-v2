@@ -388,7 +388,7 @@ export default function PremiumDashboardPage() {
         >
           <SectionHeader title="🌍 Market Intelligence" subtitle="Real-time insights and strategic market guidance" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
+            <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase() === 'saas' ? 'technology' : (insights.industry || "other").trim().toLowerCase()} />
             <BusinessTrendCard />
             <MarketingPlaybookCard />
           </div>

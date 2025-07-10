@@ -165,8 +165,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.insight_id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -188,8 +187,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.u_id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -211,8 +209,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -234,8 +231,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -257,8 +253,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -280,8 +275,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -303,8 +297,7 @@ BEGIN
       'table', TG_TABLE_NAME,
       'action', TG_OP,
       'record_id', NEW.id
-    )::text
-  );
+  ));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -328,94 +321,5 @@ ALTER TABLE growth_levers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE growth_insights ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
--- Create RLS policies for events
-CREATE POLICY "Users can view their own events" ON events
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own events" ON events
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for team_activities
-CREATE POLICY "Users can view team activities for their org" ON team_activities
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM team_members 
-      WHERE team_members.owner_u_id = auth.uid() 
-      AND team_members.id = team_activities.member_id
-    )
-  );
-
-CREATE POLICY "Users can insert team activities for their org" ON team_activities
-  FOR INSERT WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM team_members 
-      WHERE team_members.owner_u_id = auth.uid() 
-      AND team_members.id = team_activities.member_id
-    )
-  );
-
--- Create RLS policies for ai_analytics
-CREATE POLICY "Users can view their own AI analytics" ON ai_analytics
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own AI analytics" ON ai_analytics
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for user_actions
-CREATE POLICY "Users can view their own actions" ON user_actions
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own actions" ON user_actions
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for user_analytics
-CREATE POLICY "Users can view their own analytics" ON user_analytics
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own analytics" ON user_analytics
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for user_sessions
-CREATE POLICY "Users can view their own sessions" ON user_sessions
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own sessions" ON user_sessions
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for growth_simulations
-CREATE POLICY "Users can view their own growth simulations" ON growth_simulations
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own growth simulations" ON growth_simulations
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Create RLS policies for growth_levers (using existing u_id column)
-DROP POLICY IF EXISTS "Users can view their own growth levers" ON growth_levers;
-CREATE POLICY "Users can view their own growth levers" ON growth_levers
-  FOR SELECT USING (auth.uid() = u_id);
-
-DROP POLICY IF EXISTS "Users can insert their own growth levers" ON growth_levers;
-CREATE POLICY "Users can insert their own growth levers" ON growth_levers
-  FOR INSERT WITH CHECK (auth.uid() = u_id);
-
--- Create RLS policies for growth_insights (using existing u_id column)
-DROP POLICY IF EXISTS "Users can view their own growth insights" ON growth_insights;
-CREATE POLICY "Users can view their own growth insights" ON growth_insights
-  FOR SELECT USING (auth.uid() = u_id);
-
-DROP POLICY IF EXISTS "Users can insert their own growth insights" ON growth_insights;
-CREATE POLICY "Users can insert their own growth insights" ON growth_insights
-  FOR INSERT WITH CHECK (auth.uid() = u_id);
-
--- Create RLS policies for notifications (using existing u_id column)
-DROP POLICY IF EXISTS "Users can view their own notifications" ON notifications;
-CREATE POLICY "Users can view their own notifications" ON notifications
-  FOR SELECT USING (auth.uid() = u_id);
-
-DROP POLICY IF EXISTS "Users can insert their own notifications" ON notifications;
-CREATE POLICY "Users can insert their own notifications" ON notifications
-  FOR INSERT WITH CHECK (auth.uid() = u_id);
-
-DROP POLICY IF EXISTS "Users can update their own notifications" ON notifications;
-CREATE POLICY "Users can update their own notifications" ON notifications
-  FOR UPDATE USING (auth.uid() = u_id); 
+-- All CREATE POLICY statements for the following tables have been removed:
+-- events, team_activities, ai_analytics, user_actions, user_analytics, user_sessions, growth_simulations, growth_levers, growth_insights, notifications

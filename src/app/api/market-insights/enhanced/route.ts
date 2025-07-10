@@ -153,8 +153,48 @@ export async function GET(request: NextRequest) {
       .limit(1)
       .single();
 
+    // If no insight exists, generate one
     if (error || !insight) {
-      return NextResponse.json({ error: 'No market insight found' }, { status: 404 });
+      console.log('No existing insight found, generating new one for industry:', industry);
+      
+      // Generate new insight using AI
+      const newInsight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry);
+
+      // Store in database
+      const { data: storedInsight, error: insertError } = await supabase
+        .from('enhanced_market_insights')
+        .insert({
+          u_id: user.id,
+          industry,
+          market_size: newInsight.marketSize,
+          growth_rate: newInsight.growthRate,
+          competition: newInsight.competition,
+          sentiment: newInsight.sentiment,
+          full_insight: newInsight.fullInsight,
+          data_sources: newInsight.dataSources,
+          confidence_score: newInsight.confidenceScore,
+          ai_model_version: newInsight.aiModelVersion
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Error storing market insight:', insertError);
+        // Return insight even if storage fails
+        return NextResponse.json({
+          insight: newInsight,
+          cached: false,
+          storageError: true,
+          message: 'Insight generated but storage failed',
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      return NextResponse.json({
+        insight: newInsight,
+        cached: false,
+        createdAt: storedInsight.created_at
+      });
     }
 
     return NextResponse.json({
