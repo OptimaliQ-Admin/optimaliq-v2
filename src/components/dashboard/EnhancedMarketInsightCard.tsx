@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, BarChart3, TrendingUp, AlertCircle } from 'lucide-react';
+import { RefreshCw, BarChart3, TrendingUp, AlertCircle, GlobeAlt } from 'lucide-react';
 import { MarketSizeCard, GrowthRateCard, CompetitionCard, SentimentCard } from './MarketMetricCard';
 import TradingViewTicker from '../shared/TradingViewTicker';
 import { useModal } from '@/components/modals/ModalProvider';
@@ -116,19 +116,31 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
     return `${Math.floor(diffInMinutes / 1440)}d ago`;
   };
 
+  const getSentimentColor = (score: number) => {
+    if (score >= 70) return 'text-green-600';
+    if (score >= 40) return 'text-orange-600';
+    return 'text-red-600';
+  };
+
+  const getSentimentLabel = (score: number) => {
+    if (score >= 70) return 'Positive';
+    if (score >= 40) return 'Neutral';
+    return 'Negative';
+  };
+
   if (error) {
     return (
-      <div className={`bg-white rounded-lg border border-gray-200 shadow-sm p-6 ${className}`}>
+      <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-4">
           <AlertCircle className="w-6 h-6 text-red-500" />
-          <h2 className="text-xl font-semibold text-gray-900">Market Intelligence</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Market Intelligence</h2>
         </div>
         <div className="text-center py-8">
           <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={handleRefresh}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             Try Again
           </button>
@@ -138,46 +150,33 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-200 ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                {industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence
-              </h2>
-              {insightData && (
-                <p className="text-sm text-gray-500">
-                  Last updated {formatLastUpdated(insightData.createdAt)}
-                  {insightData.cached && ' (cached)'}
-                </p>
-              )}
-            </div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">Market Intelligence</h3>
+          <p className="text-sm text-gray-500 capitalize">{industry} industry</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+            <GlobeAlt className="w-5 h-5 text-green-600" />
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleRefresh}
-              disabled={loading}
-              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-              title="Refresh data"
-            >
-              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            title="Refresh data"
+          >
+            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
       </div>
 
       {/* Loading State */}
       {loading && !insightData && (
-        <div className="p-6">
-          <div className="flex items-center justify-center py-8">
-            <RefreshCw className="w-8 h-8 text-blue-600 animate-spin" />
-            <span className="ml-3 text-gray-600">Analyzing market data...</span>
-          </div>
+        <div className="flex items-center justify-center py-8">
+          <RefreshCw className="w-8 h-8 text-green-600 animate-spin" />
+          <span className="ml-3 text-gray-600">Analyzing market data...</span>
         </div>
       )}
 
@@ -185,49 +184,110 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       {insightData?.insight && (
         <>
           {/* Market Metrics Grid */}
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MarketSizeCard
-              value={insightData.insight.marketSize.value}
-              growth={insightData.insight.marketSize.growth}
-              currency={insightData.insight.marketSize.currency}
-              description={insightData.insight.marketSize.description}
-            />
-            <GrowthRateCard
-              value={insightData.insight.growthRate.value}
-              trend={insightData.insight.growthRate.trend}
-              period={insightData.insight.growthRate.period}
-              description={insightData.insight.growthRate.description}
-            />
-            <CompetitionCard
-              level={insightData.insight.competition.level}
-              trend={insightData.insight.competition.trend}
-              description={insightData.insight.competition.description}
-            />
-            <SentimentCard
-              score={insightData.insight.sentiment.score}
-              trend={insightData.insight.sentiment.trend}
-              description={insightData.insight.sentiment.description}
-            />
+          <div className="space-y-4">
+            {/* Market Size */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <h4 className="text-sm font-medium text-gray-900">Market Size</h4>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                    {insightData.insight.marketSize.growth > 0 ? '+' : ''}{insightData.insight.marketSize.growth}%
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600">{insightData.insight.marketSize.description}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-gray-900">{insightData.insight.marketSize.value}</div>
+              </div>
+            </div>
+
+            {/* Growth Rate */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <h4 className="text-sm font-medium text-gray-900">Growth Rate</h4>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                    {insightData.insight.growthRate.trend > 0 ? '+' : ''}{insightData.insight.growthRate.trend}%
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600">{insightData.insight.growthRate.description}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-gray-900">{insightData.insight.growthRate.value}%</div>
+              </div>
+            </div>
+
+            {/* Competition */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <h4 className="text-sm font-medium text-gray-900">Competition</h4>
+                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                    {insightData.insight.competition.trend}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600">{insightData.insight.competition.description}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-gray-900">{insightData.insight.competition.level}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Market Sentiment */}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-900">Market Sentiment</span>
+              <div className="flex items-center space-x-1">
+                <div className={`w-2 h-2 rounded-full ${
+                  insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
+                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
+                }`}></div>
+                <span className={`text-xs font-medium ${
+                  getSentimentColor(insightData.insight.sentiment.score)
+                }`}>
+                  {getSentimentLabel(insightData.insight.sentiment.score)}
+                </span>
+              </div>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className={`h-2 rounded-full transition-all duration-1000 ${
+                  insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
+                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
+                }`}
+                style={{ width: `${insightData.insight.sentiment.score}%` }}
+              />
+            </div>
           </div>
 
           {/* TradingView Ticker */}
-          <div className="px-6 pb-4">
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-3">Live Market Data</h3>
+          <div className="mt-4">
+            <div className="bg-gray-50 rounded-xl p-3">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Live Market Data</h3>
               <TradingViewTicker industry={industry} />
             </div>
           </div>
 
           {/* Action Button */}
-          <div className="px-6 pb-6">
+          <div className="mt-4">
             <button
               onClick={handleViewReport}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
             >
-              <TrendingUp className="w-5 h-5" />
               View Market Report
             </button>
           </div>
+
+          {/* Last Updated */}
+          {insightData && (
+            <div className="mt-3 text-center">
+              <p className="text-xs text-gray-500">
+                Last updated {formatLastUpdated(insightData.createdAt)}
+                {insightData.cached && ' (cached)'}
+              </p>
+            </div>
+          )}
         </>
       )}
     </div>
