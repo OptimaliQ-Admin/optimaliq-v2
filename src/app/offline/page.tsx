@@ -44,7 +44,7 @@ export default function OfflinePage() {
             <WifiIcon className="w-8 h-8 text-red-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            You're Offline
+            You&apos;re Offline
           </h1>
           <p className="text-gray-600">
             Please check your internet connection and try again.
