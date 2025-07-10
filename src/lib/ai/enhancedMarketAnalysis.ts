@@ -1,11 +1,13 @@
 /**
- * Enhanced Market Analysis Service
- * 
- * Provides comprehensive market intelligence using:
- * - Multiple data sources (Finnhub, Alpha Vantage, News APIs)
- * - Enhanced AI analysis with structured output
- * - Rate limiting and model versioning
- * - Real-time market data integration
+ * 🚀 Enhanced Market Analysis Service
+ *
+ * This service generates structured market intelligence using:
+ * - Live data from APIs (e.g., Finnhub, Alpha Vantage, NewsAPI)
+ * - Real-time sentiment and trend extraction
+ * - AI-powered synthesis optimized for strategic recommendations
+ * - Model version tracking + rate limiting
+ *
+ * Used to power: Market Cards, Industry Reports, and Strategic Insights in near-real-time.
  */
 
 import { aiRateLimiter } from './rateLimiter';
@@ -205,15 +207,17 @@ class EnhancedMarketAnalysis {
    * Build enhanced AI prompt for comprehensive analysis
    */
   private buildEnhancedPrompt(industry: string, marketData: MarketDataSources): string {
-    return `Analyze the ${industry} market comprehensively and provide structured insights.
+    return `You are a real-time market intelligence engine for the ${industry} sector.
 
-Market Data Available:
-- Stock Symbols: ${marketData.stockSymbols.join(', ')}
-- Analyst Recommendations: ${JSON.stringify(marketData.analystRecommendations)}
-- News Headlines: ${marketData.newsHeadlines.join('; ')}
+Based on the latest data aggregated from live financial feeds, analyst recommendations, and headline sentiment analysis, generate a time-sensitive market insight for industry leaders.
+
+Live-sourced Data:
+- Tracked Symbols: ${marketData.stockSymbols.join(', ')}
+- Analyst Outlooks: ${JSON.stringify(marketData.analystRecommendations)}
+- Current Headlines: ${marketData.newsHeadlines.join('; ')}
 - Financial Metrics: Market Cap: ${marketData.marketCap}, P/E: ${marketData.peRatio}, Beta: ${marketData.beta}
 
-Generate a comprehensive market analysis in this exact JSON format:
+Return your output strictly in this JSON structure:
 
 {
   "marketSize": {
@@ -244,14 +248,13 @@ Generate a comprehensive market analysis in this exact JSON format:
   "confidenceScore": 0.85
 }
 
-Focus on:
-1. Market Size: Current market cap, growth trends, opportunities
-2. Growth Rate: Annual projections, key drivers, risks
-3. Competition: Landscape analysis, major players, barriers
-4. Market Sentiment: News sentiment, analyst outlook, investor confidence
-5. Strategic Insights: Actionable recommendations for growth companies
+📌 Prioritize:
+1. Live indicators like beta, sentiment score, and market cap trends
+2. Fresh patterns from news and analyst shifts
+3. Actionable recommendations relevant to the past 48 hours
+4. Tone and insight style of a McKinsey consultant
 
-Ensure all data is realistic and based on the provided market data.`;
+⚠️ Do not hallucinate data. Your analysis must be grounded in the provided sources.`;
   }
 
   /**
