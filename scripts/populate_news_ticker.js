@@ -6,60 +6,70 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const fallbackHeadlines = [
-  {
-    title: "Tech Companies Focus on AI Integration and Automation",
-    url: "https://example.com/tech-ai-integration",
-    source: "Business Insider",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Global Markets Show Resilience Amid Economic Uncertainty",
-    url: "https://example.com/global-markets-resilience",
-    source: "Reuters",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Startup Funding Trends Shift Toward Sustainable Solutions",
-    url: "https://example.com/startup-funding-trends",
-    source: "TechCrunch",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Remote Work Continues to Transform Business Operations",
-    url: "https://example.com/remote-work-transformation",
-    source: "Forbes",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Digital Transformation Accelerates Across Industries",
-    url: "https://example.com/digital-transformation",
-    source: "Harvard Business Review",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "E-commerce Growth Drives Innovation in Supply Chain Management",
-    url: "https://example.com/ecommerce-supply-chain",
-    source: "Wall Street Journal",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Sustainability Becomes Key Driver in Corporate Strategy",
-    url: "https://example.com/sustainability-strategy",
-    source: "Financial Times",
-    published_at: new Date().toISOString()
-  },
-  {
-    title: "Cybersecurity Investments Surge as Threats Evolve",
-    url: "https://example.com/cybersecurity-investments",
-    source: "Bloomberg",
-    published_at: new Date().toISOString()
+async function fetchNewsFromAPI() {
+  const NEWS_API_KEY = process.env.NEWS_API_KEY;
+  
+  if (!NEWS_API_KEY) {
+    throw new Error('NEWS_API_KEY environment variable is required');
   }
-];
+
+  const businessKeywords = [
+    'business', 'economy', 'finance', 'technology', 'startup', 
+    'entrepreneurship', 'innovation', 'market', 'investment', 'corporate'
+  ];
+
+  const headlines = [];
+  
+  // Fetch news for each keyword to get diverse business news
+  for (const keyword of businessKeywords.slice(0, 5)) { // Limit to 5 keywords to avoid rate limits
+    try {
+      const response = await fetch(
+        `https://newsapi.org/v2/everything?q=${encodeURIComponent(keyword)}&language=en&sortBy=publishedAt&pageSize=3&apiKey=${NEWS_API_KEY}`
+      );
+      
+      if (!response.ok) {
+        console.warn(`⚠️ Failed to fetch news for keyword "${keyword}": ${response.status}`);
+        continue;
+      }
+      
+      const data = await response.json();
+      
+      if (data.articles && data.articles.length > 0) {
+        const articles = data.articles
+          .filter(article => article.title && article.url && article.source?.name)
+          .map(article => ({
+            title: article.title,
+            url: article.url,
+            source: article.source.name,
+            published_at: article.publishedAt || new Date().toISOString()
+          }));
+        
+        headlines.push(...articles);
+      }
+      
+      // Small delay to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+    } catch (error) {
+      console.warn(`⚠️ Error fetching news for keyword "${keyword}":`, error.message);
+    }
+  }
+  
+  return headlines;
+}
 
 async function populateNewsTicker() {
   try {
-    console.log('📰 Populating news ticker with fallback headlines...');
+    console.log('📰 Fetching real business news headlines...');
+    
+    const headlines = await fetchNewsFromAPI();
+    
+    if (headlines.length === 0) {
+      console.log('⚠️ No headlines fetched from API. News ticker will remain empty.');
+      return;
+    }
+    
+    console.log(`📊 Fetched ${headlines.length} headlines from NewsAPI`);
     
     // Clear existing headlines
     const { error: deleteError } = await supabase
@@ -76,7 +86,7 @@ async function populateNewsTicker() {
     // Insert new headlines
     const { data, error } = await supabase
       .from('business_news_ticker')
-      .insert(fallbackHeadlines)
+      .insert(headlines)
       .select();
     
     if (error) {
@@ -85,7 +95,7 @@ async function populateNewsTicker() {
     }
     
     console.log(`✅ Successfully inserted ${data?.length || 0} headlines`);
-    console.log('📰 News ticker is now populated and ready!');
+    console.log('📰 News ticker is now populated with real business news!');
     
   } catch (error) {
     console.error('💥 Error populating news ticker:', error);
