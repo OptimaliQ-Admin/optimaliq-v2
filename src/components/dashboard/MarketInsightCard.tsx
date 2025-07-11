@@ -13,6 +13,7 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [marketData, setMarketData] = useState<any>(null);
 
   useEffect(() => {
     const fetchInsight = async () => {
@@ -33,6 +34,20 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
 
           setInsight(data.insight);
           setLastUpdated(format(created, "MMMM d, yyyy"));
+          
+          // Store additional data for modal
+          setMarketData({
+            insight: data.insight,
+            createdat: data.createdat,
+            industry: data.industry,
+            source: data.source,
+            title: data.title,
+            signalStrength: data.signalStrength,
+            confidenceScore: data.confidenceScore,
+            nextRefresh: data.nextRefresh,
+            dataSources: data.dataSources,
+            marketMetrics: data.marketMetrics
+          });
 
           if (diffInDays > 7) {
             try {
@@ -164,10 +179,10 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
                   <h3 className="text-lg font-semibold text-gray-900">Market Intelligence Report</h3>
                   <div className="flex items-center gap-2">
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      Strong Signal
+                      {marketData?.signalStrength || 'Strong'} Signal
                     </span>
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      88% Confidence
+                      {Math.round((marketData?.confidenceScore || 0.88) * 100)}% Confidence
                     </span>
                   </div>
                 </div>
@@ -178,11 +193,11 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
                   </div>
                   <div>
                     <p className="text-gray-600">Next Refresh</p>
-                    <p className="font-medium">Monday 12am</p>
+                    <p className="font-medium">{marketData?.nextRefresh ? new Date(marketData.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
                   </div>
                   <div>
                     <p className="text-gray-600">Industry Specific</p>
-                    <p className="font-medium">{industry.charAt(0).toUpperCase() + industry.slice(1)}</p>
+                    <p className="font-medium">{marketData?.industry || industry.charAt(0).toUpperCase() + industry.slice(1)}</p>
                   </div>
                 </div>
               </div>

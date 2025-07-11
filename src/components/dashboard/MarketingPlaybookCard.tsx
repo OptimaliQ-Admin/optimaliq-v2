@@ -13,6 +13,7 @@ export default function MarketingPlaybookCard() {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [playbookData, setPlaybookData] = useState<any>(null);
 
   useEffect(() => {
     const fetchInsight = async () => {
@@ -23,6 +24,20 @@ export default function MarketingPlaybookCard() {
         if (data?.insight && data?.createdat) {
           setInsight(data.insight);
           setLastUpdated(format(new Date(data.createdat), "MMMM d, yyyy"));
+          
+          // Store additional data for modal
+          setPlaybookData({
+            insight: data.insight,
+            createdat: data.createdat,
+            source: data.source,
+            title: data.title,
+            signalStrength: data.signalStrength,
+            confidenceScore: data.confidenceScore,
+            nextRefresh: data.nextRefresh,
+            dataSources: data.dataSources,
+            sourceUrls: data.sourceUrls,
+            trendCount: data.trendCount
+          });
         }
       } catch (error) {
         console.error("Error fetching marketing playbook insight:", error);
@@ -156,10 +171,10 @@ export default function MarketingPlaybookCard() {
                   <h3 className="text-lg font-semibold text-gray-900">Marketing Intelligence Report</h3>
                   <div className="flex items-center gap-2">
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      Strong Signal
+                      {playbookData?.signalStrength || 'Strong'} Signal
                     </span>
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      82% Confidence
+                      {Math.round((playbookData?.confidenceScore || 0.82) * 100)}% Confidence
                     </span>
                   </div>
                 </div>
@@ -170,7 +185,7 @@ export default function MarketingPlaybookCard() {
                   </div>
                   <div>
                     <p className="text-gray-600">Next Refresh</p>
-                    <p className="font-medium">Monday 12am</p>
+                    <p className="font-medium">{playbookData?.nextRefresh ? new Date(playbookData.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
                   </div>
                 </div>
               </div>
