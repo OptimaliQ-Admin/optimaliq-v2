@@ -239,26 +239,52 @@ class BusinessTrendAnalysis {
    * Build enhanced prompt for business trend analysis
    */
   private buildTrendPrompt(industry: string, trendData: TrendDataSources): string {
-    return `You are a business intelligence analyst specializing in ${industry} industry trends.
+    // Get news headlines for context
+    const headlines = trendData.newsHeadlines.slice(0, 5).map((headline: string) => `- "${headline}"`).join("\n");
 
-Analyze the current business landscape and generate 4 key business trends that are most relevant to the ${industry} industry.
+    return `You are a strategic business advisor helping high-growth companies identify market shifts, competitive pressures, and innovation opportunities.
 
-For each trend, provide:
-1. A concise title (2-4 words)
-2. Direction: "up", "down", or "stable"
-3. Percentage change: A realistic number between -50 and +50
-4. A brief description (1-2 sentences)
+Based on the following top news headlines and the user's business context, generate a concise but insightful business trend summary and 8 directional recommendations.
 
-Focus on trends like:
-- Digital transformation and technology adoption
-- Market dynamics and competitive landscape
-- Regulatory changes and compliance
-- Consumer behavior shifts
-- Operational efficiency and process improvements
-- Sustainability and ESG initiatives
-- Talent and workforce changes
-- Supply chain and logistics
-- Financial and investment patterns
+📰 Top News Headlines:
+${headlines}
+
+🗂️ Instructions:
+- Extract strategic business trends using signals from the headlines.
+- Offer actionable insights, not just summaries.
+- Assume a cross-industry audience (unless clear sector context exists).
+- Focus on innovation, adaptability, and growth (not just risk).
+- Use headlines as anchor points where helpful (but don't quote all of them).
+- Keep the tone balanced and strategic, not overly optimistic or alarmist.
+
+## Output Format
+✍️ Output Format:
+🔥 Business Trend Summary:
+A concise 2–3 sentence summary highlighting the major directional theme.
+
+🎯 Actionable Recommendations:
+- Bullet 1 (actionable and relevant)
+- Bullet 2
+- Bullet 3
+- Bullet 4
+- Bullet 5
+- Bullet 6
+- Bullet 7
+- Bullet 8
+
+Guidance:
+- Provide exactly 8 recommendations.
+- If the news headlines offer ambiguous or insufficient information for clear recommendations, briefly note this in the trend summary and offer general strategic advice based on available signals.
+- Focus on trends like:
+  - Digital transformation and technology adoption
+  - Market dynamics and competitive landscape
+  - Regulatory changes and compliance
+  - Consumer behavior shifts
+  - Operational efficiency and process improvements
+  - Sustainability and ESG initiatives
+  - Talent and workforce changes
+  - Supply chain and logistics
+  - Financial and investment patterns
 
 Return your response as a JSON object with this exact structure:
 {
@@ -286,6 +312,30 @@ Return your response as a JSON object with this exact structure:
       "direction": "up",
       "percentageChange": 31,
       "description": "Increasing focus on ESG initiatives and green practices"
+    },
+    {
+      "title": "Supply Chain Resilience",
+      "direction": "up",
+      "percentageChange": 15,
+      "description": "Companies investing in robust supply chain solutions"
+    },
+    {
+      "title": "Cybersecurity Focus",
+      "direction": "up",
+      "percentageChange": 28,
+      "description": "Increased spending on security and compliance measures"
+    },
+    {
+      "title": "Customer Experience",
+      "direction": "up",
+      "percentageChange": 12,
+      "description": "Enhanced focus on personalized customer interactions"
+    },
+    {
+      "title": "Data Analytics",
+      "direction": "up",
+      "percentageChange": 20,
+      "description": "Growing reliance on data-driven decision making"
     }
   ]
 }

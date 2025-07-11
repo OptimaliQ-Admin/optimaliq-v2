@@ -194,7 +194,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         <>
           {/* Business Trends Grid */}
           <div className="space-y-4">
-            {trendData.trends.slice(0, 4).map((trend, index) => (
+            {trendData.trends.slice(0, 8).map((trend, index) => (
               <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
@@ -364,19 +364,19 @@ function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }
         ))}
       </div>
 
-      {/* Summary and Insights */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Industry Insights Summary</h3>
+      {/* Business Trend Summary */}
+      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">🔥 Business Trend Summary</h3>
         <div className="prose prose-sm max-w-none">
           <p className="text-gray-700 mb-4">
             The {industry} industry is experiencing significant transformation with {trends.filter(t => t.direction === 'up').length} positive trends 
             and {trends.filter(t => t.direction === 'down').length} declining areas. These insights are based on real-time market analysis 
-            and AI-powered trend detection.
+            and AI-powered trend detection, drawing from current news headlines and market signals.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-900 mb-2">Key Opportunities</h4>
+              <h4 className="font-semibold text-blue-900 mb-2">📈 Key Opportunities</h4>
               <ul className="text-sm text-blue-800 space-y-1">
                 {trends.filter(t => t.direction === 'up').map((trend, i) => (
                   <li key={i}>• {trend.title}: {trend.description}</li>
@@ -385,7 +385,7 @@ function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }
             </div>
             
             <div className="bg-orange-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-orange-900 mb-2">Areas to Monitor</h4>
+              <h4 className="font-semibold text-orange-900 mb-2">⚠️ Areas to Monitor</h4>
               <ul className="text-sm text-orange-800 space-y-1">
                 {trends.filter(t => t.direction === 'down' || t.direction === 'stable').map((trend, i) => (
                   <li key={i}>• {trend.title}: {trend.description}</li>
@@ -396,9 +396,9 @@ function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }
         </div>
       </div>
 
-      {/* Strategic Recommendations */}
+      {/* Actionable Recommendations */}
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Strategic Recommendations</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">🎯 Actionable Recommendations</h3>
         <div className="space-y-3">
           <div className="flex items-start space-x-3">
             <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -419,6 +419,20 @@ function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }
             <p className="text-sm text-gray-700">
               <strong>Stay Agile:</strong> The {industry} industry is evolving rapidly. Maintain flexibility in your strategic planning 
               to adapt to changing market conditions.
+            </p>
+          </div>
+          <div className="flex items-start space-x-3">
+            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+            <p className="text-sm text-gray-700">
+              <strong>Leverage Technology:</strong> Invest in digital transformation initiatives that align with current market trends 
+              and customer expectations.
+            </p>
+          </div>
+          <div className="flex items-start space-x-3">
+            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+            <p className="text-sm text-gray-700">
+              <strong>Build Resilience:</strong> Develop robust systems and processes that can withstand market volatility 
+              and capitalize on emerging opportunities.
             </p>
           </div>
         </div>
