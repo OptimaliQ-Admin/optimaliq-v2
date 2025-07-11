@@ -35,8 +35,7 @@ export class SmartAIClient {
 
     const aiOptions: AIGenerateOptions = {
       ...options,
-      model: modelSelection.model,
-      provider: modelSelection.provider as any
+      model: modelSelection.model
     };
 
     const response = await this.aiClient.generate(prompt, aiOptions);
@@ -60,7 +59,6 @@ export class SmartAIClient {
     const aiOptions: AIGenerateOptions = {
       ...options,
       model: modelSelection.model,
-      provider: modelSelection.provider as any,
       responseFormat: 'json'
     };
 
@@ -154,8 +152,7 @@ export class SmartAIClient {
 
     const batchOptions: AIGenerateOptions = {
       ...options,
-      model: modelSelection.model,
-      provider: modelSelection.provider as any
+      model: modelSelection.model
     };
 
     const responses = await Promise.all(
