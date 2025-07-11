@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { RefreshCw, TrendingUp, TrendingDown, Minus, AlertCircle, BarChart3 } from 'lucide-react';
 import { useModal } from '@/components/modals/ModalProvider';
 import { BusinessTrend } from '@/lib/ai/businessTrendAnalysis';
+import NewsTicker from '@/components/shared/NewsTicker';
 
 interface BusinessTrendCardProps {
   industry?: string;
@@ -211,6 +212,15 @@ export default function BusinessTrendCard({ industry = 'technology', className =
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* News Ticker */}
+          <div className="mt-6">
+            <NewsTicker 
+              className="mb-4"
+              showRefreshButton={true}
+              maxHeadlines={5}
+            />
           </div>
 
           {/* Action Button */}
