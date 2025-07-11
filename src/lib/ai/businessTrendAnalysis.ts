@@ -244,7 +244,7 @@ class BusinessTrendAnalysis {
 
     return `You are a strategic business advisor helping high-growth companies identify market shifts, competitive pressures, and innovation opportunities.
 
-Based on the following top news headlines and the user's business context, generate a concise but insightful business trend summary and 8 directional recommendations.
+Based on the following top news headlines and the user's business context, generate a concise but insightful business trend summary and 7 directional recommendations.
 
 📰 Top News Headlines:
 ${headlines}
@@ -270,10 +270,9 @@ A concise 2–3 sentence summary highlighting the major directional theme.
 - Bullet 5
 - Bullet 6
 - Bullet 7
-- Bullet 8
 
 Guidance:
-- Provide exactly 8 recommendations.
+- Provide exactly 7 recommendations.
 - If the news headlines offer ambiguous or insufficient information for clear recommendations, briefly note this in the trend summary and offer general strategic advice based on available signals.
 - Focus on trends like:
   - Digital transformation and technology adoption
@@ -330,12 +329,6 @@ Return your response as a JSON object with this exact structure:
       "direction": "up",
       "percentageChange": 12,
       "description": "Enhanced focus on personalized customer interactions"
-    },
-    {
-      "title": "Data Analytics",
-      "direction": "up",
-      "percentageChange": 20,
-      "description": "Growing reliance on data-driven decision making"
     }
   ]
 }

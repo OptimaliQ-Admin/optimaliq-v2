@@ -194,7 +194,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         <>
           {/* Business Trends Grid */}
           <div className="space-y-4">
-            {trendData.trends.slice(0, 8).map((trend, index) => (
+            {trendData.trends.slice(0, 7).map((trend, index) => (
               <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
