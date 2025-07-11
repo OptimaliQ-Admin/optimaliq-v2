@@ -206,43 +206,35 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <h4 className="font-medium text-gray-900 mb-3">Data Sources</h4>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Finnhub API</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Alpha Vantage</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>News API</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Analyst Reports</span>
-                  </div>
+                  {Object.entries(marketData?.dataSources || {}).map(([source, active]) => (
+                    <div key={source} className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <span className="capitalize">{source.replace('_', ' ')}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Market Metrics */}
-              <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
-                <h4 className="font-medium text-gray-900 mb-3">Market Metrics</h4>
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">P/E Ratio</p>
-                    <p className="font-medium">25.4</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Beta</p>
-                    <p className="font-medium">1.2</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Market Cap</p>
-                    <p className="font-medium">2.4T</p>
+              {marketData?.marketMetrics && (
+                <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
+                  <h4 className="font-medium text-gray-900 mb-3">Market Metrics</h4>
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600">P/E Ratio</p>
+                      <p className="font-medium">{marketData.marketMetrics.peRatio}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Beta</p>
+                      <p className="font-medium">{marketData.marketMetrics.beta}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Market Cap</p>
+                      <p className="font-medium">{marketData.marketMetrics.marketCap}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               
               {/* Main Insight */}
               <div className="bg-gray-50 rounded-lg p-4 max-h-[50vh] overflow-y-auto mb-6">

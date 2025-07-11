@@ -261,34 +261,17 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         </button>
       </div>
 
-      {/* Business Trends Grid */}
-      <div className="space-y-3 mb-6">
+      {/* Business Trends Content */}
+      <div className="mb-6">
         <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
           <BarChart3 className="w-4 h-4 mr-2" />
-          Key Trends
+          Business Trend Summary
         </h4>
-        <AnimatePresence>
-          {data.trends.slice(0, 5).map((trend, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-            >
-              <div className="flex items-center space-x-3">
-                {getDirectionIcon(trend.direction)}
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{trend.title}</p>
-                  <p className="text-xs text-gray-600">{trend.description}</p>
-                </div>
-              </div>
-              <span className={`text-sm font-semibold ${getDirectionColor(trend.direction)}`}>
-                {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
-              </span>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-100">
+          <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+            {data.insight ? data.insight.split('\n').slice(0, 6).join('\n') + '...' : 'Loading business trends...'}
+          </p>
+        </div>
       </div>
 
       {/* News Ticker */}

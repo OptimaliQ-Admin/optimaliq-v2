@@ -194,57 +194,32 @@ export default function MarketingPlaybookCard() {
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <h4 className="font-medium text-gray-900 mb-3">Data Sources</h4>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>HubSpot</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>AdWeek</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Marketing Dive</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Social Media Examiner</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Content Marketing Institute</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>LinkedIn</span>
-                  </div>
+                  {Object.entries(playbookData?.dataSources || {}).map(([source, active]) => (
+                    <div key={source} className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <span className="capitalize">{source.replace('_', ' ')}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Source URLs */}
-              <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
-                <h4 className="font-medium text-gray-900 mb-3">Key Sources</h4>
-                <div className="space-y-2 text-sm">
-                  <a href="https://www.hubspot.com/hubfs/2025%20State%20of%20Marketing%20from%20HubSpot.pdf" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className="text-blue-600 hover:text-blue-800 block">
-                    📄 2025 State of Marketing Report (HubSpot)
-                  </a>
-                  <a href="https://www.adweek.com/category/marketing/" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className="text-blue-600 hover:text-blue-800 block">
-                    📰 AdWeek Marketing News
-                  </a>
-                  <a href="https://www.marketingdive.com/" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className="text-blue-600 hover:text-blue-800 block">
-                    📊 Marketing Dive Insights
-                  </a>
+              {playbookData?.sourceUrls && Object.keys(playbookData.sourceUrls).length > 0 && (
+                <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
+                  <h4 className="font-medium text-gray-900 mb-3">Key Sources</h4>
+                  <div className="space-y-2 text-sm">
+                    {Object.entries(playbookData.sourceUrls).map(([source, url]) => (
+                      <a key={source} 
+                         href={url as string} 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-blue-600 hover:text-blue-800 block">
+                        📄 {source}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               
               {/* Main Insight */}
               <div className="bg-gray-50 rounded-lg p-4 max-h-[50vh] overflow-y-auto mb-6">
