@@ -1,7 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { enhancedMarketAnalysis } from '@/lib/ai/enhancedMarketAnalysis';
+import { enhancedMarketAnalysis, UserTier } from '@/lib/ai/enhancedMarketAnalysis';
+
+// Helper function to determine user tier
+async function getUserTier(supabase: any, userId: string): Promise<UserTier> {
+  try {
+    // Check if user has premium subscription
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('status, current_period_end')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .single();
+
+    if (subscription && subscription.current_period_end > new Date().toISOString()) {
+      return 'premium';
+    }
+
+    // Check if user has premium features or is in trial
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('tier, trial_ends_at')
+      .eq('id', userId)
+      .single();
+
+    if (userProfile?.tier === 'premium' || 
+        (userProfile?.trial_ends_at && userProfile.trial_ends_at > new Date().toISOString())) {
+      return 'premium';
+    }
+
+    return 'free';
+  } catch (error) {
+    console.log('Could not determine user tier, defaulting to free:', error);
+    return 'free';
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +53,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Industry is required' }, { status: 400 });
     }
 
+    // Determine user tier for smart model selection
+    const userTier = await getUserTier(supabase, user.id);
+    console.log(`👤 User ${user.id} tier: ${userTier}`);
+
     // Check if table exists first
     const { error: tableCheckError } = await supabase
       .from('enhanced_market_insights')
@@ -28,12 +66,13 @@ export async function POST(request: NextRequest) {
     if (tableCheckError) {
       console.error('Table does not exist or access denied:', tableCheckError);
       // Generate insight without storing
-      const insight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry);
+      const insight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry, userTier);
       return NextResponse.json({
         insight,
         cached: false,
         storageError: true,
-        message: 'Database table not available, insight generated but not stored'
+        message: 'Database table not available, insight generated but not stored',
+        userTier
       });
     }
 
@@ -63,12 +102,13 @@ export async function POST(request: NextRequest) {
           aiModelVersion: existingInsight.ai_model_version
         },
         cached: true,
-        createdAt: existingInsight.created_at
+        createdAt: existingInsight.created_at,
+        userTier
       });
     }
 
-    // Generate new insight using AI
-    const insight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry);
+    // Generate new insight using AI with smart model selection
+    const insight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry, userTier);
 
     // Store in database
     const { data: storedInsight, error: insertError } = await supabase
@@ -95,14 +135,16 @@ export async function POST(request: NextRequest) {
         insight,
         cached: false,
         storageError: true,
-        message: 'Insight generated but storage failed'
+        message: 'Insight generated but storage failed',
+        userTier
       });
     }
 
     return NextResponse.json({
       insight,
       cached: false,
-      createdAt: storedInsight.created_at
+      createdAt: storedInsight.created_at,
+      userTier
     });
 
   } catch (error) {
@@ -132,6 +174,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Industry parameter is required' }, { status: 400 });
     }
 
+    // Determine user tier for smart model selection
+    const userTier = await getUserTier(supabase, user.id);
+    console.log(`👤 User ${user.id} tier: ${userTier}`);
+
     // Check if table exists first
     const { error: tableCheckError } = await supabase
       .from('enhanced_market_insights')
@@ -157,8 +203,8 @@ export async function GET(request: NextRequest) {
     if (error || !insight) {
       console.log('No existing insight found, generating new one for industry:', industry);
       
-      // Generate new insight using AI
-      const newInsight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry);
+      // Generate new insight using AI with smart model selection
+      const newInsight = await enhancedMarketAnalysis.generateMarketInsight(user.id, industry, userTier);
 
       // Store in database
       const { data: storedInsight, error: insertError } = await supabase
@@ -186,14 +232,16 @@ export async function GET(request: NextRequest) {
           cached: false,
           storageError: true,
           message: 'Insight generated but storage failed',
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          userTier
         });
       }
 
       return NextResponse.json({
         insight: newInsight,
         cached: false,
-        createdAt: storedInsight.created_at
+        createdAt: storedInsight.created_at,
+        userTier
       });
     }
 
@@ -208,14 +256,15 @@ export async function GET(request: NextRequest) {
         confidenceScore: insight.confidence_score,
         aiModelVersion: insight.ai_model_version
       },
+      cached: true,
       createdAt: insight.created_at,
-      updatedAt: insight.updated_at
+      userTier
     });
 
   } catch (error) {
-    console.error('Error fetching market insight:', error);
+    console.error('Error generating market insight:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch market insight' },
+      { error: 'Failed to generate market insight' },
       { status: 500 }
     );
   }

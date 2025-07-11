@@ -6,6 +6,11 @@
  * - Real-time sentiment and trend extraction
  * - AI-powered synthesis optimized for strategic recommendations
  * - Model version tracking + rate limiting
+ * - Smart model selection for different scenarios:
+ *   • Market Intelligence: GPT-4o (high accuracy)
+ *   • Real-time Updates: GPT-4o-mini (fast, cost-effective)
+ *   • Batch Processing: Claude-3-haiku (cost-optimized)
+ *   • Creative Content: Claude-3-5-sonnet (excellent reasoning)
  *
  * Used to power: Market Cards, Industry Reports, and Strategic Insights in near-real-time.
  */
@@ -13,6 +18,19 @@
 import { aiRateLimiter } from './rateLimiter';
 import { modelVersioning } from './modelVersioning';
 import { callOpenAI } from './callOpenAI';
+import { modelSelector } from './modelSelector';
+import { getSmartAIClient } from './smartAIClient';
+import { AIClient } from './client';
+
+// User tier types
+export type UserTier = 'free' | 'premium';
+
+// Interface for user context
+export interface UserContext {
+  userId: string;
+  tier: UserTier;
+  industry: string;
+}
 
 export interface MarketSizeData {
   value: string; // e.g., "2.4T"
@@ -80,21 +98,66 @@ class EnhancedMarketAnalysis {
   }
 
   /**
+   * Get optimal model based on user tier and scenario
+   */
+  private getOptimalModel(userTier: UserTier, scenario: 'market_intelligence' | 'real_time' = 'market_intelligence') {
+    let priority: 'cost' | 'speed' | 'accuracy' | 'balanced';
+    let complexity: 'low' | 'medium' | 'high';
+
+    switch (userTier) {
+      case 'free':
+        priority = 'cost';
+        complexity = 'low';
+        break;
+      case 'premium':
+        priority = 'accuracy';
+        complexity = 'high';
+        break;
+      default:
+        priority = 'balanced';
+        complexity = 'medium';
+    }
+
+    const modelSelection = modelSelector.selectModel({
+      taskType: scenario,
+      complexity,
+      priority,
+      responseFormat: 'json'
+    });
+
+    console.log(`🧠 Smart Model Selection for ${userTier} user:`);
+    console.log(`   Selected: ${modelSelection.provider}:${modelSelection.model}`);
+    console.log(`   Reasoning: ${modelSelection.reasoning}`);
+    console.log(`   Estimated Cost: $${modelSelection.estimatedCost}/1M tokens`);
+
+    return {
+      provider: modelSelection.provider,
+      model: modelSelection.model,
+      estimatedCost: modelSelection.estimatedCost,
+      estimatedLatency: modelSelection.estimatedLatency
+    };
+  }
+
+  /**
    * Generate comprehensive market insights for an industry
    */
   async generateMarketInsight(
     userId: string,
-    industry: string
+    industry: string,
+    userTier: UserTier = 'premium'
   ): Promise<EnhancedMarketInsight> {
     const startTime = Date.now();
 
     try {
-      // Check rate limits
+      // Get optimal model for user tier
+      const modelSelection = this.getOptimalModel(userTier, 'market_intelligence');
+
+      // Check rate limits with selected model
       const rateLimitResult = await aiRateLimiter.checkRateLimit(
         userId,
-        'openai',
-        'gpt-4.1-mini',
-        'premium'
+        modelSelection.provider,
+        modelSelection.model,
+        userTier
       );
 
       if (!rateLimitResult.allowed) {
@@ -104,15 +167,15 @@ class EnhancedMarketAnalysis {
       // Get market data from multiple sources
       const marketData = await this.gatherMarketData(industry);
 
-      // Generate AI analysis
-      const aiAnalysis = await this.generateAIAnalysis(industry, marketData);
+      // Generate AI analysis with selected model
+      const aiAnalysis = await this.generateAIAnalysis(industry, marketData, modelSelection);
 
       // Record successful request
       const responseTime = Date.now() - startTime;
       await aiRateLimiter.recordRequest(
         userId,
-        'openai',
-        'gpt-4.1-mini',
+        modelSelection.provider,
+        modelSelection.model,
         responseTime,
         true,
         aiAnalysis.tokensUsed
@@ -121,10 +184,10 @@ class EnhancedMarketAnalysis {
       // Record model request for versioning
       await modelVersioning.recordModelRequest({
         userId,
-        provider: 'openai',
-        model: 'gpt-4.1-mini',
+        provider: modelSelection.provider,
+        model: modelSelection.model,
         version: '1.0',
-        requestData: { industry, marketData },
+        requestData: { industry, marketData, userTier },
         responseData: aiAnalysis,
         responseTime,
         tokensUsed: aiAnalysis.tokensUsed || 0,
@@ -138,10 +201,12 @@ class EnhancedMarketAnalysis {
     } catch (error) {
       // Record failed request
       const responseTime = Date.now() - startTime;
+      const modelSelection = this.getOptimalModel(userTier, 'market_intelligence');
+      
       await aiRateLimiter.recordRequest(
         userId,
-        'openai',
-        'gpt-4.1-mini',
+        modelSelection.provider,
+        modelSelection.model,
         responseTime,
         false
       );
@@ -173,15 +238,39 @@ class EnhancedMarketAnalysis {
   }
 
   /**
-   * Generate AI analysis using enhanced prompt
+   * Generate AI analysis using enhanced prompt and selected model
    */
   private async generateAIAnalysis(
     industry: string,
-    marketData: MarketDataSources
+    marketData: MarketDataSources,
+    modelSelection: { provider: string; model: string; estimatedCost: number; estimatedLatency: number }
   ): Promise<{ insight: EnhancedMarketInsight; tokensUsed?: number; cost?: number }> {
     const prompt = this.buildEnhancedPrompt(industry, marketData);
 
-    const response = await callOpenAI(prompt);
+    // Use the selected model instead of hardcoded callOpenAI
+    let response: any;
+    let tokensUsed = 0;
+    let cost = 0;
+
+    try {
+      // For now, we'll use callOpenAI but with the selected model
+      // In the future, this could be replaced with a multi-provider client
+      response = await callOpenAI(prompt, { model: modelSelection.model });
+      
+      // Estimate tokens and cost based on model selection
+      tokensUsed = response.length || 1000; // Rough estimate
+      cost = (tokensUsed / 1000000) * modelSelection.estimatedCost;
+      
+    } catch (error) {
+      console.error(`Error with ${modelSelection.provider}:${modelSelection.model}:`, error);
+      
+      // Fallback to GPT-4o-mini if selected model fails
+      console.log('🔄 Falling back to GPT-4o-mini...');
+      response = await callOpenAI(prompt, { model: 'gpt-4o-mini' });
+      tokensUsed = response.length || 1000;
+      cost = (tokensUsed / 1000000) * 0.15; // GPT-4o-mini cost
+    }
+
     const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response.parsed;
 
     // Validate and structure the response
@@ -197,10 +286,10 @@ class EnhancedMarketAnalysis {
         news_api: true
       },
       confidenceScore: parsedResponse.confidenceScore || 0.85,
-      aiModelVersion: modelVersioning.getActiveVersion('openai', 'gpt-4.1-mini') || '1.0'
+      aiModelVersion: modelVersioning.getActiveVersion(modelSelection.provider, modelSelection.model) || '1.0'
     };
 
-    return { insight };
+    return { insight, tokensUsed, cost };
   }
 
   /**
