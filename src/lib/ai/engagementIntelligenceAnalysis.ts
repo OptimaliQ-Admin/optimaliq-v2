@@ -580,13 +580,27 @@ class EngagementIntelligenceAnalysis {
         throw new Error('No content received from AI model');
       }
 
+      // Log the raw AI response for debugging
+      console.warn('Raw AI response:', content);
+
       // Parse the JSON response
       let parsedData;
       try {
         parsedData = JSON.parse(content);
       } catch (parseError) {
-        console.error('Failed to parse AI response:', parseError);
-        throw new Error('Invalid AI response format');
+        // Try to extract JSON from markdown/code block or extra text
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            parsedData = JSON.parse(jsonMatch[0]);
+          } catch (jsonExtractError) {
+            console.error('Failed to parse extracted JSON from AI response:', jsonExtractError);
+            throw new Error('Invalid AI response format');
+          }
+        } else {
+          console.error('Failed to parse AI response:', parseError);
+          throw new Error('Invalid AI response format');
+        }
       }
 
       // Validate and structure the response
@@ -659,32 +673,32 @@ Based on the engagement data and real-time signals below, generate comprehensive
     {
       "title": "Trend title",
       "direction": "up|down|stable",
-      "percentageChange": 15.5,
+      "percentageChange": number,
       "description": "Detailed trend description",
       "impact": "high|medium|low",
-      "timeframe": "30 days"
+      "timeframe": "30 days|60 days|90 days"
     }
   ],
   "strategies": [
     {
       "title": "Strategy title",
       "description": "Detailed strategy description",
-      "expectedImpact": 25.0,
+      "expectedImpact": number,
       "implementationDifficulty": "easy|medium|hard",
-      "timeframe": "2-4 weeks",
+      "timeframe": "2-4 weeks|1-3 months|3-6 months",
       "resources": ["resource1", "resource2"],
       "successMetrics": ["metric1", "metric2"]
     }
   ],
   "keyMetrics": {
-    "overallEngagement": 7.5,
-    "sentimentScore": 75.0,
-    "conversionRate": 3.2,
-    "audienceGrowth": 12.5,
-    "retentionRate": 68.0
+    "overallEngagement": number,
+    "sentimentScore": number,
+    "conversionRate": number,
+    "audienceGrowth": number,
+    "retentionRate": number
   },
   "fullInsight": "Comprehensive analysis text...",
-  "confidenceScore": 0.85
+  "confidenceScore": number
 }
 
 Focus on providing actionable, data-driven insights that can help improve customer engagement and business outcomes.`;
