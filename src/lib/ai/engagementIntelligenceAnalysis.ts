@@ -8,6 +8,7 @@
  * - Smart model selection for different user tiers
  * - Real-time signal calculation for enhanced accuracy
  * - Engagement scoring and predictive insights
+ * - Consistent caching with 7-day cache and 1-day refresh limit
  *
  * Used to power: Engagement Intelligence Cards, Customer Behavior Reports, and Engagement Strategy Insights.
  */
@@ -18,6 +19,7 @@ import { callOpenAI } from './callOpenAI';
 import { modelSelector } from './modelSelector';
 import { getSmartAIClient } from './smartAIClient';
 import { AIClient } from './client';
+import { sharedCaching } from './sharedCaching';
 
 // User tier types
 export type UserTier = 'free' | 'premium';
@@ -339,6 +341,97 @@ class EngagementIntelligenceAnalysis {
       signalFactors,
       lastUpdated: new Date()
     };
+  }
+
+  /**
+   * Generate engagement insight with caching support
+   */
+  async generateEngagementInsightWithCache(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium',
+    forceRefresh: boolean = false
+  ): Promise<EngagementIntelligenceInsight> {
+    try {
+      // Get optimal model for signal calculation
+      const modelSelection = this.getOptimalModel(userTier);
+      
+      // Gather signal data for caching
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+
+      return await sharedCaching.generateInsightWithCache<EngagementIntelligenceInsight>(
+        userId,
+        industry,
+        'engagement_insights',
+        () => this.generateEngagementInsight(userId, industry, userTier),
+        modelSelection.model,
+        forceRefresh,
+        signalScore,
+        { signalFactors, signalData }
+      );
+    } catch (error) {
+      console.error('Error generating engagement insight with cache:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Force refresh engagement insight (bypass cache but respect rate limits)
+   */
+  async forceRefreshEngagementInsight(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium'
+  ): Promise<EngagementIntelligenceInsight> {
+    try {
+      const modelSelection = this.getOptimalModel(userTier);
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+
+      return await sharedCaching.forceRefreshInsight<EngagementIntelligenceInsight>(
+        userId,
+        industry,
+        'engagement_insights',
+        () => this.generateEngagementInsight(userId, industry, userTier),
+        modelSelection.model,
+        signalScore,
+        { signalFactors, signalData }
+      );
+    } catch (error) {
+      console.error('Error force refreshing engagement insight:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get cached engagement insight if available
+   */
+  async getCachedEngagementInsight(
+    userId: string,
+    industry: string
+  ): Promise<EngagementIntelligenceInsight | null> {
+    try {
+      return await sharedCaching.getCachedInsight<EngagementIntelligenceInsight>(userId, industry, 'engagement_insights');
+    } catch (error) {
+      console.error('Error getting cached engagement insight:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if user can perform a manual refresh
+   */
+  async checkRefreshLimit(
+    userId: string,
+    industry: string
+  ): Promise<{ allowed: boolean; retryAfter?: number; lastRefresh?: Date }> {
+    try {
+      return await sharedCaching.checkRefreshLimit(userId, industry, 'engagement_insights');
+    } catch (error) {
+      console.error('Error checking refresh limit:', error);
+      return { allowed: true };
+    }
   }
 
   /**

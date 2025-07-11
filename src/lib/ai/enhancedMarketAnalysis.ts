@@ -12,6 +12,7 @@
  *   • Batch Processing: Claude-3-haiku (cost-optimized)
  *   • Creative Content: Claude-3-5-sonnet (excellent reasoning)
  * - Real-time signal calculation for enhanced accuracy
+ * - Consistent caching with 7-day cache and 1-day refresh limit
  *
  * Used to power: Market Cards, Industry Reports, and Strategic Insights in near-real-time.
  */
@@ -22,6 +23,7 @@ import { callOpenAI } from './callOpenAI';
 import { modelSelector } from './modelSelector';
 import { getSmartAIClient } from './smartAIClient';
 import { AIClient } from './client';
+import { sharedCaching } from './sharedCaching';
 
 // User tier types
 export type UserTier = 'free' | 'premium';
@@ -854,101 +856,6 @@ Return your output strictly in this JSON structure:
   }
 
   /**
-   * Check for existing cached market insight (30-day cache)
-   */
-  private async checkCachedInsight(userId: string, industry: string): Promise<EnhancedMarketInsight | null> {
-    try {
-      // This would integrate with your Supabase database
-      // For now, return null to always generate fresh insights
-      return null;
-      
-      // Example implementation:
-      // const { data: existingInsight } = await supabase
-      //   .from('market_insights')
-      //   .select('*')
-      //   .eq('user_id', userId)
-      //   .eq('industry', industry)
-      //   .order('created_at', { ascending: false })
-      //   .limit(1)
-      //   .single();
-      //
-      // if (existingInsight?.data && 
-      //     Date.now() - new Date(existingInsight.data.created_at).getTime() < 1000 * 60 * 60 * 24 * 30) {
-      //   return existingInsight.data.insight_data as EnhancedMarketInsight;
-      // }
-      //
-      // return null;
-    } catch (error) {
-      console.error('Error checking cached insight:', error);
-      return null;
-    }
-  }
-
-  /**
-   * Save market insight to cache
-   */
-  private async saveInsightToCache(
-    userId: string, 
-    industry: string, 
-    insight: EnhancedMarketInsight
-  ): Promise<void> {
-    try {
-      // This would integrate with your Supabase database
-      // For now, just log the save operation
-      console.log(`Saving market insight to cache for user ${userId}, industry ${industry}`);
-      
-      // Example implementation:
-      // await supabase
-      //   .from('market_insights')
-      //   .insert({
-      //     user_id: userId,
-      //     industry,
-      //     insight_data: insight,
-      //     model_version: insight.aiModelVersion,
-      //     signal_score: insight.signalScore,
-      //     created_at: new Date()
-      //   });
-    } catch (error) {
-      console.error('Error saving insight to cache:', error);
-    }
-  }
-
-  /**
-   * Force refresh market insight (delete cache and regenerate)
-   */
-  async forceRefreshInsight(userId: string, industry: string, userTier: UserTier = 'premium'): Promise<EnhancedMarketInsight> {
-    try {
-      // Delete existing cached insight
-      await this.deleteCachedInsight(userId, industry);
-      
-      // Generate fresh insight
-      return await this.generateMarketInsight(userId, industry, userTier);
-    } catch (error) {
-      console.error('Error forcing refresh:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Delete cached market insight
-   */
-  private async deleteCachedInsight(userId: string, industry: string): Promise<void> {
-    try {
-      // This would integrate with your Supabase database
-      console.log(`Deleting cached market insight for user ${userId}, industry ${industry}`);
-      
-      // Example implementation:
-      // await supabase
-      //   .from('market_insights')
-      //   .delete()
-      //   .eq('user_id', userId)
-      //   .eq('industry', industry);
-    } catch (error) {
-      console.error('Error deleting cached insight:', error);
-    }
-  }
-
-  /**
    * Generate market insight with caching support
    */
   async generateMarketInsightWithCache(
@@ -958,25 +865,84 @@ Return your output strictly in this JSON structure:
     forceRefresh: boolean = false
   ): Promise<EnhancedMarketInsight> {
     try {
-      // Check for cached insight if not forcing refresh
-      if (!forceRefresh) {
-        const cachedInsight = await this.checkCachedInsight(userId, industry);
-        if (cachedInsight) {
-          console.log(`Returning cached market insight for ${industry}`);
-          return cachedInsight;
-        }
-      }
+      // Get optimal model for signal calculation
+      const modelSelection = this.getOptimalModel(userTier);
+      
+      // Gather signal data for caching
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
 
-      // Generate fresh insight
-      const insight = await this.generateMarketInsight(userId, industry, userTier);
-      
-      // Save to cache
-      await this.saveInsightToCache(userId, industry, insight);
-      
-      return insight;
+      return await sharedCaching.generateInsightWithCache<EnhancedMarketInsight>(
+        userId,
+        industry,
+        'market_insights',
+        () => this.generateMarketInsight(userId, industry, userTier),
+        modelSelection.model,
+        forceRefresh,
+        signalScore,
+        { signalFactors, signalData }
+      );
     } catch (error) {
       console.error('Error generating market insight with cache:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Force refresh market insight (bypass cache but respect rate limits)
+   */
+  async forceRefreshInsight(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium'
+  ): Promise<EnhancedMarketInsight> {
+    try {
+      const modelSelection = this.getOptimalModel(userTier);
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+
+      return await sharedCaching.forceRefreshInsight<EnhancedMarketInsight>(
+        userId,
+        industry,
+        'market_insights',
+        () => this.generateMarketInsight(userId, industry, userTier),
+        modelSelection.model,
+        signalScore,
+        { signalFactors, signalData }
+      );
+    } catch (error) {
+      console.error('Error force refreshing market insight:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get cached market insight if available
+   */
+  async getCachedMarketInsight(
+    userId: string,
+    industry: string
+  ): Promise<EnhancedMarketInsight | null> {
+    try {
+      return await sharedCaching.getCachedInsight<EnhancedMarketInsight>(userId, industry, 'market_insights');
+    } catch (error) {
+      console.error('Error getting cached market insight:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if user can perform a manual refresh
+   */
+  async checkRefreshLimit(
+    userId: string,
+    industry: string
+  ): Promise<{ allowed: boolean; retryAfter?: number; lastRefresh?: Date }> {
+    try {
+      return await sharedCaching.checkRefreshLimit(userId, industry, 'market_insights');
+    } catch (error) {
+      console.error('Error checking refresh limit:', error);
+      return { allowed: true };
     }
   }
 }

@@ -7,6 +7,7 @@
  * - Smart model selection for different user tiers
  * - Trend direction and percentage change calculation
  * - Real-time signal calculation for enhanced accuracy
+ * - Consistent caching with 7-day cache and 1-day refresh limit
  *
  * Used to power: Business Trend Cards, Industry Insights, and Strategic Predictions.
  */
@@ -15,6 +16,7 @@ import { aiRateLimiter } from './rateLimiter';
 import { modelVersioning } from './modelVersioning';
 import { callOpenAI } from './callOpenAI';
 import { modelSelector } from './modelSelector';
+import { sharedCaching } from './sharedCaching';
 
 // User tier types
 export type UserTier = 'free' | 'premium';
@@ -274,6 +276,97 @@ class BusinessTrendAnalysis {
       );
 
       throw error;
+    }
+  }
+
+  /**
+   * Generate business trends with caching support
+   */
+  async generateBusinessTrendsWithCache(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium',
+    forceRefresh: boolean = false
+  ): Promise<BusinessTrend[]> {
+    try {
+      // Get optimal model for signal calculation
+      const modelSelection = this.getOptimalModel(userTier);
+      
+      // Gather signal data for caching
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+
+      return await sharedCaching.generateInsightWithCache<BusinessTrend[]>(
+        userId,
+        industry,
+        'business_trends',
+        () => this.generateBusinessTrends(userId, industry, userTier),
+        modelSelection.model,
+        forceRefresh,
+        signalScore,
+        { signalFactors, signalData }
+      );
+    } catch (error) {
+      console.error('Error generating business trends with cache:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Force refresh business trends (bypass cache but respect rate limits)
+   */
+  async forceRefreshBusinessTrends(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium'
+  ): Promise<BusinessTrend[]> {
+    try {
+      const modelSelection = this.getOptimalModel(userTier);
+      const signalData = await this.gatherSignalData(industry);
+      const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+
+      return await sharedCaching.forceRefreshInsight<BusinessTrend[]>(
+        userId,
+        industry,
+        'business_trends',
+        () => this.generateBusinessTrends(userId, industry, userTier),
+        modelSelection.model,
+        signalScore,
+        { signalFactors, signalData }
+      );
+    } catch (error) {
+      console.error('Error force refreshing business trends:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get cached business trends if available
+   */
+  async getCachedBusinessTrends(
+    userId: string,
+    industry: string
+  ): Promise<BusinessTrend[] | null> {
+    try {
+      return await sharedCaching.getCachedInsight<BusinessTrend[]>(userId, industry, 'business_trends');
+    } catch (error) {
+      console.error('Error getting cached business trends:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if user can perform a manual refresh
+   */
+  async checkRefreshLimit(
+    userId: string,
+    industry: string
+  ): Promise<{ allowed: boolean; retryAfter?: number; lastRefresh?: Date }> {
+    try {
+      return await sharedCaching.checkRefreshLimit(userId, industry, 'business_trends');
+    } catch (error) {
+      console.error('Error checking refresh limit:', error);
+      return { allowed: true };
     }
   }
 
