@@ -1,8 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { engagementIntelligenceAnalysis, EngagementIntelligenceInsight } from '@/lib/ai/engagementIntelligenceAnalysis';
+import { engagementIntelligenceAnalysis, EngagementIntelligenceInsight, UserTier } from '@/lib/ai/engagementIntelligenceAnalysis';
 import { getErrorMessage } from '@/utils/errorHandler';
+
+// Helper function to determine user tier
+async function getUserTier(supabase: any, userId: string): Promise<UserTier> {
+  try {
+    // Check if user has premium subscription (active paid subscription only)
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('status, current_period_end')
+      .eq('u_id', userId)
+      .eq('status', 'active')
+      .single();
+
+    if (subscription && subscription.current_period_end > new Date().toISOString()) {
+      return 'premium'; // ✅ Active paid subscription
+    }
+
+    // Trial users are treated as FREE (not premium)
+    // This ensures they get cost-optimized models and basic features
+    return 'free'; // ❌ Trial, cancelled, expired, or no subscription
+  } catch (error) {
+    console.log('Could not determine user tier, defaulting to free:', error);
+    return 'free';
+  }
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -34,16 +58,21 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
           insight: cachedInsight,
           cached: true,
-          createdAt: cachedInsight.lastUpdated
+          createdAt: cachedInsight.lastUpdated,
+          userTier: 'free' // For cached responses, default to free (trial users)
         });
       }
     }
+
+    // Determine user tier for smart model selection
+    const userTier = await getUserTier(supabase, user.id);
+    console.log(`👤 User ${user.id} tier: ${userTier}`);
 
     // Generate new insight
     const insight = await engagementIntelligenceAnalysis.generateEngagementInsight(
       user.id,
       industry,
-      'premium' // Default to premium for now
+      userTier
     );
 
     // Cache the insight
@@ -54,7 +83,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       insight,
       cached: false,
-      createdAt: insight.lastUpdated
+      createdAt: insight.lastUpdated,
+      userTier
     });
 
   } catch (error) {
@@ -94,11 +124,15 @@ export async function POST(req: NextRequest) {
       console.log(`🗑️ Deleted cached engagement insight for ${industry}`);
     }
 
+    // Determine user tier for smart model selection
+    const userTier = await getUserTier(supabase, user.id);
+    console.log(`👤 User ${user.id} tier: ${userTier}`);
+
     // Generate new insight
     const insight = await engagementIntelligenceAnalysis.generateEngagementInsight(
       user.id,
       industry,
-      'premium'
+      userTier
     );
 
     // Cache the insight
@@ -110,7 +144,8 @@ export async function POST(req: NextRequest) {
       insight,
       cached: false,
       createdAt: insight.lastUpdated,
-      forceRefreshed: forceRefresh
+      forceRefreshed: forceRefresh,
+      userTier
     });
 
   } catch (error) {

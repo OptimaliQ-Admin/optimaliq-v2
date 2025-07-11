@@ -6,31 +6,21 @@ import { enhancedMarketAnalysis, UserTier } from '@/lib/ai/enhancedMarketAnalysi
 // Helper function to determine user tier
 async function getUserTier(supabase: any, userId: string): Promise<UserTier> {
   try {
-    // Check if user has premium subscription
+    // Check if user has premium subscription (active paid subscription only)
     const { data: subscription } = await supabase
       .from('subscriptions')
       .select('status, current_period_end')
-      .eq('user_id', userId)
+      .eq('u_id', userId)
       .eq('status', 'active')
       .single();
 
     if (subscription && subscription.current_period_end > new Date().toISOString()) {
-      return 'premium';
+      return 'premium'; // ✅ Active paid subscription
     }
 
-    // Check if user has premium features or is in trial
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('tier, trial_ends_at')
-      .eq('id', userId)
-      .single();
-
-    if (userProfile?.tier === 'premium' || 
-        (userProfile?.trial_ends_at && userProfile.trial_ends_at > new Date().toISOString())) {
-      return 'premium';
-    }
-
-    return 'free';
+    // Trial users are treated as FREE (not premium)
+    // This ensures they get cost-optimized models and basic features
+    return 'free'; // ❌ Trial, cancelled, expired, or no subscription
   } catch (error) {
     console.log('Could not determine user tier, defaulting to free:', error);
     return 'free';
