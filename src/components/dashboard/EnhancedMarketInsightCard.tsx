@@ -74,28 +74,58 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
     setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
-  const handleViewReport = () => {
+  const handleViewReport = async () => {
     if (!insightData?.insight) return;
+
+    // Fetch additional cron-generated market trend information
+    let cronTrends = null;
+    try {
+      const cronResponse = await fetch(`/api/dashboard/market_trends?industry=${encodeURIComponent(industry)}`);
+      if (cronResponse.ok) {
+        const cronData = await cronResponse.json();
+        cronTrends = cronData.cronTrends;
+      }
+    } catch (error) {
+      console.error('Error fetching cron trends:', error);
+    }
 
     openModal({
       type: 'ai_insight',
       size: 'xl',
       title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence Report`,
       content: (
-        <EnhancedAIInsightModal
-          data={{
-            title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence Report`,
-            insight: insightData.insight,
-            industry,
-            dataSources: {
-              finnhub: true,
-              alpha_vantage: true,
-              news_api: true
-            },
-            confidenceScore: insightData.insight.confidenceScore || 85,
-            lastUpdated: insightData.createdAt
-          }}
-        />
+        <div className="space-y-6">
+          {/* Cron-generated Market Trend Summary */}
+          {cronTrends?.insight && (
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100">
+              <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                <span className="text-xl mr-2">📊</span>
+                Market Trend Summary
+              </h4>
+              <div className="prose prose-sm max-w-none">
+                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                  {cronTrends.insight}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Enhanced AI Insight Modal */}
+          <EnhancedAIInsightModal
+            data={{
+              title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Market Intelligence Report`,
+              insight: insightData.insight,
+              industry,
+              dataSources: {
+                finnhub: true,
+                alpha_vantage: true,
+                news_api: true
+              },
+              confidenceScore: insightData.insight.confidenceScore || 85,
+              lastUpdated: insightData.createdAt
+            }}
+          />
+        </div>
       ),
       showCloseButton: true,
       closeOnEscape: true,

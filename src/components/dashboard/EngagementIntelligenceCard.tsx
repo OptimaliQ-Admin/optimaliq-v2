@@ -72,8 +72,20 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
     setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
-  const handleViewFullReport = () => {
+  const handleViewFullReport = async () => {
     if (!engagementData) return;
+
+    // Fetch additional cron-generated marketing playbook information
+    let cronPlaybook = null;
+    try {
+      const cronResponse = await fetch('/api/dashboard/marketing_playbook');
+      if (cronResponse.ok) {
+        const cronData = await cronResponse.json();
+        cronPlaybook = cronData.cronPlaybook;
+      }
+    } catch (error) {
+      console.error('Error fetching cron playbook:', error);
+    }
 
     openModal({
       type: 'ai_insight',
@@ -81,13 +93,28 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
       content: (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
               {industry.charAt(0).toUpperCase() + industry.slice(1)} Engagement Intelligence Report
             </h3>
             <p className="text-sm text-gray-600">
               Last updated: {new Date(engagementData.createdAt).toLocaleDateString()}
             </p>
           </div>
+
+          {/* Cron-generated Marketing Playbook Summary */}
+          {cronPlaybook?.insight && (
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-100">
+              <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                <span className="text-xl mr-2">📢</span>
+                Marketing Playbook Summary
+              </h4>
+              <div className="prose prose-sm max-w-none">
+                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                  {cronPlaybook.insight}
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 mb-3">Signal Analysis</h4>
