@@ -39,7 +39,7 @@ export interface ModelCapabilities {
 
 class ModelSelector {
   private static instance: ModelSelector;
-  private modelCapabilities: Map<string, ModelCapabilities>;
+  private modelCapabilities: Map<string, ModelCapabilities> = new Map();
 
   private constructor() {
     this.initializeModelCapabilities();

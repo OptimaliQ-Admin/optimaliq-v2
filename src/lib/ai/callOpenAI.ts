@@ -6,11 +6,24 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function callOpenAI(prompt: string) {
+export interface OpenAIOptions {
+  model?: string;
+  maxTokens?: number;
+  temperature?: number;
+}
+
+export async function callOpenAI(prompt: string, options: OpenAIOptions = {}) {
+  const {
+    model = "gpt-4o-mini", // Default to gpt-4o-mini instead of gpt-4.1-mini
+    maxTokens = 1000,
+    temperature = 0.7
+  } = options;
+
   const response = await openai.chat.completions.create({
-    model: "gpt-4.1-mini",
+    model,
     messages: [{ role: "system", content: prompt }],
-    max_tokens: 1000,
+    max_tokens: maxTokens,
+    temperature,
     response_format: { type: "json_object" },
   });
 

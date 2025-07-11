@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom';
 // Modal configuration interface
 export interface ModalConfig {
   id: string;
-  type: 'ai_insight' | 'assessment_deep_dive' | 'strategy_planner' | 'standard' | 'confirmation' | 'form';
+  type: 'ai_insight' | 'assessment_deep_dive' | 'strategy_planner' | 'business_trends' | 'standard' | 'confirmation' | 'form';
   size: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   title: string;
   content: ReactNode;
