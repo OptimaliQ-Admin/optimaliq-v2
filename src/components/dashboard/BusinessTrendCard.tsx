@@ -18,11 +18,6 @@ interface BusinessTrendData {
     userTier: string;
     industry: string;
     generatedAt: string;
-    insight?: string;
-    signalStrength?: string;
-    confidenceScore?: number;
-    nextRefresh?: string;
-    dataSources?: Record<string, boolean>;
   };
   cached: boolean;
   createdAt: string;
@@ -43,7 +38,11 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         setRefreshing(true);
       }
 
-      const response = await fetch('/api/dashboard/business_trends');
+      const url = forceRefresh 
+        ? `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
+        : `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
+
+      const response = await fetch(url);
       const result = await response.json();
 
       if (!response.ok) {
@@ -51,19 +50,9 @@ export default function BusinessTrendCard({ industry = 'technology', className =
       }
 
       setTrendData({
-        data: {
-          trends: [], // We'll parse this from the insight text
-          userTier: 'premium',
-          industry: industry,
-          generatedAt: result.createdat,
-          insight: result.insight,
-          signalStrength: result.signalStrength,
-          confidenceScore: result.confidenceScore,
-          nextRefresh: result.nextRefresh,
-          dataSources: result.dataSources
-        },
+        data: result.data,
         cached: !forceRefresh,
-        createdAt: result.createdat
+        createdAt: result.data.generatedAt
       });
 
     } catch (err) {
@@ -85,70 +74,78 @@ export default function BusinessTrendCard({ industry = 'technology', className =
     setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
-  const handleViewAllTrends = () => {
-    if (!trendData) return;
+  const handleViewAllTrends = async () => {
+    if (!trendData?.data.trends) return;
+
+    // Fetch additional cron-generated business trend information
+    let cronTrends = null;
+    try {
+      const cronResponse = await fetch('/api/dashboard/business_trends');
+      if (cronResponse.ok) {
+        const cronData = await cronResponse.json();
+        cronTrends = cronData.cronTrends;
+      }
+    } catch (error) {
+      console.error('Error fetching cron trends:', error);
+    }
 
     openModal({
       type: 'ai_insight',
       title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report`,
       content: (
         <div className="space-y-6">
-          {/* Main Insight Content */}
-          <div className="bg-gray-50 rounded-lg p-4 max-h-[70vh] overflow-y-auto">
-            <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-              {/* We need to get the actual insight from the API response */}
-              {trendData.data.insight || 'Loading insight...'}
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              {industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report
+            </h3>
+            <p className="text-sm text-gray-600">
+              Last updated: {new Date(trendData.createdAt).toLocaleDateString()}
             </p>
           </div>
 
-          {/* Additional Information Section */}
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-100">
-            <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Data Quality & Refresh Information
-            </h4>
-            
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <p className="text-gray-600 text-sm">Signal Strength</p>
-                <p className="font-medium text-sm">{trendData.data.signalStrength || 'Strong'}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Confidence Score</p>
-                <p className="font-medium text-sm">{Math.round((trendData.data.confidenceScore || 0.85) * 100)}%</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Last Updated</p>
-                <p className="font-medium text-sm">{new Date(trendData.createdAt).toLocaleDateString()}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Next Refresh</p>
-                <p className="font-medium text-sm">{trendData.data.nextRefresh ? new Date(trendData.data.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
+          {/* Cron-generated Business Trend Summary */}
+          {cronTrends?.insight && (
+            <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-100">
+              <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                <span className="text-xl mr-2">🔥</span>
+                Business Trend Summary
+              </h4>
+              <div className="prose prose-sm max-w-none">
+                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                  {cronTrends.insight}
+                </p>
               </div>
             </div>
+          )}
 
-            {/* Data Sources */}
-            <div className="mb-4">
-              <p className="text-gray-600 text-sm mb-2">Data Sources</p>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                {Object.entries(trendData.data.dataSources || {}).map(([source, active]) => (
-                  <div key={source} className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                    <span className="capitalize">{source.replace('_', ' ')}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Refresh Schedule */}
-            <div className="bg-yellow-50 rounded p-3 border border-yellow-200">
-              <div className="flex items-center gap-2 mb-1">
-                <RefreshCw className="w-4 h-4 text-yellow-600" />
-                <span className="text-sm font-medium text-yellow-800">Refresh Schedule</span>
-              </div>
-              <p className="text-xs text-yellow-700">
-                This data refreshes automatically every Monday at 12am. Manual refresh is available once per day.
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-3">AI-Generated Trend Analysis</h4>
+            <div className="prose prose-sm max-w-none">
+              <p className="text-gray-700 mb-4">
+                The {industry} industry is experiencing significant transformation with {trendData.data.trends.filter(t => t.direction === 'up').length} positive trends 
+                and {trendData.data.trends.filter(t => t.direction === 'down').length} declining areas. These insights are based on real-time market analysis 
+                and AI-powered trend detection.
               </p>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-3">Key Trends</h4>
+            <div className="space-y-2">
+              {trendData.data.trends.map((trend, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="text-sm text-gray-600">
+                    {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{trend.title}</p>
+                    <p className="text-xs text-gray-600">{trend.description}</p>
+                    <p className="text-xs text-gray-500">
+                      {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}% change
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -261,17 +258,34 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         </button>
       </div>
 
-      {/* Business Trends Content */}
-      <div className="mb-6">
+      {/* Business Trends Grid */}
+      <div className="space-y-3 mb-6">
         <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
           <BarChart3 className="w-4 h-4 mr-2" />
-          Business Trend Summary
+          Key Trends
         </h4>
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-100">
-          <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-            {data.insight ? data.insight.split('\n').slice(0, 6).join('\n') + '...' : 'Loading business trends...'}
-          </p>
-        </div>
+        <AnimatePresence>
+          {data.trends.slice(0, 5).map((trend, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+            >
+              <div className="flex items-center space-x-3">
+                {getDirectionIcon(trend.direction)}
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{trend.title}</p>
+                  <p className="text-xs text-gray-600">{trend.description}</p>
+                </div>
+              </div>
+              <span className={`text-sm font-semibold ${getDirectionColor(trend.direction)}`}>
+                {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
+              </span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
       {/* News Ticker */}

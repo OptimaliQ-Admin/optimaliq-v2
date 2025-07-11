@@ -13,7 +13,6 @@ export default function MarketingPlaybookCard() {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [playbookData, setPlaybookData] = useState<any>(null);
 
   useEffect(() => {
     const fetchInsight = async () => {
@@ -21,23 +20,9 @@ export default function MarketingPlaybookCard() {
         const res = await fetch("/api/dashboard/marketing_playbook");
         const data = await res.json();
 
-        if (data?.insight && data?.createdat) {
-          setInsight(data.insight);
-          setLastUpdated(format(new Date(data.createdat), "MMMM d, yyyy"));
-          
-          // Store additional data for modal
-          setPlaybookData({
-            insight: data.insight,
-            createdat: data.createdat,
-            source: data.source,
-            title: data.title,
-            signalStrength: data.signalStrength,
-            confidenceScore: data.confidenceScore,
-            nextRefresh: data.nextRefresh,
-            dataSources: data.dataSources,
-            sourceUrls: data.sourceUrls,
-            trendCount: data.trendCount
-          });
+        if (data?.aiInsights?.insight && data?.aiInsights?.createdat) {
+          setInsight(data.aiInsights.insight);
+          setLastUpdated(format(new Date(data.aiInsights.createdat), "MMMM d, yyyy"));
         }
       } catch (error) {
         console.error("Error fetching marketing playbook insight:", error);
@@ -150,7 +135,7 @@ export default function MarketingPlaybookCard() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="max-w-4xl w-full bg-white rounded-xl shadow-xl">
             <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-4">
                 <Dialog.Title className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-2xl">📢</span>
                   Marketing Intelligence Brief
@@ -164,82 +149,35 @@ export default function MarketingPlaybookCard() {
                   </svg>
                 </button>
               </div>
-
-              {/* Enhanced Header */}
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 border border-purple-100 mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">Marketing Intelligence Report</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      {playbookData?.signalStrength || 'Strong'} Signal
-                    </span>
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      {Math.round((playbookData?.confidenceScore || 0.82) * 100)}% Confidence
-                    </span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">Last Updated</p>
-                    <p className="font-medium">{lastUpdated}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Next Refresh</p>
-                    <p className="font-medium">{playbookData?.nextRefresh ? new Date(playbookData.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Data Sources */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Data Sources</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {Object.entries(playbookData?.dataSources || {}).map(([source, active]) => (
-                    <div key={source} className="flex items-center gap-1">
-                      <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                      <span className="capitalize">{source.replace('_', ' ')}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Source URLs */}
-              {playbookData?.sourceUrls && Object.keys(playbookData.sourceUrls).length > 0 && (
-                <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
-                  <h4 className="font-medium text-gray-900 mb-3">Key Sources</h4>
-                  <div className="space-y-2 text-sm">
-                    {Object.entries(playbookData.sourceUrls).map(([source, url]) => (
-                      <a key={source} 
-                         href={url as string} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="text-blue-600 hover:text-blue-800 block">
-                        📄 {source}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
               
-              {/* Main Insight */}
-              <div className="bg-gray-50 rounded-lg p-4 max-h-[50vh] overflow-y-auto mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Marketing Analysis</h4>
-                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-                  {fullInsight}
-                </p>
-              </div>
+              <div className="space-y-6 max-h-[70vh] overflow-y-auto">
+                {/* Cron-generated Marketing Playbook Summary */}
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-100">
+                  <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                    <span className="text-xl mr-2">📢</span>
+                    Marketing Playbook Summary
+                  </h4>
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                      {fullInsight}
+                    </p>
+                  </div>
+                </div>
 
-              {/* Refresh Schedule */}
-              <div className="bg-green-50 rounded-lg p-4 border border-green-100 mb-6">
-                <h4 className="font-medium text-gray-900 mb-2">Refresh Schedule</h4>
-                <p className="text-sm text-gray-700">
-                  This data refreshes automatically every Monday at 12am. Manual refresh is available once per day.
-                </p>
+                {/* AI-Generated Marketing Analysis */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-3">AI-Generated Marketing Analysis</h4>
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                      {fullInsight}
+                    </p>
+                  </div>
+                </div>
               </div>
               
-              <div className="flex items-center justify-between">
+              <div className="mt-6 flex items-center justify-between">
                 <div className="text-sm text-gray-500">
-                  Powered by OptimaliQ.ai • AI-powered marketing intelligence
+                  {lastUpdated && `Last updated: ${lastUpdated}`}
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}

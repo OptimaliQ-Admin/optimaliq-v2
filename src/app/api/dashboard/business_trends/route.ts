@@ -10,56 +10,37 @@ export async function GET() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
   try {
-    const { data, error } = await supabase
+    // Fetch AI-generated business trends
+    const { data: aiTrends, error: aiError } = await supabase
       .from("realtime_business_trends")
-      .select("insight, createdat, source, title")
+      .select("insight, createdat")
       .order("createdat", { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (error || !data) {
-      console.warn("⚠️ No business trend insight found");
-      return NextResponse.json({ error: "No insight found" }, { status: 404 });
+    // Fetch cron-generated business trend summary
+    const { data: cronTrends, error: cronError } = await supabase
+      .from("realtime_business_trends")
+      .select("insight, createdat")
+      .order("createdat", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (aiError && cronError) {
+      console.warn("⚠️ No business trend insights found");
+      return NextResponse.json({ error: "No insights found" }, { status: 404 });
     }
 
-    // Enhanced response with additional context
-    const enhancedData = {
-      ...data,
-      refreshSchedule: "Every Monday at 12am",
-      dataSources: {
-        finnhub: true,
-        news_api: true,
-        gpt_analysis: true
-      },
-      signalStrength: "Strong",
-      confidenceScore: 0.85,
-      trendCount: data.insight ? (data.insight.match(/•/g) || []).length : 0,
-      lastRefresh: data.createdat,
-      nextRefresh: getNextMonday12am()
+    // Combine the data
+    const response = {
+      aiTrends: aiTrends || null,
+      cronTrends: cronTrends || null,
+      lastUpdated: aiTrends?.createdat || cronTrends?.createdat
     };
 
-    return NextResponse.json(enhancedData);
+    return NextResponse.json(response);
   } catch (err: unknown) {
     console.error("🔥 Business Trends API error:", getErrorMessage(err));
     return NextResponse.json({ error: "Server error", detail: getErrorMessage(err) }, { status: 500 });
   }
-}
-
-/**
- * Get the next Monday at 12am (midnight)
- */
-function getNextMonday12am(): string {
-  const now = new Date();
-  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
-  
-  // Calculate days to add to get to next Monday
-  // If today is Monday (1), we want next Monday, so add 7
-  // If today is Sunday (0), we want next Monday, so add 1
-  const daysToAdd = currentDay === 1 ? 7 : currentDay === 0 ? 1 : 8 - currentDay;
-  
-  const nextMonday = new Date(now);
-  nextMonday.setDate(now.getDate() + daysToAdd);
-  nextMonday.setHours(0, 0, 0, 0); // Set to 12am (midnight)
-  
-  return nextMonday.toISOString();
 }

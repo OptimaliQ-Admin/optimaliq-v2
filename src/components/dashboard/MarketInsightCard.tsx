@@ -13,7 +13,6 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [marketData, setMarketData] = useState<any>(null);
 
   useEffect(() => {
     const fetchInsight = async () => {
@@ -25,29 +24,15 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
         );
         const data = await res.json();
 
-        if (data?.insight && data?.createdat) {
-          const created = new Date(data.createdat);
+        if (data?.aiInsights?.insight && data?.aiInsights?.createdat) {
+          const created = new Date(data.aiInsights.createdat);
           const now = new Date();
           const diffInDays = Math.floor(
             (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24)
           );
 
-          setInsight(data.insight);
+          setInsight(data.aiInsights.insight);
           setLastUpdated(format(created, "MMMM d, yyyy"));
-          
-          // Store additional data for modal
-          setMarketData({
-            insight: data.insight,
-            createdat: data.createdat,
-            industry: data.industry,
-            source: data.source,
-            title: data.title,
-            signalStrength: data.signalStrength,
-            confidenceScore: data.confidenceScore,
-            nextRefresh: data.nextRefresh,
-            dataSources: data.dataSources,
-            marketMetrics: data.marketMetrics
-          });
 
           if (diffInDays > 7) {
             try {
@@ -158,10 +143,10 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="max-w-4xl w-full bg-white rounded-xl shadow-xl">
             <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-4">
                 <Dialog.Title className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-2xl">📊</span>
-                  Market Trend Prediction - {industry.charAt(0).toUpperCase() + industry.slice(1)}
+                  Market Trend Prediction
                 </Dialog.Title>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -173,88 +158,34 @@ export default function MarketInsightCard({ industry }: { industry: string }) {
                 </button>
               </div>
               
-              {/* Enhanced Header */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100 mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">Market Intelligence Report</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      {marketData?.signalStrength || 'Strong'} Signal
-                    </span>
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      {Math.round((marketData?.confidenceScore || 0.88) * 100)}% Confidence
-                    </span>
+              <div className="space-y-6 max-h-[70vh] overflow-y-auto">
+                {/* Cron-generated Market Trend Summary */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100">
+                  <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                    <span className="text-xl mr-2">📊</span>
+                    Market Trend Summary
+                  </h4>
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                      {insight}
+                    </p>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">Last Updated</p>
-                    <p className="font-medium">{lastUpdated}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Next Refresh</p>
-                    <p className="font-medium">{marketData?.nextRefresh ? new Date(marketData.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Industry Specific</p>
-                    <p className="font-medium">{marketData?.industry || industry.charAt(0).toUpperCase() + industry.slice(1)}</p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Data Sources */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Data Sources</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {Object.entries(marketData?.dataSources || {}).map(([source, active]) => (
-                    <div key={source} className="flex items-center gap-1">
-                      <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                      <span className="capitalize">{source.replace('_', ' ')}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Market Metrics */}
-              {marketData?.marketMetrics && (
-                <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
-                  <h4 className="font-medium text-gray-900 mb-3">Market Metrics</h4>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-600">P/E Ratio</p>
-                      <p className="font-medium">{marketData.marketMetrics.peRatio}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Beta</p>
-                      <p className="font-medium">{marketData.marketMetrics.beta}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Market Cap</p>
-                      <p className="font-medium">{marketData.marketMetrics.marketCap}</p>
-                    </div>
+                {/* AI-Generated Market Analysis */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-3">AI-Generated Market Analysis</h4>
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                      {insight}
+                    </p>
                   </div>
                 </div>
-              )}
-              
-              {/* Main Insight */}
-              <div className="bg-gray-50 rounded-lg p-4 max-h-[50vh] overflow-y-auto mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Market Analysis</h4>
-                <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-                  {insight}
-                </p>
-              </div>
-
-              {/* Refresh Schedule */}
-              <div className="bg-green-50 rounded-lg p-4 border border-green-100 mb-6">
-                <h4 className="font-medium text-gray-900 mb-2">Refresh Schedule</h4>
-                <p className="text-sm text-gray-700">
-                  This data refreshes automatically every Monday at 12am. Manual refresh is available once per day.
-                </p>
               </div>
               
-              <div className="flex items-center justify-between">
+              <div className="mt-6 flex items-center justify-between">
                 <div className="text-sm text-gray-500">
-                  Powered by OptimaliQ.ai • AI-powered market intelligence
+                  {lastUpdated && `Last updated: ${lastUpdated}`}
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
