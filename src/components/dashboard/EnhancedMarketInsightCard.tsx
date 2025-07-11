@@ -304,37 +304,38 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
               <div className="text-lg font-bold text-gray-900">{insightData.insight.competition.level}</div>
             </div>
           </motion.div>
+
+          {/* Sentiment Score */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+          >
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <h4 className="text-sm font-medium text-gray-900">Market Sentiment</h4>
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  insightData.insight.sentiment.score >= 70 ? 'bg-green-100 text-green-700' :
+                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
+                }`}>
+                  {getSentimentLabel(insightData.insight.sentiment.score)}
+                </span>
+              </div>
+              <p className="text-xs text-gray-600">Overall market confidence and outlook</p>
+            </div>
+            <div className="text-right">
+              <div className={`text-lg font-bold ${
+                getSentimentColor(insightData.insight.sentiment.score)
+              }`}>
+                {Math.round(insightData.insight.sentiment.score)}%
+              </div>
+            </div>
+          </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Market Sentiment */}
-      <div className="mb-6 pt-4 border-t border-gray-200">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-gray-900">Market Sentiment</span>
-          <div className="flex items-center space-x-1">
-            <div className={`w-2 h-2 rounded-full ${
-              insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
-              insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
-            }`}></div>
-            <span className={`text-xs font-medium ${
-              getSentimentColor(insightData.insight.sentiment.score)
-            }`}>
-              {getSentimentLabel(insightData.insight.sentiment.score)}
-            </span>
-          </div>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <motion.div
-            className={`h-2 rounded-full transition-all duration-1000 ${
-              insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
-              insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
-            }`}
-            initial={{ width: 0 }}
-            animate={{ width: `${insightData.insight.sentiment.score}%` }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
-        </div>
-      </div>
+
 
       {/* TradingView Ticker */}
       <div className="mb-6">

@@ -119,30 +119,30 @@ export default function BusinessTrendCard({ industry = 'technology', className =
           )}
 
           <div className="bg-gray-50 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-3">AI-Generated Trend Analysis</h4>
-            <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700 mb-4">
-                The {industry} industry is experiencing significant transformation with {trendData.data.trends.filter(t => t.direction === 'up').length} positive trends 
-                and {trendData.data.trends.filter(t => t.direction === 'down').length} declining areas. These insights are based on real-time market analysis 
-                and AI-powered trend detection.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-3">Key Trends</h4>
-            <div className="space-y-2">
+            <h4 className="font-medium text-gray-900 mb-3">Strategic Business Trends</h4>
+            <div className="space-y-3">
               {trendData.data.trends.map((trend, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <span className="text-sm text-gray-600">
-                    {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{trend.title}</p>
+                <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-100">
+                  <div className="flex-shrink-0">
+                    {trend.direction === 'up' ? (
+                      <ArrowUp className="w-4 h-4 text-green-600" />
+                    ) : trend.direction === 'down' ? (
+                      <ArrowDown className="w-4 h-4 text-red-600" />
+                    ) : (
+                      <Minus className="w-4 h-4 text-gray-600" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-medium text-gray-900">{trend.title}</p>
+                      <span className={`text-sm font-semibold ${
+                        trend.direction === 'up' ? 'text-green-600' : 
+                        trend.direction === 'down' ? 'text-red-600' : 'text-gray-600'
+                      }`}>
+                        {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-600">{trend.description}</p>
-                    <p className="text-xs text-gray-500">
-                      {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}% change
-                    </p>
                   </div>
                 </div>
               ))}

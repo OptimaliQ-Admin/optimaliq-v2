@@ -146,10 +146,11 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
 
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 mb-3">Strategic Recommendations</h4>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {engagementData.data.recommendations.map((recommendation, index) => (
-                <div key={index} className="border-l-2 border-blue-500 pl-3">
-                  <p className="text-sm text-gray-700">{recommendation}</p>
+                <div key={index} className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-gray-100">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-sm text-gray-700 leading-relaxed">{recommendation}</p>
                 </div>
               ))}
             </div>
@@ -279,9 +280,9 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
       {/* Signal Bar */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Signal Strength</span>
+          <span className="text-sm font-medium text-gray-700">Engagement Signal</span>
           <span className={`text-sm font-semibold px-2 py-1 rounded-full ${getSignalColor(insight.signalScore)}`}>
-            {insight.signalSummary}
+            {Math.round(insight.signalScore)}/100
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -293,8 +294,8 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
           />
         </div>
         <div className="flex justify-between text-xs text-gray-500 mt-1">
-          <span>Weak</span>
-          <span>Strong</span>
+          <span>Low Engagement</span>
+          <span>High Engagement</span>
         </div>
       </div>
 
@@ -322,7 +323,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
                   </div>
                 </div>
                 <span className={`text-sm font-semibold ${getTrendColor(trend.direction)}`}>
-                  {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange.toFixed(1)}%
+                  {trend.percentageChange > 0 ? '+' : ''}{Math.round(trend.percentageChange)}%
                 </span>
               </motion.div>
             ))}
