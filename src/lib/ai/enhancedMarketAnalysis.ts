@@ -11,6 +11,7 @@
  *   • Real-time Updates: GPT-4o-mini (fast, cost-effective)
  *   • Batch Processing: Claude-3-haiku (cost-optimized)
  *   • Creative Content: Claude-3-5-sonnet (excellent reasoning)
+ * - Real-time signal calculation for enhanced accuracy
  *
  * Used to power: Market Cards, Industry Reports, and Strategic Insights in near-real-time.
  */
@@ -30,6 +31,56 @@ export interface UserContext {
   userId: string;
   tier: UserTier;
   industry: string;
+}
+
+// Real-time signal calculation interfaces (matching Business Trends Engine)
+export interface SignalFactors {
+  newsVolume: number; // Number of relevant news articles (0-100)
+  marketMomentum: number; // Market cap and growth rate changes (-100 to 100)
+  sentimentScore: number; // Sentiment polarity from sources (-100 to 100)
+  analystConfidence: number; // Analyst report confidence (0-100)
+  volatilityIndex: number; // Market volatility indicator (0-100)
+}
+
+export interface SignalData {
+  newsArticles: NewsArticle[];
+  marketMetrics: MarketMetrics;
+  sentimentData: SentimentAnalysis;
+  analystInsights: AnalystInsight[];
+}
+
+export interface NewsArticle {
+  headline: string;
+  source: string;
+  timestamp: Date;
+  relevance: number; // 0-1 relevance score
+  sentiment: number; // -1 to 1 sentiment score
+}
+
+export interface MarketMetrics {
+  marketCap: number;
+  growthRate: number;
+  previousMarketCap: number;
+  previousGrowthRate: number;
+  volatility: number;
+  tradingVolume: number;
+  peRatio: number;
+  beta: number;
+}
+
+export interface SentimentAnalysis {
+  overallSentiment: number; // -1 to 1
+  positiveArticles: number;
+  negativeArticles: number;
+  neutralArticles: number;
+  sentimentTrend: 'improving' | 'declining' | 'stable';
+}
+
+export interface AnalystInsight {
+  title: string;
+  confidence: number; // 0-1
+  outlook: 'bullish' | 'bearish' | 'neutral';
+  keyMetrics: string[];
 }
 
 export interface MarketSizeData {
@@ -73,6 +124,8 @@ export interface EnhancedMarketInsight {
   };
   confidenceScore: number; // 0.00 to 1.00
   aiModelVersion: string;
+  signalScore?: number; // Real-time signal strength
+  signalFactors?: SignalFactors; // Breakdown of signal components
 }
 
 export interface MarketDataSources {
@@ -83,6 +136,7 @@ export interface MarketDataSources {
   marketCap: number;
   peRatio: number;
   beta: number;
+  signalData?: SignalData; // Enhanced with real-time signals
 }
 
 class EnhancedMarketAnalysis {
@@ -95,6 +149,59 @@ class EnhancedMarketAnalysis {
       EnhancedMarketAnalysis.instance = new EnhancedMarketAnalysis();
     }
     return EnhancedMarketAnalysis.instance;
+  }
+
+  /**
+   * Calculate real-time signal score based on multiple factors
+   */
+  private calculateSignalScore(signalData: SignalData): { score: number; factors: SignalFactors } {
+    // Calculate news volume score (0-100)
+    const newsVolume = Math.min(100, signalData.newsArticles.length * 10);
+    
+    // Calculate market momentum score (-100 to 100)
+    const marketCapChange = ((signalData.marketMetrics.marketCap - signalData.marketMetrics.previousMarketCap) / 
+                            signalData.marketMetrics.previousMarketCap) * 100;
+    const growthRateChange = (signalData.marketMetrics.growthRate - signalData.marketMetrics.previousGrowthRate) * 100;
+    const marketMomentum = Math.max(-100, Math.min(100, (marketCapChange + growthRateChange) / 2));
+    
+    // Calculate sentiment score (-100 to 100)
+    const sentimentScore = signalData.sentimentData.overallSentiment * 100;
+    
+    // Calculate analyst confidence score (0-100)
+    const analystConfidence = signalData.analystInsights.length > 0 
+      ? signalData.analystInsights.reduce((sum, insight) => sum + insight.confidence, 0) / signalData.analystInsights.length * 100
+      : 50; // Default neutral confidence
+    
+    // Calculate volatility index (0-100)
+    const volatilityIndex = Math.min(100, signalData.marketMetrics.volatility * 100);
+    
+    // Weighted signal score calculation
+    const weights = {
+      newsVolume: 0.2,
+      marketMomentum: 0.3,
+      sentimentScore: 0.25,
+      analystConfidence: 0.15,
+      volatilityIndex: 0.1
+    };
+    
+    const signalScore = (
+      newsVolume * weights.newsVolume +
+      marketMomentum * weights.marketMomentum +
+      sentimentScore * weights.sentimentScore +
+      analystConfidence * weights.analystConfidence +
+      (100 - volatilityIndex) * weights.volatilityIndex // Lower volatility is better
+    );
+    
+    return {
+      score: Math.max(-100, Math.min(100, signalScore)),
+      factors: {
+        newsVolume,
+        marketMomentum,
+        sentimentScore,
+        analystConfidence,
+        volatilityIndex
+      }
+    };
   }
 
   /**
@@ -167,8 +274,13 @@ class EnhancedMarketAnalysis {
       // Get market data from multiple sources
       const marketData = await this.gatherMarketData(industry);
 
-      // Generate AI analysis with selected model
-      const aiAnalysis = await this.generateAIAnalysis(industry, marketData, modelSelection);
+      // Calculate real-time signal score
+      const signalScoreResult = this.calculateSignalScore(marketData.signalData || this.getDefaultSignalData());
+      const signalScore = signalScoreResult.score;
+      const signalFactors = signalScoreResult.factors;
+
+      // Generate AI analysis with selected model and signal data
+      const aiAnalysis = await this.generateAIAnalysis(industry, marketData, modelSelection, signalScore, signalFactors);
 
       // Record successful request
       const responseTime = Date.now() - startTime;
@@ -216,14 +328,15 @@ class EnhancedMarketAnalysis {
   }
 
   /**
-   * Gather market data from multiple sources
+   * Gather enhanced market data with real-time signals
    */
   private async gatherMarketData(industry: string): Promise<MarketDataSources> {
-    const [stockSymbols, analystRecs, newsHeadlines, financialMetrics] = await Promise.allSettled([
+    const [stockSymbols, analystRecs, newsHeadlines, financialMetrics, signalData] = await Promise.allSettled([
       this.getIndustryStockSymbols(industry),
       this.getAnalystRecommendations(industry),
       this.getNewsHeadlines(industry),
-      this.getFinancialMetrics(industry)
+      this.getFinancialMetrics(industry),
+      this.gatherSignalData(industry)
     ]);
 
     return {
@@ -233,7 +346,198 @@ class EnhancedMarketAnalysis {
       financialMetrics: financialMetrics.status === 'fulfilled' ? financialMetrics.value : {},
       marketCap: this.extractMarketCap(financialMetrics),
       peRatio: this.extractPERatio(financialMetrics),
-      beta: this.extractBeta(financialMetrics)
+      beta: this.extractBeta(financialMetrics),
+      signalData: signalData.status === 'fulfilled' ? signalData.value : undefined
+    };
+  }
+
+  /**
+   * Gather comprehensive signal data for real-time analysis
+   */
+  private async gatherSignalData(industry: string): Promise<SignalData> {
+    const [newsArticles, marketMetrics, sentimentData, analystInsights] = await Promise.allSettled([
+      this.getRelevantNewsArticles(industry),
+      this.getDetailedMarketMetrics(industry),
+      this.analyzeSentiment(industry),
+      this.getAnalystInsights(industry)
+    ]);
+
+    return {
+      newsArticles: newsArticles.status === 'fulfilled' ? newsArticles.value : [],
+      marketMetrics: marketMetrics.status === 'fulfilled' ? marketMetrics.value : this.getDefaultMarketMetrics(),
+      sentimentData: sentimentData.status === 'fulfilled' ? sentimentData.value : this.getDefaultSentimentData(),
+      analystInsights: analystInsights.status === 'fulfilled' ? analystInsights.value : []
+    };
+  }
+
+  /**
+   * Get relevant news articles with sentiment analysis
+   */
+  private async getRelevantNewsArticles(industry: string): Promise<NewsArticle[]> {
+    // Mock implementation - in production, this would call news APIs with sentiment analysis
+    const mockArticles: NewsArticle[] = [
+      {
+        headline: `${industry} companies accelerate digital transformation`,
+        source: 'TechCrunch',
+        timestamp: new Date(),
+        relevance: 0.9,
+        sentiment: 0.7
+      },
+      {
+        headline: `New AI regulations impact ${industry} sector`,
+        source: 'Reuters',
+        timestamp: new Date(Date.now() - 86400000), // 1 day ago
+        relevance: 0.8,
+        sentiment: -0.3
+      },
+      {
+        headline: `${industry} leaders focus on sustainability initiatives`,
+        source: 'Bloomberg',
+        timestamp: new Date(Date.now() - 172800000), // 2 days ago
+        relevance: 0.7,
+        sentiment: 0.5
+      },
+      {
+        headline: `Investment in ${industry} technology reaches new highs`,
+        source: 'Forbes',
+        timestamp: new Date(Date.now() - 259200000), // 3 days ago
+        relevance: 0.9,
+        sentiment: 0.8
+      },
+      {
+        headline: `Supply chain disruptions affect ${industry} operations`,
+        source: 'Wall Street Journal',
+        timestamp: new Date(Date.now() - 345600000), // 4 days ago
+        relevance: 0.6,
+        sentiment: -0.6
+      }
+    ];
+    
+    return mockArticles;
+  }
+
+  /**
+   * Get detailed market metrics for signal calculation
+   */
+  private async getDetailedMarketMetrics(industry: string): Promise<MarketMetrics> {
+    // Mock implementation - in production, this would fetch from financial APIs
+    const currentMarketCap = 2400000000000; // 2.4T
+    const previousMarketCap = 2300000000000; // 2.3T
+    const currentGrowthRate = 0.15;
+    const previousGrowthRate = 0.12;
+    
+    return {
+      marketCap: currentMarketCap,
+      growthRate: currentGrowthRate,
+      previousMarketCap,
+      previousGrowthRate,
+      volatility: 0.25,
+      tradingVolume: 50000000,
+      peRatio: 25.5,
+      beta: 1.2
+    };
+  }
+
+  /**
+   * Analyze sentiment from news sources
+   */
+  private async analyzeSentiment(industry: string): Promise<SentimentAnalysis> {
+    // Mock implementation - in production, this would use NLP services
+    const articles = await this.getRelevantNewsArticles(industry);
+    
+    const positiveArticles = articles.filter(a => a.sentiment > 0.2).length;
+    const negativeArticles = articles.filter(a => a.sentiment < -0.2).length;
+    const neutralArticles = articles.filter(a => a.sentiment >= -0.2 && a.sentiment <= 0.2).length;
+    
+    const overallSentiment = articles.reduce((sum, article) => sum + article.sentiment, 0) / articles.length;
+    
+    // Determine sentiment trend based on recent articles
+    const recentArticles = articles.slice(0, 3);
+    const recentSentiment = recentArticles.reduce((sum, article) => sum + article.sentiment, 0) / recentArticles.length;
+    
+    let sentimentTrend: 'improving' | 'declining' | 'stable';
+    if (recentSentiment > overallSentiment + 0.1) {
+      sentimentTrend = 'improving';
+    } else if (recentSentiment < overallSentiment - 0.1) {
+      sentimentTrend = 'declining';
+    } else {
+      sentimentTrend = 'stable';
+    }
+    
+    return {
+      overallSentiment,
+      positiveArticles,
+      negativeArticles,
+      neutralArticles,
+      sentimentTrend
+    };
+  }
+
+  /**
+   * Get detailed analyst insights
+   */
+  private async getAnalystInsights(industry: string): Promise<AnalystInsight[]> {
+    // Mock implementation - in production, this would fetch from analyst databases
+    return [
+      {
+        title: `${industry} Market Analysis Q4 2024`,
+        confidence: 0.85,
+        outlook: 'bullish',
+        keyMetrics: ['Digital transformation', 'AI adoption', 'Market expansion']
+      },
+      {
+        title: `${industry} Trends Report`,
+        confidence: 0.72,
+        outlook: 'neutral',
+        keyMetrics: ['Sustainability focus', 'Remote work evolution', 'Supply chain optimization']
+      },
+      {
+        title: `${industry} Investment Outlook`,
+        confidence: 0.78,
+        outlook: 'bullish',
+        keyMetrics: ['Technology investment', 'M&A activity', 'International growth']
+      }
+    ];
+  }
+
+  /**
+   * Get default market metrics for fallback
+   */
+  private getDefaultMarketMetrics(): MarketMetrics {
+    return {
+      marketCap: 1000000000000,
+      growthRate: 0.1,
+      previousMarketCap: 1000000000000,
+      previousGrowthRate: 0.1,
+      volatility: 0.2,
+      tradingVolume: 50000000,
+      peRatio: 20,
+      beta: 1.0
+    };
+  }
+
+  /**
+   * Get default sentiment data for fallback
+   */
+  private getDefaultSentimentData(): SentimentAnalysis {
+    return {
+      overallSentiment: 0,
+      positiveArticles: 0,
+      negativeArticles: 0,
+      neutralArticles: 0,
+      sentimentTrend: 'stable'
+    };
+  }
+
+  /**
+   * Get default signal data for fallback
+   */
+  private getDefaultSignalData(): SignalData {
+    return {
+      newsArticles: [],
+      marketMetrics: this.getDefaultMarketMetrics(),
+      sentimentData: this.getDefaultSentimentData(),
+      analystInsights: []
     };
   }
 
@@ -243,9 +547,11 @@ class EnhancedMarketAnalysis {
   private async generateAIAnalysis(
     industry: string,
     marketData: MarketDataSources,
-    modelSelection: { provider: string; model: string; estimatedCost: number; estimatedLatency: number }
+    modelSelection: { provider: string; model: string; estimatedCost: number; estimatedLatency: number },
+    signalScore: number,
+    signalFactors: SignalFactors
   ): Promise<{ insight: EnhancedMarketInsight; tokensUsed?: number; cost?: number }> {
-    const prompt = this.buildEnhancedPrompt(industry, marketData);
+    const prompt = this.buildEnhancedPrompt(industry, marketData, signalScore, signalFactors);
 
     // Use the selected model instead of hardcoded callOpenAI
     let response: any;
@@ -286,19 +592,35 @@ class EnhancedMarketAnalysis {
         news_api: true
       },
       confidenceScore: parsedResponse.confidenceScore || 0.85,
-      aiModelVersion: modelVersioning.getActiveVersion(modelSelection.provider, modelSelection.model) || '1.0'
+      aiModelVersion: modelVersioning.getActiveVersion(modelSelection.provider, modelSelection.model) || '1.0',
+      signalScore: parsedResponse.signalScore || signalScore,
+      signalFactors: parsedResponse.signalFactors || signalFactors
     };
 
     return { insight, tokensUsed, cost };
   }
 
   /**
-   * Build enhanced AI prompt for comprehensive analysis
+   * Build enhanced AI prompt for comprehensive analysis with real-time signals
    */
-  private buildEnhancedPrompt(industry: string, marketData: MarketDataSources): string {
+  private buildEnhancedPrompt(industry: string, marketData: MarketDataSources, signalScore: number, signalFactors: SignalFactors): string {
+    // Format signal information for the prompt
+    const signalInfo = `
+📡 Real-Time Signal Score:
+- Overall: ${signalScore.toFixed(1)}/100
+- News Volume: ${signalFactors.newsVolume.toFixed(1)}/100
+- Sentiment: ${signalFactors.sentimentScore.toFixed(1)}/100
+- Analyst Confidence: ${signalFactors.analystConfidence.toFixed(1)}/100
+- Market Momentum: ${signalFactors.marketMomentum.toFixed(1)}/100
+- Volatility Index: ${signalFactors.volatilityIndex.toFixed(1)}/100
+
+Use these signals to inform market confidence, urgency, and tone.`;
+
     return `You are a real-time market intelligence engine for the ${industry} sector.
 
 Based on the latest data aggregated from live financial feeds, analyst recommendations, and headline sentiment analysis, generate a time-sensitive market insight for industry leaders.
+
+${signalInfo}
 
 Live-sourced Data:
 - Tracked Symbols: ${marketData.stockSymbols.join(', ')}
@@ -334,7 +656,15 @@ Return your output strictly in this JSON structure:
     "description": "Market sentiment"
   },
   "fullInsight": "📊 Market Summary\\nComprehensive market analysis...\\n\\n🎯 Strategic Outlook for Growth Companies\\n• Strategic insight 1\\n• Strategic insight 2\\n• Strategic insight 3\\n• Strategic insight 4",
-  "confidenceScore": 0.85
+  "confidenceScore": 0.85,
+  "signalScore": ${signalScore},
+  "signalFactors": {
+    "newsVolume": ${signalFactors.newsVolume},
+    "marketMomentum": ${signalFactors.marketMomentum},
+    "sentimentScore": ${signalFactors.sentimentScore},
+    "analystConfidence": ${signalFactors.analystConfidence},
+    "volatilityIndex": ${signalFactors.volatilityIndex}
+  }
 }
 
 📌 Prioritize:
@@ -469,6 +799,185 @@ Return your output strictly in this JSON structure:
       factors: data?.factors || ['news'],
       description: data?.description || 'Sentiment'
     };
+  }
+
+  /**
+   * Get real-time signal insights for an industry
+   */
+  async getSignalInsights(industry: string): Promise<{
+    signalScore: number;
+    factors: SignalFactors;
+    signalData: SignalData;
+    interpretation: string;
+  }> {
+    try {
+      const signalData = await this.gatherSignalData(industry);
+      const signalResult = this.calculateSignalScore(signalData);
+      
+      // Generate interpretation based on signal score
+      let interpretation = '';
+      if (signalResult.score > 70) {
+        interpretation = 'Very strong positive signals indicating significant growth opportunities';
+      } else if (signalResult.score > 30) {
+        interpretation = 'Strong positive signals suggesting favorable market conditions';
+      } else if (signalResult.score > -30) {
+        interpretation = 'Neutral signals indicating stable market conditions';
+      } else if (signalResult.score > -70) {
+        interpretation = 'Negative signals suggesting potential challenges ahead';
+      } else {
+        interpretation = 'Very strong negative signals indicating significant market concerns';
+      }
+
+      return {
+        signalScore: signalResult.score,
+        factors: signalResult.factors,
+        signalData,
+        interpretation
+      };
+    } catch (error) {
+      console.error('Error getting signal insights:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get signal strength description
+   */
+  getSignalStrengthDescription(signalScore: number): string {
+    if (signalScore > 70) return 'Very Strong Positive';
+    if (signalScore > 30) return 'Strong Positive';
+    if (signalScore > 10) return 'Moderate Positive';
+    if (signalScore > -10) return 'Neutral';
+    if (signalScore > -30) return 'Moderate Negative';
+    if (signalScore > -70) return 'Strong Negative';
+    return 'Very Strong Negative';
+  }
+
+  /**
+   * Check for existing cached market insight (30-day cache)
+   */
+  private async checkCachedInsight(userId: string, industry: string): Promise<EnhancedMarketInsight | null> {
+    try {
+      // This would integrate with your Supabase database
+      // For now, return null to always generate fresh insights
+      return null;
+      
+      // Example implementation:
+      // const { data: existingInsight } = await supabase
+      //   .from('market_insights')
+      //   .select('*')
+      //   .eq('user_id', userId)
+      //   .eq('industry', industry)
+      //   .order('created_at', { ascending: false })
+      //   .limit(1)
+      //   .single();
+      //
+      // if (existingInsight?.data && 
+      //     Date.now() - new Date(existingInsight.data.created_at).getTime() < 1000 * 60 * 60 * 24 * 30) {
+      //   return existingInsight.data.insight_data as EnhancedMarketInsight;
+      // }
+      //
+      // return null;
+    } catch (error) {
+      console.error('Error checking cached insight:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Save market insight to cache
+   */
+  private async saveInsightToCache(
+    userId: string, 
+    industry: string, 
+    insight: EnhancedMarketInsight
+  ): Promise<void> {
+    try {
+      // This would integrate with your Supabase database
+      // For now, just log the save operation
+      console.log(`Saving market insight to cache for user ${userId}, industry ${industry}`);
+      
+      // Example implementation:
+      // await supabase
+      //   .from('market_insights')
+      //   .insert({
+      //     user_id: userId,
+      //     industry,
+      //     insight_data: insight,
+      //     model_version: insight.aiModelVersion,
+      //     signal_score: insight.signalScore,
+      //     created_at: new Date()
+      //   });
+    } catch (error) {
+      console.error('Error saving insight to cache:', error);
+    }
+  }
+
+  /**
+   * Force refresh market insight (delete cache and regenerate)
+   */
+  async forceRefreshInsight(userId: string, industry: string, userTier: UserTier = 'premium'): Promise<EnhancedMarketInsight> {
+    try {
+      // Delete existing cached insight
+      await this.deleteCachedInsight(userId, industry);
+      
+      // Generate fresh insight
+      return await this.generateMarketInsight(userId, industry, userTier);
+    } catch (error) {
+      console.error('Error forcing refresh:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete cached market insight
+   */
+  private async deleteCachedInsight(userId: string, industry: string): Promise<void> {
+    try {
+      // This would integrate with your Supabase database
+      console.log(`Deleting cached market insight for user ${userId}, industry ${industry}`);
+      
+      // Example implementation:
+      // await supabase
+      //   .from('market_insights')
+      //   .delete()
+      //   .eq('user_id', userId)
+      //   .eq('industry', industry);
+    } catch (error) {
+      console.error('Error deleting cached insight:', error);
+    }
+  }
+
+  /**
+   * Generate market insight with caching support
+   */
+  async generateMarketInsightWithCache(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium',
+    forceRefresh: boolean = false
+  ): Promise<EnhancedMarketInsight> {
+    try {
+      // Check for cached insight if not forcing refresh
+      if (!forceRefresh) {
+        const cachedInsight = await this.checkCachedInsight(userId, industry);
+        if (cachedInsight) {
+          console.log(`Returning cached market insight for ${industry}`);
+          return cachedInsight;
+        }
+      }
+
+      // Generate fresh insight
+      const insight = await this.generateMarketInsight(userId, industry, userTier);
+      
+      // Save to cache
+      await this.saveInsightToCache(userId, industry, insight);
+      
+      return insight;
+    } catch (error) {
+      console.error('Error generating market insight with cache:', error);
+      throw error;
+    }
   }
 }
 
