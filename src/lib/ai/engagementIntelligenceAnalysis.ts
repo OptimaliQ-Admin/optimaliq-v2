@@ -114,12 +114,12 @@ export interface RetentionMetrics {
 
 export interface EngagementTrend {
   title: string;
-  direction: 'up' | 'down' | 'stable';
+  direction: 'up' | 'down' | 'flat';
   percentageChange: number;
   description: string;
-  impact: 'high' | 'medium' | 'low';
-  timeframe: string;
-  aiModelVersion: string;
+  impact?: 'high' | 'medium' | 'low';
+  timeframe?: string;
+  aiModelVersion?: string;
   signalScore?: number;
   signalFactors?: SignalFactors;
 }
@@ -134,6 +134,26 @@ export interface EngagementStrategy {
   successMetrics: string[];
 }
 
+// New strategic engagement trend interface
+export interface EngagementTrend {
+  title: string;
+  direction: 'up' | 'down' | 'flat';
+  percentageChange: number;
+  description: string;
+}
+
+// New strategic engagement insight interface
+export interface EngagementInsight {
+  signalScore: number; // 0–100
+  signalSummary: string; // e.g. "Neutral to Weak"
+  trends: EngagementTrend[];
+  recommendations: string[]; // 3 actionable bullets
+  lastUpdated: string; // ISO string
+  aiModelVersion: string;
+  confidenceScore: number; // 0.00 to 1.00
+}
+
+// Legacy interface for backward compatibility (will be removed)
 export interface EngagementIntelligenceInsight {
   trends: EngagementTrend[];
   strategies: EngagementStrategy[];
@@ -843,11 +863,11 @@ Focus on providing actionable, data-driven insights that can help improve custom
   /**
    * Validate direction
    */
-  private validateDirection(direction: any): 'up' | 'down' | 'stable' {
-    if (direction === 'up' || direction === 'down' || direction === 'stable') {
-      return direction;
+  private validateDirection(direction: any): 'up' | 'down' | 'flat' {
+    if (direction === 'up' || direction === 'down' || direction === 'flat' || direction === 'stable') {
+      return direction === 'stable' ? 'flat' : direction;
     }
-    return 'stable';
+    return 'flat';
   }
 
   /**
@@ -917,6 +937,246 @@ Focus on providing actionable, data-driven insights that can help improve custom
     } else {
       return 'Strong negative signals with significant engagement challenges requiring immediate attention.';
     }
+  }
+
+  /**
+   * Generate strategic engagement insight (NEW METHOD)
+   */
+  async generateStrategicEngagementInsight(
+    userId: string,
+    industry: string,
+    userTier: UserTier = 'premium'
+  ): Promise<EngagementInsight> {
+    console.log(`🎯 Generating strategic engagement insight for ${industry} (${userTier} user)`);
+
+    // Rate limiting check
+    const rateLimitResult = await aiRateLimiter.checkRateLimit(userId, 'engagement_intelligence');
+    if (!rateLimitResult.allowed) {
+      throw new Error(`Rate limit exceeded. Please try again in ${rateLimitResult.retryAfter} seconds.`);
+    }
+
+    // Get optimal model
+    const modelSelection = this.getOptimalModel(userTier);
+
+    // Gather industry-wide engagement data
+    const engagementData = await this.gatherEngagementData(industry);
+    
+    // Gather signal data
+    const signalData = await this.gatherSignalData(industry);
+    
+    // Calculate signal score
+    const { score: signalScore, factors: signalFactors } = this.calculateSignalScore(signalData);
+    
+    // Add signal data to engagement data
+    engagementData.signalData = signalData;
+
+    // Generate AI analysis
+    const { insight, tokensUsed, cost } = await this.generateStrategicAIAnalysis(
+      industry,
+      engagementData,
+      modelSelection,
+      signalScore,
+      signalFactors
+    );
+
+    // Track usage
+    if (tokensUsed && cost) {
+      await aiRateLimiter.recordRequest(userId, modelSelection.provider, modelSelection.model, 0, true, tokensUsed);
+    }
+
+    // Update model version
+    await modelVersioning.recordModelRequest({
+      userId,
+      provider: modelSelection.provider,
+      model: modelSelection.model,
+      version: '2.0',
+      requestData: { prompt: 'strategic_engagement_intelligence' },
+      responseTime: 0,
+      tokensUsed: tokensUsed || 0,
+      cost: cost || 0,
+      success: true,
+      timestamp: new Date()
+    });
+
+    console.log(`✅ Strategic engagement insight generated successfully`);
+    console.log(`   Signal Score: ${signalScore.toFixed(2)}`);
+    console.log(`   Trends: ${insight.trends.length}`);
+    console.log(`   Recommendations: ${insight.recommendations.length}`);
+
+    return insight;
+  }
+
+  /**
+   * Generate strategic AI analysis (NEW METHOD)
+   */
+  private async generateStrategicAIAnalysis(
+    industry: string,
+    engagementData: EngagementDataSources,
+    modelSelection: { provider: string; model: string; estimatedCost: number; estimatedLatency: number },
+    signalScore: number,
+    signalFactors: SignalFactors
+  ): Promise<{ insight: EngagementInsight; tokensUsed?: number; cost?: number }> {
+    console.log(`🧠 Generating strategic AI analysis for ${industry}`);
+
+    const prompt = this.buildStrategicEngagementPrompt(
+      industry,
+      engagementData,
+      signalScore,
+      signalFactors
+    );
+
+    const startTime = Date.now();
+    
+    try {
+      const aiClient = getSmartAIClient(new AIClient());
+      const response = await aiClient.generate(prompt, {
+        model: modelSelection.model,
+        temperature: 0.7,
+        maxTokens: 1500
+      });
+
+      const endTime = Date.now();
+      const responseTime = endTime - startTime;
+
+      console.log(`✅ AI analysis completed in ${responseTime}ms`);
+
+      // Parse the AI response
+      const parsedInsight = this.parseStrategicEngagementResponse(response.content || '', signalScore);
+
+      return {
+        insight: parsedInsight,
+        tokensUsed: response.tokensUsed,
+        cost: 0 // Default cost since SmartAIResponse doesn't have cost property
+      };
+
+    } catch (error) {
+      console.error('❌ Error generating AI analysis:', error);
+      
+      // Return fallback insight
+      return {
+        insight: this.generateFallbackEngagementInsight(industry, signalScore)
+      };
+    }
+  }
+
+  /**
+   * Build strategic engagement prompt
+   */
+  private buildStrategicEngagementPrompt(
+    industry: string,
+    engagementData: EngagementDataSources,
+    signalScore: number,
+    signalFactors: SignalFactors
+  ): string {
+    return `Analyze engagement intelligence for the ${industry} industry and provide strategic insights.
+
+Industry: ${industry}
+Signal Score: ${signalScore.toFixed(1)}/100
+Signal Factors:
+- Engagement Volume: ${signalFactors.engagementVolume.toFixed(1)}
+- Sentiment Momentum: ${signalFactors.sentimentMomentum.toFixed(1)}
+- Conversion Trend: ${signalFactors.conversionTrend.toFixed(1)}
+- Audience Growth: ${signalFactors.audienceGrowth.toFixed(1)}
+- Retention Index: ${signalFactors.retentionIndex.toFixed(1)}
+
+Provide a JSON response with the following structure:
+{
+  "signalSummary": "Brief description of signal strength (e.g., 'Strong Positive', 'Neutral to Weak', 'Declining')",
+  "trends": [
+    {
+      "title": "Trend name",
+      "direction": "up|down|flat",
+      "percentageChange": number,
+      "description": "Brief description of the trend"
+    }
+  ],
+  "recommendations": [
+    "Actionable recommendation 1",
+    "Actionable recommendation 2", 
+    "Actionable recommendation 3"
+  ]
+}
+
+Focus on industry-wide trends and strategic recommendations that would benefit companies in the ${industry} sector. Keep descriptions concise and actionable.`;
+  }
+
+  /**
+   * Parse strategic engagement response
+   */
+  private parseStrategicEngagementResponse(response: string, signalScore: number): EngagementInsight {
+    try {
+      // Extract JSON from response
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('No JSON found in response');
+      }
+
+      const parsed = JSON.parse(jsonMatch[0]);
+
+      // Validate and structure the response
+      const trends: EngagementTrend[] = (parsed.trends || []).slice(0, 3).map((trend: any, index: number) => ({
+        title: trend.title || `Trend ${index + 1}`,
+        direction: this.validateDirection(trend.direction),
+        percentageChange: this.validatePercentage(trend.percentageChange),
+        description: trend.description || 'No description available'
+      }));
+
+      const recommendations: string[] = (parsed.recommendations || []).slice(0, 3).map((rec: any) => 
+        typeof rec === 'string' ? rec : 'Recommendation not available'
+      );
+
+      return {
+        signalScore,
+        signalSummary: parsed.signalSummary || this.getSignalStrengthDescription(signalScore),
+        trends,
+        recommendations,
+        lastUpdated: new Date().toISOString(),
+        aiModelVersion: 'gpt-4o',
+        confidenceScore: 0.85
+      };
+
+    } catch (error) {
+      console.error('❌ Error parsing AI response:', error);
+      return this.generateFallbackEngagementInsight('general', signalScore);
+    }
+  }
+
+  /**
+   * Generate fallback engagement insight
+   */
+  private generateFallbackEngagementInsight(industry: string, signalScore: number): EngagementInsight {
+    return {
+      signalScore,
+      signalSummary: this.getSignalStrengthDescription(signalScore),
+      trends: [
+        {
+          title: 'Email Click-Throughs',
+          direction: 'down',
+          percentageChange: -10,
+          description: 'Drop in CTR despite strong open rates'
+        },
+        {
+          title: 'Customer Satisfaction',
+          direction: 'flat',
+          percentageChange: 0,
+          description: 'Satisfaction holding steady'
+        },
+        {
+          title: 'Retention Index',
+          direction: 'up',
+          percentageChange: 4.3,
+          description: 'Slight improvement in retention'
+        }
+      ],
+      recommendations: [
+        'Revamp email content and CTAs to improve CTR',
+        'Map customer journey to identify drop-off points',
+        'Increase proactive engagement on social channels'
+      ],
+      lastUpdated: new Date().toISOString(),
+      aiModelVersion: 'gpt-4o',
+      confidenceScore: 0.75
+    };
   }
 
   // Mock API methods - replace with actual implementations

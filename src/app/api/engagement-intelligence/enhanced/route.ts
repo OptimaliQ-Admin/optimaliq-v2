@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { engagementIntelligenceAnalysis, EngagementIntelligenceInsight, UserTier } from '@/lib/ai/engagementIntelligenceAnalysis';
+import { engagementIntelligenceAnalysis, EngagementInsight, UserTier } from '@/lib/ai/engagementIntelligenceAnalysis';
 import { getErrorMessage } from '@/utils/errorHandler';
 import { SharedCaching } from '@/lib/ai/sharedCaching';
 
@@ -12,188 +12,143 @@ async function getUserTier(supabase: any, userId: string): Promise<UserTier> {
     const { data: subscription } = await supabase
       .from('subscriptions')
       .select('status, current_period_end')
-      .eq('u_id', userId)
+      .eq('user_id', userId)
       .eq('status', 'active')
       .single();
 
-    if (subscription && subscription.current_period_end > new Date().toISOString()) {
-      return 'premium'; // ✅ Active paid subscription
+    if (subscription && new Date(subscription.current_period_end) > new Date()) {
+      return 'premium';
     }
-
-    // Trial users are treated as FREE (not premium)
-    // This ensures they get cost-optimized models and basic features
-    return 'free'; // ❌ Trial, cancelled, expired, or no subscription
   } catch (error) {
-    console.log('Could not determine user tier, defaulting to free:', error);
-    return 'free';
+    console.log('No active premium subscription found, using free tier');
   }
+  return 'free';
 }
 
-export const dynamic = 'force-dynamic';
-
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
     
-    // Check authentication
+    // Get user session
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { searchParams } = new URL(req.url);
-    const industry = searchParams.get('industry') || 'general';
+    // Get industry from query params
+    const { searchParams } = new URL(request.url);
+    const industry = searchParams.get('industry') || 'technology';
     const forceRefresh = searchParams.get('forceRefresh') === 'true';
 
-    console.log(`🎯 Engagement Intelligence Request:`, { 
-      userId: user.id, 
-      industry, 
-      forceRefresh 
-    });
+    // Determine user tier
+    const userTier = await getUserTier(supabase, user.id);
+
+    console.log(`🎯 Engagement Intelligence API called for ${industry} (${userTier} user)`);
 
     // Use shared caching system
     const sharedCache = SharedCaching.getInstance();
     const tableName = 'engagement_insights';
 
-    // Check cache first (unless force refresh)
-    if (!forceRefresh) {
-      const cachedInsight = await sharedCache.getCachedInsight<EngagementIntelligenceInsight>(
+    let insight: EngagementInsight;
+
+    if (forceRefresh) {
+      // Force refresh
+      insight = await sharedCache.forceRefreshInsight(
         user.id,
         industry,
-        tableName
+        tableName,
+        () => engagementIntelligenceAnalysis.generateStrategicEngagementInsight(user.id, industry, userTier),
+        '2.0',
+        undefined,
+        { userTier }
       );
-      
-      if (cachedInsight) {
-        console.log(`✅ Returning cached engagement insight for ${industry}`);
-        return NextResponse.json({
-          insight: cachedInsight,
-          cached: true,
-          createdAt: cachedInsight.lastUpdated,
-          userTier: 'free' // For cached responses, default to free (trial users)
-        });
-      }
+    } else {
+      // Normal flow with caching
+      insight = await sharedCache.generateInsightWithCache(
+        user.id,
+        industry,
+        tableName,
+        () => engagementIntelligenceAnalysis.generateStrategicEngagementInsight(user.id, industry, userTier),
+        '2.0',
+        false,
+        undefined,
+        { userTier }
+      );
     }
 
-    // Determine user tier for smart model selection
-    const userTier = await getUserTier(supabase, user.id);
-    console.log(`👤 User ${user.id} tier: ${userTier}`);
-
-    // Generate new insight
-    const insight = await engagementIntelligenceAnalysis.generateEngagementInsight(
-      user.id,
-      industry,
-      userTier
-    );
-
-    // Save to shared cache
-    await sharedCache.saveInsightToCache(
-      user.id,
-      industry,
-      insight,
-      tableName,
-      insight.aiModelVersion || 'gpt-4o',
-      insight.signalScore,
-      { userTier, confidenceScore: insight.confidenceScore }
-    );
-
-    console.log(`✅ Generated new engagement insight for ${industry}`);
+    console.log(`✅ Engagement Intelligence generated successfully`);
+    console.log(`   Signal Score: ${insight.signalScore}`);
+    console.log(`   Trends: ${insight.trends.length}`);
+    console.log(`   Recommendations: ${insight.recommendations.length}`);
 
     return NextResponse.json({
-      insight,
-      cached: false,
-      createdAt: insight.lastUpdated,
-      userTier
+      success: true,
+      data: insight
     });
 
   } catch (error) {
     console.error('❌ Engagement Intelligence API Error:', error);
     return NextResponse.json(
-      { error: getErrorMessage(error) },
+      { 
+        error: 'Failed to generate engagement intelligence',
+        details: getErrorMessage(error)
+      },
       { status: 500 }
     );
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
     
-    // Check authentication
+    // Get user session
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { industry, forceRefresh = false } = await req.json();
-
+    const { industry } = await request.json();
     if (!industry) {
       return NextResponse.json({ error: 'Industry is required' }, { status: 400 });
     }
 
-    console.log(`🔄 Engagement Intelligence POST Request:`, { 
-      userId: user.id, 
-      industry, 
-      forceRefresh 
-    });
+    // Determine user tier
+    const userTier = await getUserTier(supabase, user.id);
 
-    // Use shared caching system
+    console.log(`🔄 Force refresh engagement intelligence for ${industry} (${userTier} user)`);
+
+    // Use shared caching system for force refresh
     const sharedCache = SharedCaching.getInstance();
     const tableName = 'engagement_insights';
 
-    // Check refresh limit
-    const refreshLimit = await sharedCache.checkRefreshLimit(user.id, industry, tableName);
-    if (!refreshLimit.allowed) {
-      return NextResponse.json(
-        { error: `Refresh limit exceeded. Please try again in ${refreshLimit.retryAfter} seconds.` },
-        { status: 429 }
-      );
-    }
-
-    // Delete cached insight if force refresh
-    if (forceRefresh) {
-      await sharedCache.deleteCachedInsight(user.id, industry, tableName);
-      console.log(`🗑️ Deleted cached engagement insight for ${industry}`);
-    }
-
-    // Determine user tier for smart model selection
-    const userTier = await getUserTier(supabase, user.id);
-    console.log(`👤 User ${user.id} tier: ${userTier}`);
-
-    // Generate new insight
-    const insight = await engagementIntelligenceAnalysis.generateEngagementInsight(
+    const insight = await sharedCache.forceRefreshInsight(
       user.id,
       industry,
-      userTier
-    );
-
-    // Save to shared cache
-    await sharedCache.saveInsightToCache(
-      user.id,
-      industry,
-      insight,
       tableName,
-      insight.aiModelVersion || 'gpt-4o',
-      insight.signalScore,
-      { userTier, confidenceScore: insight.confidenceScore }
+      () => engagementIntelligenceAnalysis.generateStrategicEngagementInsight(user.id, industry, userTier),
+      '2.0',
+      undefined,
+      { userTier }
     );
 
-    // Update refresh timestamp
-    await sharedCache.updateRefreshTimestamp(user.id, industry, tableName);
-
-    console.log(`✅ Generated new engagement insight for ${industry} (force refresh: ${forceRefresh})`);
+    console.log(`✅ Engagement Intelligence force refresh completed`);
+    console.log(`   Signal Score: ${insight.signalScore}`);
+    console.log(`   Trends: ${insight.trends.length}`);
+    console.log(`   Recommendations: ${insight.recommendations.length}`);
 
     return NextResponse.json({
-      insight,
-      cached: false,
-      createdAt: insight.lastUpdated,
-      forceRefreshed: forceRefresh,
-      userTier
+      success: true,
+      data: insight
     });
 
   } catch (error) {
-    console.error('❌ Engagement Intelligence POST Error:', error);
+    console.error('❌ Engagement Intelligence Force Refresh Error:', error);
     return NextResponse.json(
-      { error: getErrorMessage(error) },
+      { 
+        error: 'Failed to refresh engagement intelligence',
+        details: getErrorMessage(error)
+      },
       { status: 500 }
     );
   }

@@ -245,7 +245,7 @@ const EnhancedAIInsightModal: React.FC<EnhancedAIInsightModalProps> = ({
       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <AlertTriangle className="w-4 h-4" />
-          <span>Analysis based on AI models and market data. Not financial advice.</span>
+          <span>Analysis based on AI models and market data.<br/>Not to be used as financial advice.</span>
         </div>
         <div className="text-sm text-gray-500">
           Last updated: {formatLastUpdated(lastUpdated)}
