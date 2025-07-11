@@ -14,7 +14,7 @@ import GrowthChart from "@/components/dashboard/GrowthChart";
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
-import MarketingPlaybookCard from "@/components/dashboard/MarketingPlaybookCard";
+import EngagementIntelligenceCard from "@/components/dashboard/EngagementIntelligenceCard";
 import DashboardExplanationModal from "@/components/modals/DashboardExplanationModal";
 import PageNavigation from "@/components/shared/PageNavigation";
 import dynamic from "next/dynamic";
@@ -390,7 +390,7 @@ export default function PremiumDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase() === 'saas' ? 'technology' : (insights.industry || "other").trim().toLowerCase()} />
             <BusinessTrendCard />
-            <MarketingPlaybookCard />
+            <EngagementIntelligenceCard industry={(insights.industry || "general").trim().toLowerCase()} />
           </div>
         </motion.section>
       </div>

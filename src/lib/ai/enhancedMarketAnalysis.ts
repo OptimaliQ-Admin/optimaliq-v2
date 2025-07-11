@@ -632,28 +632,28 @@ Return your output strictly in this JSON structure:
 
 {
   "marketSize": {
-    "value": "2.4T",
-    "growth": 12,
+    "value": number in M|B|T,
+    "growth": number,
     "currency": "USD",
-    "description": "Global market opportunity"
+    "description": "string"
   },
   "growthRate": {
-    "value": 8.2,
-    "trend": 0.5,
+    "value": number,
+    "trend": number,
     "period": "annual",
-    "description": "Annual growth projection"
+    "description": "string"
   },
   "competition": {
-    "level": "High",
-    "trend": "Stable",
-    "description": "Competitive landscape",
-    "details": "Detailed competitive analysis..."
+    "level": "Low|Medium|High",
+    "trend": "Up|Down|Stable",
+    "description": "string",
+    "details": "string"
   },
   "sentiment": {
-    "score": 75,
-    "trend": "positive",
+    "score": number,
+    "trend": "positive|negative|neutral",
     "factors": ["news", "analyst", "investor"],
-    "description": "Market sentiment"
+    "description": "string"
   },
   "fullInsight": "📊 Market Summary\\nComprehensive market analysis...\\n\\n🎯 Strategic Outlook for Growth Companies\\n• Strategic insight 1\\n• Strategic insight 2\\n• Strategic insight 3\\n• Strategic insight 4",
   "confidenceScore": 0.85,
