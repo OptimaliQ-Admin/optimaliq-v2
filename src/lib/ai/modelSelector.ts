@@ -88,8 +88,8 @@ class ModelSelector {
 
       // Anthropic Models
       ['anthropic:claude-3-5-sonnet', {
-        provider: 'anthropic',
-        model: 'claude-3-5-sonnet',
+  provider: 'anthropic',
+  model: 'claude-3-5-sonnet-20241022',
         strengths: ['excellent_reasoning', 'creative_writing', 'safety', 'large_context'],
         weaknesses: ['higher_cost', 'slower'],
         bestFor: ['creative_content', 'complex_strategy', 'safety_critical'],

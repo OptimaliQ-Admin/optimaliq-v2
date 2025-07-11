@@ -9,7 +9,13 @@
  * - Real-time monitoring and alerting
  */
 
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+// Create server-side Supabase client for rate limiting
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
