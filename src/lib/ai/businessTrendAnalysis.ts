@@ -289,46 +289,46 @@ Return your response as a JSON object with this exact structure:
 {
   "trends": [
     {
-      "title": "Digital Transformation",
-      "direction": "up",
-      "percentageChange": 23,
-      "description": "Accelerating adoption of digital technologies across the industry"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "AI Integration",
-      "direction": "up", 
-      "percentageChange": 18,
-      "description": "Growing investment in AI solutions for operational efficiency"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "Remote Work",
-      "direction": "down",
-      "percentageChange": -5,
-      "description": "Stabilizing after pandemic surge as hybrid models emerge"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "Sustainability",
-      "direction": "up",
-      "percentageChange": 31,
-      "description": "Increasing focus on ESG initiatives and green practices"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "Supply Chain Resilience",
-      "direction": "up",
-      "percentageChange": 15,
-      "description": "Companies investing in robust supply chain solutions"
+     "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "Cybersecurity Focus",
-      "direction": "up",
-      "percentageChange": 28,
-      "description": "Increased spending on security and compliance measures"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     },
     {
-      "title": "Customer Experience",
-      "direction": "up",
-      "percentageChange": 12,
-      "description": "Enhanced focus on personalized customer interactions"
+      "title": "string",
+      "direction": "up|down|stable",
+      "percentageChange": number,
+      "description": "string"
     }
   ]
 }

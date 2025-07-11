@@ -84,7 +84,6 @@ export default function BusinessTrendCard({ industry = 'technology', className =
         <BusinessTrendsDetailedModal
           trends={trendData.trends}
           industry={industry}
-          userTier={trendData.userTier}
           generatedAt={trendData.generatedAt}
         />
       ),
@@ -242,11 +241,10 @@ export default function BusinessTrendCard({ industry = 'technology', className =
 interface BusinessTrendsDetailedModalProps {
   trends: BusinessTrend[];
   industry: string;
-  userTier: string;
   generatedAt: string;
 }
 
-function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }: BusinessTrendsDetailedModalProps) {
+function BusinessTrendsDetailedModal({ trends, industry, generatedAt }: BusinessTrendsDetailedModalProps) {
   const getDirectionIcon = (direction: 'up' | 'down' | 'stable') => {
     switch (direction) {
       case 'up':
@@ -320,48 +318,9 @@ function BusinessTrendsDetailedModal({ trends, industry, userTier, generatedAt }
             <p className="text-sm text-gray-600 capitalize">{industry} Industry</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-600">User Tier: <span className="font-medium capitalize">{userTier}</span></p>
-            <p className="text-xs text-gray-500">Generated: {formatGeneratedAt(generatedAt)}</p>
+            <p className="text-sm text-gray-600">Generated: {formatGeneratedAt(generatedAt)}</p>
           </div>
         </div>
-      </div>
-
-      {/* Business Trends Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {trends.map((trend, index) => (
-          <div
-            key={index}
-            className={`p-6 rounded-lg ${getTrendCardStyle(trend.direction)} transition-all duration-200 hover:shadow-md`}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                {getDirectionIcon(trend.direction)}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {trend.title}
-                  </h3>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className="text-sm text-gray-500">
-                      {getDirectionArrow(trend.direction)}
-                    </span>
-                    <span className={`text-lg font-bold ${getPercentageColor(trend.direction, trend.percentageChange)}`}>
-                      {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <p className="text-gray-700 leading-relaxed mb-4">
-              {trend.description}
-            </p>
-
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>AI Model: {trend.aiModelVersion}</span>
-              <span>Trend #{index + 1}</span>
-            </div>
-          </div>
-        ))}
       </div>
 
       {/* Business Trend Summary */}
