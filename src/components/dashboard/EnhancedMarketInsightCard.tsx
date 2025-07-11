@@ -7,6 +7,7 @@ import TradingViewTicker from '../shared/TradingViewTicker';
 import { useModal } from '@/components/modals/ModalProvider';
 import { EnhancedMarketInsight } from '@/lib/ai/enhancedMarketAnalysis';
 import EnhancedAIInsightModal from '@/components/modals/EnhancedAIInsightModal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface EnhancedMarketInsightCardProps {
   industry: string;
@@ -24,58 +25,53 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
   className = ''
 }) => {
   const [insightData, setInsightData] = useState<MarketInsightData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refreshDisabled, setRefreshDisabled] = useState(false);
   const { openModal } = useModal();
 
   const fetchMarketInsight = async (forceRefresh = false) => {
-    console.log('🔍 Fetching market insight for industry:', industry, 'forceRefresh:', forceRefresh);
-    setLoading(true);
-    setError(null);
-
     try {
-      const url = forceRefresh 
-        ? '/api/market-insights/enhanced'
-        : `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}`;
-
-      const method = forceRefresh ? 'POST' : 'GET';
-      const body = forceRefresh ? JSON.stringify({ industry }) : undefined;
-
-      console.log('🌐 Making request to:', url, 'method:', method);
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-
-      console.log('📡 Response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ API Error:', response.status, errorText);
-        throw new Error(`Failed to fetch market insight: ${response.status} ${errorText}`);
+      setError(null);
+      if (forceRefresh) {
+        setRefreshing(true);
       }
 
-      const data = await response.json();
-      console.log('✅ Market insight data received:', data);
-      setInsightData(data);
+      const url = forceRefresh 
+        ? `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
+        : `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}`;
+
+      const response = await fetch(url);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch market insight');
+      }
+
+      setInsightData({
+        insight: result.insight,
+        cached: result.cached || false,
+        createdAt: result.createdAt || new Date().toISOString()
+      });
+
     } catch (err) {
-      console.error('💥 Error fetching market insight:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error fetching market insight:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load market insight');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  useEffect(() => {
-    fetchMarketInsight();
-  }, [industry]);
-
-  const handleRefresh = () => {
-    fetchMarketInsight(true);
+  const handleRefresh = async () => {
+    if (refreshDisabled) return;
+    
+    setRefreshDisabled(true);
+    await fetchMarketInsight(true);
+    
+    // Re-enable after 24 hours
+    setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
   const handleViewReport = () => {
@@ -133,169 +129,205 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
   // Map SaaS to technology for ticker
   const tickerIndustry = industry.toLowerCase() === 'saas' ? 'technology' : industry;
 
+  useEffect(() => {
+    fetchMarketInsight();
+  }, [industry]);
+
+  if (loading) {
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+          <div className="space-y-3">
+            <div className="h-3 bg-gray-200 rounded"></div>
+            <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-3 bg-gray-200 rounded w-4/6"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error) {
     return (
-      <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 ${className}`}>
-        <div className="flex items-center gap-3 mb-4">
-          <AlertCircle className="w-6 h-6 text-red-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Market Intelligence</h2>
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="flex items-center space-x-3 text-red-600">
+          <AlertCircle className="w-5 h-5" />
+          <div>
+            <h3 className="font-semibold">Market Intelligence</h3>
+            <p className="text-sm text-gray-600">{error}</p>
+          </div>
         </div>
-        <div className="text-center py-8">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={handleRefresh}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Try Again
-          </button>
+      </div>
+    );
+  }
+
+  if (!insightData) {
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="text-center text-gray-500">
+          <Globe className="w-8 h-8 mx-auto mb-2" />
+          <p>No market intelligence available</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-200 ${className}`}>
+    <motion.div 
+      className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Market Intelligence</h3>
-          <p className="text-sm text-gray-500 capitalize">{industry} industry</p>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+          </h3>
+          <p className="text-sm text-gray-500">
+            Real-time market analysis and insights
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-            <Globe className="w-5 h-5 text-green-600" />
-          </div>
-          <button
-            onClick={handleRefresh}
-            disabled={loading}
-            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-            title="Refresh data"
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing || refreshDisabled}
+          className={`p-2 rounded-lg transition-colors ${
+            refreshing || refreshDisabled
+              ? 'text-gray-400 cursor-not-allowed'
+              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+          }`}
+          title={refreshDisabled ? 'Refresh available in 24 hours' : 'Refresh data'}
+        >
+          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+        </button>
+      </div>
+
+      {/* Market Metrics Grid */}
+      <div className="space-y-4 mb-6">
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+          <BarChart3 className="w-4 h-4 mr-2" />
+          Market Metrics
+        </h4>
+        <AnimatePresence>
+          {/* Market Size */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
           >
-            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-          </button>
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <h4 className="text-sm font-medium text-gray-900">Market Size</h4>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                  {insightData.insight.marketSize.growth > 0 ? '+' : ''}{insightData.insight.marketSize.growth}%
+                </span>
+              </div>
+              <p className="text-xs text-gray-600">{insightData.insight.marketSize.description}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-lg font-bold text-gray-900">{insightData.insight.marketSize.value}</div>
+            </div>
+          </motion.div>
+
+          {/* Growth Rate */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+          >
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <h4 className="text-sm font-medium text-gray-900">Growth Rate</h4>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                  {insightData.insight.growthRate.trend > 0 ? '+' : ''}{insightData.insight.growthRate.trend}%
+                </span>
+              </div>
+              <p className="text-xs text-gray-600">{insightData.insight.growthRate.description}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-lg font-bold text-gray-900">{insightData.insight.growthRate.value}%</div>
+            </div>
+          </motion.div>
+
+          {/* Competition */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+          >
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <h4 className="text-sm font-medium text-gray-900">Competition</h4>
+                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                  {insightData.insight.competition.trend}
+                </span>
+              </div>
+              <p className="text-xs text-gray-600">{insightData.insight.competition.description}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-lg font-bold text-gray-900">{insightData.insight.competition.level}</div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Market Sentiment */}
+      <div className="mb-6 pt-4 border-t border-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm font-medium text-gray-900">Market Sentiment</span>
+          <div className="flex items-center space-x-1">
+            <div className={`w-2 h-2 rounded-full ${
+              insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
+              insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
+            }`}></div>
+            <span className={`text-xs font-medium ${
+              getSentimentColor(insightData.insight.sentiment.score)
+            }`}>
+              {getSentimentLabel(insightData.insight.sentiment.score)}
+            </span>
+          </div>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <motion.div
+            className={`h-2 rounded-full transition-all duration-1000 ${
+              insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
+              insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
+            }`}
+            initial={{ width: 0 }}
+            animate={{ width: `${insightData.insight.sentiment.score}%` }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
         </div>
       </div>
 
-      {/* Loading State */}
-      {loading && !insightData && (
-        <div className="flex items-center justify-center py-8">
-          <RefreshCw className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600">Analyzing market data...</span>
+      {/* TradingView Ticker */}
+      <div className="mb-6">
+        <div className="bg-gray-50 rounded-lg p-3">
+          <h3 className="text-sm font-medium text-gray-700 mb-2">Live Market Data</h3>
+          <TradingViewTicker industry={tickerIndustry} className="w-full h-12 mb-4" />
         </div>
-      )}
+      </div>
 
-      {/* Content */}
-      {insightData?.insight && (
-        <>
-          {/* Market Metrics Grid */}
-          <div className="space-y-4">
-            {/* Market Size */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="text-sm font-medium text-gray-900">Market Size</h4>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                    {insightData.insight.marketSize.growth > 0 ? '+' : ''}{insightData.insight.marketSize.growth}%
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600">{insightData.insight.marketSize.description}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-gray-900">{insightData.insight.marketSize.value}</div>
-              </div>
-            </div>
-
-            {/* Growth Rate */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="text-sm font-medium text-gray-900">Growth Rate</h4>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                    {insightData.insight.growthRate.trend > 0 ? '+' : ''}{insightData.insight.growthRate.trend}%
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600">{insightData.insight.growthRate.description}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-gray-900">{insightData.insight.growthRate.value}%</div>
-              </div>
-            </div>
-
-            {/* Competition */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="text-sm font-medium text-gray-900">Competition</h4>
-                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
-                    {insightData.insight.competition.trend}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600">{insightData.insight.competition.description}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-gray-900">{insightData.insight.competition.level}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Market Sentiment */}
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-gray-900">Market Sentiment</span>
-              <div className="flex items-center space-x-1">
-                <div className={`w-2 h-2 rounded-full ${
-                  insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
-                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
-                }`}></div>
-                <span className={`text-xs font-medium ${
-                  getSentimentColor(insightData.insight.sentiment.score)
-                }`}>
-                  {getSentimentLabel(insightData.insight.sentiment.score)}
-                </span>
-              </div>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className={`h-2 rounded-full transition-all duration-1000 ${
-                  insightData.insight.sentiment.score >= 70 ? 'bg-green-500' :
-                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-500' : 'bg-red-500'
-                }`}
-                style={{ width: `${insightData.insight.sentiment.score}%` }}
-              />
-            </div>
-          </div>
-
-          {/* TradingView Ticker */}
-          <div className="mt-4">
-            <div className="bg-gray-50 rounded-xl p-3">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Live Market Data</h3>
-              <TradingViewTicker industry={tickerIndustry} className="w-full h-12 mb-4" />
-            </div>
-          </div>
-
-          {/* Action Button */}
-          <div className="mt-4">
-            <button
-              onClick={handleViewReport}
-              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
-            >
-              View Market Report
-            </button>
-          </div>
-
-          {/* Last Updated */}
-          {insightData && (
-            <div className="mt-3 text-center">
-              <p className="text-xs text-gray-500">
-                Last updated {formatLastUpdated(insightData.createdAt)}
-                {insightData.cached && ' (cached)'}
-              </p>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="text-xs text-gray-500">
+          Last updated: {formatLastUpdated(insightData.createdAt)}
+          {insightData.cached && ' (cached)'}
+        </div>
+        <button
+          onClick={handleViewReport}
+          className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
+        >
+          View Full Report →
+        </button>
+      </div>
+    </motion.div>
   );
 };
 

@@ -689,7 +689,7 @@ A concise 2–3 sentence summary highlighting the major directional theme.
 - Bullet 7
 
 Guidance:
-- Provide exactly 6 recommendations.
+- Provide exactly 3 recommendations.
 - If the news headlines offer ambiguous or insufficient information for clear recommendations, briefly note this in the trend summary and offer general strategic advice based on available signals.
 - Focus on trends like:
   - Digital transformation and technology adoption
@@ -713,24 +713,6 @@ Return your response as a JSON object with this exact structure:
     },
     {
       "title": "string",
-      "direction": "up|down|stable",
-      "percentageChange": number,
-      "description": "string"
-    },
-    {
-      "title": "string",
-      "direction": "up|down|stable",
-      "percentageChange": number,
-      "description": "string"
-    },
-    {
-      "title": "string",
-      "direction": "up|down|stable",
-      "percentageChange": number,
-      "description": "string"
-    },
-    {
-     "title": "string",
       "direction": "up|down|stable",
       "percentageChange": number,
       "description": "string"

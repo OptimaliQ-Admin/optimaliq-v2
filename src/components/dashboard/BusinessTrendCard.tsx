@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, TrendingDown, Minus, AlertCircle, BarChart3 } from 'lucide-react';
+import { RefreshCw, TrendingUp, TrendingDown, Minus, AlertCircle, BarChart3, ArrowUp, ArrowDown } from 'lucide-react';
 import { useModal } from '@/components/modals/ModalProvider';
 import { BusinessTrend } from '@/lib/ai/businessTrendAnalysis';
 import NewsTicker from '@/components/shared/NewsTicker';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface BusinessTrendCardProps {
   industry?: string;
@@ -12,57 +13,143 @@ interface BusinessTrendCardProps {
 }
 
 interface BusinessTrendData {
-  trends: BusinessTrend[];
-  userTier: string;
-  industry: string;
-  generatedAt: string;
+  data: {
+    trends: BusinessTrend[];
+    userTier: string;
+    industry: string;
+    generatedAt: string;
+  };
+  cached: boolean;
+  createdAt: string;
 }
 
 export default function BusinessTrendCard({ industry = 'technology', className = '' }: BusinessTrendCardProps) {
   const [trendData, setTrendData] = useState<BusinessTrendData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refreshDisabled, setRefreshDisabled] = useState(false);
   const { openModal } = useModal();
 
   const fetchBusinessTrends = async (forceRefresh = false) => {
-    console.log('🔥 Fetching business trends for industry:', industry, 'forceRefresh:', forceRefresh);
-    setLoading(true);
-    setError(null);
-    
     try {
-      const url = forceRefresh 
-        ? '/api/business-trends/enhanced'
-        : `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
-
-      const method = forceRefresh ? 'POST' : 'GET';
-      const body = forceRefresh ? JSON.stringify({ industry }) : undefined;
-
-      console.log('🌐 Making request to:', url, 'method:', method);
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-
-      console.log('📡 Response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ API Error:', response.status, errorText);
-        throw new Error(`Failed to fetch business trends: ${response.status} ${errorText}`);
+      setError(null);
+      if (forceRefresh) {
+        setRefreshing(true);
       }
 
-      const data = await response.json();
-      console.log('✅ Business trends data received:', data);
-      setTrendData(data);
+      const url = forceRefresh 
+        ? `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
+        : `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
+
+      const response = await fetch(url);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch business trends');
+      }
+
+      setTrendData({
+        data: result.data,
+        cached: !forceRefresh,
+        createdAt: result.data.generatedAt
+      });
+
     } catch (err) {
-      console.error('💥 Error fetching business trends:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error fetching business trends:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load business trends');
     } finally {
       setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    if (refreshDisabled) return;
+    
+    setRefreshDisabled(true);
+    await fetchBusinessTrends(true);
+    
+    // Re-enable after 24 hours
+    setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
+  };
+
+  const handleViewAllTrends = () => {
+    if (!trendData?.data.trends) return;
+
+    openModal({
+      type: 'ai_insight',
+      title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report`,
+      content: (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report
+            </h3>
+            <p className="text-sm text-gray-600">
+              Last updated: {new Date(trendData.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-3">Business Trend Summary</h4>
+            <div className="prose prose-sm max-w-none">
+              <p className="text-gray-700 mb-4">
+                The {industry} industry is experiencing significant transformation with {trendData.data.trends.filter(t => t.direction === 'up').length} positive trends 
+                and {trendData.data.trends.filter(t => t.direction === 'down').length} declining areas. These insights are based on real-time market analysis 
+                and AI-powered trend detection.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-3">Key Trends</h4>
+            <div className="space-y-2">
+              {trendData.data.trends.map((trend, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="text-sm text-gray-600">
+                    {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{trend.title}</p>
+                    <p className="text-xs text-gray-600">{trend.description}</p>
+                    <p className="text-xs text-gray-500">
+                      {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}% change
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ),
+      size: 'xl'
+    });
+  };
+
+  const getDirectionIcon = (direction: 'up' | 'down' | 'stable') => {
+    switch (direction) {
+      case 'up':
+        return <ArrowUp className="w-4 h-4 text-green-600" />;
+      case 'down':
+        return <ArrowDown className="w-4 h-4 text-red-600" />;
+      case 'stable':
+        return <Minus className="w-4 h-4 text-gray-600" />;
+      default:
+        return <Minus className="w-4 h-4 text-gray-600" />;
+    }
+  };
+
+  const getDirectionColor = (direction: 'up' | 'down' | 'stable') => {
+    switch (direction) {
+      case 'up':
+        return 'text-green-600';
+      case 'down':
+        return 'text-red-600';
+      case 'stable':
+        return 'text-gray-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
@@ -70,342 +157,131 @@ export default function BusinessTrendCard({ industry = 'technology', className =
     fetchBusinessTrends();
   }, [industry]);
 
-  const handleRefresh = () => {
-    fetchBusinessTrends(true);
-  };
-
-  const handleViewAllTrends = () => {
-    if (!trendData?.trends) return;
-
-    openModal({
-      type: 'business_trends',
-      size: 'xl',
-      title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report`,
-      content: (
-        <BusinessTrendsDetailedModal
-          trends={trendData.trends}
-          industry={industry}
-          generatedAt={trendData.generatedAt}
-        />
-      ),
-      showCloseButton: true,
-      closeOnEscape: true,
-      closeOnBackdropClick: true
-    });
-  };
-
-  const getDirectionIcon = (direction: 'up' | 'down' | 'stable') => {
-    switch (direction) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      case 'stable':
-        return <Minus className="w-4 h-4 text-gray-500" />;
-      default:
-        return <Minus className="w-4 h-4 text-gray-500" />;
-    }
-  };
-
-  const getDirectionArrow = (direction: 'up' | 'down' | 'stable') => {
-    switch (direction) {
-      case 'up':
-        return '↗';
-      case 'down':
-        return '↘';
-      case 'stable':
-        return '→';
-      default:
-        return '→';
-    }
-  };
-
-  const getPercentageColor = (direction: 'up' | 'down' | 'stable', percentage: number) => {
-    if (direction === 'up' || percentage > 0) return 'text-green-600';
-    if (direction === 'down' || percentage < 0) return 'text-red-600';
-    return 'text-gray-600';
-  };
-
-  const formatLastUpdated = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    return `${Math.floor(diffInMinutes / 1440)}d ago`;
-  };
-
-  if (error) {
+  if (loading) {
     return (
-      <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 ${className}`}>
-        <div className="flex items-center gap-3 mb-4">
-          <AlertCircle className="w-6 h-6 text-red-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Business Trends</h2>
-        </div>
-        <div className="text-center py-8">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={handleRefresh}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Try Again
-          </button>
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+          <div className="space-y-3">
+            <div className="h-3 bg-gray-200 rounded"></div>
+            <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-3 bg-gray-200 rounded w-4/6"></div>
+          </div>
         </div>
       </div>
     );
   }
 
+  if (error) {
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="flex items-center space-x-3 text-red-600">
+          <AlertCircle className="w-5 h-5" />
+          <div>
+            <h3 className="font-semibold">Business Trends</h3>
+            <p className="text-sm text-gray-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!trendData) {
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}>
+        <div className="text-center text-gray-500">
+          <BarChart3 className="w-8 h-8 mx-auto mb-2" />
+          <p>No business trends available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { data } = trendData;
+
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-200 ${className}`}>
+    <motion.div 
+      className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Business Trends</h3>
-          <p className="text-sm text-gray-500 capitalize">{industry} industry</p>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Business Trends: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+          </h3>
+          <p className="text-sm text-gray-500">
+            Strategic business trend analysis and insights
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-green-600" />
-          </div>
-          <button
-            onClick={handleRefresh}
-            disabled={loading}
-            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-            title="Refresh data"
-          >
-            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing || refreshDisabled}
+          className={`p-2 rounded-lg transition-colors ${
+            refreshing || refreshDisabled
+              ? 'text-gray-400 cursor-not-allowed'
+              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+          }`}
+          title={refreshDisabled ? 'Refresh available in 24 hours' : 'Refresh data'}
+        >
+          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+        </button>
       </div>
 
-      {/* Loading State */}
-      {loading && !trendData && (
-        <div className="flex items-center justify-center py-8">
-          <RefreshCw className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600">Analyzing business trends...</span>
-        </div>
-      )}
-
-      {/* Content */}
-      {trendData?.trends && (
-        <>
-          {/* Business Trends Grid */}
-          <div className="space-y-4">
-            {trendData.trends.slice(0, 7).map((trend, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    {getDirectionIcon(trend.direction)}
-                    <h4 className="text-sm font-medium text-gray-900">{trend.title}</h4>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      trend.direction === 'up' ? 'bg-green-100 text-green-700' :
-                      trend.direction === 'down' ? 'bg-red-100 text-red-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
-                      {getDirectionArrow(trend.direction)} {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
-                    </span>
-                  </div>
+      {/* Business Trends Grid */}
+      <div className="space-y-3 mb-6">
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+          <BarChart3 className="w-4 h-4 mr-2" />
+          Key Trends
+        </h4>
+        <AnimatePresence>
+          {data.trends.slice(0, 5).map((trend, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+            >
+              <div className="flex items-center space-x-3">
+                {getDirectionIcon(trend.direction)}
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{trend.title}</p>
                   <p className="text-xs text-gray-600">{trend.description}</p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* News Ticker */}
-          <div className="mt-6">
-            <NewsTicker 
-              className="mb-4"
-              showRefreshButton={true}
-              maxHeadlines={5}
-            />
-          </div>
-
-          {/* Action Button */}
-          <div className="mt-6">
-            <button
-              onClick={handleViewAllTrends}
-              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
-            >
-              View Business Trends Report
-            </button>
-          </div>
-
-          {/* Last Updated */}
-          {trendData && (
-            <div className="mt-3 text-center">
-              <p className="text-xs text-gray-500">
-                Last updated {formatLastUpdated(trendData.generatedAt)}
-              </p>
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-// Detailed Business Trends Modal Component
-interface BusinessTrendsDetailedModalProps {
-  trends: BusinessTrend[];
-  industry: string;
-  generatedAt: string;
-}
-
-function BusinessTrendsDetailedModal({ trends, industry, generatedAt }: BusinessTrendsDetailedModalProps) {
-  const getDirectionIcon = (direction: 'up' | 'down' | 'stable') => {
-    switch (direction) {
-      case 'up':
-        return <TrendingUp className="w-5 h-5 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-5 h-5 text-red-500" />;
-      case 'stable':
-        return <Minus className="w-5 h-5 text-gray-500" />;
-      default:
-        return <Minus className="w-5 h-5 text-gray-500" />;
-    }
-  };
-
-  const getDirectionArrow = (direction: 'up' | 'down' | 'stable') => {
-    switch (direction) {
-      case 'up':
-        return '↗';
-      case 'down':
-        return '↘';
-      case 'stable':
-        return '→';
-      default:
-        return '→';
-    }
-  };
-
-  const getPercentageColor = (direction: 'up' | 'down' | 'stable', percentage: number) => {
-    if (direction === 'up' || percentage > 0) return 'text-green-600';
-    if (direction === 'down' || percentage < 0) return 'text-red-600';
-    return 'text-gray-600';
-  };
-
-  const getTrendCardStyle = (direction: 'up' | 'down' | 'stable') => {
-    switch (direction) {
-      case 'up':
-        return 'border-l-4 border-l-green-500 bg-green-50';
-      case 'down':
-        return 'border-l-4 border-l-red-500 bg-red-50';
-      case 'stable':
-        return 'border-l-4 border-l-gray-500 bg-gray-50';
-      default:
-        return 'border-l-4 border-l-gray-500 bg-gray-50';
-    }
-  };
-
-  const formatGeneratedAt = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return 'Recently';
-      }
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    } catch (error) {
-      return 'Recently';
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Header Info */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">Business Trends Analysis</h3>
-            <p className="text-sm text-gray-600 capitalize">{industry} Industry</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-600">Generated: {formatGeneratedAt(generatedAt)}</p>
-          </div>
-        </div>
+              <span className={`text-sm font-semibold ${getDirectionColor(trend.direction)}`}>
+                {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}%
+              </span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
-      {/* Business Trend Summary */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">🔥 Business Trend Summary</h3>
-        <div className="prose prose-sm max-w-none">
-          <p className="text-gray-700 mb-4">
-            The {industry} industry is experiencing significant transformation with {trends.filter(t => t.direction === 'up').length} positive trends 
-            and {trends.filter(t => t.direction === 'down').length} declining areas. These insights are based on real-time market analysis 
-            and AI-powered trend detection, drawing from current news headlines and market signals.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-900 mb-2">📈 Key Opportunities</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
-                {trends.filter(t => t.direction === 'up').map((trend, i) => (
-                  <li key={i}>• {trend.title}: {trend.description}</li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="bg-orange-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-orange-900 mb-2">⚠️ Areas to Monitor</h4>
-              <ul className="text-sm text-orange-800 space-y-1">
-                {trends.filter(t => t.direction === 'down' || t.direction === 'stable').map((trend, i) => (
-                  <li key={i}>• {trend.title}: {trend.description}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+      {/* News Ticker */}
+      <div className="mb-6">
+        <NewsTicker 
+          className="mb-4"
+          showRefreshButton={true}
+          maxHeadlines={3}
+        />
       </div>
 
-      {/* Actionable Recommendations */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">🎯 Actionable Recommendations</h3>
-        <div className="space-y-3">
-          <div className="flex items-start space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-            <p className="text-sm text-gray-700">
-              <strong>Focus on Growth Areas:</strong> Prioritize investments in {trends.filter(t => t.direction === 'up').map(t => t.title).join(', ')} 
-              as these show positive momentum in the {industry} sector.
-            </p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-            <p className="text-sm text-gray-700">
-              <strong>Monitor Declining Trends:</strong> Keep a close eye on {trends.filter(t => t.direction === 'down').map(t => t.title).join(', ')} 
-              and develop contingency plans if these trends continue.
-            </p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-            <p className="text-sm text-gray-700">
-              <strong>Stay Agile:</strong> The {industry} industry is evolving rapidly. Maintain flexibility in your strategic planning 
-              to adapt to changing market conditions.
-            </p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-            <p className="text-sm text-gray-700">
-              <strong>Leverage Technology:</strong> Invest in digital transformation initiatives that align with current market trends 
-              and customer expectations.
-            </p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-            <p className="text-sm text-gray-700">
-              <strong>Build Resilience:</strong> Develop robust systems and processes that can withstand market volatility 
-              and capitalize on emerging opportunities.
-            </p>
-          </div>
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="text-xs text-gray-500">
+          Last updated: {new Date(data.generatedAt).toLocaleDateString()}
         </div>
+        <button
+          onClick={handleViewAllTrends}
+          className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
+        >
+          View Full Report →
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
