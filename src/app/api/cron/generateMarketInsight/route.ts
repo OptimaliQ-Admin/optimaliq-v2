@@ -4,6 +4,25 @@ import { createClient } from "@supabase/supabase-js";
 import { getErrorMessage } from "@/utils/errorHandler";
 export const dynamic = "force-dynamic";
 
+/**
+ * Get the last Monday at 12am (midnight)
+ */
+function getLastMonday12am(): Date {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  
+  // Calculate days to subtract to get to last Monday
+  // If today is Monday (1), we want last Monday, so subtract 7
+  // If today is Sunday (0), we want last Monday, so subtract 6
+  const daysToSubtract = currentDay === 1 ? 7 : currentDay === 0 ? 6 : currentDay - 1;
+  
+  const lastMonday = new Date(now);
+  lastMonday.setDate(now.getDate() - daysToSubtract);
+  lastMonday.setHours(0, 0, 0, 0); // Set to 12am (midnight)
+  
+  return lastMonday;
+}
+
 export async function GET(req: Request) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,6 +36,8 @@ export async function GET(req: Request) {
 
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY!;
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+
+  console.log("🟡 [START] Market Insight Generator - Monday 12am Refresh");
 
   try {
     const { data: rows, error } = await supabase
@@ -40,9 +61,16 @@ export async function GET(req: Request) {
         .limit(1)
         .maybeSingle();
 
+      // Check if we need to refresh (Monday 12am schedule)
       const lastRun = existing?.createdat ? new Date(existing.createdat).getTime() : 0;
-      const isFresh = Date.now() - lastRun < 7 * 24 * 60 * 60 * 1000;
-      if (isFresh) continue;
+      const now = Date.now();
+      const lastMonday12am = getLastMonday12am().getTime();
+      const isFresh = lastRun > lastMonday12am;
+      
+      if (isFresh) {
+        console.log(`⏰ Skipping ${industry} - already refreshed this week`);
+        continue;
+      }
 
       const analystSummary = (await Promise.all(
         symbols.map(async (sym) => {

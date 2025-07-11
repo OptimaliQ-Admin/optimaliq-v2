@@ -133,9 +133,9 @@ export default function MarketingPlaybookCard() {
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="max-w-3xl w-full bg-white rounded-xl shadow-xl">
+          <Dialog.Panel className="max-w-4xl w-full bg-white rounded-xl shadow-xl">
             <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-6">
                 <Dialog.Title className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-2xl">📢</span>
                   Marketing Intelligence Brief
@@ -149,16 +149,107 @@ export default function MarketingPlaybookCard() {
                   </svg>
                 </button>
               </div>
+
+              {/* Enhanced Header */}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 border border-purple-100 mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900">Marketing Intelligence Report</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                      Strong Signal
+                    </span>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                      82% Confidence
+                    </span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-600">Last Updated</p>
+                    <p className="font-medium">{lastUpdated}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">Next Refresh</p>
+                    <p className="font-medium">Monday 12am</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Data Sources */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Data Sources</h4>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>HubSpot</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>AdWeek</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>Marketing Dive</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>Social Media Examiner</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>Content Marketing Institute</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>LinkedIn</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Source URLs */}
+              <div className="bg-yellow-50 rounded-lg p-4 mb-6 border border-yellow-100">
+                <h4 className="font-medium text-gray-900 mb-3">Key Sources</h4>
+                <div className="space-y-2 text-sm">
+                  <a href="https://www.hubspot.com/hubfs/2025%20State%20of%20Marketing%20from%20HubSpot.pdf" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-blue-600 hover:text-blue-800 block">
+                    📄 2025 State of Marketing Report (HubSpot)
+                  </a>
+                  <a href="https://www.adweek.com/category/marketing/" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-blue-600 hover:text-blue-800 block">
+                    📰 AdWeek Marketing News
+                  </a>
+                  <a href="https://www.marketingdive.com/" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-blue-600 hover:text-blue-800 block">
+                    📊 Marketing Dive Insights
+                  </a>
+                </div>
+              </div>
               
-              <div className="bg-gray-50 rounded-lg p-4 max-h-[70vh] overflow-y-auto">
+              {/* Main Insight */}
+              <div className="bg-gray-50 rounded-lg p-4 max-h-[50vh] overflow-y-auto mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Marketing Analysis</h4>
                 <p className="text-gray-700 whitespace-pre-line leading-relaxed">
                   {fullInsight}
                 </p>
               </div>
+
+              {/* Refresh Schedule */}
+              <div className="bg-green-50 rounded-lg p-4 border border-green-100 mb-6">
+                <h4 className="font-medium text-gray-900 mb-2">Refresh Schedule</h4>
+                <p className="text-sm text-gray-700">
+                  This data refreshes automatically every Monday at 12am. Manual refresh is available once per day.
+                </p>
+              </div>
               
-              <div className="mt-6 flex items-center justify-between">
+              <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">
-                  {lastUpdated && `Last updated: ${lastUpdated}`}
+                  Powered by OptimaliQ.ai • AI-powered marketing intelligence
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}

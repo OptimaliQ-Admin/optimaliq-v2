@@ -12,7 +12,7 @@
  *   • Batch Processing: Claude-3-haiku (cost-optimized)
  *   • Creative Content: Claude-3-5-sonnet (excellent reasoning)
  * - Real-time signal calculation for enhanced accuracy
- * - Consistent caching with 7-day cache and 1-day refresh limit
+ * - Consistent caching with weekly refresh (Monday 12am) and 1-day refresh limit
  *
  * Used to power: Market Cards, Industry Reports, and Strategic Insights in near-real-time.
  */

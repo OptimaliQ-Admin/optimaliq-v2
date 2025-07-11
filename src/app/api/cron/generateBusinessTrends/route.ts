@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  console.log("🟡 [START] Weekly Business Trend Generator");
+  console.log("🟡 [START] Weekly Business Trend Generator - Monday 12am Refresh");
 
   try {
     // 1. Fetch top general business news headlines

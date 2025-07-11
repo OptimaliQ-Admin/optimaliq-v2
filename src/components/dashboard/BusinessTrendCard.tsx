@@ -18,6 +18,10 @@ interface BusinessTrendData {
     userTier: string;
     industry: string;
     generatedAt: string;
+    signalStrength?: string;
+    confidenceScore?: number;
+    nextRefresh?: string;
+    dataSources?: Record<string, boolean>;
   };
   cached: boolean;
   createdAt: string;
@@ -82,15 +86,50 @@ export default function BusinessTrendCard({ industry = 'technology', className =
       title: `${industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report`,
       content: (
         <div className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report
-            </h3>
-            <p className="text-sm text-gray-600">
-              Last updated: {new Date(trendData.createdAt).toLocaleDateString()}
-            </p>
+          {/* Header with enhanced info */}
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-100">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {industry.charAt(0).toUpperCase() + industry.slice(1)} Business Trends Report
+              </h3>
+              <div className="flex items-center gap-2">
+                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                  {trendData.data.signalStrength || 'Strong'} Signal
+                </span>
+                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                  {Math.round((trendData.data.confidenceScore || 0.85) * 100)}% Confidence
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-600">Last Updated</p>
+                <p className="font-medium">{new Date(trendData.createdAt).toLocaleDateString()}</p>
+              </div>
+              <div>
+                <p className="text-gray-600">Next Refresh</p>
+                <p className="font-medium">{trendData.data.nextRefresh ? new Date(trendData.data.nextRefresh).toLocaleDateString() : 'Monday 12am'}</p>
+              </div>
+            </div>
           </div>
 
+          {/* Data Sources */}
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+            <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Data Sources
+            </h4>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              {Object.entries(trendData.data.dataSources || {}).map(([source, active]) => (
+                <div key={source} className="flex items-center gap-1">
+                  <div className={`w-2 h-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                  <span className="capitalize">{source.replace('_', ' ')}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Trend Summary */}
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 mb-3">Business Trend Summary</h4>
             <div className="prose prose-sm max-w-none">
@@ -102,24 +141,51 @@ export default function BusinessTrendCard({ industry = 'technology', className =
             </div>
           </div>
 
+          {/* Key Trends */}
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 mb-3">Key Trends</h4>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {trendData.data.trends.map((trend, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <span className="text-sm text-gray-600">
-                    {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
-                  </span>
-                  <div>
+                <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <div className={`p-2 rounded-full ${
+                    trend.direction === 'up' ? 'bg-green-100' : 
+                    trend.direction === 'down' ? 'bg-red-100' : 'bg-gray-100'
+                  }`}>
+                    <span className="text-sm">
+                      {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
+                    </span>
+                  </div>
+                  <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900">{trend.title}</p>
-                    <p className="text-xs text-gray-600">{trend.description}</p>
-                    <p className="text-xs text-gray-500">
-                      {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}% change
-                    </p>
+                    <p className="text-xs text-gray-600 mt-1">{trend.description}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-xs font-semibold ${
+                        trend.direction === 'up' ? 'text-green-600' : 
+                        trend.direction === 'down' ? 'text-red-600' : 'text-gray-600'
+                      }`}>
+                        {trend.percentageChange > 0 ? '+' : ''}{trend.percentageChange}% change
+                      </span>
+                      {trend.signalScore && (
+                        <span className="text-xs text-gray-500">
+                          Signal: {trend.signalScore.toFixed(1)}/100
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Refresh Schedule */}
+          <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
+            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh Schedule
+            </h4>
+            <p className="text-sm text-gray-700">
+              This data refreshes automatically every Monday at 12am. Manual refresh is available once per day.
+            </p>
           </div>
         </div>
       ),

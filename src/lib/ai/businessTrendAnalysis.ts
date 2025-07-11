@@ -7,7 +7,7 @@
  * - Smart model selection for different user tiers
  * - Trend direction and percentage change calculation
  * - Real-time signal calculation for enhanced accuracy
- * - Consistent caching with 7-day cache and 1-day refresh limit
+ * - Consistent caching with weekly refresh (Monday 12am) and 1-day refresh limit
  *
  * Used to power: Business Trend Cards, Industry Insights, and Strategic Predictions.
  */

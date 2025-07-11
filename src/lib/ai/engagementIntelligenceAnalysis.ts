@@ -8,7 +8,7 @@
  * - Smart model selection for different user tiers
  * - Real-time signal calculation for enhanced accuracy
  * - Engagement scoring and predictive insights
- * - Consistent caching with 7-day cache and 1-day refresh limit
+ * - Consistent caching with weekly refresh (Monday 12am) and 1-day refresh limit
  *
  * Used to power: Engagement Intelligence Cards, Customer Behavior Reports, and Engagement Strategy Insights.
  */

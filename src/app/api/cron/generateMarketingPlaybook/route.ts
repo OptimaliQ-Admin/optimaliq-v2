@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  console.log("🟡 [START] Tactical Marketing Playbook Generator");
+  console.log("🟡 [START] Tactical Marketing Playbook Generator - Monday 12am Refresh");
 
   try {
     const selectedSources = SOURCES.sort(() => 0.5 - Math.random()).slice(0, 3); // rotate sources randomly

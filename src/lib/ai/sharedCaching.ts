@@ -2,7 +2,7 @@
  * 🔄 Shared Caching Utility for AI Modules
  *
  * Provides consistent caching behavior across all AI analysis modules:
- * - 7-day cache for regular insights
+ * - Weekly cache refresh every Monday at 12am
  * - 1-day refresh limit for manual refreshes
  * - Supabase integration for persistent storage
  * - Rate limiting and user tracking
@@ -12,9 +12,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Cache configuration
-const CACHE_DURATION_DAYS = 7; // Regular cache duration
 const REFRESH_LIMIT_HOURS = 24; // Manual refresh limit
-const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
 // Base interface for cached insights
@@ -57,6 +55,34 @@ export class SharedCaching {
   }
 
   /**
+   * Get the last Monday at 12am (midnight)
+   */
+  private getLastMonday12am(): Date {
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Calculate days to subtract to get to last Monday
+    // If today is Monday (1), we want last Monday, so subtract 7
+    // If today is Tuesday (2), we want last Monday, so subtract 1
+    // If today is Sunday (0), we want last Monday, so subtract 6
+    const daysToSubtract = currentDay === 1 ? 7 : currentDay === 0 ? 6 : currentDay - 1;
+    
+    const lastMonday = new Date(now);
+    lastMonday.setDate(now.getDate() - daysToSubtract);
+    lastMonday.setHours(0, 0, 0, 0); // Set to 12am (midnight)
+    
+    return lastMonday;
+  }
+
+  /**
+   * Check if cache is still valid (created after last Monday 12am)
+   */
+  private isCacheValid(createdAt: Date): boolean {
+    const lastMonday12am = this.getLastMonday12am();
+    return new Date(createdAt) > lastMonday12am;
+  }
+
+  /**
    * Check if a cached insight exists and is still valid
    */
   async getCachedInsight<T>(
@@ -78,15 +104,18 @@ export class SharedCaching {
         return null;
       }
 
-      // Check if cache is still valid (within 7 days)
-      const cacheAge = Date.now() - new Date(cachedInsight.created_at).getTime();
-      const isValid = cacheAge < (CACHE_DURATION_DAYS * MILLISECONDS_PER_DAY);
+      // Check if cache is still valid (created after last Monday 12am)
+      const isValid = this.isCacheValid(cachedInsight.created_at);
 
       if (isValid) {
-        console.log(`✅ Returning cached ${tableName} for ${industry} (age: ${Math.round(cacheAge / MILLISECONDS_PER_DAY)} days)`);
+        const lastMonday = this.getLastMonday12am();
+        const nextRefresh = new Date(lastMonday);
+        nextRefresh.setDate(lastMonday.getDate() + 7); // Next Monday
+        
+        console.log(`✅ Returning cached ${tableName} for ${industry} (refreshes next Monday 12am)`);
         return cachedInsight.insight_data as T;
       } else {
-        console.log(`⏰ Cached ${tableName} for ${industry} expired (age: ${Math.round(cacheAge / MILLISECONDS_PER_DAY)} days)`);
+        console.log(`⏰ Cached ${tableName} for ${industry} expired (older than last Monday 12am)`);
         return null;
       }
     } catch (error) {

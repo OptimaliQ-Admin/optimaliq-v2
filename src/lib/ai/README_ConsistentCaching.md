@@ -4,9 +4,9 @@
 
 This document describes the unified caching system implemented across all AI analysis modules to ensure consistent behavior, performance optimization, and cost control.
 
-## 🎯 Design Goals
+## �� Design Goals
 
-- **7-day cache** for regular insights to reduce AI costs
+- **Weekly cache refresh** every Monday at 12am for regular insights
 - **1-day refresh limit** for manual refreshes to prevent abuse
 - **Consistent behavior** across all AI modules
 - **Signal score integration** for advanced analytics
@@ -17,9 +17,9 @@ This document describes the unified caching system implemented across all AI ana
 
 | Module | Table Name | Cache Duration | Refresh Limit |
 |--------|------------|----------------|---------------|
-| Enhanced Market Analysis | `market_insights` | 7 days | 1 per day |
-| Business Trend Analysis | `business_trends` | 7 days | 1 per day |
-| Engagement Intelligence | `engagement_insights` | 7 days | 1 per day |
+| Enhanced Market Analysis | `market_insights` | Weekly (Monday 12am) | 1 per day |
+| Business Trend Analysis | `business_trends` | Weekly (Monday 12am) | 1 per day |
+| Engagement Intelligence | `engagement_insights` | Weekly (Monday 12am) | 1 per day |
 
 ## 🏗️ Architecture
 
@@ -37,6 +37,10 @@ export class SharedCaching {
   // Rate limiting methods
   async checkRefreshLimit(userId, industry, tableName): Promise<RefreshLimit>
   async forceRefreshInsight<T>(userId, industry, tableName, generateFunction, modelVersion, signalScore?, insightMeta?): Promise<T>
+  
+  // Weekly refresh methods
+  private getLastMonday12am(): Date
+  private isCacheValid(createdAt: Date): boolean
 }
 ```
 
@@ -68,8 +72,8 @@ CREATE TABLE table_name (
 ```mermaid
 graph TD
     A[User requests insight] --> B{Check cache}
-    B -->|Cache exists & < 7 days| C[Return cached insight]
-    B -->|No cache or expired| D[Generate new insight]
+    B -->|Cache exists & created after last Monday 12am| C[Return cached insight]
+    B -->|No cache or older than last Monday 12am| D[Generate new insight]
     D --> E[Save to cache]
     E --> F[Return insight]
 ```
@@ -157,8 +161,16 @@ const refreshedInsight = await engagementIntelligenceAnalysis.forceRefreshEngage
 ### Cache Duration
 
 ```typescript
-const CACHE_DURATION_DAYS = 7; // Regular cache duration
 const REFRESH_LIMIT_HOURS = 24; // Manual refresh limit
+
+// Weekly refresh logic
+private getLastMonday12am(): Date {
+  // Returns the last Monday at 12am (midnight)
+}
+
+private isCacheValid(createdAt: Date): boolean {
+  // Returns true if cache was created after last Monday 12am
+}
 ```
 
 ### Signal Score Integration
@@ -200,74 +212,17 @@ All caching tables have RLS enabled with policies:
 ## 🚀 Benefits
 
 ### Cost Optimization
-- **Reduced AI API calls** through intelligent caching
-- **7-day cache** significantly reduces costs
+- **Reduced AI API calls** through intelligent weekly caching
+- **Predictable refresh schedule** every Monday at 12am
 - **Smart refresh limits** prevent abuse
 
 ### User Experience
 - **Faster response times** for cached insights
 - **Consistent behavior** across all modules
 - **Clear feedback** on refresh limits
+- **Predictable weekly updates** for fresh insights
 
-### Developer Experience
-- **Unified API** across all modules
-- **Shared logic** reduces code duplication
-- **Type-safe** caching with generics
-
-## 🔧 Maintenance
-
-### Database Cleanup
-
-Automatic cleanup function removes old data:
-
-```sql
-SELECT cleanup_old_ai_insights(); -- Removes insights older than 30 days
-```
-
-### Monitoring
-
-Key metrics to monitor:
-
-- Cache hit rates
-- Refresh limit violations
-- Storage usage
-- API response times
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **"Refresh limit exceeded"**
-   - User tried to refresh more than once per day
-   - Wait for the retry-after time or use cached data
-
-2. **"Invalid AI response format"**
-   - AI model returned malformed JSON
-   - Check logs for raw AI response
-   - Consider adjusting prompts
-
-3. **Cache not working**
-   - Check Supabase connection
-   - Verify RLS policies
-   - Check table permissions
-
-### Debug Commands
-
-```typescript
-// Check cache status
-const cached = await module.getCachedInsight(userId, industry);
-
-// Check refresh limit
-const limit = await module.checkRefreshLimit(userId, industry);
-
-// Force cleanup (admin only)
-await supabase.rpc('cleanup_old_ai_insights');
-```
-
-## 📈 Future Enhancements
-
-- **Adaptive cache duration** based on signal strength
-- **Multi-region caching** for global users
-- **Cache warming** for popular industries
-- **Analytics dashboard** for cache performance
-- **A/B testing** for cache strategies 
+### Business Intelligence
+- **Weekly trend analysis** aligns with business cycles
+- **Consistent data freshness** across all users
+- **Cost-effective insights** with controlled refresh frequency 
