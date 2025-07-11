@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, Users, MessageSquare, Target, AlertCircle, Activity, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { TrendingUp, Users, MessageSquare, Target, AlertCircle, Activity, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { useModal } from '@/components/modals/ModalProvider';
 import { EngagementInsight, EngagementTrend } from '@/lib/ai/engagementIntelligenceAnalysis';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,21 +25,14 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
 }) => {
   const [engagementData, setEngagementData] = useState<EngagementData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [refreshDisabled, setRefreshDisabled] = useState(false);
   const { openModal } = useModal();
 
-  const fetchEngagementData = async (forceRefresh = false) => {
+  const fetchEngagementData = async () => {
     try {
       setError(null);
-      if (forceRefresh) {
-        setRefreshing(true);
-      }
 
-      const url = forceRefresh 
-        ? `/api/engagement-intelligence/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
-        : `/api/engagement-intelligence/enhanced?industry=${encodeURIComponent(industry)}`;
+      const url = `/api/engagement-intelligence/enhanced?industry=${encodeURIComponent(industry)}`;
 
       const response = await fetch(url);
       const result = await response.json();
@@ -50,7 +43,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
 
       setEngagementData({
         data: result.data,
-        cached: !forceRefresh,
+        cached: result.cached || false,
         createdAt: result.data.lastUpdated
       });
 
@@ -59,18 +52,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
       setError(err instanceof Error ? err.message : 'Failed to load engagement intelligence');
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
-  };
-
-  const handleRefresh = async () => {
-    if (refreshDisabled) return;
-    
-    setRefreshDisabled(true);
-    await fetchEngagementData(true);
-    
-    // Re-enable after 24 hours
-    setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
   const handleViewFullReport = async () => {
@@ -248,27 +230,13 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">
-            Engagement Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-          </h3>
-          <p className="text-sm text-gray-500">
-            Strategic engagement trends and recommendations
-          </p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing || refreshDisabled}
-          className={`p-2 rounded-lg transition-colors ${
-            refreshing || refreshDisabled
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-          }`}
-          title={refreshDisabled ? 'Refresh available in 24 hours' : 'Refresh data'}
-        >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-        </button>
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Engagement Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Strategic engagement trends and recommendations • Refreshes every Monday
+        </p>
       </div>
 
       {/* Signal Bar */}

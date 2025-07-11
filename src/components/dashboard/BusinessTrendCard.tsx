@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, TrendingDown, Minus, AlertCircle, BarChart3, ArrowUp, ArrowDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, AlertCircle, BarChart3, ArrowUp, ArrowDown } from 'lucide-react';
 import { useModal } from '@/components/modals/ModalProvider';
 import { BusinessTrend } from '@/lib/ai/businessTrendAnalysis';
 import NewsTicker from '@/components/shared/NewsTicker';
@@ -27,21 +27,14 @@ interface BusinessTrendData {
 export default function BusinessTrendCard({ industry = 'technology', className = '' }: BusinessTrendCardProps) {
   const [trendData, setTrendData] = useState<BusinessTrendData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [refreshDisabled, setRefreshDisabled] = useState(false);
   const { openModal } = useModal();
 
-  const fetchBusinessTrends = async (forceRefresh = false) => {
+  const fetchBusinessTrends = async () => {
     try {
       setError(null);
-      if (forceRefresh) {
-        setRefreshing(true);
-      }
 
-      const url = forceRefresh 
-        ? `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
-        : `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
+      const url = `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
 
       const response = await fetch(url);
       const result = await response.json();
@@ -52,7 +45,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
 
       setTrendData({
         data: result.data,
-        cached: !forceRefresh,
+        cached: result.cached || false,
         createdAt: result.data.generatedAt
       });
 
@@ -61,18 +54,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
       setError(err instanceof Error ? err.message : 'Failed to load business trends');
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
-  };
-
-  const handleRefresh = async () => {
-    if (refreshDisabled) return;
-    
-    setRefreshDisabled(true);
-    await fetchBusinessTrends(true);
-    
-    // Re-enable after 24 hours
-    setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
   const handleViewAllTrends = async () => {
@@ -229,27 +211,13 @@ export default function BusinessTrendCard({ industry = 'technology', className =
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">
-            Business Trends: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-          </h3>
-          <p className="text-sm text-gray-500">
-            Strategic business trend analysis and insights
-          </p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing || refreshDisabled}
-          className={`p-2 rounded-lg transition-colors ${
-            refreshing || refreshDisabled
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-          }`}
-          title={refreshDisabled ? 'Refresh available in 24 hours' : 'Refresh data'}
-        >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-        </button>
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Business Trends: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Strategic business trend analysis and insights • Refreshes every Monday
+        </p>
       </div>
 
       {/* Business Trends Grid */}

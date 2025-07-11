@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, BarChart3, TrendingUp, AlertCircle, Globe } from 'lucide-react';
+import { BarChart3, TrendingUp, AlertCircle, Globe } from 'lucide-react';
 import { MarketSizeCard, GrowthRateCard, CompetitionCard, SentimentCard } from './MarketMetricCard';
 import TradingViewTicker from '../shared/TradingViewTicker';
 import { useModal } from '@/components/modals/ModalProvider';
@@ -27,21 +27,14 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
 }) => {
   const [insightData, setInsightData] = useState<MarketInsightData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [refreshDisabled, setRefreshDisabled] = useState(false);
   const { openModal } = useModal();
 
-  const fetchMarketInsight = async (forceRefresh = false) => {
+  const fetchMarketInsight = async () => {
     try {
       setError(null);
-      if (forceRefresh) {
-        setRefreshing(true);
-      }
 
-      const url = forceRefresh 
-        ? `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`
-        : `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}`;
+      const url = `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}`;
 
       const response = await fetch(url);
       const result = await response.json();
@@ -61,18 +54,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       setError(err instanceof Error ? err.message : 'Failed to load market insight');
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
-  };
-
-  const handleRefresh = async () => {
-    if (refreshDisabled) return;
-    
-    setRefreshDisabled(true);
-    await fetchMarketInsight(true);
-    
-    // Re-enable after 24 hours
-    setTimeout(() => setRefreshDisabled(false), 24 * 60 * 60 * 1000);
   };
 
   const handleViewReport = async () => {
@@ -206,27 +188,13 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">
-            Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-          </h3>
-          <p className="text-sm text-gray-500">
-            Real-time market analysis and insights
-          </p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing || refreshDisabled}
-          className={`p-2 rounded-lg transition-colors ${
-            refreshing || refreshDisabled
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-          }`}
-          title={refreshDisabled ? 'Refresh available in 24 hours' : 'Refresh data'}
-        >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-        </button>
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Real-time market analysis and insights • Refreshes every Monday
+        </p>
       </div>
 
       {/* Market Metrics Grid */}
