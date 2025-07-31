@@ -65,7 +65,7 @@ export default function StructuredOnboardingForm({
           if (!Array.isArray(answer) || answer.length === 0) {
             newErrors[question.id] = 'Please select at least one option';
           }
-        } else if (!answer || answer.toString().trim() === '') {
+        } else if (!answer || (answer || '').toString().trim() === '') {
           newErrors[question.id] = 'This field is required';
         }
       }
@@ -113,7 +113,7 @@ export default function StructuredOnboardingForm({
               <p className="text-sm text-gray-600 mb-3">{question.description}</p>
             )}
             <textarea
-              value={value}
+              value={value || ''}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 error ? 'border-red-500' : 'border-gray-300'
@@ -124,7 +124,7 @@ export default function StructuredOnboardingForm({
             />
             {question.maxLength && (
               <p className="text-xs text-gray-500 mt-1">
-                {value.toString().length}/{question.maxLength} characters
+                {(value || '').toString().length}/{question.maxLength} characters
               </p>
             )}
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
@@ -145,7 +145,7 @@ export default function StructuredOnboardingForm({
               <p className="text-sm text-gray-600 mb-3">{question.description}</p>
             )}
             <select
-              value={value}
+              value={value || ''}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 error ? 'border-red-500' : 'border-gray-300'
@@ -233,8 +233,8 @@ export default function StructuredOnboardingForm({
             </label>
             <input
               type="number"
-              value={value}
-              onChange={(e) => handleAnswerChange(question.id, parseInt(e.target.value))}
+              value={value || ''}
+              onChange={(e) => handleAnswerChange(question.id, parseInt(e.target.value) || 0)}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 error ? 'border-red-500' : 'border-gray-300'
               }`}
