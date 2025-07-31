@@ -40,6 +40,9 @@ export class StructuredOnboardingService {
   private supabase: ReturnType<typeof createClient<Database>>;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
+    if (!supabaseKey) {
+      throw new Error('Supabase service role key is required for onboarding operations');
+    }
     this.supabase = createClient<Database>(supabaseUrl, supabaseKey);
   }
 

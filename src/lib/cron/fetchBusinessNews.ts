@@ -25,7 +25,7 @@ export async function fetchBusinessNews() {
       throw new Error('NEWSAPI_KEY environment variable is not set');
     }
     
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       throw new Error('Supabase environment variables are not set');
     }
 
@@ -56,8 +56,8 @@ export async function fetchBusinessNews() {
 
     // Initialize Supabase client with service role
     const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
     // Clear old headlines (keep only last 24 hours)
@@ -107,7 +107,7 @@ async function insertFallbackHeadlines() {
   
   try {
     const supabase = createClient(
-      process.env.SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
