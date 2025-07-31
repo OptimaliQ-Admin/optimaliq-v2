@@ -38,9 +38,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Fetch user's industry from tier2_users
+    // Fetch user's industry from users
     const { data: userData, error: userError } = await supabase
-      .from("tier2_users")
+      .from("users")
       .select("industry")
       .eq("u_id", u_id)
       .single();

@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
     // Get inviter information for email
     const { data: inviterInfo, error: inviterError } = await supabase
-      .from('tier2_users')
+      .from('users')
       .select('first_name, last_name, company')
       .eq('u_id', u_id)
       .single();

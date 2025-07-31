@@ -107,7 +107,7 @@ export default function RecoverCreateAccountForm() {
     }
 
     // ✅ Call the same API that handles both new and recovered account creation
-    // If UUID exists in tier2_users, it will be updated with Auth user ID
+    // If UUID exists in users, it will be updated with Auth user ID
     const normalizedFormState = {
       ...formState,
       linkedin_url: formState.linkedin_url ? normalizeLinkedInUrl(formState.linkedin_url) : formState.linkedin_url,

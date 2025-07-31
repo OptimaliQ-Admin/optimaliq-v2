@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     // 🔍 Pull most recent onboarding assessment
     const { data: assessment, error: assessmentError } = await supabase
-      .from("onboarding_assessments")
+      .from("onboarding_sessions")
       .select("*")
       .eq("u_id", u_id)
       .order("created_at", { ascending: false })
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     // 🔍 Pull user metadata
     const { data: user, error: userError } = await supabase
-      .from("tier2_users")
+      .from("users")
       .select("*")
       .eq("u_id", u_id)
       .single();

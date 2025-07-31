@@ -123,7 +123,7 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
     try {
       // 1. Check for existing user by email
       const { data: existingUser, error: fetchError } = await supabase
-        .from("tier2_users")
+        .from("users")
         .select("u_id")
         .eq("email", userInfo.email)
         .maybeSingle();
@@ -142,7 +142,7 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
         userId = existingUser.u_id;
 
         const { error: updateError } = await supabase
-          .from("tier2_users")
+          .from("users")
           .update({
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
@@ -166,7 +166,7 @@ export default function SubscribeForm({ plan, cycle, email }: SubscribeFormProps
         userId = crypto.randomUUID(); // make new ID
 
         const { error: insertUserError } = await supabase
-          .from("tier2_users")
+          .from("users")
           .insert([{ 
             u_id: userId,
             email: userInfo.email,

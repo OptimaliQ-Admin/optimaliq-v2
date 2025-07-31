@@ -80,7 +80,7 @@ export default function QuestionDelegationPage() {
 
       // Get delegator information
       const { data: delegatorData, error: delegatorError } = await supabase
-        .from('tier2_users')
+        .from('users')
         .select('email, first_name, last_name, company')
         .eq('u_id', delegationData.delegator_u_id)
         .single();

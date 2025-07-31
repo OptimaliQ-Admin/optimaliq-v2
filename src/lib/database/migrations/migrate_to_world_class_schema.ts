@@ -44,9 +44,9 @@ export class WorldClassOnboardingMigration {
   private async migrateUsers(): Promise<void> {
     console.log('📊 Migrating users...');
     
-    // Get existing tier2_users
+    // Get existing users
     const { data: existingUsers, error: fetchError } = await this.supabase
-      .from('tier2_users')
+      .from('users')
       .select('*');
 
     if (fetchError) {
@@ -144,9 +144,9 @@ export class WorldClassOnboardingMigration {
   private async migrateOnboardingAssessments(): Promise<void> {
     console.log('📝 Migrating onboarding assessments...');
     
-    // Get existing onboarding_assessments
+    // Get existing onboarding_sessions
     const { data: existingAssessments, error: fetchError } = await this.supabase
-      .from('onboarding_assessments')
+      .from('onboarding_sessions')
       .select('*');
 
     if (fetchError) {
@@ -183,7 +183,7 @@ export class WorldClassOnboardingMigration {
 
       // Create enhanced onboarding assessment
       const { error: assessmentError } = await this.supabase
-        .from('onboarding_assessments')
+        .from('onboarding_sessions')
         .insert({
           session_id: session.id,
           assessment_type: 'world_class_onboarding',
@@ -211,7 +211,7 @@ export class WorldClassOnboardingMigration {
             friction_points: assessment.friction_points
           },
           metadata: {
-            source: 'legacy_onboarding_assessments',
+            source: 'legacy_onboarding_sessions',
             original_id: assessment.o_id
           },
           confidence_score: 0.8
@@ -402,7 +402,7 @@ export class WorldClassOnboardingMigration {
     ] = await Promise.all([
       this.supabase.from('users').select('*', { count: 'exact', head: true }),
       this.supabase.from('organizations').select('*', { count: 'exact', head: true }),
-      this.supabase.from('onboarding_assessments').select('*', { count: 'exact', head: true }),
+      this.supabase.from('onboarding_sessions').select('*', { count: 'exact', head: true }),
       this.supabase.from('market_insights').select('*', { count: 'exact', head: true }),
       this.supabase.from('business_trends').select('*', { count: 'exact', head: true }),
       this.supabase.from('engagement_intelligence').select('*', { count: 'exact', head: true })

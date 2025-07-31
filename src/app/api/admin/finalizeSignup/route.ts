@@ -17,17 +17,17 @@ export async function POST(req: Request) {
     }
 
     // Handles both new and recovered account creation
-    // If UUID exists in tier2_users, it will be updated with Auth user ID
-    // ✅ 1. Check user in tier2_users
+    // If UUID exists in users, it will be updated with Auth user ID
+    // ✅ 1. Check user in users
     const { data: tier2User, error: tier2Error } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .select("*")
       .eq("email", email)
       .single();
 
     if (tier2Error || !tier2User) {
-      console.error("❌ User not found in tier2_users:", tier2Error);
-      return NextResponse.json({ error: "User not found in tier2_users" }, { status: 404 });
+      console.error("❌ User not found in users:", tier2Error);
+      return NextResponse.json({ error: "User not found in users" }, { status: 404 });
     }
 
     // ✅ 2. Check user in Supabase Auth
@@ -66,9 +66,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
     }
 
-    // ✅ 4. Update tier2_users with user ID and new data
+    // ✅ 4. Update users with user ID and new data
     const { error: updateTier2Error } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .update({
         u_id: authUser.id,
         timezone,
@@ -79,8 +79,8 @@ export async function POST(req: Request) {
       .eq("email", email);
 
     if (updateTier2Error) {
-      console.error("❌ Error updating tier2_users:", updateTier2Error);
-      return NextResponse.json({ error: "Failed to update tier2_users" }, { status: 500 });
+      console.error("❌ Error updating users:", updateTier2Error);
+      return NextResponse.json({ error: "Failed to update users" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

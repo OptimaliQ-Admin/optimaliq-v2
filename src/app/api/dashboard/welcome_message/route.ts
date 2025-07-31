@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   // Fetch user's first name
   const { data: user, error: userError } = await supabase
-    .from("tier2_users")
+    .from("users")
     .select("first_name")
     .eq("u_id", u_id)
     .single();

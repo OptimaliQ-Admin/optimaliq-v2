@@ -16,15 +16,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // ✅ 1. Check if user exists in tier2_users
+    // ✅ 1. Check if user exists in users
     const { data: tier2User, error: tier2Error } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .select("*")
       .eq("email", email.toLowerCase())
       .maybeSingle();
 
     if (tier2Error) {
-      console.error("Error checking tier2_users:", tier2Error);
+      console.error("Error checking users:", tier2Error);
       return NextResponse.json({ error: "Database error" }, { status: 500 });
     }
 
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       message = 'Email not found. Please create a new account.';
       account_created = false;
     } else if (authUser) {
-      // User has both tier2_users record and Auth account
+      // User has both users record and Auth account
       status = 'paid_with_account';
       message = 'Account exists. Please login with your password.';
       account_created = true;

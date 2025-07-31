@@ -54,7 +54,7 @@ export async function GET() {
       }
     }
 
-    // 2. Clean up orphaned trial records (trials without corresponding tier2_users)
+    // 2. Clean up orphaned trial records (trials without corresponding users)
     const { data: orphanedTrials, error: fetchOrphanedError } = await supabaseAdmin!
       .from("trial_users")
       .select("*")

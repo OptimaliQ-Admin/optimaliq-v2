@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { supabase } from "@/lib/supabase";
 import { performLogout } from "@/lib/utils/auth";
 
-// Types from your tier2_users table
+// Types from your users table
 export type PremiumUser = {
   u_id: string;
   email: string;

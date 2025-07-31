@@ -17,36 +17,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing u_id" }, { status: 400 });
     }
 
-    // Fetch user profile
+    // Fetch user profile from new users table
     const { data: profile, error: profileError } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .select("*")
-      .eq("u_id", u_id)
+      .eq("id", u_id)
       .maybeSingle();
 
     if (profileError || !profile) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Fetch subscription
+    // Fetch subscription from new subscriptions table
     const { data: subscription, error: subscriptionError } = await supabaseAdmin!
       .from("subscriptions")
       .select("status")
-      .eq("u_id", u_id)
+      .eq("user_id", u_id)
       .maybeSingle();
 
     const hasActiveSubscription = subscription?.status === "active" || subscription?.status === "trial";
 
-    // Fetch onboarding
-    const { data, error } = await supabaseAdmin!
-      .from("onboarding_assessments")
-      .select("o_id")
-      .eq("u_id", u_id)
+    // Check for completed onboarding session (new World Class Onboarding)
+    const { data: onboardingSession, error: onboardingError } = await supabaseAdmin!
+      .from("onboarding_sessions")
+      .select("id, status, completed_at")
+      .eq("user_id", u_id)
+      .eq("status", "completed")
       .limit(1);
 
-    const onboarding = data?.[0];
-
-    const hasCompletedOnboarding = Boolean(onboarding);
+    const hasCompletedOnboarding = Boolean(onboardingSession?.[0]);
 
     return NextResponse.json({
       hasActiveSubscription,

@@ -30,9 +30,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found in auth" }, { status: 404 });
     }
 
-    // ✅ 2. Update tier2_users with new data
+    // ✅ 2. Update users with new data
     const { error: updateError } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .update({
         timezone,
         linkedin_url,
@@ -42,8 +42,8 @@ export async function POST(req: Request) {
       .eq("email", email);
 
     if (updateError) {
-      console.error("❌ Error updating tier2_users:", updateError);
-      return NextResponse.json({ error: "Failed to update tier2_users" }, { status: 500 });
+      console.error("❌ Error updating users:", updateError);
+      return NextResponse.json({ error: "Failed to update users" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

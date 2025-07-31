@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
     // Check if user has Strategic plan (required for delegation)
     const { data: userData, error: userError } = await supabase
-      .from("tier2_users")
+      .from("users")
       .select("subscription_status, subscription_plan, first_name, last_name, company")
       .eq("u_id", user.id)
       .single();

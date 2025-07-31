@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     // Get delegator information for email
     const { data: delegatorInfo } = await supabase
-      .from('tier2_users')
+      .from('users')
       .select('first_name, last_name, company')
       .eq('u_id', user.id)
       .single();

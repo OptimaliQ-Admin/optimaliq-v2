@@ -146,7 +146,7 @@ export default function DynamicAssessmentPage() {
 
       try {
         const { data, error } = await supabase
-          .from("tier2_users")
+          .from("users")
           .select("subscription_status")
           .eq("email", user.email)
           .single();

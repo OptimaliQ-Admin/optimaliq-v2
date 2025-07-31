@@ -1,6 +1,6 @@
 //src/app/api/dashboard/route.ts
-import { NextResponse } from "next/server";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
@@ -14,48 +14,40 @@ export async function POST(req: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
   try {
+    const supabase = createRouteHandlerClient({ cookies });
     const { u_id } = await req.json();
-    if (!u_id || typeof u_id !== "string") {
+
+    if (!u_id) {
       return NextResponse.json(
         { error: "Invalid or missing u_id" },
         { status: 400 }
       );
     }
 
-    // Fetch user profile
+    // Fetch user profile from new users table
     const { data: user, error: userError } = await supabase
-      .from("tier2_users")
+      .from("users")
       .select("*")
-      .eq("u_id", u_id)
+      .eq("id", u_id)
       .single();
 
     if (userError || !user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Fetch profile scores
-    const { data: profile, error: profileError } = await supabase
-      .from("tier2_profiles")
+    // Fetch latest onboarding session (replaces onboarding_sessions)
+    const { data: onboardingSession, error: onboardingError } = await supabase
+      .from("onboarding_sessions")
       .select("*")
-      .eq("u_id", u_id)
-      .single();
-
-    if (profileError || !profile) {
-      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
-    }
-
-    // Fetch latest assessment
-    const { data: assessment, error: assessmentError } = await supabase
-      .from("onboarding_assessments")
-      .select("*")
-      .eq("u_id", u_id)
-      .order("created_at", { ascending: false })
+      .eq("user_id", u_id)
+      .eq("status", "completed")
+      .order("completed_at", { ascending: false })
       .limit(1)
       .single();
 
-    if (assessmentError || !assessment) {
+    if (onboardingError || !onboardingSession) {
       return NextResponse.json(
-        { error: "Assessment not found" },
+        { error: "No completed onboarding session found" },
         { status: 404 }
       );
     }
@@ -82,13 +74,13 @@ export async function POST(req: Request) {
       });
     }
 
-    // Generate AI scores
+    // Generate AI scores using onboarding session data
     const aiScores = await generateDashboardScores(
       { 
         ...user, 
-        business_overview: profile.business_overview || assessment.business_overview
+        business_overview: onboardingSession.metadata?.business_overview || ""
       }, 
-      assessment
+      onboardingSession
     );
 
     console.log(

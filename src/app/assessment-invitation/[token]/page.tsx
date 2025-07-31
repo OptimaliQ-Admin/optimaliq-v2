@@ -81,7 +81,7 @@ export default function AssessmentInvitationPage() {
 
       // Get inviter information
       const { data: inviterData, error: inviterError } = await supabase
-        .from('tier2_users')
+        .from('users')
         .select('email, first_name, last_name, company')
         .eq('u_id', invitationData.inviter_u_id)
         .single();

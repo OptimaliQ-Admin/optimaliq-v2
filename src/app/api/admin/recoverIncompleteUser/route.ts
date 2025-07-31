@@ -16,15 +16,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing email" }, { status: 400 });
     }
 
-    // ✅ 1. Check if user exists in tier2_users
+    // ✅ 1. Check if user exists in users
     const { data: tier2User, error: tier2Error } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .select("*")
       .eq("email", email)
       .single();
 
     if (tier2Error || !tier2User) {
-      // User doesn't exist in tier2_users - normal case
+      // User doesn't exist in users - normal case
       return NextResponse.json({ 
         needsAccountCompletion: false 
       });
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     const authUser = userList.users.find((user) => user.email?.toLowerCase() === email.toLowerCase());
 
-    // ✅ 3. If user exists in tier2_users but not in Auth, they need to complete account creation
+    // ✅ 3. If user exists in users but not in Auth, they need to complete account creation
     if (!authUser) {
       console.log("👤 Found incomplete user:", email);
       return NextResponse.json({

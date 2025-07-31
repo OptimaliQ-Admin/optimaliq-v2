@@ -20,7 +20,7 @@ export async function GET() {
       .from("trial_users")
       .select(`
         *,
-        tier2_users!inner(email, first_name)
+        users!inner(email, first_name)
       `)
       .eq("status", "active")
       .lt("trial_end_date", now);
@@ -70,8 +70,8 @@ export async function GET() {
         try {
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai';
           await emailService.sendTrialExpiredEmail({
-            to: trial.tier2_users.email,
-            firstName: trial.tier2_users.first_name,
+            to: trial.users.email,
+            firstName: trial.users.first_name,
             upgradeUrl: `${baseUrl}/premium/account/billing`,
             supportUrl: `${baseUrl}/support`
           });
@@ -81,7 +81,7 @@ export async function GET() {
         }
 
         processedCount++;
-        console.log(`Processed expired trial: ${trial.id} for user: ${trial.tier2_users.email}`);
+        console.log(`Processed expired trial: ${trial.id} for user: ${trial.users.email}`);
 
       } catch (error) {
         console.error(`Error processing trial ${trial.id}:`, error);

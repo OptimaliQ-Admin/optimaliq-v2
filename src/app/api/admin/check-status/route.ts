@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user is admin
     const { data: userData, error: userError } = await supabaseAdmin!
-      .from('tier2_users')
+      .from('users')
       .select('role')
       .eq('u_id', user.id)
       .single();

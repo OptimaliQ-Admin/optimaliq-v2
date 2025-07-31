@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     };
 
     const { error } = await supabaseAdmin!
-      .from("tier2_users")
+      .from("users")
       .update(normalizedUpdates)
       .eq("u_id", u_id);
 

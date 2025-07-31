@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         .from('assessment_invitations')
         .select(`
           *,
-          inviter:tier2_users!inviter_u_id(first_name, last_name, company)
+          inviter:users!inviter_id(first_name, last_name, company)
         `)
         .eq('invitation_token', invitationToken)
         .single();

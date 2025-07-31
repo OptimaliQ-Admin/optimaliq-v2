@@ -61,11 +61,11 @@ export async function middleware(req: NextRequest) {
     }
     
     try {
-      // Get user's subscription status
+      // Get user's subscription status from new subscriptions table
       const { data: subscription, error } = await supabase
         .from('subscriptions')
         .select('status')
-        .eq('u_id', session.user.id)
+        .eq('user_id', session.user.id)
         .single();
 
       if (error) {

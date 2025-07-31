@@ -55,7 +55,7 @@ export async function isUserAdmin(userId: string): Promise<boolean> {
     }
 
     const { data, error } = await supabaseAdmin!
-      .from('tier2_users')
+      .from('users')
       .select('role')
       .eq('u_id', userId)
       .single();

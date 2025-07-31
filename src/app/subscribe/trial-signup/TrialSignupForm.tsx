@@ -247,9 +247,9 @@ export default function TrialSignupForm() {
         return;
       }
 
-      // Create tier2_users record
+      // Create users record
       const { error: tier2Error } = await supabase
-        .from("tier2_users")
+        .from("users")
         .insert([{
           u_id: authData.user.id,
           email: formState.email,
@@ -265,7 +265,7 @@ export default function TrialSignupForm() {
         }]);
 
       if (tier2Error) {
-        console.error("Error creating tier2_users record:", tier2Error);
+        console.error("Error creating users record:", tier2Error);
         toast.error("Failed to create user profile");
         setIsLoading(false);
         return;

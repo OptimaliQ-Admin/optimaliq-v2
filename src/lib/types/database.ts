@@ -398,41 +398,7 @@ export interface Database {
           earned_at?: string
         }
       }
-      onboarding_assessments: {
-        Row: {
-          id: string
-          session_id: string
-          assessment_type: string
-          responses: Json
-          metadata: Json
-          ai_insights: Json
-          recommendations: Json
-          confidence_score: number | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          session_id: string
-          assessment_type?: string
-          responses?: Json
-          metadata?: Json
-          ai_insights?: Json
-          recommendations?: Json
-          confidence_score?: number | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          session_id?: string
-          assessment_type?: string
-          responses?: Json
-          metadata?: Json
-          ai_insights?: Json
-          recommendations?: Json
-          confidence_score?: number | null
-          created_at?: string
-        }
-      }
+
 
       // Assessment System
       assessments: {
@@ -1003,7 +969,7 @@ export type AdaptiveQuestion = Database['public']['Tables']['adaptive_questions'
 export type RealTimeInsight = Database['public']['Tables']['real_time_insights']['Row']
 export type BusinessModelCanvas = Database['public']['Tables']['business_model_canvas']['Row']
 export type GamificationAchievement = Database['public']['Tables']['gamification_achievements']['Row']
-export type OnboardingAssessment = Database['public']['Tables']['onboarding_assessments']['Row']
+export type OnboardingAssessment = Database['public']['Tables']['onboarding_sessions']['Row']
 export type Assessment = Database['public']['Tables']['assessments']['Row']
 export type AssessmentScore = Database['public']['Tables']['assessment_scores']['Row']
 export type MarketInsight = Database['public']['Tables']['market_insights']['Row']
@@ -1025,7 +991,7 @@ export type AdaptiveQuestionInsert = Database['public']['Tables']['adaptive_ques
 export type RealTimeInsightInsert = Database['public']['Tables']['real_time_insights']['Insert']
 export type BusinessModelCanvasInsert = Database['public']['Tables']['business_model_canvas']['Insert']
 export type GamificationAchievementInsert = Database['public']['Tables']['gamification_achievements']['Insert']
-export type OnboardingAssessmentInsert = Database['public']['Tables']['onboarding_assessments']['Insert']
+export type OnboardingAssessmentInsert = Database['public']['Tables']['onboarding_sessions']['Insert']
 export type AssessmentInsert = Database['public']['Tables']['assessments']['Insert']
 export type AssessmentScoreInsert = Database['public']['Tables']['assessment_scores']['Insert']
 export type MarketInsightInsert = Database['public']['Tables']['market_insights']['Insert']
@@ -1047,7 +1013,7 @@ export type AdaptiveQuestionUpdate = Database['public']['Tables']['adaptive_ques
 export type RealTimeInsightUpdate = Database['public']['Tables']['real_time_insights']['Update']
 export type BusinessModelCanvasUpdate = Database['public']['Tables']['business_model_canvas']['Update']
 export type GamificationAchievementUpdate = Database['public']['Tables']['gamification_achievements']['Update']
-export type OnboardingAssessmentUpdate = Database['public']['Tables']['onboarding_assessments']['Update']
+export type OnboardingAssessmentUpdate = Database['public']['Tables']['onboarding_sessions']['Update']
 export type AssessmentUpdate = Database['public']['Tables']['assessments']['Update']
 export type AssessmentScoreUpdate = Database['public']['Tables']['assessment_scores']['Update']
 export type MarketInsightUpdate = Database['public']['Tables']['market_insights']['Update']
