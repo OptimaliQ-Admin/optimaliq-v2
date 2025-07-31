@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       const { data: subscription, error: subError } = await supabaseAdmin!
         .from("subscriptions")
         .select("status")
-        .eq("u_id", tier2User.u_id)
+        .eq("user_id", tier2User.id)
         .maybeSingle();
 
       if (!subError && subscription) {
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       message = 'Account exists. Please login with your password.';
       account_created = true;
       userInfo = {
-        u_id: tier2User.u_id,
+        id: tier2User.id,
         email: tier2User.email,
         first_name: tier2User.first_name,
         last_name: tier2User.last_name,
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       message = 'We found your payment! Please complete your account setup.';
       account_created = false;
       userInfo = {
-        u_id: tier2User.u_id,
+        id: tier2User.id,
         email: tier2User.email,
         first_name: tier2User.first_name,
         last_name: tier2User.last_name,
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
       message = 'Please subscribe to access OptimaliQ.';
       account_created = false;
       userInfo = {
-        u_id: tier2User.u_id,
+        id: tier2User.id,
         email: tier2User.email,
         first_name: tier2User.first_name,
         last_name: tier2User.last_name,
