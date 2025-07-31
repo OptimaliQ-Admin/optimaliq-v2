@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { supabase } from "@/lib/supabase";
 
 interface User {
   id: string;
@@ -20,6 +15,7 @@ export function usePremiumUser() {
     const fetchUser = async () => {
       try {
         console.log('🔍 usePremiumUser: Starting to fetch user...');
+        
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -68,15 +64,19 @@ export function usePremiumUser() {
       }
     };
 
-    fetchUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Set up auth state listener first
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('🔄 usePremiumUser: Auth state changed:', { event, hasUser: !!session?.user });
       if (session?.user) {
         fetchUser();
       } else {
         setUser(null);
+        setLoading(false);
       }
     });
+
+    // Then fetch initial user
+    fetchUser();
 
     return () => {
       subscription.unsubscribe();
