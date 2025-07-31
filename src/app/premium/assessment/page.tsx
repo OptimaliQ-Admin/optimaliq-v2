@@ -37,7 +37,7 @@ export default function AssessmentsPage() {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      if (!user?.u_id) return;
+      if (!user?.id) return;
 
       try {
         const selectFields = Object.values(assessmentFieldMap)
@@ -47,7 +47,7 @@ export default function AssessmentsPage() {
         const { data: profileData, error: profileError } = await supabase
           .from("tier2_profiles")
           .select(selectFields)
-          .eq("u_id", user.u_id)
+          .eq("u_id", user.id)
           .single();
 
         if (profileError) {
@@ -90,7 +90,7 @@ export default function AssessmentsPage() {
     };
 
     fetchProfileData();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const handleCloseModal = () => {
     setShowExplanationModal(false);
@@ -248,7 +248,7 @@ export default function AssessmentsPage() {
                 description="Analyze your internal workflows and process scalability."
                 score={assessmentData.bpm?.score ?? null}
                 lastTakenDate={assessmentData.bpm?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="sales"
@@ -256,7 +256,7 @@ export default function AssessmentsPage() {
                 description="Evaluate your sales pipeline and conversions."
                 score={assessmentData.sales?.score ?? null}
                 lastTakenDate={assessmentData.sales?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="marketing_effectiveness"
@@ -264,7 +264,7 @@ export default function AssessmentsPage() {
                 description="Measure how well your marketing drives engagement and results."
                 score={assessmentData.marketing_effectiveness?.score ?? null}
                 lastTakenDate={assessmentData.marketing_effectiveness?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
             </div>
           </motion.div>
@@ -295,7 +295,7 @@ export default function AssessmentsPage() {
                 description="Evaluate your technology infrastructure and digital capabilities."
                 score={assessmentData.tech_stack?.score ?? null}
                 lastTakenDate={assessmentData.tech_stack?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="ai_readiness"
@@ -303,7 +303,7 @@ export default function AssessmentsPage() {
                 description="Assess how prepared you are to leverage AI and automation at scale."
                 score={assessmentData.ai_readiness?.score ?? null}
                 lastTakenDate={assessmentData.ai_readiness?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="digital_transformation"
@@ -311,7 +311,7 @@ export default function AssessmentsPage() {
                 description="Evaluate your readiness for digital transformation success."
                 score={assessmentData.digital_transformation?.score ?? null}
                 lastTakenDate={assessmentData.digital_transformation?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
             </div>
           </motion.div>
@@ -342,7 +342,7 @@ export default function AssessmentsPage() {
                 description="Evaluate your organization's strategic planning and execution."
                 score={assessmentData.strategic_maturity?.score ?? null}
                 lastTakenDate={assessmentData.strategic_maturity?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="competitive_benchmarking"
@@ -350,7 +350,7 @@ export default function AssessmentsPage() {
                 description="See how you stack up against peers and top performers."
                 score={assessmentData.competitive_benchmarking?.score ?? null}
                 lastTakenDate={assessmentData.competitive_benchmarking?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
               <AssessmentCard
                 slug="leadership"
@@ -358,7 +358,7 @@ export default function AssessmentsPage() {
                 description="Assess team alignment, leadership effectiveness, and culture."
                 score={assessmentData.leadership?.score ?? null}
                 lastTakenDate={assessmentData.leadership?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
             </div>
           </motion.div>
@@ -388,7 +388,7 @@ export default function AssessmentsPage() {
                 description="Understand your CX performance and opportunities to improve."
                 score={assessmentData.customer_experience?.score ?? null}
                 lastTakenDate={assessmentData.customer_experience?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
             </div>
           </motion.div>
@@ -416,20 +416,20 @@ export default function AssessmentsPage() {
               <ReassessmentCard
                 score={assessmentData.reassessment?.score ?? null}
                 lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
-                userId={user?.u_id}
+                userId={user?.id}
               />
-              {user?.u_id && <TechToolsCard userId={user.u_id} />}
+              {user?.id && <TechToolsCard userId={user.id} />}
             </div>
           </motion.div>
         </div>
       </div>
 
       {/* Assessment Explanation Modal */}
-      {user?.u_id && (
+      {user?.id && (
         <AssessmentExplanationModal
           isOpen={showExplanationModal}
           onClose={handleCloseModal}
-          userId={user.u_id}
+          userId={user.id}
         />
       )}
     </>

@@ -28,10 +28,10 @@ export default function GrowthLeversCard() {
   const { width, height } = useWindowSize();
 
   useEffect(() => {
-    if (user?.u_id) {
+    if (user?.id) {
       fetchLevers();
     }
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const fetchLevers = async () => {
     try {
@@ -39,7 +39,7 @@ export default function GrowthLeversCard() {
       const response = await fetch("/api/growth_studio/levers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ u_id: user?.u_id }),
+        body: JSON.stringify({ u_id: user?.id }),
       });
 
       if (!response.ok) {
@@ -57,7 +57,7 @@ export default function GrowthLeversCard() {
   };
 
   const handleLeverToggle = async (index: number) => {
-    if (!user?.u_id) return;
+    if (!user?.id) return;
 
     // Optimistically update the UI
     const updatedLevers = [...levers];
@@ -73,7 +73,7 @@ export default function GrowthLeversCard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          u_id: user.u_id,
+          u_id: user.id,
           lever_text: updatedLevers[index].text,
           is_completed: newStatus,
         }),

@@ -24,7 +24,7 @@ export default function NotificationBell() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user?.u_id) {
+    if (!user?.id) {
       setIsLoading(false);
       return;
     }
@@ -35,7 +35,7 @@ export default function NotificationBell() {
         const { data, error } = await supabase
           .from('notifications')
           .select('*')
-          .eq('u_id', user.u_id)
+          .eq('u_id', user.id)
           .order('created_at', { ascending: false })
           .limit(10);
 
@@ -62,7 +62,7 @@ export default function NotificationBell() {
         event: 'INSERT',
         schema: 'public',
         table: 'notifications',
-        filter: `u_id=eq.${user.u_id}`
+        filter: `u_id=eq.${user.id}`
       }, (payload) => {
         setNotifications(prev => [payload.new as Notification, ...prev]);
         setUnreadCount(prev => prev + 1);
@@ -72,10 +72,10 @@ export default function NotificationBell() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const markAsRead = async (notificationId: number) => {
-    if (!user?.u_id) return;
+    if (!user?.id) return;
 
     try {
       const { error } = await supabase
@@ -97,7 +97,7 @@ export default function NotificationBell() {
     }
   };
 
-  if (!user?.u_id) {
+  if (!user?.id) {
     return null;
   }
 

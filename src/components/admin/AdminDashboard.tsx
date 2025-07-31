@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   });
 
   const checkAdminStatus = useCallback(async () => {
-    if (!user?.u_id) return;
+    if (!user?.id) return;
     
     try {
       const response = await fetch('/api/admin/check-status');
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
       setError('Failed to check admin status');
       setIsAdmin(false);
     }
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const loadDashboardData = useCallback(async () => {
     setLoading(true);

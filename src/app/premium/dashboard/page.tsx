@@ -143,7 +143,7 @@ export default function PremiumDashboardPage() {
     }
   };
 
-  if (!u_id || loading) return <InsightLoading />;
+  if (!userId || loading) return <InsightLoading />;
   if (error) return <p className="text-center text-red-600 p-10">{error}</p>;
   if (!insights) return null;
 
@@ -156,7 +156,7 @@ export default function PremiumDashboardPage() {
       <DashboardExplanationModal
         isOpen={showDashboardExplanation}
         onClose={() => setShowDashboardExplanation(false)}
-        userId={u_id}
+        userId={userId}
       />
 
       {/* Floating Page Navigation */}

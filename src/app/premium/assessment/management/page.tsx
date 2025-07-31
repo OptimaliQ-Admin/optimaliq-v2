@@ -58,9 +58,9 @@ export default function AssessmentManagementPage() {
   ];
 
   useEffect(() => {
-    if (!user?.u_id) return;
+    if (!user?.id) return;
     loadData();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const loadData = async () => {
     try {
@@ -68,14 +68,14 @@ export default function AssessmentManagementPage() {
       const { data: invitationData } = await supabase
         .from("assessment_invitations")
         .select("*")
-        .eq("inviter_u_id", user?.u_id)
+        .eq("inviter_u_id", user?.id)
         .order("created_at", { ascending: false });
 
       // Load delegations
       const { data: delegationData } = await supabase
         .from("question_delegations")
         .select("*")
-        .eq("delegator_u_id", user?.u_id)
+        .eq("delegator_u_id", user?.id)
         .order("created_at", { ascending: false });
 
       setInvitations(invitationData || []);

@@ -19,13 +19,13 @@ export function useStrategicAccess(): StrategicAccess {
         setLoading(true);
         setError(null);
 
-        if (!premiumUser?.u_id) {
+        if (!premiumUser?.id) {
           console.log("🔍 No user ID from PremiumUserContext");
           setHasAccess(false);
           return;
         }
 
-        console.log("🔍 Using user ID from PremiumUserContext:", premiumUser.u_id);
+        console.log("🔍 Using user ID from PremiumUserContext:", premiumUser.id);
 
         // Use server-side API call to bypass RLS policies
         const response = await fetch('/api/premium/auth/checkStrategicAccess', {
@@ -34,7 +34,7 @@ export function useStrategicAccess(): StrategicAccess {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            u_id: premiumUser.u_id
+            u_id: premiumUser.id
           })
         });
 
@@ -57,7 +57,7 @@ export function useStrategicAccess(): StrategicAccess {
     };
 
     checkAccess();
-  }, [premiumUser?.u_id]);
+  }, [premiumUser?.id]);
 
   return { hasAccess, loading, error };
 } 

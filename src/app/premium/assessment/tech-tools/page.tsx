@@ -207,13 +207,13 @@ export default function TechToolsAssessment() {
   // Load existing tech stack data
   useEffect(() => {
     const loadTechStack = async () => {
-      if (!user?.u_id) return;
+      if (!user?.id) return;
 
       try {
         const { data, error } = await supabase
           .from("user_tech_stack")
           .select("*")
-          .eq("u_id", user.u_id)
+          .eq("u_id", user.id)
           .single();
 
         if (error) throw error;
@@ -241,10 +241,10 @@ export default function TechToolsAssessment() {
     };
 
     loadTechStack();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const handleSubmit = async () => {
-    if (!user?.u_id) {
+    if (!user?.id) {
       showToast.error("User session expired. Please log in again.");
       router.push("/subscribe/login");
       return;
@@ -255,7 +255,7 @@ export default function TechToolsAssessment() {
       const { error } = await supabase
         .from("user_tech_stack")
         .upsert({
-          u_id: user.u_id,
+          u_id: user.id,
           crm_tools: answers.usesCRM ? answers.crmTools : [],
           esp_tools: answers.usesESP ? answers.espTools : [],
           analytics_tools: answers.usesAnalytics ? answers.analyticsTools : [],

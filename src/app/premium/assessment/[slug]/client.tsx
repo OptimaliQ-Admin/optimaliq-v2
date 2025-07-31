@@ -179,13 +179,13 @@ export default function DynamicAssessmentPage() {
       }
       
       // For regular assessments, we need user ID
-      if (!isInvitedAssessment && !user?.u_id && !skipCheck) {
+      if (!isInvitedAssessment && !user?.id && !skipCheck) {
         console.log('⏳ Waiting for user ID...');
         return;
       }
 
       try {
-        let targetUserId = user?.u_id;
+        let targetUserId = user?.id;
         
         // For invited assessments, use the inviter's user ID
         if (isInvitedAssessment && invitationData) {
@@ -225,7 +225,7 @@ export default function DynamicAssessmentPage() {
     };
 
     fetchScore();
-  }, [user?.u_id, skipCheck, isInvitedAssessment, invitationData]);
+  }, [user?.id, skipCheck, isInvitedAssessment, invitationData]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -256,7 +256,7 @@ export default function DynamicAssessmentPage() {
       return;
     }
 
-    if (!user?.u_id) {
+    if (!user?.id) {
       showToast.error("User ID missing. Please try again.");
       return;
     }
@@ -269,7 +269,7 @@ export default function DynamicAssessmentPage() {
         assessment: slug,
         answers: formAnswers,
         score: score,
-        userId: user.u_id
+        userId: user.id
       };
 
       // Add invitation data if this is an invited assessment

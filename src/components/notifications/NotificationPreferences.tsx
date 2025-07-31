@@ -17,7 +17,7 @@ type NotificationPreference = {
 export default function NotificationPreferences() {
   const { user } = usePremiumUser();
   const [preferences, setPreferences] = useState<NotificationPreference>({
-    u_id: user?.u_id || '',
+    u_id: user?.id || '',
     assessment_updates: true,
     growth_insights: true,
     system_updates: true,
@@ -30,7 +30,7 @@ export default function NotificationPreferences() {
   const [saveMessage, setSaveMessage] = useState('');
 
   useEffect(() => {
-    if (!user?.u_id) {
+    if (!user?.id) {
       setIsLoading(false);
       return;
     }
@@ -40,7 +40,7 @@ export default function NotificationPreferences() {
         const { data, error } = await supabase
           .from('notification_preferences')
           .select('*')
-          .eq('u_id', user.u_id)
+          .eq('u_id', user.id)
           .maybeSingle();
 
         if (error) {
@@ -52,7 +52,7 @@ export default function NotificationPreferences() {
           setPreferences(data);
         } else {
           const defaultPreferences: NotificationPreference = {
-            u_id: user.u_id,
+            u_id: user.id,
             assessment_updates: true,
             growth_insights: true,
             system_updates: true,
@@ -75,7 +75,7 @@ export default function NotificationPreferences() {
       } catch (error) {
         console.error('Error in fetchPreferences:', error);
         const defaultPreferences: NotificationPreference = {
-          u_id: user.u_id,
+          u_id: user.id,
           assessment_updates: true,
           growth_insights: true,
           system_updates: true,
@@ -90,10 +90,10 @@ export default function NotificationPreferences() {
     };
 
     fetchPreferences();
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const handleToggle = async (key: keyof Omit<NotificationPreference, 'u_id' | 'created_at' | 'updated_at'>) => {
-    if (!user?.u_id) return;
+    if (!user?.id) return;
 
     setIsSaving(true);
     setSaveMessage('');
@@ -126,7 +126,7 @@ export default function NotificationPreferences() {
     }
   };
 
-  if (!user?.u_id) {
+  if (!user?.id) {
     return null;
   }
 

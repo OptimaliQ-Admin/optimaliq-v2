@@ -75,10 +75,10 @@ export default function AssessmentCard({
 
   // Load team members when component mounts
   useEffect(() => {
-    if (user?.u_id) {
+    if (user?.id) {
       loadTeamMembers();
     }
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   // Handle clicking outside dropdown to close it
   useEffect(() => {
@@ -99,7 +99,7 @@ export default function AssessmentCard({
 
   const loadTeamMembers = async () => {
     setLoadingTeam(true);
-    console.log('AssessmentCard - Loading team members for user:', user?.u_id);
+    console.log('AssessmentCard - Loading team members for user:', user?.id);
     
     try {
       const response = await fetch('/api/assessment-delegation/get-team-members', {
@@ -107,7 +107,7 @@ export default function AssessmentCard({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ u_id: user?.u_id }),
+        body: JSON.stringify({ u_id: user?.id }),
       });
 
       if (response.ok) {
@@ -134,7 +134,7 @@ export default function AssessmentCard({
     
     try {
       const requestData = {
-        u_id: user?.u_id,
+        u_id: user?.id,
         inviteeEmail: member.member_email,
         inviteeName: member.member_name,
         assessmentType: slug,

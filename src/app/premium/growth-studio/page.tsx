@@ -24,7 +24,7 @@ interface ProfileData {
 function GrowthStudioComponent() {
   const { user } = usePremiumUser();
   const email = user?.email;
-  const userId = user?.u_id;
+  const userId = user?.id;
   const [isLoading, setIsLoading] = useState(true);
   const [showGrowthStudioExplanation, setShowGrowthStudioExplanation] = useState(false);
 

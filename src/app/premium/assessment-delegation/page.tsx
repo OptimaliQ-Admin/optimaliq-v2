@@ -57,13 +57,13 @@ export default function AssessmentDelegationPage() {
         return;
       }
       
-      console.log('User authenticated via PremiumUserContext:', premiumUser.u_id);
+      console.log('User authenticated via PremiumUserContext:', premiumUser.id);
       loadData();
     }
   }, [hasAccess, accessLoading, isUserLoaded, premiumUser, router]);
 
   const loadData = async () => {
-    if (!premiumUser?.u_id) return;
+    if (!premiumUser?.id) return;
     
     try {
       setLoading(true);
@@ -74,7 +74,7 @@ export default function AssessmentDelegationPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ u_id: premiumUser.u_id }),
+        body: JSON.stringify({ u_id: premiumUser.id }),
       });
 
       if (teamResponse.ok) {
@@ -88,7 +88,7 @@ export default function AssessmentDelegationPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ u_id: premiumUser.u_id }),
+        body: JSON.stringify({ u_id: premiumUser.id }),
       });
 
       if (invitationsResponse.ok) {
@@ -106,7 +106,7 @@ export default function AssessmentDelegationPage() {
     try {
       setSending(true);
       
-      if (!premiumUser?.u_id) {
+      if (!premiumUser?.id) {
         throw new Error('User not authenticated');
       }
 
@@ -116,7 +116,7 @@ export default function AssessmentDelegationPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          u_id: premiumUser.u_id,
+          u_id: premiumUser.id,
           memberEmail,
           memberName,
           memberRole
@@ -146,7 +146,7 @@ export default function AssessmentDelegationPage() {
 
   const removeTeamMember = async (memberId: string) => {
     try {
-      if (!premiumUser?.u_id) {
+      if (!premiumUser?.id) {
         throw new Error('User not authenticated');
       }
 
@@ -156,7 +156,7 @@ export default function AssessmentDelegationPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          u_id: premiumUser.u_id,
+          u_id: premiumUser.id,
           memberId
         }),
       });

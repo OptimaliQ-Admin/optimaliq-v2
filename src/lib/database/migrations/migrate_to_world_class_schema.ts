@@ -64,7 +64,7 @@ export class WorldClassOnboardingMigration {
       const { error: insertError } = await this.supabase
         .from('users')
         .upsert({
-          id: user.u_id,
+          id: user.id,
           email: user.email,
           first_name: user.first_name,
           last_name: user.last_name,
@@ -89,7 +89,7 @@ export class WorldClassOnboardingMigration {
         });
 
       if (insertError) {
-        console.error(`Error migrating user ${user.u_id}:`, insertError);
+        console.error(`Error migrating user ${user.id}:`, insertError);
       }
     }
 
