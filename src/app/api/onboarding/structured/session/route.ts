@@ -17,10 +17,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize structured onboarding service
+    // Initialize structured onboarding service with service role key for RLS bypass
     const onboardingService = new StructuredOnboardingService(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
     // Create new structured onboarding session
