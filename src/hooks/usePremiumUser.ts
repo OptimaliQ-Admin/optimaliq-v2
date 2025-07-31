@@ -26,21 +26,19 @@ export function usePremiumUser() {
         }
 
         if (session?.user) {
-          // Check if user has premium access
-          const { data: profile, error: profileError } = await supabase
-            .from("profiles")
-            .select("is_premium")
-            .eq("id", session.user.id)
+          // Check if user has premium access by checking subscription status
+          const { data: subscription, error: subscriptionError } = await supabase
+            .from("subscriptions")
+            .select("status")
+            .eq("user_id", session.user.id)
             .single();
 
-          if (profileError) {
-            throw profileError;
-          }
+          const isPremium = subscription?.status === "active" || subscription?.status === "trial";
 
           setUser({
             id: session.user.id,
             email: session.user.email,
-            isPremium: profile?.is_premium || false,
+            isPremium: isPremium || false,
           });
         }
       } catch (error) {
