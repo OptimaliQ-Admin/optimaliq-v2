@@ -4,16 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import StructuredOnboardingForm from '@/components/onboarding/StructuredOnboardingForm';
-import { OnboardingResponse } from '@/lib/services/onboarding/StructuredOnboardingService';
+import ConversationalOnboardingChat from '@/components/onboarding/ConversationalOnboardingChat';
 
 export default function WorldClassOnboardingPage() {
   const router = useRouter();
   const { user, loading, error } = useAuth();
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<any>(null);
-  const [totalSteps, setTotalSteps] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [sessionError, setSessionError] = useState<string | null>(null);
 
@@ -63,51 +59,12 @@ export default function WorldClassOnboardingPage() {
 
       const data = await response.json();
       setSessionId(data.session.id);
-      setCurrentStep(data.currentStep);
-      setTotalSteps(data.totalSteps);
-      setProgress(0);
 
     } catch (err) {
       console.error('Error initializing session:', err);
       setSessionError('Failed to start onboarding session. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleSubmitAnswers = async (answers: OnboardingResponse[]) => {
-    if (!sessionId) return;
-
-    try {
-      const response = await fetch(`/api/onboarding/structured/step`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sessionId,
-          answers
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit answers');
-      }
-
-      const data = await response.json();
-
-      if (data.completed) {
-        // Onboarding completed, redirect to dashboard
-        router.push('/premium/dashboard');
-      } else {
-        // Move to next step
-        setCurrentStep(data.nextStep);
-        setProgress(data.progress);
-      }
-
-    } catch (error) {
-      console.error('Error submitting answers:', error);
-      setSessionError('Failed to save your answers. Please try again.');
     }
   };
 
@@ -120,7 +77,7 @@ export default function WorldClassOnboardingPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Setting up your onboarding session...</p>
+          <p className="text-gray-600">Setting up your conversational onboarding...</p>
         </div>
       </div>
     );
@@ -149,12 +106,12 @@ export default function WorldClassOnboardingPage() {
     return null; // useAuth will handle redirect
   }
 
-  if (!currentStep) {
+  if (!sessionId) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading onboarding questions...</p>
+          <p className="text-gray-600">Initializing your business discovery session...</p>
         </div>
       </div>
     );
@@ -162,18 +119,15 @@ export default function WorldClassOnboardingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-8 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="h-[calc(100vh-4rem)]"
         >
-          <StructuredOnboardingForm
-            sessionId={sessionId!}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            progress={progress}
-            onSubmit={handleSubmitAnswers}
+          <ConversationalOnboardingChat
+            sessionId={sessionId}
             onComplete={handleComplete}
           />
         </motion.div>
