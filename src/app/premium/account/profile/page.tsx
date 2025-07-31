@@ -45,7 +45,7 @@ export default function ProfilePage() {
     setUploading(true);
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.u_id}-${Date.now()}.${fileExt}`;
+      const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
       const { data, error } = await supabase.storage.from('profile-pics').upload(fileName, file);
       if (error) throw error;
       const { data: { publicUrl } } = supabase.storage.from('profile-pics').getPublicUrl(fileName);
@@ -91,7 +91,7 @@ export default function ProfilePage() {
       const response = await fetch('/api/premium/account/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ u_id: user?.u_id, ...form }),
+        body: JSON.stringify({ user_id: user?.id, ...form }),
       });
       if (!response.ok) {
         const data = await response.json();

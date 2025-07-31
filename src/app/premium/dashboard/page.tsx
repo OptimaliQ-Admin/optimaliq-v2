@@ -29,7 +29,7 @@ interface ProfileData {
 
 export default function PremiumDashboardPage() {
   const { user } = usePremiumUser();
-  const u_id = user?.u_id;
+  const userId = user?.id;
 
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
@@ -58,11 +58,11 @@ export default function PremiumDashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (!u_id) return;
+    if (!userId) return;
 
     const fetchData = async () => {
       try {
-        const res = await axios.post("/api/dashboard", { u_id });
+        const res = await axios.post("/api/dashboard", { user_id: userId });
         if (res.data.error) {
           setError(res.data.error);
         } else {
@@ -77,29 +77,29 @@ export default function PremiumDashboardPage() {
     };
 
     fetchData();
-  }, [u_id]);
+  }, [userId]);
 
   useEffect(() => {
-    if (!u_id) return;
-    axios.post("/api/dashboard/welcome_message", { u_id })
+    if (!userId) return;
+    axios.post("/api/dashboard/welcome_message", { user_id: userId })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',
         quote: "Welcome back! Let's grow your business today.",
         author: "OptimaliQ"
       }));
-  }, [u_id]);
+  }, [userId]);
 
   // Check if user has seen dashboard explanation
   useEffect(() => {
-    if (!u_id) return;
+    if (!userId) return;
 
     const checkDashboardExplanation = async () => {
       try {
         const { data: profileData, error } = await supabase
           .from("tier2_profiles")
           .select("dashboard_explanation_seen_at")
-          .eq("u_id", u_id)
+          .eq("u_id", userId)
           .single();
 
         if (error) {
@@ -118,7 +118,7 @@ export default function PremiumDashboardPage() {
     };
 
     checkDashboardExplanation();
-  }, [u_id]);
+  }, [userId]);
 
   // Auto-dismiss welcome message after 5 minutes
   useEffect(() => {
