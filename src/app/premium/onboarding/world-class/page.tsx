@@ -23,13 +23,23 @@ export default function WorldClassOnboardingPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isUserLoaded) return;
+    console.log('🔍 Onboarding page useEffect:', { 
+      isUserLoaded, 
+      user: user ? { id: user.id, email: user.email, isPremium: user.isPremium } : null 
+    });
+    
+    if (!isUserLoaded) {
+      console.log('⏳ User still loading...');
+      return;
+    }
 
     if (!user?.id) {
+      console.log('❌ No user ID found, redirecting to create account');
       router.push('/subscribe/create-account');
       return;
     }
 
+    console.log('✅ User loaded successfully, initializing session');
     initializeSession();
   }, [user, isUserLoaded, router]);
 

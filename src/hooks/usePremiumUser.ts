@@ -19,11 +19,19 @@ export function usePremiumUser() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log('🔍 usePremiumUser: Starting to fetch user...');
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
+          console.error('❌ usePremiumUser: Auth session error:', error);
           throw error;
         }
+
+        console.log('🔍 usePremiumUser: Session data:', { 
+          hasSession: !!session, 
+          userId: session?.user?.id,
+          userEmail: session?.user?.email 
+        });
 
         if (session?.user) {
           // Check if user has premium access by checking subscription status
@@ -33,17 +41,29 @@ export function usePremiumUser() {
             .eq("user_id", session.user.id)
             .single();
 
+          console.log('🔍 usePremiumUser: Subscription data:', { 
+            subscription, 
+            subscriptionError,
+            status: subscription?.status 
+          });
+
           const isPremium = subscription?.status === "active" || subscription?.status === "trial";
 
-          setUser({
+          const userData = {
             id: session.user.id,
             email: session.user.email,
             isPremium: isPremium || false,
-          });
+          };
+
+          console.log('✅ usePremiumUser: Setting user data:', userData);
+          setUser(userData);
+        } else {
+          console.log('❌ usePremiumUser: No session user found');
         }
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("❌ usePremiumUser: Error fetching user:", error);
       } finally {
+        console.log('🏁 usePremiumUser: Setting loading to false');
         setLoading(false);
       }
     };
