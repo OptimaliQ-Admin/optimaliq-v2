@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
@@ -19,7 +19,7 @@ export async function POST(
       );
     }
 
-    const { sessionId } = params;
+    const { sessionId } = await params;
     const { canvasData } = await request.json();
 
     // Verify session belongs to user
@@ -67,7 +67,7 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
@@ -82,7 +82,7 @@ export async function GET(
       );
     }
 
-    const { sessionId } = params;
+    const { sessionId } = await params;
 
     // Verify session belongs to user and get canvas data
     const { data: session, error: sessionError } = await supabase

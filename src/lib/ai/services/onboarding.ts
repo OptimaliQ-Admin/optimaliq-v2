@@ -309,8 +309,8 @@ export class OnboardingAIService {
     context: ConversationContext
   ): AIResponse {
     let responseText = "Thank you for sharing that information. Let's continue exploring your business strategy.";
-    let suggestions = ['Tell me more about your goals', 'What challenges are you facing?', 'How do you differentiate?'];
-    let nextStep = 'goals';
+    const suggestions = ['Tell me more about your goals', 'What challenges are you facing?', 'How do you differentiate?'];
+    const nextStep = 'goals';
 
     if (intent.type === 'question') {
       responseText = "That's a great question. Let me help you understand this better.";
@@ -324,7 +324,7 @@ export class OnboardingAIService {
     };
   }
 
-  private fallbackQuestion(context: ConversationContext): AdaptiveQuestion {
+  private fallbackQuestion(_context: ConversationContext): AdaptiveQuestion {
     return {
       id: `fallback-${Date.now()}`,
       type: 'goals',
@@ -344,7 +344,7 @@ export class OnboardingAIService {
     
     // Default values
     let type: UserIntent['type'] = 'answer';
-    let confidence = analysis.confidence || 0.7;
+    const confidence = analysis.confidence || 0.7;
     const entities: string[] = [];
     let sentiment: 'positive' | 'neutral' | 'negative' = 'neutral';
 

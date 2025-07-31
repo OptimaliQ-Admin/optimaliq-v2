@@ -5,7 +5,7 @@ import { ConversationService } from '@/lib/services/onboarding/ConversationServi
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
@@ -20,7 +20,7 @@ export async function POST(
       );
     }
 
-    const { sessionId } = params;
+    const { sessionId } = await params;
 
     // Initialize conversation service
     const conversationService = new ConversationService(

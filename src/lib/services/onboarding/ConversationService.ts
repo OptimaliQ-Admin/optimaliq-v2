@@ -309,7 +309,7 @@ export class ConversationService {
     if (lowerText.includes('customer') || lowerText.includes('client') || lowerText.includes('acquisition')) {
       previousResponses.challenges = previousResponses.challenges || [];
       previousResponses.challenges.push('customer_acquisition');
-    }
+        }
     if (lowerText.includes('competition') || lowerText.includes('competitor')) {
       previousResponses.challenges = previousResponses.challenges || [];
       previousResponses.challenges.push('competition');

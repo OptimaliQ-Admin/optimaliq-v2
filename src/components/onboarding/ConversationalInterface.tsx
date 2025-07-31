@@ -163,7 +163,7 @@ export default function ConversationalInterface({
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">AI Business Strategist</h2>
-            <p className="text-sm text-gray-600">Let's understand your business together</p>
+            <p className="text-sm text-gray-600">Let&apos;s understand your business together</p>
           </div>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-500">
