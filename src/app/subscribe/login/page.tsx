@@ -372,17 +372,32 @@ function LoginPageContent() {
               </div>
             )}
 
-            {/* Create Account Link - always show */}
-            <div className="text-center">
-              <span className="text-gray-600 text-sm">Don&apos;t have an account? </span>
-              <button
-                type="button"
-                onClick={handleCreateAccount}
-                className="text-blue-600 hover:underline text-sm font-medium"
-              >
-                Create one here
-              </button>
-            </div>
+            {/* Create Account Link - only show if user doesn't have an account */}
+            {emailStatus && emailStatus !== 'paid_with_account' && (
+              <div className="text-center">
+                <span className="text-gray-600 text-sm">Don&apos;t have an account? </span>
+                <button
+                  type="button"
+                  onClick={handleCreateAccount}
+                  className="text-blue-600 hover:underline text-sm font-medium"
+                >
+                  Create one here
+                </button>
+              </div>
+            )}
+
+            {/* Forgot Password Link - only show if user has an account */}
+            {emailStatus === 'paid_with_account' && (
+              <div className="text-center">
+                <span className="text-gray-600 text-sm">Having trouble signing in? </span>
+                <a
+                  href="/subscribe/forgot-password"
+                  className="text-blue-600 hover:underline text-sm font-medium"
+                >
+                  Reset your password
+                </a>
+              </div>
+            )}
           </div>
         </form>
       </div>
