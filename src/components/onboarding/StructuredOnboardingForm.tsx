@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { OnboardingStep, OnboardingQuestion, OnboardingResponse } from '@/lib/services/onboarding/StructuredOnboardingService';
+import { OnboardingStep, OnboardingQuestion, OnboardingResponse, OnboardingQuestionOption } from '@/lib/services/onboarding/StructuredOnboardingService';
 
 interface StructuredOnboardingFormProps {
   sessionId: string;
@@ -109,15 +109,24 @@ export default function StructuredOnboardingForm({
               {question.question}
               {question.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <input
-              type="text"
+            {question.description && (
+              <p className="text-sm text-gray-600 mb-3">{question.description}</p>
+            )}
+            <textarea
               value={value}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 error ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Enter your answer..."
+              rows={question.rows || 3}
+              maxLength={question.maxLength}
             />
+            {question.maxLength && (
+              <p className="text-xs text-gray-500 mt-1">
+                {value.toString().length}/{question.maxLength} characters
+              </p>
+            )}
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
             {question.helpText && (
               <p className="text-gray-500 text-sm mt-1">{question.helpText}</p>
@@ -132,6 +141,9 @@ export default function StructuredOnboardingForm({
               {question.question}
               {question.required && <span className="text-red-500 ml-1">*</span>}
             </label>
+            {question.description && (
+              <p className="text-sm text-gray-600 mb-3">{question.description}</p>
+            )}
             <select
               value={value}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
@@ -140,11 +152,15 @@ export default function StructuredOnboardingForm({
               }`}
             >
               <option value="">Select an option...</option>
-              {question.options?.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              {question.options?.map((option) => {
+                const optionValue = typeof option === 'string' ? option : option.value;
+                const optionLabel = typeof option === 'string' ? option : option.label;
+                return (
+                  <option key={optionValue} value={optionValue}>
+                    {optionLabel}
+                  </option>
+                );
+              })}
             </select>
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
@@ -157,25 +173,53 @@ export default function StructuredOnboardingForm({
               {question.question}
               {question.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <div className="space-y-2">
-              {question.options?.map((option) => (
-                <label key={option} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={Array.isArray(value) && value.includes(option)}
-                    onChange={(e) => {
-                      const currentValues = Array.isArray(value) ? value : [];
-                      const newValues = e.target.checked
-                        ? [...currentValues, option]
-                        : currentValues.filter(v => v !== option);
-                      handleAnswerChange(question.id, newValues);
-                    }}
-                    className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">{option}</span>
-                </label>
-              ))}
+            {question.description && (
+              <p className="text-sm text-gray-600 mb-3">{question.description}</p>
+            )}
+            <div className="space-y-3">
+              {question.options?.map((option) => {
+                const optionValue = typeof option === 'string' ? option : option.value;
+                const optionLabel = typeof option === 'string' ? option : option.label;
+                const optionDescription = typeof option === 'string' ? undefined : option.description;
+                
+                return (
+                  <label key={optionValue} className="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Array.isArray(value) && value.includes(optionValue)}
+                      onChange={(e) => {
+                        const currentValues = Array.isArray(value) ? value : [];
+                        const maxSelect = question.maxSelect || 999;
+                        
+                        let newValues;
+                        if (e.target.checked) {
+                          if (currentValues.length >= maxSelect) {
+                            newValues = [...currentValues.slice(1), optionValue];
+                          } else {
+                            newValues = [...currentValues, optionValue];
+                          }
+                        } else {
+                          newValues = currentValues.filter(v => v !== optionValue);
+                        }
+                        handleAnswerChange(question.id, newValues);
+                      }}
+                      className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-0.5"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-gray-700">{optionLabel}</span>
+                      {optionDescription && (
+                        <p className="text-xs text-gray-500 mt-1">{optionDescription}</p>
+                      )}
+                    </div>
+                  </label>
+                );
+              })}
             </div>
+            {question.maxSelect && (
+              <p className="text-xs text-gray-500 mt-2">
+                Select up to {question.maxSelect} options
+              </p>
+            )}
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
         );
@@ -196,6 +240,39 @@ export default function StructuredOnboardingForm({
               }`}
               placeholder="Enter a number..."
             />
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+          </div>
+        );
+
+      case 'rank':
+        return (
+          <div key={question.id} className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {question.question}
+              {question.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
+            {question.description && (
+              <p className="text-sm text-gray-600 mb-3">{question.description}</p>
+            )}
+            <div className="space-y-2">
+              {Array.isArray(question.options) && question.options.map((option, index) => {
+                const optionValue = typeof option === 'string' ? option : option.value;
+                const optionLabel = typeof option === 'string' ? option : option.label;
+                const currentRank = Array.isArray(value) ? value.indexOf(optionValue) + 1 : index + 1;
+                
+                return (
+                  <div key={optionValue} className="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium mr-3">
+                      {currentRank}
+                    </div>
+                    <span className="text-sm text-gray-700">{optionLabel}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Drag to reorder (not implemented yet - using default order)
+            </p>
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
         );
