@@ -6,10 +6,10 @@ export async function POST(req: Request) {
   const supabase = createServerComponentClient({ cookies });
   
   try {
-    const { u_id } = await req.json();
+    const { user_id } = await req.json();
 
-    if (!u_id) {
-      return NextResponse.json({ error: "Missing u_id" }, { status: 400 });
+    if (!user_id) {
+      return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
     }
 
     // Verify the user is authenticated
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const { data: subscription, error: subscriptionError } = await supabase
       .from("subscriptions")
       .select("*")
-      .eq("u_id", u_id)
+      .eq("user_id", user_id)
       .single();
 
     if (subscriptionError) {

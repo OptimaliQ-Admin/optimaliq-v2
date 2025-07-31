@@ -6,7 +6,7 @@ import { performLogout } from "@/lib/utils/auth";
 
 // Types from your users table
 export type PremiumUser = {
-  u_id: string;
+  id: string;
   email: string;
   first_name: string;
   last_name: string;
@@ -66,7 +66,7 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
       const response = await fetch('/api/premium/account/subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ u_id: userId }),
+        body: JSON.stringify({ user_id: userId }),
       });
 
       if (response.ok) {
@@ -86,10 +86,10 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
 
   // Refresh subscription data
   const refreshSubscription = useCallback(async () => {
-    if (user?.u_id) {
-      await fetchSubscription(user.u_id);
+    if (user?.id) {
+      await fetchSubscription(user.id);
     }
-  }, [user?.u_id, fetchSubscription]);
+  }, [user?.id, fetchSubscription]);
 
   // Centralized logout function using the auth utility
   const logout = useCallback(async () => {
@@ -117,8 +117,8 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
         const userData = JSON.parse(stored);
         setUser(userData);
         // Fetch subscription data for the user
-        if (userData?.u_id) {
-          fetchSubscription(userData.u_id);
+        if (userData?.id) {
+          fetchSubscription(userData.id);
         }
       }
     } catch (err) {
@@ -133,7 +133,7 @@ export const PremiumUserProvider = ({ children }: { children: React.ReactNode })
     if (user) {
       localStorage.setItem("tier2_user", JSON.stringify(user));
       // Fetch subscription data when user changes
-      fetchSubscription(user.u_id);
+      fetchSubscription(user.id);
     } else {
       localStorage.removeItem("tier2_user");
       setSubscription(null);

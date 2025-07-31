@@ -19,14 +19,14 @@ export default function BillingPage() {
 
   useEffect(() => {
     const fetchCustomerId = async () => {
-      if (!user?.u_id) return;
+      if (!user?.id) return;
       
       setCustomerIdLoading(true);
       try {
         const response = await fetch('/api/premium/account/subscription', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ u_id: user.u_id }),
+          body: JSON.stringify({ user_id: user.id }),
         });
         
         if (response.ok) {
@@ -45,7 +45,7 @@ export default function BillingPage() {
 
     // Simple loading state to ensure user context is loaded
     const timer = setTimeout(() => {
-      if (!user?.u_id) {
+      if (!user?.id) {
         setLoading(false);
       } else {
         fetchCustomerId();
@@ -53,7 +53,7 @@ export default function BillingPage() {
     }, 500);
     
     return () => clearTimeout(timer);
-  }, [user?.u_id]);
+  }, [user?.id]);
 
   const handleManageBilling = async () => {
     if (!stripeCustomerId) {
