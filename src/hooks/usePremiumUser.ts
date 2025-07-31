@@ -12,6 +12,8 @@ export function usePremiumUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchUser = async () => {
       try {
         console.log('🔍 usePremiumUser: Starting to fetch user...');
@@ -52,15 +54,23 @@ export function usePremiumUser() {
           };
 
           console.log('✅ usePremiumUser: Setting user data:', userData);
-          setUser(userData);
+          if (isMounted) {
+            setUser(userData);
+            setLoading(false);
+          }
         } else {
           console.log('❌ usePremiumUser: No session user found');
+          if (isMounted) {
+            setUser(null);
+            setLoading(false);
+          }
         }
       } catch (error) {
         console.error("❌ usePremiumUser: Error fetching user:", error);
-      } finally {
-        console.log('🏁 usePremiumUser: Setting loading to false');
-        setLoading(false);
+        if (isMounted) {
+          setUser(null);
+          setLoading(false);
+        }
       }
     };
 
@@ -70,8 +80,10 @@ export function usePremiumUser() {
       if (session?.user) {
         fetchUser();
       } else {
-        setUser(null);
-        setLoading(false);
+        if (isMounted) {
+          setUser(null);
+          setLoading(false);
+        }
       }
     });
 
@@ -79,6 +91,7 @@ export function usePremiumUser() {
     fetchUser();
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);

@@ -28,24 +28,21 @@ export default function WorldClassOnboardingPage() {
       user: user ? { id: user.id, email: user.email, isPremium: user.isPremium } : null 
     });
     
-    // Wait for user to be fully loaded
+    // Wait for user to be loaded AND have a valid user object
     if (!isUserLoaded) {
       console.log('⏳ User still loading...');
       return;
     }
 
-    // If user loading is complete but no user found, redirect
-    if (isUserLoaded && !user?.id) {
-      console.log('❌ User loading complete but no user found, redirecting to create account');
+    // If user is loaded but no user object, redirect to create account
+    if (!user?.id) {
+      console.log('❌ No user ID found, redirecting to create account');
       router.push('/subscribe/create-account');
       return;
     }
 
-    // Only proceed if we have a valid user
-    if (user?.id) {
-      console.log('✅ User loaded successfully, initializing session');
-      initializeSession();
-    }
+    console.log('✅ User loaded successfully, initializing session');
+    initializeSession();
   }, [user, isUserLoaded, router]);
 
   const initializeSession = async () => {
