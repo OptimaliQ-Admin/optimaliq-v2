@@ -63,7 +63,7 @@ export class WorldClassOnboardingMigration {
     for (const user of existingUsers) {
       const { error: insertError } = await this.supabase
         .from('users')
-        .insert({
+        .upsert({
           id: user.u_id,
           email: user.email,
           first_name: user.first_name,
@@ -83,9 +83,10 @@ export class WorldClassOnboardingMigration {
           status: 'active',
           created_at: user.created_at,
           updated_at: new Date().toISOString()
-        })
-        .onConflict('id')
-        .ignore();
+        }, {
+          onConflict: 'id',
+          ignoreDuplicates: true
+        });
 
       if (insertError) {
         console.error(`Error migrating user ${user.u_id}:`, insertError);
@@ -117,7 +118,7 @@ export class WorldClassOnboardingMigration {
     for (const org of existingOrgs) {
       const { error: insertError } = await this.supabase
         .from('organizations')
-        .insert({
+        .upsert({
           id: org.id,
           name: org.name,
           slug: org.slug,
@@ -127,9 +128,10 @@ export class WorldClassOnboardingMigration {
           status: 'active',
           created_at: org.created_at,
           updated_at: new Date().toISOString()
-        })
-        .onConflict('id')
-        .ignore();
+        }, {
+          onConflict: 'id',
+          ignoreDuplicates: true
+        });
 
       if (insertError) {
         console.error(`Error migrating organization ${org.id}:`, insertError);
