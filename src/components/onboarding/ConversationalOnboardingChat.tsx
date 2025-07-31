@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ConversationMessage, QuestionNode, RealTimeInsight } from '@/lib/services/onboarding/ConversationManager';
+import { BusinessMetrics, StrategicInsight } from '@/lib/services/onboarding/BusinessIntelligenceEngine';
+import RankingInterface from './RankingInterface';
+import OnboardingCompletion from './OnboardingCompletion';
 
 interface ConversationalOnboardingChatProps {
   sessionId: string;
@@ -24,6 +27,11 @@ export default function ConversationalOnboardingChat({
   const [currentQuestion, setCurrentQuestion] = useState<QuestionNode | null>(null);
   const [insights, setInsights] = useState<RealTimeInsight[]>([]);
   const [progress, setProgress] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [completionData, setCompletionData] = useState<{
+    metrics: BusinessMetrics;
+    insights: StrategicInsight[];
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -174,10 +182,78 @@ export default function ConversationalOnboardingChat({
     }
   };
 
+  const handleRankingComplete = async (rankings: string[]) => {
+    if (!currentQuestion) return;
+
+    const userMessage: ConversationMessage = {
+      id: `user_${Date.now()}`,
+      type: 'user',
+      content: `Ranked: ${rankings.join(', ')}`,
+      timestamp: new Date().toISOString()
+    };
+
+    addMessage(userMessage);
+
+    // Process response
+    try {
+      const response = await fetch('/api/onboarding/conversational/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          questionId: currentQuestion.id,
+          answer: rankings
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Add AI response with typing effect
+        addMessage(data.aiMessage, true);
+        
+        // Update state
+        setCurrentQuestion(data.nextQuestion);
+        setInsights(prev => [...prev, ...data.insights]);
+        setProgress(data.state.progress);
+
+        // Check if conversation is complete
+        if (data.state.currentPhase === 'completion') {
+          setTimeout(() => {
+            onComplete();
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  const handleCompletion = async () => {
+    try {
+      const response = await fetch('/api/onboarding/conversational/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCompletionData({
+          metrics: data.metrics,
+          insights: data.insights
+        });
+        setIsCompleted(true);
+      }
+    } catch (error) {
+      console.error('Failed to complete onboarding:', error);
     }
   };
 
@@ -210,6 +286,17 @@ export default function ConversationalOnboardingChat({
         return '🤖';
     }
   };
+
+    // Show completion screen if onboarding is finished
+  if (isCompleted && completionData) {
+    return (
+      <OnboardingCompletion
+        metrics={completionData.metrics}
+        insights={completionData.insights}
+        onContinue={onComplete}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto">
@@ -274,7 +361,37 @@ export default function ConversationalOnboardingChat({
                             key={option.value}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => handleOptionSelect(option.label)}
+                            onClick={() => handleOptionSelect(option.value)}
+                            className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition-colors"
+                          >
+                            <div className="font-medium text-gray-900">{option.label}</div>
+                            {option.description && (
+                              <div className="text-sm text-gray-500 mt-1">{option.description}</div>
+                            )}
+                          </motion.button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Show ranking interface */}
+                    {message.type === 'ai' && message.showOptions && currentQuestion?.type === 'ranking' && (
+                      <div className="mt-4">
+                        <RankingInterface
+                          options={currentQuestion.options || []}
+                          onRankingComplete={handleRankingComplete}
+                        />
+                      </div>
+                    )}
+
+                    {/* Show conditional questions */}
+                    {message.type === 'ai' && message.showOptions && currentQuestion?.type === 'conditional' && (
+                      <div className="mt-4 space-y-2">
+                        {currentQuestion.options?.map((option) => (
+                          <motion.button
+                            key={option.value}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => handleOptionSelect(option.value)}
                             className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition-colors"
                           >
                             <div className="font-medium text-gray-900">{option.label}</div>

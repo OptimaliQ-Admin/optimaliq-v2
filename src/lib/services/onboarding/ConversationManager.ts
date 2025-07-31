@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/lib/types/database';
+import { BusinessIntelligenceEngine } from './BusinessIntelligenceEngine';
 
 export interface UserResponse {
   sessionId: string;
@@ -97,10 +98,12 @@ export interface RealTimeInsight {
 export class ConversationManager {
   private supabase: any;
   private questionTree: QuestionNode[];
+  private businessIntelligence: BusinessIntelligenceEngine;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
     this.supabase = createClient<Database>(supabaseUrl, supabaseKey);
     this.questionTree = this.initializeQuestionTree();
+    this.businessIntelligence = new BusinessIntelligenceEngine();
   }
 
   private initializeQuestionTree(): QuestionNode[] {
@@ -220,6 +223,90 @@ export class ConversationManager {
         insights: [],
         required: true,
         order: 4
+      },
+      {
+        id: 'priority_ranking',
+        type: 'ranking',
+        content: "Based on our conversation, I'd like to understand your priorities. Please rank these business areas by importance to you:",
+        context: 'Understanding business priorities and focus areas',
+        personality: 'strategist',
+        options: [
+          {
+            value: 'customer_retention',
+            label: 'Customer Retention',
+            description: 'Keeping existing customers happy and engaged'
+          },
+          {
+            value: 'customer_acquisition',
+            label: 'Customer Acquisition',
+            description: 'Finding and converting new customers'
+          },
+          {
+            value: 'product_development',
+            label: 'Product Development',
+            description: 'Improving and expanding your product/service'
+          },
+          {
+            value: 'team_growth',
+            label: 'Team Growth',
+            description: 'Building and scaling your team'
+          },
+          {
+            value: 'operational_efficiency',
+            label: 'Operational Efficiency',
+            description: 'Streamlining processes and reducing costs'
+          }
+        ],
+        followUps: [],
+        insights: [
+          {
+            type: 'pattern',
+            condition: (response, context) => {
+              const rankings = response as string[];
+              return rankings[0] === 'customer_retention';
+            },
+            generate: () => "I see you prioritize customer retention. This aligns perfectly with sustainable growth strategies."
+          }
+        ],
+        required: true,
+        order: 5
+      },
+      {
+        id: 'business_maturity',
+        type: 'conditional',
+        content: "Let me understand your business maturity level better. How long have you been in business?",
+        context: 'Understanding business maturity and experience',
+        personality: 'analyst',
+        options: [
+          {
+            value: 'under_1_year',
+            label: 'Under 1 year',
+            description: 'Early startup phase',
+            followUpQuestions: ['funding_status', 'product_market_fit']
+          },
+          {
+            value: '1_3_years',
+            label: '1-3 years',
+            description: 'Growth phase',
+            followUpQuestions: ['scaling_challenges', 'team_size']
+          },
+          {
+            value: '3_5_years',
+            label: '3-5 years',
+            description: 'Established business',
+            followUpQuestions: ['market_expansion', 'competitive_position']
+          },
+          {
+            value: '5_plus_years',
+            label: '5+ years',
+            description: 'Mature business',
+            followUpQuestions: ['innovation_focus', 'market_leadership']
+          }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 6
       }
     ];
   }
@@ -340,6 +427,7 @@ export class ConversationManager {
     const insights: RealTimeInsight[] = [];
     const question = this.questionTree.find(q => q.id === response.questionId);
 
+    // Generate insights from question-specific logic
     if (question) {
       for (const insightGenerator of question.insights) {
         if (insightGenerator.condition(response.answer, context)) {
@@ -356,6 +444,14 @@ export class ConversationManager {
         }
       }
     }
+
+    // Generate real-time business intelligence insights
+    const businessInsights = this.businessIntelligence.generateRealTimeInsights(
+      response.answer,
+      response.questionId,
+      context
+    );
+    insights.push(...businessInsights);
 
     return insights;
   }
