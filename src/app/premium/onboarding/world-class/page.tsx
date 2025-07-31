@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { usePremiumUser } from '@/hooks/usePremiumUser';
 import ConversationalInterface from '@/components/onboarding/ConversationalInterface';
 import VisualBusinessModelBuilder from '@/components/onboarding/VisualBusinessModelBuilder';
 import GamifiedInterface from '@/components/onboarding/GamifiedInterface';
@@ -14,41 +14,44 @@ type InterfaceMode = 'conversational' | 'visual' | 'gamified';
 
 export default function WorldClassOnboardingPage() {
   const router = useRouter();
-  const { user, loading: isUserLoaded } = usePremiumUser();
+  const { user, loading, error } = useAuth();
   const [session, setSession] = useState<OnboardingSession | null>(null);
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [insights, setInsights] = useState<any[]>([]);
   const [interfaceMode, setInterfaceMode] = useState<InterfaceMode>('conversational');
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [sessionError, setSessionError] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('🔍 Onboarding page useEffect:', { 
-      isUserLoaded, 
-      user: user ? { id: user.id, email: user.email, isPremium: user.isPremium } : null 
+      loading, 
+      hasUser: !!user,
+      error 
     });
     
-    // Wait for user to be loaded AND have a valid user object
-    if (!isUserLoaded) {
-      console.log('⏳ User still loading...');
+    if (loading) {
+      console.log('⏳ Auth still loading...');
       return;
     }
 
-    // If user is loaded but no user object, redirect to create account
+    if (error) {
+      console.log('❌ Auth error:', error);
+      return;
+    }
+
     if (!user?.id) {
-      console.log('❌ No user ID found, redirecting to create account');
-      router.push('/subscribe/create-account');
+      console.log('❌ No user found');
       return;
     }
 
-    console.log('✅ User loaded successfully, initializing session');
+    console.log('✅ User authenticated, initializing session');
     initializeSession();
-  }, [user, isUserLoaded, router]);
+  }, [user, loading, error]);
 
   const initializeSession = async () => {
     try {
       setIsLoading(true);
-      setError(null);
+      setSessionError(null);
 
       // Create new onboarding session
       const response = await fetch('/api/onboarding/session', {
@@ -78,7 +81,7 @@ export default function WorldClassOnboardingPage() {
 
     } catch (err) {
       console.error('Error initializing session:', err);
-      setError('Failed to start onboarding session. Please try again.');
+      setSessionError('Failed to start onboarding session. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -175,7 +178,7 @@ export default function WorldClassOnboardingPage() {
     }
   };
 
-  if (!isUserLoaded || isLoading) {
+  if (loading || isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <motion.div
