@@ -128,7 +128,7 @@ function LoginPageContent() {
     if (emailStatus === 'paid_no_account' && userInfo) {
       // User paid but needs to complete account
       localStorage.setItem("tier2_email", userInfo.email);
-      localStorage.setItem("tier2_user_id", userInfo.u_id);
+      localStorage.setItem("tier2_user_id", userInfo.id);
       localStorage.setItem("tier2_full_user_info", JSON.stringify(userInfo));
       router.push("/subscribe/recover-create-account");
     } else if (emailStatus === 'not_paid' || emailStatus === 'not_found') {
