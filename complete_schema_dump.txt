@@ -1,0 +1,128 @@
+                                                                                               List of relations
+   Schema   |                Name                 |   Type   |  Owner   | Persistence | Access method |    Size    |                                        Description                                        
+------------+-------------------------------------+----------+----------+-------------+---------------+------------+-------------------------------------------------------------------------------------------
+ extensions | pg_stat_statements                  | view     | postgres | permanent   |               | 0 bytes    | 
+ extensions | pg_stat_statements_info             | view     | postgres | permanent   |               | 0 bytes    | 
+ public     | admin_dashboard                     | view     | postgres | permanent   |               | 0 bytes    | 
+ public     | ai_analytics                        | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | ai_assessment_context               | table    | postgres | permanent   | heap          | 8192 bytes | AI context and adaptive features for assessments
+ public     | ai_log                              | table    | postgres | permanent   | heap          | 96 kB      | 
+ public     | ai_readiness_assessment             | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | assessment_analytics                | table    | postgres | permanent   | heap          | 8192 bytes | Analytics and insights for assessment sessions
+ public     | assessment_assignments              | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | assessment_delegations              | table    | postgres | permanent   | heap          | 8192 bytes | Team collaboration and assessment delegation
+ public     | assessment_insights                 | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | assessment_invitations              | table    | postgres | permanent   | heap          | 16 kB      | Stores assessment invitations sent by business owners to team members
+ public     | assessment_scoring_results          | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | assessment_sessions                 | table    | postgres | permanent   | heap          | 8192 bytes | Enhanced assessment sessions with AI-powered features
+ public     | assessment_templates                | table    | postgres | permanent   | heap          | 16 kB      | Assessment templates with scoring algorithms
+ public     | audit_log                           | table    | postgres | permanent   | heap          | 56 kB      | 
+ public     | audit_log_id_seq                    | sequence | postgres | permanent   |               | 8192 bytes | 
+ public     | bpm_assessment                      | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | business_news_ticker                | table    | postgres | permanent   | heap          | 48 kB      | Stores business news headlines for the news ticker component
+ public     | business_reassessment               | table    | postgres | permanent   | heap          | 8192 bytes | This is a duplicate of onboarding_assessments
+ public     | competitive_benchmarking_assessment | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | customer_experience_assessment      | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | dashboard_analytics                 | table    | postgres | permanent   | heap          | 8192 bytes | Analytics tracking for dashboard usage and user behavior
+ public     | dashboard_benchmarks                | table    | postgres | permanent   | heap          | 0 bytes    | Benchmark data for user comparison with industry and top performers
+ public     | dashboard_configs                   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | dashboard_events                    | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | dashboard_layouts                   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | dashboard_trends                    | table    | postgres | permanent   | heap          | 0 bytes    | Trend tracking for dashboard analytics and performance monitoring
+ public     | dashboard_widget_data               | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | digital_transformation_assessment   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | email_subscription_analytics        | view     | postgres | permanent   |               | 0 bytes    | 
+ public     | email_subscriptions                 | table    | postgres | permanent   | heap          | 8192 bytes | Stores email newsletter subscriptions for "Stay Ahead of the Curve"
+ public     | email_subscriptions_id_seq          | sequence | postgres | permanent   |               | 8192 bytes | 
+ public     | enhanced_market_insights            | table    | postgres | permanent   | heap          | 72 kB      | 
+ public     | enterprise_orgs                     | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | events                              | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | growth_assessment                   | table    | postgres | permanent   | heap          | 16 kB      | User-specific growth assessment data with RLS enabled
+ public     | growth_assessment_history           | table    | postgres | permanent   | heap          | 16 kB      | User-specific assessment history with RLS enabled
+ public     | growth_insights                     | table    | postgres | permanent   | heap          | 16 kB      | User-specific growth insights data with RLS enabled
+ public     | growth_insights_history             | table    | postgres | permanent   | heap          | 8192 bytes | User-specific insights history with RLS enabled
+ public     | growth_lever_progress               | table    | postgres | permanent   | heap          | 16 kB      | Comprehensive progress tracking for growth lever implementation with milestone management
+ public     | growth_levers                       | table    | postgres | permanent   | heap          | 56 kB      | Enterprise-grade growth lever recommendations with AI-powered insights and ROI estimates
+ public     | growth_levers_regeneration          | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | growth_quadrant_data                | table    | postgres | permanent   | heap          | 16 kB      | Public quadrant data with user-specific write access
+ public     | growth_simulations                  | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | growth_simulations_log              | table    | postgres | permanent   | heap          | 8192 bytes | User-specific simulation logs with RLS enabled
+ public     | growth_studio_audit_log             | table    | postgres | permanent   | heap          | 8192 bytes | Comprehensive audit trail for all growth studio activities with security compliance
+ public     | growth_users                        | table    | postgres | permanent   | heap          | 16 kB      | User-specific growth user profiles with RLS enabled
+ public     | industry_stock_symbols              | table    | postgres | permanent   | heap          | 16 kB      | Public read access: Contains public industry reference data accessible to all users
+ public     | industry_stock_symbols_id_seq       | sequence | postgres | permanent   |               | 8192 bytes | 
+ public     | inspirational_quotes                | table    | postgres | permanent   | heap          | 48 kB      | 
+ public     | integration_templates               | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | leadership_assessment               | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | leads                               | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | marketing_effectiveness_assessment  | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | notification_preferences            | table    | postgres | permanent   | heap          | 0 bytes    | 
+ public     | notifications                       | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | onboarding_assessments              | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | org_audit_logs                      | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | org_roles                           | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | org_users                           | table    | postgres | permanent   | heap          | 0 bytes    | 
+ public     | public_tables_overview              | view     | postgres | permanent   |               | 0 bytes    | 
+ public     | pulse_delegations                   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | pulse_responses                     | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | question_delegations                | table    | postgres | permanent   | heap          | 8192 bytes | Stores question delegations sent by VP-level users to team members
+ public     | real_time_metrics                   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | realtime_business_trends            | table    | postgres | permanent   | heap          | 16 kB      | Public read access: Contains anonymized business trend data accessible to all users
+ public     | realtime_events                     | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | realtime_market_trends              | table    | postgres | permanent   | heap          | 176 kB     | Public read access: Contains anonymized market trend data accessible to all users
+ public     | realtime_marketing_playbook         | table    | postgres | permanent   | heap          | 32 kB      | Public read access: Contains anonymized marketing insights accessible to all users
+ public     | realtime_strategic_trends           | table    | postgres | permanent   | heap          | 64 kB      | Public read access: Contains anonymized strategic trend data accessible to all users
+ public     | realtime_subscriptions              | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | reassessment_assessment             | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | reassessment_prompts                | table    | postgres | permanent   | heap          | 8192 bytes | Reassessment reminders and prompts for user engagement
+ public     | roadmap_updates                     | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | sales_performance_assessment        | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_ai_readiness                  | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | score_bpm                           | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | score_competitive_benchmarking      | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_customer_experience           | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_digital_transformation        | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_leadership                    | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_marketing_effectiveness       | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | score_reassessment                  | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | score_sales_performance             | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | score_strategic_maturity            | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | score_tech_stack                    | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | scorecard_insights                  | table    | postgres | permanent   | heap          | 672 kB     | Public read access: Contains anonymized scorecard insights accessible to all users
+ public     | security_alerts                     | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | simulation_analytics                | table    | postgres | permanent   | heap          | 8192 bytes | Analytics and insights for simulation performance and user behavior
+ public     | simulation_scenarios                | table    | postgres | permanent   | heap          | 8192 bytes | Individual simulation scenarios with detailed impact analysis and risk assessment
+ public     | simulation_sessions                 | table    | postgres | permanent   | heap          | 8192 bytes | Advanced business simulation sessions with scenario modeling and AI insights
+ public     | strategic_maturity_assessment       | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | strategic_pulses                    | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | subscriptions                       | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | team_activities                     | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | team_activity_log                   | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | team_analytics                      | table    | postgres | permanent   | heap          | 0 bytes    | 
+ public     | team_comments                       | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | team_members                        | table    | postgres | permanent   | heap          | 16 kB      | Stores team member information for delegation management
+ public     | team_messages                       | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | team_presence                       | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | team_users                          | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | tech_stack_assessment               | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | tier2_dashboard_insights            | table    | postgres | permanent   | heap          | 32 kB      | Enterprise dashboard insights for Epic 9 - Intelligent Dashboard System
+ public     | tier2_profiles                      | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | tier2_simulation_history            | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | tier2_users                         | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | trends                              | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | trial_user_analytics                | view     | postgres | permanent   |               | 0 bytes    | 
+ public     | trial_users                         | table    | postgres | permanent   | heap          | 16 kB      | Stores trial user information for 30-day free trials
+ public     | unified_assessment_analytics        | table    | postgres | permanent   | heap          | 8192 bytes | Analytics and insights for assessment sessions
+ public     | unified_assessment_context          | table    | postgres | permanent   | heap          | 8192 bytes | AI context and user profile data for assessments
+ public     | unified_assessment_delegations      | table    | postgres | permanent   | heap          | 8192 bytes | Assessment delegation and collaboration features
+ public     | unified_assessment_progress         | table    | postgres | permanent   | heap          | 8192 bytes | Detailed progress tracking for assessment sessions
+ public     | unified_assessment_sessions         | table    | postgres | permanent   | heap          | 8192 bytes | Unified assessment sessions with AI-powered features
+ public     | unified_assessment_templates        | table    | postgres | permanent   | heap          | 16 kB      | Unified assessment templates for all assessment types
+ public     | user_actions                        | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | user_analytics                      | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | user_sessions                       | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | user_tech_stack                     | table    | postgres | permanent   | heap          | 16 kB      | 
+ public     | useractivity                        | table    | postgres | permanent   | heap          | 8192 bytes | 
+ public     | websocket_connections               | table    | postgres | permanent   | heap          | 8192 bytes | 
+(123 rows)
+

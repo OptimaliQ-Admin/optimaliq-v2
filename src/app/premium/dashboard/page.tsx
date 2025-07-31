@@ -210,8 +210,8 @@ export default function PremiumDashboardPage() {
                 <p className="font-semibold text-lg">Time to retake your assessment</p>
                 <p className="text-sm mt-2 leading-relaxed">
                   Your last assessment was over 30 days ago. Please {" "}
-                  <a href="/premium/onboarding/initial-assessment" className="underline font-semibold text-yellow-700 hover:text-yellow-900 transition-colors duration-200">
-                    retake your assessment
+                  <a href="/premium/onboarding/world-class" className="underline font-semibold text-yellow-700 hover:text-yellow-900 transition-colors duration-200">
+                    retake your World-Class Onboarding
                   </a>
                   {" "}to keep your insights current.
                 </p>

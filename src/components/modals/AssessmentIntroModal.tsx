@@ -15,7 +15,7 @@ export default function AssessmentIntroModal({ isOpen, onClose }: Props) {
 
   const handleStart = () => {
     onClose();
-    router.push("/premium/onboarding/initial-assessment");
+          router.push("/premium/onboarding/world-class");
   };
 
   return (

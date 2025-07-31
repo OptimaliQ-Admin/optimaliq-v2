@@ -224,7 +224,7 @@ function LoginPageContent() {
       if (hasCompletedOnboarding) {
         router.push("/premium/dashboard");
       } else {
-        router.push("/premium/onboarding/required");
+        router.push("/premium/onboarding/world-class");
       }
     } catch (error) {
       console.error("❌ Unexpected login error:", error);
