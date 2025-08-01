@@ -52,29 +52,28 @@ export default function PhaseProgressIndicator({
   progress
 }: PhaseProgressIndicatorProps) {
   const currentPhaseIndex = phases.findIndex(phase => phase.id === currentPhase);
-  const currentPhaseData = phases[currentPhaseIndex];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">Business Discovery</h2>
-                          <p className="text-gray-600">Let&apos;s uncover your growth opportunities</p>
+          <h2 className="text-lg font-semibold text-gray-800">Business Discovery</h2>
+          <p className="text-sm text-gray-600">Let&apos;s uncover your growth opportunities</p>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-gray-800">{progress}%</div>
-          <div className="text-sm text-gray-500">Complete</div>
+          <div className="text-xl font-bold text-gray-800">{progress}%</div>
+          <div className="text-xs text-gray-500">Complete</div>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex justify-between text-sm text-gray-500 mb-2">
+      <div className="mb-3">
+        <div className="flex justify-between text-xs text-gray-500 mb-1">
           <span>Progress</span>
           <span>{progress}%</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -91,7 +90,7 @@ export default function PhaseProgressIndicator({
       </div>
 
       {/* Phase Indicators */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-2">
         {phases.map((phase, index) => {
           const isCompleted = index < currentPhaseIndex;
           const isCurrent = index === currentPhaseIndex;
@@ -100,7 +99,7 @@ export default function PhaseProgressIndicator({
           return (
             <motion.div
               key={phase.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.3 }}
               className={`relative text-center ${
@@ -108,18 +107,18 @@ export default function PhaseProgressIndicator({
               }`}
             >
               {/* Phase Circle */}
-              <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-lg font-medium transition-all duration-300 ${
+              <div className={`w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                 isCompleted
-                  ? `bg-gradient-to-r from-${phase.color}-500 to-${phase.color}-600 text-white shadow-lg`
+                  ? `bg-gradient-to-r from-${phase.color}-500 to-${phase.color}-600 text-white shadow-md`
                   : isCurrent
-                  ? `bg-gradient-to-r from-${phase.color}-500 to-${phase.color}-600 text-white shadow-lg ring-4 ring-${phase.color}-200`
+                  ? `bg-gradient-to-r from-${phase.color}-500 to-${phase.color}-600 text-white shadow-md ring-2 ring-${phase.color}-200`
                   : 'bg-gray-100 text-gray-400'
               }`}>
                 {isCompleted ? (
                   <motion.svg
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -131,8 +130,8 @@ export default function PhaseProgressIndicator({
               </div>
 
               {/* Phase Info */}
-              <div className="space-y-1">
-                <h3 className={`text-sm font-semibold ${
+              <div className="space-y-0.5">
+                <h3 className={`text-xs font-medium ${
                   isCompleted || isCurrent
                     ? `text-${phase.color}-800`
                     : 'text-gray-400'
@@ -153,13 +152,13 @@ export default function PhaseProgressIndicator({
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className={`absolute -top-1 -right-1 w-4 h-4 rounded-full bg-${phase.color}-500 border-2 border-white`}
+                  className={`absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-${phase.color}-500 border border-white`}
                 />
               )}
 
               {/* Connection Line */}
               {index < phases.length - 1 && (
-                <div className="absolute top-6 left-full w-full h-0.5 bg-gray-200 -z-10">
+                <div className="absolute top-4 left-full w-full h-0.5 bg-gray-200 -z-10">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ 
@@ -174,30 +173,6 @@ export default function PhaseProgressIndicator({
           );
         })}
       </div>
-
-      {/* Current Phase Details */}
-      {currentPhaseData && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.3 }}
-          className={`mt-6 p-4 rounded-xl bg-gradient-to-r from-${currentPhaseData.color}-50 to-${currentPhaseData.color}-100 border border-${currentPhaseData.color}-200`}
-        >
-          <div className="flex items-center space-x-3">
-            <div className={`w-8 h-8 rounded-full bg-gradient-to-r from-${currentPhaseData.color}-500 to-${currentPhaseData.color}-600 flex items-center justify-center text-white text-sm`}>
-              {currentPhaseData.icon}
-            </div>
-            <div>
-              <h3 className={`font-semibold text-${currentPhaseData.color}-800`}>
-                {currentPhaseData.name} Phase
-              </h3>
-              <p className={`text-sm text-${currentPhaseData.color}-700`}>
-                {currentPhaseData.description}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 } 

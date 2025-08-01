@@ -257,20 +257,39 @@ export default function MultiSelectInput({
             </AnimatePresence>
           </div>
 
-          {/* Helper Text */}
+          {/* Helper Text and Continue Button */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-center mt-4"
+            className="text-center mt-4 space-y-3"
           >
             <p className="text-sm text-gray-500">
               {selectedValues.length}/{maxSelect} selected
             </p>
             {isAtMax && (
-              <p className="text-xs text-orange-600 mt-1">
+              <p className="text-xs text-orange-600">
                 Maximum selections reached. Click on a selected item to remove it.
               </p>
+            )}
+            
+            {/* Continue Button */}
+            {selectedValues.length > 0 && (
+              <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => onSelect(selectedValues)}
+                disabled={disabled}
+                className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  disabled
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : `bg-gradient-to-r ${config.gradient} text-white shadow-lg hover:shadow-xl`
+                }`}
+              >
+                Continue with {selectedValues.length} selection{selectedValues.length !== 1 ? 's' : ''}
+              </motion.button>
             )}
           </motion.div>
         </div>

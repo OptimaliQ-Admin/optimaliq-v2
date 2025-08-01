@@ -120,7 +120,7 @@ export default function ConversationalOnboardingChat({
         setInsights(data.insights);
 
         // Add AI response only if it's not just repeating the next question
-        if (data.aiMessage && data.aiMessage.content !== data.nextQuestion?.content) {
+        if (data.aiMessage && data.aiMessage.content !== data.nextQuestion?.content && data.aiMessage.content.trim() !== "") {
           addMessage(data.aiMessage);
         }
 

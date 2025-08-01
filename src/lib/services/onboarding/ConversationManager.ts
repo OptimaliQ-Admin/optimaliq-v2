@@ -189,11 +189,12 @@ export class ConversationManager {
       },
       {
         id: 'friction_points',
-        type: 'multi_choice',
+        type: 'multi_select',
         content: "What are the biggest friction points actively holding your business back? Select up to 3 areas where you're experiencing the most significant challenges.",
         context: 'Identifying current bottlenecks and challenges',
         personality: 'consultant',
         phase: 'discovery',
+        maxSelect: 3,
         options: [
           { value: 'lack_funding', label: 'Lack of funding', description: 'Insufficient capital for growth initiatives' },
           { value: 'leadership_misalignment', label: 'Leadership misalignment', description: 'Conflicting priorities or vision among leaders' },
@@ -351,11 +352,12 @@ export class ConversationManager {
       // Group 4: Growth Stack
       {
         id: 'acquisition_channels',
-        type: 'multi_choice',
+        type: 'multi_select',
         content: "Which acquisition channels are driving meaningful results today? Select all that apply.",
         context: 'Understanding current growth engine',
         personality: 'strategist',
         phase: 'roadmap',
+        maxSelect: 5,
         options: [
           { value: 'seo', label: 'Organic Search / SEO', description: 'Traffic from search engines' },
           { value: 'paid_media', label: 'Paid Media (Google, Meta, TikTok, etc.)', description: 'Paid advertising across platforms' },
@@ -478,11 +480,12 @@ export class ConversationManager {
       // Group 6: Benchmarks
       {
         id: 'benchmark_preferences',
-        type: 'multi_choice',
+        type: 'multi_select',
         content: "What type of insights or benchmarks would be most valuable to you right now? Select all that apply.",
         context: 'Understanding insight priorities',
         personality: 'analyst',
         phase: 'roadmap',
+        maxSelect: 4,
         options: [
           { value: 'competitor_comparison', label: 'Competitor comparison', description: 'How you stack up against competitors' },
           { value: 'revenue_growth', label: 'Revenue growth levers', description: 'Strategies to accelerate revenue' },
