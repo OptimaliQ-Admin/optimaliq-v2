@@ -174,7 +174,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 3
+        order: 2.5
       },
       {
         id: 'gtm_strategy',
@@ -225,7 +225,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 6
+        order: 5.5
       },
 
       // Group 2: Positioning
@@ -310,7 +310,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 11
+        order: 10.5
       },
       {
         id: 'business_priorities',
@@ -388,7 +388,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 15
+        order: 14.5
       },
       {
         id: 'tech_maturity',
@@ -503,7 +503,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 23
+        order: 22.5
       },
       {
         id: 'funding_status',
@@ -534,7 +534,7 @@ export class ConversationManager {
         followUps: [],
         insights: [],
         required: false,
-        order: 25
+        order: 24.5
       },
       {
         id: 'growth_pace',
