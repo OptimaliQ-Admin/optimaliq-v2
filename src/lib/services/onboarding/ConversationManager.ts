@@ -801,6 +801,7 @@ export class ConversationManager {
   }
 
   private async determineNextQuestion(response: UserResponse, context: BusinessContext, state: ConversationState): Promise<QuestionNode | null> {
+    console.log('DEBUG: Determining next question after:', response.questionId, 'with answer:', response.answer);
     const currentQuestion = this.questionTree.find(q => q.id === response.questionId);
     
     if (!currentQuestion) return null;
@@ -822,11 +823,15 @@ export class ConversationManager {
 
     // Handle multi-select questions with "other" option - only if "other" is selected
     if (Array.isArray(response.answer) && response.answer.includes('other')) {
+      console.log('DEBUG: Other option selected in multi-select, checking for follow-up question');
       const otherQuestionId = `${currentQuestion.id}_other`;
       const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
       if (otherQuestion && !context.responses[otherQuestionId]) {
+        console.log('DEBUG: Returning other follow-up question:', otherQuestionId);
         return otherQuestion;
       }
+    } else if (Array.isArray(response.answer)) {
+      console.log('DEBUG: Multi-select answer without other:', response.answer);
     }
 
     // Skip follow-up questions for most cases to keep conversation flowing
@@ -842,10 +847,18 @@ export class ConversationManager {
       }
     }
 
-    // Default: move to next question by order
+    // Default: move to next question by order, but skip "_other" questions unless explicitly triggered
     const currentOrder = currentQuestion.order;
-    const nextQuestion = this.questionTree.find(q => q.order === currentOrder + 1);
+    let nextOrder = currentOrder + 1;
+    let nextQuestion = this.questionTree.find(q => q.order === nextOrder);
     
+    // Skip "_other" questions when going by order (they should only be triggered as follow-ups)
+    while (nextQuestion && nextQuestion.id.includes('_other')) {
+      nextOrder++;
+      nextQuestion = this.questionTree.find(q => q.order === nextOrder);
+    }
+    
+    console.log('DEBUG: Returning next question by order:', nextQuestion?.id || 'null');
     return nextQuestion || null;
   }
 
