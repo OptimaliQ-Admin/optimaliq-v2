@@ -55,15 +55,26 @@ export interface UserPersona {
 
 export interface QuestionNode {
   id: string;
-  type: 'conversation' | 'multi_choice' | 'text_input' | 'ranking' | 'conditional';
+  type: 'conversation' | 'multi_choice' | 'multi_select' | 'text_input' | 'ranking' | 'slider' | 'nps' | 'likert';
   content: string;
   context: string;
   personality: 'consultant' | 'analyst' | 'strategist' | 'mentor';
+  phase: 'introduction' | 'discovery' | 'diagnosis' | 'roadmap';
   options?: QuestionOption[];
+  maxSelect?: number; // For multi_select questions
+  minValue?: number; // For slider questions
+  maxValue?: number; // For slider questions
+  step?: number; // For slider questions
+  scale?: number; // For NPS/Likert questions
   followUps: ConditionalQuestion[];
   insights: InsightGenerator[];
   required: boolean;
   order: number;
+  adaptiveLogic?: {
+    condition: (context: BusinessContext, previousAnswers: Record<string, any>) => boolean;
+    skipTo?: string;
+    additionalQuestions?: string[];
+  };
 }
 
 export interface QuestionOption {
@@ -115,6 +126,7 @@ export class ConversationManager {
         content: "Hi! I'm your business growth consultant. I'm here to help you discover your biggest growth opportunities and create a strategic roadmap. Let's start by understanding your business better. What's the biggest challenge you're facing right now in growing your business?",
         context: 'Introduction and initial challenge identification',
         personality: 'consultant',
+        phase: 'introduction',
         followUps: [],
         insights: [
           {
@@ -132,6 +144,7 @@ export class ConversationManager {
         content: "What metrics do you track most closely to measure growth? Choose the KPIs that guide your key decisions today.",
         context: 'Understanding current focus and optimization priorities',
         personality: 'analyst',
+        phase: 'discovery',
         options: [
           { value: 'revenue', label: 'Revenue', description: 'Total sales and income' },
           { value: 'profit_margin', label: 'Profit Margin', description: 'Net profit as percentage of revenue' },
@@ -156,6 +169,7 @@ export class ConversationManager {
         content: "Please describe the other metric(s) you track",
         context: 'Understanding custom metrics',
         personality: 'analyst',
+        phase: 'discovery',
         followUps: [],
         insights: [],
         required: false,
@@ -167,6 +181,7 @@ export class ConversationManager {
         content: "In one or two sentences, describe your go-to-market strategy. How do you attract, convert, and retain customers?",
         context: 'Understanding current market approach',
         personality: 'strategist',
+        phase: 'discovery',
         followUps: [],
         insights: [],
         required: true,
@@ -178,6 +193,7 @@ export class ConversationManager {
         content: "What are the biggest friction points actively holding your business back? Select up to 3 areas where you're experiencing the most significant challenges.",
         context: 'Identifying current bottlenecks and challenges',
         personality: 'consultant',
+        phase: 'discovery',
         options: [
           { value: 'lack_funding', label: 'Lack of funding', description: 'Insufficient capital for growth initiatives' },
           { value: 'leadership_misalignment', label: 'Leadership misalignment', description: 'Conflicting priorities or vision among leaders' },
@@ -203,6 +219,7 @@ export class ConversationManager {
         content: "Please describe the other friction point(s)",
         context: 'Understanding unique challenges',
         personality: 'consultant',
+        phase: 'discovery',
         followUps: [],
         insights: [],
         required: false,
@@ -216,6 +233,7 @@ export class ConversationManager {
         content: "What makes your business hard to compete with? What do you do better, faster, or differently than others in your space?",
         context: 'Understanding competitive advantages and market positioning',
         personality: 'strategist',
+        phase: 'discovery',
         followUps: [],
         insights: [],
         required: true,
@@ -227,6 +245,7 @@ export class ConversationManager {
         content: "How would your customers describe your brand in one sentence? Imagine you're reading an online review—what would they say?",
         context: 'Understanding brand perception and customer experience',
         personality: 'consultant',
+        phase: 'discovery',
         followUps: [],
         insights: [],
         required: true,
@@ -238,6 +257,7 @@ export class ConversationManager {
         content: "How do you currently make big strategic decisions? When facing big bets—new product, pricing changes, growth pivots—what guides your decision-making process?",
         context: 'Understanding decision-making approach',
         personality: 'strategist',
+        phase: 'discovery',
         options: [
           { value: 'gut_feel', label: 'Mostly gut instinct or experience', description: 'Decisions based on intuition and past experience' },
           { value: 'data_driven', label: 'Primarily based on data and analytics', description: 'Decisions guided by metrics, testing, and analysis' },
@@ -259,6 +279,7 @@ export class ConversationManager {
         content: "What platforms or tools are central to your operations? Select the tools you actively use across different categories.",
         context: 'Understanding current tech ecosystem',
         personality: 'analyst',
+        phase: 'diagnosis',
         options: [
           { value: 'crm', label: 'CRM (Salesforce, HubSpot, etc.)', description: 'Customer relationship management' },
           { value: 'marketing_automation', label: 'Marketing Automation', description: 'Email marketing and automation tools' },
@@ -282,6 +303,7 @@ export class ConversationManager {
         content: "Please describe any other platforms or tools that are central to your operations",
         context: 'Understanding custom tools',
         personality: 'analyst',
+        phase: 'diagnosis',
         followUps: [],
         insights: [],
         required: false,
@@ -293,6 +315,7 @@ export class ConversationManager {
         content: "Rank the following priorities from most to least important to your business right now. This helps us understand your current strategic focus.",
         context: 'Understanding strategic priorities and resource allocation',
         personality: 'strategist',
+        phase: 'diagnosis',
         options: [
           { value: 'growth', label: 'Growth', description: 'Expanding customer base and revenue' },
           { value: 'profitability', label: 'Profitability', description: 'Improving margins and financial performance' },
@@ -311,6 +334,7 @@ export class ConversationManager {
         content: "Describe your internal process discipline. Select the statement that best reflects your company's current operational maturity level.",
         context: 'Understanding operational maturity',
         personality: 'analyst',
+        phase: 'diagnosis',
         options: [
           { value: '1', label: 'Everything is ad hoc', description: 'No formal processes, decisions made on the fly' },
           { value: '2', label: 'Some structure, but mostly reactive', description: 'Basic processes exist but are inconsistently applied' },
@@ -331,6 +355,7 @@ export class ConversationManager {
         content: "Which acquisition channels are driving meaningful results today? Select all that apply.",
         context: 'Understanding current growth engine',
         personality: 'strategist',
+        phase: 'roadmap',
         options: [
           { value: 'seo', label: 'Organic Search / SEO', description: 'Traffic from search engines' },
           { value: 'paid_media', label: 'Paid Media (Google, Meta, TikTok, etc.)', description: 'Paid advertising across platforms' },
@@ -355,6 +380,7 @@ export class ConversationManager {
         content: "Please describe the acquisition channels that are driving meaningful results",
         context: 'Understanding unique channels',
         personality: 'strategist',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: false,
@@ -366,6 +392,7 @@ export class ConversationManager {
         content: "What is your current tech maturity level? How well-integrated and effective is your current tech stack?",
         context: 'Understanding technical foundation',
         personality: 'analyst',
+        phase: 'roadmap',
         options: [
           { value: 'integrated', label: 'Everything is integrated and works seamlessly', description: 'All systems communicate and data flows automatically' },
           { value: 'partially_integrated', label: 'Some systems talk to each other, others don\'t', description: 'Partial integration with some manual processes' },
@@ -384,6 +411,7 @@ export class ConversationManager {
         content: "What are your current retention levers? How do you keep customers coming back? What's your hook or lifecycle play?",
         context: 'Understanding customer success strategy',
         personality: 'strategist',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: true,
@@ -397,6 +425,7 @@ export class ConversationManager {
         content: "What kind of business decisions are hardest for you to make right now? Hiring? Prioritization? Marketing spend? Pricing? Something else?",
         context: 'Understanding current decision-making challenges',
         personality: 'consultant',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: true,
@@ -408,6 +437,7 @@ export class ConversationManager {
         content: "How aligned is your team on company goals and direction? This helps us understand your organizational dynamics.",
         context: 'Understanding organizational alignment',
         personality: 'consultant',
+        phase: 'roadmap',
         options: [
           { value: 'fully_aligned', label: 'Fully aligned and collaborative', description: 'Everyone is on the same page and working together effectively' },
           { value: 'mostly_aligned', label: 'Mostly aligned, occasional friction', description: 'Generally aligned with some minor disagreements or miscommunications' },
@@ -426,6 +456,7 @@ export class ConversationManager {
         content: "Please describe the alignment of your team",
         context: 'Understanding unique team dynamics',
         personality: 'consultant',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: false,
@@ -437,6 +468,7 @@ export class ConversationManager {
         content: "What would a wildly successful next 12 months look like for your business? Revenue, people, customers, product—describe your future state vividly.",
         context: 'Understanding vision and goals',
         personality: 'strategist',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: true,
@@ -450,6 +482,7 @@ export class ConversationManager {
         content: "What type of insights or benchmarks would be most valuable to you right now? Select all that apply.",
         context: 'Understanding insight priorities',
         personality: 'analyst',
+        phase: 'roadmap',
         options: [
           { value: 'competitor_comparison', label: 'Competitor comparison', description: 'How you stack up against competitors' },
           { value: 'revenue_growth', label: 'Revenue growth levers', description: 'Strategies to accelerate revenue' },
@@ -472,6 +505,7 @@ export class ConversationManager {
         content: "Please describe the other insights or benchmarks",
         context: 'Understanding unique insight needs',
         personality: 'analyst',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: false,
@@ -483,6 +517,7 @@ export class ConversationManager {
         content: "Are you currently raising capital or preparing for an exit? This helps us understand your current business stage.",
         context: 'Understanding business stage and strategic priorities',
         personality: 'strategist',
+        phase: 'roadmap',
         options: [
           { value: 'raising_now', label: 'Yes, actively raising', description: 'Currently in fundraising mode' },
           { value: 'early_planning', label: 'In early planning stages', description: 'Considering fundraising in the near future' },
@@ -501,6 +536,7 @@ export class ConversationManager {
         content: "Please describe the other ways you are currently raising capital or preparing for an exit",
         context: 'Understanding unique funding situation',
         personality: 'strategist',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: false,
@@ -512,6 +548,7 @@ export class ConversationManager {
         content: "What is your ideal pace of growth? This helps us understand your growth ambitions and set appropriate benchmarks.",
         context: 'Understanding growth ambitions',
         personality: 'strategist',
+        phase: 'roadmap',
         options: [
           { value: '10_25', label: '10–25% YoY', description: 'Steady, sustainable growth' },
           { value: '25_50', label: '25–50% YoY', description: 'Moderate acceleration' },
@@ -533,6 +570,7 @@ export class ConversationManager {
         content: "What's one thing you know you need to fix—but haven't yet? Be honest. What's been nagging at you that keeps getting deprioritized?",
         context: 'Identifying immediate opportunities',
         personality: 'consultant',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: true,
@@ -544,6 +582,7 @@ export class ConversationManager {
         content: "Are You Ready to Commit? Ready to level up? This path is built for ambitious businesses willing to do the work. Are you in?",
         context: 'Confirming commitment to growth',
         personality: 'mentor',
+        phase: 'roadmap',
         options: [
           { value: 'yes_ready', label: '✅ Yes — I\'m ready to grow.', description: 'I\'m committed to implementing the strategies and insights from this assessment' },
           { value: 'no_not_ready', label: '❌ No — not at this time.', description: 'I need more time to consider or prepare for this commitment' }
@@ -561,6 +600,7 @@ export class ConversationManager {
         content: "Briefly describe what your business offers, who you serve, and how you deliver value. This helps us personalize insights and recommendations.",
         context: 'Understanding business model and value proposition',
         personality: 'consultant',
+        phase: 'roadmap',
         followUps: [],
         insights: [],
         required: true,

@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ConversationMessage, QuestionNode, RealTimeInsight } from '@/lib/services/onboarding/ConversationManager';
 import { BusinessMetrics, StrategicInsight } from '@/lib/services/onboarding/BusinessIntelligenceEngine';
-import RankingInterface from './RankingInterface';
+import ChatMessage from './ChatMessage';
+import DynamicInputRenderer from './DynamicInputRenderer';
+import PhaseProgressIndicator from './PhaseProgressIndicator';
 import OnboardingCompletion from './OnboardingCompletion';
 
 interface ConversationalOnboardingChatProps {
@@ -22,18 +24,18 @@ export default function ConversationalOnboardingChat({
   onComplete
 }: ConversationalOnboardingChatProps) {
   const [messages, setMessages] = useState<MessageWithUI[]>([]);
-  const [currentInput, setCurrentInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<QuestionNode | null>(null);
   const [insights, setInsights] = useState<RealTimeInsight[]>([]);
   const [progress, setProgress] = useState(0);
+  const [currentPhase, setCurrentPhase] = useState<'introduction' | 'discovery' | 'diagnosis' | 'roadmap'>('introduction');
+  const [isTyping, setIsTyping] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [completionData, setCompletionData] = useState<{
     metrics: BusinessMetrics;
     insights: StrategicInsight[];
   } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null);
 
   // Initialize conversation
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function ConversationalOnboardingChat({
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, currentQuestion]);
 
   const initializeConversation = async () => {
     try {
@@ -56,6 +58,7 @@ export default function ConversationalOnboardingChat({
       if (response.ok) {
         const data = await response.json();
         setCurrentQuestion(data.question);
+        setCurrentPhase(data.question.phase);
         
         // Add welcome message with typing effect
         addMessage({
@@ -87,67 +90,22 @@ export default function ConversationalOnboardingChat({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessage = async () => {
-    if (!currentInput.trim() || !currentQuestion) return;
-
-    const userMessage: ConversationMessage = {
-      id: `user_${Date.now()}`,
-      type: 'user',
-      content: currentInput,
-      timestamp: new Date().toISOString()
-    };
-
-    addMessage(userMessage);
-    setCurrentInput('');
-
-    // Process response
-    try {
-      const response = await fetch('/api/onboarding/conversational/respond', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          questionId: currentQuestion.id,
-          answer: currentInput
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Add AI response with typing effect
-        addMessage(data.aiMessage, true);
-        
-        // Update state
-        setCurrentQuestion(data.nextQuestion);
-        setInsights(prev => [...prev, ...data.insights]);
-        setProgress(data.state.progress);
-
-        // Check if conversation is complete
-        if (data.state.currentPhase === 'completion') {
-          setTimeout(() => {
-            onComplete();
-          }, 2000);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    }
-  };
-
-  const handleOptionSelect = async (option: string) => {
+  const handleAnswer = useCallback(async (answer: string | string[] | number) => {
     if (!currentQuestion) return;
 
+    // Add user message
     const userMessage: ConversationMessage = {
       id: `user_${Date.now()}`,
       type: 'user',
-      content: option,
+      content: Array.isArray(answer) ? answer.join(', ') : String(answer),
       timestamp: new Date().toISOString()
     };
 
     addMessage(userMessage);
 
-    // Process response
+    // Show typing indicator
+    setIsTyping(true);
+
     try {
       const response = await fetch('/api/onboarding/conversational/respond', {
         method: 'POST',
@@ -155,86 +113,49 @@ export default function ConversationalOnboardingChat({
         body: JSON.stringify({
           sessionId,
           questionId: currentQuestion.id,
-          answer: option
+          answer,
+          timestamp: new Date().toISOString()
         })
       });
 
       if (response.ok) {
         const data = await response.json();
         
-        // Add AI response with typing effect
-        addMessage(data.aiMessage, true);
-        
         // Update state
-        setCurrentQuestion(data.nextQuestion);
-        setInsights(prev => [...prev, ...data.insights]);
         setProgress(data.state.progress);
+        setCurrentPhase(data.state.currentPhase);
+        setInsights(data.insights);
 
-        // Check if conversation is complete
-        if (data.state.currentPhase === 'completion') {
-          setTimeout(() => {
-            onComplete();
-          }, 2000);
+        // Add AI response
+        if (data.aiMessage) {
+          addMessage(data.aiMessage);
         }
+
+        // Update current question
+        if (data.nextQuestion) {
+          setCurrentQuestion(data.nextQuestion);
+          setCurrentPhase(data.nextQuestion.phase);
+        } else {
+          // Conversation completed
+          handleCompletion();
+        }
+      } else {
+        throw new Error('Failed to process response');
       }
     } catch (error) {
-      console.error('Failed to send message:', error);
-    }
-  };
-
-  const handleRankingComplete = async (rankings: string[]) => {
-    if (!currentQuestion) return;
-
-    const userMessage: ConversationMessage = {
-      id: `user_${Date.now()}`,
-      type: 'user',
-      content: `Ranked: ${rankings.join(', ')}`,
-      timestamp: new Date().toISOString()
-    };
-
-    addMessage(userMessage);
-
-    // Process response
-    try {
-      const response = await fetch('/api/onboarding/conversational/respond', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          questionId: currentQuestion.id,
-          answer: rankings
-        })
+      console.error('Error processing answer:', error);
+      // Add error message
+      addMessage({
+        id: `error_${Date.now()}`,
+        type: 'ai',
+        content: "I apologize, but I encountered an error processing your response. Please try again.",
+        timestamp: new Date().toISOString(),
+        metadata: { personality: 'consultant' }
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Add AI response with typing effect
-        addMessage(data.aiMessage, true);
-        
-        // Update state
-        setCurrentQuestion(data.nextQuestion);
-        setInsights(prev => [...prev, ...data.insights]);
-        setProgress(data.state.progress);
-
-        // Check if conversation is complete
-        if (data.state.currentPhase === 'completion') {
-          setTimeout(() => {
-            onComplete();
-          }, 2000);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
+    } finally {
+      setIsTyping(false);
     }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+  }, [currentQuestion, sessionId]);
 
   const handleCompletion = async () => {
     try {
@@ -246,48 +167,14 @@ export default function ConversationalOnboardingChat({
 
       if (response.ok) {
         const data = await response.json();
-        setCompletionData({
-          metrics: data.metrics,
-          insights: data.insights
-        });
+        setCompletionData(data);
         setIsCompleted(true);
       }
     } catch (error) {
-      console.error('Failed to complete onboarding:', error);
+      console.error('Error completing onboarding:', error);
     }
   };
 
-  const getPersonalityStyle = (personality?: string) => {
-    switch (personality) {
-      case 'consultant':
-        return 'bg-blue-50 border-blue-200';
-      case 'analyst':
-        return 'bg-purple-50 border-purple-200';
-      case 'strategist':
-        return 'bg-green-50 border-green-200';
-      case 'mentor':
-        return 'bg-orange-50 border-orange-200';
-      default:
-        return 'bg-gray-50 border-gray-200';
-    }
-  };
-
-  const getPersonalityIcon = (personality?: string) => {
-    switch (personality) {
-      case 'consultant':
-        return '💼';
-      case 'analyst':
-        return '📊';
-      case 'strategist':
-        return '🎯';
-      case 'mentor':
-        return '🤝';
-      default:
-        return '🤖';
-    }
-  };
-
-    // Show completion screen if onboarding is finished
   if (isCompleted && completionData) {
     return (
       <OnboardingCompletion
@@ -299,111 +186,38 @@ export default function ConversationalOnboardingChat({
   }
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto">
-      {/* Progress Bar */}
-      <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Business Discovery Progress
-          </span>
-          <span className="text-sm text-gray-500">{progress}% Complete</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <motion.div
-            className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5 }}
-          />
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="max-w-4xl mx-auto p-6">
+        {/* Phase Progress Indicator */}
+        <PhaseProgressIndicator
+          currentPhase={currentPhase}
+          progress={progress}
+        />
 
-      {/* Chat Container */}
-      <div className="flex-1 bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="flex flex-col h-full">
+        {/* Chat Container */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          {/* Chat Header */}
+          <div className="px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-lg">
+                💼
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold">Business Growth Consultant</h1>
+                <p className="text-blue-100 text-sm">AI-powered business discovery</p>
+              </div>
+            </div>
+          </div>
+
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="h-96 overflow-y-auto p-6 space-y-4">
             <AnimatePresence>
-              {messages.map((message, index) => (
-                <motion.div
+              {messages.map((message) => (
+                <ChatMessage
                   key={message.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
-                      message.type === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : `${getPersonalityStyle(message.metadata?.personality)} border`
-                    }`}
-                  >
-                    {message.type === 'ai' && (
-                      <div className="flex items-center mb-2">
-                        <span className="text-lg mr-2">
-                          {getPersonalityIcon(message.metadata?.personality)}
-                        </span>
-                        <span className="text-xs text-gray-500 capitalize">
-                          {message.metadata?.personality || 'AI'} Consultant
-                        </span>
-                      </div>
-                    )}
-                    
-                    <div className="whitespace-pre-wrap">{message.content}</div>
-
-                    {/* Show options for AI messages with multi-choice questions */}
-                    {message.type === 'ai' && currentQuestion?.type === 'multi_choice' && (
-                      <div className="mt-4 space-y-2">
-                        {currentQuestion.options?.map((option) => (
-                          <motion.button
-                            key={option.value}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleOptionSelect(option.value)}
-                            className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition-colors"
-                          >
-                            <div className="font-medium text-gray-900">{option.label}</div>
-                            {option.description && (
-                              <div className="text-sm text-gray-500 mt-1">{option.description}</div>
-                            )}
-                          </motion.button>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Show ranking interface */}
-                    {message.type === 'ai' && currentQuestion?.type === 'ranking' && (
-                      <div className="mt-4">
-                        <RankingInterface
-                          options={currentQuestion.options || []}
-                          onRankingComplete={handleRankingComplete}
-                        />
-                      </div>
-                    )}
-
-                    {/* Show conditional questions */}
-                    {message.type === 'ai' && currentQuestion?.type === 'conditional' && (
-                      <div className="mt-4 space-y-2">
-                        {currentQuestion.options?.map((option) => (
-                          <motion.button
-                            key={option.value}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleOptionSelect(option.value)}
-                            className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition-colors"
-                          >
-                            <div className="font-medium text-gray-900">{option.label}</div>
-                            {option.description && (
-                              <div className="text-sm text-gray-500 mt-1">{option.description}</div>
-                            )}
-                          </motion.button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
+                  message={message}
+                  showTypingIndicator={message.isTyping}
+                />
               ))}
             </AnimatePresence>
 
@@ -412,81 +226,85 @@ export default function ConversationalOnboardingChat({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex justify-start"
+                className="flex items-start space-x-3"
               >
-                <div className={`max-w-[80%] rounded-lg p-4 ${getPersonalityStyle(currentQuestion?.personality)} border`}>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                        className="w-2 h-2 bg-gray-400 rounded-full"
-                      />
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                        className="w-2 h-2 bg-gray-400 rounded-full"
-                      />
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                        className="w-2 h-2 bg-gray-400 rounded-full"
-                      />
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-medium shadow-lg">
+                  💼
+                </div>
+                <div className="flex-1">
+                  <div className="bg-white rounded-2xl shadow-lg border border-blue-200 px-4 py-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                          className="w-2 h-2 bg-gray-400 rounded-full"
+                        />
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                          className="w-2 h-2 bg-gray-400 rounded-full"
+                        />
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                          className="w-2 h-2 bg-gray-400 rounded-full"
+                        />
+                      </div>
+                      <span className="text-sm text-gray-500">Consultant is thinking...</span>
                     </div>
-                    <span className="text-sm text-gray-500">AI is thinking...</span>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Current Question Input */}
+            {currentQuestion && !isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                className="mt-6"
+              >
+                <DynamicInputRenderer
+                  question={currentQuestion}
+                  onAnswer={handleAnswer}
+                  disabled={isTyping}
+                />
               </motion.div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area - Only show for text-based questions */}
-          {currentQuestion && (currentQuestion.type === 'text_input' || currentQuestion.type === 'conversation') && (
-            <div className="border-t bg-gray-50 p-4">
-              <div className="flex space-x-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={currentInput}
-                  onChange={(e) => setCurrentInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={currentQuestion.type === 'conversation' ? "Tell me about your challenge..." : "Type your answer..."}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  disabled={isTyping}
-                />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleSendMessage}
-                  disabled={!currentInput.trim() || isTyping}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Send
-                </motion.button>
+          {/* Insights Panel */}
+          {insights.length > 0 && (
+            <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
+              <div className="flex items-center space-x-2 mb-3">
+                <div className="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-semibold text-gray-800">Strategic Insights</h3>
+              </div>
+              <div className="space-y-2">
+                {insights.slice(-2).map((insight, index) => (
+                  <motion.div
+                    key={insight.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="text-sm text-gray-600 bg-white rounded-lg p-3 border border-gray-200"
+                  >
+                    {insight.content}
+                  </motion.div>
+                ))}
               </div>
             </div>
           )}
         </div>
       </div>
-
-      {/* Insights Panel - Only show strategic insights, not conversation responses */}
-      {insights.length > 0 && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
-          <h3 className="text-sm font-medium text-purple-800 mb-2">💡 Strategic Insights</h3>
-          <div className="space-y-2">
-            {insights
-              .filter(insight => insight.type !== 'pattern') // Filter out pattern insights that duplicate conversation
-              .slice(-2) // Show only last 2 insights to reduce noise
-              .map((insight) => (
-                <div key={insight.id} className="text-sm text-purple-700">
-                  {insight.content}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 } 
