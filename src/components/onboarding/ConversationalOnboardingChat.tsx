@@ -354,7 +354,7 @@ export default function ConversationalOnboardingChat({
                     <div className="whitespace-pre-wrap">{message.content}</div>
 
                     {/* Show options for AI messages with multi-choice questions */}
-                    {message.type === 'ai' && message.showOptions && currentQuestion?.type === 'multi_choice' && (
+                    {message.type === 'ai' && currentQuestion?.type === 'multi_choice' && (
                       <div className="mt-4 space-y-2">
                         {currentQuestion.options?.map((option) => (
                           <motion.button
@@ -374,7 +374,7 @@ export default function ConversationalOnboardingChat({
                     )}
 
                     {/* Show ranking interface */}
-                    {message.type === 'ai' && message.showOptions && currentQuestion?.type === 'ranking' && (
+                    {message.type === 'ai' && currentQuestion?.type === 'ranking' && (
                       <div className="mt-4">
                         <RankingInterface
                           options={currentQuestion.options || []}
@@ -384,7 +384,7 @@ export default function ConversationalOnboardingChat({
                     )}
 
                     {/* Show conditional questions */}
-                    {message.type === 'ai' && message.showOptions && currentQuestion?.type === 'conditional' && (
+                    {message.type === 'ai' && currentQuestion?.type === 'conditional' && (
                       <div className="mt-4 space-y-2">
                         {currentQuestion.options?.map((option) => (
                           <motion.button
@@ -442,8 +442,8 @@ export default function ConversationalOnboardingChat({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          {(currentQuestion?.type === 'text_input' || currentQuestion?.type === 'conversation') && (
+          {/* Input Area - Only show for text-based questions */}
+          {currentQuestion && (currentQuestion.type === 'text_input' || currentQuestion.type === 'conversation') && (
             <div className="border-t bg-gray-50 p-4">
               <div className="flex space-x-2">
                 <input
@@ -452,7 +452,7 @@ export default function ConversationalOnboardingChat({
                   value={currentInput}
                   onChange={(e) => setCurrentInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder={currentQuestion?.type === 'conversation' ? "Tell me about your challenge..." : "Type your answer..."}
+                  placeholder={currentQuestion.type === 'conversation' ? "Tell me about your challenge..." : "Type your answer..."}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   disabled={isTyping}
                 />
