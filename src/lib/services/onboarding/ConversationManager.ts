@@ -454,18 +454,7 @@ export class ConversationManager {
         required: true,
         order: 19
       },
-      {
-        id: 'team_alignment_other',
-        type: 'text_input',
-        content: "Please describe the alignment of your team",
-        context: 'Understanding unique team dynamics',
-        personality: 'consultant',
-        phase: 'roadmap',
-        followUps: [],
-        insights: [],
-        required: false,
-        order: 20
-      },
+
       {
         id: 'future_success',
         type: 'text_input',
@@ -831,7 +820,7 @@ export class ConversationManager {
       }
     }
 
-    // Handle multi-select questions with "other" option - only if meaningful
+    // Handle multi-select questions with "other" option - only if "other" is selected
     if (Array.isArray(response.answer) && response.answer.includes('other')) {
       const otherQuestionId = `${currentQuestion.id}_other`;
       const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
@@ -890,30 +879,31 @@ export class ConversationManager {
   private async generateAIResponse(response: UserResponse, nextQuestion: QuestionNode | null, insights: RealTimeInsight[]): Promise<ConversationMessage> {
     let content = '';
 
-    // Generate more conversational responses
+    // Generate conversational responses
     if (nextQuestion) {
-      // Only add conversational responses for certain question types, not for every question
-      const shouldAddResponse = nextQuestion.type === 'conversation' || 
-                               nextQuestion.id.includes('completion');
+      // Add brief acknowledgment or transition for most questions
+      const acknowledgments = [
+        "Got it!",
+        "Thanks for sharing that.",
+        "I see.",
+        "That's helpful to know.",
+        "Perfect.",
+        "Interesting!",
+        "That makes sense.",
+        "I understand.",
+        "Right.",
+        "Okay.",
+        "Understood."
+      ];
       
-      if (shouldAddResponse) {
-        // Add brief acknowledgment or transition
-        const acknowledgments = [
-          "Got it!",
-          "Thanks for sharing that.",
-          "I see.",
-          "That's helpful to know.",
-          "Perfect.",
-          "Interesting!",
-          "That makes sense.",
-          "I understand."
-        ];
-        
-        const randomAck = acknowledgments[Math.floor(Math.random() * acknowledgments.length)];
+      const randomAck = acknowledgments[Math.floor(Math.random() * acknowledgments.length)];
+      
+      // For conversation type questions, include the question content
+      if (nextQuestion.type === 'conversation') {
         content = `${randomAck} ${nextQuestion.content}`;
       } else {
-        // For most questions, don't add an AI response - let the input component handle it
-        content = "";
+        // For other question types, just provide acknowledgment
+        content = randomAck;
       }
     } else {
       content = "Thank you for sharing all that information! I have a great understanding of your business now. Let me prepare your personalized growth strategy.";
