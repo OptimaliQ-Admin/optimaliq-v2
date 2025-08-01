@@ -115,7 +115,13 @@ export class ConversationManager {
         context: 'Introduction and initial challenge identification',
         personality: 'consultant',
         followUps: [],
-        insights: [],
+        insights: [
+          {
+            type: 'pattern',
+            condition: (response) => response && response.length > 10,
+            generate: () => "I see you're facing some real challenges. Let me understand your current approach better."
+          }
+        ],
         required: true,
         order: 1
       },
@@ -494,13 +500,16 @@ export class ConversationManager {
       }
     }
 
-    // Generate real-time business intelligence insights
-    const businessInsights = this.businessIntelligence.generateRealTimeInsights(
-      response.answer,
-      response.questionId,
-      context
-    );
-    insights.push(...businessInsights);
+    // Only generate business intelligence insights for certain question types
+    // Skip for simple conversation questions to avoid noise
+    if (question && question.type !== 'conversation') {
+      const businessInsights = this.businessIntelligence.generateRealTimeInsights(
+        response.answer,
+        response.questionId,
+        context
+      );
+      insights.push(...businessInsights);
+    }
 
     return insights;
   }
@@ -510,12 +519,21 @@ export class ConversationManager {
     
     if (!currentQuestion) return null;
 
+    // For the welcome question, always go to challenge_followup
+    if (currentQuestion.id === 'welcome') {
+      return this.questionTree.find(q => q.id === 'challenge_followup') || null;
+    }
+
     // Check for follow-up questions based on the response
-    const followUps = currentQuestion.options?.find(opt => opt.value === response.answer)?.followUpQuestions || [];
-    
-    if (followUps.length > 0) {
-      const nextQuestionId = followUps[0];
-      return this.questionTree.find(q => q.id === nextQuestionId) || null;
+    if (currentQuestion.options) {
+      const selectedOption = currentQuestion.options.find(opt => opt.value === response.answer);
+      const followUps = selectedOption?.followUpQuestions || [];
+      
+      if (followUps.length > 0) {
+        const nextQuestionId = followUps[0];
+        const nextQuestion = this.questionTree.find(q => q.id === nextQuestionId);
+        if (nextQuestion) return nextQuestion;
+      }
     }
 
     // Get next question in sequence
@@ -552,16 +570,11 @@ export class ConversationManager {
   private async generateAIResponse(response: UserResponse, nextQuestion: QuestionNode | null, insights: RealTimeInsight[]): Promise<ConversationMessage> {
     let content = '';
 
-    // Add insights if any
-    if (insights.length > 0) {
-      content += insights.map(insight => insight.content).join(' ') + '\n\n';
-    }
-
-    // Add next question
+    // Only add next question content - insights are handled separately
     if (nextQuestion) {
-      content += nextQuestion.content;
+      content = nextQuestion.content;
     } else {
-      content += "Thank you for sharing all that information! I have a great understanding of your business now. Let me prepare your personalized growth strategy.";
+      content = "Thank you for sharing all that information! I have a great understanding of your business now. Let me prepare your personalized growth strategy.";
     }
 
     return {

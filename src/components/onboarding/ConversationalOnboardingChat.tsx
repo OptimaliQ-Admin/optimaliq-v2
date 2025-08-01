@@ -471,16 +471,19 @@ export default function ConversationalOnboardingChat({
         </div>
       </div>
 
-      {/* Insights Panel */}
+      {/* Insights Panel - Only show strategic insights, not conversation responses */}
       {insights.length > 0 && (
         <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
-          <h3 className="text-sm font-medium text-purple-800 mb-2">💡 Real-time Insights</h3>
+          <h3 className="text-sm font-medium text-purple-800 mb-2">💡 Strategic Insights</h3>
           <div className="space-y-2">
-            {insights.slice(-3).map((insight) => (
-              <div key={insight.id} className="text-sm text-purple-700">
-                {insight.content}
-              </div>
-            ))}
+            {insights
+              .filter(insight => insight.type !== 'pattern') // Filter out pattern insights that duplicate conversation
+              .slice(-2) // Show only last 2 insights to reduce noise
+              .map((insight) => (
+                <div key={insight.id} className="text-sm text-purple-700">
+                  {insight.content}
+                </div>
+              ))}
           </div>
         </div>
       )}
