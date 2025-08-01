@@ -59,8 +59,17 @@ export default function ConversationalOnboardingChat({
         setCurrentQuestion(data.question);
         setCurrentPhase(data.question.phase);
         
-        // Don't add welcome message here - let the input component handle it
-        // This prevents duplication
+        // Add the initial question as an AI message
+        addMessage({
+          id: `question_${data.question.id}`,
+          type: 'ai',
+          content: data.question.content,
+          timestamp: new Date().toISOString(),
+          metadata: { 
+            questionId: data.question.id,
+            personality: data.question.personality 
+          }
+        });
       }
     } catch (error) {
       console.error('Failed to initialize conversation:', error);
@@ -133,6 +142,18 @@ export default function ConversationalOnboardingChat({
         if (data.nextQuestion) {
           setCurrentQuestion(data.nextQuestion);
           setCurrentPhase(data.nextQuestion.phase);
+          
+          // Add the next question as an AI message so it appears in chat history
+          addMessage({
+            id: `question_${data.nextQuestion.id}`,
+            type: 'ai',
+            content: data.nextQuestion.content,
+            timestamp: new Date().toISOString(),
+            metadata: { 
+              questionId: data.nextQuestion.id,
+              personality: data.nextQuestion.personality 
+            }
+          });
         } else {
           // Conversation completed
           handleCompletion();

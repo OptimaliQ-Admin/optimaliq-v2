@@ -881,29 +881,34 @@ export class ConversationManager {
 
     // Generate conversational responses
     if (nextQuestion) {
-      // Add brief acknowledgment or transition for most questions
-      const acknowledgments = [
-        "Got it!",
-        "Thanks for sharing that.",
-        "I see.",
-        "That's helpful to know.",
-        "Perfect.",
-        "Interesting!",
-        "That makes sense.",
-        "I understand.",
-        "Right.",
-        "Okay.",
-        "Understood."
-      ];
-      
-      const randomAck = acknowledgments[Math.floor(Math.random() * acknowledgments.length)];
-      
-      // For conversation type questions, include the question content
-      if (nextQuestion.type === 'conversation') {
-        content = `${randomAck} ${nextQuestion.content}`;
+      // Don't add acknowledgments for "other" follow-up questions
+      if (nextQuestion.id.includes('_other')) {
+        content = "";
       } else {
-        // For other question types, just provide acknowledgment
-        content = randomAck;
+        // Add brief acknowledgment or transition for most questions
+        const acknowledgments = [
+          "Got it!",
+          "Thanks for sharing that.",
+          "I see.",
+          "That's helpful to know.",
+          "Perfect.",
+          "Interesting!",
+          "That makes sense.",
+          "I understand.",
+          "Right.",
+          "Okay.",
+          "Understood."
+        ];
+        
+        const randomAck = acknowledgments[Math.floor(Math.random() * acknowledgments.length)];
+        
+        // For conversation type questions, include the question content
+        if (nextQuestion.type === 'conversation') {
+          content = `${randomAck} ${nextQuestion.content}`;
+        } else {
+          // For other question types, just provide acknowledgment
+          content = randomAck;
+        }
       }
     } else {
       content = "Thank you for sharing all that information! I have a great understanding of your business now. Let me prepare your personalized growth strategy.";
