@@ -343,6 +343,9 @@ export class ConversationManager {
       // Generate AI response message
       const aiMessage = await this.generateAIResponse(response, nextQuestion, insights);
 
+      // Save AI message to database
+      await this.saveAIMessage(response.sessionId, aiMessage);
+
       return {
         state: updatedState,
         aiMessage,
@@ -357,17 +360,20 @@ export class ConversationManager {
   }
 
   private async saveResponse(response: UserResponse): Promise<void> {
-    const { error } = await this.supabase
-      .from('onboarding_responses')
+    // Save user message to conversation_messages
+    const { error: userError } = await this.supabase
+      .from('conversation_messages')
       .insert({
         session_id: response.sessionId,
-        question_id: response.questionId,
-        answer: response.answer,
-        timestamp: response.timestamp,
-        context: response.context
+        message_type: 'user',
+        content: response.answer,
+        metadata: {
+          questionId: response.questionId,
+          context: response.context
+        }
       });
 
-    if (error) throw error;
+    if (userError) throw userError;
   }
 
   private async getConversationState(sessionId: string): Promise<ConversationState> {
@@ -385,17 +391,13 @@ export class ConversationManager {
       .eq('session_id', sessionId)
       .order('created_at', { ascending: true });
 
-    // Get responses
-    const { data: responses } = await this.supabase
-      .from('onboarding_responses')
-      .select('*')
-      .eq('session_id', sessionId);
-
-    // Build context from responses
+    // Build context from user messages
     const context: BusinessContext = {
       responses: {},
-      ...responses?.reduce((acc: any, response: any) => {
-        acc.responses[response.question_id] = response.answer;
+      ...messages?.filter((m: any) => m.message_type === 'user').reduce((acc: any, message: any) => {
+        if (message.metadata?.questionId) {
+          acc.responses[message.metadata.questionId] = message.content;
+        }
         return acc;
       }, {} as any)
     };
@@ -481,10 +483,12 @@ export class ConversationManager {
     return Math.round((answeredQuestions / totalQuestions) * 100);
   }
 
-  private analyzeUserPersona(messages: ConversationMessage[]): UserPersona {
+  private analyzeUserPersona(messages: any[]): UserPersona {
     // Analyze communication style from message patterns
-    const userMessages = messages.filter(m => m.type === 'user');
-    const avgLength = userMessages.reduce((sum, msg) => sum + msg.content.length, 0) / userMessages.length;
+    const userMessages = messages.filter((m: any) => m.message_type === 'user');
+    const avgLength = userMessages.length > 0 
+      ? userMessages.reduce((sum: number, msg: any) => sum + (msg.content?.length || 0), 0) / userMessages.length 
+      : 0;
     
     let communicationStyle: 'direct' | 'detailed' | 'casual' | 'formal' = 'casual';
     if (avgLength > 100) communicationStyle = 'detailed';
@@ -553,6 +557,17 @@ export class ConversationManager {
           recommendations: insight.recommendations
         });
     }
+  }
+
+  private async saveAIMessage(sessionId: string, message: ConversationMessage): Promise<void> {
+    await this.supabase
+      .from('conversation_messages')
+      .insert({
+        session_id: sessionId,
+        message_type: 'ai',
+        content: message.content,
+        metadata: message.metadata
+      });
   }
 }
 
