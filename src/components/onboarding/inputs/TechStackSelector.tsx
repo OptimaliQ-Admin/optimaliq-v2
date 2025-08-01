@@ -149,7 +149,7 @@ export default function TechStackSelector({
         ? prev.filter(v => v !== toolValue)
         : [...prev, toolValue];
       
-      onSelect(newSelection);
+      // Don't call onSelect here - wait for Continue button
       return newSelection;
     });
   };

@@ -48,7 +48,7 @@ export default function MultiSelectInput({
         }
       }
 
-      onSelect(newSelection);
+      // Don't call onSelect here - wait for Continue button
       return newSelection;
     });
   };
