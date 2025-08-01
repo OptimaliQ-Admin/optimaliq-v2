@@ -313,20 +313,27 @@ export class ConversationManager {
 
   async processUserResponse(response: UserResponse): Promise<ConversationUpdate> {
     try {
+      console.log('Processing user response:', { sessionId: response.sessionId, questionId: response.questionId, answer: response.answer });
+      
       // Save the response to the database
       await this.saveResponse(response);
+      console.log('Response saved successfully');
 
       // Get current conversation state
       const state = await this.getConversationState(response.sessionId);
+      console.log('Conversation state retrieved:', { sessionId: state.sessionId, phase: state.currentPhase });
 
       // Update business context with the response
       const updatedContext = this.updateBusinessContext(state.context, response);
+      console.log('Business context updated');
 
       // Analyze the response for insights
       const insights = await this.generateInsights(response, updatedContext);
+      console.log('Insights generated:', insights.length);
 
       // Determine the next question based on response and context
       const nextQuestion = await this.determineNextQuestion(response, updatedContext, state);
+      console.log('Next question determined:', nextQuestion?.id);
 
       // Update conversation state
       const updatedState: ConversationState = {
@@ -339,12 +346,15 @@ export class ConversationManager {
 
       // Save updated state
       await this.saveConversationState(updatedState);
+      console.log('Conversation state saved');
 
       // Generate AI response message
       const aiMessage = await this.generateAIResponse(response, nextQuestion, insights);
+      console.log('AI message generated');
 
       // Save AI message to database
       await this.saveAIMessage(response.sessionId, aiMessage);
+      console.log('AI message saved');
 
       return {
         state: updatedState,
@@ -355,64 +365,91 @@ export class ConversationManager {
 
     } catch (error) {
       console.error('Error processing user response:', error);
-      throw new Error('Failed to process user response');
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+      throw new Error(`Failed to process user response: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
   private async saveResponse(response: UserResponse): Promise<void> {
-    // Save user message to conversation_messages
-    const { error: userError } = await this.supabase
-      .from('conversation_messages')
-      .insert({
-        session_id: response.sessionId,
-        message_type: 'user',
-        content: response.answer,
-        metadata: {
-          questionId: response.questionId,
-          context: response.context
-        }
-      });
+    try {
+      // Save user message to conversation_messages
+      const { error: userError } = await this.supabase
+        .from('conversation_messages')
+        .insert({
+          session_id: response.sessionId,
+          message_type: 'user',
+          content: response.answer,
+          metadata: {
+            questionId: response.questionId,
+            context: response.context
+          }
+        });
 
-    if (userError) throw userError;
+      if (userError) {
+        console.error('Error saving user response:', userError);
+        throw userError;
+      }
+    } catch (error) {
+      console.error('Error in saveResponse:', error);
+      throw error;
+    }
   }
 
   private async getConversationState(sessionId: string): Promise<ConversationState> {
-    // Get session data
-    const { data: session } = await this.supabase
-      .from('onboarding_sessions')
-      .select('*')
-      .eq('id', sessionId)
-      .single();
+    try {
+      // Get session data
+      const { data: session, error: sessionError } = await this.supabase
+        .from('onboarding_sessions')
+        .select('*')
+        .eq('id', sessionId)
+        .single();
 
-    // Get conversation history
-    const { data: messages } = await this.supabase
-      .from('conversation_messages')
-      .select('*')
-      .eq('session_id', sessionId)
-      .order('created_at', { ascending: true });
+      if (sessionError) {
+        console.error('Error fetching session:', sessionError);
+        throw sessionError;
+      }
 
-    // Build context from user messages
-    const context: BusinessContext = {
-      responses: {},
-      ...messages?.filter((m: any) => m.message_type === 'user').reduce((acc: any, message: any) => {
-        if (message.metadata?.questionId) {
-          acc.responses[message.metadata.questionId] = message.content;
-        }
-        return acc;
-      }, {} as any)
-    };
+      // Get conversation history
+      const { data: messages, error: messagesError } = await this.supabase
+        .from('conversation_messages')
+        .select('*')
+        .eq('session_id', sessionId)
+        .order('created_at', { ascending: true });
 
-    return {
-      sessionId,
-      currentPhase: session?.current_step || 'introduction',
-      context,
-      userPersona: this.analyzeUserPersona(messages || []),
-      conversationHistory: messages || [],
-      activeQuestion: null,
-      nextQuestions: [],
-      insights: [],
-      progress: 0
-    };
+      if (messagesError) {
+        console.error('Error fetching messages:', messagesError);
+        throw messagesError;
+      }
+
+      // Build context from user messages
+      const context: BusinessContext = {
+        responses: {},
+        ...messages?.filter((m: any) => m.message_type === 'user').reduce((acc: any, message: any) => {
+          if (message.metadata?.questionId) {
+            acc.responses[message.metadata.questionId] = message.content;
+          }
+          return acc;
+        }, {} as any)
+      };
+
+      return {
+        sessionId,
+        currentPhase: session?.current_step || 'introduction',
+        context,
+        userPersona: this.analyzeUserPersona(messages || []),
+        conversationHistory: messages || [],
+        activeQuestion: null,
+        nextQuestions: [],
+        insights: [],
+        progress: 0
+      };
+    } catch (error) {
+      console.error('Error in getConversationState:', error);
+      throw error;
+    }
   }
 
   private updateBusinessContext(context: BusinessContext, response: UserResponse): BusinessContext {
