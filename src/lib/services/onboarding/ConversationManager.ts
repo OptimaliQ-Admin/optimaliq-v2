@@ -140,11 +140,12 @@ export class ConversationManager {
       },
       {
         id: 'growth_metrics',
-        type: 'multi_choice',
+        type: 'multi_select',
         content: "What metrics do you track most closely to measure growth? Choose the KPIs that guide your key decisions today.",
         context: 'Understanding current focus and optimization priorities',
         personality: 'analyst',
         phase: 'discovery',
+        maxSelect: 5,
         options: [
           { value: 'revenue', label: 'Revenue', description: 'Total sales and income' },
           { value: 'profit_margin', label: 'Profit Margin', description: 'Net profit as percentage of revenue' },
@@ -276,11 +277,12 @@ export class ConversationManager {
       // Group 3: Operations
       {
         id: 'tech_stack_overview',
-        type: 'multi_choice',
+        type: 'multi_select',
         content: "What platforms or tools are central to your operations? Select the tools you actively use across different categories.",
         context: 'Understanding current tech ecosystem',
         personality: 'analyst',
         phase: 'diagnosis',
+        maxSelect: 8,
         options: [
           { value: 'crm', label: 'CRM (Salesforce, HubSpot, etc.)', description: 'Customer relationship management' },
           { value: 'marketing_automation', label: 'Marketing Automation', description: 'Email marketing and automation tools' },

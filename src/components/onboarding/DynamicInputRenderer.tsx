@@ -6,6 +6,7 @@ import { QuestionNode } from '@/lib/services/onboarding/ConversationManager';
 import TextInput from './inputs/TextInput';
 import MultiChoiceInput from './inputs/MultiChoiceInput';
 import MultiSelectInput from './inputs/MultiSelectInput';
+import TechStackSelector from './inputs/TechStackSelector';
 import RankingInterface from './RankingInterface';
 
 interface DynamicInputRendererProps {
@@ -48,6 +49,18 @@ export default function DynamicInputRenderer({
         );
 
       case 'multi_select':
+        // Special handling for tech stack question
+        if (question.id === 'tech_stack_overview') {
+          return (
+            <TechStackSelector
+              question={question.content}
+              onSelect={(values) => onAnswer(values)}
+              disabled={disabled}
+              personality={question.personality}
+            />
+          );
+        }
+        
         return (
           <MultiSelectInput
             question={question.content}

@@ -75,7 +75,12 @@ export default function ConversationalOnboardingChat({
         setMessages(prev => [...prev, { ...message, showOptions: true }]);
       }, 1500);
     } else {
-      setMessages(prev => [...prev, message]);
+      setMessages(prev => {
+        // Prevent duplicate messages
+        const isDuplicate = prev.some(m => m.id === message.id);
+        if (isDuplicate) return prev;
+        return [...prev, message];
+      });
     }
   };
 
@@ -197,7 +202,7 @@ export default function ConversationalOnboardingChat({
               </div>
               <div>
                 <h1 className="text-lg font-semibold">Business Growth Consultant</h1>
-                <p className="text-blue-100 text-sm">AI-powered business discovery</p>
+                <p className="text-blue-100 text-sm">OptimaliQ&apos;s business discovery</p>
               </div>
             </div>
           </div>
