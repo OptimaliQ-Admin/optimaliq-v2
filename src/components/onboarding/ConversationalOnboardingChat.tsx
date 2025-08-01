@@ -35,7 +35,6 @@ export default function ConversationalOnboardingChat({
     insights: StrategicInsight[];
   } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
 
   // Initialize conversation
   useEffect(() => {
@@ -126,8 +125,8 @@ export default function ConversationalOnboardingChat({
         setCurrentPhase(data.state.currentPhase);
         setInsights(data.insights);
 
-        // Add AI response
-        if (data.aiMessage) {
+        // Add AI response only if it's not just repeating the next question
+        if (data.aiMessage && data.aiMessage.content !== data.nextQuestion?.content) {
           addMessage(data.aiMessage);
         }
 
@@ -186,8 +185,8 @@ export default function ConversationalOnboardingChat({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="max-w-4xl mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-2xl mx-auto p-4">
         {/* Phase Progress Indicator */}
         <PhaseProgressIndicator
           currentPhase={currentPhase}
@@ -195,11 +194,11 @@ export default function ConversationalOnboardingChat({
         />
 
         {/* Chat Container */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Chat Header */}
-          <div className="px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+          <div className="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-lg">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-lg backdrop-blur-sm">
                 💼
               </div>
               <div>
@@ -210,7 +209,7 @@ export default function ConversationalOnboardingChat({
           </div>
 
           {/* Messages Area */}
-          <div className="h-96 overflow-y-auto p-6 space-y-4">
+          <div className="h-[500px] overflow-y-auto p-6 space-y-4">
             <AnimatePresence>
               {messages.map((message) => (
                 <ChatMessage
@@ -228,11 +227,11 @@ export default function ConversationalOnboardingChat({
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-start space-x-3"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-medium shadow-lg">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-sm font-medium shadow-lg">
                   💼
                 </div>
                 <div className="flex-1">
-                  <div className="bg-white rounded-2xl shadow-lg border border-blue-200 px-4 py-3">
+                  <div className="bg-gray-100 rounded-2xl px-4 py-3 max-w-xs">
                     <div className="flex items-center space-x-2">
                       <div className="flex space-x-1">
                         <motion.div
@@ -251,7 +250,6 @@ export default function ConversationalOnboardingChat({
                           className="w-2 h-2 bg-gray-400 rounded-full"
                         />
                       </div>
-                      <span className="text-sm text-gray-500">Consultant is thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -277,29 +275,32 @@ export default function ConversationalOnboardingChat({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Insights Panel */}
-          {insights.length > 0 && (
-            <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
+          {/* Insights Panel - Only show if there are meaningful insights */}
+          {insights.length > 0 && insights.some(insight => insight.confidence > 0.7) && (
+            <div className="border-t border-gray-100 bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-4">
               <div className="flex items-center space-x-2 mb-3">
-                <div className="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <h3 className="text-sm font-semibold text-gray-800">Strategic Insights</h3>
+                <h3 className="text-sm font-semibold text-gray-800">💡 Key Insight</h3>
               </div>
               <div className="space-y-2">
-                {insights.slice(-2).map((insight, index) => (
-                  <motion.div
-                    key={insight.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="text-sm text-gray-600 bg-white rounded-lg p-3 border border-gray-200"
-                  >
-                    {insight.content}
-                  </motion.div>
-                ))}
+                {insights
+                  .filter(insight => insight.confidence > 0.7)
+                  .slice(-1)
+                  .map((insight, index) => (
+                    <motion.div
+                      key={insight.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="text-sm text-gray-700 bg-white rounded-lg p-3 border border-amber-200 shadow-sm"
+                    >
+                      {insight.content}
+                    </motion.div>
+                  ))}
               </div>
             </div>
           )}

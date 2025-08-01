@@ -811,31 +811,33 @@ export class ConversationManager {
     
     if (!currentQuestion) return null;
 
-    // Handle conditional "other" questions
-    if (response.answer === 'other' && currentQuestion.options) {
-      const otherQuestionId = `${currentQuestion.id}_other`;
-      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
-      if (otherQuestion) {
-        return otherQuestion;
-      }
-    }
-
-    // Handle multi-select questions that might have "other" option
-    if (Array.isArray(response.answer) && response.answer.includes('other')) {
-      const otherQuestionId = `${currentQuestion.id}_other`;
-      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
-      if (otherQuestion) {
-        return otherQuestion;
-      }
-    }
-
     // For the welcome question, always go to growth_metrics
     if (currentQuestion.id === 'welcome') {
       return this.questionTree.find(q => q.id === 'growth_metrics') || null;
     }
 
-    // Check for follow-up questions based on the response
-    if (currentQuestion.options) {
+    // Only show follow-up questions for "other" if the answer is meaningful
+    if (response.answer === 'other' && currentQuestion.options) {
+      // Only show follow-up if user hasn't already answered this type of question
+      const otherQuestionId = `${currentQuestion.id}_other`;
+      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
+      if (otherQuestion && !context.responses[otherQuestionId]) {
+        return otherQuestion;
+      }
+    }
+
+    // Handle multi-select questions with "other" option - only if meaningful
+    if (Array.isArray(response.answer) && response.answer.includes('other')) {
+      const otherQuestionId = `${currentQuestion.id}_other`;
+      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
+      if (otherQuestion && !context.responses[otherQuestionId]) {
+        return otherQuestion;
+      }
+    }
+
+    // Skip follow-up questions for most cases to keep conversation flowing
+    // Only check for critical follow-ups that are absolutely necessary
+    if (currentQuestion.options && currentQuestion.id.includes('critical')) {
       const selectedOption = currentQuestion.options.find(opt => opt.value === response.answer);
       const followUps = selectedOption?.followUpQuestions || [];
       
@@ -883,9 +885,32 @@ export class ConversationManager {
   private async generateAIResponse(response: UserResponse, nextQuestion: QuestionNode | null, insights: RealTimeInsight[]): Promise<ConversationMessage> {
     let content = '';
 
-    // Only add next question content - insights are handled separately
+    // Generate more conversational responses
     if (nextQuestion) {
-      content = nextQuestion.content;
+      // Only add conversational responses for certain question types, not for every question
+      const shouldAddResponse = nextQuestion.type === 'conversation' || 
+                               nextQuestion.id.includes('welcome') ||
+                               nextQuestion.id.includes('completion');
+      
+      if (shouldAddResponse) {
+        // Add brief acknowledgment or transition
+        const acknowledgments = [
+          "Got it!",
+          "Thanks for sharing that.",
+          "I see.",
+          "That's helpful to know.",
+          "Perfect.",
+          "Interesting!",
+          "That makes sense.",
+          "I understand."
+        ];
+        
+        const randomAck = acknowledgments[Math.floor(Math.random() * acknowledgments.length)];
+        content = `${randomAck} ${nextQuestion.content}`;
+      } else {
+        // For most questions, don't add an AI response - let the input component handle it
+        content = "";
+      }
     } else {
       content = "Thank you for sharing all that information! I have a great understanding of your business now. Let me prepare your personalized growth strategy.";
     }
