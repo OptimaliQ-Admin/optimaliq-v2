@@ -21,11 +21,12 @@ export default function DynamicInputRenderer({
 }: DynamicInputRendererProps) {
   const renderInput = () => {
     switch (question.type) {
+      case 'conversation':
       case 'text_input':
         return (
           <TextInput
             question={question.content}
-            placeholder="Type your answer..."
+            placeholder={question.type === 'conversation' ? "Share your thoughts..." : "Type your answer..."}
             maxLength={500}
             rows={3}
             onSend={(value) => onAnswer(value)}
