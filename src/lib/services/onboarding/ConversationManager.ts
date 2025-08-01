@@ -889,7 +889,6 @@ export class ConversationManager {
     if (nextQuestion) {
       // Only add conversational responses for certain question types, not for every question
       const shouldAddResponse = nextQuestion.type === 'conversation' || 
-                               nextQuestion.id.includes('welcome') ||
                                nextQuestion.id.includes('completion');
       
       if (shouldAddResponse) {

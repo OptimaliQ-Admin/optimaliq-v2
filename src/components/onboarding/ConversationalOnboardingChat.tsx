@@ -59,14 +59,8 @@ export default function ConversationalOnboardingChat({
         setCurrentQuestion(data.question);
         setCurrentPhase(data.question.phase);
         
-        // Add welcome message with typing effect
-        addMessage({
-          id: 'welcome',
-          type: 'ai',
-          content: data.question.content,
-          timestamp: new Date().toISOString(),
-          metadata: { personality: data.question.personality }
-        }, true);
+        // Don't add welcome message here - let the input component handle it
+        // This prevents duplication
       }
     } catch (error) {
       console.error('Failed to initialize conversation:', error);
