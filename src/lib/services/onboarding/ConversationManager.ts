@@ -108,6 +108,7 @@ export class ConversationManager {
 
   private initializeQuestionTree(): QuestionNode[] {
     return [
+      // Group 1: Goals & Challenges
       {
         id: 'welcome',
         type: 'conversation',
@@ -126,193 +127,444 @@ export class ConversationManager {
         order: 1
       },
       {
-        id: 'challenge_followup',
+        id: 'growth_metrics',
         type: 'multi_choice',
-        content: "That's a common challenge! I'm seeing some interesting patterns here. Let me understand your current approach better. Which of these resonates most with your situation?",
-        context: 'Understanding current approach to the identified challenge',
+        content: "What metrics do you track most closely to measure growth? Choose the KPIs that guide your key decisions today.",
+        context: 'Understanding current focus and optimization priorities',
         personality: 'analyst',
         options: [
-          {
-            value: 'loyalty_program',
-            label: 'We have a loyalty program',
-            description: 'We offer rewards, points, or membership benefits',
-            followUpQuestions: ['retention_rate', 'loyalty_effectiveness']
-          },
-          {
-            value: 'customer_service',
-            label: 'We focus on customer service',
-            description: 'We prioritize excellent customer support and experience',
-            followUpQuestions: ['service_metrics', 'customer_satisfaction']
-          },
-          {
-            value: 'unsure',
-            label: 'We\'re not sure what to do',
-            description: 'We haven\'t implemented a specific strategy yet',
-            followUpQuestions: ['business_maturity', 'resource_availability']
-          },
-          {
-            value: 'other',
-            label: 'Other approach',
-            description: 'We have a different strategy',
-            followUpQuestions: ['custom_approach', 'strategy_details']
-          }
+          { value: 'revenue', label: 'Revenue', description: 'Total sales and income' },
+          { value: 'profit_margin', label: 'Profit Margin', description: 'Net profit as percentage of revenue' },
+          { value: 'customer_ltv', label: 'Customer Lifetime Value (LTV)', description: 'Total value a customer brings over time' },
+          { value: 'customer_acquisition_cost', label: 'Customer Acquisition Cost (CAC)', description: 'Cost to acquire a new customer' },
+          { value: 'churn_rate', label: 'Customer Churn Rate', description: 'Rate at which customers leave' },
+          { value: 'retention_rate', label: 'Customer Retention Rate', description: 'Rate at which customers stay' },
+          { value: 'conversion_rate', label: 'Conversion Rate', description: 'Percentage of visitors who become customers' },
+          { value: 'traffic', label: 'Website or App Traffic', description: 'Number of visitors to your platform' },
+          { value: 'active_users', label: 'Monthly Active Users (MAU)', description: 'Users engaging with your product monthly' },
+          { value: 'net_promoter_score', label: 'Net Promoter Score (NPS)', description: 'Customer satisfaction and loyalty metric' },
+          { value: 'other', label: 'Other', description: 'Custom metrics specific to your business' }
         ],
         followUps: [],
-        insights: [
-          {
-            type: 'pattern',
-            condition: (response) => response === 'loyalty_program',
-            generate: () => "I see you're using a loyalty program approach. This is often effective for retention, but let's see how it's performing for you."
-          }
-        ],
+        insights: [],
         required: true,
         order: 2
       },
       {
-        id: 'retention_rate',
+        id: 'growth_metrics_other',
         type: 'text_input',
-        content: "Great! Loyalty programs can be powerful. I'm curious - what's your current retention rate, and how do you measure it?",
-        context: 'Understanding current retention metrics',
-        personality: 'strategist',
+        content: "Please describe the other metric(s) you track",
+        context: 'Understanding custom metrics',
+        personality: 'analyst',
         followUps: [],
-        insights: [
-          {
-            type: 'benchmark',
-            condition: (response, context) => {
-              const rate = parseFloat(response);
-              return !isNaN(rate);
-            },
-            generate: (response) => {
-              const rate = parseFloat(response);
-              if (rate >= 70) return "That's excellent! You're well above industry averages.";
-              if (rate >= 50) return "That's solid! You're performing well compared to most businesses.";
-              return "I see some opportunities here. Let's work on improving this together.";
-            }
-          }
-        ],
-        required: true,
+        insights: [],
+        required: false,
         order: 3
       },
       {
-        id: 'growth_strategy',
-        type: 'multi_choice',
-        content: "Now let's talk about growth. What's your primary method for acquiring new customers?",
-        context: 'Understanding customer acquisition strategy',
-        personality: 'consultant',
-        options: [
-          {
-            value: 'digital_marketing',
-            label: 'Digital Marketing',
-            description: 'SEO, PPC, social media, content marketing',
-            followUpQuestions: ['marketing_budget', 'channel_effectiveness']
-          },
-          {
-            value: 'referrals',
-            label: 'Referrals & Word of Mouth',
-            description: 'Customer referrals, partnerships, networking',
-            followUpQuestions: ['referral_program', 'partnership_network']
-          },
-          {
-            value: 'sales_team',
-            label: 'Sales Team',
-            description: 'Direct sales, outbound, account management',
-            followUpQuestions: ['sales_process', 'team_size']
-          },
-          {
-            value: 'organic',
-            label: 'Organic Growth',
-            description: 'Natural growth, minimal marketing spend',
-            followUpQuestions: ['growth_rate', 'scalability_concerns']
-          }
-        ],
+        id: 'gtm_strategy',
+        type: 'text_input',
+        content: "In one or two sentences, describe your go-to-market strategy. How do you attract, convert, and retain customers?",
+        context: 'Understanding current market approach',
+        personality: 'strategist',
         followUps: [],
         insights: [],
         required: true,
         order: 4
       },
       {
-        id: 'priority_ranking',
-        type: 'ranking',
-        content: "Based on our conversation, I'd like to understand your priorities. Please rank these business areas by importance to you:",
-        context: 'Understanding business priorities and focus areas',
-        personality: 'strategist',
+        id: 'friction_points',
+        type: 'multi_choice',
+        content: "What are the biggest friction points actively holding your business back? Select up to 3 areas where you're experiencing the most significant challenges.",
+        context: 'Identifying current bottlenecks and challenges',
+        personality: 'consultant',
         options: [
-          {
-            value: 'customer_retention',
-            label: 'Customer Retention',
-            description: 'Keeping existing customers happy and engaged'
-          },
-          {
-            value: 'customer_acquisition',
-            label: 'Customer Acquisition',
-            description: 'Finding and converting new customers'
-          },
-          {
-            value: 'product_development',
-            label: 'Product Development',
-            description: 'Improving and expanding your product/service'
-          },
-          {
-            value: 'team_growth',
-            label: 'Team Growth',
-            description: 'Building and scaling your team'
-          },
-          {
-            value: 'operational_efficiency',
-            label: 'Operational Efficiency',
-            description: 'Streamlining processes and reducing costs'
-          }
-        ],
-        followUps: [],
-        insights: [
-          {
-            type: 'pattern',
-            condition: (response, context) => {
-              const rankings = response as string[];
-              return rankings[0] === 'customer_retention';
-            },
-            generate: () => "I see you prioritize customer retention. This aligns perfectly with sustainable growth strategies."
-          }
-        ],
-        required: true,
-        order: 5
-      },
-      {
-        id: 'business_maturity',
-        type: 'conditional',
-        content: "Let me understand your business maturity level better. How long have you been in business?",
-        context: 'Understanding business maturity and experience',
-        personality: 'analyst',
-        options: [
-          {
-            value: 'under_1_year',
-            label: 'Under 1 year',
-            description: 'Early startup phase',
-            followUpQuestions: ['funding_status', 'product_market_fit']
-          },
-          {
-            value: '1_3_years',
-            label: '1-3 years',
-            description: 'Growth phase',
-            followUpQuestions: ['scaling_challenges', 'team_size']
-          },
-          {
-            value: '3_5_years',
-            label: '3-5 years',
-            description: 'Established business',
-            followUpQuestions: ['market_expansion', 'competitive_position']
-          },
-          {
-            value: '5_plus_years',
-            label: '5+ years',
-            description: 'Mature business',
-            followUpQuestions: ['innovation_focus', 'market_leadership']
-          }
+          { value: 'lack_funding', label: 'Lack of funding', description: 'Insufficient capital for growth initiatives' },
+          { value: 'leadership_misalignment', label: 'Leadership misalignment', description: 'Conflicting priorities or vision among leaders' },
+          { value: 'hiring_retention', label: 'Hiring or retention challenges', description: 'Difficulty finding or keeping key talent' },
+          { value: 'operational_inefficiencies', label: 'Operational inefficiencies', description: 'Process bottlenecks or workflow issues' },
+          { value: 'underperforming_marketing', label: 'Underperforming marketing', description: 'Low ROI on marketing spend or poor conversion' },
+          { value: 'high_cac', label: 'High customer acquisition cost', description: 'Expensive customer acquisition relative to LTV' },
+          { value: 'weak_retention', label: 'Weak customer retention', description: 'High churn or low customer loyalty' },
+          { value: 'tech_stack_issues', label: 'Tech stack limitations', description: 'Technology constraints or integration problems' },
+          { value: 'brand_positioning', label: 'Undefined brand positioning', description: 'Unclear market differentiation or messaging' },
+          { value: 'market_saturation', label: 'Market saturation', description: 'Intense competition or limited market opportunity' },
+          { value: 'regulatory_issues', label: 'Regulatory or compliance issues', description: 'Legal or compliance challenges' },
+          { value: 'other', label: 'Other', description: 'Unique challenges specific to your business' }
         ],
         followUps: [],
         insights: [],
         required: true,
+        order: 5
+      },
+      {
+        id: 'friction_points_other',
+        type: 'text_input',
+        content: "Please describe the other friction point(s)",
+        context: 'Understanding unique challenges',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: false,
         order: 6
+      },
+
+      // Group 2: Positioning
+      {
+        id: 'differentiator',
+        type: 'text_input',
+        content: "What makes your business hard to compete with? What do you do better, faster, or differently than others in your space?",
+        context: 'Understanding competitive advantages and market positioning',
+        personality: 'strategist',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 7
+      },
+      {
+        id: 'brand_perception',
+        type: 'text_input',
+        content: "How would your customers describe your brand in one sentence? Imagine you're reading an online review—what would they say?",
+        context: 'Understanding brand perception and customer experience',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 8
+      },
+      {
+        id: 'strategy_decision_method',
+        type: 'multi_choice',
+        content: "How do you currently make big strategic decisions? When facing big bets—new product, pricing changes, growth pivots—what guides your decision-making process?",
+        context: 'Understanding decision-making approach',
+        personality: 'strategist',
+        options: [
+          { value: 'gut_feel', label: 'Mostly gut instinct or experience', description: 'Decisions based on intuition and past experience' },
+          { value: 'data_driven', label: 'Primarily based on data and analytics', description: 'Decisions guided by metrics, testing, and analysis' },
+          { value: 'team_alignment', label: 'Collective input and cross-functional alignment', description: 'Decisions made through team consensus and collaboration' },
+          { value: 'executive_top_down', label: 'Top-down executive leadership', description: 'Decisions made by senior leadership and cascaded down' },
+          { value: 'board_pressure', label: 'Board or investor direction', description: 'Decisions influenced by board members or investors' },
+          { value: 'mixed', label: 'A mix of the above', description: 'Combination of different approaches depending on the situation' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 9
+      },
+
+      // Group 3: Operations
+      {
+        id: 'tech_stack_overview',
+        type: 'multi_choice',
+        content: "What platforms or tools are central to your operations? Select the tools you actively use across different categories.",
+        context: 'Understanding current tech ecosystem',
+        personality: 'analyst',
+        options: [
+          { value: 'crm', label: 'CRM (Salesforce, HubSpot, etc.)', description: 'Customer relationship management' },
+          { value: 'marketing_automation', label: 'Marketing Automation', description: 'Email marketing and automation tools' },
+          { value: 'analytics', label: 'Analytics & BI', description: 'Data analysis and business intelligence' },
+          { value: 'project_management', label: 'Project Management', description: 'Task and project tracking tools' },
+          { value: 'accounting', label: 'Accounting & Finance', description: 'Financial management systems' },
+          { value: 'communication', label: 'Communication Tools', description: 'Team communication platforms' },
+          { value: 'ecommerce', label: 'E-commerce Platform', description: 'Online sales and payment processing' },
+          { value: 'cms', label: 'Content Management', description: 'Website and content management' },
+          { value: 'hr_tools', label: 'HR & Recruitment', description: 'Human resources and hiring tools' },
+          { value: 'other', label: 'Other', description: 'Custom or industry-specific tools' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 10
+      },
+      {
+        id: 'tech_stack_other',
+        type: 'text_input',
+        content: "Please describe any other platforms or tools that are central to your operations",
+        context: 'Understanding custom tools',
+        personality: 'analyst',
+        followUps: [],
+        insights: [],
+        required: false,
+        order: 11
+      },
+      {
+        id: 'business_priorities',
+        type: 'ranking',
+        content: "Rank the following priorities from most to least important to your business right now. This helps us understand your current strategic focus.",
+        context: 'Understanding strategic priorities and resource allocation',
+        personality: 'strategist',
+        options: [
+          { value: 'growth', label: 'Growth', description: 'Expanding customer base and revenue' },
+          { value: 'profitability', label: 'Profitability', description: 'Improving margins and financial performance' },
+          { value: 'efficiency', label: 'Efficiency', description: 'Optimizing operations and processes' },
+          { value: 'innovation', label: 'Innovation', description: 'Developing new products or services' },
+          { value: 'brand_equity', label: 'Brand Equity', description: 'Building brand recognition and loyalty' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 12
+      },
+      {
+        id: 'process_discipline',
+        type: 'multi_choice',
+        content: "Describe your internal process discipline. Select the statement that best reflects your company's current operational maturity level.",
+        context: 'Understanding operational maturity',
+        personality: 'analyst',
+        options: [
+          { value: '1', label: 'Everything is ad hoc', description: 'No formal processes, decisions made on the fly' },
+          { value: '2', label: 'Some structure, but mostly reactive', description: 'Basic processes exist but are inconsistently applied' },
+          { value: '3', label: 'We have defined processes, but they\'re not consistently followed', description: 'Processes are documented but execution varies' },
+          { value: '4', label: 'Most departments follow documented processes', description: 'Consistent process execution across most areas' },
+          { value: '5', label: 'Processes are standardized, automated, and continuously optimized', description: 'Mature process discipline with continuous improvement' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 13
+      },
+
+      // Group 4: Growth Stack
+      {
+        id: 'acquisition_channels',
+        type: 'multi_choice',
+        content: "Which acquisition channels are driving meaningful results today? Select all that apply.",
+        context: 'Understanding current growth engine',
+        personality: 'strategist',
+        options: [
+          { value: 'seo', label: 'Organic Search / SEO', description: 'Traffic from search engines' },
+          { value: 'paid_media', label: 'Paid Media (Google, Meta, TikTok, etc.)', description: 'Paid advertising across platforms' },
+          { value: 'email', label: 'Email Marketing', description: 'Direct email campaigns and automation' },
+          { value: 'outbound', label: 'Outbound Sales', description: 'Proactive sales outreach' },
+          { value: 'partnerships', label: 'Partnerships / Affiliates', description: 'Strategic partnerships and affiliate programs' },
+          { value: 'events', label: 'Events / Webinars', description: 'Live events and virtual presentations' },
+          { value: 'influencers', label: 'Influencer Marketing', description: 'Collaborations with influencers' },
+          { value: 'pr', label: 'PR / Earned Media', description: 'Public relations and media coverage' },
+          { value: 'referrals', label: 'Word of Mouth / Referrals', description: 'Customer referrals and recommendations' },
+          { value: 'retail', label: 'Retail or Channel Distribution', description: 'Physical retail or distribution channels' },
+          { value: 'other', label: 'Other', description: 'Unique channels specific to your business' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 14
+      },
+      {
+        id: 'acquisition_channels_other',
+        type: 'text_input',
+        content: "Please describe the acquisition channels that are driving meaningful results",
+        context: 'Understanding unique channels',
+        personality: 'strategist',
+        followUps: [],
+        insights: [],
+        required: false,
+        order: 15
+      },
+      {
+        id: 'tech_maturity',
+        type: 'multi_choice',
+        content: "What is your current tech maturity level? How well-integrated and effective is your current tech stack?",
+        context: 'Understanding technical foundation',
+        personality: 'analyst',
+        options: [
+          { value: 'integrated', label: 'Everything is integrated and works seamlessly', description: 'All systems communicate and data flows automatically' },
+          { value: 'partially_integrated', label: 'Some systems talk to each other, others don\'t', description: 'Partial integration with some manual processes' },
+          { value: 'siloed', label: 'Tools are siloed or require manual workarounds', description: 'Systems operate independently with manual data transfer' },
+          { value: 'early_stage', label: 'We\'re still selecting or onboarding core platforms', description: 'In the process of building the tech foundation' },
+          { value: 'unsure', label: 'Unsure / Other', description: 'Not certain about current tech integration status' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 16
+      },
+      {
+        id: 'retention_strategy',
+        type: 'text_input',
+        content: "What are your current retention levers? How do you keep customers coming back? What's your hook or lifecycle play?",
+        context: 'Understanding customer success strategy',
+        personality: 'strategist',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 17
+      },
+
+      // Group 5: Clarity
+      {
+        id: 'decision_bottlenecks',
+        type: 'text_input',
+        content: "What kind of business decisions are hardest for you to make right now? Hiring? Prioritization? Marketing spend? Pricing? Something else?",
+        context: 'Understanding current decision-making challenges',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 18
+      },
+      {
+        id: 'team_alignment',
+        type: 'multi_choice',
+        content: "How aligned is your team on company goals and direction? This helps us understand your organizational dynamics.",
+        context: 'Understanding organizational alignment',
+        personality: 'consultant',
+        options: [
+          { value: 'fully_aligned', label: 'Fully aligned and collaborative', description: 'Everyone is on the same page and working together effectively' },
+          { value: 'mostly_aligned', label: 'Mostly aligned, occasional friction', description: 'Generally aligned with some minor disagreements or miscommunications' },
+          { value: 'some_misalignment', label: 'Some misalignment across departments', description: 'Different teams have different priorities or understandings' },
+          { value: 'not_aligned', label: 'No clear alignment — teams are working in silos', description: 'Teams operate independently without shared goals or coordination' },
+          { value: 'other', label: 'Other', description: 'Unique alignment situation specific to your organization' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 19
+      },
+      {
+        id: 'team_alignment_other',
+        type: 'text_input',
+        content: "Please describe the alignment of your team",
+        context: 'Understanding unique team dynamics',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: false,
+        order: 20
+      },
+      {
+        id: 'future_success',
+        type: 'text_input',
+        content: "What would a wildly successful next 12 months look like for your business? Revenue, people, customers, product—describe your future state vividly.",
+        context: 'Understanding vision and goals',
+        personality: 'strategist',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 21
+      },
+
+      // Group 6: Benchmarks
+      {
+        id: 'benchmark_preferences',
+        type: 'multi_choice',
+        content: "What type of insights or benchmarks would be most valuable to you right now? Select all that apply.",
+        context: 'Understanding insight priorities',
+        personality: 'analyst',
+        options: [
+          { value: 'competitor_comparison', label: 'Competitor comparison', description: 'How you stack up against competitors' },
+          { value: 'revenue_growth', label: 'Revenue growth levers', description: 'Strategies to accelerate revenue' },
+          { value: 'retention', label: 'Retention improvements', description: 'Ways to reduce churn and increase loyalty' },
+          { value: 'efficiency', label: 'Operational efficiency plays', description: 'Process optimization opportunities' },
+          { value: 'industry_best_practices', label: 'Industry best practices', description: 'Proven strategies from your industry' },
+          { value: 'automation', label: 'Process automation opportunities', description: 'Tasks that can be automated' },
+          { value: 'tech_stack', label: 'Tech stack recommendations', description: 'Technology optimization suggestions' },
+          { value: 'funnel_analysis', label: 'Marketing & sales funnel analysis', description: 'Conversion optimization insights' },
+          { value: 'other', label: 'Other', description: 'Unique insights specific to your business' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 22
+      },
+      {
+        id: 'benchmark_preferences_other',
+        type: 'text_input',
+        content: "Please describe the other insights or benchmarks",
+        context: 'Understanding unique insight needs',
+        personality: 'analyst',
+        followUps: [],
+        insights: [],
+        required: false,
+        order: 23
+      },
+      {
+        id: 'funding_status',
+        type: 'multi_choice',
+        content: "Are you currently raising capital or preparing for an exit? This helps us understand your current business stage.",
+        context: 'Understanding business stage and strategic priorities',
+        personality: 'strategist',
+        options: [
+          { value: 'raising_now', label: 'Yes, actively raising', description: 'Currently in fundraising mode' },
+          { value: 'early_planning', label: 'In early planning stages', description: 'Considering fundraising in the near future' },
+          { value: 'preparing_exit', label: 'Preparing for acquisition or sale', description: 'Planning for exit or acquisition' },
+          { value: 'not_planned', label: 'No, not on the roadmap', description: 'Focusing on organic growth' },
+          { value: 'other', label: 'Other', description: 'Unique funding or exit situation' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 24
+      },
+      {
+        id: 'funding_status_other',
+        type: 'text_input',
+        content: "Please describe the other ways you are currently raising capital or preparing for an exit",
+        context: 'Understanding unique funding situation',
+        personality: 'strategist',
+        followUps: [],
+        insights: [],
+        required: false,
+        order: 25
+      },
+      {
+        id: 'growth_pace',
+        type: 'multi_choice',
+        content: "What is your ideal pace of growth? This helps us understand your growth ambitions and set appropriate benchmarks.",
+        context: 'Understanding growth ambitions',
+        personality: 'strategist',
+        options: [
+          { value: '10_25', label: '10–25% YoY', description: 'Steady, sustainable growth' },
+          { value: '25_50', label: '25–50% YoY', description: 'Moderate acceleration' },
+          { value: '50_100', label: '50–100% YoY', description: 'Fast growth trajectory' },
+          { value: '2x_3x', label: '2x–3x', description: 'Rapid scaling' },
+          { value: '3x_plus', label: '3x+', description: 'Hypergrowth mode' },
+          { value: 'unsure', label: 'Unsure', description: 'Still determining growth targets' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 26
+      },
+
+      // Group 7: Final Commitment
+      {
+        id: 'unresolved_issue',
+        type: 'text_input',
+        content: "What's one thing you know you need to fix—but haven't yet? Be honest. What's been nagging at you that keeps getting deprioritized?",
+        context: 'Identifying immediate opportunities',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 27
+      },
+      {
+        id: 'final_confirmation',
+        type: 'multi_choice',
+        content: "Are You Ready to Commit? Ready to level up? This path is built for ambitious businesses willing to do the work. Are you in?",
+        context: 'Confirming commitment to growth',
+        personality: 'mentor',
+        options: [
+          { value: 'yes_ready', label: '✅ Yes — I\'m ready to grow.', description: 'I\'m committed to implementing the strategies and insights from this assessment' },
+          { value: 'no_not_ready', label: '❌ No — not at this time.', description: 'I need more time to consider or prepare for this commitment' }
+        ],
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 28
+      },
+
+      // Group 8: Business Overview
+      {
+        id: 'business_overview',
+        type: 'text_input',
+        content: "Briefly describe what your business offers, who you serve, and how you deliver value. This helps us personalize insights and recommendations.",
+        context: 'Understanding business model and value proposition',
+        personality: 'consultant',
+        followUps: [],
+        insights: [],
+        required: true,
+        order: 29
       }
     ];
   }
@@ -519,9 +771,27 @@ export class ConversationManager {
     
     if (!currentQuestion) return null;
 
-    // For the welcome question, always go to challenge_followup
+    // Handle conditional "other" questions
+    if (response.answer === 'other' && currentQuestion.options) {
+      const otherQuestionId = `${currentQuestion.id}_other`;
+      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
+      if (otherQuestion) {
+        return otherQuestion;
+      }
+    }
+
+    // Handle multi-select questions that might have "other" option
+    if (Array.isArray(response.answer) && response.answer.includes('other')) {
+      const otherQuestionId = `${currentQuestion.id}_other`;
+      const otherQuestion = this.questionTree.find(q => q.id === otherQuestionId);
+      if (otherQuestion) {
+        return otherQuestion;
+      }
+    }
+
+    // For the welcome question, always go to growth_metrics
     if (currentQuestion.id === 'welcome') {
-      return this.questionTree.find(q => q.id === 'challenge_followup') || null;
+      return this.questionTree.find(q => q.id === 'growth_metrics') || null;
     }
 
     // Check for follow-up questions based on the response
@@ -536,16 +806,19 @@ export class ConversationManager {
       }
     }
 
-    // Get next question in sequence
-    const nextQuestion = this.questionTree.find(q => q.order === currentQuestion.order + 1);
+    // Default: move to next question by order
+    const currentOrder = currentQuestion.order;
+    const nextQuestion = this.questionTree.find(q => q.order === currentOrder + 1);
     
     return nextQuestion || null;
   }
 
   private calculateProgress(context: BusinessContext): number {
-    const totalQuestions = this.questionTree.length;
-    const answeredQuestions = Object.keys(context.responses).length;
-    return Math.round((answeredQuestions / totalQuestions) * 100);
+    // Count only required questions for progress calculation
+    const requiredQuestions = this.questionTree.filter(q => q.required);
+    const totalRequired = requiredQuestions.length;
+    const answeredRequired = requiredQuestions.filter(q => context.responses[q.id]).length;
+    return Math.round((answeredRequired / totalRequired) * 100);
   }
 
   private analyzeUserPersona(messages: any[]): UserPersona {
