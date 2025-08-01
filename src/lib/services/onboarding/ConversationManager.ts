@@ -425,14 +425,24 @@ export class ConversationManager {
       }
 
       // Build context from user messages
+      const userMessages = messages?.filter((m: any) => m.message_type === 'user') || [];
+      const responses: Record<string, any> = {};
+      
+      userMessages.forEach((message: any) => {
+        if (message.metadata?.questionId) {
+          responses[message.metadata.questionId] = message.content;
+        }
+      });
+
       const context: BusinessContext = {
-        responses: {},
-        ...messages?.filter((m: any) => m.message_type === 'user').reduce((acc: any, message: any) => {
-          if (message.metadata?.questionId) {
-            acc.responses[message.metadata.questionId] = message.content;
-          }
-          return acc;
-        }, {} as any)
+        responses,
+        industry: undefined,
+        companySize: undefined,
+        revenueRange: undefined,
+        growthStage: undefined,
+        primaryChallenges: [],
+        goals: [],
+        currentMetrics: {}
       };
 
       return {
