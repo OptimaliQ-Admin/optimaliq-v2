@@ -2,9 +2,10 @@
 
 import OpenAI from "openai";
 
-const openai = new OpenAI({
+// Only create OpenAI instance if API key is available
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+}) : null;
 
 export interface OpenAIOptions {
   model?: string;
@@ -13,6 +14,10 @@ export interface OpenAIOptions {
 }
 
 export async function callOpenAI(prompt: string, options: OpenAIOptions = {}) {
+  if (!openai) {
+    throw new Error("OpenAI API key is not configured. Please set the OPENAI_API_KEY environment variable.");
+  }
+
   const {
     model = "gpt-4o-mini", // Default to gpt-4o-mini instead of gpt-4.1-mini
     maxTokens = 1000,

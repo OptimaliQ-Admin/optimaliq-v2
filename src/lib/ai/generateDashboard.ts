@@ -1,9 +1,10 @@
 import OpenAI from "openai";
 import { z } from "zod";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+// Only create OpenAI instance if API key is available
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+}) : null;
 
 // ✅ Zod schema to validate response
 const DashboardScoresSchema = z.object({
@@ -96,6 +97,11 @@ Formatting rules:
 `;
 
   try {
+    // Check if OpenAI is available
+    if (!openai) {
+      throw new Error("OpenAI API key is not configured. Please set the OPENAI_API_KEY environment variable.");
+    }
+
     // Log the data being sent to AI
     console.log("🧠 Business overview in assessment:", !!assessment.business_overview);
     console.log("🧠 Business overview in user:", !!user.business_overview);
