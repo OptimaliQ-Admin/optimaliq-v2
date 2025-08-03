@@ -1,94 +1,102 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Check, AlertCircle } from 'lucide-react';
-import { Question } from '@/lib/services/onboarding/QuestionFlowManager';
+
+interface Question {
+  id: string;
+  type: 'text_area' | 'multi_select' | 'multiple_choice' | 'rank_order';
+  prompt: string;
+  options?: string[];
+  maxSelect?: number;
+  required?: boolean;
+}
 
 interface InlineQuestionInputProps {
-  questions: Question[];
-  onSubmit: (responses: Record<string, any>) => void;
+  question: Question;
+  onSubmit: (answers: Record<string, any>) => void;
   isSubmitting: boolean;
+  currentAnswers?: Record<string, any>;
 }
 
 export default function InlineQuestionInput({ 
-  questions, 
+  question, 
   onSubmit, 
-  isSubmitting 
+  isSubmitting,
+  currentAnswers = {}
 }: InlineQuestionInputProps) {
-  const [responses, setResponses] = useState<Record<string, any>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [textInput, setTextInput] = useState(currentAnswers[question.id] || '');
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+    currentAnswers[question.id] ? (Array.isArray(currentAnswers[question.id]) ? currentAnswers[question.id] : [currentAnswers[question.id]]) : []
+  );
+  const [rankedItems, setRankedItems] = useState<string[]>(
+    currentAnswers[question.id] || question.options || []
+  );
 
-  const handleInputChange = (questionId: string, value: any) => {
-    setResponses(prev => ({ ...prev, [questionId]: value }));
+  const handleAnswerChange = () => {
+    let answer: any;
     
-    // Clear error when user starts typing
-    if (errors[questionId]) {
-      setErrors(prev => ({ ...prev, [questionId]: '' }));
+    switch (question.type) {
+      case 'text_area':
+        answer = textInput;
+        break;
+      case 'multiple_choice':
+        answer = selectedOptions[0];
+        break;
+      case 'multi_select':
+        answer = selectedOptions;
+        break;
+      case 'rank_order':
+        answer = rankedItems;
+        break;
+      default:
+        answer = '';
+    }
+
+    if (answer && (typeof answer === 'string' ? answer.trim() : answer.length > 0)) {
+      onSubmit({ [question.id]: answer });
     }
   };
 
-  const validateResponses = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    questions.forEach(question => {
-      const response = responses[question.id];
-
-      // Check required fields
-      if (question.required && (!response || (Array.isArray(response) && response.length === 0))) {
-        newErrors[question.id] = 'This field is required';
-        return;
-      }
-
-      // Validate text area length
-      if (question.type === 'text_area' && question.validation && response) {
-        if (question.validation.minLength && response.length < question.validation.minLength) {
-          newErrors[question.id] = `Must be at least ${question.validation.minLength} characters`;
+  const handleOptionSelect = (option: string) => {
+    if (question.type === 'multiple_choice') {
+      setSelectedOptions([option]);
+      setTimeout(() => handleAnswerChange(), 100);
+    } else if (question.type === 'multi_select') {
+      setSelectedOptions(prev => {
+        if (prev.includes(option)) {
+          return prev.filter(item => item !== option);
+        } else {
+          if (question.maxSelect && prev.length >= question.maxSelect) {
+            return prev;
+          }
+          return [...prev, option];
         }
-        if (question.validation.maxLength && response.length > question.validation.maxLength) {
-          newErrors[question.id] = `Must be less than ${question.validation.maxLength} characters`;
-        }
-      }
-
-      // Validate multi-select max
-      if (question.type === 'multi_select' && question.maxSelect && Array.isArray(response)) {
-        if (response.length > question.maxSelect) {
-          newErrors[question.id] = `Maximum ${question.maxSelect} selections allowed`;
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validateResponses()) {
-      onSubmit(responses);
+      });
+      setTimeout(() => handleAnswerChange(), 100);
     }
   };
 
-  const renderQuestionInput = (question: Question) => {
-    const value = responses[question.id];
-    const error = errors[question.id];
+  const handleRankChange = (fromIndex: number, toIndex: number) => {
+    const newRankedItems = [...rankedItems];
+    const [movedItem] = newRankedItems.splice(fromIndex, 1);
+    newRankedItems.splice(toIndex, 0, movedItem);
+    setRankedItems(newRankedItems);
+  };
 
+  const renderInput = () => {
     switch (question.type) {
       case 'text_area':
         return (
-          <div className="space-y-2">
-            <textarea
-              value={value || ''}
-              onChange={(e) => handleInputChange(question.id, e.target.value)}
-              placeholder="Type your answer here..."
-              className={`w-full p-3 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                error ? 'border-red-300' : 'border-gray-300'
-              }`}
-              rows={4}
-              maxLength={question.validation?.maxLength}
-            />
-            {question.validation?.maxLength && (
-              <div className="text-xs text-gray-500 text-right">
-                {value?.length || 0} / {question.validation.maxLength}
-              </div>
-            )}
+          <div className="space-y-3">
+                    <textarea
+          value={textInput}
+          onChange={(e) => {
+            setTextInput(e.target.value);
+            setTimeout(() => handleAnswerChange(), 100);
+          }}
+          placeholder="Type your answer here..."
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          rows={3}
+        />
           </div>
         );
 
@@ -101,8 +109,8 @@ export default function InlineQuestionInput({
                   type="radio"
                   name={question.id}
                   value={option}
-                  checked={value === option}
-                  onChange={(e) => handleInputChange(question.id, e.target.value)}
+                  checked={selectedOptions.includes(option)}
+                  onChange={() => handleOptionSelect(option)}
                   className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{option}</span>
@@ -119,23 +127,17 @@ export default function InlineQuestionInput({
                 <input
                   type="checkbox"
                   value={option}
-                  checked={Array.isArray(value) && value.includes(option)}
-                  onChange={(e) => {
-                    const currentValues = Array.isArray(value) ? value : [];
-                    const newValues = e.target.checked
-                      ? [...currentValues, option]
-                      : currentValues.filter(v => v !== option);
-                    handleInputChange(question.id, newValues);
-                  }}
+                  checked={selectedOptions.includes(option)}
+                  onChange={() => handleOptionSelect(option)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{option}</span>
               </label>
             ))}
             {question.maxSelect && (
-              <div className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500">
                 Select up to {question.maxSelect} options
-              </div>
+              </p>
             )}
           </div>
         );
@@ -143,25 +145,27 @@ export default function InlineQuestionInput({
       case 'rank_order':
         return (
           <div className="space-y-2">
-            <div className="text-sm text-gray-600 mb-3">
-              Drag to reorder or click to select:
-            </div>
-            {question.options?.map((option, index) => (
+            {rankedItems.map((item, index) => (
               <div
-                key={option}
-                className="flex items-center space-x-3 p-2 border border-gray-200 rounded cursor-move hover:bg-gray-50"
+                key={item}
+                className="flex items-center space-x-3 p-2 bg-gray-50 rounded border cursor-move"
+                draggable
+                onDragStart={(e) => e.dataTransfer.setData('text/plain', index.toString())}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                  handleRankChange(fromIndex, index);
+                }}
               >
-                <span className="text-sm font-medium text-gray-500 w-6">
-                  {index + 1}
-                </span>
-                <span className="text-sm text-gray-700 flex-1">{option}</span>
-                <input
-                  type="hidden"
-                  value={option}
-                  name={`${question.id}_${index}`}
-                />
+                <span className="text-sm font-medium text-gray-500 w-6">#{index + 1}</span>
+                <span className="text-sm text-gray-700 flex-1">{item}</span>
+                <div className="text-gray-400">⋮⋮</div>
               </div>
             ))}
+            <p className="text-xs text-gray-500">
+              Drag to reorder items
+            </p>
           </div>
         );
 
@@ -171,49 +175,24 @@ export default function InlineQuestionInput({
   };
 
   return (
-    <div className="space-y-6">
-      {questions.map((question) => (
-        <div key={question.id} className="space-y-3">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-900">
-              {question.prompt}
-              {question.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
-            {errors[question.id] && (
-              <div className="flex items-center space-x-1 text-red-600 text-sm">
-                <AlertCircle size={14} />
-                <span>{errors[question.id]}</span>
-              </div>
-            )}
-          </div>
-          
-          {renderQuestionInput(question)}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm"
+    >
+      <h3 className="text-sm font-medium text-gray-900 mb-3">
+        {question.prompt}
+      </h3>
+      
+      {renderInput()}
+      
+      <div className="mt-4 flex justify-end">
+        <div className="text-xs text-gray-500 mt-2">
+          {question.required && (
+            <span className="text-red-500">* Required</span>
+          )}
         </div>
-      ))}
-
-      <motion.button
-        onClick={handleSubmit}
-        disabled={isSubmitting}
-        className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${
-          isSubmitting
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
-        whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-        whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-      >
-        {isSubmitting ? (
-          <>
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span>Processing...</span>
-          </>
-        ) : (
-          <>
-            <Send size={16} />
-            <span>Continue</span>
-          </>
-        )}
-      </motion.button>
-    </div>
+      </div>
+    </motion.div>
   );
 } 

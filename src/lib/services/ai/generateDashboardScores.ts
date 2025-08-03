@@ -1,189 +1,108 @@
 import { callOpenAI } from '@/lib/ai/callOpenAI';
 
-export interface DashboardScoresRequest {
+interface DashboardScoresRequest {
   sessionId: string;
-  userResponses: Record<string, any>;
-  userProfile: {
-    industry: string;
-    companySize: string;
-    revenueRange: string;
-  };
+  allResponses: Record<string, any>;
+  userProfile: any;
 }
 
-export interface AssessmentScores {
-  overall_score: number;
+interface DashboardScores {
   strategy_score: number;
   process_score: number;
   technology_score: number;
-  bracket: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  industry_benchmark: number;
-  top_performer_benchmark: number;
-  recommendations: string[];
-  confidence_score: number;
+  overall_score: number;
+  benchmark_position: number;
+  roadmap: string[];
 }
 
-export interface DashboardInsights {
-  key_insights: string[];
-  growth_opportunities: string[];
-  risk_factors: string[];
-  competitive_position: string;
-  market_trends: string[];
-}
+export async function generateDashboardScores(request: DashboardScoresRequest): Promise<DashboardScores> {
+  const { sessionId, allResponses, userProfile } = request;
 
-export interface RoadmapTask {
-  title: string;
-  description: string;
-  priority: 'high' | 'medium' | 'low';
-  estimated_effort: string;
-  expected_impact: string;
-  due_date: Date;
-  dependencies: string[];
-}
+  // Build context from user profile
+  const userContext = {
+    industry: userProfile?.industry || 'business',
+    companySize: userProfile?.company_size || 'mid-sized',
+    revenueRange: userProfile?.revenue_range || 'not specified'
+  };
 
-export async function generateDashboardScores(
-  request: DashboardScoresRequest
-): Promise<{
-  scores: AssessmentScores;
-  insights: DashboardInsights;
-  roadmap: RoadmapTask[];
-}> {
-  const { userResponses, userProfile } = request;
-
-  // Format responses for analysis
-  const responseSummary = Object.entries(userResponses)
-    .map(([key, value]) => {
-      const formattedValue = Array.isArray(value) ? value.join(', ') : value;
-      return `- ${key}: ${formattedValue}`;
+  // Format all responses for analysis
+  const responseSummary = Object.entries(allResponses)
+    .map(([questionId, answer]) => {
+      const answerText = Array.isArray(answer) ? answer.join(', ') : String(answer);
+      return `- ${questionId}: ${answerText}`;
     })
     .join('\n');
 
-  const prompt = `You are a senior growth consultant analyzing a business assessment.
+  const prompt = `You are a senior business strategist analyzing a company's growth maturity. 
 
-Business Profile:
-- Industry: ${userProfile.industry}
-- Company Size: ${userProfile.companySize}
-- Revenue Range: ${userProfile.revenueRange}
+Company Profile:
+- Industry: ${userContext.industry}
+- Company Size: ${userContext.companySize}
+- Revenue Range: ${userContext.revenueRange}
 
 Assessment Responses:
 ${responseSummary}
 
-Please provide a comprehensive analysis in JSON format with the following structure:
+Based on these responses, provide a comprehensive analysis in JSON format with the following structure:
 
 {
-  "scores": {
-    "overall_score": 3.2,
-    "strategy_score": 3.5,
-    "process_score": 2.8,
-    "technology_score": 3.1,
-    "bracket": "intermediate",
-    "industry_benchmark": 2.9,
-    "top_performer_benchmark": 4.2,
-    "recommendations": ["Improve customer retention processes", "Implement data-driven decision making"],
-    "confidence_score": 0.85
-  },
-  "insights": {
-    "key_insights": ["Strong product-market fit", "Operational processes need optimization"],
-    "growth_opportunities": ["Market expansion potential", "Process automation"],
-    "risk_factors": ["Customer churn risk", "Scaling challenges"],
-    "competitive_position": "Strong in niche, vulnerable to larger players",
-    "market_trends": ["Industry consolidation", "Digital transformation acceleration"]
-  },
-  "roadmap": [
-    {
-      "title": "Implement Customer Success Program",
-      "description": "Develop systematic approach to customer onboarding and retention",
-      "priority": "high",
-      "estimated_effort": "2-3 months",
-      "expected_impact": "Reduce churn by 20%",
-      "due_date": "2024-03-15",
-      "dependencies": []
-    }
-  ]
+  "strategy_score": <number 1-5>,
+  "process_score": <number 1-5>,
+  "technology_score": <number 1-5>,
+  "overall_score": <number 1-5>,
+  "benchmark_position": <number representing percentage above industry average>,
+  "roadmap": ["action item 1", "action item 2", "action item 3", "action item 4", "action item 5"]
 }
 
 Scoring Guidelines:
-- 1-2: Beginner (basic processes, limited strategy)
-- 2-3: Intermediate (some structure, room for improvement)
-- 3-4: Advanced (well-developed, strategic approach)
-- 4-5: Expert (best-in-class, innovative practices)
+- Strategy Score: Based on goal clarity, positioning, competitive advantage
+- Process Score: Based on operational maturity, team size, process efficiency
+- Technology Score: Based on tech stack maturity, tool usage, automation
+- Overall Score: Weighted average of the three scores
+- Benchmark Position: Percentage above industry average (e.g., 25 means 25% above average)
+- Roadmap: 5 specific, actionable items for the next 30 days
 
-Focus on actionable insights and specific, measurable recommendations.`;
+Be strategic and realistic in your assessment.`;
 
   try {
     const response = await callOpenAI(prompt, {
-      model: 'gpt-4o-mini',
-      maxTokens: 1500,
-      temperature: 0.3
+      model: 'gpt-4',
+      temperature: 0.3,
+      maxTokens: 500
     });
 
-    const analysis = response.parsed;
+    const result = response.parsed || JSON.parse(response.raw || '{}');
 
-    // Validate and structure the response
-    const scores: AssessmentScores = {
-      overall_score: analysis.scores?.overall_score || 3.0,
-      strategy_score: analysis.scores?.strategy_score || 3.0,
-      process_score: analysis.scores?.process_score || 3.0,
-      technology_score: analysis.scores?.technology_score || 3.0,
-      bracket: analysis.scores?.bracket || 'intermediate',
-      industry_benchmark: analysis.scores?.industry_benchmark || 3.0,
-      top_performer_benchmark: analysis.scores?.top_performer_benchmark || 4.0,
-      recommendations: analysis.scores?.recommendations || [],
-      confidence_score: analysis.scores?.confidence_score || 0.8
+    return {
+      strategy_score: result.strategy_score || 3,
+      process_score: result.process_score || 3,
+      technology_score: result.technology_score || 3,
+      overall_score: result.overall_score || 3,
+      benchmark_position: result.benchmark_position || 0,
+      roadmap: result.roadmap || [
+        'Review and optimize current processes',
+        'Implement key performance indicators',
+        'Evaluate technology stack efficiency',
+        'Develop strategic growth plan',
+        'Build team capabilities'
+      ]
     };
-
-    const insights: DashboardInsights = {
-      key_insights: analysis.insights?.key_insights || [],
-      growth_opportunities: analysis.insights?.growth_opportunities || [],
-      risk_factors: analysis.insights?.risk_factors || [],
-      competitive_position: analysis.insights?.competitive_position || 'Analyzing...',
-      market_trends: analysis.insights?.market_trends || []
-    };
-
-    const roadmap: RoadmapTask[] = (analysis.roadmap || []).map((task: any) => ({
-      title: task.title || 'Task',
-      description: task.description || '',
-      priority: task.priority || 'medium',
-      estimated_effort: task.estimated_effort || '1 month',
-      expected_impact: task.expected_impact || 'Improve performance',
-      due_date: new Date(task.due_date || Date.now() + 30 * 24 * 60 * 60 * 1000),
-      dependencies: task.dependencies || []
-    }));
-
-    return { scores, insights, roadmap };
-
   } catch (error) {
     console.error('Error generating dashboard scores:', error);
     
-    // Fallback response
+    // Return default scores if AI fails
     return {
-      scores: {
-        overall_score: 3.0,
-        strategy_score: 3.0,
-        process_score: 3.0,
-        technology_score: 3.0,
-        bracket: 'intermediate',
-        industry_benchmark: 3.0,
-        top_performer_benchmark: 4.0,
-        recommendations: ['Complete detailed assessment for personalized recommendations'],
-        confidence_score: 0.5
-      },
-      insights: {
-        key_insights: ['Assessment completed successfully'],
-        growth_opportunities: ['Further analysis required'],
-        risk_factors: ['Limited data available'],
-        competitive_position: 'Analysis in progress',
-        market_trends: ['Industry analysis pending']
-      },
+      strategy_score: 3,
+      process_score: 3,
+      technology_score: 3,
+      overall_score: 3,
+      benchmark_position: 0,
       roadmap: [
-        {
-          title: 'Complete Assessment Review',
-          description: 'Review detailed assessment results and develop action plan',
-          priority: 'high',
-          estimated_effort: '1 week',
-          expected_impact: 'Clear strategic direction',
-          due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          dependencies: []
-        }
+        'Review and optimize current processes',
+        'Implement key performance indicators',
+        'Evaluate technology stack efficiency',
+        'Develop strategic growth plan',
+        'Build team capabilities'
       ]
     };
   }
