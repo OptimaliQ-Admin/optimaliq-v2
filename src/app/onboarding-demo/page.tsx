@@ -7,8 +7,19 @@ export default function OnboardingDemoPage() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [scores, setScores] = useState<any>(null);
 
-  const handleComplete = (assessmentScores: any) => {
-    setScores(assessmentScores);
+  const handleComplete = () => {
+    // For demo purposes, we'll set some mock scores
+    setScores({
+      scores: {
+        overall_score: 4.2,
+        bracket: 'growth-stage',
+        recommendations: [
+          'Focus on customer retention strategies',
+          'Implement data-driven decision making',
+          'Optimize your go-to-market strategy'
+        ]
+      }
+    });
     setIsCompleted(true);
   };
 
@@ -79,7 +90,6 @@ export default function OnboardingDemoPage() {
       <ConversationalOnboardingChat
         sessionId="demo-session-123"
         onComplete={handleComplete}
-        onProgress={handleProgress}
       />
     </div>
   );

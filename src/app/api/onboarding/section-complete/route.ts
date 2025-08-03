@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ConversationManager } from '@/lib/services/onboarding/ConversationManager';
+import { ConversationManager, UserResponse } from '@/lib/services/onboarding/ConversationManager';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,17 +20,31 @@ export async function POST(request: NextRequest) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
     );
 
-    // Generate strategic GPT response
-    const aiResponse = await conversationManager.onSectionComplete(
-      sectionId,
-      responses,
-      userProfile
-    );
+    // Convert responses to UserResponse format
+    // For now, we'll process the first response as a representative of the section
+    const firstResponseKey = Object.keys(responses)[0];
+    const userResponse: UserResponse = {
+      sessionId,
+      questionId: firstResponseKey || sectionId,
+      answer: responses[firstResponseKey] || JSON.stringify(responses),
+      timestamp: new Date().toISOString(),
+      context: {
+        sectionId,
+        allResponses: responses,
+        userProfile
+      }
+    };
+
+    // Process the user response to get AI response
+    const conversationUpdate = await conversationManager.processUserResponse(userResponse);
 
     return NextResponse.json({
-      message: aiResponse,
+      message: conversationUpdate.aiMessage.content,
       sectionId,
-      completed: true
+      completed: true,
+      nextQuestion: conversationUpdate.nextQuestion,
+      insights: conversationUpdate.insights,
+      sectionResponse: conversationUpdate.sectionResponse?.content
     });
 
   } catch (error) {
