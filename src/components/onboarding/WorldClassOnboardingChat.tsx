@@ -108,8 +108,7 @@ export default function WorldClassOnboardingChat({
             'Customer service',
             'Price/Value',
             'Speed to market',
-            'Team expertise',
-            'Brand recognition'
+            'Team expertise'
           ],
           required: true
         }
@@ -117,27 +116,15 @@ export default function WorldClassOnboardingChat({
     },
     {
       id: 'operations',
-      name: 'Operations & Processes',
-      aiPromptIntro: 'Understanding your operational maturity and efficiency',
+      name: 'Operations & Process',
+      aiPromptIntro: 'Understanding your operational efficiency and process maturity',
       order: 3,
       transitionHook: 'Let\'s shift gears to your customer engine — how you\'re acquiring, retaining, and scaling growth.',
       questions: [
         {
-          id: 'process_maturity',
-          type: 'multiple_choice',
-          prompt: 'How would you describe your operational processes?',
-          options: [
-            'Mostly ad-hoc and reactive',
-            'Some documented processes',
-            'Well-defined and followed',
-            'Highly optimized and automated'
-          ],
-          required: true
-        },
-        {
           id: 'team_size',
           type: 'multiple_choice',
-          prompt: 'How large is your team?',
+          prompt: 'How large is your current team?',
           options: [
             '1-5 people',
             '6-15 people',
@@ -148,99 +135,109 @@ export default function WorldClassOnboardingChat({
           required: true
         },
         {
-          id: 'biggest_operational_challenge',
+          id: 'process_maturity',
+          type: 'multiple_choice',
+          prompt: 'How would you describe your process maturity?',
+          options: [
+            'Ad-hoc and reactive',
+            'Some processes documented',
+            'Well-defined processes',
+            'Highly optimized and automated'
+          ],
+          required: true
+        },
+        {
+          id: 'tech_stack',
           type: 'text_area',
-          prompt: 'What\'s your biggest operational challenge?',
+          prompt: 'What are your main tools and technologies?',
           required: true
         }
       ]
     },
     {
       id: 'growth_stack',
-      name: 'Growth Stack & Tools',
-      aiPromptIntro: 'Understanding your technology stack and growth tools',
+      name: 'Growth Engine',
+      aiPromptIntro: 'Understanding your customer acquisition and retention strategies',
       order: 4,
       transitionHook: 'This is where it gets interesting. Let\'s talk decision-making, alignment, and what success looks like for your team.',
       questions: [
         {
-          id: 'tech_stack_maturity',
-          type: 'multiple_choice',
-          prompt: 'How mature is your technology stack?',
-          options: [
-            'Still building core systems',
-            'Basic tools in place',
-            'Integrated and optimized',
-            'Advanced automation'
-          ],
-          required: true
-        },
-        {
-          id: 'key_tools',
+          id: 'acquisition_channels',
           type: 'multi_select',
-          prompt: 'Which tools do you use most? (Select all that apply)',
+          prompt: 'Which customer acquisition channels are working best?',
           options: [
-            'CRM (Salesforce, HubSpot, etc.)',
-            'Marketing automation',
-            'Analytics (Google Analytics, Mixpanel)',
+            'Content marketing',
+            'Paid advertising',
+            'Social media',
             'Email marketing',
-            'Social media management',
-            'Project management',
-            'Customer support',
-            'Accounting/Finance',
-            'HR/Recruiting'
+            'Partnerships',
+            'Direct sales',
+            'Referrals',
+            'SEO'
           ],
-          maxSelect: 5,
+          maxSelect: 3,
           required: true
         },
         {
-          id: 'tech_gaps',
+          id: 'retention_strategy',
           type: 'text_area',
-          prompt: 'What technology gaps are holding you back?',
+          prompt: 'How do you currently retain and grow existing customers?',
+          required: true
+        },
+        {
+          id: 'growth_metrics',
+          type: 'multi_select',
+          prompt: 'Which metrics do you track most closely?',
+          options: [
+            'Revenue growth',
+            'Customer acquisition cost',
+            'Lifetime value',
+            'Churn rate',
+            'Conversion rates',
+            'Customer satisfaction',
+            'Market share'
+          ],
+          maxSelect: 4,
           required: true
         }
       ]
     },
     {
       id: 'clarity',
-      name: 'Decision Making & Clarity',
-      aiPromptIntro: 'Understanding your decision-making processes and strategic clarity',
+      name: 'Strategy & Alignment',
+      aiPromptIntro: 'Understanding your strategic clarity and team alignment',
       order: 5,
       transitionHook: 'You\'re building toward something specific — let\'s anchor that with the right benchmarks and expectations.',
       questions: [
         {
-          id: 'decision_speed',
+          id: 'vision_clarity',
           type: 'multiple_choice',
-          prompt: 'How quickly do you typically make strategic decisions?',
+          prompt: 'How clear is your team on the company vision?',
           options: [
-            'Immediately (same day)',
-            'Within a week',
-            'Within a month',
-            'Several months',
-            'Very slowly'
+            'Very clear and aligned',
+            'Somewhat clear',
+            'Unclear or conflicting',
+            'Not communicated'
           ],
           required: true
         },
         {
-          id: 'success_metrics',
-          type: 'multi_select',
-          prompt: 'What metrics do you track most closely? (Select all that apply)',
+          id: 'decision_making',
+          type: 'multiple_choice',
+          prompt: 'How do you typically make strategic decisions?',
           options: [
-            'Revenue growth',
-            'Customer acquisition cost',
-            'Customer lifetime value',
-            'Conversion rates',
-            'Team productivity',
-            'Customer satisfaction',
-            'Profit margins',
-            'Market share'
+            'Data-driven analysis',
+            'Gut instinct and experience',
+            'Team consensus',
+            'Customer feedback',
+            'Market research'
           ],
-          maxSelect: 4,
           required: true
         },
         {
-          id: 'strategic_clarity',
+          id: 'success_definition',
           type: 'text_area',
-          prompt: 'What strategic question keeps you up at night?',
+          prompt: 'What does success look like for your business in the next year?',
           required: true
         }
       ]
@@ -248,20 +245,20 @@ export default function WorldClassOnboardingChat({
     {
       id: 'benchmarks',
       name: 'Benchmarks & Expectations',
-      aiPromptIntro: 'Understanding your performance benchmarks and growth expectations',
+      aiPromptIntro: 'Understanding your performance context and industry benchmarks',
       order: 6,
       transitionHook: 'Thanks for being thoughtful through this. One last thing before we wrap — let\'s talk about what\'s been left unsaid or deprioritized.',
       questions: [
         {
-          id: 'industry_benchmark',
+          id: 'industry_benchmarks',
           type: 'multiple_choice',
-          prompt: 'How do you think you compare to industry leaders?',
+          prompt: 'How do you compare to industry benchmarks?',
           options: [
-            'Significantly behind',
-            'Slightly behind',
-            'On par',
-            'Ahead of most',
-            'Leading the industry'
+            'Leading the industry',
+            'Above average',
+            'Average',
+            'Below average',
+            'Not sure'
           ],
           required: true
         },
@@ -273,76 +270,78 @@ export default function WorldClassOnboardingChat({
             'Declining',
             'Flat (0-5%)',
             'Moderate (5-20%)',
-            'Strong (20-50%)',
-            'Explosive (50%+)'
+            'High (20-50%)',
+            'Hypergrowth (50%+)'
           ],
           required: true
         },
         {
-          id: 'deprioritized_areas',
+          id: 'unaddressed_areas',
           type: 'text_area',
-          prompt: 'What important areas have you had to deprioritize?',
+          prompt: 'What areas of your business have you been meaning to address but haven\'t had time for?',
           required: true
         }
       ]
     }
   ];
 
+  // Load user profile on mount
   useEffect(() => {
-    // Load user profile
-    const loadUserProfile = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { data: profile } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', user.id)
-            .single();
-          setUserProfile(profile);
-        }
-      } catch (error) {
-        console.error('Error loading user profile:', error);
-      }
-    };
-
     loadUserProfile();
   }, []);
 
+  // Auto-scroll to bottom when new messages are added
   useEffect(() => {
-    // Show welcome message on mount
-    if (messages.length === 0 && userProfile) {
-      const welcomeMessage = getRandomWelcomeMessage(userProfile.industry);
-      setMessages([{
-        id: 'welcome',
-        type: 'ai',
-        content: welcomeMessage.content,
-        timestamp: new Date()
-      }]);
-    }
-  }, [userProfile, messages.length]);
-
-  useEffect(() => {
-    // Auto-scroll to bottom when new messages arrive
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const handleQuestionGroupSubmit = async (answers: Record<string, any>) => {
-    // Collect answers for the current question group
-    const updatedAnswers = { ...currentAnswers, ...answers };
-    setCurrentAnswers(updatedAnswers);
-    
-    // Check if we have all answers for the current group
+  const loadUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Get user profile from users table
+        const { data: profile } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        setUserProfile(profile || user);
+
+        // Add welcome message
+        const welcomeMessage = getRandomWelcomeMessage();
+        setMessages([{
+          id: 'welcome',
+          type: 'ai',
+          content: welcomeMessage.content,
+          timestamp: new Date()
+        }]);
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  };
+
+  const handleAnswerChange = (questionId: string, answer: any) => {
+    setCurrentAnswers(prev => ({
+      ...prev,
+      [questionId]: answer
+    }));
+  };
+
+  const handleGroupSubmit = async () => {
     const currentGroup = questionGroups[currentQuestionGroupIndex];
+    
+    // Check if all questions in the current group are answered
     const allGroupQuestionsAnswered = currentGroup.questions.every(question => 
-      updatedAnswers[question.id] && 
-      (typeof updatedAnswers[question.id] === 'string' ? updatedAnswers[question.id].trim() : updatedAnswers[question.id].length > 0)
+      currentAnswers[question.id] && 
+      (typeof currentAnswers[question.id] === 'string' ? currentAnswers[question.id].trim() : currentAnswers[question.id].length > 0)
     );
     
     if (!allGroupQuestionsAnswered) {
-      return; // Wait for all questions to be answered
+      return; // Don't proceed if not all questions are answered
     }
     
     setIsSubmitting(true);
@@ -351,19 +350,19 @@ export default function WorldClassOnboardingChat({
     const answerMessages = currentGroup.questions.map(question => ({
       id: `answer-${question.id}`,
       type: 'user' as const,
-      content: updatedAnswers[question.id] || 'No answer provided',
+      content: currentAnswers[question.id] || 'No answer provided',
       timestamp: new Date()
     }));
 
     setMessages(prev => [...prev, ...answerMessages]);
-    setAllAnswers(prev => ({ ...prev, ...updatedAnswers }));
+    setAllAnswers(prev => ({ ...prev, ...currentAnswers }));
 
     // Save answers to database
     try {
       await supabase
         .from('user_responses')
         .insert(
-          Object.entries(updatedAnswers).map(([questionId, answer]) => ({
+          Object.entries(currentAnswers).map(([questionId, answer]) => ({
             session_id: sessionId,
             question_id: questionId,
             answer: typeof answer === 'string' ? answer : JSON.stringify(answer),
@@ -380,7 +379,7 @@ export default function WorldClassOnboardingChat({
       const aiResponse = await generateSectionReply({
         sectionId: currentGroup.id,
         sectionName: currentGroup.name,
-        responses: updatedAnswers,
+        responses: currentAnswers,
         userProfile,
         transitionHook: currentGroup.transitionHook
       });
@@ -397,7 +396,7 @@ export default function WorldClassOnboardingChat({
         // Generate final scores and roadmap
         const finalScores = await generateDashboardScores({
           sessionId,
-          allResponses: { ...allAnswers, ...updatedAnswers },
+          allResponses: { ...allAnswers, ...currentAnswers },
           userProfile
         });
 
@@ -421,6 +420,7 @@ export default function WorldClassOnboardingChat({
       } else {
         // Move to next question group
         setCurrentQuestionGroupIndex(prev => prev + 1);
+        setCurrentAnswers({}); // Reset answers for next group
       }
     } catch (error) {
       console.error('Error generating AI response:', error);
@@ -437,11 +437,15 @@ export default function WorldClassOnboardingChat({
   };
 
   const currentGroup = questionGroups[currentQuestionGroupIndex];
+  const allCurrentGroupAnswered = currentGroup?.questions.every(question => 
+    currentAnswers[question.id] && 
+    (typeof currentAnswers[question.id] === 'string' ? currentAnswers[question.id].trim() : currentAnswers[question.id].length > 0)
+  );
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Progress Indicator */}
-      <div className="p-6 border-b border-gray-200 bg-white">
+      <div className="p-4 md:p-6 border-b border-gray-200 bg-white shadow-sm">
         <ProgressIndicator
           currentStep={currentQuestionGroupIndex + 1}
           totalSteps={questionGroups.length}
@@ -452,7 +456,7 @@ export default function WorldClassOnboardingChat({
       {/* Chat Container */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-6 space-y-4"
+        className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"
       >
         <AnimatePresence>
           {messages.map((message) => (
@@ -475,15 +479,52 @@ export default function WorldClassOnboardingChat({
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            {currentGroup.questions.map((question) => (
-              <InlineQuestionInput
-                key={question.id}
-                question={question}
-                onSubmit={handleQuestionGroupSubmit}
-                isSubmitting={isSubmitting}
-                currentAnswers={currentAnswers}
-              />
-            ))}
+            <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+                {currentGroup.name}
+              </h2>
+              <p className="text-sm text-gray-600 mb-6">
+                {currentGroup.aiPromptIntro}
+              </p>
+              
+              <div className="space-y-6">
+                {currentGroup.questions.map((question, index) => (
+                  <div key={question.id} className="border-b border-gray-100 pb-6 last:border-b-0">
+                    <InlineQuestionInput
+                      question={question}
+                      onAnswerChange={(answer) => handleAnswerChange(question.id, answer)}
+                      currentAnswer={currentAnswers[question.id]}
+                      questionNumber={index + 1}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Submit Button */}
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <button
+                  onClick={handleGroupSubmit}
+                  disabled={!allCurrentGroupAnswered || isSubmitting}
+                  className={`w-full md:w-auto px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                    allCurrentGroupAnswered && !isSubmitting
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : (
+                    `Continue to ${currentQuestionGroupIndex < questionGroups.length - 1 ? 'Next Section' : 'Complete'}`
+                  )}
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
 
