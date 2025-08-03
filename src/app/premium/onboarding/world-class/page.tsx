@@ -30,19 +30,18 @@ export default function WorldClassOnboardingPage() {
       }
 
       // Create new onboarding session
-      const sessionId = `onboarding-${user.id}-${Date.now()}`;
-      
-      const { error: sessionError } = await supabase
+      const { data: sessionData, error: sessionError } = await supabase
         .from('onboarding_sessions')
         .insert({
-          id: sessionId,
           user_id: user.id,
-          status: 'in_progress',
-          created_at: new Date().toISOString(),
+          status: 'active',
+          session_type: 'world_class_conversational',
           metadata: {
             type: 'world_class_conversational'
           }
-        });
+        })
+        .select('id')
+        .single();
 
       if (sessionError) {
         console.error('Error creating session:', sessionError);
@@ -50,7 +49,7 @@ export default function WorldClassOnboardingPage() {
         return;
       }
 
-      setSessionId(sessionId);
+      setSessionId(sessionData.id);
     } catch (error) {
       console.error('Error initializing onboarding:', error);
       setError('Failed to initialize onboarding');
