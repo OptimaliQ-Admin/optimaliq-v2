@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QuestionNode } from '@/lib/services/onboarding/ConversationManager';
+import { QuestionNode, BusinessContext } from '@/lib/services/onboarding/ConversationManager';
 import TextInput from './inputs/TextInput';
 import MultiChoiceInput from './inputs/MultiChoiceInput';
 import MultiSelectInput from './inputs/MultiSelectInput';
@@ -13,12 +13,22 @@ interface DynamicInputRendererProps {
   question: QuestionNode;
   onAnswer: (answer: string | string[] | number) => void;
   disabled?: boolean;
+  context?: BusinessContext;
 }
+
+// Helper function to get question content
+const getQuestionContent = (question: QuestionNode, context?: BusinessContext): string => {
+  if (typeof question.content === 'function') {
+    return question.content(context || { responses: {} });
+  }
+  return question.content;
+};
 
 export default function DynamicInputRenderer({
   question,
   onAnswer,
-  disabled = false
+  disabled = false,
+  context
 }: DynamicInputRendererProps) {
   const renderInput = () => {
     switch (question.type) {
@@ -26,7 +36,7 @@ export default function DynamicInputRenderer({
       case 'text_input':
         return (
           <TextInput
-            question={question.content}
+            question={getQuestionContent(question, context)}
             placeholder={question.type === 'conversation' ? "Share your thoughts..." : "Type your answer..."}
             maxLength={500}
             rows={3}
@@ -39,7 +49,7 @@ export default function DynamicInputRenderer({
       case 'multi_choice':
         return (
           <MultiChoiceInput
-            question={question.content}
+            question={getQuestionContent(question, context)}
             options={question.options || []}
             onSelect={(value) => onAnswer(value)}
             disabled={disabled}
@@ -53,7 +63,7 @@ export default function DynamicInputRenderer({
         if (question.id === 'tech_stack_overview') {
           return (
             <TechStackSelector
-              question={question.content}
+              question={getQuestionContent(question, context)}
               onSelect={(values) => onAnswer(values)}
               disabled={disabled}
               personality={question.personality}
@@ -63,7 +73,7 @@ export default function DynamicInputRenderer({
         
         return (
           <MultiSelectInput
-            question={question.content}
+            question={getQuestionContent(question, context)}
             options={question.options || []}
             maxSelect={question.maxSelect || 5}
             onSelect={(values) => onAnswer(values)}
@@ -88,7 +98,7 @@ export default function DynamicInputRenderer({
                     🎯
                   </div>
                   <div className="flex-1">
-                    <p className="text-gray-800 font-semibold text-lg">{question.content}</p>
+                    <p className="text-gray-800 font-semibold text-lg">{getQuestionContent(question, context)}</p>
                     <p className="text-gray-600 text-sm mt-1">Drag and drop to rank by importance</p>
                   </div>
                 </div>
@@ -121,7 +131,7 @@ export default function DynamicInputRenderer({
                     📊
                   </div>
                   <div className="flex-1">
-                    <p className="text-gray-800 font-semibold text-lg">{question.content}</p>
+                    <p className="text-gray-800 font-semibold text-lg">{getQuestionContent(question, context)}</p>
                     <p className="text-gray-600 text-sm mt-1">Slide to indicate your level</p>
                   </div>
                 </div>
@@ -166,7 +176,7 @@ export default function DynamicInputRenderer({
                     🧠
                   </div>
                   <div className="flex-1">
-                    <p className="text-gray-800 font-semibold text-lg">{question.content}</p>
+                    <p className="text-gray-800 font-semibold text-lg">{getQuestionContent(question, context)}</p>
                     <p className="text-gray-600 text-sm mt-1">Rate from 0 to 10</p>
                   </div>
                 </div>
@@ -211,7 +221,7 @@ export default function DynamicInputRenderer({
                     💼
                   </div>
                   <div className="flex-1">
-                    <p className="text-gray-800 font-semibold text-lg">{question.content}</p>
+                    <p className="text-gray-800 font-semibold text-lg">{getQuestionContent(question, context)}</p>
                     <p className="text-gray-600 text-sm mt-1">Select your level of agreement</p>
                   </div>
                 </div>

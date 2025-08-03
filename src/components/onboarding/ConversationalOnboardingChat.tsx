@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ConversationMessage, QuestionNode, RealTimeInsight } from '@/lib/services/onboarding/ConversationManager';
+import { ConversationMessage, QuestionNode, RealTimeInsight, ConversationState } from '@/lib/services/onboarding/ConversationManager';
 import { BusinessMetrics, StrategicInsight } from '@/lib/services/onboarding/BusinessIntelligenceEngine';
 import ChatMessage from './ChatMessage';
 import DynamicInputRenderer from './DynamicInputRenderer';
@@ -30,6 +30,7 @@ export default function ConversationalOnboardingChat({
   const [currentPhase, setCurrentPhase] = useState<'introduction' | 'discovery' | 'diagnosis' | 'roadmap'>('introduction');
   const [isTyping, setIsTyping] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [conversationState, setConversationState] = useState<ConversationState | null>(null);
   const [completionData, setCompletionData] = useState<{
     metrics: BusinessMetrics;
     insights: StrategicInsight[];
@@ -117,6 +118,7 @@ export default function ConversationalOnboardingChat({
         const data = await response.json();
         
         // Update state
+        setConversationState(data.state);
         setProgress(data.state.progress);
         setCurrentPhase(data.state.currentPhase);
         setInsights(data.insights);
@@ -124,6 +126,16 @@ export default function ConversationalOnboardingChat({
         // Add AI response if it has content
         if (data.aiMessage && data.aiMessage.content && data.aiMessage.content.trim() !== "") {
           addMessage(data.aiMessage);
+        }
+
+        // Add section response if available (with typing animation)
+        if (data.sectionResponse && data.sectionResponse.content && data.sectionResponse.content.trim() !== "") {
+          // Add typing animation for section response
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            addMessage(data.sectionResponse);
+          }, 2000); // 2 second typing animation
         }
 
         // Update current question
@@ -260,11 +272,12 @@ export default function ConversationalOnboardingChat({
                 transition={{ delay: 0.3, duration: 0.4 }}
                 className="mt-6"
               >
-                <DynamicInputRenderer
-                  question={currentQuestion}
-                  onAnswer={handleAnswer}
-                  disabled={isTyping}
-                />
+                            <DynamicInputRenderer
+              question={currentQuestion}
+              onAnswer={handleAnswer}
+              disabled={isTyping}
+              context={conversationState?.context}
+            />
               </motion.div>
             )}
 

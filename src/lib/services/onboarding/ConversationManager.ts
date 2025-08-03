@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/lib/types/database';
 import { BusinessIntelligenceEngine } from './BusinessIntelligenceEngine';
+import { SectionResponseGenerator, QuestionSection } from './SectionResponseGenerator';
 
 export interface UserResponse {
   sessionId: string;
@@ -20,6 +21,7 @@ export interface ConversationMessage {
     personality?: string;
     insights?: string[];
     nextQuestion?: string;
+    sectionId?: string;
   };
 }
 
@@ -56,7 +58,7 @@ export interface UserPersona {
 export interface QuestionNode {
   id: string;
   type: 'conversation' | 'multi_choice' | 'multi_select' | 'text_input' | 'ranking' | 'slider' | 'nps' | 'likert';
-  content: string;
+  content: string | ((context: BusinessContext) => string);
   context: string;
   personality: 'consultant' | 'analyst' | 'strategist' | 'mentor';
   phase: 'introduction' | 'discovery' | 'diagnosis' | 'roadmap';
@@ -110,11 +112,49 @@ export class ConversationManager {
   private supabase: any;
   private questionTree: QuestionNode[];
   private businessIntelligence: BusinessIntelligenceEngine;
+  private sectionResponseGenerator: SectionResponseGenerator;
+
+  // Define question sections
+  private questionSections: QuestionSection[] = [
+    {
+      id: 'business_foundation',
+      name: 'Business Foundation',
+      description: 'Understanding your current business situation',
+      questions: ['welcome', 'growth_metrics', 'friction_points'],
+      order: 1,
+      aiPrompt: 'Business basics and current challenges'
+    },
+    {
+      id: 'strategy_execution',
+      name: 'Strategy & Execution',
+      description: 'Your current strategic approach',
+      questions: ['gtm_strategy', 'differentiator', 'business_priorities'],
+      order: 2,
+      aiPrompt: 'Current strategy and execution approach'
+    },
+    {
+      id: 'technology_process',
+      name: 'Technology & Process',
+      description: 'Your technology stack and operational processes',
+      questions: ['tech_stack_overview', 'process_discipline', 'acquisition_channels'],
+      order: 3,
+      aiPrompt: 'Technology stack and operational processes'
+    },
+    {
+      id: 'growth_ambitions',
+      name: 'Growth Ambitions',
+      description: 'Your growth goals and future plans',
+      questions: ['benchmark_preferences', 'funding_status', 'growth_pace'],
+      order: 4,
+      aiPrompt: 'Growth goals and future ambitions'
+    }
+  ];
 
   constructor(supabaseUrl: string, supabaseKey: string) {
     this.supabase = createClient<Database>(supabaseUrl, supabaseKey);
     this.questionTree = this.initializeQuestionTree();
     this.businessIntelligence = new BusinessIntelligenceEngine();
+    this.sectionResponseGenerator = new SectionResponseGenerator(supabaseUrl, supabaseKey);
   }
 
   private initializeQuestionTree(): QuestionNode[] {
@@ -123,7 +163,12 @@ export class ConversationManager {
       {
         id: 'welcome',
         type: 'conversation',
-        content: "Hi! I'm your business growth consultant. I'm here to help you discover your biggest growth opportunities and create a strategic roadmap. Let's start by understanding your business better. What's the biggest challenge you're facing right now in growing your business?",
+        content: (context: BusinessContext) => {
+          if (context.industry && context.companySize) {
+            return `Hi! I've worked with a lot of ${context.industry} companies at your stage - that's typically when the real scaling challenges start to emerge. I'm here to help you discover your biggest growth opportunities and create a strategic roadmap. Let's start by understanding your current situation better. What's the biggest challenge you're facing right now in growing your business?`;
+          }
+          return "Hi! I'm your business growth consultant. I'm here to help you discover your biggest growth opportunities and create a strategic roadmap. Let's start by understanding your business better. What's the biggest challenge you're facing right now in growing your business?";
+        },
         context: 'Introduction and initial challenge identification',
         personality: 'consultant',
         phase: 'introduction',
@@ -627,6 +672,19 @@ export class ConversationManager {
       const nextQuestion = await this.determineNextQuestion(response, updatedContext, state);
       console.log('Next question determined:', nextQuestion?.id);
 
+      // Check if we have a section response to add
+      let sectionResponse: ConversationMessage | undefined;
+      const currentSection = this.getCurrentSection(updatedContext);
+      if (currentSection && this.isSectionComplete(currentSection, updatedContext)) {
+        const generatedResponse = await this.generateSectionResponse(currentSection, updatedContext);
+        if (generatedResponse) {
+          sectionResponse = generatedResponse;
+          // Save section response to database
+          await this.saveAIMessage(response.sessionId, sectionResponse);
+          console.log('Section response generated and saved');
+        }
+      }
+
       // Update conversation state
       const updatedState: ConversationState = {
         ...state,
@@ -652,7 +710,8 @@ export class ConversationManager {
         state: updatedState,
         aiMessage,
         nextQuestion,
-        insights
+        insights,
+        sectionResponse
       };
 
     } catch (error) {
@@ -704,6 +763,18 @@ export class ConversationManager {
         throw sessionError;
       }
 
+      // Get user profile data
+      const { data: user, error: userError } = await this.supabase
+        .from('users')
+        .select('industry, company_size, revenue_range')
+        .eq('id', session.user_id)
+        .single();
+
+      if (userError) {
+        console.error('Error fetching user profile:', userError);
+        // Continue without user data
+      }
+
       // Get conversation history
       const { data: messages, error: messagesError } = await this.supabase
         .from('conversation_messages')
@@ -728,9 +799,9 @@ export class ConversationManager {
 
       const context: BusinessContext = {
         responses,
-        industry: undefined,
-        companySize: undefined,
-        revenueRange: undefined,
+        industry: user?.industry || undefined,
+        companySize: user?.company_size || undefined,
+        revenueRange: user?.revenue_range || undefined,
         growthStage: undefined,
         primaryChallenges: [],
         goals: [],
@@ -862,6 +933,58 @@ export class ConversationManager {
     return nextQuestion || null;
   }
 
+  // Section management methods
+  private getCurrentSection(context: BusinessContext): QuestionSection | null {
+    // Find which section we're currently in based on responses
+    for (const section of this.questionSections) {
+      const answeredQuestions = section.questions.filter(qId => context.responses[qId]);
+      const totalQuestions = section.questions.length;
+      
+      // If we have some answers but not all, we're in this section
+      if (answeredQuestions.length > 0 && answeredQuestions.length < totalQuestions) {
+        return section;
+      }
+    }
+    return null;
+  }
+
+  private isSectionComplete(section: QuestionSection, context: BusinessContext): boolean {
+    // Check if all questions in the section have been answered
+    return section.questions.every(qId => context.responses[qId]);
+  }
+
+  private getNextSection(currentSection: QuestionSection): QuestionSection | null {
+    const currentIndex = this.questionSections.findIndex(s => s.id === currentSection.id);
+    if (currentIndex < this.questionSections.length - 1) {
+      return this.questionSections[currentIndex + 1];
+    }
+    return null; // No more sections
+  }
+
+  private async generateSectionResponse(section: QuestionSection, context: BusinessContext): Promise<ConversationMessage | null> {
+    try {
+      const sectionResponse = await this.sectionResponseGenerator.generateSectionResponse(
+        section,
+        context.responses,
+        context
+      );
+
+      return {
+        id: `section_${section.id}_${Date.now()}`,
+        type: 'ai',
+        content: sectionResponse.content,
+        timestamp: sectionResponse.timestamp,
+        metadata: {
+          sectionId: section.id,
+          personality: 'consultant'
+        }
+      };
+    } catch (error) {
+      console.error('Error generating section response:', error);
+      return null;
+    }
+  }
+
   private calculateProgress(context: BusinessContext): number {
     // Count only required questions for progress calculation
     const requiredQuestions = this.questionTree.filter(q => q.required);
@@ -986,4 +1109,5 @@ export interface ConversationUpdate {
   aiMessage: ConversationMessage;
   nextQuestion: QuestionNode | null;
   insights: RealTimeInsight[];
+  sectionResponse?: ConversationMessage;
 } 
