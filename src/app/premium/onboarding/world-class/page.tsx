@@ -38,7 +38,7 @@ export default function WorldClassOnboardingPage() {
           id: sessionId,
           user_id: user.id,
           status: 'in_progress',
-          started_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
           metadata: {
             type: 'world_class_conversational'
           }
