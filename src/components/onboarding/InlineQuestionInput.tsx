@@ -39,18 +39,16 @@ export default function InlineQuestionInput({
 
   // Update local state when currentAnswer changes
   useEffect(() => {
-    if (currentAnswer !== undefined) {
-      if (question.type === 'text_area') {
-        setTextInput(currentAnswer || '');
-      } else if (question.type === 'multiple_choice') {
-        setSelectedOptions(currentAnswer ? [currentAnswer] : []);
-      } else if (question.type === 'multi_select') {
-        setSelectedOptions(Array.isArray(currentAnswer) ? currentAnswer : []);
-      } else if (question.type === 'rank_order') {
-        setRankedItems(currentAnswer || question.defaultItems || []);
-      } else if (question.type === 'tech_stack_selector') {
-        setSelectedTechTools(Array.isArray(currentAnswer) ? currentAnswer : []);
-      }
+    if (question.type === 'text_area') {
+      setTextInput(currentAnswer || '');
+    } else if (question.type === 'multiple_choice') {
+      setSelectedOptions(currentAnswer ? [currentAnswer] : []);
+    } else if (question.type === 'multi_select') {
+      setSelectedOptions(Array.isArray(currentAnswer) ? currentAnswer : []);
+    } else if (question.type === 'rank_order') {
+      setRankedItems(currentAnswer || question.defaultItems || []);
+    } else if (question.type === 'tech_stack_selector') {
+      setSelectedTechTools(Array.isArray(currentAnswer) ? currentAnswer : []);
     }
   }, [currentAnswer, question.type, question.defaultItems]);
 

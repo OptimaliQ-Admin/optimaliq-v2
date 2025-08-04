@@ -364,6 +364,7 @@ export default function WorldClassOnboardingChat({
             </div>
             
             <InlineQuestionInput
+              key={`${currentGroupIndex}-${currentQuestionIndex}`}
               question={currentQuestion}
               onAnswerChange={(answer) => {
                 setCurrentAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }));
