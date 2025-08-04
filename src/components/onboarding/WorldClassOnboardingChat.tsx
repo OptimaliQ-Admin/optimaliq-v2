@@ -7,7 +7,7 @@ import InlineQuestionInput from './InlineQuestionInput';
 import ProgressIndicator from './ProgressIndicator';
 import TypingIndicator from './TypingIndicator';
 import { questionGroups, QuestionGroup, Question } from '@/lib/services/onboarding/QuestionFlowManager';
-import { generateSectionReply } from '@/lib/services/ai/generateSectionReply';
+// Removed generateSectionReply import - now using dynamic AI API
 import { generateDashboardScores } from '@/lib/services/ai/generateDashboardScores';
 import { getRandomWelcomeMessage, getTransitionHook } from '@/lib/config/onboardingMessages';
 import { supabase } from '@/lib/supabase';
@@ -109,20 +109,45 @@ export default function WorldClassOnboardingChat({
     // Generate AI response for this individual question
     setIsTyping(true);
     try {
-      const aiResponse = await generateSectionReply({
-        sectionId: currentGroup.id,
-        sectionName: currentGroup.name,
-        responses: { [currentQuestion.id]: currentAnswers[currentQuestion.id] },
-        userProfile,
-        transitionHook: currentQuestionIndex === currentGroup.questions.length - 1 ? currentGroup.transitionHook : ''
+      const response = await fetch('/api/ai/onboarding-response', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          currentSection: currentGroup.id,
+          currentQuestion: currentQuestion.id,
+          userAnswer: currentAnswers[currentQuestion.id],
+          conversationHistory: messages.map(msg => ({
+            type: msg.type,
+            content: msg.content,
+            timestamp: msg.timestamp
+          })),
+          userProfile
+        })
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const aiResponse = await response.json();
 
       setMessages(prev => [...prev, {
         id: `ai-${currentQuestion.id}`,
         type: 'ai',
-        content: aiResponse,
+        content: aiResponse.response,
         timestamp: new Date()
       }]);
+
+      // Store extracted data for dashboard
+      if (aiResponse.dataForDashboard) {
+        setAllAnswers(prev => ({
+          ...prev,
+          [`${currentQuestion.id}_insights`]: aiResponse.dataForDashboard
+        }));
+      }
 
       // Check if this is the last question in the group
       if (currentQuestionIndex === currentGroup.questions.length - 1) {
@@ -344,7 +369,7 @@ export default function WorldClassOnboardingChat({
         )}
 
         {/* Typing Indicator */}
-        {isTyping && <TypingIndicator />}
+        {isTyping && <TypingIndicator showThinking={true} />}
       </div>
     </div>
   );
