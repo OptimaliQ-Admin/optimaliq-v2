@@ -108,11 +108,11 @@ export default function InlineQuestionInput({
               value={textInput}
               onChange={(e) => handleTextChange(e.target.value)}
               placeholder={question.placeholder || "Share your thoughts..."}
-              className="w-full p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none transition-all duration-300"
+                              className="w-full p-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none transition-all duration-300"
               rows={question.rows || 4}
             />
             {question.maxCharacters && (
-              <div className="text-right text-white/60 text-sm">
+              <div className="text-right text-gray-600 text-sm">
                 {textInput.length}/{question.maxCharacters} characters
               </div>
             )}
@@ -134,8 +134,8 @@ export default function InlineQuestionInput({
                 transition={{ delay: index * 0.1 }}
                 className={`flex items-start space-x-4 cursor-pointer p-4 rounded-xl border transition-all duration-300 ${
                   selectedOptions.includes(option)
-                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/50 shadow-lg'
-                    : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30'
+                    ? 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300 shadow-lg'
+                    : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                 }`}
               >
                 <div className="relative flex-shrink-0 mt-1">
@@ -149,8 +149,8 @@ export default function InlineQuestionInput({
                   />
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                     selectedOptions.includes(option)
-                      ? 'border-blue-400 bg-blue-400'
-                      : 'border-white/40'
+                      ? 'border-blue-500 bg-blue-500'
+                      : 'border-gray-300'
                   }`}>
                     {selectedOptions.includes(option) && (
                       <motion.div
@@ -161,7 +161,7 @@ export default function InlineQuestionInput({
                     )}
                   </div>
                 </div>
-                <span className="text-white/90 leading-relaxed">{option}</span>
+                <span className="text-gray-900 leading-relaxed">{option}</span>
               </motion.label>
             ))}
           </motion.div>
@@ -182,8 +182,8 @@ export default function InlineQuestionInput({
                 transition={{ delay: index * 0.1 }}
                 className={`flex items-start space-x-4 cursor-pointer p-4 rounded-xl border transition-all duration-300 ${
                   selectedOptions.includes(option)
-                    ? 'bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-400/50 shadow-lg'
-                    : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30'
+                    ? 'bg-gradient-to-r from-green-50 to-blue-50 border-green-300 shadow-lg'
+                    : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                 }`}
               >
                 <div className="relative flex-shrink-0 mt-1">
@@ -196,8 +196,8 @@ export default function InlineQuestionInput({
                   />
                   <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
                     selectedOptions.includes(option)
-                      ? 'border-green-400 bg-green-400'
-                      : 'border-white/40'
+                      ? 'border-green-500 bg-green-500'
+                      : 'border-gray-300'
                   }`}>
                     {selectedOptions.includes(option) && (
                       <motion.svg
@@ -212,14 +212,14 @@ export default function InlineQuestionInput({
                     )}
                   </div>
                 </div>
-                <span className="text-white/90 leading-relaxed">{option}</span>
+                <span className="text-gray-900 leading-relaxed">{option}</span>
               </motion.label>
             ))}
             {question.maxSelect && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-white/60 text-sm mt-3"
+                className="text-gray-600 text-sm mt-3"
               >
                 Select up to {question.maxSelect} options ({selectedOptions.length}/{question.maxSelect})
               </motion.p>

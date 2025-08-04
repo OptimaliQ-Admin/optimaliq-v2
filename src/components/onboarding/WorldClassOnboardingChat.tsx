@@ -42,10 +42,17 @@ export default function WorldClassOnboardingChat({
   const currentGroup = questionGroups[currentGroupIndex];
   const currentQuestion = currentGroup?.questions[currentQuestionIndex];
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to question when it changes
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    if (currentQuestion && !isTyping) {
+      setTimeout(() => {
+        const questionElement = document.querySelector('[data-question-id]');
+        if (questionElement) {
+          questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
+  }, [currentQuestionIndex, currentGroupIndex, isTyping]);
 
   // Initialize welcome message
   useEffect(() => {
@@ -312,6 +319,7 @@ export default function WorldClassOnboardingChat({
         {/* Current Question */}
         {currentQuestion && !isTyping && (
           <motion.div
+            data-question-id={currentQuestion.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -335,9 +343,29 @@ export default function WorldClassOnboardingChat({
             
             <InlineQuestionInput
               question={currentQuestion}
-              onAnswerChange={(answer) => handleAnswerSubmit(currentQuestion.id, answer)}
+              onAnswerChange={(answer) => {
+                setCurrentAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }));
+                setAllAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }));
+              }}
               currentAnswer={currentAnswers[currentQuestion.id]}
             />
+            
+            {/* Submit Button */}
+            <div className="flex justify-end mt-4">
+              <motion.button
+                onClick={() => handleAnswerSubmit(currentQuestion.id, currentAnswers[currentQuestion.id])}
+                disabled={!currentAnswers[currentQuestion.id]}
+                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                  currentAnswers[currentQuestion.id]
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+                whileHover={currentAnswers[currentQuestion.id] ? { scale: 1.05 } : {}}
+                whileTap={currentAnswers[currentQuestion.id] ? { scale: 0.95 } : {}}
+              >
+                Continue
+              </motion.button>
+            </div>
           </motion.div>
         )}
 
