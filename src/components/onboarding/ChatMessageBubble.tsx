@@ -24,29 +24,29 @@ export default function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}
+      className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-6`}
     >
-      <div className={`flex items-start gap-2 sm:gap-3 max-w-[85%] sm:max-w-[80%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+      <div className={`flex items-start gap-3 max-w-[85%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
         {/* Avatar */}
-        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold flex-shrink-0 ${
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 ${
           isAI 
-            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white' 
-            : 'bg-gradient-to-br from-gray-500 to-gray-600 text-white'
+            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg' 
+            : 'bg-gradient-to-br from-gray-600 to-gray-700 text-white shadow-lg'
         }`}>
           {isAI ? 'AI' : 'U'}
         </div>
 
         {/* Message Content */}
-        <div className={`rounded-2xl px-3 py-2 sm:px-4 sm:py-3 shadow-sm ${
+        <div className={`rounded-2xl px-6 py-4 shadow-xl backdrop-blur-sm ${
           isAI 
-            ? 'bg-white border border-gray-200 text-gray-800' 
+            ? 'bg-white/10 border border-white/20 text-white' 
             : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
         }`}>
           <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
             {message.content}
           </p>
-          <div className={`text-xs mt-1 sm:mt-2 ${
-            isAI ? 'text-gray-500' : 'text-blue-100'
+          <div className={`text-xs mt-3 ${
+            isAI ? 'text-white/60' : 'text-white/80'
           }`}>
             {message.timestamp.toLocaleTimeString([], { 
               hour: '2-digit', 

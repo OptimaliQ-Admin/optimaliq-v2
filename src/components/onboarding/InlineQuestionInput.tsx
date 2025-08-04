@@ -14,14 +14,12 @@ interface InlineQuestionInputProps {
   question: Question;
   onAnswerChange: (answer: any) => void;
   currentAnswer?: any;
-  questionNumber?: number;
 }
 
 export default function InlineQuestionInput({ 
   question, 
   onAnswerChange, 
-  currentAnswer,
-  questionNumber
+  currentAnswer
 }: InlineQuestionInputProps) {
   const [textInput, setTextInput] = useState(currentAnswer || '');
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
@@ -79,84 +77,164 @@ export default function InlineQuestionInput({
     switch (question.type) {
       case 'text_area':
         return (
-          <div className="space-y-2">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
             <textarea
               value={textInput}
               onChange={(e) => handleTextChange(e.target.value)}
-              placeholder="Type your answer here..."
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
-              rows={3}
+              placeholder="Share your thoughts..."
+              className="w-full p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none transition-all duration-300"
+              rows={4}
             />
-          </div>
+          </motion.div>
         );
 
       case 'multiple_choice':
         return (
-          <div className="space-y-3">
-            {question.options?.map((option) => (
-              <label key={option} className="flex items-start space-x-3 cursor-pointer p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                <input
-                  type="radio"
-                  name={question.id}
-                  value={option}
-                  checked={selectedOptions.includes(option)}
-                  onChange={() => handleOptionSelect(option)}
-                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 mt-0.5"
-                />
-                <span className="text-sm text-gray-700 leading-relaxed">{option}</span>
-              </label>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
+            {question.options?.map((option, index) => (
+              <motion.label
+                key={option}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className={`flex items-start space-x-4 cursor-pointer p-4 rounded-xl border transition-all duration-300 ${
+                  selectedOptions.includes(option)
+                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/50 shadow-lg'
+                    : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30'
+                }`}
+              >
+                <div className="relative flex-shrink-0 mt-1">
+                  <input
+                    type="radio"
+                    name={question.id}
+                    value={option}
+                    checked={selectedOptions.includes(option)}
+                    onChange={() => handleOptionSelect(option)}
+                    className="sr-only"
+                  />
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                    selectedOptions.includes(option)
+                      ? 'border-blue-400 bg-blue-400'
+                      : 'border-white/40'
+                  }`}>
+                    {selectedOptions.includes(option) && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="w-2 h-2 bg-white rounded-full"
+                      />
+                    )}
+                  </div>
+                </div>
+                <span className="text-white/90 leading-relaxed">{option}</span>
+              </motion.label>
             ))}
-          </div>
+          </motion.div>
         );
 
       case 'multi_select':
         return (
-          <div className="space-y-3">
-            {question.options?.map((option) => (
-              <label key={option} className="flex items-start space-x-3 cursor-pointer p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={selectedOptions.includes(option)}
-                  onChange={() => handleOptionSelect(option)}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5"
-                />
-                <span className="text-sm text-gray-700 leading-relaxed">{option}</span>
-              </label>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
+            {question.options?.map((option, index) => (
+              <motion.label
+                key={option}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className={`flex items-start space-x-4 cursor-pointer p-4 rounded-xl border transition-all duration-300 ${
+                  selectedOptions.includes(option)
+                    ? 'bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-400/50 shadow-lg'
+                    : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30'
+                }`}
+              >
+                <div className="relative flex-shrink-0 mt-1">
+                  <input
+                    type="checkbox"
+                    value={option}
+                    checked={selectedOptions.includes(option)}
+                    onChange={() => handleOptionSelect(option)}
+                    className="sr-only"
+                  />
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
+                    selectedOptions.includes(option)
+                      ? 'border-green-400 bg-green-400'
+                      : 'border-white/40'
+                  }`}>
+                    {selectedOptions.includes(option) && (
+                      <motion.svg
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </motion.svg>
+                    )}
+                  </div>
+                </div>
+                <span className="text-white/90 leading-relaxed">{option}</span>
+              </motion.label>
             ))}
             {question.maxSelect && (
-              <p className="text-xs text-gray-500 mt-2">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-white/60 text-sm mt-3"
+              >
                 Select up to {question.maxSelect} options ({selectedOptions.length}/{question.maxSelect})
-              </p>
+              </motion.p>
             )}
-          </div>
+          </motion.div>
         );
 
       case 'rank_order':
         return (
-          <div className="space-y-3">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
             {rankedItems.map((item, index) => (
               <div
                 key={item}
-                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-move hover:bg-gray-100 transition-colors"
+                className="flex items-center space-x-4 p-4 bg-white/5 rounded-xl border border-white/20 cursor-move hover:bg-white/10 transition-all duration-300"
                 draggable
-                onDragStart={(e) => e.dataTransfer.setData('text/plain', index.toString())}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
+                onDragStart={(e: React.DragEvent) => e.dataTransfer.setData('text/plain', index.toString())}
+                onDragOver={(e: React.DragEvent) => e.preventDefault()}
+                onDrop={(e: React.DragEvent) => {
                   e.preventDefault();
                   const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
                   handleRankChange(fromIndex, index);
                 }}
               >
-                <span className="text-sm font-medium text-gray-500 w-6">#{index + 1}</span>
-                <span className="text-sm text-gray-700 flex-1">{item}</span>
-                <div className="text-gray-400 text-lg">⋮⋮</div>
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                  {index + 1}
+                </div>
+                <span className="text-white/90 flex-1">{item}</span>
+                <div className="text-white/40 text-lg">⋮⋮</div>
               </div>
             ))}
-            <p className="text-xs text-gray-500 mt-2">
-              Drag to reorder items
-            </p>
-          </div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-white/60 text-sm mt-3"
+            >
+              Drag to reorder items by priority
+            </motion.p>
+          </motion.div>
         );
 
       default:
@@ -165,26 +243,8 @@ export default function InlineQuestionInput({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-3"
-    >
-      <div className="flex items-start space-x-3">
-        {questionNumber && (
-          <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
-            {questionNumber}
-          </div>
-        )}
-        <div className="flex-1">
-          <h3 className="text-sm font-medium text-gray-900 mb-3 leading-relaxed">
-            {question.prompt}
-            {question.required && <span className="text-red-500 ml-1">*</span>}
-          </h3>
-          
-          {renderInput()}
-        </div>
-      </div>
-    </motion.div>
+    <div className="space-y-4">
+      {renderInput()}
+    </div>
   );
 } 

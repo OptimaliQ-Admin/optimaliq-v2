@@ -31,12 +31,14 @@ export default function WorldClassOnboardingChat({
 }: WorldClassOnboardingChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentQuestionGroupIndex, setCurrentQuestionGroupIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentAnswers, setCurrentAnswers] = useState<Record<string, any>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [allAnswers, setAllAnswers] = useState<Record<string, any>>({});
+  const [showNextQuestion, setShowNextQuestion] = useState(false);
 
   // Question groups from our architecture
   const questionGroups: QuestionGroup[] = [
@@ -331,30 +333,44 @@ export default function WorldClassOnboardingChat({
     }));
   };
 
-  const handleGroupSubmit = async () => {
+  const handleNextQuestion = () => {
+    const currentGroup = questionGroups[currentQuestionGroupIndex];
+    const currentQuestion = currentGroup.questions[currentQuestionIndex];
+    
+    // Check if current question is answered
+    const isAnswered = currentAnswers[currentQuestion.id] && 
+      (typeof currentAnswers[currentQuestion.id] === 'string' ? currentAnswers[currentQuestion.id].trim() : currentAnswers[currentQuestion.id].length > 0);
+    
+    if (!isAnswered) {
+      return; // Don't proceed if question isn't answered
+    }
+
+    // Add user answer to messages
+    setMessages(prev => [...prev, {
+      id: `answer-${currentQuestion.id}`,
+      type: 'user',
+      content: currentAnswers[currentQuestion.id] || 'No answer provided',
+      timestamp: new Date()
+    }]);
+
+    // Check if this is the last question in the group
+    if (currentQuestionIndex === currentGroup.questions.length - 1) {
+      // Complete the group
+      handleGroupComplete();
+    } else {
+      // Move to next question in the same group
+      setShowNextQuestion(true);
+      setTimeout(() => {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setShowNextQuestion(false);
+      }, 300);
+    }
+  };
+
+  const handleGroupComplete = async () => {
     const currentGroup = questionGroups[currentQuestionGroupIndex];
     
-    // Check if all questions in the current group are answered
-    const allGroupQuestionsAnswered = currentGroup.questions.every(question => 
-      currentAnswers[question.id] && 
-      (typeof currentAnswers[question.id] === 'string' ? currentAnswers[question.id].trim() : currentAnswers[question.id].length > 0)
-    );
-    
-    if (!allGroupQuestionsAnswered) {
-      return; // Don't proceed if not all questions are answered
-    }
-    
     setIsSubmitting(true);
-    
-    // Add user answers to messages
-    const answerMessages = currentGroup.questions.map(question => ({
-      id: `answer-${question.id}`,
-      type: 'user' as const,
-      content: currentAnswers[question.id] || 'No answer provided',
-      timestamp: new Date()
-    }));
-
-    setMessages(prev => [...prev, ...answerMessages]);
     setAllAnswers(prev => ({ ...prev, ...currentAnswers }));
 
     // Save answers to database
@@ -419,8 +435,11 @@ export default function WorldClassOnboardingChat({
         onComplete(finalScores);
       } else {
         // Move to next question group
-        setCurrentQuestionGroupIndex(prev => prev + 1);
-        setCurrentAnswers({}); // Reset answers for next group
+        setTimeout(() => {
+          setCurrentQuestionGroupIndex(prev => prev + 1);
+          setCurrentQuestionIndex(0);
+          setCurrentAnswers({});
+        }, 1000);
       }
     } catch (error) {
       console.error('Error generating AI response:', error);
@@ -437,18 +456,28 @@ export default function WorldClassOnboardingChat({
   };
 
   const currentGroup = questionGroups[currentQuestionGroupIndex];
-  const allCurrentGroupAnswered = currentGroup?.questions.every(question => 
-    currentAnswers[question.id] && 
-    (typeof currentAnswers[question.id] === 'string' ? currentAnswers[question.id].trim() : currentAnswers[question.id].length > 0)
-  );
+  const currentQuestion = currentGroup?.questions[currentQuestionIndex];
+  const isCurrentQuestionAnswered = currentQuestion && currentAnswers[currentQuestion.id] && 
+    (typeof currentAnswers[currentQuestion.id] === 'string' ? currentAnswers[currentQuestion.id].trim() : currentAnswers[currentQuestion.id].length > 0);
+
+  const totalQuestions = questionGroups.reduce((total, group) => total + group.questions.length, 0);
+  const answeredQuestions = Object.keys(currentAnswers).length + 
+    (currentQuestionGroupIndex * questionGroups[0]?.questions.length || 0);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="h-full flex flex-col bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
       {/* Progress Indicator */}
-      <div className="p-4 md:p-6 border-b border-gray-200 bg-white shadow-sm">
+      <div className="relative z-10 p-6 border-b border-white/10 bg-white/5 backdrop-blur-sm">
         <ProgressIndicator
-          currentStep={currentQuestionGroupIndex + 1}
-          totalSteps={questionGroups.length}
+          currentStep={answeredQuestions + 1}
+          totalSteps={totalQuestions}
           currentSection={currentGroup?.name}
         />
       </div>
@@ -456,7 +485,7 @@ export default function WorldClassOnboardingChat({
       {/* Chat Container */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"
+        className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10"
       >
         <AnimatePresence>
           {messages.map((message) => (
@@ -465,67 +494,92 @@ export default function WorldClassOnboardingChat({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
               <ChatMessageBubble message={message} />
             </motion.div>
           ))}
         </AnimatePresence>
 
-        {/* Current Question Group */}
-        {currentGroup && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
-          >
-            <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-              <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-                {currentGroup.name}
-              </h2>
-              <p className="text-sm text-gray-600 mb-6">
-                {currentGroup.aiPromptIntro}
-              </p>
-              
-              <div className="space-y-6">
-                {currentGroup.questions.map((question, index) => (
-                  <div key={question.id} className="border-b border-gray-100 pb-6 last:border-b-0">
-                    <InlineQuestionInput
-                      question={question}
-                      onAnswerChange={(answer) => handleAnswerChange(question.id, answer)}
-                      currentAnswer={currentAnswers[question.id]}
-                      questionNumber={index + 1}
-                    />
+        {/* Current Question */}
+        {currentQuestion && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${currentQuestionGroupIndex}-${currentQuestionIndex}`}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -30, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="relative"
+            >
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 shadow-2xl">
+                {/* Section Header */}
+                <div className="mb-6">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                      {currentQuestionGroupIndex + 1}
+                    </div>
+                    <h2 className="text-xl font-semibold text-white">
+                      {currentGroup.name}
+                    </h2>
                   </div>
-                ))}
-              </div>
+                  <p className="text-white/70 text-sm">
+                    {currentGroup.aiPromptIntro}
+                  </p>
+                </div>
 
-              {/* Submit Button */}
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <button
-                  onClick={handleGroupSubmit}
-                  disabled={!allCurrentGroupAnswered || isSubmitting}
-                  className={`w-full md:w-auto px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                    allCurrentGroupAnswered && !isSubmitting
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Processing...
-                    </span>
-                  ) : (
-                    `Continue to ${currentQuestionGroupIndex < questionGroups.length - 1 ? 'Next Section' : 'Complete'}`
-                  )}
-                </button>
+                {/* Question */}
+                <div className="mb-8">
+                  <div className="flex items-start space-x-4 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-1">
+                      {currentQuestionIndex + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-medium text-white mb-4 leading-relaxed">
+                        {currentQuestion.prompt}
+                        {currentQuestion.required && <span className="text-red-400 ml-1">*</span>}
+                      </h3>
+                      
+                      <InlineQuestionInput
+                        question={currentQuestion}
+                        onAnswerChange={(answer) => handleAnswerChange(currentQuestion.id, answer)}
+                        currentAnswer={currentAnswers[currentQuestion.id]}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Next Button */}
+                <div className="flex justify-end">
+                  <motion.button
+                    onClick={handleNextQuestion}
+                    disabled={!isCurrentQuestionAnswered || isSubmitting}
+                    className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 ${
+                      isCurrentQuestionAnswered && !isSubmitting
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                        : 'bg-white/10 text-white/50 cursor-not-allowed'
+                    }`}
+                    whileHover={isCurrentQuestionAnswered && !isSubmitting ? { scale: 1.05 } : {}}
+                    whileTap={isCurrentQuestionAnswered && !isSubmitting ? { scale: 0.95 } : {}}
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                      </span>
+                    ) : (
+                      currentQuestionIndex === currentGroup.questions.length - 1 
+                        ? (currentQuestionGroupIndex === questionGroups.length - 1 ? 'Complete Assessment' : 'Complete Section')
+                        : 'Next Question'
+                    )}
+                  </motion.button>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </AnimatePresence>
         )}
 
         {/* Typing Indicator */}

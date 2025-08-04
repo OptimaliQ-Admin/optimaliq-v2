@@ -15,32 +15,32 @@ export default function ProgressIndicator({
   const progress = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0 shadow-lg">
             {currentStep}
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
-              Step {currentStep} of {totalSteps}
+            <h2 className="text-xl sm:text-2xl font-bold text-white truncate">
+              Question {currentStep} of {totalSteps}
             </h2>
             {currentSection && (
-              <p className="text-sm text-gray-600 truncate">{currentSection}</p>
+              <p className="text-white/70 text-sm truncate">{currentSection}</p>
             )}
           </div>
         </div>
-        <div className="text-sm text-gray-500 flex-shrink-0">
+        <div className="text-white/80 text-sm flex-shrink-0 font-medium">
           {Math.round(progress)}% complete
         </div>
       </div>
       
-      <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full bg-white/10 rounded-full h-3 backdrop-blur-sm">
         <motion.div
-          className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full shadow-lg"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
       </div>
     </div>
