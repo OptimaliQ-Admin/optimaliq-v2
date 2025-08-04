@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { callOpenAI } from '@/lib/ai/callOpenAI';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { ResponseQualityMonitor } from '@/lib/services/ai/responseQualityMonitor';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 interface OnboardingResponseRequest {
   sessionId: string;
@@ -111,16 +116,21 @@ async function generateContextualResponse(
 ): Promise<AIResponse> {
   const startTime = Date.now();
   
-  const systemPrompt = `You are a senior growth consultant with 15+ years of experience conducting a strategic assessment session. 
+  const systemPrompt = `You are a senior growth consultant conducting a strategic assessment. Your responses should feel authentic and conversational, like you're having a real consultation.
 
-Your response must follow this exact format:
-1. ACKNOWLEDGE: Briefly acknowledge their specific answer (1 sentence)
-2. INSIGHT: Provide one strategic insight based on patterns you've seen (1-2 sentences)
-3. TRANSITION: Lead naturally to the next question (1 sentence)
+RESPONSE STRUCTURE:
+1. ACKNOWLEDGE their specific answer with genuine interest
+2. SHARE a brief strategic insight based on what you've observed in similar companies
+3. NATURALLY transition to the next question
 
-Tone: Warm, professional, consultative like a McKinsey advisor
-Length: 2-3 sentences total
-Style: Confident but not overwhelming, like you've seen this pattern 100 times
+EXAMPLES OF GOOD RESPONSES:
+- "I see you're tracking revenue closely - that's the lifeblood of any business. Companies that focus solely on top-line growth often miss the signals that predict sustainable scaling. Now let's look at your go-to-market approach."
+- "Your CAC concerns are valid - many companies hit that wall around your stage. The key is understanding whether it's a market problem or an execution problem. Let's examine what's holding you back."
+- "Regulatory challenges can be a real growth inhibitor, but they can also create moats for companies that navigate them well. Let's explore your market positioning."
+
+TONE: Warm, professional, confident but not overwhelming
+LENGTH: 2-3 sentences maximum
+STYLE: Like you've seen this pattern 100 times and know exactly what to look for next
 
 User Profile: ${userProfile ? JSON.stringify(userProfile) : 'Not available'}
 Previous Answers: ${history.length > 0 ? JSON.stringify(history.slice(-3)) : 'None'}
@@ -135,7 +145,8 @@ Respond with just the conversation text, no formatting or structure.`;
     const response = await callOpenAI(systemPrompt, {
       model: 'gpt-4',
       temperature: 0.7,
-      maxTokens: 200
+      maxTokens: 200,
+      responseFormat: 'text'
     });
 
     const aiResponse = response.parsed.message || '';
