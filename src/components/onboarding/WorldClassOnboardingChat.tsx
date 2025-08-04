@@ -94,7 +94,7 @@ export default function WorldClassOnboardingChat({
           sessionId,
           currentSection: currentGroup.id,
           currentQuestion: currentQuestion.id,
-          userAnswer: currentAnswers[currentQuestion.id],
+          userAnswer: answer,
           conversationHistory: messages.map(msg => ({
             type: msg.type,
             content: msg.content,

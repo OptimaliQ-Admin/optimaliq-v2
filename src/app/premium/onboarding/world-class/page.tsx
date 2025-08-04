@@ -13,6 +13,7 @@ export default function WorldClassOnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const [scores, setScores] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     initializeOnboarding();
@@ -28,6 +29,15 @@ export default function WorldClassOnboardingPage() {
         router.push('/subscribe/login');
         return;
       }
+
+      // Get user profile
+      const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      setUserProfile(profile || user);
 
       // Create new onboarding session
       const { data: sessionData, error: sessionError } = await supabase
@@ -208,6 +218,7 @@ export default function WorldClassOnboardingPage() {
     <div className="h-screen">
       <WorldClassOnboardingChat
         sessionId={sessionId}
+        userProfile={userProfile}
         onComplete={handleComplete}
       />
     </div>
