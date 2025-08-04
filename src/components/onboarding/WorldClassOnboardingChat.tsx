@@ -190,6 +190,23 @@ export default function WorldClassOnboardingChat({
     return Math.min((completedQuestions / totalQuestions) * 100, 100);
   };
 
+  const getUserInitials = () => {
+    if (!userProfile) return 'U';
+    
+    const firstName = userProfile.first_name || userProfile.name?.split(' ')[0] || '';
+    const lastName = userProfile.last_name || userProfile.name?.split(' ')[1] || '';
+    
+    if (firstName && lastName) {
+      return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    } else if (firstName) {
+      return firstName.charAt(0).toUpperCase();
+    } else if (userProfile.email) {
+      return userProfile.email.charAt(0).toUpperCase();
+    }
+    
+    return 'U';
+  };
+
   if (isComplete) {
     return (
       <motion.div
@@ -283,7 +300,7 @@ export default function WorldClassOnboardingChat({
                     {message.type === 'ai' ? (
                       <SparklesIcon className="w-4 h-4 text-white" />
                     ) : (
-                      <span className="text-white text-sm font-medium">U</span>
+                      <span className="text-white text-sm font-medium">{getUserInitials()}</span>
                     )}
                   </div>
 
