@@ -140,6 +140,8 @@ export default function WorldClassOnboardingChat({
         // Move to next question in the same group
         setTimeout(() => {
           setCurrentQuestionIndex(prev => prev + 1);
+          // Clear the current answer for the next question
+          setCurrentAnswers({});
         }, 1000);
       }
     } catch (error) {
@@ -157,6 +159,8 @@ export default function WorldClassOnboardingChat({
       } else {
         setTimeout(() => {
           setCurrentQuestionIndex(prev => prev + 1);
+          // Clear the current answer for the next question
+          setCurrentAnswers({});
         }, 1000);
       }
     } finally {
@@ -164,24 +168,25 @@ export default function WorldClassOnboardingChat({
     }
   };
 
-  const handleGroupComplete = async () => {
+    const handleGroupComplete = async () => {
     if (currentGroupIndex < questionGroups.length - 1) {
       // Move to next group
-      setTimeout(() => {
-        setCurrentGroupIndex(prev => prev + 1);
-        setCurrentQuestionIndex(0);
-        setCurrentAnswers({});
-      }, 1500);
-         } else {
-       // Complete the assessment
-       setIsComplete(true);
-       const scores = await generateDashboardScores({
-         sessionId,
-         allResponses: allAnswers,
-         userProfile
-       });
-       onComplete(allAnswers, scores);
-     }
+              setTimeout(() => {
+          setCurrentGroupIndex(prev => prev + 1);
+          setCurrentQuestionIndex(0);
+          // Clear current answers when moving to new group
+          setCurrentAnswers({});
+        }, 1500);
+    } else {
+      // Complete the assessment
+      setIsComplete(true);
+      const scores = await generateDashboardScores({
+        sessionId,
+        allResponses: allAnswers,
+        userProfile
+      });
+      onComplete(allAnswers, scores);
+    }
   };
 
   const getProgressPercentage = () => {
