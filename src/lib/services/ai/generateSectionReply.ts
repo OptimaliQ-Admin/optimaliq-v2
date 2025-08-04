@@ -24,48 +24,22 @@ User Profile:
 - Revenue Range: ${userProfile.revenue_range || 'Not specified'}
 ` : '';
 
-    // Build response analysis based on section
-    let responseAnalysis = '';
-    const strategicInsight = '';
+    // Generate specific response based on section and responses
+    const specificResponse = generateSpecificResponse(sectionId, responses, userContext);
 
-    switch (sectionId) {
-      case 'goals':
-        responseAnalysis = analyzeGoalsSection(responses);
-        break;
-      case 'positioning':
-        responseAnalysis = analyzePositioningSection(responses);
-        break;
-      case 'operations':
-        responseAnalysis = analyzeOperationsSection(responses);
-        break;
-      case 'growth_stack':
-        responseAnalysis = analyzeGrowthStackSection(responses);
-        break;
-      case 'clarity':
-        responseAnalysis = analyzeClaritySection(responses);
-        break;
-      case 'benchmarks':
-        responseAnalysis = analyzeBenchmarksSection(responses);
-        break;
-      case 'final':
-        responseAnalysis = analyzeFinalSection(responses);
-        break;
-      case 'business_overview':
-        responseAnalysis = analyzeBusinessOverviewSection(responses);
-        break;
-      default:
-        responseAnalysis = 'Analyzing responses...';
+    // If we have a specific response, use it; otherwise fall back to AI generation
+    if (specificResponse) {
+      return specificResponse;
     }
 
+    // Fallback to AI generation for sections not yet covered
     const prompt = `You are a senior growth consultant with 15+ years of experience working with hundreds of companies. You're conducting a strategic assessment session with a business leader.
 
 ${userContext}
 
 The user just completed the "${sectionName}" section. Here's what they shared:
 
-${responseAnalysis}
-
-${strategicInsight}
+${JSON.stringify(responses, null, 2)}
 
 Based on their responses, provide a strategic, consultative 2-3 sentence response that:
 1. Acknowledges their situation with nuance and strategic insight
@@ -90,447 +64,322 @@ Response:`;
   }
 }
 
-function analyzeGoalsSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateSpecificResponse(sectionId: string, responses: Record<string, any>, userContext: string): string {
+  switch (sectionId) {
+    case 'goals':
+      return generateGoalsResponse(responses);
+    case 'positioning':
+      return generatePositioningResponse(responses);
+    case 'operations':
+      return generateOperationsResponse(responses);
+    case 'growth_stack':
+      return generateGrowthStackResponse(responses);
+    case 'clarity':
+      return generateClarityResponse(responses);
+    case 'benchmarks':
+      return generateBenchmarksResponse(responses);
+    case 'final':
+      return generateFinalResponse(responses);
+    case 'business_overview':
+      return generateBusinessOverviewResponse(responses);
+    default:
+      return '';
+  }
+}
 
-  // Analyze growth metrics
+function generateGoalsResponse(responses: Record<string, any>): string {
+  let response = '';
+
+  // Question 1: Growth Metrics
   if (responses.growth_metrics) {
     const metrics = Array.isArray(responses.growth_metrics) ? responses.growth_metrics : [responses.growth_metrics];
-    analysis += `Growth Metrics: ${metrics.join(', ')}\n`;
     
     if (metrics.includes('Revenue')) {
-      analysis += 'Focus: Revenue tracking - shows top-line growth focus\n';
-    }
-    if (metrics.includes('Profit Margin')) {
-      analysis += 'Focus: Profitability tracking - shows mature business thinking\n';
-    }
-    if (metrics.includes('Customer Lifetime Value (LTV)')) {
-      analysis += 'Focus: LTV tracking - shows customer-centric approach\n';
-    }
-    if (metrics.includes('Customer Acquisition Cost (CAC)')) {
-      analysis += 'Focus: CAC tracking - shows unit economics awareness\n';
-    }
-    if (metrics.includes('Customer Churn Rate')) {
-      analysis += 'Focus: Churn tracking - shows retention focus\n';
-    }
-    if (metrics.includes('Website or App Traffic')) {
-      analysis += 'Focus: Traffic tracking - shows awareness of leading indicators\n';
+      response += "I see you're tracking revenue closely—that's the lifeblood of any business. What I'm curious about is whether you're also monitoring the quality of that revenue. Companies that focus solely on top-line growth often miss the signals that predict sustainable scaling. ";
+    } else if (metrics.includes('Profit Margin')) {
+      response += "Profit margin focus shows you understand the importance of unit economics—that's sophisticated thinking. Many companies chase growth at the expense of profitability and end up in a dangerous cycle. ";
+    } else if (metrics.includes('Customer Lifetime Value (LTV)') || metrics.includes('Customer Acquisition Cost (CAC)')) {
+      response += "Excellent—you're tracking the fundamental unit economics. LTV/CAC ratio is often the best predictor of long-term success. Companies with strong LTV/CAC ratios can afford to be more aggressive with growth investments. ";
+    } else if (metrics.includes('Customer Churn Rate') || metrics.includes('Customer Retention Rate')) {
+      response += "Smart focus on retention—it's often more profitable to keep existing customers than acquire new ones. Companies that crack the retention code typically have much more predictable growth. ";
+    } else if (metrics.includes('Conversion Rate')) {
+      response += "Conversion rate optimization is a powerful lever. The best conversion strategies often come from understanding the customer journey deeply. ";
+    } else if (metrics.includes('Website or App Traffic') || metrics.includes('Monthly Active Users (MAU)')) {
+      response += "Traffic and engagement metrics are great leading indicators. But I'm curious about the quality of that traffic—are you seeing the right people engaging, or just more volume? ";
+    } else if (metrics.includes('Net Promoter Score (NPS)')) {
+      response += "NPS focus shows you understand the importance of customer satisfaction. Companies with high NPS often have organic growth advantages through word-of-mouth. ";
+    } else if (metrics.length > 1) {
+      response += "You're tracking a well-rounded set of metrics—that's a sign of mature business thinking. How do you prioritize these metrics when they conflict? ";
     }
   }
 
-  // Analyze GTM strategy
+  // Question 2: Go-To-Market Strategy
   if (responses.gtm_strategy) {
-    analysis += `GTM Strategy: ${responses.gtm_strategy}\n`;
-    
     const strategy = responses.gtm_strategy.toLowerCase();
-    if (strategy.includes('content') || strategy.includes('seo')) {
-      analysis += 'Strategy Type: Content-driven growth\n';
-    } else if (strategy.includes('paid') || strategy.includes('advertising')) {
-      analysis += 'Strategy Type: Paid acquisition focus\n';
+    
+    if (strategy.includes('content') || strategy.includes('seo') || strategy.includes('organic')) {
+      response += "Content-driven growth is excellent for building sustainable competitive advantages. The best content strategies often take 6-12 months to show real ROI. ";
+    } else if (strategy.includes('paid') || strategy.includes('advertising') || strategy.includes('ads')) {
+      response += "Paid channels can drive immediate results, but they require constant optimization. Companies that succeed with paid often have strong organic foundations as well. ";
     } else if (strategy.includes('sales') || strategy.includes('outbound')) {
-      analysis += 'Strategy Type: Direct sales approach\n';
-    } else if (strategy.includes('partnership') || strategy.includes('affiliate')) {
-      analysis += 'Strategy Type: Partnership-driven growth\n';
+      response += "Direct sales approaches can be highly effective for B2B or high-value products. The best sales strategies often combine outbound with strong inbound lead generation. ";
+    } else if (strategy.includes('partnership') || strategy.includes('partner')) {
+      response += "Partnerships can be powerful growth multipliers. The most successful partnership strategies often start with a few key relationships and expand systematically. ";
+    } else if (strategy.includes('community') || strategy.includes('referral')) {
+      response += "Community-driven growth is incredibly powerful when done right. Companies that build strong communities often have much lower customer acquisition costs. ";
+    } else {
+      response += "Your go-to-market approach shows strategic thinking. ";
     }
   }
 
-  // Analyze friction points
+  // Question 3: Friction Points
   if (responses.friction_points) {
     const frictionPoints = Array.isArray(responses.friction_points) ? responses.friction_points : [responses.friction_points];
-    analysis += `Friction Points: ${frictionPoints.join(', ')}\n`;
     
     if (frictionPoints.includes('Lack of funding')) {
-      analysis += 'Challenge: Capital constraints\n';
-    }
-    if (frictionPoints.includes('Leadership misalignment')) {
-      analysis += 'Challenge: Team alignment issues\n';
-    }
-    if (frictionPoints.includes('Hiring or retention challenges')) {
-      analysis += 'Challenge: Talent acquisition/retention\n';
-    }
-    if (frictionPoints.includes('Operational inefficiencies')) {
-      analysis += 'Challenge: Process optimization needed\n';
-    }
-    if (frictionPoints.includes('Underperforming marketing')) {
-      analysis += 'Challenge: Marketing effectiveness\n';
-    }
-    if (frictionPoints.includes('High customer acquisition cost')) {
-      analysis += 'Challenge: CAC optimization needed\n';
-    }
-    if (frictionPoints.includes('Weak customer retention')) {
-      analysis += 'Challenge: Customer success focus needed\n';
+      response += "Funding constraints can actually force better business discipline. Many companies that bootstrap successfully develop stronger unit economics and more sustainable growth models. ";
+    } else if (frictionPoints.includes('Leadership misalignment')) {
+      response += "Leadership alignment issues are common in growing companies. Companies that solve alignment issues early often avoid much bigger problems later. ";
+    } else if (frictionPoints.includes('Hiring or retention challenges')) {
+      response += "Talent challenges are universal in today's market. Companies that solve talent issues often focus on culture, growth opportunities, and clear career paths. ";
+    } else if (frictionPoints.includes('Operational inefficiencies')) {
+      response += "Operational bottlenecks often indicate growth—systems that worked at one scale break at the next. Process optimization can often unlock significant growth capacity. ";
+    } else if (frictionPoints.includes('Underperforming marketing')) {
+      response += "Marketing underperformance often stems from either targeting issues or conversion problems. The best marketing optimizations often start with customer research and journey mapping. ";
+    } else if (frictionPoints.includes('High customer acquisition cost')) {
+      response += "High CAC is a common challenge in competitive markets. Companies that solve CAC issues often focus on improving LTV first, then optimizing acquisition. ";
+    } else if (frictionPoints.includes('Weak customer retention')) {
+      response += "Retention issues often indicate product-market fit or customer success problems. The best retention strategies often start with understanding why customers leave. ";
+    } else if (frictionPoints.includes('Tech stack limitations')) {
+      response += "Tech limitations can seriously constrain growth. Companies that solve tech issues often prioritize integration and automation over adding more tools. ";
+    } else if (frictionPoints.includes('Undefined brand positioning')) {
+      response += "Unclear positioning makes every marketing dollar less effective. The best positioning strategies often start with customer research and competitive analysis. ";
     }
   }
 
-  return analysis;
+  return response || "Thank you for sharing your goals and priorities. This gives me a clear picture of where you're focused and what's holding you back. ";
 }
 
-function analyzePositioningSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generatePositioningResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze differentiator
+  // Question 1: Differentiator
   if (responses.differentiator) {
-    analysis += `Competitive Advantage: ${responses.differentiator}\n`;
+    const differentiator = responses.differentiator.toLowerCase();
     
-    // Analyze the type of differentiator
-    const diff = responses.differentiator.toLowerCase();
-    if (diff.includes('technology') || diff.includes('tech') || diff.includes('platform')) {
-      analysis += 'Differentiator Type: Technology/Product-focused\n';
-    } else if (diff.includes('service') || diff.includes('support') || diff.includes('customer')) {
-      analysis += 'Differentiator Type: Service/Customer-focused\n';
-    } else if (diff.includes('process') || diff.includes('efficiency') || diff.includes('operational')) {
-      analysis += 'Differentiator Type: Process/Operational\n';
-    } else if (diff.includes('team') || diff.includes('expertise') || diff.includes('experience')) {
-      analysis += 'Differentiator Type: Team/Expertise\n';
-    } else if (diff.includes('partnership') || diff.includes('access') || diff.includes('network')) {
-      analysis += 'Differentiator Type: Market Access/Partnerships\n';
+    if (differentiator.includes('technology') || differentiator.includes('tech') || differentiator.includes('platform')) {
+      response += "Technology differentiation can be incredibly powerful when executed well. The key is ensuring your tech advantage translates into customer value that's hard to replicate. ";
+    } else if (differentiator.includes('data') || differentiator.includes('analytics') || differentiator.includes('insights')) {
+      response += "Data-driven differentiation is becoming increasingly valuable. Companies that can turn data into actionable insights often have significant competitive advantages. ";
+    } else if (differentiator.includes('service') || differentiator.includes('support') || differentiator.includes('experience')) {
+      response += "Service differentiation is often underrated but incredibly effective. Companies that excel at customer experience often have much higher retention and referral rates. ";
+    } else if (differentiator.includes('team') || differentiator.includes('people') || differentiator.includes('expertise')) {
+      response += "Team and expertise differentiation is often the most sustainable competitive advantage. The right people can adapt to changing market conditions better than any technology. ";
+    } else if (differentiator.includes('process') || differentiator.includes('methodology') || differentiator.includes('approach')) {
+      response += "Process differentiation can create significant efficiency advantages. Companies that optimize their core processes often have better margins and faster execution. ";
+    } else {
+      response += "Your differentiation strategy shows clear thinking about competitive advantages. ";
     }
   }
 
-  // Analyze customer perception
-  if (responses.customer_perception) {
-    analysis += `Customer Perception: ${responses.customer_perception}\n`;
+  // Question 2: Competitive Landscape
+  if (responses.competitive_landscape) {
+    const landscape = responses.competitive_landscape.toLowerCase();
     
-    const perception = responses.customer_perception.toLowerCase();
-    if (perception.includes('responsive') || perception.includes('fast')) {
-      analysis += 'Perception Type: Service quality focus\n';
-    } else if (perception.includes('reliable') || perception.includes('trust')) {
-      analysis += 'Perception Type: Trust and reliability\n';
-    } else if (perception.includes('innovative') || perception.includes('cutting-edge')) {
-      analysis += 'Perception Type: Innovation focus\n';
-    } else if (perception.includes('affordable') || perception.includes('value')) {
-      analysis += 'Perception Type: Value proposition\n';
+    if (landscape.includes('crowded') || landscape.includes('saturated') || landscape.includes('many competitors')) {
+      response += "A crowded market can actually be a good sign—it means there's real demand. The key is finding your unique positioning within that market. ";
+    } else if (landscape.includes('emerging') || landscape.includes('new') || landscape.includes('growing')) {
+      response += "Emerging markets offer great opportunities but also require careful navigation. Being early can give you significant advantages if you execute well. ";
+    } else if (landscape.includes('consolidated') || landscape.includes('few players') || landscape.includes('oligopoly')) {
+      response += "Consolidated markets often have high barriers to entry but also significant opportunities for disruption. ";
+    } else {
+      response += "Understanding your competitive landscape is crucial for effective positioning. ";
     }
   }
 
-  // Analyze strategic decision making
-  if (responses.strategic_decision_making) {
-    analysis += `Decision Making: ${responses.strategic_decision_making}\n`;
-    
-    const decisionStyle = responses.strategic_decision_making.toLowerCase();
-    if (decisionStyle.includes('data') || decisionStyle.includes('analytics')) {
-      analysis += 'Decision Style: Data-driven approach\n';
-    } else if (decisionStyle.includes('gut') || decisionStyle.includes('experience')) {
-      analysis += 'Decision Style: Experience-based intuition\n';
-    } else if (decisionStyle.includes('collective') || decisionStyle.includes('alignment')) {
-      analysis += 'Decision Style: Collaborative consensus\n';
-    } else if (decisionStyle.includes('top-down') || decisionStyle.includes('executive')) {
-      analysis += 'Decision Style: Executive leadership\n';
-    }
-  }
-
-  return analysis;
+  return response || "Your market positioning strategy shows thoughtful consideration of your competitive advantages. ";
 }
 
-function analyzeOperationsSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateOperationsResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze tech stack overview
-  if (responses.tech_stack_overview) {
-    const techTools = Array.isArray(responses.tech_stack_overview) ? responses.tech_stack_overview : [responses.tech_stack_overview];
-    analysis += `Tech Stack: ${techTools.join(', ')}\n`;
+  // Question 1: Team Structure
+  if (responses.team_structure) {
+    const structure = responses.team_structure.toLowerCase();
     
-    if (techTools.includes('Salesforce') || techTools.includes('HubSpot')) {
-      analysis += 'Tech Focus: CRM and sales automation\n';
-    }
-    if (techTools.includes('Mailchimp') || techTools.includes('ConvertKit')) {
-      analysis += 'Tech Focus: Email marketing automation\n';
-    }
-    if (techTools.includes('Google Analytics') || techTools.includes('Mixpanel')) {
-      analysis += 'Tech Focus: Analytics and data tracking\n';
-    }
-    if (techTools.includes('Asana') || techTools.includes('Trello')) {
-      analysis += 'Tech Focus: Project management\n';
+    if (structure.includes('lean') || structure.includes('small') || structure.includes('startup')) {
+      response += "Lean team structures can be incredibly efficient and allow for fast decision-making. Many successful companies maintain lean operations even as they scale. ";
+    } else if (structure.includes('department') || structure.includes('functional') || structure.includes('organized')) {
+      response += "Functional organization shows you're thinking about scalability and specialization. The key is ensuring departments work together effectively. ";
+    } else if (structure.includes('cross-functional') || structure.includes('agile') || structure.includes('squad')) {
+      response += "Cross-functional teams can drive innovation and faster execution. Companies that master cross-functional collaboration often have significant competitive advantages. ";
+    } else {
+      response += "Your team structure reflects your operational priorities and growth stage. ";
     }
   }
 
-  // Analyze business priorities ranking
-  if (responses.business_priorities) {
-    const priorities = Array.isArray(responses.business_priorities) ? responses.business_priorities : [responses.business_priorities];
-    analysis += `Business Priorities: ${priorities.join(' > ')}\n`;
+  // Question 2: Decision Making
+  if (responses.decision_making) {
+    const decisionMaking = responses.decision_making.toLowerCase();
     
-    if (priorities[0] === 'Growth') {
-      analysis += 'Priority Focus: Growth-driven strategy\n';
-    } else if (priorities[0] === 'Profitability') {
-      analysis += 'Priority Focus: Profitability optimization\n';
-    } else if (priorities[0] === 'Efficiency') {
-      analysis += 'Priority Focus: Operational efficiency\n';
-    } else if (priorities[0] === 'Innovation') {
-      analysis += 'Priority Focus: Innovation and R&D\n';
+    if (decisionMaking.includes('data') || decisionMaking.includes('analytics') || decisionMaking.includes('metrics')) {
+      response += "Data-driven decision making is essential for scaling effectively. Companies that build strong data cultures often make better long-term decisions. ";
+    } else if (decisionMaking.includes('consensus') || decisionMaking.includes('collaborative') || decisionMaking.includes('team')) {
+      response += "Collaborative decision making can lead to better buy-in and execution. The key is balancing collaboration with speed. ";
+    } else if (decisionMaking.includes('hierarchical') || decisionMaking.includes('top-down') || decisionMaking.includes('leadership')) {
+      response += "Clear decision-making authority can speed up execution. The best hierarchical structures maintain accountability while empowering teams. ";
+    } else {
+      response += "Your decision-making approach reflects your company culture and operational needs. ";
     }
   }
 
-  // Analyze process maturity
-  if (responses.process_maturity) {
-    analysis += `Process Maturity: ${responses.process_maturity}\n`;
-    
-    if (responses.process_maturity === 'Everything is ad hoc') {
-      analysis += 'Maturity Level: Early-stage, reactive\n';
-    } else if (responses.process_maturity === 'Some structure, but mostly reactive') {
-      analysis += 'Maturity Level: Developing structure\n';
-    } else if (responses.process_maturity === 'We have defined processes, but they\'re not consistently followed') {
-      analysis += 'Maturity Level: Defined but inconsistent\n';
-    } else if (responses.process_maturity === 'Most departments follow documented processes') {
-      analysis += 'Maturity Level: Structured approach\n';
-    } else if (responses.process_maturity === 'Processes are standardized, automated, and continuously optimized') {
-      analysis += 'Maturity Level: Advanced optimization\n';
-    }
-  }
-
-  return analysis;
+  return response || "Your operational approach shows you're thinking systematically about scaling your business. ";
 }
 
-function analyzeGrowthStackSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateGrowthStackResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze acquisition channels
-  if (responses.acquisition_channels) {
-    const channels = Array.isArray(responses.acquisition_channels) ? responses.acquisition_channels : [responses.acquisition_channels];
-    analysis += `Acquisition Channels: ${channels.join(', ')}\n`;
+  // Question 1: Tech Stack
+  if (responses.tech_stack) {
+    const techStack = Array.isArray(responses.tech_stack) ? responses.tech_stack : [responses.tech_stack];
     
-    if (channels.includes('Organic Search / SEO')) {
-      analysis += 'Channel Strategy: Organic growth focus\n';
-    }
-    if (channels.includes('Paid Media (Google, Meta, TikTok, etc.)')) {
-      analysis += 'Channel Strategy: Paid advertising investment\n';
-    }
-    if (channels.includes('Email Marketing')) {
-      analysis += 'Channel Strategy: Direct marketing approach\n';
-    }
-    if (channels.includes('Outbound Sales')) {
-      analysis += 'Channel Strategy: Direct sales focus\n';
-    }
-    if (channels.includes('Partnerships / Affiliates')) {
-      analysis += 'Channel Strategy: Partnership-driven growth\n';
-    }
-    if (channels.length > 3) {
-      analysis += 'Channel Strategy: Multi-channel approach\n';
+    if (techStack.length > 5) {
+      response += "You have a comprehensive tech stack—that shows you're investing in tools. The key is ensuring these tools work together effectively rather than creating complexity. ";
+    } else if (techStack.length <= 3) {
+      response += "A focused tech stack can be incredibly powerful. Many successful companies do more with fewer, better-integrated tools. ";
+    } else {
+      response += "Your tech stack reflects your current growth priorities and operational needs. ";
     }
   }
 
-  // Analyze tech maturity
-  if (responses.tech_maturity) {
-    analysis += `Tech Maturity: ${responses.tech_maturity}\n`;
+  // Question 2: Automation Level
+  if (responses.automation_level) {
+    const automation = responses.automation_level.toLowerCase();
     
-    if (responses.tech_maturity === 'Everything is integrated and works seamlessly') {
-      analysis += 'Integration Level: Fully integrated\n';
-    } else if (responses.tech_maturity === 'Some systems talk to each other, others don\'t') {
-      analysis += 'Integration Level: Partially integrated\n';
-    } else if (responses.tech_maturity === 'Tools are siloed or require manual workarounds') {
-      analysis += 'Integration Level: Siloed systems\n';
-    } else if (responses.tech_maturity === 'We\'re still selecting or onboarding core platforms') {
-      analysis += 'Integration Level: Building foundation\n';
+    if (automation.includes('high') || automation.includes('advanced') || automation.includes('automated')) {
+      response += "High automation levels can create significant operational advantages. Companies that automate effectively often have better margins and faster execution. ";
+    } else if (automation.includes('medium') || automation.includes('partial') || automation.includes('some')) {
+      response += "Balanced automation approaches often work well for growing companies. The key is automating the right processes at the right time. ";
+    } else if (automation.includes('low') || automation.includes('manual') || automation.includes('basic')) {
+      response += "Manual processes can work well in early stages, but automation becomes increasingly important as you scale. ";
+    } else {
+      response += "Your automation approach reflects your current operational priorities. ";
     }
   }
 
-  // Analyze retention strategy
-  if (responses.retention_strategy) {
-    analysis += `Retention Strategy: ${responses.retention_strategy}\n`;
-    
-    const strategy = responses.retention_strategy.toLowerCase();
-    if (strategy.includes('email') || strategy.includes('drip')) {
-      analysis += 'Retention Focus: Email lifecycle marketing\n';
-    } else if (strategy.includes('customer success') || strategy.includes('support')) {
-      analysis += 'Retention Focus: Customer success approach\n';
-    } else if (strategy.includes('loyalty') || strategy.includes('program')) {
-      analysis += 'Retention Focus: Loyalty programs\n';
-    } else if (strategy.includes('product') || strategy.includes('feature')) {
-      analysis += 'Retention Focus: Product-driven retention\n';
-    } else if (strategy.includes('community') || strategy.includes('network')) {
-      analysis += 'Retention Focus: Community building\n';
-    }
-  }
-
-  return analysis;
+  return response || "Your growth stack shows you're thinking about the tools and systems needed to scale effectively. ";
 }
 
-function analyzeClaritySection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateClarityResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze decision bottlenecks
-  if (responses.decision_bottlenecks) {
-    analysis += `Decision Bottlenecks: ${responses.decision_bottlenecks}\n`;
+  // Question 1: Vision Clarity
+  if (responses.vision_clarity) {
+    const clarity = responses.vision_clarity.toLowerCase();
     
-    const bottlenecks = responses.decision_bottlenecks.toLowerCase();
-    if (bottlenecks.includes('hiring') || bottlenecks.includes('talent')) {
-      analysis += 'Bottleneck Type: Talent acquisition\n';
-    } else if (bottlenecks.includes('prioritization') || bottlenecks.includes('focus')) {
-      analysis += 'Bottleneck Type: Strategic prioritization\n';
-    } else if (bottlenecks.includes('marketing') || bottlenecks.includes('spend')) {
-      analysis += 'Bottleneck Type: Marketing investment decisions\n';
-    } else if (bottlenecks.includes('pricing') || bottlenecks.includes('pricing')) {
-      analysis += 'Bottleneck Type: Pricing strategy\n';
-    } else if (bottlenecks.includes('strategic') || bottlenecks.includes('direction')) {
-      analysis += 'Bottleneck Type: Strategic direction\n';
+    if (clarity.includes('very clear') || clarity.includes('crystal clear') || clarity.includes('well defined')) {
+      response += "Having a clear vision is incredibly powerful for alignment and execution. Companies with clear visions often make better strategic decisions. ";
+    } else if (clarity.includes('somewhat clear') || clarity.includes('evolving') || clarity.includes('developing')) {
+      response += "Vision clarity often evolves as companies grow and learn. The key is ensuring your team understands the current direction. ";
+    } else if (clarity.includes('unclear') || clarity.includes('fuzzy') || clarity.includes('confusing')) {
+      response += "Vision clarity issues are common in growing companies. Many successful companies go through periods of vision refinement. ";
+    } else {
+      response += "Your vision clarity reflects your current stage of development. ";
     }
   }
 
-  // Analyze team alignment
-  if (responses.team_alignment) {
-    analysis += `Team Alignment: ${responses.team_alignment}\n`;
+  // Question 2: Communication
+  if (responses.communication) {
+    const communication = responses.communication.toLowerCase();
     
-    if (responses.team_alignment === 'Fully aligned and collaborative') {
-      analysis += 'Alignment Status: Strong team cohesion\n';
-    } else if (responses.team_alignment === 'Mostly aligned, occasional friction') {
-      analysis += 'Alignment Status: Moderate alignment\n';
-    } else if (responses.team_alignment === 'Some misalignment across departments') {
-      analysis += 'Alignment Status: Departmental misalignment\n';
-    } else if (responses.team_alignment === 'No clear alignment — teams are working in silos') {
-      analysis += 'Alignment Status: Siloed teams\n';
+    if (communication.includes('excellent') || communication.includes('strong') || communication.includes('effective')) {
+      response += "Strong communication is essential for execution. Companies that communicate well often have better alignment and faster execution. ";
+    } else if (communication.includes('good') || communication.includes('adequate') || communication.includes('improving')) {
+      response += "Communication is often an area where companies can make significant improvements. The best communication strategies are consistent and transparent. ";
+    } else if (communication.includes('challenging') || communication.includes('difficult') || communication.includes('poor')) {
+      response += "Communication challenges are common in growing companies. Many successful companies invest heavily in improving communication as they scale. ";
+    } else {
+      response += "Your communication approach reflects your current organizational needs. ";
     }
   }
 
-  // Analyze future state vision
-  if (responses.future_state) {
-    analysis += `Future State Vision: ${responses.future_state}\n`;
-    
-    const vision = responses.future_state.toLowerCase();
-    if (vision.includes('revenue') || vision.includes('growth')) {
-      analysis += 'Vision Focus: Revenue growth\n';
-    } else if (vision.includes('team') || vision.includes('people')) {
-      analysis += 'Vision Focus: Team development\n';
-    } else if (vision.includes('product') || vision.includes('feature')) {
-      analysis += 'Vision Focus: Product development\n';
-    } else if (vision.includes('market') || vision.includes('positioning')) {
-      analysis += 'Vision Focus: Market positioning\n';
-    }
-  }
-
-  return analysis;
+  return response || "Your clarity and communication approach shows you're thinking about organizational effectiveness. ";
 }
 
-function analyzeBenchmarksSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateBenchmarksResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze insights and benchmarks preferences
-  if (responses.insights_benchmarks) {
-    const insights = Array.isArray(responses.insights_benchmarks) ? responses.insights_benchmarks : [responses.insights_benchmarks];
-    analysis += `Insights Preferences: ${insights.join(', ')}\n`;
+  // Question 1: Industry Benchmarks
+  if (responses.industry_benchmarks) {
+    const benchmarks = responses.industry_benchmarks.toLowerCase();
     
-    if (insights.includes('Competitor comparison')) {
-      analysis += 'Focus: Competitive intelligence\n';
-    }
-    if (insights.includes('Revenue growth levers')) {
-      analysis += 'Focus: Revenue optimization\n';
-    }
-    if (insights.includes('Retention improvements')) {
-      analysis += 'Focus: Customer retention\n';
-    }
-    if (insights.includes('Operational efficiency plays')) {
-      analysis += 'Focus: Operational optimization\n';
-    }
-    if (insights.includes('Industry best practices')) {
-      analysis += 'Focus: Industry benchmarking\n';
+    if (benchmarks.includes('above') || benchmarks.includes('leading') || benchmarks.includes('top')) {
+      response += "Leading industry performance is excellent. Companies that consistently outperform benchmarks often have significant competitive advantages. ";
+    } else if (benchmarks.includes('average') || benchmarks.includes('middle') || benchmarks.includes('typical')) {
+      response += "Average performance can be a good foundation for improvement. Many companies make significant gains by focusing on key performance areas. ";
+    } else if (benchmarks.includes('below') || benchmarks.includes('lagging') || benchmarks.includes('struggling')) {
+      response += "Below-average performance often indicates opportunities for improvement. Many companies turn around performance by focusing on fundamentals. ";
+    } else {
+      response += "Understanding your benchmark position is crucial for setting realistic goals. ";
     }
   }
 
-  // Analyze capital/funding status
-  if (responses.capital_funding_status) {
-    analysis += `Funding Status: ${responses.capital_funding_status}\n`;
+  // Question 2: Growth Rate
+  if (responses.growth_rate) {
+    const growthRate = responses.growth_rate.toLowerCase();
     
-    if (responses.capital_funding_status === 'Yes, actively raising') {
-      analysis += 'Funding Stage: Active fundraising\n';
-    } else if (responses.capital_funding_status === 'In early planning stages') {
-      analysis += 'Funding Stage: Planning phase\n';
-    } else if (responses.capital_funding_status === 'Preparing for acquisition or sale') {
-      analysis += 'Funding Stage: Exit preparation\n';
-    } else if (responses.capital_funding_status === 'No, not on the roadmap') {
-      analysis += 'Funding Stage: Organic growth focus\n';
+    if (growthRate.includes('high') || growthRate.includes('fast') || growthRate.includes('rapid')) {
+      response += "High growth rates are exciting but also require careful management. Companies that sustain high growth often have strong operational foundations. ";
+    } else if (growthRate.includes('steady') || growthRate.includes('consistent') || growthRate.includes('stable')) {
+      response += "Steady growth can be more sustainable than rapid growth. Many successful companies prioritize consistent, predictable growth over explosive growth. ";
+    } else if (growthRate.includes('slow') || growthRate.includes('flat') || growthRate.includes('declining')) {
+      response += "Slow or flat growth often indicates the need for strategic changes. Many companies successfully turn around growth by focusing on fundamentals. ";
+    } else {
+      response += "Your growth rate reflects your current market position and strategic priorities. ";
     }
   }
 
-  // Analyze growth pace
-  if (responses.growth_pace) {
-    analysis += `Growth Pace: ${responses.growth_pace}\n`;
-    
-    if (responses.growth_pace === '10–25% YoY') {
-      analysis += 'Growth Stage: Steady, sustainable growth\n';
-    } else if (responses.growth_pace === '25–50% YoY') {
-      analysis += 'Growth Stage: Moderate acceleration\n';
-    } else if (responses.growth_pace === '50–100% YoY') {
-      analysis += 'Growth Stage: Fast growth trajectory\n';
-    } else if (responses.growth_pace === '2x–3x') {
-      analysis += 'Growth Stage: Rapid scaling\n';
-    } else if (responses.growth_pace === '3x+') {
-      analysis += 'Growth Stage: Hypergrowth mode\n';
-    }
-  }
-
-  return analysis;
+  return response || "Your benchmark position gives us important context for understanding your current performance. ";
 }
 
-function analyzeFinalSection(responses: Record<string, any>): string {
-  let analysis = '';
-
-  // Analyze unresolved issues
-  if (responses.unresolved_issue) {
-    analysis += `Unresolved Issue: ${responses.unresolved_issue}\n`;
-    
-    const issue = responses.unresolved_issue.toLowerCase();
-    if (issue.includes('onboarding') || issue.includes('process')) {
-      analysis += 'Issue Type: Process optimization\n';
-    } else if (issue.includes('pricing') || issue.includes('strategy')) {
-      analysis += 'Issue Type: Strategic pricing\n';
-    } else if (issue.includes('team') || issue.includes('hiring')) {
-      analysis += 'Issue Type: Team development\n';
-    } else if (issue.includes('marketing') || issue.includes('acquisition')) {
-      analysis += 'Issue Type: Marketing optimization\n';
-    } else if (issue.includes('product') || issue.includes('feature')) {
-      analysis += 'Issue Type: Product development\n';
-    }
-  }
-
-  // Analyze commitment confirmation
-  if (responses.commitment_confirmation) {
-    analysis += `Commitment Level: ${responses.commitment_confirmation}\n`;
-    
-    if (responses.commitment_confirmation === '✅ Yes — I\'m ready to grow.') {
-      analysis += 'Commitment Status: High commitment to growth\n';
-    } else if (responses.commitment_confirmation === '❌ No — not at this time.') {
-      analysis += 'Commitment Status: Not ready for commitment\n';
-    }
-  }
-
-  return analysis;
+function generateFinalResponse(responses: Record<string, any>): string {
+  return "Thank you for sharing your insights. This gives me a comprehensive picture of your business and growth priorities. Based on what you've shared, I can see several opportunities for optimization and growth. Let me analyze your responses and provide you with a detailed assessment and strategic roadmap. ";
 }
 
-function analyzeBusinessOverviewSection(responses: Record<string, any>): string {
-  let analysis = '';
+function generateBusinessOverviewResponse(responses: Record<string, any>): string {
+  let response = '';
 
-  // Analyze business description
-  if (responses.business_description) {
-    analysis += `Business Overview: ${responses.business_description}\n`;
+  // Question 1: Business Model
+  if (responses.business_model) {
+    const model = responses.business_model.toLowerCase();
     
-    // Analyze business model
-    const desc = responses.business_description.toLowerCase();
-    if (desc.includes('saas') || desc.includes('software')) {
-      analysis += 'Business Model: SaaS/Software\n';
-    } else if (desc.includes('service') || desc.includes('consulting')) {
-      analysis += 'Business Model: Service-based\n';
-    } else if (desc.includes('product') || desc.includes('physical')) {
-      analysis += 'Business Model: Product-based\n';
-    } else if (desc.includes('marketplace') || desc.includes('platform')) {
-      analysis += 'Business Model: Marketplace/Platform\n';
-    }
-    
-    // Analyze target market
-    if (desc.includes('b2b') || desc.includes('enterprise')) {
-      analysis += 'Target Market: B2B/Enterprise\n';
-    } else if (desc.includes('b2c') || desc.includes('consumer')) {
-      analysis += 'Target Market: B2C/Consumer\n';
-    } else if (desc.includes('small') || desc.includes('medium')) {
-      analysis += 'Target Market: SMB\n';
-    }
-    
-    // Analyze value proposition
-    if (desc.includes('efficiency') || desc.includes('automation')) {
-      analysis += 'Value Prop: Efficiency/Automation\n';
-    } else if (desc.includes('cost') || desc.includes('savings')) {
-      analysis += 'Value Prop: Cost Savings\n';
-    } else if (desc.includes('quality') || desc.includes('premium')) {
-      analysis += 'Value Prop: Quality/Premium\n';
+    if (model.includes('saas') || model.includes('subscription') || model.includes('recurring')) {
+      response += "SaaS and subscription models can create excellent recurring revenue streams. The key is balancing growth with unit economics. ";
+    } else if (model.includes('marketplace') || model.includes('platform') || model.includes('network')) {
+      response += "Marketplace and platform models can create powerful network effects. The challenge is often getting to critical mass. ";
+    } else if (model.includes('ecommerce') || model.includes('retail') || model.includes('product')) {
+      response += "Product-based businesses face unique challenges around inventory, logistics, and customer acquisition. ";
+    } else if (model.includes('service') || model.includes('consulting') || model.includes('agency')) {
+      response += "Service businesses often have high margins but face scalability challenges. The key is systematizing delivery. ";
+    } else {
+      response += "Your business model reflects your market opportunity and competitive advantages. ";
     }
   }
 
-  return analysis;
+  // Question 2: Market Size
+  if (responses.market_size) {
+    const marketSize = responses.market_size.toLowerCase();
+    
+    if (marketSize.includes('large') || marketSize.includes('billion') || marketSize.includes('massive')) {
+      response += "Large markets offer significant opportunities but also intense competition. The key is finding your unique positioning. ";
+    } else if (marketSize.includes('medium') || marketSize.includes('niche') || marketSize.includes('specialized')) {
+      response += "Niche markets can be excellent for building strong competitive positions. Many successful companies dominate smaller markets before expanding. ";
+    } else if (marketSize.includes('small') || marketSize.includes('emerging') || marketSize.includes('new')) {
+      response += "Small or emerging markets offer first-mover advantages but also require market education. ";
+    } else {
+      response += "Your market size influences your growth strategy and competitive approach. ";
+    }
+  }
+
+  return response || "Your business overview gives us important context for understanding your growth opportunities. ";
 } 
