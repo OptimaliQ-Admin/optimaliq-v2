@@ -3,11 +3,16 @@ import { motion } from 'framer-motion';
 
 interface Question {
   id: string;
-  type: 'text_area' | 'multi_select' | 'multiple_choice' | 'rank_order';
+  type: 'text_area' | 'multi_select' | 'multiple_choice' | 'rank_order' | 'tech_stack_selector';
   prompt: string;
+  description?: string;
   options?: string[];
   maxSelect?: number;
   required?: boolean;
+  placeholder?: string;
+  maxCharacters?: number;
+  rows?: number;
+  defaultItems?: string[];
 }
 
 interface InlineQuestionInputProps {
@@ -26,7 +31,10 @@ export default function InlineQuestionInput({
     currentAnswer ? (Array.isArray(currentAnswer) ? currentAnswer : [currentAnswer]) : []
   );
   const [rankedItems, setRankedItems] = useState<string[]>(
-    currentAnswer || question.options || []
+    currentAnswer || question.defaultItems || []
+  );
+  const [selectedTechTools, setSelectedTechTools] = useState<string[]>(
+    currentAnswer ? (Array.isArray(currentAnswer) ? currentAnswer : [currentAnswer]) : []
   );
 
   // Update local state when currentAnswer changes
@@ -39,12 +47,17 @@ export default function InlineQuestionInput({
       } else if (question.type === 'multi_select') {
         setSelectedOptions(Array.isArray(currentAnswer) ? currentAnswer : []);
       } else if (question.type === 'rank_order') {
-        setRankedItems(currentAnswer || question.options || []);
+        setRankedItems(currentAnswer || question.defaultItems || []);
+      } else if (question.type === 'tech_stack_selector') {
+        setSelectedTechTools(Array.isArray(currentAnswer) ? currentAnswer : []);
       }
     }
-  }, [currentAnswer, question.type, question.options]);
+  }, [currentAnswer, question.type, question.defaultItems]);
 
   const handleTextChange = (value: string) => {
+    if (question.maxCharacters && value.length > question.maxCharacters) {
+      return; // Don't update if exceeding max characters
+    }
     setTextInput(value);
     onAnswerChange(value);
   };
@@ -63,6 +76,15 @@ export default function InlineQuestionInput({
         onAnswerChange(newSelection);
       }
     }
+  };
+
+  const handleTechToolSelect = (tool: string) => {
+    const newSelection = selectedTechTools.includes(tool)
+      ? selectedTechTools.filter(item => item !== tool)
+      : [...selectedTechTools, tool];
+    
+    setSelectedTechTools(newSelection);
+    onAnswerChange(newSelection);
   };
 
   const handleRankChange = (fromIndex: number, toIndex: number) => {
@@ -85,10 +107,15 @@ export default function InlineQuestionInput({
             <textarea
               value={textInput}
               onChange={(e) => handleTextChange(e.target.value)}
-              placeholder="Share your thoughts..."
+              placeholder={question.placeholder || "Share your thoughts..."}
               className="w-full p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none transition-all duration-300"
-              rows={4}
+              rows={question.rows || 4}
             />
+            {question.maxCharacters && (
+              <div className="text-right text-white/60 text-sm">
+                {textInput.length}/{question.maxCharacters} characters
+              </div>
+            )}
           </motion.div>
         );
 
@@ -237,6 +264,175 @@ export default function InlineQuestionInput({
           </motion.div>
         );
 
+      case 'tech_stack_selector':
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-4"
+          >
+            {/* CRM & Sales */}
+            <div className="space-y-3">
+              <h4 className="text-white/80 font-medium">CRM & Sales</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close'].map((tool) => (
+                  <motion.label
+                    key={tool}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
+                      selectedTechTools.includes(tool)
+                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/50'
+                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTechTools.includes(tool)}
+                      onChange={() => handleTechToolSelect(tool)}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedTechTools.includes(tool) ? 'border-blue-400 bg-blue-400' : 'border-white/40'
+                    }`}>
+                      {selectedTechTools.includes(tool) && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 bg-white rounded"
+                        />
+                      )}
+                    </div>
+                    <span className="text-white/90 text-sm">{tool}</span>
+                  </motion.label>
+                ))}
+              </div>
+            </div>
+
+            {/* Marketing */}
+            <div className="space-y-3">
+              <h4 className="text-white/80 font-medium">Marketing</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse'].map((tool) => (
+                  <motion.label
+                    key={tool}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
+                      selectedTechTools.includes(tool)
+                        ? 'bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-400/50'
+                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTechTools.includes(tool)}
+                      onChange={() => handleTechToolSelect(tool)}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedTechTools.includes(tool) ? 'border-green-400 bg-green-400' : 'border-white/40'
+                    }`}>
+                      {selectedTechTools.includes(tool) && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 bg-white rounded"
+                        />
+                      )}
+                    </div>
+                    <span className="text-white/90 text-sm">{tool}</span>
+                  </motion.label>
+                ))}
+              </div>
+            </div>
+
+            {/* Analytics */}
+            <div className="space-y-3">
+              <h4 className="text-white/80 font-medium">Analytics</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo'].map((tool) => (
+                  <motion.label
+                    key={tool}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
+                      selectedTechTools.includes(tool)
+                        ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/50'
+                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTechTools.includes(tool)}
+                      onChange={() => handleTechToolSelect(tool)}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedTechTools.includes(tool) ? 'border-purple-400 bg-purple-400' : 'border-white/40'
+                    }`}>
+                      {selectedTechTools.includes(tool) && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 bg-white rounded"
+                        />
+                      )}
+                    </div>
+                    <span className="text-white/90 text-sm">{tool}</span>
+                  </motion.label>
+                ))}
+              </div>
+            </div>
+
+            {/* Project Management */}
+            <div className="space-y-3">
+              <h4 className="text-white/80 font-medium">Project Management</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp'].map((tool) => (
+                  <motion.label
+                    key={tool}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
+                      selectedTechTools.includes(tool)
+                        ? 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/50'
+                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTechTools.includes(tool)}
+                      onChange={() => handleTechToolSelect(tool)}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedTechTools.includes(tool) ? 'border-orange-400 bg-orange-400' : 'border-white/40'
+                    }`}>
+                      {selectedTechTools.includes(tool) && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 bg-white rounded"
+                        />
+                      )}
+                    </div>
+                    <span className="text-white/90 text-sm">{tool}</span>
+                  </motion.label>
+                ))}
+              </div>
+            </div>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-white/60 text-sm mt-3"
+            >
+              Selected {selectedTechTools.length} tools
+            </motion.p>
+          </motion.div>
+        );
+
       default:
         return null;
     }
@@ -244,6 +440,15 @@ export default function InlineQuestionInput({
 
   return (
     <div className="space-y-4">
+      {question.description && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-white/70 text-sm leading-relaxed"
+        >
+          {question.description}
+        </motion.p>
+      )}
       {renderInput()}
     </div>
   );

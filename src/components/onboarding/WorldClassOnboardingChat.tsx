@@ -6,7 +6,7 @@ import ChatMessageBubble from './ChatMessageBubble';
 import InlineQuestionInput from './InlineQuestionInput';
 import ProgressIndicator from './ProgressIndicator';
 import TypingIndicator from './TypingIndicator';
-import { QuestionGroup, Question } from '@/lib/services/onboarding/QuestionFlowManager';
+import { questionGroups, QuestionGroup, Question } from '@/lib/services/onboarding/QuestionFlowManager';
 import { generateSectionReply } from '@/lib/services/ai/generateSectionReply';
 import { generateDashboardScores } from '@/lib/services/ai/generateDashboardScores';
 import { getRandomWelcomeMessage, getTransitionHook } from '@/lib/config/onboardingMessages';
@@ -39,253 +39,6 @@ export default function WorldClassOnboardingChat({
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [allAnswers, setAllAnswers] = useState<Record<string, any>>({});
   const [showNextQuestion, setShowNextQuestion] = useState(false);
-
-  // Question groups from our architecture
-  const questionGroups: QuestionGroup[] = [
-    {
-      id: 'goals',
-      name: 'Goals & Priorities',
-      aiPromptIntro: 'Understanding your growth priorities and strategic objectives',
-      order: 1,
-      transitionHook: 'Now that I understand your growth priorities, let\'s talk about how your business stands out in the market.',
-      questions: [
-        {
-          id: 'primary_goal',
-          type: 'multiple_choice',
-          prompt: 'What\'s your primary growth goal right now?',
-          options: [
-            'Scale revenue rapidly',
-            'Improve profitability',
-            'Expand to new markets',
-            'Optimize operations',
-            'Build team and culture'
-          ],
-          required: true
-        },
-        {
-          id: 'timeframe',
-          type: 'multiple_choice',
-          prompt: 'What\'s your target timeframe for achieving this goal?',
-          options: [
-            '3-6 months',
-            '6-12 months',
-            '12-18 months',
-            '18+ months'
-          ],
-          required: true
-        },
-        {
-          id: 'biggest_challenge',
-          type: 'text_area',
-          prompt: 'What\'s the biggest challenge standing in your way?',
-          required: true
-        }
-      ]
-    },
-    {
-      id: 'positioning',
-      name: 'Market Positioning',
-      aiPromptIntro: 'Understanding your competitive landscape and differentiation',
-      order: 2,
-      transitionHook: 'That gives me a good sense of how you\'re positioned. Now I want to look under the hood — your processes, tools, and internal rhythm.',
-      questions: [
-        {
-          id: 'differentiator',
-          type: 'text_area',
-          prompt: 'What makes your business unique in your market?',
-          required: true
-        },
-        {
-          id: 'target_customer',
-          type: 'text_area',
-          prompt: 'Who is your ideal customer?',
-          required: true
-        },
-        {
-          id: 'competitive_advantage',
-          type: 'multiple_choice',
-          prompt: 'What\'s your strongest competitive advantage?',
-          options: [
-            'Technology/Product',
-            'Customer service',
-            'Price/Value',
-            'Speed to market',
-            'Team expertise'
-          ],
-          required: true
-        }
-      ]
-    },
-    {
-      id: 'operations',
-      name: 'Operations & Process',
-      aiPromptIntro: 'Understanding your operational efficiency and process maturity',
-      order: 3,
-      transitionHook: 'Let\'s shift gears to your customer engine — how you\'re acquiring, retaining, and scaling growth.',
-      questions: [
-        {
-          id: 'team_size',
-          type: 'multiple_choice',
-          prompt: 'How large is your current team?',
-          options: [
-            '1-5 people',
-            '6-15 people',
-            '16-50 people',
-            '51-200 people',
-            '200+ people'
-          ],
-          required: true
-        },
-        {
-          id: 'process_maturity',
-          type: 'multiple_choice',
-          prompt: 'How would you describe your process maturity?',
-          options: [
-            'Ad-hoc and reactive',
-            'Some processes documented',
-            'Well-defined processes',
-            'Highly optimized and automated'
-          ],
-          required: true
-        },
-        {
-          id: 'tech_stack',
-          type: 'text_area',
-          prompt: 'What are your main tools and technologies?',
-          required: true
-        }
-      ]
-    },
-    {
-      id: 'growth_stack',
-      name: 'Growth Engine',
-      aiPromptIntro: 'Understanding your customer acquisition and retention strategies',
-      order: 4,
-      transitionHook: 'This is where it gets interesting. Let\'s talk decision-making, alignment, and what success looks like for your team.',
-      questions: [
-        {
-          id: 'acquisition_channels',
-          type: 'multi_select',
-          prompt: 'Which customer acquisition channels are working best?',
-          options: [
-            'Content marketing',
-            'Paid advertising',
-            'Social media',
-            'Email marketing',
-            'Partnerships',
-            'Direct sales',
-            'Referrals',
-            'SEO'
-          ],
-          maxSelect: 3,
-          required: true
-        },
-        {
-          id: 'retention_strategy',
-          type: 'text_area',
-          prompt: 'How do you currently retain and grow existing customers?',
-          required: true
-        },
-        {
-          id: 'growth_metrics',
-          type: 'multi_select',
-          prompt: 'Which metrics do you track most closely?',
-          options: [
-            'Revenue growth',
-            'Customer acquisition cost',
-            'Lifetime value',
-            'Churn rate',
-            'Conversion rates',
-            'Customer satisfaction',
-            'Market share'
-          ],
-          maxSelect: 4,
-          required: true
-        }
-      ]
-    },
-    {
-      id: 'clarity',
-      name: 'Strategy & Alignment',
-      aiPromptIntro: 'Understanding your strategic clarity and team alignment',
-      order: 5,
-      transitionHook: 'You\'re building toward something specific — let\'s anchor that with the right benchmarks and expectations.',
-      questions: [
-        {
-          id: 'vision_clarity',
-          type: 'multiple_choice',
-          prompt: 'How clear is your team on the company vision?',
-          options: [
-            'Very clear and aligned',
-            'Somewhat clear',
-            'Unclear or conflicting',
-            'Not communicated'
-          ],
-          required: true
-        },
-        {
-          id: 'decision_making',
-          type: 'multiple_choice',
-          prompt: 'How do you typically make strategic decisions?',
-          options: [
-            'Data-driven analysis',
-            'Gut instinct and experience',
-            'Team consensus',
-            'Customer feedback',
-            'Market research'
-          ],
-          required: true
-        },
-        {
-          id: 'success_definition',
-          type: 'text_area',
-          prompt: 'What does success look like for your business in the next year?',
-          required: true
-        }
-      ]
-    },
-    {
-      id: 'benchmarks',
-      name: 'Benchmarks & Expectations',
-      aiPromptIntro: 'Understanding your performance context and industry benchmarks',
-      order: 6,
-      transitionHook: 'Thanks for being thoughtful through this. One last thing before we wrap — let\'s talk about what\'s been left unsaid or deprioritized.',
-      questions: [
-        {
-          id: 'industry_benchmarks',
-          type: 'multiple_choice',
-          prompt: 'How do you compare to industry benchmarks?',
-          options: [
-            'Leading the industry',
-            'Above average',
-            'Average',
-            'Below average',
-            'Not sure'
-          ],
-          required: true
-        },
-        {
-          id: 'growth_rate',
-          type: 'multiple_choice',
-          prompt: 'What\'s your current growth rate?',
-          options: [
-            'Declining',
-            'Flat (0-5%)',
-            'Moderate (5-20%)',
-            'High (20-50%)',
-            'Hypergrowth (50%+)'
-          ],
-          required: true
-        },
-        {
-          id: 'unaddressed_areas',
-          type: 'text_area',
-          prompt: 'What areas of your business have you been meaning to address but haven\'t had time for?',
-          required: true
-        }
-      ]
-    }
-  ];
 
   // Load user profile on mount
   useEffect(() => {
@@ -460,7 +213,7 @@ export default function WorldClassOnboardingChat({
   const isCurrentQuestionAnswered = currentQuestion && currentAnswers[currentQuestion.id] && 
     (typeof currentAnswers[currentQuestion.id] === 'string' ? currentAnswers[currentQuestion.id].trim() : currentAnswers[currentQuestion.id].length > 0);
 
-  const totalQuestions = questionGroups.reduce((total, group) => total + group.questions.length, 0);
+  const totalQuestions = questionGroups.reduce((total: number, group: QuestionGroup) => total + group.questions.length, 0);
   const answeredQuestions = Object.keys(currentAnswers).length + 
     (currentQuestionGroupIndex * questionGroups[0]?.questions.length || 0);
 
@@ -542,7 +295,7 @@ export default function WorldClassOnboardingChat({
                       
                       <InlineQuestionInput
                         question={currentQuestion}
-                        onAnswerChange={(answer) => handleAnswerChange(currentQuestion.id, answer)}
+                        onAnswerChange={(answer: any) => handleAnswerChange(currentQuestion.id, answer)}
                         currentAnswer={currentAnswers[currentQuestion.id]}
                       />
                     </div>
