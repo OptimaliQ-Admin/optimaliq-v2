@@ -1,110 +1,79 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ChatMessageBubble from './ChatMessageBubble';
+import { ChevronRightIcon, PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import InlineQuestionInput from './InlineQuestionInput';
-import ProgressIndicator from './ProgressIndicator';
 import TypingIndicator from './TypingIndicator';
 import { questionGroups, QuestionGroup, Question } from '@/lib/services/onboarding/QuestionFlowManager';
 // Removed generateSectionReply import - now using dynamic AI API
 import { generateDashboardScores } from '@/lib/services/ai/generateDashboardScores';
 import { getRandomWelcomeMessage, getTransitionHook } from '@/lib/config/onboardingMessages';
-import { supabase } from '@/lib/supabase';
 
-interface ChatMessage {
+interface Message {
   id: string;
-  type: 'user' | 'ai' | 'question_group';
+  type: 'ai' | 'user';
   content: string;
   timestamp: Date;
-  questionGroup?: QuestionGroup;
 }
 
 interface WorldClassOnboardingChatProps {
   sessionId: string;
-  onComplete: (scores: any) => void;
+  userProfile?: any;
+  onComplete: (answers: any, scores: any) => void;
 }
 
 export default function WorldClassOnboardingChat({
   sessionId,
+  userProfile,
   onComplete
 }: WorldClassOnboardingChatProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [currentQuestionGroupIndex, setCurrentQuestionGroupIndex] = useState(0);
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [currentAnswers, setCurrentAnswers] = useState<Record<string, any>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [userProfile, setUserProfile] = useState<any>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
   const [allAnswers, setAllAnswers] = useState<Record<string, any>>({});
-  const [showNextQuestion, setShowNextQuestion] = useState(false);
+  const [currentAnswers, setCurrentAnswers] = useState<Record<string, any>>({});
+  const [isComplete, setIsComplete] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Load user profile on mount
+  const currentGroup = questionGroups[currentGroupIndex];
+  const currentQuestion = currentGroup?.questions[currentQuestionIndex];
+
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    loadUserProfile();
-  }, []);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
 
-  // Auto-scroll to bottom when new messages are added
+  // Initialize welcome message
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    if (showWelcome && currentGroup) {
+      const welcomeMessage = getRandomWelcomeMessage();
+      setMessages([{
+        id: 'welcome',
+        type: 'ai',
+        content: typeof welcomeMessage === 'string' ? welcomeMessage : welcomeMessage.content,
+        timestamp: new Date()
+      }]);
     }
-  }, [messages]);
+  }, [showWelcome, currentGroup]);
 
-  const loadUserProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Get user profile from users table
-        const { data: profile } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', user.id)
-          .single();
+  const handleAnswerSubmit = async (questionId: string, answer: any) => {
+    if (!currentQuestion) return;
 
-        setUserProfile(profile || user);
-
-        // Add welcome message
-        const welcomeMessage = getRandomWelcomeMessage();
-        setMessages([{
-          id: 'welcome',
-          type: 'ai',
-          content: welcomeMessage.content,
-          timestamp: new Date()
-        }]);
-      }
-    } catch (error) {
-      console.error('Error loading user profile:', error);
-    }
-  };
-
-  const handleAnswerChange = (questionId: string, answer: any) => {
-    setCurrentAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }));
-  };
-
-  const handleNextQuestion = async () => {
-    const currentGroup = questionGroups[currentQuestionGroupIndex];
-    const currentQuestion = currentGroup.questions[currentQuestionIndex];
-    
-    // Check if current question is answered
-    const isAnswered = currentAnswers[currentQuestion.id] && 
-      (typeof currentAnswers[currentQuestion.id] === 'string' ? currentAnswers[currentQuestion.id].trim() : currentAnswers[currentQuestion.id].length > 0);
-    
-    if (!isAnswered) {
-      return; // Don't proceed if question isn't answered
-    }
-
-    // Add user answer to messages
-    setMessages(prev => [...prev, {
-      id: `answer-${currentQuestion.id}`,
+    // Add user message
+    const userMessage: Message = {
+      id: `user-${questionId}`,
       type: 'user',
-      content: currentAnswers[currentQuestion.id] || 'No answer provided',
+      content: typeof answer === 'string' ? answer : JSON.stringify(answer),
       timestamp: new Date()
-    }]);
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setCurrentAnswers(prev => ({ ...prev, [questionId]: answer }));
+    setAllAnswers(prev => ({ ...prev, [questionId]: answer }));
 
     // Generate AI response for this individual question
     setIsTyping(true);
@@ -189,194 +158,190 @@ export default function WorldClassOnboardingChat({
   };
 
   const handleGroupComplete = async () => {
-    const currentGroup = questionGroups[currentQuestionGroupIndex];
-    
-    setIsSubmitting(true);
-    setAllAnswers(prev => ({ ...prev, ...currentAnswers }));
-
-    // Save answers to database
-    try {
-      await supabase
-        .from('user_responses')
-        .insert(
-          Object.entries(currentAnswers).map(([questionId, answer]) => ({
-            session_id: sessionId,
-            question_id: questionId,
-            answer: typeof answer === 'string' ? answer : JSON.stringify(answer),
-            timestamp: new Date().toISOString()
-          }))
-        );
-    } catch (error) {
-      console.error('Error saving answers:', error);
-    }
-
-    // Check if this is the final section
-    if (currentQuestionGroupIndex === questionGroups.length - 1) {
-      // Generate final scores and roadmap
-      const finalScores = await generateDashboardScores({
-        sessionId,
-        allResponses: { ...allAnswers, ...currentAnswers },
-        userProfile
-      });
-
-      // Save to database
-      await supabase
-        .from('assessment_scores')
-        .insert({
-          user_id: userProfile?.id,
-          session_id: sessionId,
-          strategy_score: finalScores.strategy_score,
-          process_score: finalScores.process_score,
-          technology_score: finalScores.technology_score,
-          overall_score: finalScores.overall_score,
-          benchmark_position: finalScores.benchmark_position,
-          roadmap: finalScores.roadmap,
-          created_at: new Date().toISOString()
-        });
-
-      // Call completion handler
-      onComplete(finalScores);
-    } else {
-      // Move to next question group
+    if (currentGroupIndex < questionGroups.length - 1) {
+      // Move to next group
       setTimeout(() => {
-        setCurrentQuestionGroupIndex(prev => prev + 1);
+        setCurrentGroupIndex(prev => prev + 1);
         setCurrentQuestionIndex(0);
         setCurrentAnswers({});
-      }, 1000);
-    }
-    
-    setIsSubmitting(false);
+      }, 1500);
+         } else {
+       // Complete the assessment
+       setIsComplete(true);
+       const scores = await generateDashboardScores({
+         sessionId,
+         allResponses: allAnswers,
+         userProfile
+       });
+       onComplete(allAnswers, scores);
+     }
   };
 
-  const currentGroup = questionGroups[currentQuestionGroupIndex];
-  const currentQuestion = currentGroup?.questions[currentQuestionIndex];
-  const isCurrentQuestionAnswered = currentQuestion && currentAnswers[currentQuestion.id] && 
-    (typeof currentAnswers[currentQuestion.id] === 'string' ? currentAnswers[currentQuestion.id].trim() : currentAnswers[currentQuestion.id].length > 0);
+  const getProgressPercentage = () => {
+    const totalQuestions = questionGroups.reduce((sum, group) => sum + group.questions.length, 0);
+    const completedQuestions = allAnswers ? Object.keys(allAnswers).filter(key => !key.includes('_insights')).length : 0;
+    return Math.min((completedQuestions / totalQuestions) * 100, 100);
+  };
 
-  const totalQuestions = questionGroups.reduce((total: number, group: QuestionGroup) => total + group.questions.length, 0);
-  const answeredQuestions = Object.keys(currentAnswers).length + 
-    (currentQuestionGroupIndex * questionGroups[0]?.questions.length || 0);
+  if (isComplete) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex items-center justify-center min-h-[400px]"
+      >
+        <div className="text-center">
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <SparklesIcon className="w-8 h-8 text-white" />
+          </motion.div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Assessment Complete!</h3>
+          <p className="text-gray-600">Generating your personalized insights...</p>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
-      {/* Progress Indicator */}
-      <div className="relative z-10 p-6 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <ProgressIndicator
-          currentStep={answeredQuestions + 1}
-          totalSteps={totalQuestions}
-          currentSection={currentGroup?.name}
-        />
-      </div>
+    <div className="flex flex-col h-full max-w-4xl mx-auto">
+      {/* Header with Progress */}
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-200/50 px-6 py-4"
+      >
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <SparklesIcon className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Strategic Assessment</h2>
+              <p className="text-sm text-gray-500">{currentGroup?.name}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-medium text-gray-900">
+              {Math.round(getProgressPercentage())}% Complete
+            </div>
+            <div className="text-xs text-gray-500">
+              Question {currentQuestionIndex + 1} of {currentGroup?.questions.length}
+            </div>
+          </div>
+        </div>
+        
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${getProgressPercentage()}%` }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
+          />
+        </div>
+      </motion.div>
 
       {/* Chat Container */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10"
+        className="flex-1 overflow-y-auto px-4 py-6 space-y-6"
+        style={{ scrollBehavior: 'smooth' }}
       >
         <AnimatePresence>
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <motion.div
               key={message.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeOut",
+                delay: index * 0.1 
+              }}
+              className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <ChatMessageBubble message={message} />
+              <div className={`max-w-[85%] md:max-w-[70%] ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
+                <div className={`flex items-start space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                  {/* Avatar */}
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                    message.type === 'ai' 
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600' 
+                      : 'bg-gradient-to-r from-gray-600 to-gray-700'
+                  }`}>
+                    {message.type === 'ai' ? (
+                      <SparklesIcon className="w-4 h-4 text-white" />
+                    ) : (
+                      <span className="text-white text-sm font-medium">U</span>
+                    )}
+                  </div>
+
+                  {/* Message Bubble */}
+                  <div className={`px-4 py-3 rounded-2xl shadow-sm ${
+                    message.type === 'ai'
+                      ? 'bg-white border border-gray-200 text-gray-900'
+                      : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+                  }`}>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      {message.content}
+                    </p>
+                    <div className={`text-xs mt-2 ${
+                      message.type === 'ai' ? 'text-gray-400' : 'text-blue-100'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>
 
+        {/* Typing Indicator */}
+        <AnimatePresence>
+          {isTyping && <TypingIndicator showThinking={true} />}
+        </AnimatePresence>
+
         {/* Current Question */}
-        {currentQuestion && (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${currentQuestionGroupIndex}-${currentQuestionIndex}`}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -30, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="relative"
-            >
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 shadow-2xl">
-                {/* Section Header */}
-                <div className="mb-6">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                      {currentQuestionGroupIndex + 1}
-                    </div>
-                    <h2 className="text-xl font-semibold text-white">
-                      {currentGroup.name}
-                    </h2>
-                  </div>
-                  <p className="text-white/70 text-sm">
-                    {currentGroup.aiPromptIntro}
-                  </p>
-                </div>
-
-                {/* Question */}
-                <div className="mb-8">
-                  <div className="flex items-start space-x-4 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-1">
-                      {currentQuestionIndex + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-medium text-white mb-4 leading-relaxed">
-                        {currentQuestion.prompt}
-                        {currentQuestion.required && <span className="text-red-400 ml-1">*</span>}
-                      </h3>
-                      
-                      <InlineQuestionInput
-                        question={currentQuestion}
-                        onAnswerChange={(answer: any) => handleAnswerChange(currentQuestion.id, answer)}
-                        currentAnswer={currentAnswers[currentQuestion.id]}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Next Button */}
-                <div className="flex justify-end">
-                  <motion.button
-                    onClick={handleNextQuestion}
-                    disabled={!isCurrentQuestionAnswered || isSubmitting}
-                    className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 ${
-                      isCurrentQuestionAnswered && !isSubmitting
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
-                        : 'bg-white/10 text-white/50 cursor-not-allowed'
-                    }`}
-                    whileHover={isCurrentQuestionAnswered && !isSubmitting ? { scale: 1.05 } : {}}
-                    whileTap={isCurrentQuestionAnswered && !isSubmitting ? { scale: 0.95 } : {}}
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      currentQuestionIndex === currentGroup.questions.length - 1 
-                        ? (currentQuestionGroupIndex === questionGroups.length - 1 ? 'Complete Assessment' : 'Complete Section')
-                        : 'Next Question'
-                    )}
-                  </motion.button>
-                </div>
+        {currentQuestion && !isTyping && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6 shadow-sm"
+          >
+            <div className="flex items-start space-x-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <ChevronRightIcon className="w-4 h-4 text-white" />
               </div>
-            </motion.div>
-          </AnimatePresence>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {currentQuestion.prompt}
+                </h3>
+                {currentQuestion.description && (
+                  <p className="text-sm text-gray-600 mb-4">
+                    {currentQuestion.description}
+                  </p>
+                )}
+              </div>
+            </div>
+            
+            <InlineQuestionInput
+              question={currentQuestion}
+              onAnswerChange={(answer) => handleAnswerSubmit(currentQuestion.id, answer)}
+              currentAnswer={currentAnswers[currentQuestion.id]}
+            />
+          </motion.div>
         )}
 
-        {/* Typing Indicator */}
-        {isTyping && <TypingIndicator showThinking={true} />}
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );

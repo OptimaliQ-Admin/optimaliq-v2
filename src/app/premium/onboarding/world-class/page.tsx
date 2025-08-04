@@ -58,7 +58,7 @@ export default function WorldClassOnboardingPage() {
     }
   };
 
-  const handleComplete = async (finalScores: any) => {
+  const handleComplete = async (answers: any, finalScores: any) => {
     try {
       // Update session status
       if (sessionId) {
