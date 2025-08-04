@@ -86,7 +86,7 @@ export default function WorldClassOnboardingChat({
     }));
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     const currentGroup = questionGroups[currentQuestionGroupIndex];
     const currentQuestion = currentGroup.questions[currentQuestionIndex];
     
@@ -106,17 +106,53 @@ export default function WorldClassOnboardingChat({
       timestamp: new Date()
     }]);
 
-    // Check if this is the last question in the group
-    if (currentQuestionIndex === currentGroup.questions.length - 1) {
-      // Complete the group
-      handleGroupComplete();
-    } else {
-      // Move to next question in the same group
-      setShowNextQuestion(true);
-      setTimeout(() => {
-        setCurrentQuestionIndex(prev => prev + 1);
-        setShowNextQuestion(false);
-      }, 300);
+    // Generate AI response for this individual question
+    setIsTyping(true);
+    try {
+      const aiResponse = await generateSectionReply({
+        sectionId: currentGroup.id,
+        sectionName: currentGroup.name,
+        responses: { [currentQuestion.id]: currentAnswers[currentQuestion.id] },
+        userProfile,
+        transitionHook: currentQuestionIndex === currentGroup.questions.length - 1 ? currentGroup.transitionHook : ''
+      });
+
+      setMessages(prev => [...prev, {
+        id: `ai-${currentQuestion.id}`,
+        type: 'ai',
+        content: aiResponse,
+        timestamp: new Date()
+      }]);
+
+      // Check if this is the last question in the group
+      if (currentQuestionIndex === currentGroup.questions.length - 1) {
+        // Complete the group
+        await handleGroupComplete();
+      } else {
+        // Move to next question in the same group
+        setTimeout(() => {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+      setMessages(prev => [...prev, {
+        id: `error-${currentQuestion.id}`,
+        type: 'ai',
+        content: 'I appreciate your response. Let\'s continue with the next question.',
+        timestamp: new Date()
+      }]);
+      
+      // Still move to next question even if AI response fails
+      if (currentQuestionIndex === currentGroup.questions.length - 1) {
+        await handleGroupComplete();
+      } else {
+        setTimeout(() => {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }, 1000);
+      }
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -142,70 +178,42 @@ export default function WorldClassOnboardingChat({
       console.error('Error saving answers:', error);
     }
 
-    // Generate AI response
-    setIsTyping(true);
-    try {
-      const aiResponse = await generateSectionReply({
-        sectionId: currentGroup.id,
-        sectionName: currentGroup.name,
-        responses: currentAnswers,
-        userProfile,
-        transitionHook: currentGroup.transitionHook
+    // Check if this is the final section
+    if (currentQuestionGroupIndex === questionGroups.length - 1) {
+      // Generate final scores and roadmap
+      const finalScores = await generateDashboardScores({
+        sessionId,
+        allResponses: { ...allAnswers, ...currentAnswers },
+        userProfile
       });
 
-      setMessages(prev => [...prev, {
-        id: `ai-${currentGroup.id}`,
-        type: 'ai',
-        content: aiResponse,
-        timestamp: new Date()
-      }]);
-
-      // Check if this is the final section
-      if (currentQuestionGroupIndex === questionGroups.length - 1) {
-        // Generate final scores and roadmap
-        const finalScores = await generateDashboardScores({
-          sessionId,
-          allResponses: { ...allAnswers, ...currentAnswers },
-          userProfile
+      // Save to database
+      await supabase
+        .from('assessment_scores')
+        .insert({
+          user_id: userProfile?.id,
+          session_id: sessionId,
+          strategy_score: finalScores.strategy_score,
+          process_score: finalScores.process_score,
+          technology_score: finalScores.technology_score,
+          overall_score: finalScores.overall_score,
+          benchmark_position: finalScores.benchmark_position,
+          roadmap: finalScores.roadmap,
+          created_at: new Date().toISOString()
         });
 
-        // Save to database
-        await supabase
-          .from('assessment_scores')
-          .insert({
-            user_id: userProfile?.id,
-            session_id: sessionId,
-            strategy_score: finalScores.strategy_score,
-            process_score: finalScores.process_score,
-            technology_score: finalScores.technology_score,
-            overall_score: finalScores.overall_score,
-            benchmark_position: finalScores.benchmark_position,
-            roadmap: finalScores.roadmap,
-            created_at: new Date().toISOString()
-          });
-
-        // Call completion handler
-        onComplete(finalScores);
-      } else {
-        // Move to next question group
-        setTimeout(() => {
-          setCurrentQuestionGroupIndex(prev => prev + 1);
-          setCurrentQuestionIndex(0);
-          setCurrentAnswers({});
-        }, 1000);
-      }
-    } catch (error) {
-      console.error('Error generating AI response:', error);
-      setMessages(prev => [...prev, {
-        id: `error-${currentGroup.id}`,
-        type: 'ai',
-        content: 'I appreciate your responses. Let\'s continue with the next section.',
-        timestamp: new Date()
-      }]);
-    } finally {
-      setIsTyping(false);
-      setIsSubmitting(false);
+      // Call completion handler
+      onComplete(finalScores);
+    } else {
+      // Move to next question group
+      setTimeout(() => {
+        setCurrentQuestionGroupIndex(prev => prev + 1);
+        setCurrentQuestionIndex(0);
+        setCurrentAnswers({});
+      }, 1000);
     }
+    
+    setIsSubmitting(false);
   };
 
   const currentGroup = questionGroups[currentQuestionGroupIndex];
