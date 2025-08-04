@@ -124,7 +124,14 @@ export default function WorldClassOnboardingChat({
             content: msg.content,
             timestamp: msg.timestamp
           })),
-          userProfile
+          userProfile,
+          nextQuestion: currentQuestionIndex < currentGroup.questions.length - 1 
+            ? {
+                id: currentGroup.questions[currentQuestionIndex + 1].id,
+                text: currentGroup.questions[currentQuestionIndex + 1].prompt,
+                type: currentGroup.questions[currentQuestionIndex + 1].type
+              }
+            : undefined
         })
       });
 

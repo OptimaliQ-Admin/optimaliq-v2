@@ -15,7 +15,11 @@ interface OnboardingResponseRequest {
   userAnswer: any;
   conversationHistory: any[];
   userProfile?: any;
-  nextQuestion?: any;
+  nextQuestion?: {
+    id: string;
+    text: string;
+    type: string;
+  };
 }
 
 interface AIResponse {
@@ -112,7 +116,8 @@ async function generateContextualResponse(
   question: string,
   answer: any,
   history: any[],
-  userProfile?: any
+  userProfile?: any,
+  nextQuestion?: any
 ): Promise<AIResponse> {
   const startTime = Date.now();
   
@@ -121,12 +126,12 @@ async function generateContextualResponse(
 RESPONSE STRUCTURE:
 1. ACKNOWLEDGE their specific answer with genuine interest
 2. SHARE a brief strategic insight based on what you've observed in similar companies
-3. NATURALLY transition to the next question
+3. NATURALLY transition to the next question (use the exact next question provided)
 
 EXAMPLES OF GOOD RESPONSES:
-- "I see you're tracking revenue closely - that's the lifeblood of any business. Companies that focus solely on top-line growth often miss the signals that predict sustainable scaling. Now let's look at your go-to-market approach."
-- "Your CAC concerns are valid - many companies hit that wall around your stage. The key is understanding whether it's a market problem or an execution problem. Let's examine what's holding you back."
-- "Regulatory challenges can be a real growth inhibitor, but they can also create moats for companies that navigate them well. Let's explore your market positioning."
+- "I see you're tracking revenue closely - that's the lifeblood of any business. Companies that focus solely on top-line growth often miss the signals that predict sustainable scaling. Now let's look at what's holding your business back."
+- "Your CAC concerns are valid - many companies hit that wall around your stage. The key is understanding whether it's a market problem or an execution problem. Let's examine your market positioning."
+- "Regulatory challenges can be a real growth inhibitor, but they can also create moats for companies that navigate them well. Let's explore your team structure and decision-making processes."
 
 TONE: Warm, professional, confident but not overwhelming
 LENGTH: 2-3 sentences maximum
@@ -138,8 +143,9 @@ Previous Answers: ${history.length > 0 ? JSON.stringify(history.slice(-3)) : 'No
 Current Section: ${section}
 Current Question: ${question}
 User Answer: ${JSON.stringify(answer)}
+Next Question: ${nextQuestion ? nextQuestion.text : 'Continue to next section'}
 
-Respond with just the conversation text, no formatting or structure.`;
+IMPORTANT: Your transition should naturally lead into the exact next question provided. Don't make up what the next question might be - use the actual next question text to guide your transition.`;
 
   try {
     const response = await callOpenAI(systemPrompt, {
@@ -176,7 +182,7 @@ Respond with just the conversation text, no formatting or structure.`;
 export async function POST(request: NextRequest) {
   try {
     const body: OnboardingResponseRequest = await request.json();
-    const { sessionId, currentSection, currentQuestion, userAnswer, conversationHistory, userProfile } = body;
+    const { sessionId, currentSection, currentQuestion, userAnswer, conversationHistory, userProfile, nextQuestion } = body;
 
     // Validate required fields
     if (!sessionId || !currentSection || !currentQuestion || !userAnswer) {
@@ -195,7 +201,8 @@ export async function POST(request: NextRequest) {
         currentQuestion,
         userAnswer,
         conversationHistory,
-        userProfile
+        userProfile,
+        nextQuestion
       );
     } catch (error) {
       console.error('AI generation failed, using fallback:', error);
