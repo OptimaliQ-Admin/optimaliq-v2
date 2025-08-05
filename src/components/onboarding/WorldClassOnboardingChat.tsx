@@ -42,16 +42,7 @@ export default function WorldClassOnboardingChat({
   const currentGroup = questionGroups[currentGroupIndex];
   const currentQuestion = currentGroup?.questions[currentQuestionIndex];
 
-  // Auto-scroll to top when question changes
-  useEffect(() => {
-    if (currentQuestion && !isTyping) {
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 100);
-    }
-  }, [currentQuestionIndex, currentGroupIndex, isTyping]);
+  // No auto-scrolling - let user control their own position
 
   // Initialize welcome message (only once)
   useEffect(() => {
