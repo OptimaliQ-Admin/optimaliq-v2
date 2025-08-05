@@ -235,7 +235,7 @@ export default function InlineQuestionInput({
             {rankedItems.map((item, index) => (
               <div
                 key={item}
-                className="flex items-center space-x-4 p-4 bg-white/5 rounded-xl border border-white/20 cursor-move hover:bg-white/10 transition-all duration-300"
+                className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-200 cursor-move hover:bg-gray-100 transition-all duration-300"
                 draggable
                 onDragStart={(e: React.DragEvent) => e.dataTransfer.setData('text/plain', index.toString())}
                 onDragOver={(e: React.DragEvent) => e.preventDefault()}
@@ -248,14 +248,14 @@ export default function InlineQuestionInput({
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                   {index + 1}
                 </div>
-                <span className="text-white/90 flex-1">{item}</span>
-                <div className="text-white/40 text-lg">⋮⋮</div>
+                <span className="text-gray-900 flex-1">{item}</span>
+                <div className="text-gray-400 text-lg">⋮⋮</div>
               </div>
             ))}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-white/60 text-sm mt-3"
+              className="text-gray-600 text-sm mt-3"
             >
               Drag to reorder items by priority
             </motion.p>
@@ -271,7 +271,7 @@ export default function InlineQuestionInput({
           >
             {/* CRM & Sales */}
             <div className="space-y-3">
-              <h4 className="text-white/80 font-medium">CRM & Sales</h4>
+              <h4 className="text-gray-700 font-medium">CRM & Sales</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close'].map((tool) => (
                   <motion.label
@@ -281,7 +281,7 @@ export default function InlineQuestionInput({
                     className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
                       selectedTechTools.includes(tool)
                         ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/50'
-                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <input
@@ -301,7 +301,7 @@ export default function InlineQuestionInput({
                         />
                       )}
                     </div>
-                    <span className="text-white/90 text-sm">{tool}</span>
+                    <span className="text-gray-900 text-sm">{tool}</span>
                   </motion.label>
                 ))}
               </div>
@@ -309,7 +309,7 @@ export default function InlineQuestionInput({
 
             {/* Marketing */}
             <div className="space-y-3">
-              <h4 className="text-white/80 font-medium">Marketing</h4>
+              <h4 className="text-gray-700 font-medium">Marketing</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse'].map((tool) => (
                   <motion.label
@@ -319,7 +319,7 @@ export default function InlineQuestionInput({
                     className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
                       selectedTechTools.includes(tool)
                         ? 'bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-400/50'
-                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <input
@@ -339,7 +339,7 @@ export default function InlineQuestionInput({
                         />
                       )}
                     </div>
-                    <span className="text-white/90 text-sm">{tool}</span>
+                    <span className="text-gray-900 text-sm">{tool}</span>
                   </motion.label>
                 ))}
               </div>
@@ -347,7 +347,7 @@ export default function InlineQuestionInput({
 
             {/* Analytics */}
             <div className="space-y-3">
-              <h4 className="text-white/80 font-medium">Analytics</h4>
+              <h4 className="text-gray-700 font-medium">Analytics</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo'].map((tool) => (
                   <motion.label
@@ -357,7 +357,7 @@ export default function InlineQuestionInput({
                     className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
                       selectedTechTools.includes(tool)
                         ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/50'
-                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <input
@@ -377,7 +377,7 @@ export default function InlineQuestionInput({
                         />
                       )}
                     </div>
-                    <span className="text-white/90 text-sm">{tool}</span>
+                    <span className="text-gray-900 text-sm">{tool}</span>
                   </motion.label>
                 ))}
               </div>
@@ -385,7 +385,7 @@ export default function InlineQuestionInput({
 
             {/* Project Management */}
             <div className="space-y-3">
-              <h4 className="text-white/80 font-medium">Project Management</h4>
+              <h4 className="text-gray-700 font-medium">Project Management</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp'].map((tool) => (
                   <motion.label
@@ -395,7 +395,7 @@ export default function InlineQuestionInput({
                     className={`flex items-center space-x-3 cursor-pointer p-3 rounded-lg border transition-all duration-300 ${
                       selectedTechTools.includes(tool)
                         ? 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/50'
-                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <input
@@ -415,7 +415,7 @@ export default function InlineQuestionInput({
                         />
                       )}
                     </div>
-                    <span className="text-white/90 text-sm">{tool}</span>
+                    <span className="text-gray-900 text-sm">{tool}</span>
                   </motion.label>
                 ))}
               </div>
@@ -424,7 +424,7 @@ export default function InlineQuestionInput({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-white/60 text-sm mt-3"
+              className="text-gray-600 text-sm mt-3"
             >
               Selected {selectedTechTools.length} tools
             </motion.p>
@@ -442,7 +442,7 @@ export default function InlineQuestionInput({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-white/70 text-sm leading-relaxed"
+          className="text-gray-600 text-sm leading-relaxed"
         >
           {question.description}
         </motion.p>
