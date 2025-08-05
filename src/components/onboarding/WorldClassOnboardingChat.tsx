@@ -42,21 +42,20 @@ export default function WorldClassOnboardingChat({
   const currentGroup = questionGroups[currentGroupIndex];
   const currentQuestion = currentGroup?.questions[currentQuestionIndex];
 
-  // Auto-scroll to question when it changes
+  // Auto-scroll to top when question changes
   useEffect(() => {
     if (currentQuestion && !isTyping) {
       setTimeout(() => {
-        const questionElement = document.querySelector('[data-question-id]');
-        if (questionElement) {
-          questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }, 100);
     }
   }, [currentQuestionIndex, currentGroupIndex, isTyping]);
 
-  // Initialize welcome message
+  // Initialize welcome message (only once)
   useEffect(() => {
-    if (showWelcome && currentGroup) {
+    if (showWelcome && currentGroup && messages.length === 0) {
       const welcomeMessage = getRandomWelcomeMessage();
       setMessages([{
         id: 'welcome',
@@ -65,7 +64,7 @@ export default function WorldClassOnboardingChat({
         timestamp: new Date()
       }]);
     }
-  }, [showWelcome, currentGroup]);
+  }, [showWelcome, currentGroup, messages.length]);
 
   const handleAnswerSubmit = async (questionId: string, answer: any) => {
     if (!currentQuestion) return;
