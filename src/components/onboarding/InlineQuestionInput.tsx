@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface Question {
@@ -36,6 +36,13 @@ export default function InlineQuestionInput({
   const [selectedTechTools, setSelectedTechTools] = useState<string[]>(
     currentAnswer ? (Array.isArray(currentAnswer) ? currentAnswer : [currentAnswer]) : []
   );
+  const [openDropdowns, setOpenDropdowns] = useState({
+    crm: false,
+    marketing: false,
+    analytics: false,
+    pm: false
+  });
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Update local state when currentAnswer changes
   useEffect(() => {
@@ -51,6 +58,34 @@ export default function InlineQuestionInput({
       setSelectedTechTools(Array.isArray(currentAnswer) ? currentAnswer : []);
     }
   }, [currentAnswer, question.type, question.defaultItems]);
+
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      let shouldClose = true;
+      
+      Object.values(dropdownRefs.current).forEach(ref => {
+        if (ref && ref.contains(target)) {
+          shouldClose = false;
+        }
+      });
+      
+      if (shouldClose) {
+        setOpenDropdowns({
+          crm: false,
+          marketing: false,
+          analytics: false,
+          pm: false
+        });
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleTextChange = (value: string) => {
     if (question.maxCharacters && value.length > question.maxCharacters) {
@@ -272,205 +307,184 @@ export default function InlineQuestionInput({
             {/* CRM & Sales */}
             <div className="space-y-3">
               <h4 className="text-gray-700 font-medium">CRM & Sales</h4>
-              <div className="relative">
-                <select
-                  multiple
-                  value={selectedTechTools.filter(tool => 
-                    ['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].includes(tool)
-                  )}
-                  onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                    const currentCRM = selectedTechTools.filter(tool => 
-                      ['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'Pipedrive', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].includes(tool)
-                    );
-                    const otherTools = selectedTechTools.filter(tool => 
-                      !['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'Pipedrive', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].includes(tool)
-                    );
-                    onAnswerChange([...otherTools, ...selectedOptions]);
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  size={6}
+              <div className="relative" ref={el => { dropdownRefs.current.crm = el; }}>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdowns(prev => ({ ...prev, crm: !prev.crm }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent flex items-center justify-between"
                 >
-                  <option value="Salesforce">Salesforce</option>
-                  <option value="HubSpot">HubSpot</option>
-                  <option value="Pipedrive">Pipedrive</option>
-                  <option value="Zoho CRM">Zoho CRM</option>
-                  <option value="Freshsales">Freshsales</option>
-                  <option value="Close">Close</option>
-                  <option value="Microsoft Dynamics">Microsoft Dynamics</option>
-                  <option value="SugarCRM">SugarCRM</option>
-                  <option value="Insightly">Insightly</option>
-                  <option value="Nimble">Nimble</option>
-                  <option value="Agile CRM">Agile CRM</option>
-                  <option value="Capsule CRM">Capsule CRM</option>
-                  <option value="Bitrix24">Bitrix24</option>
-                  <option value="SuiteCRM">SuiteCRM</option>
-                  <option value="Vtiger">Vtiger</option>
-                  <option value="Odoo CRM">Odoo CRM</option>
-                  <option value="Zendesk Sell">Zendesk Sell</option>
-                  <option value="Copper">Copper</option>
-                  <option value="SalesLoft">SalesLoft</option>
-                  <option value="Outreach">Outreach</option>
-                  <option value="Gong">Gong</option>
-                  <option value="Chorus.ai">Chorus.ai</option>
-                  <option value="Gong.io">Gong.io</option>
-                  <option value="Chorus">Chorus</option>
-                </select>
+                  <span className="text-left">
+                    {selectedTechTools.filter(tool => 
+                      ['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].includes(tool)
+                    ).length > 0 
+                      ? `${selectedTechTools.filter(tool => 
+                          ['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].includes(tool)
+                        ).length} selected`
+                      : 'Select CRM & Sales tools'
+                    }
+                  </span>
+                  <svg className={`w-5 h-5 transition-transform ${openDropdowns.crm ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openDropdowns.crm && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                  >
+                    {['Salesforce', 'HubSpot', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'Close', 'Microsoft Dynamics', 'SugarCRM', 'Insightly', 'Nimble', 'Agile CRM', 'Capsule CRM', 'Bitrix24', 'SuiteCRM', 'Vtiger', 'Odoo CRM', 'Zendesk Sell', 'Copper', 'SalesLoft', 'Outreach', 'Gong', 'Chorus.ai', 'Gong.io', 'Chorus'].map((tool) => (
+                      <label key={tool} className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedTechTools.includes(tool)}
+                          onChange={() => handleTechToolSelect(tool)}
+                          className="mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <span className="text-gray-900 text-sm">{tool}</span>
+                      </label>
+                    ))}
+                  </motion.div>
+                )}
               </div>
             </div>
 
             {/* Marketing */}
             <div className="space-y-3">
               <h4 className="text-gray-700 font-medium">Marketing</h4>
-              <div className="relative">
-                <select
-                  multiple
-                  value={selectedTechTools.filter(tool => 
-                    ['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'ConvertKit', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].includes(tool)
-                  )}
-                  onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                    const currentMarketing = selectedTechTools.filter(tool => 
-                      ['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'ConvertKit', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].includes(tool)
-                    );
-                    const otherTools = selectedTechTools.filter(tool => 
-                      !['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'ConvertKit', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].includes(tool)
-                    );
-                    onAnswerChange([...otherTools, ...selectedOptions]);
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  size={6}
+              <div className="relative" ref={el => { dropdownRefs.current.marketing = el; }}>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdowns(prev => ({ ...prev, marketing: !prev.marketing }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent flex items-center justify-between"
                 >
-                  <option value="Mailchimp">Mailchimp</option>
-                  <option value="ConvertKit">ConvertKit</option>
-                  <option value="ActiveCampaign">ActiveCampaign</option>
-                  <option value="Klaviyo">Klaviyo</option>
-                  <option value="Drip">Drip</option>
-                  <option value="GetResponse">GetResponse</option>
-                  <option value="Constant Contact">Constant Contact</option>
-                  <option value="SendinBlue">SendinBlue</option>
-                  <option value="AWeber">AWeber</option>
-                  <option value="Campaign Monitor">Campaign Monitor</option>
-                  <option value="Emma">Emma</option>
-                  <option value="VerticalResponse">VerticalResponse</option>
-                  <option value="iContact">iContact</option>
-                  <option value="Ontraport">Ontraport</option>
-                  <option value="Infusionsoft">Infusionsoft</option>
-                  <option value="Kajabi">Kajabi</option>
-                  <option value="Substack">Substack</option>
-                  <option value="Buttondown">Buttondown</option>
-                  <option value="TinyLetter">TinyLetter</option>
-                  <option value="MailerLite">MailerLite</option>
-                  <option value="SendGrid">SendGrid</option>
-                  <option value="Postmark">Postmark</option>
-                  <option value="Customer.io">Customer.io</option>
-                  <option value="Intercom">Intercom</option>
-                  <option value="Drift">Drift</option>
-                </select>
+                  <span className="text-left">
+                    {selectedTechTools.filter(tool => 
+                      ['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].includes(tool)
+                    ).length > 0 
+                      ? `${selectedTechTools.filter(tool => 
+                          ['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].includes(tool)
+                        ).length} selected`
+                      : 'Select Marketing tools'
+                    }
+                  </span>
+                  <svg className={`w-5 h-5 transition-transform ${openDropdowns.marketing ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openDropdowns.marketing && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                  >
+                    {['Mailchimp', 'ConvertKit', 'ActiveCampaign', 'Klaviyo', 'Drip', 'GetResponse', 'Constant Contact', 'SendinBlue', 'AWeber', 'Campaign Monitor', 'Emma', 'VerticalResponse', 'iContact', 'Ontraport', 'Infusionsoft', 'Kajabi', 'Substack', 'Buttondown', 'TinyLetter', 'MailerLite', 'SendGrid', 'Postmark', 'Customer.io', 'Intercom', 'Drift'].map((tool) => (
+                      <label key={tool} className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedTechTools.includes(tool)}
+                          onChange={() => handleTechToolSelect(tool)}
+                          className="mr-3 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                        />
+                        <span className="text-gray-900 text-sm">{tool}</span>
+                      </label>
+                    ))}
+                  </motion.div>
+                )}
               </div>
             </div>
 
             {/* Analytics */}
             <div className="space-y-3">
               <h4 className="text-gray-700 font-medium">Analytics</h4>
-              <div className="relative">
-                <select
-                  multiple
-                  value={selectedTechTools.filter(tool => 
-                    ['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].includes(tool)
-                  )}
-                  onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                    const currentAnalytics = selectedTechTools.filter(tool => 
-                      ['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].includes(tool)
-                    );
-                    const otherTools = selectedTechTools.filter(tool => 
-                      !['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].includes(tool)
-                    );
-                    onAnswerChange([...otherTools, ...selectedOptions]);
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  size={6}
+              <div className="relative" ref={el => { dropdownRefs.current.analytics = el; }}>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdowns(prev => ({ ...prev, analytics: !prev.analytics }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-transparent flex items-center justify-between"
                 >
-                  <option value="Google Analytics">Google Analytics</option>
-                  <option value="Mixpanel">Mixpanel</option>
-                  <option value="Amplitude">Amplitude</option>
-                  <option value="Hotjar">Hotjar</option>
-                  <option value="FullStory">FullStory</option>
-                  <option value="Pendo">Pendo</option>
-                  <option value="Adobe Analytics">Adobe Analytics</option>
-                  <option value="Segment">Segment</option>
-                  <option value="Kissmetrics">Kissmetrics</option>
-                  <option value="Heap">Heap</option>
-                  <option value="Crazy Egg">Crazy Egg</option>
-                  <option value="Optimizely">Optimizely</option>
-                  <option value="VWO">VWO</option>
-                  <option value="Google Tag Manager">Google Tag Manager</option>
-                  <option value="Tealium">Tealium</option>
-                  <option value="Adobe Launch">Adobe Launch</option>
-                  <option value="GTM">GTM</option>
-                  <option value="Facebook Pixel">Facebook Pixel</option>
-                  <option value="LinkedIn Insight Tag">LinkedIn Insight Tag</option>
-                  <option value="Twitter Pixel">Twitter Pixel</option>
-                  <option value="Pinterest Tag">Pinterest Tag</option>
-                  <option value="Snapchat Pixel">Snapchat Pixel</option>
-                  <option value="TikTok Pixel">TikTok Pixel</option>
-                  <option value="Reddit Pixel">Reddit Pixel</option>
-                  <option value="Quora Pixel">Quora Pixel</option>
-                  <option value="Bing Ads">Bing Ads</option>
-                </select>
+                  <span className="text-left">
+                    {selectedTechTools.filter(tool => 
+                      ['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].includes(tool)
+                    ).length > 0 
+                      ? `${selectedTechTools.filter(tool => 
+                          ['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].includes(tool)
+                        ).length} selected`
+                      : 'Select Analytics tools'
+                    }
+                  </span>
+                  <svg className={`w-5 h-5 transition-transform ${openDropdowns.analytics ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openDropdowns.analytics && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                  >
+                    {['Google Analytics', 'Mixpanel', 'Amplitude', 'Hotjar', 'FullStory', 'Pendo', 'Adobe Analytics', 'Segment', 'Kissmetrics', 'Heap', 'Crazy Egg', 'Optimizely', 'VWO', 'Google Tag Manager', 'Tealium', 'Adobe Launch', 'GTM', 'Facebook Pixel', 'LinkedIn Insight Tag', 'Twitter Pixel', 'Pinterest Tag', 'Snapchat Pixel', 'TikTok Pixel', 'Reddit Pixel', 'Quora Pixel', 'Bing Ads'].map((tool) => (
+                      <label key={tool} className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedTechTools.includes(tool)}
+                          onChange={() => handleTechToolSelect(tool)}
+                          className="mr-3 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        />
+                        <span className="text-gray-900 text-sm">{tool}</span>
+                      </label>
+                    ))}
+                  </motion.div>
+                )}
               </div>
             </div>
 
             {/* Project Management */}
             <div className="space-y-3">
               <h4 className="text-gray-700 font-medium">Project Management</h4>
-              <div className="relative">
-                <select
-                  multiple
-                  value={selectedTechTools.filter(tool => 
-                    ['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].includes(tool)
-                  )}
-                  onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                    const currentPM = selectedTechTools.filter(tool => 
-                      ['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].includes(tool)
-                    );
-                    const otherTools = selectedTechTools.filter(tool => 
-                      !['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].includes(tool)
-                    );
-                    onAnswerChange([...otherTools, ...selectedOptions]);
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  size={6}
+              <div className="relative" ref={el => { dropdownRefs.current.pm = el; }}>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdowns(prev => ({ ...prev, pm: !prev.pm }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent flex items-center justify-between"
                 >
-                  <option value="Asana">Asana</option>
-                  <option value="Trello">Trello</option>
-                  <option value="Monday.com">Monday.com</option>
-                  <option value="ClickUp">ClickUp</option>
-                  <option value="Notion">Notion</option>
-                  <option value="Basecamp">Basecamp</option>
-                  <option value="Jira">Jira</option>
-                  <option value="Confluence">Confluence</option>
-                  <option value="Slack">Slack</option>
-                  <option value="Microsoft Teams">Microsoft Teams</option>
-                  <option value="Zoom">Zoom</option>
-                  <option value="Google Meet">Google Meet</option>
-                  <option value="Loom">Loom</option>
-                  <option value="Figma">Figma</option>
-                  <option value="Sketch">Sketch</option>
-                  <option value="Adobe XD">Adobe XD</option>
-                  <option value="InVision">InVision</option>
-                  <option value="Framer">Framer</option>
-                  <option value="Webflow">Webflow</option>
-                  <option value="Squarespace">Squarespace</option>
-                  <option value="Wix">Wix</option>
-                  <option value="Shopify">Shopify</option>
-                  <option value="WooCommerce">WooCommerce</option>
-                  <option value="Magento">Magento</option>
-                  <option value="BigCommerce">BigCommerce</option>
-                  <option value="Stripe">Stripe</option>
-                </select>
+                  <span className="text-left">
+                    {selectedTechTools.filter(tool => 
+                      ['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].includes(tool)
+                    ).length > 0 
+                      ? `${selectedTechTools.filter(tool => 
+                          ['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].includes(tool)
+                        ).length} selected`
+                      : 'Select Project Management tools'
+                    }
+                  </span>
+                  <svg className={`w-5 h-5 transition-transform ${openDropdowns.pm ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openDropdowns.pm && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                  >
+                    {['Asana', 'Trello', 'Monday.com', 'ClickUp', 'Notion', 'Basecamp', 'Jira', 'Confluence', 'Slack', 'Microsoft Teams', 'Zoom', 'Google Meet', 'Loom', 'Figma', 'Sketch', 'Adobe XD', 'InVision', 'Framer', 'Webflow', 'Squarespace', 'Wix', 'Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Stripe'].map((tool) => (
+                      <label key={tool} className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedTechTools.includes(tool)}
+                          onChange={() => handleTechToolSelect(tool)}
+                          className="mr-3 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                        />
+                        <span className="text-gray-900 text-sm">{tool}</span>
+                      </label>
+                    ))}
+                  </motion.div>
+                )}
               </div>
             </div>
 
@@ -479,7 +493,7 @@ export default function InlineQuestionInput({
               animate={{ opacity: 1 }}
               className="text-gray-600 text-sm mt-3"
             >
-              Selected {selectedTechTools.length} tools (Hold Ctrl/Cmd to select multiple)
+              Selected {selectedTechTools.length} tools
             </motion.p>
           </motion.div>
         );
