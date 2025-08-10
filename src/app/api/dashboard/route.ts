@@ -74,9 +74,27 @@ export async function POST(req: Request) {
     }
 
     if (!needsRefresh) {
-      return NextResponse.json({
+      const normalized = {
         ...insights,
-        score: insights.overall_score, // Map overall_score to score for frontend compatibility
+        strategy_score: Number(insights.strategy_score),
+        process_score: Number(insights.process_score),
+        technology_score: Number(insights.technology_score),
+        overall_score: Number(insights.overall_score),
+        industryAvgScore: Number(insights.industryAvgScore),
+        topPerformerScore: Number(insights.topPerformerScore),
+        chartData: Array.isArray((insights as any).chartData)
+          ? (insights as any).chartData.map((d: any) => ({
+              month: d.month,
+              userScore: Number(d.userScore),
+              industryScore: Number(d.industryScore),
+              topPerformerScore: Number(d.topPerformerScore),
+            }))
+          : [],
+      } as any;
+
+      return NextResponse.json({
+        ...normalized,
+        score: normalized.overall_score, // Map overall_score to score for frontend compatibility
         industry: user.industry?.trim().toLowerCase(),
         promptRetake: false,
       });
