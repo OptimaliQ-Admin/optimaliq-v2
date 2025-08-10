@@ -3,6 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { generateDashboardScores } from "@/lib/ai/generateDashboard";
+import { buildOnboardingFeatures } from "@/lib/ai/dashboard/buildFeatures";
+import { scoreFromFeatures } from "@/lib/ai/dashboard/scoreFromFeatures";
+import { benchmarkFromScores } from "@/lib/ai/dashboard/benchmarkFromScores";
+import { swFromAnswers } from "@/lib/ai/dashboard/swFromAnswers";
+import { roadmapFromSw } from "@/lib/ai/dashboard/roadmapFromSw";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -159,15 +164,54 @@ export async function POST(req: Request) {
         console.log("✅ Successfully synced new scores to legacy dashboard table");
       }
     } else {
-      // Generate AI scores using onboarding session data (fallback)
-      console.log("🔄 No pre-generated scores found, generating new ones...");
-      aiScores = await generateDashboardScores(
-        { 
-          ...user, 
-          business_overview: onboardingSession.metadata?.business_overview || ""
-        }, 
-        onboardingSession
-      );
+      console.log("🔄 No pre-generated scores found, running structured pipeline...");
+      const features = buildOnboardingFeatures(user, onboardingSession);
+      const deterministicScores = scoreFromFeatures(features);
+
+      // Try LLM scoring; if fails, fall back to deterministic
+      let llmScores = null as any;
+      try {
+        llmScores = await generateDashboardScores(
+          { ...user, business_overview: onboardingSession.metadata?.business_overview || "" },
+          onboardingSession
+        );
+      } catch {}
+
+      const finalScores = llmScores ?? deterministicScores;
+      const benchmarks = benchmarkFromScores({
+        strategy_score: finalScores.strategy_score,
+        process_score: finalScores.process_score,
+        technology_score: finalScores.technology_score,
+      }, features.industry);
+      const sw = swFromAnswers(features.rawAnswers || {});
+      const roadmap = roadmapFromSw(sw.weaknesses, features.industry);
+
+      aiScores = {
+        strategy_score: finalScores.strategy_score,
+        process_score: finalScores.process_score,
+        technology_score: finalScores.technology_score,
+        score: finalScores.score,
+        industryAvgScore: 3.2,
+        topPerformerScore: 4.5,
+        benchmarking: benchmarks,
+        strengths: sw.strengths,
+        weaknesses: sw.weaknesses,
+        roadmap,
+      };
+
+      // Persist ai_details for transparency
+      await supabase.from("onboarding_sessions").update({
+        metadata: {
+          ...onboardingSession.metadata,
+          ai_details: {
+            feature_version: "v1",
+            model_version: llmScores ? "gpt-4.1-mini" : "deterministic-v1",
+            prompt_version: llmScores ? "v1" : null,
+            confidence: (finalScores as any).confidence ?? 0.75,
+            explanations: (finalScores as any).explanations ?? {},
+          }
+        }
+      }).eq("id", onboardingSession.id);
 
       console.log(
         "🧪 Final AI scores returned to dashboard route:",
@@ -250,6 +294,9 @@ export async function POST(req: Request) {
       chartData,
       updated_at: now.toISOString(),
       industry: user.industry?.trim().toLowerCase(),
+      model_version: (onboardingSession.metadata?.ai_details?.model_version) ?? undefined,
+      prompt_version: (onboardingSession.metadata?.ai_details?.prompt_version) ?? undefined,
+      confidence: (onboardingSession.metadata?.ai_details?.confidence) ?? undefined,
     };
 
     // Save insights
