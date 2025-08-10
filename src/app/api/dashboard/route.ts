@@ -107,7 +107,7 @@ export async function POST(req: Request) {
 
     // Check if onboarding session already has AI-generated scores
     let aiScores;
-    if (onboardingSession.metadata?.has_ai_scores && onboardingSession.metadata?.score) {
+    if (onboardingSession.metadata?.has_ai_scores && onboardingSession.metadata?.score && onboardingSession.metadata?.fallback_used !== true) {
       console.log("✅ Using pre-generated scores from onboarding session");
       
       const storedScores = {
