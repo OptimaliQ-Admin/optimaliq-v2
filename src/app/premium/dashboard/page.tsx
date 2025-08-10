@@ -81,7 +81,7 @@ export default function PremiumDashboardPage() {
 
   useEffect(() => {
     if (!userId) return;
-    axios.post("/api/dashboard/welcome_message", { user_id: userId })
+    axios.post("/api/dashboard/welcome_message", { u_id: userId })
       .then(res => setWelcomeData(res.data))
       .catch(() => setWelcomeData({
         firstName: '',
@@ -331,7 +331,7 @@ export default function PremiumDashboardPage() {
             <div className="lg:col-span-1">
               <InsightCard 
                 title="🚀 30-Day Growth Plan" 
-                items={insights.roadmap.map(item => ({ 
+                items={(insights.roadmap || []).map(item => ({ 
                   label: item.task, 
                   detail: item.expectedImpact 
                 }))} 
@@ -363,14 +363,14 @@ export default function PremiumDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <InsightCard 
               title="✅ Key Strengths" 
-              items={insights.strengths.map(item => ({ 
+              items={(insights.strengths || []).map(item => ({ 
                 label: item.title, 
                 detail: item.impact 
               }))} 
             />
             <InsightCard 
               title="🚨 Areas for Improvement" 
-              items={insights.weaknesses.map(item => ({ 
+              items={(insights.weaknesses || []).map(item => ({ 
                 label: item.title, 
                 detail: item.impact 
               }))} 

@@ -9,16 +9,15 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
   const { u_id } = await req.json();
-
   if (!u_id) {
-    return NextResponse.json({ error: "Email required" }, { status: 400 });
+    return NextResponse.json({ error: "u_id required" }, { status: 400 });
   }
 
   // Fetch user's first name
   const { data: user, error: userError } = await supabase
     .from("users")
     .select("first_name")
-    .eq("u_id", u_id)
+    .eq("id", u_id)
     .single();
 
   if (userError || !user) {
