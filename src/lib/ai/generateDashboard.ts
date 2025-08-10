@@ -42,24 +42,34 @@ const DashboardScoresSchema = z.object({
 export type DashboardScores = z.infer<typeof DashboardScoresSchema>;
 
 export async function generateDashboardScores(user: any, assessment: any): Promise<DashboardScores | null> {
-  // Prepare user context with business overview
+  // Prepare user context with business overview and onboarding responses
   const userContext = {
-    industry: user.industry,
-    company_size: user.company_size,
-    revenue_range: user.revenue_range,
-    business_overview: assessment.business_overview || user.business_overview,
+    industry: user.industry || 'business',
+    company_size: user.company_size || 'mid-sized',
+    revenue_range: user.revenue_range || 'not specified',
+    business_overview: assessment.business_overview || user.business_overview || '',
+    user_responses: assessment.user_responses || {},
+    session_id: assessment.session_id || ''
   };
 
-  const systemPrompt = `
-You are a world-class business strategist evaluating high-growth companies. Your job is to assess strategy, process, and technology maturity, identify strategic gaps, benchmark against peers, and generate a 30-day growth roadmap.
+  // Format user responses for better context
+  const responseContext = Object.entries(userContext.user_responses)
+    .map(([questionId, answer]) => {
+      const answerText = Array.isArray(answer) ? answer.join(', ') : String(answer);
+      return `- ${questionId}: ${answerText}`;
+    })
+    .join('\n');
 
-You must anchor all responses in two things:
-1. The company’s **industry**: ${user.industry}
-2. The company’s **self-described business**: ${assessment.business_overview}
+  const systemPrompt = `You are a world-class business strategist evaluating high-growth companies. Your job is to assess strategy, process, and technology maturity, identify strategic gaps, benchmark against peers, and generate a 30-day growth roadmap.
 
-Your responses MUST reflect the unique nature of the business, its model, and its context — not just generic industry practices.
+You must anchor all responses in three things:
+1. The company's **industry**: ${userContext.industry}
+2. The company's **self-described business**: ${userContext.business_overview}
+3. The company's **specific assessment responses**: ${responseContext ? '\n' + responseContext : 'Not provided'}
 
-All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company’s industry (e.g., ${user.industry}). Use the provided company size and revenue range to contextualize your output.
+Your responses MUST reflect the unique nature of the business, its model, and its context — not just generic industry practices. Use the specific answers provided to tailor your analysis.
+
+All benchmarking insights, strengths/weaknesses, and roadmap tasks should reflect the norms, challenges, and best practices relevant to the company's industry (e.g., ${userContext.industry}). Use the provided company size and revenue range to contextualize your output.
 
 Responses must be deterministic — the same input should produce the same output. This ensures consistency in scoring and insights across sessions.
 
@@ -71,30 +81,33 @@ strategy_score (float between 1.0–5.0 — round to 1–2 decimal places)
 process_score (float between 1.0–5.0 — round to 1–2 decimal places)
 technology_score (float between 1.0–5.0 — round to 1–2 decimal places)
 score (overall average of the three scores — between 1.0–5.0, round to 2 decimals)
-industryAvgScore (float between 1.0–5.0)
-topPerformerScore (float between 1.0–5.0)
+industryAvgScore (float between 1.0–5.0, realistic for the industry)
+topPerformerScore (float between 1.0–5.0, aspirational but achievable)
 
 benchmarking: object with:
-- strategy: brief string summary
-- process: brief string summary
-- technology: brief string summary
+- strategy: brief string summary based on assessment responses
+- process: brief string summary based on operational maturity indicators
+- technology: brief string summary based on tech stack and tool usage
 
 strengths: array of 3–4 objects:
 - each with a title (string) and impact (string)
+- base these on positive indicators from the assessment responses
 
 weaknesses: array of 3–4 objects:
 - each with a title (string) and impact (string)
+- base these on areas for improvement identified in responses
 
 roadmap: array of 4 task objects:
 - each with a task (string) and expectedImpact (string)
-- Each task must clearly relate to the business model and industry.
-- each task should be clear, action-oriented, specific (not generic or vague) and talored to the to the specific company context from ${assessment.business_overview} and ${user.industry}.
+- Each task must clearly relate to the business model and industry
+- each task should be clear, action-oriented, specific (not generic or vague) and tailored to the specific company context from ${userContext.business_overview} and ${userContext.industry}
+- Use the assessment responses to identify the most impactful next steps
 
 Formatting rules:
 - All numeric scores must be floats rounded to 1–2 decimal places
 - Do not return values outside the 1.0–5.0 range
 - Return a single JSON object only (no markdown, code blocks, or wrappers)
-`;
+- Ensure all scores are realistic and actionable`;
 
   try {
     // Check if OpenAI is available
@@ -115,7 +128,11 @@ Formatting rules:
           role: "user",
           content: JSON.stringify({
             ...userContext,
-            ...assessment,
+            assessment_responses: responseContext,
+            session_details: {
+              session_id: userContext.session_id,
+              assessment_type: 'world_class_conversational'
+            }
           }),
         },
       ],

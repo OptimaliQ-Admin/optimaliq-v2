@@ -70,7 +70,7 @@ export default function WorldClassOnboardingPage() {
 
   const handleComplete = async (answers: any, finalScores: any) => {
     try {
-      // Update session status
+      // Update session status with the correct dashboard-compatible data format
       if (sessionId) {
         await supabase
           .from('onboarding_sessions')
@@ -78,7 +78,18 @@ export default function WorldClassOnboardingPage() {
             status: 'completed',
             completed_at: new Date().toISOString(),
             metadata: {
-              ...finalScores,
+              // Save the exact format the dashboard API expects
+              strategy_score: finalScores.strategy_score,
+              process_score: finalScores.process_score,
+              technology_score: finalScores.technology_score,
+              score: finalScores.score,
+              industryAvgScore: finalScores.industryAvgScore,
+              topPerformerScore: finalScores.topPerformerScore,
+              benchmarking: finalScores.benchmarking,
+              strengths: finalScores.strengths,
+              weaknesses: finalScores.weaknesses,
+              roadmap: finalScores.roadmap,
+              business_overview: answers, // Include all user responses for context
               type: 'world_class_conversational'
             }
           })
