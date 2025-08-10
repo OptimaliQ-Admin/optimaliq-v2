@@ -90,10 +90,38 @@ export default function WorldClassOnboardingPage() {
               weaknesses: finalScores.weaknesses,
               roadmap: finalScores.roadmap,
               business_overview: answers, // Include all user responses for context
-              type: 'world_class_conversational'
+              type: 'world_class_conversational',
+              // Add a flag to indicate this session has pre-generated scores
+              has_ai_scores: true,
+              ai_scores_generated_at: new Date().toISOString()
             }
           })
           .eq('id', sessionId);
+
+        // Also sync the data to the dashboard insights table for immediate access
+        const { error: insightsError } = await supabase
+          .from('tier2_dashboard_insights')
+          .upsert({
+            u_id: userProfile?.id,
+            strategy_score: finalScores.strategy_score,
+            process_score: finalScores.process_score,
+            technology_score: finalScores.technology_score,
+            overall_score: finalScores.score,
+            industryAvgScore: finalScores.industryAvgScore,
+            topPerformerScore: finalScores.topPerformerScore,
+            benchmarking: finalScores.benchmarking,
+            strengths: finalScores.strengths,
+            weaknesses: finalScores.weaknesses,
+            roadmap: finalScores.roadmap,
+            industry: userProfile?.industry?.toLowerCase(),
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'u_id'
+          });
+
+        if (insightsError) {
+          console.warn('Warning: Could not sync to dashboard insights table:', insightsError);
+        }
       }
 
       setScores(finalScores);
@@ -186,7 +214,7 @@ export default function WorldClassOnboardingPage() {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="text-gray-600">Overall Score:</span>
-                      <span className="ml-2 font-medium">{scores.overall_score}/5</span>
+                      <span className="ml-2 font-medium">{scores.score || scores.overall_score}/5</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Strategy:</span>
@@ -207,8 +235,10 @@ export default function WorldClassOnboardingPage() {
                   <div className="bg-blue-50 rounded-lg p-4">
                     <h3 className="font-semibold text-gray-900 mb-2">Your 30-Day Roadmap</h3>
                     <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                      {scores.roadmap.slice(0, 3).map((item: string, index: number) => (
-                        <li key={index}>{item}</li>
+                      {scores.roadmap.slice(0, 3).map((item: any, index: number) => (
+                        <li key={index}>
+                          {typeof item === 'string' ? item : `${item.task} (${item.expectedImpact})`}
+                        </li>
                       ))}
                     </ul>
                   </div>

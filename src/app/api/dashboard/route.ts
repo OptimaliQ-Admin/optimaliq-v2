@@ -74,30 +74,55 @@ export async function POST(req: Request) {
       });
     }
 
-    // Generate AI scores using onboarding session data
-    const aiScores = await generateDashboardScores(
-      { 
-        ...user, 
-        business_overview: onboardingSession.metadata?.business_overview || ""
-      }, 
-      onboardingSession
-    );
+    // Check if onboarding session already has AI-generated scores
+    let aiScores;
+    if (onboardingSession.metadata?.has_ai_scores && onboardingSession.metadata?.score) {
+      console.log("✅ Using pre-generated scores from onboarding session");
+      
+      const storedScores = {
+        strategy_score: onboardingSession.metadata.strategy_score,
+        process_score: onboardingSession.metadata.process_score,
+        technology_score: onboardingSession.metadata.technology_score,
+        score: onboardingSession.metadata.score,
+        industryAvgScore: onboardingSession.metadata.industryAvgScore,
+        topPerformerScore: onboardingSession.metadata.topPerformerScore,
+        benchmarking: onboardingSession.metadata.benchmarking,
+        strengths: onboardingSession.metadata.strengths,
+        weaknesses: onboardingSession.metadata.weaknesses,
+        roadmap: onboardingSession.metadata.roadmap,
+      };
 
-    console.log(
-      "🧪 Final AI scores returned to dashboard route:",
-      JSON.stringify(aiScores, null, 2)
-    );
-    if (aiScores) {
-      console.log("🧪 Types:", {
-        benchmarking: typeof aiScores.benchmarking,
-        strengths: Array.isArray(aiScores.strengths),
-        weaknesses: Array.isArray(aiScores.weaknesses),
-        roadmap: Array.isArray(aiScores.roadmap),
-      });
-    }
+      console.log("🧪 Using stored scores:", JSON.stringify(storedScores, null, 2));
+      
+      // Use stored scores instead of regenerating
+      aiScores = storedScores;
+    } else {
+      // Generate AI scores using onboarding session data (fallback)
+      console.log("🔄 No pre-generated scores found, generating new ones...");
+      aiScores = await generateDashboardScores(
+        { 
+          ...user, 
+          business_overview: onboardingSession.metadata?.business_overview || ""
+        }, 
+        onboardingSession
+      );
 
-    if (!aiScores) {
-      return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });
+      console.log(
+        "🧪 Final AI scores returned to dashboard route:",
+        JSON.stringify(aiScores, null, 2)
+      );
+      if (aiScores) {
+        console.log("🧪 Types:", {
+          benchmarking: typeof aiScores.benchmarking,
+          strengths: Array.isArray(aiScores.strengths),
+          weaknesses: Array.isArray(aiScores.weaknesses),
+          roadmap: Array.isArray(aiScores.roadmap),
+        });
+      }
+
+      if (!aiScores) {
+        return NextResponse.json({ error: "AI scoring failed" }, { status: 500 });
+      }
     }
 
     console.info("🧠 AI Scores Generated:", aiScores);
