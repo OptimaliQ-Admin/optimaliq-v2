@@ -183,6 +183,7 @@ export default function WorldClassOnboardingChat({
       } else {
         // Fallback if AI scoring fails
         const fallbackScores = {
+          fallback_used: true,
           strategy_score: 3.0,
           process_score: 3.0,
           technology_score: 3.0,
