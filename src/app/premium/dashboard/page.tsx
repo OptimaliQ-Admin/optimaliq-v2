@@ -147,8 +147,11 @@ export default function PremiumDashboardPage() {
   if (error) return <p className="text-center text-red-600 p-10">{error}</p>;
   if (!insights) return null;
 
-  const overallPerformance = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.topPerformerScore) * 100;
-  const industryPosition = ((insights.strategy_score + insights.process_score + insights.technology_score) / 3 / insights.industryAvgScore) * 100;
+  const avgScore = ((insights.strategy_score || 0) + (insights.process_score || 0) + (insights.technology_score || 0)) / 3;
+  const denomTop = insights.topPerformerScore && insights.topPerformerScore > 0 ? insights.topPerformerScore : 4.5;
+  const denomIndustry = insights.industryAvgScore && insights.industryAvgScore > 0 ? insights.industryAvgScore : 3.2;
+  const overallPerformance = Math.round((avgScore / denomTop) * 100);
+  const industryPosition = Math.round((avgScore / denomIndustry) * 100);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
