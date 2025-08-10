@@ -60,7 +60,18 @@ export async function POST(req: Request) {
     thirtyDaysAgo.setDate(now.getDate() - 30);
 
     const updatedAt = insights?.updated_at ? new Date(insights.updated_at) : null;
-    const needsRefresh = !updatedAt || updatedAt < thirtyDaysAgo;
+    let needsRefresh = !updatedAt || updatedAt < thirtyDaysAgo;
+    
+    // 🔍 Check if there are newer onboarding scores that haven't been synced
+    if (insights && onboardingSession.metadata?.has_ai_scores) {
+      const onboardingScoreDate = new Date(onboardingSession.metadata.ai_scores_generated_at || onboardingSession.completed_at);
+      const dashboardScoreDate = new Date(insights.updated_at);
+      
+      if (onboardingScoreDate > dashboardScoreDate) {
+        console.log("🔄 Newer onboarding scores detected, forcing refresh...");
+        needsRefresh = true;
+      }
+    }
 
     if (!needsRefresh) {
       return NextResponse.json({
@@ -93,6 +104,42 @@ export async function POST(req: Request) {
       
       // Use stored scores instead of regenerating
       aiScores = storedScores;
+      
+      // 🔄 SYNC: Update the legacy dashboard insights table with new data
+      console.log("🔄 Syncing new scores to legacy dashboard table...");
+      const syncPayload = {
+        u_id,
+        strategy_score: storedScores.strategy_score,
+        process_score: storedScores.process_score,
+        technology_score: storedScores.technology_score,
+        overall_score: storedScores.score,
+        score: storedScores.score, // Add score field for frontend compatibility
+        industryAvgScore: storedScores.industryAvgScore,
+        topPerformerScore: storedScores.topPerformerScore,
+        benchmarking: storedScores.benchmarking,
+        strengths: storedScores.strengths,
+        weaknesses: storedScores.weaknesses,
+        roadmap: storedScores.roadmap,
+        chartData: [
+          { month: "Now", userScore: storedScores.score, industryScore: storedScores.industryAvgScore, topPerformerScore: storedScores.topPerformerScore },
+          { month: "3 Months", userScore: Math.min(5, storedScores.score + 0.5), industryScore: storedScores.industryAvgScore, topPerformerScore: storedScores.topPerformerScore },
+          { month: "6 Months", userScore: Math.min(5, storedScores.score + 1), industryScore: storedScores.industryAvgScore, topPerformerScore: storedScores.topPerformerScore },
+          { month: "12 Months", userScore: Math.min(5, storedScores.score + 2), industryScore: storedScores.industryAvgScore, topPerformerScore: storedScores.topPerformerScore },
+        ],
+        updated_at: new Date().toISOString(),
+        industry: user.industry?.trim().toLowerCase(),
+      };
+      
+      // Upsert to legacy dashboard table
+      const { error: syncError } = await supabase
+        .from("tier2_dashboard_insights")
+        .upsert([syncPayload], { onConflict: "u_id" });
+        
+      if (syncError) {
+        console.warn("⚠️ Warning: Could not sync to legacy dashboard table:", syncError);
+      } else {
+        console.log("✅ Successfully synced new scores to legacy dashboard table");
+      }
     } else {
       // Generate AI scores using onboarding session data (fallback)
       console.log("🔄 No pre-generated scores found, generating new ones...");
