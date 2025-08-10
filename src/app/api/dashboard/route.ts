@@ -69,6 +69,7 @@ export async function POST(req: Request) {
     if (!needsRefresh) {
       return NextResponse.json({
         ...insights,
+        score: insights.overall_score, // Map overall_score to score for frontend compatibility
         industry: user.industry?.trim().toLowerCase(),
         promptRetake: false,
       });
@@ -178,6 +179,7 @@ export async function POST(req: Request) {
       process_score: aiScores.process_score,
       technology_score: aiScores.technology_score,
       overall_score: aiScores.score,
+      score: aiScores.score, // Add score field for frontend compatibility
       industryAvgScore: aiScores.industryAvgScore,
       topPerformerScore: aiScores.topPerformerScore,
       benchmarking: aiScores.benchmarking,

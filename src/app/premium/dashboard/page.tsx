@@ -62,7 +62,7 @@ export default function PremiumDashboardPage() {
 
     const fetchData = async () => {
       try {
-        const res = await axios.post("/api/dashboard", { user_id: userId });
+        const res = await axios.post("/api/dashboard", { u_id: userId });
         if (res.data.error) {
           setError(res.data.error);
         } else {
