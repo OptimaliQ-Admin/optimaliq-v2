@@ -10,6 +10,7 @@ import { swFromAnswers } from "@/lib/ai/dashboard/swFromAnswers";
 import { roadmapFromSw } from "@/lib/ai/dashboard/roadmapFromSw";
 import { generateSWAndRoadmap } from "@/lib/ai/dashboard/generateSWAndRoadmap";
 import { saveAssessmentResults } from "@/lib/sync/saveAssessmentResults";
+import { recordTelemetry } from "@/lib/sync/aiTelemetry";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -179,16 +180,20 @@ export async function POST(req: Request) {
     } else {
       console.log("🔄 No pre-generated scores found, running structured pipeline...");
       // Generate AI scores using onboarding features/deterministic fallback
+      const t0 = Date.now();
       const features = buildOnboardingFeatures(user as any, onboardingSession as any);
+      await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "features", featureVersion: "v1", success: true, durationMs: Date.now() - t0 });
       const deterministicScores = scoreFromFeatures(features);
 
       // Try LLM scoring; if fails, fall back to deterministic
       let llmScores = null as any;
       try {
+        const t1 = Date.now();
         llmScores = await generateDashboardScores(
           { ...user, business_overview: onboardingSession.metadata?.business_overview || "" },
           onboardingSession
         );
+        await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "scoring", usedModel: "openai", promptVersion: "v1", featureVersion: "v1", success: true, durationMs: Date.now() - t1 });
       } catch {}
 
       const finalScores = llmScores ?? deterministicScores;
@@ -201,6 +206,7 @@ export async function POST(req: Request) {
       let roadmap = roadmapFromSw(sw.weaknesses, features.industry);
       // Try LLM refinement for SW and Roadmap with McKinsey tone
       try {
+        const t2 = Date.now();
         const refined = await generateSWAndRoadmap({
           industry: features.industry,
           answers: features.rawAnswers || {},
@@ -210,6 +216,7 @@ export async function POST(req: Request) {
           sw = { strengths: refined.strengths, weaknesses: refined.weaknesses } as any;
           roadmap = refined.roadmap as any;
         }
+        await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "insights", usedModel: "openai", promptVersion: "v1", featureVersion: "v1", success: true, durationMs: Date.now() - t2 });
       } catch {}
 
       aiScores = {
