@@ -70,7 +70,7 @@ export default function WorldClassOnboardingPage() {
 
   const handleComplete = async (answers: any, finalScores: any) => {
     try {
-      // Update session status with the correct dashboard-compatible data format
+      // Update session status, then redirect to dashboard (no local summary screen)
       if (sessionId) {
         await supabase
           .from('onboarding_sessions')
@@ -89,7 +89,7 @@ export default function WorldClassOnboardingPage() {
               strengths: finalScores.strengths,
               weaknesses: finalScores.weaknesses,
               roadmap: finalScores.roadmap,
-              fallback_used: Boolean((finalScores as any).fallback_used === true),
+              fallback_used: finalScores.fallback_used === true,
               business_overview: answers, // Include all user responses for context
               type: 'world_class_conversational',
               // Add a flag to indicate this session has pre-generated scores
@@ -99,32 +99,9 @@ export default function WorldClassOnboardingPage() {
           })
           .eq('id', sessionId);
 
-        // Skip immediate dashboard upsert if fallback was used; let API regenerate properly
-        if (!(finalScores as any).fallback_used) {
-          const { error: insightsError } = await supabase
-            .from('tier2_dashboard_insights')
-            .upsert({
-              u_id: userProfile?.id,
-              strategy_score: finalScores.strategy_score,
-              process_score: finalScores.process_score,
-              technology_score: finalScores.technology_score,
-              overall_score: finalScores.score,
-              industryAvgScore: finalScores.industryAvgScore,
-              topPerformerScore: finalScores.topPerformerScore,
-              benchmarking: finalScores.benchmarking,
-              strengths: finalScores.strengths,
-              weaknesses: finalScores.weaknesses,
-              roadmap: finalScores.roadmap,
-              industry: userProfile?.industry?.toLowerCase(),
-              updated_at: new Date().toISOString()
-            }, {
-              onConflict: 'u_id'
-            });
-
-          if (insightsError) {
-            console.warn('Warning: Could not sync to dashboard insights table:', insightsError);
-          }
-        }
+        // Immediately navigate to dashboard; API will generate/refresh insights
+        router.replace('/premium/dashboard');
+        return;
       }
 
       setScores(finalScores);

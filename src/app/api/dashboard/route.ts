@@ -19,6 +19,8 @@ import { getErrorMessage } from "@/utils/errorHandler";
 
 export async function POST(req: Request) {
   try {
+    const startTs = Date.now();
+    const abortAfterMs = 15000; // protect against Vercel 10s/edge cold constraints
     const supabase = createRouteHandlerClient({ cookies });
     const { u_id } = await req.json();
 
@@ -173,9 +175,12 @@ export async function POST(req: Request) {
     } else {
       console.log("🔄 No pre-generated scores found, running structured pipeline...");
       // Generate AI scores using onboarding features/deterministic fallback
-      const t0 = Date.now();
+      const tFeatures = Date.now();
       const features = buildOnboardingFeatures(user as any, onboardingSession as any);
-      await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "features", featureVersion: "v1", success: true, durationMs: Date.now() - t0 });
+      if (Date.now() - startTs > abortAfterMs) {
+        return NextResponse.json({ error: "Processing timeout", promptRetake: true }, { status: 202 });
+      }
+      await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "features", featureVersion: "v1", success: true, durationMs: Date.now() - tFeatures });
       const deterministicScores = scoreFromFeatures(features);
 
       // Try LLM scoring; if fails, fall back to deterministic
@@ -212,6 +217,9 @@ export async function POST(req: Request) {
         if (refined) {
           sw = { strengths: refined.strengths, weaknesses: refined.weaknesses } as any;
           roadmap = refined.roadmap as any;
+        }
+        if (Date.now() - startTs > abortAfterMs) {
+          return NextResponse.json({ error: "Processing timeout", promptRetake: true }, { status: 202 });
         }
         await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "insights", usedModel: "openai", promptVersion: "v1", featureVersion: "v1", success: true, durationMs: Date.now() - t2 });
       } catch {}
