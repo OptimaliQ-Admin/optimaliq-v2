@@ -106,6 +106,7 @@ export async function POST(req: Request) {
 
     if (needsNewLevers) {
       // Generate new levers using OpenAI
+      let finalLevers: string[];
       try {
         const completion = await openai.chat.completions.create({
           model: "gpt-4o-mini",
@@ -147,7 +148,7 @@ Return your response as a JSON object with a "levers" array containing exactly 5
         const responseData = JSON.parse(content);
         const leversText = (responseData?.levers as string[]) || [];
         if (!Array.isArray(leversText) || leversText.length === 0) throw new Error("Empty levers");
-        var finalLevers = leversText.slice(0, 5);
+        finalLevers = leversText.slice(0, 5);
       } catch (e) {
         // Deterministic fallback based on lowest scores
         const scorePairs: Array<[string, number]> = Object.entries(scoreLabels)
