@@ -72,13 +72,23 @@ export default function TeamWorkspacePage() {
 
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Team Workspace</h1>
-        <button onClick={createCampaign} className="px-3 py-2 bg-blue-600 text-white rounded">New Campaign</button>
+      </div>
+      <div className="mb-4 border-b">
+        <div className="flex gap-4">
+          <button className="px-3 py-2 border-b-2 border-blue-600">Dashboard</button>
+          <button className="px-3 py-2">Campaigns</button>
+          <button className="px-3 py-2">People</button>
+          <button className="px-3 py-2">Submissions</button>
+        </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="border rounded p-4">
-          <h2 className="font-semibold mb-2">Campaigns</h2>
+        <div className="border rounded-2xl p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold">Campaigns</h2>
+            <button onClick={createCampaign} className="px-3 py-2 bg-blue-600 text-white rounded">New Campaign</button>
+          </div>
           {loading && <div>Loading…</div>}
           <ul className="space-y-2">
             {campaigns.map(c => (
@@ -91,7 +101,7 @@ export default function TeamWorkspacePage() {
             {campaigns.length===0 && !loading && <div className="text-sm text-gray-500">No campaigns yet.</div>}
           </ul>
         </div>
-        <div className="border rounded p-4">
+        <div className="border rounded-2xl p-4">
           <div className="flex items-center justify-between mb-2">
             <h2 className="font-semibold">Assignments</h2>
             {selectedCampaignId && (
