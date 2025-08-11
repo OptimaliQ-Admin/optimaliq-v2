@@ -11,6 +11,7 @@ import { roadmapFromSw } from "@/lib/ai/dashboard/roadmapFromSw";
 import { generateSWAndRoadmap } from "@/lib/ai/dashboard/generateSWAndRoadmap";
 import { saveAssessmentResults } from "@/lib/sync/saveAssessmentResults";
 import { recordTelemetry } from "@/lib/sync/aiTelemetry";
+import { generateScoresWithLLM } from "@/lib/ai/dashboard/generateScoring";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -56,20 +57,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // Prefer compatibility view (new normalized pipeline) if available; fallback to legacy table
-    let { data: insights } = await supabase
+    // Read exclusively from compatibility view (normalized pipeline)
+    const { data: insights } = await supabase
       .from("tier2_dashboard_insights_v")
       .select("*")
       .eq("u_id", u_id)
       .maybeSingle();
-    if (!insights) {
-      const resLegacy = await supabase
-        .from("tier2_dashboard_insights")
-        .select("*")
-        .eq("u_id", u_id)
-        .maybeSingle();
-      insights = resLegacy.data ?? null;
-    }
 
     const now = new Date();
     const thirtyDaysAgo = new Date();
@@ -189,10 +182,14 @@ export async function POST(req: Request) {
       let llmScores = null as any;
       try {
         const t1 = Date.now();
-        llmScores = await generateDashboardScores(
-          { ...user, business_overview: onboardingSession.metadata?.business_overview || "" },
-          onboardingSession
-        );
+        const llmValidated = await generateScoresWithLLM({
+          industry: (user.industry || "general").toLowerCase(),
+          features: features as any,
+          answers: features.rawAnswers || {},
+        });
+        if (llmValidated) {
+          llmScores = llmValidated;
+        }
         await recordTelemetry({ userId: u_id, sessionId: onboardingSession.id, stage: "scoring", usedModel: "openai", promptVersion: "v1", featureVersion: "v1", success: true, durationMs: Date.now() - t1 });
       } catch {}
 

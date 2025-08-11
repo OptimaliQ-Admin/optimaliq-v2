@@ -1,6 +1,14 @@
 {
   "crons": [
     {
+      "path": "/api/cron/recomputeIndustryStats",
+      "schedule": "0 6 * * *"
+    }
+  ]
+}
+{
+  "crons": [
+    {
       "path": "/api/cron/generateMarketInsight",
       "schedule": "0 0 * * 1"
     },
