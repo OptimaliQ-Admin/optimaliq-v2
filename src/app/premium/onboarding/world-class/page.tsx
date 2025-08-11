@@ -89,6 +89,7 @@ export default function WorldClassOnboardingPage() {
               strengths: finalScores.strengths,
               weaknesses: finalScores.weaknesses,
               roadmap: finalScores.roadmap,
+              fallback_used: Boolean((finalScores as any).fallback_used === true),
               business_overview: answers, // Include all user responses for context
               type: 'world_class_conversational',
               // Add a flag to indicate this session has pre-generated scores
@@ -98,29 +99,31 @@ export default function WorldClassOnboardingPage() {
           })
           .eq('id', sessionId);
 
-        // Also sync the data to the dashboard insights table for immediate access
-        const { error: insightsError } = await supabase
-          .from('tier2_dashboard_insights')
-          .upsert({
-            u_id: userProfile?.id,
-            strategy_score: finalScores.strategy_score,
-            process_score: finalScores.process_score,
-            technology_score: finalScores.technology_score,
-            overall_score: finalScores.score,
-            industryAvgScore: finalScores.industryAvgScore,
-            topPerformerScore: finalScores.topPerformerScore,
-            benchmarking: finalScores.benchmarking,
-            strengths: finalScores.strengths,
-            weaknesses: finalScores.weaknesses,
-            roadmap: finalScores.roadmap,
-            industry: userProfile?.industry?.toLowerCase(),
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'u_id'
-          });
+        // Skip immediate dashboard upsert if fallback was used; let API regenerate properly
+        if (!(finalScores as any).fallback_used) {
+          const { error: insightsError } = await supabase
+            .from('tier2_dashboard_insights')
+            .upsert({
+              u_id: userProfile?.id,
+              strategy_score: finalScores.strategy_score,
+              process_score: finalScores.process_score,
+              technology_score: finalScores.technology_score,
+              overall_score: finalScores.score,
+              industryAvgScore: finalScores.industryAvgScore,
+              topPerformerScore: finalScores.topPerformerScore,
+              benchmarking: finalScores.benchmarking,
+              strengths: finalScores.strengths,
+              weaknesses: finalScores.weaknesses,
+              roadmap: finalScores.roadmap,
+              industry: userProfile?.industry?.toLowerCase(),
+              updated_at: new Date().toISOString()
+            }, {
+              onConflict: 'u_id'
+            });
 
-        if (insightsError) {
-          console.warn('Warning: Could not sync to dashboard insights table:', insightsError);
+          if (insightsError) {
+            console.warn('Warning: Could not sync to dashboard insights table:', insightsError);
+          }
         }
       }
 

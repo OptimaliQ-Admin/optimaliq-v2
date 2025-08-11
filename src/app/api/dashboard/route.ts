@@ -8,6 +8,8 @@ import { scoreFromFeatures } from "@/lib/ai/dashboard/scoreFromFeatures";
 import { benchmarkFromScores } from "@/lib/ai/dashboard/benchmarkFromScores";
 import { swFromAnswers } from "@/lib/ai/dashboard/swFromAnswers";
 import { roadmapFromSw } from "@/lib/ai/dashboard/roadmapFromSw";
+import { generateSWAndRoadmap } from "@/lib/ai/dashboard/generateSWAndRoadmap";
+import { saveAssessmentResults } from "@/lib/sync/saveAssessmentResults";
 import { saveDashboardInsights } from "@/lib/sync/saveDashboard";
 import { saveProfileScores } from "@/lib/sync/saveProfile";
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -53,12 +55,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Fetch existing dashboard insight
-    const { data: insights } = await supabase
-      .from("tier2_dashboard_insights")
+    // Prefer compatibility view (new normalized pipeline) if available; fallback to legacy table
+    let { data: insights } = await supabase
+      .from("tier2_dashboard_insights_v")
       .select("*")
       .eq("u_id", u_id)
       .maybeSingle();
+    if (!insights) {
+      const resLegacy = await supabase
+        .from("tier2_dashboard_insights")
+        .select("*")
+        .eq("u_id", u_id)
+        .maybeSingle();
+      insights = resLegacy.data ?? null;
+    }
 
     const now = new Date();
     const thirtyDaysAgo = new Date();
@@ -87,22 +97,12 @@ export async function POST(req: Request) {
         overall_score: Number(insights.overall_score),
         industryAvgScore: Number(insights.industryAvgScore),
         topPerformerScore: Number(insights.topPerformerScore),
-        chartData: Array.isArray((insights as any).chartData)
-          ? (insights as any).chartData.map((d: any) => ({
-              month: d.month,
-              userScore: Number(d.userScore),
-              industryScore: Number(d.industryScore),
-              topPerformerScore: Number(d.topPerformerScore),
-            }))
-          : [],
-      } as any;
-
-      return NextResponse.json({
-        ...normalized,
-        score: normalized.overall_score, // Map overall_score to score for frontend compatibility
+        chartData: Array.isArray((insights as any)?.chartData) ? (insights as any).chartData : [],
+        score: Number((insights as any).overall_score ?? (insights as any).score),
         industry: user.industry?.trim().toLowerCase(),
         promptRetake: false,
-      });
+      } as any;
+      return NextResponse.json(normalized);
     }
 
     // Check if onboarding session already has AI-generated scores
@@ -153,19 +153,33 @@ export async function POST(req: Request) {
         industry: user.industry?.trim().toLowerCase(),
       };
       
-      // Upsert to legacy dashboard table
+      // Dual-write: legacy and normalized
       const { error: syncError } = await supabase
         .from("tier2_dashboard_insights")
         .upsert([syncPayload], { onConflict: "u_id" });
-        
-      if (syncError) {
-        console.warn("⚠️ Warning: Could not sync to legacy dashboard table:", syncError);
-      } else {
-        console.log("✅ Successfully synced new scores to legacy dashboard table");
-      }
+      await saveAssessmentResults({
+        userId: u_id,
+        sessionId: onboardingSession.id,
+        scores: {
+          strategy_score: storedScores.strategy_score,
+          process_score: storedScores.process_score,
+          technology_score: storedScores.technology_score,
+          score: storedScores.score,
+          versions: { feature_version: "v1", prompt_version: onboardingSession.metadata?.ai_details?.prompt_version ?? null, model_version: onboardingSession.metadata?.ai_details?.model_version ?? null },
+          ai_details: onboardingSession.metadata?.ai_details ?? {},
+        },
+        insights: {
+          benchmarking: storedScores.benchmarking,
+          strengths: storedScores.strengths,
+          weaknesses: storedScores.weaknesses,
+          roadmap: storedScores.roadmap,
+        },
+        industry: user.industry?.trim().toLowerCase(),
+      });
     } else {
       console.log("🔄 No pre-generated scores found, running structured pipeline...");
-      const features = buildOnboardingFeatures(user, onboardingSession);
+      // Generate AI scores using onboarding features/deterministic fallback
+      const features = buildOnboardingFeatures(user as any, onboardingSession as any);
       const deterministicScores = scoreFromFeatures(features);
 
       // Try LLM scoring; if fails, fall back to deterministic
@@ -183,8 +197,20 @@ export async function POST(req: Request) {
         process_score: finalScores.process_score,
         technology_score: finalScores.technology_score,
       }, features.industry);
-      const sw = swFromAnswers(features.rawAnswers || {});
-      const roadmap = roadmapFromSw(sw.weaknesses, features.industry);
+      let sw = swFromAnswers(features.rawAnswers || {});
+      let roadmap = roadmapFromSw(sw.weaknesses, features.industry);
+      // Try LLM refinement for SW and Roadmap with McKinsey tone
+      try {
+        const refined = await generateSWAndRoadmap({
+          industry: features.industry,
+          answers: features.rawAnswers || {},
+          businessOverview: (onboardingSession.metadata?.business_overview?.business_description) || user.business_overview || ""
+        });
+        if (refined) {
+          sw = { strengths: refined.strengths, weaknesses: refined.weaknesses } as any;
+          roadmap = refined.roadmap as any;
+        }
+      } catch {}
 
       aiScores = {
         strategy_score: finalScores.strategy_score,
@@ -200,14 +226,18 @@ export async function POST(req: Request) {
       };
 
       // Persist ai_details for transparency
+      const computedConfidence = (finalScores as any).confidence ?? 0.75;
+      const computedModelVersion = llmScores ? "gpt-4.1-mini" : "deterministic-v1";
+      const computedPromptVersion = llmScores ? "v1" : null;
+
       await supabase.from("onboarding_sessions").update({
         metadata: {
           ...onboardingSession.metadata,
           ai_details: {
             feature_version: "v1",
-            model_version: llmScores ? "gpt-4.1-mini" : "deterministic-v1",
-            prompt_version: llmScores ? "v1" : null,
-            confidence: (finalScores as any).confidence ?? 0.75,
+            model_version: computedModelVersion,
+            prompt_version: computedPromptVersion,
+            confidence: computedConfidence,
             explanations: (finalScores as any).explanations ?? {},
           }
         }
@@ -298,14 +328,35 @@ export async function POST(req: Request) {
       prompt_version: (onboardingSession.metadata?.ai_details?.prompt_version) ?? undefined,
       confidence: (onboardingSession.metadata?.ai_details?.confidence) ?? undefined,
     };
-
-    // Save insights
-    console.log("🧪 Payload Field Checks:");
-    console.log("benchmarking:", payload.benchmarking);
-    console.log("strengths:", payload.strengths);
-    console.log("weaknesses:", payload.weaknesses);
-    console.log("roadmap:", payload.roadmap);
-    await saveDashboardInsights(supabase, payload);
+    // Save to legacy
+    const { error: upsertError } = await supabase
+      .from("tier2_dashboard_insights")
+      .upsert([payload], { onConflict: "u_id" });
+    // Also save normalized
+    await saveAssessmentResults({
+      userId: u_id,
+      sessionId: onboardingSession.id,
+      scores: {
+        strategy_score: aiScores.strategy_score,
+        process_score: aiScores.process_score,
+        technology_score: aiScores.technology_score,
+        score: aiScores.score,
+        confidence: (onboardingSession.metadata?.ai_details?.confidence) ?? 0.75,
+        versions: { 
+          feature_version: "v1", 
+          prompt_version: onboardingSession.metadata?.ai_details?.prompt_version ?? null, 
+          model_version: onboardingSession.metadata?.ai_details?.model_version ?? "deterministic-v1" 
+        },
+        ai_details: onboardingSession.metadata?.ai_details ?? {},
+      },
+      insights: {
+        benchmarking: aiScores.benchmarking,
+        strengths: aiScores.strengths,
+        weaknesses: aiScores.weaknesses,
+        roadmap: aiScores.roadmap,
+      },
+      industry: user.industry?.trim().toLowerCase(),
+    });
 
     // Save summary to profile
     await saveProfileScores(supabase, u_id, {
