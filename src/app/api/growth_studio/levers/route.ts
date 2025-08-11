@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     const { data: userData, error: userError } = await supabase
       .from("users")
       .select("industry")
-      .eq("u_id", u_id)
+      .eq("id", u_id)
       .single();
 
     if (userError && userError.code !== "PGRST116") {
@@ -106,12 +106,14 @@ export async function POST(req: Request) {
 
     if (needsNewLevers) {
       // Generate new levers using OpenAI
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
-        messages: [
-          {
-            role: "system",
-            content: `You are a growth strategy expert for the ${industry} industry.
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          temperature: 0,
+          messages: [
+            {
+              role: "system",
+              content: `You are a growth strategy expert for the ${industry} industry.
 
 Business Context: The user runs a business in the ${industry} industry. Specifically, their business ${profile?.business_overview || 'provides services in this industry'}.
 
@@ -135,35 +137,32 @@ Return your response as a JSON object with a "levers" array containing exactly 5
     "Introduce a quarterly customer feedback survey to identify new service opportunities."
   ]
 }`
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 500,
-        response_format: { type: "json_object" },
-      });
-
-      const content = completion.choices[0].message.content;
-      if (!content) {
-        throw new Error("No content in OpenAI response");
+            }
+          ],
+          max_tokens: 500,
+          response_format: { type: "json_object" },
+        });
+        const content = completion.choices[0].message.content;
+        if (!content) throw new Error("No content in OpenAI response");
+        const responseData = JSON.parse(content);
+        const leversText = (responseData?.levers as string[]) || [];
+        if (!Array.isArray(leversText) || leversText.length === 0) throw new Error("Empty levers");
+        var finalLevers = leversText.slice(0, 5);
+      } catch (e) {
+        // Deterministic fallback based on lowest scores
+        const scorePairs: Array<[string, number]> = Object.entries(scoreLabels)
+          .map(([key, label]) => [label, Number((profile as any)?.[key] ?? 0)]);
+        const sorted = scorePairs.sort((a, b) => (a[1] || 0) - (b[1] || 0)).slice(0, 3);
+        const suggestions: string[] = [];
+        for (const [label] of sorted) {
+          if (label.includes("Process")) suggestions.push("Document and standardize top 5 core processes; assign owners and KPIs within 30 days.");
+          else if (label.includes("Technology")) suggestions.push("Consolidate overlapping tools and integrate your core stack to reduce manual handoffs by 20%.");
+          else if (label.includes("Strategy") || label.includes("Maturity")) suggestions.push("Clarify positioning and publish a one-page strategy with 3 measurable quarterly objectives.");
+          else suggestions.push(`Run a focused improvement sprint for ${label.toLowerCase()} with one measurable outcome in 30 days.`);
+        }
+        while (suggestions.length < 5) suggestions.push("Schedule a customer discovery sprint with 5 interviews to uncover growth opportunities.");
+        finalLevers = suggestions.slice(0, 5);
       }
-
-      // Parse the JSON response
-      let responseData;
-      try {
-        responseData = JSON.parse(content);
-      } catch (parseError) {
-        console.error("Failed to parse OpenAI response as JSON:", content);
-        throw new Error("Invalid response format from AI");
-      }
-
-      const leversText = responseData.levers || [];
-      
-      if (!leversText || leversText.length === 0) {
-        throw new Error("Failed to generate growth levers");
-      }
-
-      // Ensure we have exactly 5 levers
-      const finalLevers = leversText.slice(0, 5);
 
       // Upsert the new levers
       const { error: upsertError } = await supabase
@@ -203,14 +202,14 @@ Return your response as a JSON object with a "levers" array containing exactly 5
       .from("growth_lever_progress")
       .select("*")
       .eq("u_id", u_id)
-      .in("lever_text", existingLevers.levers);
+      .in("lever_text", existingLevers?.levers || []);
 
     if (progressError) {
       throw progressError;
     }
 
     // Combine existing levers with their progress
-    const levers = existingLevers.levers.map((text: string) => ({
+    const levers = (existingLevers?.levers || []).map((text: string) => ({
       text,
       isCompleted: progressData?.some(p => p.lever_text === text && p.is_completed) || false,
     }));
