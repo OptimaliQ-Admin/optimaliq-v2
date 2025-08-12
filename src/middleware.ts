@@ -106,6 +106,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    // Exclude delegate invite paths from middleware to avoid any redirects/geo gating
+    '/((?!api|_next/static|_next/image|favicon.ico|public|delegate).*)',
   ],
 };
