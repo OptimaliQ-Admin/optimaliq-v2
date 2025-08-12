@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const { error } = await supabaseAdmin!
       .from("users")
       .update(normalizedUpdates)
-      .eq("u_id", u_id);
+      .eq("id", u_id);
 
     if (error) {
       console.error("❌ Failed to update user:", error);
