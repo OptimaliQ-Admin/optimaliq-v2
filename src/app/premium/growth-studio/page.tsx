@@ -14,7 +14,7 @@ import SimulationResults, { SimulationResult } from "@/components/growthstudio/S
 import SectionHeader from "@/components/growthstudio/SectionHeader";
 import StrategicAnalysisCard from "@/components/dashboard/StrategicAnalysisCard";
 import WhatIfScenarioSimulator from "@/components/dashboard/WhatIfScenarioSimulator";
-import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
+import CompetitiveBenchmarkRadar from "@/components/dashboard/CompetitiveBenchmarkRadar";
 // Salesforce-style shell: sticky header, tabs, left nav
 
 interface ProfileData {
@@ -32,7 +32,7 @@ function GrowthStudioComponent() {
   const [showModal, setShowModal] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'overview'|'analysis'|'simulation'|'levers'>(
+  const [activeTab, setActiveTab] = useState<'overview'|'analysis'|'simulation'>(
     'overview'
   );
 
@@ -128,7 +128,6 @@ function GrowthStudioComponent() {
                 { key: 'overview', label: 'Overview' },
                 { key: 'analysis', label: 'Analysis' },
                 { key: 'simulation', label: 'Simulation' },
-                { key: 'levers', label: 'Levers' },
               ].map(t => (
                 <button
                   key={t.key}
@@ -152,7 +151,6 @@ function GrowthStudioComponent() {
               <a className={`block px-3 py-2 rounded ${activeTab==='overview'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('overview')}>Highlights</a>
               <a className={`block px-3 py-2 rounded ${activeTab==='analysis'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('analysis')}>Strategic Analysis</a>
               <a className={`block px-3 py-2 rounded ${activeTab==='simulation'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('simulation')}>Scenario Simulation</a>
-              <a className={`block px-3 py-2 rounded ${activeTab==='levers'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('levers')}>Growth Levers</a>
             </nav>
           </div>
         </aside>
@@ -174,7 +172,11 @@ function GrowthStudioComponent() {
 
           {activeTab === 'analysis' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12">
+              <div className="col-span-12 lg:col-span-6">
+                <div className="text-sm font-semibold mb-3">Competitive Benchmarking</div>
+                <CompetitiveBenchmarkRadar userId={userId} />
+              </div>
+              <div className="col-span-12 lg:col-span-6">
                 <div className="text-sm font-semibold mb-3">Strategic Analysis</div>
                 <StrategicAnalysisCard userId={userId} />
               </div>
@@ -190,13 +192,7 @@ function GrowthStudioComponent() {
             </div>
           )}
 
-          {activeTab === 'levers' && (
-            <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12">
-                <GrowthLeversCard />
-              </div>
-            </div>
-          )}
+          {/* Growth Levers intentionally omitted from Growth Studio; now lives on Dashboard Tasks */}
         </section>
       </main>
 

@@ -127,9 +127,9 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
     // Create scales
     const rScale = d3.scaleLinear().range([0, radius]).domain([0, 5]);
 
-    // Draw circular grid
+    // Draw circular grid with subtle depth (thicker outer rings)
     const levels = 5;
-    const gridCircles = svg
+    svg
       .selectAll(".gridCircle")
       .data(d3.range(1, levels + 1).reverse())
       .enter()
@@ -137,9 +137,9 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
       .attr("class", "gridCircle")
       .attr("r", (d) => (radius / levels) * d)
       .style("fill", "none")
-      .style("stroke", "#e2e8f0")
-      .style("stroke-width", 1)
-      .style("stroke-dasharray", "2 4");
+      .style("stroke", (d) => (d === levels ? "#cbd5e1" : "#e2e8f0"))
+      .style("stroke-width", (d) => (d === levels ? 2 : 1))
+      .style("stroke-dasharray", (d) => (d === levels ? "none" : "2 4"));
 
     // Draw axis lines
     const axisLines = svg
@@ -206,7 +206,7 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
       .radius((d) => rScale(d.value))
       .angle((d, i) => angleSlice * i - Math.PI / 2);
 
-    // Draw user radar
+    // Draw user radar with soft shadow and 3D-like gradient
     const userData = [
       { value: radarData.user.strategy },
       { value: radarData.user.process },
@@ -229,9 +229,10 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
       .style("fill", "url(#userRadarGradient)")
       .style("stroke", "#1d4ed8")
       .style("stroke-width", 3)
-      .style("opacity", 0.8);
+      .style("filter", "drop-shadow(0 3px 6px rgba(29,78,216,0.25))")
+      .style("opacity", 0.9);
 
-    // Draw industry average radar
+    // Draw industry average radar (dashed outline)
     const industryData = [
       { value: radarData.industryAvg.strategy },
       { value: radarData.industryAvg.process },
@@ -249,7 +250,7 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
       .style("stroke-width", 2)
       .style("stroke-dasharray", "6 3");
 
-    // Draw top performer radar
+    // Draw top performer radar with glow
     const topPerformerData = [
       { value: radarData.topPerformer.strategy },
       { value: radarData.topPerformer.process },
@@ -272,7 +273,8 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
       .style("fill", "url(#topPerformerRadarGradient)")
       .style("stroke", "#059669")
       .style("stroke-width", 2)
-      .style("stroke-dasharray", "3 6");
+      .style("stroke-dasharray", "3 6")
+      .style("filter", "drop-shadow(0 2px 4px rgba(5,150,105,0.25))");
 
     // Add data points
     const addDataPoints = (data: { value: number }[], color: string, className: string) => {
@@ -282,7 +284,7 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
         .enter()
         .append("circle")
         .attr("class", `${className}-point`)
-        .attr("r", 4)
+        .attr("r", 5)
         .attr("cx", (d: { value: number }, i: number) => {
           const angle = angleSlice * i - Math.PI / 2;
           return Math.cos(angle) * rScale(d.value);
@@ -293,7 +295,8 @@ export default function CompetitiveBenchmarkRadar({ userId }: { userId: string }
         })
         .style("fill", color)
         .style("stroke", "#ffffff")
-        .style("stroke-width", 2);
+        .style("stroke-width", 2)
+        .style("filter", "drop-shadow(0 1px 2px rgba(0,0,0,0.2))");
     };
 
     addDataPoints(userData, "#1d4ed8", "user");
