@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   // Join invites + assignments; include status and updated_at for completion date
   const { data: invites } = await supabase
     .from('assessment_invites')
-    .select('id, invite_email, invite_name, status, created_at, campaign_id, assessment_assignments:assignment_id(status, updated_at)')
+    .select('id, invite_email, invite_name, status, created_at, campaign_id, assignment_id, assessment_assignments:assignment_id(status, updated_at)')
     .in('campaign_id', ids)
     .order('created_at', { ascending: false });
 
@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
       campaignId: inv.campaign_id,
       assessment: camp?.title || 'Assessment',
       type_slug: camp?.type_slug || null,
+      assignment_id: inv.assignment_id,
       assignedTo: inv.invite_email,
       status: asg?.status || inv.status,
       created_at: inv.created_at,

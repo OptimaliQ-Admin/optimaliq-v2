@@ -290,9 +290,8 @@ export default function TeamWorkspacePage() {
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Assigned Assessments</h3>
-                <p className="text-sm text-gray-500">Summary of assignments and status</p>
+                <p className="text-sm text-gray-500">When you assign an assessment from the assessment card, it will appear here.</p>
               </div>
-              <button onClick={() => setShowAssignModal(true)} className="inline-flex items-center rounded-lg bg-blue-600 text-white text-sm font-semibold px-3 py-2 hover:bg-blue-700 shadow-sm">Assign Assessment</button>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -303,6 +302,7 @@ export default function TeamWorkspacePage() {
                     <th className="text-left font-medium px-6 py-3">Status</th>
                     <th className="text-left font-medium px-6 py-3">Assigned On</th>
                     <th className="text-left font-medium px-6 py-3">Completed On</th>
+                    <th className="text-right font-medium px-6 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -321,6 +321,23 @@ export default function TeamWorkspacePage() {
                       </td>
                       <td className="px-6 py-3 text-gray-700">{new Date(row.created_at).toLocaleString()}</td>
                       <td className="px-6 py-3 text-gray-700">{row.completed_at ? new Date(row.completed_at).toLocaleString() : '—'}</td>
+                      <td className="px-6 py-3 text-right">
+                        {row.status !== 'completed' && (
+                          <button onClick={async ()=>{
+                            const res = await fetch(`/api/team/assignments?id=${row.assignment_id}`, { method: 'DELETE' });
+                            const j = await res.json();
+                            if (res.ok) {
+                              showToast('Unassigned successfully','success');
+                              // refresh invitations
+                              const inv = await fetch(`/api/team/invitations?u_id=${user?.id}`);
+                              const invJson = await inv.json();
+                              setInvitations(invJson.invitations || []);
+                            } else {
+                              showToast(j.error || 'Failed to unassign','error');
+                            }
+                          }} className="text-xs text-red-600 hover:text-red-700 font-semibold">Unassign</button>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
