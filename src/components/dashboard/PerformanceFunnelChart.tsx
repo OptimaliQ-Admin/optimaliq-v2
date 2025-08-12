@@ -164,11 +164,16 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         .style("rx", "4");
     });
 
-    // Draw single benchmark lines (Target and Industry) spanning full width with labels on the left
+    // Determine where the first bar starts to cap benchmark lines before it
+    const firstBarCategory = funnelData[0]?.category;
+    const firstBarX = firstBarCategory ? xScale(firstBarCategory)! : 0;
+    const lineEndX = Math.max(0, firstBarX - 8);
+
+    // Draw single benchmark lines (Target and Industry) capped before the first bar with labels on the left
     svg
       .append("line")
       .attr("x1", 0)
-      .attr("x2", width)
+      .attr("x2", lineEndX)
       .attr("y1", yScale(topPerformer))
       .attr("y2", yScale(topPerformer))
       .style("stroke", "#ef4444")
@@ -188,7 +193,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
     svg
       .append("line")
       .attr("x1", 0)
-      .attr("x2", width)
+      .attr("x2", lineEndX)
       .attr("y1", yScale(industryAvg))
       .attr("y2", yScale(industryAvg))
       .style("stroke", "#64748b")
@@ -311,12 +316,12 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       .style("fill", "#475569")
       .text("Performance Score");
 
-    // Overall score indicator (full-width line with left label)
+    // Overall score indicator (capped line with left label)
     const overallY = yScale(overallScore);
     svg
       .append("line")
       .attr("x1", 0)
-      .attr("x2", width)
+      .attr("x2", lineEndX)
       .attr("y1", overallY)
       .attr("y2", overallY)
       .style("stroke", "#3b82f6")

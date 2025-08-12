@@ -1,147 +1,45 @@
-// File: src/app/premium/dashboard/page.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import axios from "axios";
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import InsightLoading from "@/components/dashboard/InsightLoading";
-import SectionHeader from "@/components/dashboard/SectionHeader";
 import ScoreCard from "@/components/dashboard/ScoreCard";
-import InsightCard from "@/components/dashboard/InsightCard";
-import GrowthChart from "@/components/dashboard/GrowthChart";
-import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
-import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import EngagementIntelligenceCard from "@/components/dashboard/EngagementIntelligenceCard";
-import DashboardExplanationModal from "@/components/modals/DashboardExplanationModal";
-import PageNavigation from "@/components/shared/PageNavigation";
-import dynamic from "next/dynamic";
+import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
+import InsightCard from "@/components/dashboard/InsightCard";
+import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
+import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
-import { supabase } from "@/lib/supabase";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/EnhancedMarketInsightCard"), { ssr: false });
 
-interface ProfileData {
-  dashboard_explanation_seen_at: string | null;
-}
-
-export default function PremiumDashboardPage() {
+export default function DashboardV2Page() {
   const { user } = usePremiumUser();
   const userId = user?.id;
-
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
-  const [welcomeData, setWelcomeData] = useState({ firstName: '', quote: '', author: '' });
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showDashboardExplanation, setShowDashboardExplanation] = useState(false);
-
-  // Define page sections for navigation
-  const pageSections = [
-    { id: "score-overview", label: "Score Overview", icon: "🏆" },
-    { id: "performance-summary", label: "Performance Summary", icon: "📊" },
-    { id: "growth-analysis", label: "Growth Analysis", icon: "📈" },
-    { id: "performance-insights", label: "Performance Insights", icon: "💡" },
-    { id: "market-intelligence", label: "Market Intelligence", icon: "🌍" },
-  ];
-
-  // Check if welcome message has been shown in this session
-  useEffect(() => {
-    const hasSeenWelcome = sessionStorage.getItem('dashboard_welcome_shown');
-    if (!hasSeenWelcome) {
-      setShowWelcome(true);
-      sessionStorage.setItem('dashboard_welcome_shown', 'true');
-    }
-  }, []);
+  const [activeTab, setActiveTab] = useState<'overview'|'analysis'|'market'|'tasks'>('overview');
+  const [modalData, setModalData] = useState<any>(null);
 
   useEffect(() => {
     if (!userId) return;
-
-    const fetchData = async () => {
+    const run = async () => {
       try {
         const res = await axios.post("/api/dashboard", { u_id: userId });
-        if (res.data.error) {
-          setError(res.data.error);
-        } else {
-          setInsights(res.data);
-        }
-      } catch (err) {
-        console.error("Error fetching insights:", err);
+        if (res.data.error) setError(res.data.error);
+        else setInsights(res.data);
+      } catch {
         setError("Unable to fetch dashboard insights.");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    run();
   }, [userId]);
-
-  useEffect(() => {
-    if (!userId) return;
-    axios.post("/api/dashboard/welcome_message", { u_id: userId })
-      .then(res => setWelcomeData(res.data))
-      .catch(() => setWelcomeData({
-        firstName: '',
-        quote: "Welcome back! Let's grow your business today.",
-        author: "OptimaliQ"
-      }));
-  }, [userId]);
-
-  // Check if user has seen dashboard explanation
-  useEffect(() => {
-    if (!userId) return;
-
-    const checkDashboardExplanation = async () => {
-      try {
-        const { data: profileData, error } = await supabase
-          .from("tier2_profiles")
-          .select("dashboard_explanation_seen_at")
-          .eq("u_id", userId)
-          .single();
-
-        if (error) {
-          console.error("Error fetching profile data:", error);
-          return;
-        }
-
-        const hasSeenExplanation = (profileData as ProfileData).dashboard_explanation_seen_at !== null;
-        
-        if (!hasSeenExplanation) {
-          setShowDashboardExplanation(true);
-        }
-      } catch (err) {
-        console.error("Error checking dashboard explanation status:", err);
-      }
-    };
-
-    checkDashboardExplanation();
-  }, [userId]);
-
-  // Auto-dismiss welcome message after 5 minutes
-  useEffect(() => {
-    if (showWelcome) {
-      const timer = setTimeout(() => {
-        setShowWelcome(false);
-      }, 5 * 60 * 1000); // 5 minutes
-      return () => clearTimeout(timer);
-    }
-  }, [showWelcome]);
-
-  const handleScoreClick = async (category: string, score: number) => {
-    try {
-      const res = await axios.post("/api/dashboard/scorecard_insights", {
-        category,
-        score,
-        industry: insights?.industry || "other",
-      });
-      setModalData(res.data);
-    } catch (err) {
-      console.error("Failed to fetch modal insights:", err);
-    }
-  };
 
   if (!userId || loading) return <InsightLoading />;
   if (error) return <p className="text-center text-red-600 p-10">{error}</p>;
@@ -153,250 +51,174 @@ export default function PremiumDashboardPage() {
   const overallPerformance = Math.round((avgScore / denomTop) * 100);
   const industryPosition = Math.round((avgScore / denomIndustry) * 100);
 
+  const handleScoreClick = async (category: string, score: number) => {
+    try {
+      const res = await axios.post("/api/dashboard/scorecard_insights", {
+        category,
+        score,
+        industry: insights?.industry || "other",
+      });
+      setModalData(res.data);
+    } catch (err) {
+      // no-op; modalData remains unchanged
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Dashboard Explanation Modal */}
-      <DashboardExplanationModal
-        isOpen={showDashboardExplanation}
-        onClose={() => setShowDashboardExplanation(false)}
-        userId={userId}
-      />
+    <div className="min-h-screen bg-white">
+      {/* App header mimic (Salesforce style) */}
+      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b">
+        <div className="max-w-[1400px] mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-blue-600" />
+            <div className="font-semibold">Dashboard v2</div>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden md:inline text-xs text-gray-500">Overall</span>
+            <span className="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-bold shadow-sm border border-blue-100 leading-none">
+              <span className="block text-2xl md:text-3xl">{insights.overall_score?.toFixed?.(1)}</span>
+            </span>
+          </div>
+        </div>
+        {/* Tabs */}
+        <div className="border-t">
+          <div className="max-w-[1400px] mx-auto px-4">
+            <nav className="flex gap-6 text-sm">
+              {[
+                { key: 'overview', label: 'Overview' },
+                { key: 'analysis', label: 'Analysis' },
+                { key: 'market', label: 'Market' },
+                { key: 'tasks', label: 'Tasks' },
+              ].map(t => (
+                <button key={t.key} onClick={() => setActiveTab(t.key as any)} className={`h-10 border-b-2 -mb-px ${activeTab===t.key? 'border-blue-600 text-blue-700':'border-transparent text-gray-600 hover:text-gray-800'}`}>{t.label}</button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </header>
 
-      {/* Floating Page Navigation */}
-      <PageNavigation sections={pageSections} />
+      <main className="max-w-[1400px] mx-auto p-4 grid grid-cols-12 gap-4">
+        {/* Left vertical nav mimic */}
+        <aside className="hidden lg:block col-span-2">
+          <div className="border rounded-xl overflow-hidden">
+            <div className="px-3 py-2 text-xs font-semibold tracking-wide bg-gray-50 border-b">Navigation</div>
+            <nav className="p-2 text-sm">
+              <a className={`block px-3 py-2 rounded ${activeTab==='overview'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('overview')}>Highlights</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='analysis'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('analysis')}>Performance</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='market'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('market')}>Market</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='tasks'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('tasks')}>Insights & Tasks</a>
+            </nav>
+          </div>
+        </aside>
 
-      {/* Enhanced Welcome Toast */}
-      {showWelcome && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          className="fixed top-6 right-6 z-50"
-        >
-          <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-200 max-w-sm backdrop-blur-sm">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Welcome back, {welcomeData.firstName || 'there'}! 👋
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  &ldquo;{welcomeData.quote}&rdquo;
-                </p>
-                <p className="text-gray-500 text-xs mt-2 font-medium">
-                  — {welcomeData.author}
-                </p>
+        {/* Main content */}
+        <section className="col-span-12 lg:col-span-10 space-y-4">
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-12 gap-4">
+              {/* Highlights metric cards */}
+              <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <ScoreCard title="Overall" icon="🏆" score={insights.overall_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Overall maturity" onLearnMore={() => handleScoreClick("overall", insights.overall_score)} />
+                <ScoreCard title="Strategy" icon="🎯" score={insights.strategy_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Strategy maturity" onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)} />
+                <ScoreCard title="Process" icon="⚙️" score={insights.process_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Process maturity" onLearnMore={() => handleScoreClick("process", insights.process_score)} />
+                <ScoreCard title="Technology" icon="🚀" score={insights.technology_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Technology maturity" onLearnMore={() => handleScoreClick("technology", insights.technology_score)} />
               </div>
-              <button
-                onClick={() => setShowWelcome(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors duration-200 ml-4"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+
+              {/* Performance Summary (from original dashboard) */}
+              <div className="col-span-12 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="text-xl">📊</div>
+                  <h4 className="font-bold text-gray-900 text-lg">Performance Summary</h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-green-600 mb-1">+{Math.round(industryPosition - 100)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">Above Industry Average</div>
+                    <div className="text-xs text-gray-600">You&apos;re performing {Math.round(industryPosition - 100)}% better than typical</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-1">{Math.round(overallPerformance)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">of Top Performer Level</div>
+                    <div className="text-xs text-gray-600">Operating at {Math.round(overallPerformance)}% of top performers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-purple-600 mb-1">Top {Math.round(100 - overallPerformance)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">Industry Percentile</div>
+                    <div className="text-xs text-gray-600">You&rsquo;re in the top {Math.round(100 - overallPerformance)}% of your industry</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Removed compact duplicate KPI cards to avoid redundancy with Performance Summary */}
             </div>
-          </div>
-        </motion.div>
-      )}
+          )}
 
-      <div className="max-w-[1920px] mx-auto p-8 space-y-10">
-        {/* Assessment Reminder */}
-        {insights.promptRetake && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-xl shadow-sm"
-          >
-            <div className="flex items-start gap-3">
-              <div className="text-yellow-600 text-xl">🕒</div>
-              <div>
-                <p className="font-semibold text-lg">Time to retake your assessment</p>
-                <p className="text-sm mt-2 leading-relaxed">
-                  Your last assessment was over 30 days ago. Please {" "}
-                  <a href="/premium/onboarding/world-class" className="underline font-semibold text-yellow-700 hover:text-yellow-900 transition-colors duration-200">
-                    retake your World-Class Onboarding
-                  </a>
-                  {" "}to keep your insights current.
-                </p>
+          {activeTab === 'analysis' && (
+            <div className="grid grid-cols-12 gap-4">
+              {/* Full-width chart */}
+              <div className="col-span-12 border rounded-xl p-4">
+                <div className="text-sm font-semibold mb-3">Funnel & Benchmarks</div>
+                <PerformanceFunnelChart 
+                  strategyScore={insights.strategy_score}
+                  processScore={insights.process_score}
+                  technologyScore={insights.technology_score}
+                  overallScore={insights.overall_score}
+                  industryAvg={insights.industryAvgScore}
+                  topPerformer={insights.topPerformerScore}
+                  height={520}
+                  showInsights={true}
+                />
               </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Score Overview Section */}
-        <motion.section 
-          id="score-overview"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
-        >
-          <SectionHeader title="🏆 Business Score Overview" subtitle="Your comprehensive growth maturity assessment across key business areas" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <ScoreCard
-              title="Overall Score"
-              icon="🏆"
-              score={insights.overall_score}
-              industryAvg={insights.industryAvgScore}
-              topPerformer={insights.topPerformerScore}
-              description="Your comprehensive growth maturity score"
-              onLearnMore={() => handleScoreClick("overall", insights.overall_score)}
-            />
-            <ScoreCard
-              title="Strategy"
-              icon="🎯"
-              score={insights.strategy_score}
-              industryAvg={insights.industryAvgScore}
-              topPerformer={insights.topPerformerScore}
-              description="Clarity, positioning, and strategic alignment."
-              onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)}
-            />
-            <ScoreCard
-              title="Process"
-              icon="⚙️"
-              score={insights.process_score}
-              industryAvg={insights.industryAvgScore}
-              topPerformer={insights.topPerformerScore}
-              description="Consistency, execution, and scalability."
-              onLearnMore={() => handleScoreClick("process", insights.process_score)}
-            />
-            <ScoreCard
-              title="Technology"
-              icon="🚀"
-              score={insights.technology_score}
-              industryAvg={insights.industryAvgScore}
-              topPerformer={insights.topPerformerScore}
-              description="Growth, automation, and efficiency."
-              onLearnMore={() => handleScoreClick("technology", insights.technology_score)}
-            />
-          </div>
-        </motion.section>
-
-        {/* Performance Summary Section */}
-        <motion.section 
-          id="performance-summary"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-8 border border-blue-100 shadow-sm"
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-2xl">📊</div>
-            <h4 className="font-bold text-gray-900 text-xl">Performance Summary</h4>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-green-600 mb-2 group-hover:text-green-700 transition-colors duration-200">
-                +{Math.round(industryPosition - 100)}%
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">Above Industry Average</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re performing {Math.round(industryPosition - 100)}% better than the typical company in your industry
+              {/* Strengths and Areas side by side under the chart */}
+              <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InsightCard 
+                  title="✅ Key Strengths" 
+                  items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
+                <InsightCard 
+                  title="🚨 Areas for Improvement" 
+                  items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
               </div>
             </div>
-            
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors duration-200">
-                {Math.round(overallPerformance)}%
+          )}
+
+          {activeTab === 'market' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+                <div className="text-sm font-semibold mb-3">Market Signals</div>
+                <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
               </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">of Top Performer Level</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re operating at {Math.round(overallPerformance)}% of what the best companies in your industry achieve
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+                <div className="text-sm font-semibold mb-3">Business Trends</div>
+                <BusinessTrendCard />
               </div>
-            </div>
-            
-            <div className="text-center group">
-              <div className="text-3xl font-bold text-purple-600 mb-2 group-hover:text-purple-700 transition-colors duration-200">
-                Top {Math.round(100 - overallPerformance)}%
-              </div>
-              <div className="text-sm font-semibold text-gray-700 mb-2">Industry Percentile</div>
-              <div className="text-xs text-gray-600 leading-relaxed">
-                You&apos;re in the top {Math.round(100 - overallPerformance)}% of companies in your industry
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+                <div className="text-sm font-semibold mb-3">Engagement Intelligence</div>
+                <EngagementIntelligenceCard industry={(insights.industry || "general").trim().toLowerCase()} />
               </div>
             </div>
-          </div>
-        </motion.section>
+          )}
 
-        <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
-
-        {/* Analysis Section */}
-        <motion.section 
-          id="growth-analysis"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-8"
-        >
-          <SectionHeader title="📈 Growth Analysis & Planning" subtitle="Strategic insights and actionable growth recommendations" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1">
-              <InsightCard 
-                title="🚀 30-Day Growth Plan" 
-                items={(insights.roadmap || []).map(item => ({ 
-                  label: item.task, 
-                  detail: item.expectedImpact 
-                }))} 
-              />
+          {activeTab === 'tasks' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 border rounded-xl p-4">
+                <div className="text-sm font-semibold mb-3">30-Day Growth Plan</div>
+                <ul className="text-sm space-y-2">
+                  {(insights.roadmap||[]).map((r,i)=> (
+                    <li key={i} className="flex items-start gap-2"><span className="text-purple-600 mt-0.5">◆</span><div><div className="font-medium">{r.task}</div><div className="text-gray-600 text-xs">{r.expectedImpact}</div></div></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="col-span-12">
+                <GrowthLeversCard />
+              </div>
             </div>
-            <div className="lg:col-span-2 space-y-8">
-              <GrowthChart data={insights.chartData} />
-              <PerformanceFunnelChart 
-                strategyScore={insights.strategy_score}
-                processScore={insights.process_score}
-                technologyScore={insights.technology_score}
-                overallScore={insights.overall_score}
-                industryAvg={insights.industryAvgScore}
-                topPerformer={insights.topPerformerScore}
-              />
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Strengths & Weaknesses Section */}
-        <motion.section 
-          id="performance-insights"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="space-y-8"
-        >
-          <SectionHeader title="🎯 Performance Insights" subtitle="Key strengths to leverage and areas for strategic improvement" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <InsightCard 
-              title="✅ Key Strengths" 
-              items={(insights.strengths || []).map(item => ({ 
-                label: item.title, 
-                detail: item.impact 
-              }))} 
-            />
-            <InsightCard 
-              title="🚨 Areas for Improvement" 
-              items={(insights.weaknesses || []).map(item => ({ 
-                label: item.title, 
-                detail: item.impact 
-              }))} 
-            />
-          </div>
-        </motion.section>
-
-        {/* Market Insights Section */}
-        <motion.section 
-          id="market-intelligence"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="space-y-8"
-        >
-          <SectionHeader title="🌍 Market Intelligence" subtitle="Real-time insights and strategic market guidance" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase() === 'saas' ? 'technology' : (insights.industry || "other").trim().toLowerCase()} />
-            <BusinessTrendCard />
-            <EngagementIntelligenceCard industry={(insights.industry || "general").trim().toLowerCase()} />
-          </div>
-        </motion.section>
-      </div>
+          )}
+        </section>
+      </main>
+      <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
     </div>
   );
 }
+
+
