@@ -68,6 +68,13 @@ export default function TeamWorkspacePage() {
   ];
   const [reviewCampaignId, setReviewCampaignId] = useState<string | null>(null);
   const [reviewData, setReviewData] = useState<{ avg: number | null; insights: any[] } | null>(null);
+
+  // Lightweight toast
+  const [toast, setToast] = useState<{ message: string; kind?: 'success'|'error'|'info' } | null>(null);
+  const showToast = (message: string, kind: 'success'|'error'|'info' = 'info') => {
+    setToast({ message, kind });
+    setTimeout(() => setToast(null), 3500);
+  };
   useEffect(() => {
     if (!reviewCampaignId) return;
     (async () => {
@@ -158,16 +165,16 @@ export default function TeamWorkspacePage() {
     if (res.ok) {
       setShowAssignModal(false);
       setAssignForm({ topic: '', personIds: [] });
-      if (json.inviteUrls?.length) {
-        console.log('Invites created:', json.inviteUrls);
-        alert(`Assigned. Invite links emailed. First URL: ${json.inviteUrls[0].url}`);
-      }
+      const created = json.created ?? 0;
+      const resent = json.resent ?? 0;
+      const blocked = Array.isArray(json.blocked) ? json.blocked.length : 0;
+      showToast(`Invites sent: ${created}${resent ? `, resent: ${resent}` : ''}${blocked ? `, blocked: ${blocked}` : ''}`, 'success');
       // Refresh campaigns
       const r = await fetch(`/api/team/campaigns?u_id=${user.id}`);
       const j = await r.json();
       setCampaigns(j.campaigns || []);
     } else {
-      alert(json.error || 'Failed to assign');
+      showToast(json.error || 'Failed to assign', 'error');
     }
   };
 
@@ -184,15 +191,13 @@ export default function TeamWorkspacePage() {
     if (res.ok) {
       setShowGenerateModal(false);
       setGenerateForm({ topic: '', personIds: [] });
-      if (json.inviteUrls?.length) {
-        console.log('Invites created:', json.inviteUrls);
-        alert(`Custom assessment created. First invite URL: ${json.inviteUrls[0].url}`);
-      }
+      const created = json.created ?? (json.inviteUrls?.length || 0);
+      showToast(`Custom assessment invites sent: ${created}`, 'success');
       const r = await fetch(`/api/team/campaigns?u_id=${user.id}`);
       const j = await r.json();
       setCampaigns(j.campaigns || []);
     } else {
-      alert(json.error || 'Failed to generate');
+      showToast(json.error || 'Failed to generate', 'error');
     }
   };
 
@@ -456,6 +461,13 @@ export default function TeamWorkspacePage() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-40 rounded-lg px-4 py-3 shadow-lg border text-sm ${toast.kind==='success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : toast.kind==='error' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-gray-50 border-gray-200 text-gray-800'}`}>
+          {toast.message}
         </div>
       )}
 
