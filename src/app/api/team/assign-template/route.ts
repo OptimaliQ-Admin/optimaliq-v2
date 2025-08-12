@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createInviteToken } from "@/lib/security/tokens";
 import { resend } from "@/lib/resend";
-import { sendAssessmentInviteEmail } from "@/lib/email/sendInvite";
+import { emailService } from "@/lib/emailService";
 import { randomUUID } from "node:crypto";
 
 export async function POST(req: NextRequest) {
@@ -47,6 +47,13 @@ export async function POST(req: NextRequest) {
     // Assign + invite
     let created = 0;
     const inviteUrls: Array<{ email: string; url: string }> = [];
+    // Email template context
+    const { data: ownerUser } = await supabase.from('users').select('email').eq('id', owner_u_id).single();
+    const { data: org } = org_id ? await supabase.from('organizations').select('name').eq('id', org_id).single() : { data: null } as any;
+    const inviterName = (ownerUser as any)?.email?.split('@')[0] || 'OptimaliQ';
+    const inviterCompany = (org as any)?.name || 'OptimaliQ';
+    const assessmentDescription = 'Please complete this assessment to help improve capabilities.';
+
     for (const email of toAssign) {
       const { data: assignment, error: asgErr } = await supabase
         .from('assessment_assignments')
@@ -59,7 +66,19 @@ export async function POST(req: NextRequest) {
         .from('assessment_invites')
         .insert({ campaign_id: campaign.id, assignment_id: assignment.id, invite_email: email, invite_name: null, token, expires_at: expiresAt.toISOString(), status: 'sent' });
       if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
-      if (resend) await sendAssessmentInviteEmail({ to: email, name: null, title: campaign.title, token });
+      if (resend) {
+        const base = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://optimaliq.ai');
+        const invitationUrl = `${base}/delegate/a/${token}`;
+        await emailService.sendAssessmentInvitationEmail({
+          to: email,
+          inviterName,
+          inviterCompany,
+          assessmentTitle: campaign.title,
+          assessmentDescription,
+          invitationUrl,
+          expiresAt: expiresAt.toISOString(),
+        });
+      }
       created++;
       const url = `${process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai"}/delegate/a/${token}`;
       inviteUrls.push({ email, url });

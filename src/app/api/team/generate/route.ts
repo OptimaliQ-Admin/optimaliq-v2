@@ -4,7 +4,7 @@ import { generatePulseConfig } from "@/lib/ai/generatePulseConfig";
 import { createInviteToken } from "@/lib/security/tokens";
 import { randomUUID } from "node:crypto";
 import { resend } from "@/lib/resend";
-import { sendAssessmentInviteEmail } from "@/lib/email/sendInvite";
+import { emailService } from "@/lib/emailService";
 
 function getDb() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
@@ -41,6 +41,13 @@ export async function POST(req: NextRequest) {
 
     // Create assignments + invites
     const inviteUrls: Array<{ email: string; url: string }> = [];
+    // Fetch inviter/org context for template email
+    const { data: ownerUser } = await supabase.from('users').select('email').eq('id', owner_u_id).single();
+    const { data: org } = org_id ? await supabase.from('organizations').select('name').eq('id', org_id).single() : { data: null } as any;
+    const inviterName = (ownerUser as any)?.email?.split('@')[0] || 'OptimaliQ';
+    const inviterCompany = (org as any)?.name || 'OptimaliQ';
+    const assessmentDescription = `Custom ${type === 'pulse' ? 'Pulse' : 'Assessment'}: ${topic}`;
+
     for (const email of participant_emails) {
       const { data: assignment, error: asgErr } = await supabase
         .from('assessment_assignments')
@@ -56,7 +63,17 @@ export async function POST(req: NextRequest) {
       if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
 
       if (resend) {
-        await sendAssessmentInviteEmail({ to: email, name: null, title: campaign.title, token });
+        const base = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://optimaliq.ai');
+        const invitationUrl = `${base}/delegate/a/${token}`;
+        await emailService.sendAssessmentInvitationEmail({
+          to: email,
+          inviterName,
+          inviterCompany,
+          assessmentTitle: campaign.title,
+          assessmentDescription,
+          invitationUrl,
+          expiresAt: expiresAt.toISOString(),
+        });
       }
       const url = `${process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai"}/delegate/a/${token}`;
       inviteUrls.push({ email, url });
