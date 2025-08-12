@@ -47,6 +47,7 @@ export default function DashboardV2Page() {
   const denomTop = insights.topPerformerScore && insights.topPerformerScore > 0 ? insights.topPerformerScore : 4.5;
   const denomIndustry = insights.industryAvgScore && insights.industryAvgScore > 0 ? insights.industryAvgScore : 3.2;
   const overallPerformance = Math.round((avgScore / denomTop) * 100);
+  const industryPosition = Math.round((avgScore / denomIndustry) * 100);
 
   return (
     <div className="min-h-screen bg-white">
@@ -57,10 +58,10 @@ export default function DashboardV2Page() {
             <div className="w-8 h-8 rounded bg-blue-600" />
             <div className="font-semibold">Dashboard v2</div>
           </div>
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <span className="hidden md:inline">Overall</span>
-            <span className="px-3 py-1.5 rounded-md bg-blue-50 text-blue-700 font-bold text-base shadow-sm border border-blue-100">
-              {insights.overall_score?.toFixed?.(1)}
+          <div className="flex items-center gap-3">
+            <span className="hidden md:inline text-xs text-gray-500">Overall</span>
+            <span className="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-bold shadow-sm border border-blue-100 leading-none">
+              <span className="block text-2xl md:text-3xl">{insights.overall_score?.toFixed?.(1)}</span>
             </span>
           </div>
         </div>
@@ -107,6 +108,31 @@ export default function DashboardV2Page() {
                 <ScoreCard title="Technology" icon="🚀" score={insights.technology_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Technology maturity" onLearnMore={() => {}} />
               </div>
 
+              {/* Performance Summary (from original dashboard) */}
+              <div className="col-span-12 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="text-xl">📊</div>
+                  <h4 className="font-bold text-gray-900 text-lg">Performance Summary</h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-green-600 mb-1">+{Math.round(industryPosition - 100)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">Above Industry Average</div>
+                    <div className="text-xs text-gray-600">You're performing {Math.round(industryPosition - 100)}% better than typical</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-1">{Math.round(overallPerformance)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">of Top Performer Level</div>
+                    <div className="text-xs text-gray-600">Operating at {Math.round(overallPerformance)}% of top performers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-purple-600 mb-1">Top {Math.round(100 - overallPerformance)}%</div>
+                    <div className="text-xs font-semibold text-gray-700 mb-1">Industry Percentile</div>
+                    <div className="text-xs text-gray-600">You’re in the top {Math.round(100 - overallPerformance)}% of your industry</div>
+                  </div>
+                </div>
+              </div>
+
               {/* Compact cards */}
               <div className="col-span-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="border rounded-xl p-4">
@@ -130,7 +156,8 @@ export default function DashboardV2Page() {
 
           {activeTab === 'analysis' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 xl:col-span-8 border rounded-xl p-4">
+              {/* Full-width chart */}
+              <div className="col-span-12 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">Funnel & Benchmarks</div>
                 <PerformanceFunnelChart 
                   strategyScore={insights.strategy_score}
@@ -139,11 +166,12 @@ export default function DashboardV2Page() {
                   overallScore={insights.overall_score}
                   industryAvg={insights.industryAvgScore}
                   topPerformer={insights.topPerformerScore}
-                  height={480}
+                  height={520}
                   showInsights={true}
                 />
               </div>
-              <div className="col-span-12 xl:col-span-4 grid grid-cols-1 gap-4">
+              {/* Strengths and Areas side by side under the chart */}
+              <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InsightCard 
                   title="✅ Key Strengths" 
                   items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
