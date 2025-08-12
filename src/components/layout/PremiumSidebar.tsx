@@ -17,6 +17,7 @@ import {
 
 const navItems = [
   { href: "/premium/dashboard", icon: <ChartBarIcon className="w-5 h-5" />, label: "Dashboard" },
+  { href: "/premium/dashboard-v2", icon: <ChartBarIcon className="w-5 h-5" />, label: "Dashboard v2" },
   { href: "/premium/growth-studio", icon: <RocketLaunchIcon className="w-5 h-5" />, label: "Growth Studio" },
   { href: "/premium/assessment", icon: <PencilSquareIcon className="w-5 h-5" />, label: "Assessment" },
   { href: "/premium/team", icon: <UsersIcon className="w-5 h-5" />, label: "Team" },
