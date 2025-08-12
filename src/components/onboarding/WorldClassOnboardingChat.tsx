@@ -21,13 +21,16 @@ interface WorldClassOnboardingChatProps {
   sessionId: string;
   userProfile?: any;
   onComplete: (answers: any, scores: any) => void;
+  questionGroupsOverride?: QuestionGroup[];
 }
 
 export default function WorldClassOnboardingChat({
   sessionId,
   userProfile,
-  onComplete
+  onComplete,
+  questionGroupsOverride
 }: WorldClassOnboardingChatProps) {
+  const groups = questionGroupsOverride ?? questionGroups;
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -39,7 +42,7 @@ export default function WorldClassOnboardingChat({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const currentGroup = questionGroups[currentGroupIndex];
+  const currentGroup = groups[currentGroupIndex];
   const currentQuestion = currentGroup?.questions[currentQuestionIndex];
 
   // No auto-scrolling - let user control their own position
@@ -159,7 +162,7 @@ export default function WorldClassOnboardingChat({
   };
 
     const handleGroupComplete = async () => {
-    if (currentGroupIndex < questionGroups.length - 1) {
+    if (currentGroupIndex < groups.length - 1) {
       // Move to next group
               setTimeout(() => {
           setCurrentGroupIndex(prev => prev + 1);
@@ -218,7 +221,7 @@ export default function WorldClassOnboardingChat({
   };
 
   const getProgressPercentage = () => {
-    const totalQuestions = questionGroups.reduce((sum, group) => sum + group.questions.length, 0);
+    const totalQuestions = groups.reduce((sum, group) => sum + group.questions.length, 0);
     const completedQuestions = allAnswers ? Object.keys(allAnswers).filter(key => !key.includes('_insights')).length : 0;
     return Math.min((completedQuestions / totalQuestions) * 100, 100);
   };
