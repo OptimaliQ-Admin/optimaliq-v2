@@ -9,6 +9,8 @@ import ScoreCard from "@/components/dashboard/ScoreCard";
 import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import EngagementIntelligenceCard from "@/components/dashboard/EngagementIntelligenceCard";
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
+import InsightCard from "@/components/dashboard/InsightCard";
+import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/EnhancedMarketInsightCard"), { ssr: false });
@@ -56,8 +58,10 @@ export default function DashboardV2Page() {
             <div className="font-semibold">Dashboard v2</div>
           </div>
           <div className="flex items-center gap-3 text-sm text-gray-600">
-            <span>Overall</span>
-            <span className="px-2 py-1 rounded bg-gray-100 font-semibold">{insights.overall_score?.toFixed?.(1)}</span>
+            <span className="hidden md:inline">Overall</span>
+            <span className="px-3 py-1.5 rounded-md bg-blue-50 text-blue-700 font-bold text-base shadow-sm border border-blue-100">
+              {insights.overall_score?.toFixed?.(1)}
+            </span>
           </div>
         </div>
         {/* Tabs */}
@@ -126,7 +130,7 @@ export default function DashboardV2Page() {
 
           {activeTab === 'analysis' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 xl:col-span-7 border rounded-xl p-4">
+              <div className="col-span-12 xl:col-span-8 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">Funnel & Benchmarks</div>
                 <PerformanceFunnelChart 
                   strategyScore={insights.strategy_score}
@@ -135,25 +139,19 @@ export default function DashboardV2Page() {
                   overallScore={insights.overall_score}
                   industryAvg={insights.industryAvgScore}
                   topPerformer={insights.topPerformerScore}
+                  height={480}
+                  showInsights={true}
                 />
               </div>
-              <div className="col-span-12 xl:col-span-5 grid grid-cols-1 gap-4">
-                <div className="border rounded-xl p-4">
-                  <div className="text-sm font-semibold mb-2">Strengths</div>
-                  <ul className="text-sm space-y-1">
-                    {(insights.strengths||[]).slice(0,5).map((s,i)=> (
-                      <li key={i} className="flex items-start gap-2"><span className="text-green-600 mt-0.5">●</span><span>{s.title}</span></li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="border rounded-xl p-4">
-                  <div className="text-sm font-semibold mb-2">Areas for Improvement</div>
-                  <ul className="text-sm space-y-1">
-                    {(insights.weaknesses||[]).slice(0,5).map((w,i)=> (
-                      <li key={i} className="flex items-start gap-2"><span className="text-red-600 mt-0.5">●</span><span>{w.title}</span></li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="col-span-12 xl:col-span-4 grid grid-cols-1 gap-4">
+                <InsightCard 
+                  title="✅ Key Strengths" 
+                  items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
+                <InsightCard 
+                  title="🚨 Areas for Improvement" 
+                  items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
               </div>
             </div>
           )}
@@ -177,7 +175,7 @@ export default function DashboardV2Page() {
 
           {activeTab === 'tasks' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 xl:col-span-6 border rounded-xl p-4">
+              <div className="col-span-12 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">30-Day Growth Plan</div>
                 <ul className="text-sm space-y-2">
                   {(insights.roadmap||[]).map((r,i)=> (
@@ -185,10 +183,8 @@ export default function DashboardV2Page() {
                   ))}
                 </ul>
               </div>
-              <div className="col-span-12 xl:col-span-6 border rounded-xl p-4">
-                <div className="text-sm font-semibold mb-3">Benchmarking Notes</div>
-                <div className="text-sm text-gray-700">Industry Avg: {insights.industryAvgScore?.toFixed?.(1)} • Top Performer: {insights.topPerformerScore?.toFixed?.(1)}</div>
-                <div className="mt-2 text-xs text-gray-500">Use these targets to calibrate quarterly objectives and track uplift after executing tasks.</div>
+              <div className="col-span-12">
+                <GrowthLeversCard />
               </div>
             </div>
           )}

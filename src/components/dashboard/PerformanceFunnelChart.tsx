@@ -21,6 +21,8 @@ interface Props {
   overallScore: number;
   industryAvg: number;
   topPerformer: number;
+  height?: number;
+  showInsights?: boolean;
 }
 
 const PerformanceFunnelChart: React.FC<Props> = ({
@@ -30,6 +32,8 @@ const PerformanceFunnelChart: React.FC<Props> = ({
   overallScore,
   industryAvg,
   topPerformer,
+  height = 420,
+  showInsights = true,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -67,16 +71,16 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       },
     ];
 
-    // Setup dimensions
-    const margin = { top: 40, right: 60, bottom: 80, left: 80 };
+    // Setup dimensions (Salesforce-like spacious layout)
+    const margin = { top: 36, right: 72, bottom: 110, left: 80 };
     const width = svgRef.current.clientWidth - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const innerHeight = height - margin.top - margin.bottom;
 
     // Create SVG
     const svg = d3
       .select(svgRef.current)
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("height", innerHeight + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -105,7 +109,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
     svg
       .append("rect")
       .attr("width", width)
-      .attr("height", height)
+      .attr("height", innerHeight)
       .style("fill", "url(#funnelBackgroundGradient)")
       .style("rx", "12")
       .style("ry", "12")
@@ -121,7 +125,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
     const yScale = d3
       .scaleLinear()
       .domain([0, 5])
-      .range([height, 0])
+      .range([innerHeight, 0])
       .nice();
 
     // Grid lines
@@ -184,7 +188,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         .attr("stop-opacity", 0.4);
 
       const barWidth = xScale.bandwidth();
-      const barHeight = height - yScale(item.score);
+      const barHeight = innerHeight - yScale(item.score);
       const barX = xScale(item.category)!;
       const barY = yScale(item.score);
 
@@ -239,7 +243,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       svg
         .append("text")
         .attr("x", barX + barWidth / 2)
-        .attr("y", height + 20)
+        .attr("y", innerHeight + 20)
         .style("text-anchor", "middle")
         .style("font-size", "12px")
         .style("font-weight", "600")
@@ -250,7 +254,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       svg
         .append("text")
         .attr("x", barX + barWidth / 2)
-        .attr("y", height + 40)
+        .attr("y", innerHeight + 40)
         .style("text-anchor", "middle")
         .style("font-size", "11px")
         .style("font-weight", "500")
@@ -346,7 +350,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       svg
         .append("text")
         .attr("x", width / 2)
-        .attr("y", height + 70)
+        .attr("y", innerHeight + 70)
         .style("text-anchor", "middle")
         .style("font-size", "11px")
         .style("font-weight", "500")
@@ -368,20 +372,22 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         How each capability area contributes to your overall performance score
       </p>
       <div className="relative">
-        <svg ref={svgRef} className="w-full" style={{ height: "400px" }} />
+        <svg ref={svgRef} className="w-full" style={{ height: `${height}px` }} />
       </div>
-      <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
-        <div className="flex items-start gap-3">
-          <div className="text-purple-600 text-lg">🎯</div>
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-1">Performance Insights</h4>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              Your <strong>Strategy</strong> is your strongest area, while <strong>Process</strong> offers the biggest improvement opportunity. 
-              Focus on operational efficiency to close the gap with top performers.
-            </p>
+      {showInsights && (
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
+          <div className="flex items-start gap-3">
+            <div className="text-purple-600 text-lg">🎯</div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-1">Performance Insights</h4>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                Your <strong>Strategy</strong> is your strongest area, while <strong>Process</strong> offers the biggest improvement opportunity. 
+                Focus on operational efficiency to close the gap with top performers.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </motion.div>
   );
 };
