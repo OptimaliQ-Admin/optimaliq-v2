@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const org_id = (profile as any)?.organization_id ?? null;
   const { data, error } = await supabase
     .from("assessment_campaigns")
-    .select("*")
+    .select("*, assessment_assignments(count)")
     .eq(org_id ? "org_id" : "owner_u_id", org_id ?? u_id)
     .order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

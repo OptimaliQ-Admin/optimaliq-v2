@@ -21,10 +21,14 @@ export async function POST(req: NextRequest) {
     // Build question set via AI
     const config = await generatePulseConfig({ topic });
 
+    // Org scoping
+    const { data: profile } = await supabase.from('tier2_profiles').select('organization_id').eq('u_id', owner_u_id).single();
+    const org_id = (profile as any)?.organization_id ?? null;
+
     // Create campaign
     const { data: campaign, error: campErr } = await supabase
       .from('assessment_campaigns')
-      .insert({ owner_u_id, type_slug: 'custom_'+type, title: `${topic} Pulse`, due_at, status: 'active' })
+      .insert({ owner_u_id, type_slug: 'custom_'+type, title: `${topic} Pulse`, due_at, status: 'active', org_id })
       .select('*')
       .single();
     if (campErr) return NextResponse.json({ error: campErr.message }, { status: 500 });
@@ -40,7 +44,7 @@ export async function POST(req: NextRequest) {
     for (const email of participant_emails) {
       const { data: assignment, error: asgErr } = await supabase
         .from('assessment_assignments')
-        .insert({ campaign_id: campaign.id, assignee_u_id: randomUUID(), due_at, status: 'pending' })
+        .insert({ campaign_id: campaign.id, assignee_u_id: randomUUID(), due_at, status: 'pending', org_id })
         .select('*')
         .single();
       if (asgErr) return NextResponse.json({ error: asgErr.message }, { status: 500 });

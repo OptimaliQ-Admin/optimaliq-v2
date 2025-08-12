@@ -339,6 +339,7 @@ export default function TeamWorkspacePage() {
                     <th className="text-left font-medium px-6 py-3">Title</th>
                     <th className="text-left font-medium px-6 py-3">Created</th>
                     <th className="text-left font-medium px-6 py-3">Type</th>
+                    <th className="text-right font-medium px-6 py-3">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">

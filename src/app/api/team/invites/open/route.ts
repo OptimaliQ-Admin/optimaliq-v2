@@ -19,11 +19,20 @@ export async function POST(req: NextRequest) {
     } else {
       await supabase.from('assessment_invites').update({ last_opened_at: now.toISOString() }).eq('id', invite.id);
     }
+    // Ensure config has questions. For templates, produce a basic fallback set
+    let config = invite.assessment_campaign_configs?.config;
+    if (!config?.questions && invite.assessment_campaigns?.type_slug) {
+      config = { type: 'template', template_slug: invite.assessment_campaigns.type_slug, questions: [
+        { key: 'q1', label: 'Overall maturity (0-5)', type: 'text' },
+        { key: 'q2', label: 'Top strength', type: 'text' },
+        { key: 'q3', label: 'Top improvement area', type: 'text' },
+      ]};
+    }
     return NextResponse.json({
       campaignTitle: invite.assessment_campaigns.title,
       campaignId: invite.campaign_id,
       assignmentId: invite.assignment_id,
-      config: invite.assessment_campaign_configs?.config,
+      config,
       due_at: invite.assessment_assignments?.due_at || null
     });
   } catch (e: any) {
