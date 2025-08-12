@@ -129,42 +129,31 @@ export default function AssessmentCard({
     console.log('AssessmentCard - Assessment slug:', slug);
     
     try {
-      const requestData = {
-        u_id: user?.id,
-        inviteeEmail: member.member_email,
-        inviteeName: member.member_name,
-        assessmentType: slug,
-        customMessage: `Please complete the ${title} assessment to help improve our organization's capabilities.`
+      // Use new team assignment endpoint which enforces 30-day rules and resends active invites
+      const payload = {
+        owner_u_id: user?.id,
+        type_slug: slug,
+        participant_emails: [member.member_email],
       };
-      
-      console.log('AssessmentCard - Sending request data:', requestData);
-      console.log('AssessmentCard - Request data validation:', {
-        hasUId: !!requestData.u_id,
-        hasEmail: !!requestData.inviteeEmail,
-        hasName: !!requestData.inviteeName,
-        hasType: !!requestData.assessmentType
-      });
-      
-      const response = await fetch('/api/assessment-delegation/send-invitation', {
+      const response = await fetch('/api/team/assign-template', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-
-      console.log('AssessmentCard - Response status:', response.status);
       const result = await response.json();
-      console.log('AssessmentCard - Response data:', result);
-
       if (response.ok) {
         setShowTeamDropdown(false);
         setSelectedMember(null);
-        // Show success message
-        alert(`Invitation sent successfully to ${member.member_name}!`);
+        if ((result.blockedInfo || []).length) {
+          const info = result.blockedInfo[0];
+          alert(`Blocked: last completed on ${new Date(info.lastCompletedAt).toLocaleDateString()}`);
+        } else if ((result.resent || 0) > 0) {
+          alert(`Invite resent to ${member.member_email}.`);
+        } else {
+          alert(`Invitation sent successfully to ${member.member_email}.`);
+        }
       } else {
-        console.error('Error sending invitation:', result);
-        alert(`Failed to send invitation: ${result.error}`);
+        alert(`Failed to send invitation: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error sending invitation:', error);
