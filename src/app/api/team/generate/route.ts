@@ -1,0 +1,63 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { generatePulseConfig } from "@/lib/ai/generatePulseConfig";
+import { createInviteToken } from "@/lib/security/tokens";
+import { resend } from "@/lib/resend";
+import { sendAssessmentInviteEmail } from "@/lib/email/sendInvite";
+
+function getDb() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+}
+
+export async function POST(req: NextRequest) {
+  const supabase = getDb();
+  try {
+    const { owner_u_id, type = 'pulse', topic, participant_emails = [], due_at = null } = await req.json();
+    if (!owner_u_id || !topic || !Array.isArray(participant_emails) || participant_emails.length === 0) {
+      return NextResponse.json({ error: "owner_u_id, topic, participant_emails[] required" }, { status: 400 });
+    }
+
+    // Build question set via AI
+    const config = await generatePulseConfig({ topic });
+
+    // Create campaign
+    const { data: campaign, error: campErr } = await supabase
+      .from('assessment_campaigns')
+      .insert({ owner_u_id, type_slug: 'custom_'+type, title: `${topic} Pulse`, due_at, status: 'active' })
+      .select('*')
+      .single();
+    if (campErr) return NextResponse.json({ error: campErr.message }, { status: 500 });
+
+    // Persist config
+    const { error: cfgErr } = await supabase
+      .from('assessment_campaign_configs')
+      .insert({ campaign_id: campaign.id, config: { type, topic, questions: config.questions } });
+    if (cfgErr) return NextResponse.json({ error: cfgErr.message }, { status: 500 });
+
+    // Create assignments + invites
+    for (const email of participant_emails) {
+      const { data: assignment, error: asgErr } = await supabase
+        .from('assessment_assignments')
+        .insert({ campaign_id: campaign.id, assignee_u_id: crypto.randomUUID(), due_at, status: 'pending' })
+        .select('*')
+        .single();
+      if (asgErr) return NextResponse.json({ error: asgErr.message }, { status: 500 });
+
+      const token = createInviteToken({ campaignId: campaign.id, assignmentId: assignment.id, email });
+      const { error: invErr } = await supabase
+        .from('assessment_invites')
+        .insert({ campaign_id: campaign.id, assignment_id: assignment.id, invite_email: email, invite_name: null, token, expires_at: new Date(Date.now()+1000*60*60*24*14).toISOString(), status: 'sent' });
+      if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
+
+      if (resend) {
+        await sendAssessmentInviteEmail({ to: email, name: null, title: campaign.title, token });
+      }
+    }
+
+    return NextResponse.json({ campaignId: campaign.id });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+
