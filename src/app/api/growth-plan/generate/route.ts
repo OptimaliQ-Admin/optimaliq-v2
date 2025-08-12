@@ -63,19 +63,34 @@ export async function POST() {
     .single();
   if (planErr) return NextResponse.json({ error: planErr.message }, { status: 500 });
 
-  // Insert levers
-  const leverRows = levers.map((lv, i) => ({
-    plan_id: plan.id,
-    title: lv.title,
-    description: lv.description,
-    priority: lv.priority ?? i + 1,
-    success_metric: lv.success_metric,
-    target_value: lv.target_value,
-    due_date: lv.due_date,
-    owner: lv.owner,
-    tags: lv.tags ?? [],
-    ai_reasoning: lv.ai_reasoning,
-  }));
+  // Insert levers, clamp due_date within 30-day window
+  const startDate = new Date(String(plan.period_start));
+  const endDate = new Date(String(plan.period_end));
+  const clampDate = (d: Date) => {
+    if (isNaN(d.getTime())) return endDate;
+    if (d < startDate) return startDate;
+    if (d > endDate) return endDate;
+    return d;
+  };
+
+  const toDateOnly = (d: Date) => d.toISOString().slice(0, 10);
+
+  const leverRows = levers.map((lv, i) => {
+    const parsed = lv.due_date ? new Date(lv.due_date) : endDate;
+    const clamped = clampDate(parsed);
+    return {
+      plan_id: plan.id,
+      title: lv.title,
+      description: lv.description,
+      priority: lv.priority ?? i + 1,
+      success_metric: lv.success_metric,
+      target_value: lv.target_value,
+      due_date: toDateOnly(clamped),
+      owner: lv.owner,
+      tags: lv.tags ?? [],
+      ai_reasoning: lv.ai_reasoning,
+    };
+  });
   await supabase.from("growth_plan_levers").insert(leverRows);
 
   // Nudges at day 7 and 21 from period_start

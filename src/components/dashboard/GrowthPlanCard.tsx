@@ -54,7 +54,19 @@ export default function GrowthPlanCard() {
             <div>
               <div className="font-medium">{lv.priority}. {lv.title}</div>
               <div className="text-sm text-gray-600">{lv.description}</div>
-              <div className="text-xs mt-1">Metric: {lv.success_metric} • Target: {lv.target_value} • Due: {lv.due_date}</div>
+              <div className="text-xs mt-1 flex items-center gap-2">
+                <span>Metric: {lv.success_metric} • Target: {lv.target_value} • Due:</span>
+                <input
+                  type="date"
+                  defaultValue={lv.due_date}
+                  className="border rounded px-1 py-0.5 text-xs"
+                  onChange={async (e) => {
+                    // clamp client-side to plan window if present
+                    const date = e.target.value;
+                    await fetch(`/api/growth-plan/levers/${lv.id}/progress`, { method: 'POST', body: JSON.stringify({ current_value: lv.current_value, due_date: date }) });
+                  }}
+                />
+              </div>
               <div className="mt-2">
                 <LeverSubtasks leverId={lv.id} />
               </div>

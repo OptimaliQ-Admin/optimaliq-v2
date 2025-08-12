@@ -12,8 +12,8 @@ export async function POST(req: Request, context: any) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { status, current_value, effort, impact } = body || {};
-  if (!status && effort === undefined && impact === undefined && current_value === undefined) {
+  const { status, current_value, effort, impact, risk_status, risk_reason, due_date } = body || {};
+  if (!status && effort === undefined && impact === undefined && current_value === undefined && due_date === undefined && risk_status === undefined && risk_reason === undefined) {
     return NextResponse.json({ error: "No fields to update" }, { status: 400 });
   }
 
@@ -41,6 +41,9 @@ export async function POST(req: Request, context: any) {
   if (current_value !== undefined) update.current_value = current_value;
   if (effort !== undefined) update.effort = effort;
   if (impact !== undefined) update.impact = impact;
+  if (risk_status !== undefined) update.risk_status = risk_status;
+  if (risk_reason !== undefined) update.risk_reason = risk_reason;
+  if (due_date !== undefined) update.due_date = due_date;
 
   await supabase
     .from("growth_plan_levers")

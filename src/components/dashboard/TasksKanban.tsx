@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DndContext, useSensor, useSensors, PointerSensor, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, useSensor, useSensors, PointerSensor, DragEndEvent, DragStartEvent, Over } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +17,8 @@ type Lever = {
 
 export default function TasksKanban() {
   const [levers, setLevers] = useState<Lever[]>([]);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [showBlockerPrompt, setShowBlockerPrompt] = useState<{ leverId: string; toStatus: Lever["status"]; } | null>(null);
   const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
@@ -27,6 +29,10 @@ export default function TasksKanban() {
     })();
   }, []);
 
+  const onDragStart = (event: DragStartEvent) => {
+    setDraggingId(String(event.active.id));
+  };
+
   const onDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || !active) return;
@@ -34,8 +40,14 @@ export default function TasksKanban() {
     const newStatus = over.id as Lever["status"]; // column id
     const lever = levers.find(l => l.id === leverId);
     if (!lever || lever.status === newStatus) return;
-    await fetch(`/api/growth-plan/levers/${leverId}/progress`, { method: "POST", body: JSON.stringify({ status: newStatus }) });
-    setLevers(prev => prev.map(l => l.id === leverId ? { ...l, status: newStatus } : l));
+    if (newStatus === 'blocked') {
+      // Prompt for blocker reason after drop
+      setShowBlockerPrompt({ leverId, toStatus: newStatus });
+    } else {
+      await fetch(`/api/growth-plan/levers/${leverId}/progress`, { method: "POST", body: JSON.stringify({ status: newStatus }) });
+      setLevers(prev => prev.map(l => l.id === leverId ? { ...l, status: newStatus } : l));
+    }
+    setDraggingId(null);
   };
 
   const columns: { id: Lever["status"]; title: string }[] = [
@@ -46,10 +58,10 @@ export default function TasksKanban() {
   ];
 
   return (
-    <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+    <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="grid grid-cols-4 gap-4">
         {columns.map(col => (
-          <div key={col.id} className="border rounded-xl p-3 bg-gray-50">
+          <div key={col.id} id={col.id} className="border rounded-xl p-3 bg-gray-50 min-h-[160px]">
             <div className="text-sm font-semibold mb-2">{col.title}</div>
             <SortableContext items={(levers.filter(l => l.status === col.id)).map(l => l.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-2 min-h-[60px]">
@@ -61,6 +73,21 @@ export default function TasksKanban() {
           </div>
         ))}
       </div>
+
+      {showBlockerPrompt && (
+        <BlockerModal
+          onCancel={() => setShowBlockerPrompt(null)}
+          onSave={async (reason) => {
+            const { leverId, toStatus } = showBlockerPrompt;
+            await fetch(`/api/growth-plan/levers/${leverId}/progress`, {
+              method: 'POST',
+              body: JSON.stringify({ status: toStatus, risk_status: 'blocked', risk_reason: reason })
+            });
+            setLevers(prev => prev.map(l => l.id === leverId ? { ...l, status: toStatus } : l));
+            setShowBlockerPrompt(null);
+          }}
+        />
+      )}
     </DndContext>
   );
 }
@@ -75,6 +102,22 @@ function KanbanCard({ lever }: { lever: Lever }) {
       {lever.due_date && (
         <a className="text-xs text-blue-600" href={`/api/growth-plan/levers/${lever.id}/ics`}>Add to calendar</a>
       )}
+    </div>
+  );
+}
+
+function BlockerModal({ onCancel, onSave }: { onCancel: () => void; onSave: (reason: string) => void }) {
+  const [reason, setReason] = useState("");
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl p-4 w-full max-w-md border shadow-lg">
+        <div className="text-sm font-semibold mb-2">Add blocker reason</div>
+        <textarea className="w-full border rounded p-2 text-sm" rows={4} placeholder="e.g., Waiting on vendor access / resource constraints" value={reason} onChange={(e)=>setReason(e.target.value)} />
+        <div className="mt-3 flex justify-end gap-2">
+          <button className="px-3 py-1 text-sm border rounded" onClick={onCancel}>Cancel</button>
+          <button className="px-3 py-1 text-sm bg-blue-600 text-white rounded" onClick={()=> onSave(reason.trim())} disabled={!reason.trim()}>Save</button>
+        </div>
+      </div>
     </div>
   );
 }
