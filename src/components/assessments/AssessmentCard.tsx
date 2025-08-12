@@ -105,7 +105,13 @@ export default function AssessmentCard({
       const response = await fetch(`/api/team/people?u_id=${user?.id}`);
       if (response.ok) {
         const data = await response.json();
-        setTeamMembers(data.people || []);
+        const mapped = (data.people || []).map((p: any) => ({
+          id: p.id,
+          member_email: p.email,
+          member_name: `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim() || p.email,
+          role: p.title || p.department || ''
+        }));
+        setTeamMembers(mapped);
       }
     } catch (error) {
       console.error('Error loading team members:', error);
