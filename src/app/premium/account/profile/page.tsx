@@ -44,6 +44,8 @@ export default function ProfilePage() {
     if (!file) return;
     setUploading(true);
     try {
+      // Show instant preview while uploading
+      try { setProfilePic(URL.createObjectURL(file)); } catch {}
       const fileExt = file.name.split('.').pop();
       const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
       const { data, error } = await supabase.storage.from('profile-pics').upload(fileName, file);
@@ -91,7 +93,7 @@ export default function ProfilePage() {
       const response = await fetch('/api/premium/account/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: user?.id, ...form }),
+        body: JSON.stringify({ u_id: user?.id, updates: { ...form } }),
       });
       if (!response.ok) {
         const data = await response.json();
