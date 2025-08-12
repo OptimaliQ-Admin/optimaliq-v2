@@ -15,6 +15,7 @@ export default function GrowthAssessmentChat() {
     <WorldClassOnboardingChat
       sessionId={sessionId}
       questionGroupsOverride={growthAssessmentQuestionGroups}
+      disableQuestionAI={true}
       onComplete={async (answers) => {
         try {
           // Use the user ID generated at Step 1 lead form (with ReCAPTCHA)

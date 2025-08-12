@@ -33,11 +33,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ data: cached.snapshot, cached: true, createdAt: cached.created_at });
     }
 
-    // Enqueue refresh if not already queued
-    await supabaseAdmin
+    // Enqueue refresh if not already queued (avoid relying on partial unique for upsert)
+    const { data: existingQueue } = await supabaseAdmin
       .from("snapshot_refresh_requests")
-      .upsert({ card: CARD, industry, status: "queued" }, { onConflict: "card,industry" })
-      .select();
+      .select("id")
+      .eq("card", CARD)
+      .eq("industry", industry)
+      .eq("status", "queued")
+      .limit(1);
+    if (!existingQueue || existingQueue.length === 0) {
+      await supabaseAdmin
+        .from("snapshot_refresh_requests")
+        .insert({ card: CARD, industry, status: "queued" });
+    }
 
     if (cached) {
       return NextResponse.json({ data: cached.snapshot, cached: false, createdAt: cached.created_at, refreshing: true });
@@ -45,7 +53,7 @@ export async function GET(req: NextRequest) {
 
     // Synthetic last-resort fallback (keeps current behavior for first load)
     const fallback = {
-      data: {
+      insight: {
         marketSize: { value: "$2.4T", growth: 3.2, currency: "USD", description: "Estimated total addressable market" },
         growthRate: { value: 7.5, trend: 0.8, period: "annual", description: "Projected YoY industry growth" },
         competition: { level: "Medium", trend: "Stable", description: "Fragmented landscape with emerging leaders", details: "Top peers maintain steady share" },

@@ -22,13 +22,15 @@ interface WorldClassOnboardingChatProps {
   userProfile?: any;
   onComplete: (answers: any, scores: any) => void;
   questionGroupsOverride?: QuestionGroup[];
+  disableQuestionAI?: boolean;
 }
 
 export default function WorldClassOnboardingChat({
   sessionId,
   userProfile,
   onComplete,
-  questionGroupsOverride
+  questionGroupsOverride,
+  disableQuestionAI = false
 }: WorldClassOnboardingChatProps) {
   const groups = questionGroupsOverride ?? questionGroups;
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
@@ -78,51 +80,62 @@ export default function WorldClassOnboardingChat({
     // Generate AI response for this individual question
     setIsTyping(true);
     try {
-      const response = await fetch('/api/ai/onboarding-response', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sessionId,
-          currentSection: currentGroup.id,
-          currentQuestion: currentQuestion.id,
-          userAnswer: answer,
-          conversationHistory: messages.map(msg => ({
-            type: msg.type,
-            content: msg.content,
-            timestamp: msg.timestamp
-          })),
-          userProfile,
-          nextQuestion: currentQuestionIndex < currentGroup.questions.length - 1 
-            ? {
-                id: currentGroup.questions[currentQuestionIndex + 1].id,
-                text: currentGroup.questions[currentQuestionIndex + 1].prompt,
-                type: currentGroup.questions[currentQuestionIndex + 1].type
-              }
-            : undefined
-        })
-      });
+      if (disableQuestionAI) {
+        // Skip AI call; simulate quick acknowledgement
+        await new Promise(res => setTimeout(res, 500));
+        setMessages(prev => [...prev, {
+          id: `ai-${currentQuestion.id}`,
+          type: 'ai',
+          content: 'Got it. Thanks!'
+          , timestamp: new Date()
+        }]);
+      } else {
+        const response = await fetch('/api/ai/onboarding-response', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            currentSection: currentGroup.id,
+            currentQuestion: currentQuestion.id,
+            userAnswer: answer,
+            conversationHistory: messages.map(msg => ({
+              type: msg.type,
+              content: msg.content,
+              timestamp: msg.timestamp
+            })),
+            userProfile,
+            nextQuestion: currentQuestionIndex < currentGroup.questions.length - 1 
+              ? {
+                  id: currentGroup.questions[currentQuestionIndex + 1].id,
+                  text: currentGroup.questions[currentQuestionIndex + 1].prompt,
+                  type: currentGroup.questions[currentQuestionIndex + 1].type
+                }
+              : undefined
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to get AI response');
-      }
+        if (!response.ok) {
+          throw new Error('Failed to get AI response');
+        }
 
-      const aiResponse = await response.json();
+        const aiResponse = await response.json();
 
-      setMessages(prev => [...prev, {
-        id: `ai-${currentQuestion.id}`,
-        type: 'ai',
-        content: aiResponse.response,
-        timestamp: new Date()
-      }]);
+        setMessages(prev => [...prev, {
+          id: `ai-${currentQuestion.id}`,
+          type: 'ai',
+          content: aiResponse.response,
+          timestamp: new Date()
+        }]);
 
-      // Store extracted data for dashboard
-      if (aiResponse.dataForDashboard) {
-        setAllAnswers(prev => ({
-          ...prev,
-          [`${currentQuestion.id}_insights`]: aiResponse.dataForDashboard
-        }));
+        // Store extracted data for dashboard
+        if (aiResponse.dataForDashboard) {
+          setAllAnswers(prev => ({
+            ...prev,
+            [`${currentQuestion.id}_insights`]: aiResponse.dataForDashboard
+          }));
+        }
       }
 
       // Check if this is the last question in the group
@@ -135,7 +148,7 @@ export default function WorldClassOnboardingChat({
           setCurrentQuestionIndex(prev => prev + 1);
           // Clear the current answer for the next question
           setCurrentAnswers({});
-        }, 1000);
+        }, 600);
       }
     } catch (error) {
       console.error('Error generating AI response:', error);
@@ -154,7 +167,7 @@ export default function WorldClassOnboardingChat({
           setCurrentQuestionIndex(prev => prev + 1);
           // Clear the current answer for the next question
           setCurrentAnswers({});
-        }, 1000);
+        }, 600);
       }
     } finally {
       setIsTyping(false);
@@ -173,19 +186,22 @@ export default function WorldClassOnboardingChat({
     } else {
       // Complete the assessment
       setIsComplete(true);
-      
-      // Use the correct dashboard scoring function that matches dashboard API expectations
-      const scores = await generateDashboardScores(userProfile, {
-        business_overview: allAnswers,
-        user_responses: allAnswers,
-        session_id: sessionId
-      });
-      
-      if (scores) {
-        onComplete(allAnswers, scores);
-      } else {
+
+      let scores = null as any;
+      try {
+        // Try generating scores via AI
+        scores = await generateDashboardScores(userProfile, {
+          business_overview: allAnswers,
+          user_responses: allAnswers,
+          session_id: sessionId
+        });
+      } catch (err) {
+        console.error('AI scoring failed, using fallback.', err);
+      }
+
+      if (!scores) {
         // Fallback if AI scoring fails
-        const fallbackScores = {
+        scores = {
           fallback_used: true,
           strategy_score: 3.0,
           process_score: 3.0,
@@ -215,8 +231,9 @@ export default function WorldClassOnboardingChat({
             { task: "Develop strategic growth plan with quarterly milestones", expectedImpact: "Create clear roadmap for sustainable business expansion" }
           ]
         };
-        onComplete(allAnswers, fallbackScores);
       }
+
+      onComplete(allAnswers, scores);
     }
   };
 

@@ -66,7 +66,7 @@ export default function TasksKanban() {
             <SortableContext items={(levers.filter(l => l.status === col.id)).map(l => l.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-2 min-h-[60px]">
                 {levers.filter(l => l.status === col.id).map(l => (
-                  <KanbanCard key={l.id} lever={l} />
+                  <KanbanCard key={l.id} lever={l} onBlock={(id)=> setShowBlockerPrompt({ leverId: id, toStatus: 'blocked' })} />
                 ))}
               </div>
             </SortableContext>
@@ -92,7 +92,7 @@ export default function TasksKanban() {
   );
 }
 
-function KanbanCard({ lever }: { lever: Lever }) {
+function KanbanCard({ lever, onBlock }: { lever: Lever; onBlock: (id: string) => void }) {
   return (
     <div id={lever.id} className="bg-white border rounded-lg p-3">
       <div className="text-sm font-medium">{lever.priority}. {lever.title}</div>
@@ -100,7 +100,10 @@ function KanbanCard({ lever }: { lever: Lever }) {
         <div className="text-xs text-gray-600">Metric: {lever.success_metric} • Target: {lever.target_value}</div>
       )}
       {lever.due_date && (
-        <a className="text-xs text-blue-600" href={`/api/growth-plan/levers/${lever.id}/ics`}>Add to calendar</a>
+        <div className="flex items-center gap-3 mt-1">
+          <a className="text-xs text-blue-600" href={`/api/growth-plan/levers/${lever.id}/ics`}>Add to calendar</a>
+          <button className="text-xs text-red-600 underline" onClick={()=> onBlock(lever.id)}>Mark blocked</button>
+        </div>
       )}
     </div>
   );
