@@ -1,4 +1,4 @@
-// src/app/api/growth-plan/levers/[id]/progress/route.ts
+// src/app/api/growth-plan/levers/[id]/subtasks/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
@@ -11,24 +11,21 @@ export async function POST(req: Request, context: any) {
   const user = auth?.user;
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await req.json();
-  const { status, current_value, effort, impact } = body || {};
-  if (!status && effort === undefined && impact === undefined && current_value === undefined) {
-    return NextResponse.json({ error: "No fields to update" }, { status: 400 });
-  }
+  const { title, due_date } = await req.json();
+  if (!title) return NextResponse.json({ error: "Missing title" }, { status: 400 });
 
   const supabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
+  // verify lever belongs to user
   const { data: lever } = await supabase
     .from("growth_plan_levers")
     .select("id, plan_id")
     .eq("id", params.id)
     .single();
-  if (!lever) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
+  if (!lever) return NextResponse.json({ error: "Lever not found" }, { status: 404 });
   const { data: plan } = await supabase
     .from("growth_plans")
     .select("user_id")
@@ -36,18 +33,13 @@ export async function POST(req: Request, context: any) {
     .single();
   if (!plan || plan.user_id !== user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const update: any = {};
-  if (status) update.status = status;
-  if (current_value !== undefined) update.current_value = current_value;
-  if (effort !== undefined) update.effort = effort;
-  if (impact !== undefined) update.impact = impact;
-
-  await supabase
-    .from("growth_plan_levers")
-    .update(update)
-    .eq("id", params.id);
-
-  return NextResponse.json({ ok: true });
+  const { data, error } = await supabase
+    .from("growth_plan_subtasks")
+    .insert({ lever_id: params.id, title, due_date: due_date ?? null })
+    .select("id, title, status, due_date, created_at")
+    .single();
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ subtask: data });
 }
 
 

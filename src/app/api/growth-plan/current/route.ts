@@ -27,7 +27,11 @@ export async function GET() {
   if (!plan) return NextResponse.json({ plan: null });
 
   const [{ data: levers }, { data: nudges }] = await Promise.all([
-    supabase.from("growth_plan_levers").select("*").eq("plan_id", plan.id).order("priority"),
+    supabase
+      .from("growth_plan_levers")
+      .select("*, subtasks:growth_plan_subtasks(id, title, status, due_date, created_at)")
+      .eq("plan_id", plan.id)
+      .order("priority"),
     supabase.from("growth_plan_nudges").select("*").eq("plan_id", plan.id).order("send_at"),
   ]);
 

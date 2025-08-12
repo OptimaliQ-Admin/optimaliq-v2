@@ -11,8 +11,8 @@ import EngagementIntelligenceCard from "@/components/dashboard/EngagementIntelli
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import InsightCard from "@/components/dashboard/InsightCard";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
-import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import GrowthPlanCard from "@/components/dashboard/GrowthPlanCard";
+import TasksKanban from "@/components/dashboard/TasksKanban";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/EnhancedMarketInsightCard"), { ssr: false });
@@ -206,7 +206,7 @@ export default function DashboardV2Page() {
                 <GrowthPlanCard />
               </div>
               <div className="col-span-12">
-                <GrowthLeversCard />
+                <TasksKanban />
               </div>
             </div>
           )}

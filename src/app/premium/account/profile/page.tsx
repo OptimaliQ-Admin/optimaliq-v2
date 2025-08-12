@@ -48,11 +48,14 @@ export default function ProfilePage() {
       try { setProfilePic(URL.createObjectURL(file)); } catch {}
       const fileExt = file.name.split('.').pop();
       const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
-      const { data, error } = await supabase.storage.from('profile-pics').upload(fileName, file);
+      // Overwrite if the same file name exists to avoid duplicates
+      const { data, error } = await supabase.storage.from('profile-pics').upload(fileName, file, { upsert: true });
       if (error) throw error;
       const { data: { publicUrl } } = supabase.storage.from('profile-pics').getPublicUrl(fileName);
-      setProfilePic(publicUrl);
-      setForm(prev => ({ ...prev, profile_pic_url: publicUrl }));
+      // For robustness, build a public URL via URL if needed
+      const finalUrl = publicUrl || `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile-pics/${fileName}`;
+      setProfilePic(finalUrl);
+      setForm(prev => ({ ...prev, profile_pic_url: finalUrl }));
       
       // Update user context with new profile picture URL
       if (user) {

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import LeverSubtasks from "@/components/dashboard/LeverSubtasks";
 import { toast } from "react-hot-toast";
 
 export default function GrowthPlanCard() {
@@ -54,6 +55,9 @@ export default function GrowthPlanCard() {
               <div className="font-medium">{lv.priority}. {lv.title}</div>
               <div className="text-sm text-gray-600">{lv.description}</div>
               <div className="text-xs mt-1">Metric: {lv.success_metric} • Target: {lv.target_value} • Due: {lv.due_date}</div>
+              <div className="mt-2">
+                <LeverSubtasks leverId={lv.id} />
+              </div>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={async () => {
