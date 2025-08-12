@@ -118,7 +118,7 @@ export default function DashboardV2Page() {
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-green-600 mb-1">+{Math.round(industryPosition - 100)}%</div>
                     <div className="text-xs font-semibold text-gray-700 mb-1">Above Industry Average</div>
-                    <div className="text-xs text-gray-600">You're performing {Math.round(industryPosition - 100)}% better than typical</div>
+                    <div className="text-xs text-gray-600">You&apos;re performing {Math.round(industryPosition - 100)}% better than typical</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-1">{Math.round(overallPerformance)}%</div>
@@ -128,7 +128,7 @@ export default function DashboardV2Page() {
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-purple-600 mb-1">Top {Math.round(100 - overallPerformance)}%</div>
                     <div className="text-xs font-semibold text-gray-700 mb-1">Industry Percentile</div>
-                    <div className="text-xs text-gray-600">You’re in the top {Math.round(100 - overallPerformance)}% of your industry</div>
+                    <div className="text-xs text-gray-600">You&rsquo;re in the top {Math.round(100 - overallPerformance)}% of your industry</div>
                   </div>
                 </div>
               </div>
