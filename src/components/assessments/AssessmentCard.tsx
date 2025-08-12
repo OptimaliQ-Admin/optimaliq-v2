@@ -257,6 +257,13 @@ export default function AssessmentCard({
   const StatusIcon = statusInfo.icon;
   const assessmentIcon = assessmentIcons[slug] || { icon: "📊", color: "from-gray-500 to-gray-600", bgColor: "bg-gray-50" };
 
+  const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+  const hasBlockingAssignment = assigned.some(a => {
+    if (a.status !== 'completed') return true;
+    if (!a.completed_at) return true;
+    return (Date.now() - new Date(a.completed_at).getTime()) < THIRTY_DAYS_MS;
+  });
+
   return (
     <>
       <motion.div 
@@ -411,8 +418,8 @@ export default function AssessmentCard({
           )}
         </div>
 
-        {/* Team Invitation Section */}
-        {teamMembers.length > 0 && (
+        {/* Team Invitation Section (hidden if active or recently completed assignment) */}
+        {teamMembers.length > 0 && !hasBlockingAssignment && (
           <div className="border-t border-gray-100 p-6 bg-gray-50/50">
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -471,7 +478,7 @@ export default function AssessmentCard({
                 <div className="mt-3">
                   <button
                     onClick={() => handleSendInvitation(selectedMember)}
-                    disabled={sendingInvitation}
+                    disabled={sendingInvitation || !selectedMember}
                     className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {sendingInvitation ? (
@@ -493,6 +500,12 @@ export default function AssessmentCard({
             <div className="mt-3 text-xs text-gray-500">
               <p>Team members will receive an email with a link to complete this assessment.</p>
             </div>
+          </div>
+        )}
+
+        {hasBlockingAssignment && (
+          <div className="border-t border-gray-100 p-6 bg-gray-50/50">
+            <div className="text-sm text-gray-600">An invitation is already active or was recently completed. Manage or unassign in Team Workspace.</div>
           </div>
         )}
 

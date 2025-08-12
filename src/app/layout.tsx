@@ -92,7 +92,8 @@ export const metadata: Metadata = {
       { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
   },
-  manifest: '/manifest.json',
+  // Disable manifest in preview envs to avoid 401s
+  // manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -155,7 +156,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="manifest" href="/manifest.json" />
+        {/* Disable manifest link to avoid 401 in preview environments */}
+        {/* <link rel="manifest" href="/manifest.json" /> */}
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-gray-50 text-gray-900 font-sans`}>
         {/* Google Tag Manager (noscript) */}

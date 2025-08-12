@@ -69,6 +69,7 @@ export default function TeamWorkspacePage() {
   ];
   const [reviewCampaignId, setReviewCampaignId] = useState<string | null>(null);
   const [reviewData, setReviewData] = useState<{ avg: number | null; insights: any[] } | null>(null);
+  const [creating, setCreating] = useState(false);
 
   // Lightweight toast
   const [toast, setToast] = useState<{ message: string; kind?: 'success'|'error'|'info' } | null>(null);
@@ -188,12 +189,14 @@ export default function TeamWorkspacePage() {
     if (!user?.id) return;
     const emails = people.filter(p => generateForm.personIds.includes(p.id)).map(p => p.email);
     if (!generateForm.topic || emails.length === 0) { alert('Pick a topic and at least one person'); return; }
-    const res = await fetch('/api/team/generate', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ owner_u_id: user.id, type: 'custom', topic: generateForm.topic, participant_emails: emails })
-    });
-    const json = await res.json();
-    if (res.ok) {
+    setCreating(true);
+    try {
+      const res = await fetch('/api/team/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ owner_u_id: user.id, type: 'custom', topic: generateForm.topic, participant_emails: emails })
+      });
+      const json = await res.json();
+      if (res.ok) {
       setShowGenerateModal(false);
       setGenerateForm({ topic: '', personIds: [] });
       const created = json.created ?? (json.inviteUrls?.length || 0);
@@ -201,8 +204,11 @@ export default function TeamWorkspacePage() {
       const r = await fetch(`/api/team/campaigns?u_id=${user.id}`);
       const j = await r.json();
       setCampaigns(j.campaigns || []);
-    } else {
-      showToast(json.error || 'Failed to generate', 'error');
+      } else {
+        showToast(json.error || 'Failed to generate', 'error');
+      }
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -562,7 +568,9 @@ export default function TeamWorkspacePage() {
             </div>
             <div className="mt-6 flex items-center justify-end gap-2">
               <button onClick={()=>setShowGenerateModal(false)} className="px-3 py-2 text-sm rounded-lg border">Cancel</button>
-              <button onClick={handleGenerateAssessment} className="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700">Create</button>
+              <button onClick={handleGenerateAssessment} disabled={creating} className="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+                {creating ? 'Creating…' : 'Create'}
+              </button>
             </div>
           </div>
         </div>
