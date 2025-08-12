@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
         const invitationUrl = `${base}/delegate/a/${token}`;
         await emailService.sendAssessmentInvitationEmail({
           to: email,
+          firstName: (email || '').split('@')[0] || 'there',
           inviterName,
           inviterCompany,
           assessmentTitle: campaign.title,
