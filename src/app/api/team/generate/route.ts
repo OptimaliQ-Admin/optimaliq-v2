@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
 
       if (resend) {
-        const base = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://optimaliq.ai');
+        const base = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_APP_URL || 'https://optimaliq.ai');
         const invitationUrl = `${base}/delegate/a/${token}`;
         await emailService.sendAssessmentInvitationEmail({
           to: email,
