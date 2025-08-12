@@ -36,6 +36,18 @@ export default function TeamWorkspacePage() {
   const [loadingAssessments, setLoadingAssessments] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignForm, setAssignForm] = useState<{ topic: string; personIds: string[] }>({ topic: '', personIds: [] });
+  const templateSlugByTitle: Record<string,string> = {
+    'Business Process Maturity': 'bpm',
+    'Sales Performance': 'sales',
+    'Marketing Effectiveness': 'marketing_effectiveness',
+    'Technology Maturity': 'tech_stack',
+    'AI Readiness': 'ai_readiness',
+    'Digital Transformation': 'digital_transformation',
+    'Strategic Maturity': 'strategic_maturity',
+    'Competitive Benchmarking': 'competitive_benchmarking',
+    'Leadership & Team Performance': 'leadership',
+    'Customer Experience': 'customer_experience',
+  };
 
   // Generate state
   const [customCampaigns, setCustomCampaigns] = useState<Campaign[]>([]);
@@ -136,10 +148,11 @@ export default function TeamWorkspacePage() {
   const handleAssignAssessment = async () => {
     if (!user?.id) return;
     const emails = people.filter(p => assignForm.personIds.includes(p.id)).map(p => p.email);
-    if (!assignForm.topic || emails.length === 0) { alert('Pick a topic and at least one person'); return; }
-    const res = await fetch('/api/team/generate', {
+    if (!assignForm.topic || emails.length === 0) { alert('Pick a template and at least one person'); return; }
+    const type_slug = templateSlugByTitle[assignForm.topic];
+    const res = await fetch('/api/team/assign-template', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ owner_u_id: user.id, type: 'pulse', topic: assignForm.topic, participant_emails: emails })
+      body: JSON.stringify({ owner_u_id: user.id, type_slug, participant_emails: emails })
     });
     const json = await res.json();
     if (res.ok) {
