@@ -165,17 +165,6 @@ export default function AssessmentsPage() {
               <h1 className="text-xl font-semibold text-gray-900">Assessments</h1>
               <p className="text-xs text-gray-500">Plan, take, and review assessments</p>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs text-gray-500">
-              <span className="px-2 py-1 bg-gray-100 rounded">Overview</span>
-              <span>•</span>
-              <span>Business</span>
-              <span>•</span>
-              <span>Technology</span>
-              <span>•</span>
-              <span>Strategy</span>
-              <span>•</span>
-              <span>Progress</span>
-            </div>
           </div>
           {/* Tabs */}
           <div className="max-w-[1920px] mx-auto px-6">
@@ -320,7 +309,14 @@ export default function AssessmentsPage() {
                       const dateStr = lastDate ? new Date(lastDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
                       const statusLabel = needs ? 'Not started' : 'Completed';
                       const statusStyle = needs ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                      // Retake rules: allow retake if last taken > 30 days ago
+                      const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+                      const lastMs = lastDate ? new Date(lastDate).getTime() : 0;
+                      const canRetake = !!lastDate && (Date.now() - lastMs > THIRTY_DAYS);
+                      const showAction = needs || canRetake;
+                      const actionLabel = needs ? 'Start' : 'Retake';
                       const onAction = () => {
+                        if (!showAction) return;
                         if (item.slug === 'reassessment') {
                           setActiveTab('progress');
                           setTimeout(() => {
@@ -339,9 +335,13 @@ export default function AssessmentsPage() {
                           <td className="px-6 py-3 text-gray-900">{score !== null ? score.toFixed?.(1) : '—'}</td>
                           <td className="px-6 py-3 text-gray-600">{dateStr}</td>
                           <td className="px-6 py-3 text-right">
-                            <button onClick={onAction} className="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-sm">
-                              {needs ? 'Start' : 'Review'}
-                            </button>
+                            {showAction ? (
+                              <button onClick={onAction} className="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-sm">
+                                {actionLabel}
+                              </button>
+                            ) : (
+                              <span className="text-xs text-gray-400">No action available</span>
+                            )}
                           </td>
                         </tr>
                       );
