@@ -10,7 +10,7 @@ import ReassessmentCard from "@/components/assessments/ReassessmentCard";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 import TechToolsCard from "@/components/assessment/TechToolsCard";
 import AssessmentExplanationModal from "@/components/modals/AssessmentExplanationModal";
-import PageNavigation from "@/components/shared/PageNavigation";
+// Salesforce-style shell for assessments: sticky header + tabs
 import { FaChartLine, FaLightbulb, FaRocket, FaBullseye, FaCogs, FaBrain, FaUsers, FaShieldAlt } from "react-icons/fa";
 
 type AssessmentSlug = keyof typeof assessmentFieldMap;
@@ -26,14 +26,7 @@ export default function AssessmentsPage() {
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [explanationSeen, setExplanationSeen] = useState<boolean | null>(null);
 
-  // Define page sections for navigation
-  const pageSections = [
-    { id: "header", label: "Overview", icon: "📊" },
-    { id: "business-assessments", label: "Business Assessments", icon: "🏢" },
-    { id: "technology-assessments", label: "Technology Assessments", icon: "💻" },
-    { id: "strategy-assessments", label: "Strategy Assessments", icon: "🎯" },
-    { id: "progress-tracking", label: "Progress Tracking", icon: "📈" },
-  ];
+  const [activeTab, setActiveTab] = useState<'overview'|'business'|'technology'|'strategy'|'progress'>('overview');
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -149,18 +142,52 @@ export default function AssessmentsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-        {/* Floating Page Navigation */}
-        <PageNavigation sections={pageSections} />
+      <div className="min-h-screen bg-gray-50">
+        {/* Sticky header */}
+        <div className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-gray-200">
+          <div className="max-w-[1920px] mx-auto px-6 py-4 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">Assessments</h1>
+              <p className="text-xs text-gray-500">Plan, take, and review assessments</p>
+            </div>
+            <div className="hidden md:flex items-center gap-2 text-xs text-gray-500">
+              <span className="px-2 py-1 bg-gray-100 rounded">Overview</span>
+              <span>•</span>
+              <span>Business</span>
+              <span>•</span>
+              <span>Technology</span>
+              <span>•</span>
+              <span>Strategy</span>
+              <span>•</span>
+              <span>Progress</span>
+            </div>
+          </div>
+          {/* Tabs */}
+          <div className="max-w-[1920px] mx-auto px-6">
+            <div className="flex gap-2 overflow-x-auto no-scrollbar text-sm">
+              {[
+                { key: 'overview', label: 'Overview' },
+                { key: 'business', label: 'Business' },
+                { key: 'technology', label: 'Technology' },
+                { key: 'strategy', label: 'Strategy' },
+                { key: 'progress', label: 'Progress' },
+              ].map(t => (
+                <button key={t.key} onClick={() => setActiveTab(t.key as any)}
+                  className={`px-4 py-2 border-b-2 -mb-px ${activeTab===t.key ? 'border-blue-600 text-blue-700 font-semibold' : 'border-transparent text-gray-600 hover:text-gray-800'}`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
-        <div className="max-w-[1920px] mx-auto p-8 space-y-16">
-          {/* Header Section */}
+        <div className="max-w-[1920px] mx-auto p-6 space-y-10">
+          {/* Header Section (Overview tab) */}
           <motion.div 
-            id="header"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
+            className={`${activeTab==='overview' ? 'block' : 'hidden'} text-center`}
           >
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
@@ -235,11 +262,10 @@ export default function AssessmentsPage() {
 
           {/* Business Assessments Section */}
           <motion.div 
-            id="business-assessments"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="space-y-8"
+            className={`${activeTab==='business' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AssessmentCard
@@ -271,11 +297,10 @@ export default function AssessmentsPage() {
 
           {/* Technology Assessments Section */}
           <motion.div 
-            id="technology-assessments"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.0 }}
-            className="space-y-8"
+            className={`${activeTab==='technology' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
@@ -318,11 +343,10 @@ export default function AssessmentsPage() {
 
           {/* Strategy Assessments Section */}
           <motion.div 
-            id="strategy-assessments"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="space-y-8"
+            className={`${activeTab==='strategy' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
@@ -363,12 +387,12 @@ export default function AssessmentsPage() {
             </div>
           </motion.div>
 
-          {/* Customer Experience Assessment */}
+          {/* Customer Experience Assessment (stays with Strategy section or could be in Business) */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.4 }}
-            className="space-y-8"
+            className={`${activeTab==='strategy' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
@@ -395,11 +419,10 @@ export default function AssessmentsPage() {
 
           {/* Progress Tracking Section */}
           <motion.div 
-            id="progress-tracking"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.6 }}
-            className="space-y-8"
+            className={`${activeTab==='progress' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">

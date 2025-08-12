@@ -436,6 +436,15 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
           .text(d);
       });
 
+    // Tooltip for quadrant points
+    const qTip = svg.append("g").attr("class", "qTip").style("pointer-events", "none").style("opacity", 0);
+    const qTipBg = qTip.append("rect").attr("rx", 6).attr("ry", 6)
+      .style("fill", "rgba(17,24,39,0.95)")
+      .style("stroke", "#ffffff")
+      .style("stroke-width", 0.75)
+      .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.25))");
+    const qTipText = qTip.append("text").style("fill", "#ffffff").style("font-size", "12px").style("font-weight", "600");
+
     // Add data points with better spacing and visibility
     const points = svg
       .selectAll(".data-point")
@@ -456,20 +465,39 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .style("stroke-width", d => d.name === "You" ? 4 : 3)
       .style("opacity", d => d.name === "You" ? 0.9 : 0.7)
       .style("filter", d => d.name === "You" ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))")
-      .on("mouseover", function(event, d) {
-        d3.select(this)
+      .on("mouseover", function(event, d: any) {
+        const circle = d3.select(this).select('circle');
+        circle
           .style("opacity", 1)
           .style("stroke-width", d.name === "You" ? 5 : 4)
           .style("filter", d.name === "You" ? "drop-shadow(0 3px 6px rgba(29, 78, 216, 0.5))" : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))");
-        setHoveredPoint(`${d.name}: Strategy ${d.strategy_score.toFixed(1)}, Process ${d.process_score.toFixed(1)}, Technology ${d.technology_score.toFixed(1)}`);
+
+        const tip = `${d.name}: S ${d.strategy_score.toFixed(1)} · P ${d.process_score.toFixed(1)} · T ${d.technology_score.toFixed(1)}`;
+        qTipText.text(tip);
+        const bbox = (qTipText.node() as SVGTextElement).getBBox();
+        qTipBg.attr("x", bbox.x - 8).attr("y", bbox.y - 6).attr("width", bbox.width + 16).attr("height", bbox.height + 12);
+
+        const cx = xScale(d.strategy_score);
+        const cy = yScale(d.process_score);
+        const offsetX = cx > width / 2 ? -20 : 20;
+        const offsetY = cy > height / 2 ? -20 : 20;
+        qTip.style("opacity", 1).attr("transform", `translate(${cx + offsetX}, ${cy + offsetY})`).raise();
+      })
+      .on("mousemove", function(event, d: any) {
+        const cx = xScale(d.strategy_score);
+        const cy = yScale(d.process_score);
+        const offsetX = cx > width / 2 ? -20 : 20;
+        const offsetY = cy > height / 2 ? -20 : 20;
+        qTip.attr("transform", `translate(${cx + offsetX}, ${cy + offsetY})`).raise();
       })
       .on("mouseout", function() {
         const d = d3.select(this).datum() as any;
-        d3.select(this)
+        const circle = d3.select(this).select('circle');
+        circle
           .style("opacity", d.name === "You" ? 0.9 : 0.7)
           .style("stroke-width", d.name === "You" ? 4 : 3)
           .style("filter", d.name === "You" ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))");
-        setHoveredPoint(null);
+        qTip.style("opacity", 0);
       });
 
     // Add labels for user point with better visibility
@@ -865,15 +893,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
             <svg ref={quadrantSvgRef} className="w-full" style={{ height: "600px" }} />
           </div>
           
-          {hoveredPoint && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-4 bg-blue-50 rounded-lg border border-blue-200"
-            >
-              <p className="text-sm text-blue-700 font-medium">{hoveredPoint}</p>
-            </motion.div>
-          )}
+          {/* Tooltip now renders on the chart itself */}
         </div>
 
         {/* Radar Chart - Full Width */}
