@@ -172,11 +172,7 @@ function GrowthStudioComponent() {
 
           {activeTab === 'analysis' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 lg:col-span-6">
-                <div className="text-sm font-semibold mb-3">Competitive Benchmarking</div>
-                <CompetitiveBenchmarkRadar userId={userId} />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
+              <div className="col-span-12">
                 <div className="text-sm font-semibold mb-3">Strategic Analysis</div>
                 <StrategicAnalysisCard userId={userId} />
               </div>
