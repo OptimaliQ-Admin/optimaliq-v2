@@ -72,11 +72,14 @@ export default function AssessmentCard({
   const [sendingInvitation, setSendingInvitation] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [assigned, setAssigned] = useState<Array<{ email: string; status: string; created_at: string; completed_at: string | null }>>([]);
+  const [loadingAssigned, setLoadingAssigned] = useState(false);
 
   // Load team members when component mounts (use new Team API for data)
   useEffect(() => {
     if (user?.id) {
       loadTeamMembers();
+      loadAssigned();
     }
   }, [user?.id]);
 
@@ -120,6 +123,30 @@ export default function AssessmentCard({
     }
   };
 
+  const loadAssigned = async () => {
+    if (!user?.id) return;
+    try {
+      setLoadingAssigned(true);
+      const res = await fetch(`/api/team/invitations?u_id=${user.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        const list = (data.invitations || [])
+          .filter((row: any) => row.type_slug === slug)
+          .map((row: any) => ({
+            email: row.assignedTo,
+            status: row.status,
+            created_at: row.created_at,
+            completed_at: row.completed_at || null,
+          }));
+        setAssigned(list);
+      }
+    } catch (e) {
+      console.error('Error loading assigned invites:', e);
+    } finally {
+      setLoadingAssigned(false);
+    }
+  };
+
   const handleSendInvitation = async (member: TeamMember) => {
     setSendingInvitation(true);
     
@@ -152,6 +179,8 @@ export default function AssessmentCard({
         } else {
           alert(`Invitation sent successfully to ${member.member_email}.`);
         }
+        // refresh assignments list
+        await loadAssigned();
       } else {
         alert(`Failed to send invitation: ${result.error || 'Unknown error'}`);
       }
@@ -482,6 +511,27 @@ export default function AssessmentCard({
             </div>
           </div>
         )}
+
+        {/* Assigned list for this assessment */}
+        <div className="border-t border-gray-100 p-6 bg-gray-50/50">
+          <div className="text-sm font-semibold text-gray-700 mb-2">Assigned</div>
+          {loadingAssigned && <div className="text-sm text-gray-500">Loading…</div>}
+          {!loadingAssigned && assigned.length === 0 && (
+            <div className="text-sm text-gray-500">No one assigned yet.</div>
+          )}
+          {!loadingAssigned && assigned.length > 0 && (
+            <ul className="space-y-1">
+              {assigned.map((a, i) => (
+                <li key={i} className="flex items-center justify-between text-sm">
+                  <span className="text-gray-700">{a.email}</span>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded border text-xs ${a.status==='completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
+                    {a.status}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </motion.div>
 
       {slug in slugToAssessmentType && (
