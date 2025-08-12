@@ -54,6 +54,16 @@ export default function TeamWorkspacePage() {
     'Innovation Velocity & R&D Effectiveness',
     'Risk & Compliance Readiness'
   ];
+  const [reviewCampaignId, setReviewCampaignId] = useState<string | null>(null);
+  const [reviewData, setReviewData] = useState<{ avg: number | null; insights: any[] } | null>(null);
+  useEffect(() => {
+    if (!reviewCampaignId) return;
+    (async () => {
+      const res = await fetch(`/api/team/campaigns/${reviewCampaignId}/insights`);
+      const json = await res.json();
+      setReviewData(json);
+    })();
+  }, [reviewCampaignId]);
 
   // Load team people
   useEffect(() => {
@@ -321,6 +331,9 @@ export default function TeamWorkspacePage() {
                       <td className="px-6 py-3">
                         <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">{c.type_slug}</span>
                       </td>
+                      <td className="px-6 py-3 text-right">
+                        <button onClick={()=>setReviewCampaignId(c.id)} className="text-xs text-blue-600 hover:text-blue-700 font-semibold">Review</button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -370,6 +383,56 @@ export default function TeamWorkspacePage() {
               <button onClick={()=>setShowAddModal(false)} className="px-3 py-2 text-sm rounded-lg border">Cancel</button>
               <button onClick={handleAddPerson} className="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700">Save</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review Drawer */}
+      {reviewCampaignId && (
+        <div className="fixed inset-0 z-30 flex">
+          <div className="flex-1 bg-black/30" onClick={()=>{ setReviewCampaignId(null); setReviewData(null); }} />
+          <div className="w-full max-w-xl bg-white border-l border-gray-200 shadow-2xl p-6 overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Campaign Insights</h3>
+              <button onClick={()=>{ setReviewCampaignId(null); setReviewData(null); }} className="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            {!reviewData ? (
+              <div className="text-gray-500">Loading…</div>
+            ) : (
+              <div className="space-y-6">
+                <div>
+                  <div className="text-sm text-gray-500">Average Score</div>
+                  <div className="text-3xl font-bold text-gray-900">{reviewData.avg?.toFixed?.(1) ?? '—'}</div>
+                </div>
+                <div className="space-y-4">
+                  {(reviewData.insights || []).map((ins, idx) => (
+                    <div key={idx} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-500">Assignment</div>
+                        <div className="text-sm font-semibold text-gray-800">Score: {ins.overall_score?.toFixed?.(1) ?? '—'}</div>
+                      </div>
+                      {ins.summary && (
+                        <p className="mt-2 text-sm text-gray-700">{ins.summary}</p>
+                      )}
+                      <div className="mt-3 grid grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-xs font-semibold text-emerald-700 mb-1">Key Strengths</div>
+                          <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            {(ins.key_strengths || []).map((s: string, i: number) => <li key={i}>{s}</li>)}
+                          </ul>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-amber-700 mb-1">Areas for Improvement</div>
+                          <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            {(ins.areas_for_improvement || []).map((w: string, i: number) => <li key={i}>{w}</li>)}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
