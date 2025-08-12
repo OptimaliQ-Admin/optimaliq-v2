@@ -19,9 +19,11 @@ export async function POST(req: NextRequest) {
   try {
     const { campaign_id, assignee_u_id, due_at } = await req.json();
     if (!campaign_id || !assignee_u_id) return NextResponse.json({ error: "campaign_id, assignee_u_id required" }, { status: 400 });
+    // inherit org_id from campaign
+    const { data: camp } = await supabase.from('assessment_campaigns').select('org_id').eq('id', campaign_id).single();
     const { data, error } = await supabase
       .from("assessment_assignments")
-      .insert({ campaign_id, assignee_u_id, due_at, status: "pending" })
+      .insert({ campaign_id, assignee_u_id, due_at, status: "pending", org_id: (camp as any)?.org_id ?? null })
       .select("*")
       .single();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
