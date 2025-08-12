@@ -158,6 +158,10 @@ export default function TeamWorkspacePage() {
     if (res.ok) {
       setShowAssignModal(false);
       setAssignForm({ topic: '', personIds: [] });
+      if (json.inviteUrls?.length) {
+        console.log('Invites created:', json.inviteUrls);
+        alert(`Assigned. Invite links emailed. First URL: ${json.inviteUrls[0].url}`);
+      }
       // Refresh campaigns
       const r = await fetch(`/api/team/campaigns?u_id=${user.id}`);
       const j = await r.json();
@@ -180,6 +184,10 @@ export default function TeamWorkspacePage() {
     if (res.ok) {
       setShowGenerateModal(false);
       setGenerateForm({ topic: '', personIds: [] });
+      if (json.inviteUrls?.length) {
+        console.log('Invites created:', json.inviteUrls);
+        alert(`Custom assessment created. First invite URL: ${json.inviteUrls[0].url}`);
+      }
       const r = await fetch(`/api/team/campaigns?u_id=${user.id}`);
       const j = await r.json();
       setCampaigns(j.campaigns || []);

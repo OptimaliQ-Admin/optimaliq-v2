@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
 
     // Assign + invite
     let created = 0;
+    const inviteUrls: Array<{ email: string; url: string }> = [];
     for (const email of toAssign) {
       const { data: assignment, error: asgErr } = await supabase
         .from('assessment_assignments')
@@ -60,9 +61,11 @@ export async function POST(req: NextRequest) {
       if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
       if (resend) await sendAssessmentInviteEmail({ to: email, name: null, title: campaign.title, token });
       created++;
+      const url = `${process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai"}/delegate/a/${token}`;
+      inviteUrls.push({ email, url });
     }
 
-    return NextResponse.json({ campaignId: campaign.id, created, blocked: Array.from(blocked) });
+    return NextResponse.json({ campaignId: campaign.id, created, blocked: Array.from(blocked), inviteUrls });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
