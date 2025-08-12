@@ -647,138 +647,85 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       labelText.raise();
     });
 
-    // Draw industry average radar first (background)
-    const industryData = [
-      { value: radarData.industryAvg.strategy },
-      { value: radarData.industryAvg.process },
-      { value: radarData.industryAvg.technology },
-      { value: radarData.industryAvg.overall }
-    ];
+    // POLAR AREA STYLE (amCharts-like) — wedges per axis, keeping our data/colors
+    // Gradients for user wedges
+    const defsPolar = svg.append("defs");
+    const userPolarGradient = defsPolar.append("linearGradient")
+      .attr("id", "userPolarGradient")
+      .attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
+    userPolarGradient.append("stop").attr("offset", "0%").attr("stop-color", "#3b82f6").attr("stop-opacity", 0.9);
+    userPolarGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.7);
 
-    svg
-      .append("path")
-      .datum(industryData)
-      .attr("class", "industryRadar")
-      .attr("d", radarLine)
-      .style("fill", "none")
-      .style("stroke", "#64748b")
-      .style("stroke-width", 3)
-      .style("stroke-dasharray", "6 3")
-      .style("opacity", 0.6);
+    const sectorWidth = angleSlice * 0.7; // leave gaps between sectors
 
-    // Draw top performer radar
-    const topPerformerData = [
-      { value: radarData.topPerformer.strategy },
-      { value: radarData.topPerformer.process },
-      { value: radarData.topPerformer.technology },
-      { value: radarData.topPerformer.overall }
-    ];
+    const axisValues = [
+      { key: "strategy", i: 0 },
+      { key: "process", i: 1 },
+      { key: "technology", i: 2 },
+      { key: "overall", i: 3 }
+    ] as const;
 
-    // Create top performer gradient
-    const topPerformerGradient = svg.append("defs").append("linearGradient")
-      .attr("id", "topPerformerRadarGradient")
-      .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
-    topPerformerGradient.append("stop").attr("offset", "0%").attr("stop-color", "#10b981").attr("stop-opacity", 0.2);
-    topPerformerGradient.append("stop").attr("offset", "100%").attr("stop-color", "#059669").attr("stop-opacity", 0.1);
+    const getAngleCenter = (i: number) => angleSlice * i - Math.PI / 2;
 
-    svg
-      .append("path")
-      .datum(topPerformerData)
-      .attr("class", "topPerformerRadar")
-      .attr("d", radarLine)
-      .style("fill", "url(#topPerformerRadarGradient)")
-      .style("stroke", "#059669")
-      .style("stroke-width", 3)
-      .style("stroke-dasharray", "3 6")
-      .style("opacity", 0.8);
+    // Draw bands for industry and top performer as thin ring segments per axis
+    axisValues.forEach(({ key, i }) => {
+      const center = getAngleCenter(i);
+      const start = center - sectorWidth / 2;
+      const end = center + sectorWidth / 2;
 
-    // Draw user radar with enhanced prominence
-    const userData = [
-      { value: radarData.user.strategy },
-      { value: radarData.user.process },
-      { value: radarData.user.technology },
-      { value: radarData.user.overall }
-    ];
+      const industryVal = (radarData.industryAvg as any)[key];
+      const topVal = (radarData.topPerformer as any)[key];
+      const userVal = (radarData.user as any)[key];
 
-    // Create user gradient with enhanced styling
-    const userGradient = svg.append("defs").append("linearGradient")
-      .attr("id", "userRadarGradient")
-      .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
-    userGradient.append("stop").attr("offset", "0%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.4);
-    userGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1e40af").attr("stop-opacity", 0.2);
+      const arc = d3.arc<any>();
 
-    // Add user radar with enhanced styling and glow effect
-    svg
-      .append("path")
-      .datum(userData)
-      .attr("class", "userRadar")
-      .attr("d", radarLine)
-      .style("fill", "url(#userRadarGradient)")
-      .style("stroke", "#1d4ed8")
-      .style("stroke-width", 4)
-      .style("filter", "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.3))");
+      // Industry band (neutral)
+      svg.append("path")
+        .attr("d", arc({ innerRadius: Math.max(0, rScale(industryVal) - 5), outerRadius: rScale(industryVal), startAngle: start, endAngle: end }))
+        .style("fill", "#94a3b8")
+        .style("opacity", 0.35);
 
-    // Add data points with larger sizes and enhanced visibility
-    const addDataPoints = (data: { value: number }[], color: string, className: string, isUser: boolean = false) => {
-      svg
-        .selectAll(`.${className}-point`)
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", `${className}-point`)
-        .attr("r", isUser ? 6 : 5) // Larger points, user points slightly bigger
-        .attr("cx", (d: { value: number }, i: number) => {
-          const angle = angleSlice * i - Math.PI / 2;
-          return Math.cos(angle) * rScale(d.value);
-        })
-        .attr("cy", (d: { value: number }, i: number) => {
-          const angle = angleSlice * i - Math.PI / 2;
-          return Math.sin(angle) * rScale(d.value);
-        })
-        .style("fill", color)
-        .style("stroke", "#ffffff")
-        .style("stroke-width", isUser ? 3 : 2)
-        .style("filter", isUser ? "drop-shadow(0 2px 4px rgba(29, 78, 216, 0.4))" : "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))");
-    };
+      // Top performer band (green)
+      svg.append("path")
+        .attr("d", arc({ innerRadius: Math.max(0, rScale(topVal) - 5), outerRadius: rScale(topVal), startAngle: start, endAngle: end }))
+        .style("fill", "#10b981")
+        .style("opacity", 0.35);
 
-    addDataPoints(userData, "#1d4ed8", "user", true);
-    addDataPoints(industryData, "#64748b", "industry");
-    addDataPoints(topPerformerData, "#059669", "topPerformer");
+      // User wedge (primary, full sector)
+      svg.append("path")
+        .attr("d", arc({ innerRadius: 0, outerRadius: rScale(userVal), startAngle: start, endAngle: end }))
+        .style("fill", "url(#userPolarGradient)")
+        .style("filter", "drop-shadow(0 4px 8px rgba(29, 78, 216, 0.25))");
 
-    // Add legend with enhanced styling and larger text
+      // Value badge dot at wedge tip
+      const tipX = Math.cos(center) * rScale(userVal);
+      const tipY = Math.sin(center) * rScale(userVal);
+      svg.append("circle")
+        .attr("cx", tipX)
+        .attr("cy", tipY)
+        .attr("r", 5)
+        .style("fill", "#1d4ed8")
+        .style("stroke", "#fff")
+        .style("stroke-width", 2);
+    });
+
+    // Legend
     const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${radius + 60}, -${radius / 2})`);
-    
     const legendData = [
-      { label: "You", color: "#1d4ed8", pattern: "solid", isUser: true },
-      { label: "Industry Average", color: "#64748b", pattern: "dashed" },
-      { label: "Top Performers", color: "#059669", pattern: "dotted" }
+      { label: "You", color: "#1d4ed8" },
+      { label: "Industry Avg (band)", color: "#94a3b8" },
+      { label: "Top Performer (band)", color: "#10b981" }
     ];
-
     legend.selectAll(".legend-item")
       .data(legendData)
       .enter()
       .append("g")
       .attr("class", "legend-item")
-      .attr("transform", (d, i) => `translate(0, ${i * 30})`) // More spacing
+      .attr("transform", (d, i) => `translate(0, ${i * 26})`)
       .each(function(d) {
         const g = d3.select(this);
-        
-        g.append("line")
-          .attr("x1", 0)
-          .attr("x2", 25) // Longer lines
-          .attr("y1", 0)
-          .attr("y2", 0)
-          .style("stroke", d.color)
-          .style("stroke-width", d.isUser ? 4 : 3) // Thicker line for user
-          .style("stroke-dasharray", d.pattern === "dashed" ? "6 3" : d.pattern === "dotted" ? "3 6" : "none");
-        
-        g.append("text")
-          .attr("x", 30) // More spacing
-          .attr("y", 3)
-          .style("font-size", "14px") // Larger text
-          .style("font-weight", d.isUser ? "700" : "500")
-          .style("fill", d.isUser ? "#1d4ed8" : "#374151")
-          .text(d.label);
+        g.append("rect").attr("width", 18).attr("height", 12).attr("rx", 2).attr("ry", 2).style("fill", d.color).style("opacity", d.label.startsWith("You") ? 1 : 0.35);
+        g.append("text").attr("x", 26).attr("y", 10).style("font-size", "13px").style("fill", "#374151").text(d.label);
       });
 
   }, [data]);
