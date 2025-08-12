@@ -669,7 +669,11 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
 
     // Hover tooltip group (SVG-based for portability)
     const hoverTip = svg.append("g").attr("class", "hoverTip").style("pointer-events", "none").style("opacity", 0);
-    const hoverBg = hoverTip.append("rect").attr("rx", 6).attr("ry", 6).style("fill", "rgba(17,24,39,0.9)");
+    const hoverBg = hoverTip.append("rect").attr("rx", 6).attr("ry", 6)
+      .style("fill", "rgba(17,24,39,0.95)")
+      .style("stroke", "#ffffff")
+      .style("stroke-width", 0.75)
+      .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.25))");
     const hoverText = hoverTip.append("text").style("fill", "#ffffff").style("font-size", "12px").style("font-weight", "600");
 
     // Draw bands for industry and top performer as ring segments per axis and animated wedges for user
@@ -722,11 +726,18 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
           hoverText.text(tip);
           const bbox = (hoverText.node() as SVGTextElement).getBBox();
           hoverBg.attr("x", bbox.x - 8).attr("y", bbox.y - 6).attr("width", bbox.width + 16).attr("height", bbox.height + 12);
-          hoverTip.style("opacity", 1)
-            .attr("transform", `translate(${Math.cos(d.center) * (rScale(d.userVal) + 18)}, ${Math.sin(d.center) * (rScale(d.userVal) + 18)})`);
+          const baseR = rScale(d.userVal) + 18;
+          const offset = 36;
+          const tx = Math.cos(d.center) * baseR + (Math.cos(d.center) >= 0 ? offset : -offset);
+          const ty = Math.sin(d.center) * baseR + (Math.sin(d.center) >= 0 ? 12 : -12);
+          hoverTip.style("opacity", 1).attr("transform", `translate(${tx}, ${ty})`).raise();
         })
         .on("mousemove", function (event, d: any) {
-          hoverTip.attr("transform", `translate(${Math.cos(d.center) * (rScale(d.userVal) + 18)}, ${Math.sin(d.center) * (rScale(d.userVal) + 18)})`);
+          const baseR = rScale(d.userVal) + 18;
+          const offset = 36;
+          const tx = Math.cos(d.center) * baseR + (Math.cos(d.center) >= 0 ? offset : -offset);
+          const ty = Math.sin(d.center) * baseR + (Math.sin(d.center) >= 0 ? 12 : -12);
+          hoverTip.attr("transform", `translate(${tx}, ${ty})`).raise();
         })
         .on("mouseout", function (event, d: any) {
           d3.select(this)
@@ -791,6 +802,9 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         g.append("rect").attr("width", 18).attr("height", 12).attr("rx", 2).attr("ry", 2).style("fill", d.color).style("opacity", d.label.startsWith("You") ? 1 : 0.35);
         g.append("text").attr("x", 26).attr("y", 10).style("font-size", "13px").style("fill", "#374151").text(d.label);
       });
+
+    // Ensure tooltip stays on top after all elements are appended
+    hoverTip.raise();
 
   }, [data]);
 
