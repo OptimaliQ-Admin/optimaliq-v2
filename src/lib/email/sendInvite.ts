@@ -16,7 +16,12 @@ export async function sendAssessmentInviteEmail(params: {
     <p style="color:#64748b;font-size:12px">If the button doesn't work, copy and paste this URL: ${url}</p>
   </div>`;
   if (resend) {
-    await resend.emails.send({ to: params.to, subject, html, from: process.env.NEXT_PUBLIC_EMAIL_FROM || "noreply@optimaliq.ai" });
+    await resend.emails.send({
+      from: process.env.NEXT_PUBLIC_EMAIL_FROM || 'assessments@e.optimaliq.ai',
+      to: params.to,
+      subject,
+      html,
+    });
   }
 }
 
