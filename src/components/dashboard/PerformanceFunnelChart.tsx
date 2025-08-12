@@ -164,6 +164,47 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         .style("rx", "4");
     });
 
+    // Draw single benchmark lines (Target and Industry) spanning full width with labels on the left
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", yScale(topPerformer))
+      .attr("y2", yScale(topPerformer))
+      .style("stroke", "#ef4444")
+      .style("stroke-width", 2)
+      .style("stroke-dasharray", "4 4");
+
+    svg
+      .append("text")
+      .attr("x", 0)
+      .attr("y", yScale(topPerformer) - 8)
+      .style("text-anchor", "start")
+      .style("font-size", "10px")
+      .style("font-weight", "600")
+      .style("fill", "#ef4444")
+      .text(`Target: ${topPerformer.toFixed(1)}`);
+
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", yScale(industryAvg))
+      .attr("y2", yScale(industryAvg))
+      .style("stroke", "#64748b")
+      .style("stroke-width", 2)
+      .style("stroke-dasharray", "2 4");
+
+    svg
+      .append("text")
+      .attr("x", 0)
+      .attr("y", yScale(industryAvg) - 8)
+      .style("text-anchor", "start")
+      .style("font-size", "10px")
+      .style("font-weight", "600")
+      .style("fill", "#64748b")
+      .text(`Industry: ${industryAvg.toFixed(1)}`);
+
     // Draw bars with gradients
     funnelData.forEach((item, index) => {
       const barGradient = svg
@@ -206,27 +247,6 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         .style("filter", "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15))")
         .style("transition", "all 0.3s ease");
 
-      // Target line
-      svg
-        .append("line")
-        .attr("x1", barX)
-        .attr("x2", barX + barWidth)
-        .attr("y1", yScale(topPerformer))
-        .attr("y2", yScale(topPerformer))
-        .style("stroke", "#ef4444")
-        .style("stroke-width", 2)
-        .style("stroke-dasharray", "4 4");
-
-      // Industry average line
-      svg
-        .append("line")
-        .attr("x1", barX)
-        .attr("x2", barX + barWidth)
-        .attr("y1", yScale(industryAvg))
-        .attr("y2", yScale(industryAvg))
-        .style("stroke", "#64748b")
-        .style("stroke-width", 2)
-        .style("stroke-dasharray", "2 4");
 
       // Score text
       svg
@@ -261,27 +281,7 @@ const PerformanceFunnelChart: React.FC<Props> = ({
         .style("fill", "#64748b")
         .text(`${item.contribution.toFixed(0)}% contribution`);
 
-      // Target label
-      svg
-        .append("text")
-        .attr("x", barX + barWidth + 5)
-        .attr("y", yScale(topPerformer) - 5)
-        .style("text-anchor", "start")
-        .style("font-size", "10px")
-        .style("font-weight", "600")
-        .style("fill", "#ef4444")
-        .text(`Target: ${topPerformer}`);
-
-      // Industry label
-      svg
-        .append("text")
-        .attr("x", barX + barWidth + 5)
-        .attr("y", yScale(industryAvg) - 5)
-        .style("text-anchor", "start")
-        .style("font-size", "10px")
-        .style("font-weight", "600")
-        .style("fill", "#64748b")
-        .text(`Industry: ${industryAvg}`);
+      // removed per-bar labels for target and industry to avoid repetition
     });
 
     // Y-axis
@@ -311,28 +311,26 @@ const PerformanceFunnelChart: React.FC<Props> = ({
       .style("fill", "#475569")
       .text("Performance Score");
 
-    // Overall score indicator
-    const overallX = width / 2;
+    // Overall score indicator (full-width line with left label)
     const overallY = yScale(overallScore);
-
     svg
       .append("line")
-      .attr("x1", overallX - 20)
-      .attr("x2", overallX + 20)
+      .attr("x1", 0)
+      .attr("x2", width)
       .attr("y1", overallY)
       .attr("y2", overallY)
-      .style("stroke", "#8b5cf6")
-      .style("stroke-width", 4)
+      .style("stroke", "#3b82f6")
+      .style("stroke-width", 3)
       .style("stroke-linecap", "round");
 
     svg
       .append("text")
-      .attr("x", overallX)
-      .attr("y", overallY - 15)
-      .style("text-anchor", "middle")
+      .attr("x", 0)
+      .attr("y", overallY - 10)
+      .style("text-anchor", "start")
       .style("font-size", "12px")
       .style("font-weight", "700")
-      .style("fill", "#8b5cf6")
+      .style("fill", "#3b82f6")
       .text(`Overall: ${overallScore.toFixed(1)}`);
 
     // Performance gap analysis

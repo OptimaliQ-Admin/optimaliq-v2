@@ -10,6 +10,7 @@ import BusinessTrendCard from "@/components/dashboard/BusinessTrendCard";
 import EngagementIntelligenceCard from "@/components/dashboard/EngagementIntelligenceCard";
 import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChart";
 import InsightCard from "@/components/dashboard/InsightCard";
+import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 
@@ -22,6 +23,7 @@ export default function DashboardV2Page() {
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview'|'analysis'|'market'|'tasks'>('overview');
+  const [modalData, setModalData] = useState<any>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -48,6 +50,19 @@ export default function DashboardV2Page() {
   const denomIndustry = insights.industryAvgScore && insights.industryAvgScore > 0 ? insights.industryAvgScore : 3.2;
   const overallPerformance = Math.round((avgScore / denomTop) * 100);
   const industryPosition = Math.round((avgScore / denomIndustry) * 100);
+
+  const handleScoreClick = async (category: string, score: number) => {
+    try {
+      const res = await axios.post("/api/dashboard/scorecard_insights", {
+        category,
+        score,
+        industry: insights?.industry || "other",
+      });
+      setModalData(res.data);
+    } catch (err) {
+      // no-op; modalData remains unchanged
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -102,10 +117,10 @@ export default function DashboardV2Page() {
             <div className="grid grid-cols-12 gap-4">
               {/* Highlights metric cards */}
               <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                <ScoreCard title="Overall" icon="🏆" score={insights.overall_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Overall maturity" onLearnMore={() => {}} />
-                <ScoreCard title="Strategy" icon="🎯" score={insights.strategy_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Strategy maturity" onLearnMore={() => {}} />
-                <ScoreCard title="Process" icon="⚙️" score={insights.process_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Process maturity" onLearnMore={() => {}} />
-                <ScoreCard title="Technology" icon="🚀" score={insights.technology_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Technology maturity" onLearnMore={() => {}} />
+                <ScoreCard title="Overall" icon="🏆" score={insights.overall_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Overall maturity" onLearnMore={() => handleScoreClick("overall", insights.overall_score)} />
+                <ScoreCard title="Strategy" icon="🎯" score={insights.strategy_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Strategy maturity" onLearnMore={() => handleScoreClick("strategy", insights.strategy_score)} />
+                <ScoreCard title="Process" icon="⚙️" score={insights.process_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Process maturity" onLearnMore={() => handleScoreClick("process", insights.process_score)} />
+                <ScoreCard title="Technology" icon="🚀" score={insights.technology_score} industryAvg={insights.industryAvgScore} topPerformer={insights.topPerformerScore} description="Technology maturity" onLearnMore={() => handleScoreClick("technology", insights.technology_score)} />
               </div>
 
               {/* Performance Summary (from original dashboard) */}
@@ -133,24 +148,7 @@ export default function DashboardV2Page() {
                 </div>
               </div>
 
-              {/* Compact cards */}
-              <div className="col-span-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="border rounded-xl p-4">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">Performance</div>
-                  <div className="text-3xl font-bold text-blue-600">{overallPerformance}%</div>
-                  <div className="text-xs text-gray-500">of top performer benchmark</div>
-                </div>
-                <div className="border rounded-xl p-4">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">Industry Avg</div>
-                  <div className="text-3xl font-bold text-green-600">{insights.industryAvgScore?.toFixed?.(1) ?? '—'}</div>
-                  <div className="text-xs text-gray-500">Comparative baseline</div>
-                </div>
-                <div className="border rounded-xl p-4">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">Roadmap Items</div>
-                  <div className="text-3xl font-bold text-purple-600">{(insights.roadmap || []).length}</div>
-                  <div className="text-xs text-gray-500">Active 30-day initiatives</div>
-                </div>
-              </div>
+              {/* Removed compact duplicate KPI cards to avoid redundancy with Performance Summary */}
             </div>
           )}
 
@@ -218,6 +216,7 @@ export default function DashboardV2Page() {
           )}
         </section>
       </main>
+      <ScoreContextModal open={!!modalData} onClose={() => setModalData(null)} data={modalData} />
     </div>
   );
 }
