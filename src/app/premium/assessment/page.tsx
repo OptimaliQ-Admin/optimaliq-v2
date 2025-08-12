@@ -2,11 +2,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { usePremiumUser } from "@/context/PremiumUserContext";
 import AssessmentCard from "@/components/assessments/AssessmentCard";
 import ReassessmentCard from "@/components/assessments/ReassessmentCard";
+import ReassessmentPromptModal from "@/components/assessments/ReassessmentPromptModal";
 import { assessmentFieldMap } from "@/lib/utils/assessmentFieldMap";
 import TechToolsCard from "@/components/assessment/TechToolsCard";
 import AssessmentExplanationModal from "@/components/modals/AssessmentExplanationModal";
@@ -20,13 +22,16 @@ type ProfileData = Record<string, number | string | null> & {
 
 export default function AssessmentsPage() {
   const { user } = usePremiumUser();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [assessmentData, setAssessmentData] = useState<Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>>({} as Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
+  const [showProgressPrompt, setShowProgressPrompt] = useState(false);
+  const [hasTakenProgressBefore, setHasTakenProgressBefore] = useState(false);
   const [explanationSeen, setExplanationSeen] = useState<boolean | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'overview'|'business'|'technology'|'strategy'|'progress'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview'|'business'|'technology'|'strategy'|'customer'|'progress'>('overview');
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -75,6 +80,16 @@ export default function AssessmentsPage() {
         }, {} as Record<AssessmentSlug, { score: number | null; lastTakenDate: string | null }>);
 
         setAssessmentData(data);
+
+        // Determine if we should show progress prompt when landing on page (not only when switching tabs)
+        const progress = data.reassessment?.lastTakenDate;
+        setHasTakenProgressBefore(Boolean(progress));
+        // Example criteria: show if taken before 30+ days ago OR never taken (baseline)
+        const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+        const last = progress ? new Date(progress).getTime() : 0;
+        const shouldPrompt = !progress || Date.now() - last > THIRTY_DAYS;
+        setShowProgressPrompt(shouldPrompt);
+
         setLoading(false);
       } catch (err) {
         console.error("❌ Unexpected error:", err);
@@ -170,6 +185,7 @@ export default function AssessmentsPage() {
                 { key: 'business', label: 'Business' },
                 { key: 'technology', label: 'Technology' },
                 { key: 'strategy', label: 'Strategy' },
+                { key: 'customer', label: 'Customer Experience' },
                 { key: 'progress', label: 'Progress' },
               ].map(t => (
                 <button key={t.key} onClick={() => setActiveTab(t.key as any)}
@@ -257,6 +273,82 @@ export default function AssessmentsPage() {
                 <h3 className="font-bold text-gray-900 mb-3 text-lg">Strategic Focus</h3>
                 <p className="text-gray-600 leading-relaxed">Identify key areas for improvement and strategic opportunities</p>
               </motion.div>
+            </motion.div>
+
+            {/* Overview: Assessments Summary */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-12 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden text-left"
+            >
+              <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Assessment Summary</h3>
+                  <p className="text-sm text-gray-500">Snapshot of all assessments with status, score, and last taken</p>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-gray-50 text-gray-600">
+                    <tr>
+                      <th className="text-left font-medium px-6 py-3">Assessment</th>
+                      <th className="text-left font-medium px-6 py-3">Status</th>
+                      <th className="text-left font-medium px-6 py-3">Score</th>
+                      <th className="text-left font-medium px-6 py-3">Last Taken</th>
+                      <th className="text-right font-medium px-6 py-3">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {([
+                      { slug: 'bpm', title: 'Business Process Maturity' },
+                      { slug: 'sales', title: 'Sales Performance' },
+                      { slug: 'marketing_effectiveness', title: 'Marketing Effectiveness' },
+                      { slug: 'tech_stack', title: 'Technology Maturity' },
+                      { slug: 'ai_readiness', title: 'AI & Automation Readiness' },
+                      { slug: 'digital_transformation', title: 'Digital Transformation' },
+                      { slug: 'strategic_maturity', title: 'Strategic Maturity' },
+                      { slug: 'competitive_benchmarking', title: 'Competitive Benchmarking' },
+                      { slug: 'leadership', title: 'Leadership & Team Performance' },
+                      { slug: 'customer_experience', title: 'Customer Experience' },
+                      { slug: 'reassessment', title: 'Growth Progress Tracker' },
+                    ] as Array<{ slug: keyof typeof assessmentFieldMap | 'reassessment'; title: string }>).map((item) => {
+                      const entry = (assessmentData as any)[item.slug] as { score: number | null; lastTakenDate: string | null } | undefined;
+                      const score = entry?.score ?? null;
+                      const lastDate = entry?.lastTakenDate ?? null;
+                      const needs = !lastDate;
+                      const dateStr = lastDate ? new Date(lastDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+                      const statusLabel = needs ? 'Not started' : 'Completed';
+                      const statusStyle = needs ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                      const onAction = () => {
+                        if (item.slug === 'reassessment') {
+                          setActiveTab('progress');
+                          setTimeout(() => {
+                            document.getElementById('progress-start-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }, 50);
+                          return;
+                        }
+                        router.push(`/premium/assessment/${item.slug}`);
+                      };
+                      return (
+                        <tr key={item.slug} className="hover:bg-gray-50/60 transition-colors">
+                          <td className="px-6 py-3 text-gray-900 font-medium">{item.title}</td>
+                          <td className="px-6 py-3">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${statusStyle}`}>{statusLabel}</span>
+                          </td>
+                          <td className="px-6 py-3 text-gray-900">{score !== null ? score.toFixed?.(1) : '—'}</td>
+                          <td className="px-6 py-3 text-gray-600">{dateStr}</td>
+                          <td className="px-6 py-3 text-right">
+                            <button onClick={onAction} className="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-sm">
+                              {needs ? 'Start' : 'Review'}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </motion.div>
           </motion.div>
 
@@ -387,12 +479,12 @@ export default function AssessmentsPage() {
             </div>
           </motion.div>
 
-          {/* Customer Experience Assessment (stays with Strategy section or could be in Business) */}
+          {/* Customer Experience Assessment moved to its own tab */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.4 }}
-            className={`${activeTab==='strategy' ? 'block' : 'hidden'} space-y-8`}
+            className={`${activeTab==='customer' ? 'block' : 'hidden'} space-y-8`}
           >
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
@@ -441,6 +533,8 @@ export default function AssessmentsPage() {
                 lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
                 userId={user?.id}
               />
+              {/* anchor for smooth scroll from modal */}
+              <div id="progress-start-anchor" />
               {user?.id && <TechToolsCard userId={user.id} />}
             </div>
           </motion.div>
@@ -453,6 +547,23 @@ export default function AssessmentsPage() {
           isOpen={showExplanationModal}
           onClose={handleCloseModal}
           userId={user.id}
+        />
+      )}
+
+      {/* Progress Prompt Modal on page entry if criteria met */}
+      {showProgressPrompt && (
+        <ReassessmentPromptModal
+          isOpen={showProgressPrompt}
+          onClose={() => setShowProgressPrompt(false)}
+          onStart={() => {
+            setShowProgressPrompt(false);
+            // Navigate to progress tab and scroll to card
+            setActiveTab('progress');
+            setTimeout(() => {
+              document.getElementById('progress-start-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+          }}
+          hasTakenBefore={hasTakenProgressBefore}
         />
       )}
     </>
