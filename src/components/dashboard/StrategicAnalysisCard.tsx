@@ -494,11 +494,11 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     // Clear previous chart
     d3.select(radarSvgRef.current).selectAll("*").remove();
 
-    // Setup dimensions - MUCH LARGER for executive view
-    const margin = { top: 80, right: 80, bottom: 80, left: 80 }; // Increased margins
+    // Setup dimensions - larger circle and a bit more room for legend
+    const margin = { top: 60, right: 120, bottom: 60, left: 80 };
     const width = radarSvgRef.current.clientWidth - margin.left - margin.right;
-    const height = 600 - margin.top - margin.bottom; // Increased from 500 to 600
-    const radius = Math.min(width, height) / 2 - 60; // Increased radius for better visibility
+    const height = 700 - margin.top - margin.bottom;
+    const radius = Math.min(width, height) / 2 - 20; // maximize usable radius
 
     // Create SVG
     const svg = d3
@@ -653,10 +653,10 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     const userPolarGradient = defsPolar.append("linearGradient")
       .attr("id", "userPolarGradient")
       .attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
-    userPolarGradient.append("stop").attr("offset", "0%").attr("stop-color", "#3b82f6").attr("stop-opacity", 0.9);
-    userPolarGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.7);
+    userPolarGradient.append("stop").attr("offset", "0%").attr("stop-color", "#3b82f6").attr("stop-opacity", 0.95);
+    userPolarGradient.append("stop").attr("offset", "100%").attr("stop-color", "#1d4ed8").attr("stop-opacity", 0.8);
 
-    const sectorWidth = angleSlice * 0.7; // leave gaps between sectors
+    const sectorWidth = angleSlice * 0.8; // slight gaps between sectors
 
     const axisValues = [
       { key: "strategy", i: 0 },
@@ -667,7 +667,12 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
 
     const getAngleCenter = (i: number) => angleSlice * i - Math.PI / 2;
 
-    // Draw bands for industry and top performer as thin ring segments per axis
+    // Hover tooltip group (SVG-based for portability)
+    const hoverTip = svg.append("g").attr("class", "hoverTip").style("pointer-events", "none").style("opacity", 0);
+    const hoverBg = hoverTip.append("rect").attr("rx", 6).attr("ry", 6).style("fill", "rgba(17,24,39,0.9)");
+    const hoverText = hoverTip.append("text").style("fill", "#ffffff").style("font-size", "12px").style("font-weight", "600");
+
+    // Draw bands for industry and top performer as ring segments per axis and animated wedges for user
     axisValues.forEach(({ key, i }) => {
       const center = getAngleCenter(i);
       const start = center - sectorWidth / 2;
@@ -678,24 +683,68 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       const userVal = (radarData.user as any)[key];
 
       const arc = d3.arc<any>();
+      const ringThickness = 12;
 
-      // Industry band (neutral)
+      // Industry band (neutral) with stronger visibility
       svg.append("path")
-        .attr("d", arc({ innerRadius: Math.max(0, rScale(industryVal) - 5), outerRadius: rScale(industryVal), startAngle: start, endAngle: end }))
+        .attr("d", arc({ innerRadius: Math.max(0, rScale(industryVal) - ringThickness), outerRadius: rScale(industryVal), startAngle: start, endAngle: end }))
         .style("fill", "#94a3b8")
-        .style("opacity", 0.35);
+        .style("opacity", 0.5)
+        .style("stroke", "#64748b")
+        .style("stroke-width", 1.5)
+        .style("filter", "drop-shadow(0 1px 2px rgba(0,0,0,0.15))");
 
-      // Top performer band (green)
+      // Top performer band (green) with stronger visibility
       svg.append("path")
-        .attr("d", arc({ innerRadius: Math.max(0, rScale(topVal) - 5), outerRadius: rScale(topVal), startAngle: start, endAngle: end }))
+        .attr("d", arc({ innerRadius: Math.max(0, rScale(topVal) - ringThickness), outerRadius: rScale(topVal), startAngle: start, endAngle: end }))
         .style("fill", "#10b981")
-        .style("opacity", 0.35);
+        .style("opacity", 0.5)
+        .style("stroke", "#059669")
+        .style("stroke-width", 1.5)
+        .style("filter", "drop-shadow(0 1px 2px rgba(0,0,0,0.15))");
 
-      // User wedge (primary, full sector)
-      svg.append("path")
-        .attr("d", arc({ innerRadius: 0, outerRadius: rScale(userVal), startAngle: start, endAngle: end }))
+      // User wedge (primary, full sector) with animation + interactivity
+      const wedgeDatum = { key, i, userVal, industryVal, topVal, center, start, end } as any;
+      const wedge = svg.append("path")
+        .datum(wedgeDatum)
+        .attr("d", arc({ innerRadius: 0, outerRadius: 0, startAngle: start, endAngle: end }))
         .style("fill", "url(#userPolarGradient)")
-        .style("filter", "drop-shadow(0 4px 8px rgba(29, 78, 216, 0.25))");
+        .style("filter", "drop-shadow(0 4px 8px rgba(29, 78, 216, 0.25))")
+        .style("cursor", "pointer")
+        .on("mouseover", function (event, d: any) {
+          d3.select(this)
+            .interrupt()
+            .transition()
+            .duration(180)
+            .attr("d", arc({ innerRadius: 0, outerRadius: rScale(d.userVal) + 12, startAngle: d.start, endAngle: d.end }))
+            .style("opacity", 0.98);
+          const tip = `${d.key[0].toUpperCase() + d.key.slice(1)}: You ${d.userVal.toFixed(1)} | Ind ${d.industryVal.toFixed(1)} | Top ${d.topVal.toFixed(1)}`;
+          hoverText.text(tip);
+          const bbox = (hoverText.node() as SVGTextElement).getBBox();
+          hoverBg.attr("x", bbox.x - 8).attr("y", bbox.y - 6).attr("width", bbox.width + 16).attr("height", bbox.height + 12);
+          hoverTip.style("opacity", 1)
+            .attr("transform", `translate(${Math.cos(d.center) * (rScale(d.userVal) + 18)}, ${Math.sin(d.center) * (rScale(d.userVal) + 18)})`);
+        })
+        .on("mousemove", function (event, d: any) {
+          hoverTip.attr("transform", `translate(${Math.cos(d.center) * (rScale(d.userVal) + 18)}, ${Math.sin(d.center) * (rScale(d.userVal) + 18)})`);
+        })
+        .on("mouseout", function (event, d: any) {
+          d3.select(this)
+            .interrupt()
+            .transition()
+            .duration(180)
+            .attr("d", arc({ innerRadius: 0, outerRadius: rScale(d.userVal), startAngle: d.start, endAngle: d.end }))
+            .style("opacity", 1);
+          hoverTip.style("opacity", 0);
+        })
+        .transition()
+        .duration(900)
+        .attrTween("d", function (d: any) {
+          const iOuter = d3.interpolate(0, rScale(d.userVal));
+          return function (t: number) {
+            return arc({ innerRadius: 0, outerRadius: iOuter(t), startAngle: d.start, endAngle: d.end }) as string;
+          };
+        });
 
       // Value badge dot at wedge tip
       const tipX = Math.cos(center) * rScale(userVal);
@@ -707,10 +756,25 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
         .style("fill", "#1d4ed8")
         .style("stroke", "#fff")
         .style("stroke-width", 2);
+
+      // Numeric value label with outline for readability
+      svg.append("text")
+        .attr("x", Math.cos(center) * (rScale(userVal) + 16))
+        .attr("y", Math.sin(center) * (rScale(userVal) + 16))
+        .attr("text-anchor", center > Math.PI / 2 || center < -Math.PI / 2 ? "end" : "start")
+        .attr("dominant-baseline", "middle")
+        .style("font-size", "13px")
+        .style("font-weight", "700")
+        .style("fill", "#0b3ea8")
+        .style("paint-order", "stroke")
+        .style("stroke", "#ffffff")
+        .style("stroke-width", 3)
+        .style("stroke-linejoin", "round")
+        .text(userVal.toFixed(1));
     });
 
     // Legend
-    const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${radius + 60}, -${radius / 2})`);
+    const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${radius + 80}, -${radius / 2})`);
     const legendData = [
       { label: "You", color: "#1d4ed8" },
       { label: "Industry Avg (band)", color: "#94a3b8" },
