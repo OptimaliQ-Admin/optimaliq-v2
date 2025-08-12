@@ -13,7 +13,15 @@ export async function POST(req: Request) {
       }, { status: 503 });
     }
 
-    const { u_id, updates } = await req.json();
+    // Accept both legacy and new payloads
+    const body = await req.json();
+    const u_id = body.u_id || body.user_id;
+    const updates = body.updates || ((): any => {
+      const copy = { ...body };
+      delete (copy as any).u_id;
+      delete (copy as any).user_id;
+      return copy;
+    })();
 
     console.log("📝 Updating user profile");
 

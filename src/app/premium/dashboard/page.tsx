@@ -12,6 +12,7 @@ import PerformanceFunnelChart from "@/components/dashboard/PerformanceFunnelChar
 import InsightCard from "@/components/dashboard/InsightCard";
 import ScoreContextModal from "@/components/dashboard/ScoreContextModal";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
+import GrowthPlanCard from "@/components/dashboard/GrowthPlanCard";
 import { DashboardInsights } from "@/lib/types/DashboardInsights";
 
 const MarketInsightCard = dynamic(() => import("@/components/dashboard/EnhancedMarketInsightCard"), { ssr: false });
@@ -201,13 +202,8 @@ export default function DashboardV2Page() {
 
           {activeTab === 'tasks' && (
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 border rounded-xl p-4">
-                <div className="text-sm font-semibold mb-3">30-Day Growth Plan</div>
-                <ul className="text-sm space-y-2">
-                  {(insights.roadmap||[]).map((r,i)=> (
-                    <li key={i} className="flex items-start gap-2"><span className="text-purple-600 mt-0.5">◆</span><div><div className="font-medium">{r.task}</div><div className="text-gray-600 text-xs">{r.expectedImpact}</div></div></li>
-                  ))}
-                </ul>
+              <div className="col-span-12">
+                <GrowthPlanCard />
               </div>
               <div className="col-span-12">
                 <GrowthLeversCard />
