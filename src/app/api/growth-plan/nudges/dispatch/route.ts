@@ -1,7 +1,7 @@
 // src/app/api/growth-plan/nudges/dispatch/route.ts
 import { NextResponse } from "next/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { resend } from "@/lib/resend";
+import { resend, EMAIL_SENDERS } from "@/lib/resend";
 
 export async function POST() {
   const supabase = createAdminClient(
@@ -29,7 +29,9 @@ export async function POST() {
 
     const subject = n.type === "day7" ? "Quick nudge on your 30‑day plan" : "Two‑thirds check‑in on your 30‑day plan";
     const link = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://optimaliq.ai'}/premium/dashboard?plan=${n.plan_id}`;
-    await resend?.emails.send({
+    if (!resend) continue;
+    await resend.emails.send({
+      from: EMAIL_SENDERS.SUPPORT,
       to: user.email,
       subject,
       html: `<p>Hi ${user.first_name || ''}, quick nudge on your 30‑day plan.</p><p><a href="${link}">Open my plan →</a></p>`

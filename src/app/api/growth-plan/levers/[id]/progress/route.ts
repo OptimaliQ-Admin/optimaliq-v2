@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, context: any) {
+  const { params } = context;
   const userClient = createRouteHandlerClient({ cookies });
   const { data: auth } = await userClient.auth.getUser();
   const user = auth?.user;
