@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
       if (resend) {
         const base = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_APP_URL || 'https://optimaliq.ai');
-        const invitationUrl = `${base}/delegate/a/${token}`;
+        const invitationUrl = `${base}/delegate/a?token=${encodeURIComponent(token)}`;
         await emailService.sendAssessmentInvitationEmail({
           to: email,
           firstName: (email || '').split('@')[0] || 'there',
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
           expiresAt: expiresAt.toISOString(),
         });
       }
-      const url = `${process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai"}/delegate/a/${token}`;
+      const url = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai")}/delegate/a?token=${encodeURIComponent(token)}`;
       inviteUrls.push({ email, url });
     }
 

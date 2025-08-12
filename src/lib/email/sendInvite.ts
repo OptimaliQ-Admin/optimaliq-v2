@@ -7,7 +7,7 @@ export async function sendAssessmentInviteEmail(params: {
   token: string;
 }) {
   const base = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_APP_URL || "https://optimaliq.ai");
-  const url = `${base}/delegate/a/${params.token}`;
+  const url = `${base}/delegate/a?token=${encodeURIComponent(params.token)}`;
   const subject = `You've been asked to complete an OptimaliQ assessment`;
   const html = `<div style="font-family:Inter,system-ui,Arial,sans-serif;line-height:1.6">
     <h2 style="margin:0 0 12px">${params.title}</h2>
