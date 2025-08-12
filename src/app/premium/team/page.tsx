@@ -42,6 +42,18 @@ export default function TeamWorkspacePage() {
   const [loadingGenerate, setLoadingGenerate] = useState(false);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [generateForm, setGenerateForm] = useState<{ topic: string; personIds: string[] }>({ topic: '', personIds: [] });
+  const topicOptions = [
+    'Sales Pipeline Health',
+    'Customer Satisfaction & NPS',
+    'Operational Efficiency',
+    'Product Quality & Release Readiness',
+    'Employee Engagement & Retention',
+    'Marketing Funnel Effectiveness',
+    'Onboarding & Customer Experience',
+    'Cost Optimization & Margin Expansion',
+    'Innovation Velocity & R&D Effectiveness',
+    'Risk & Compliance Readiness'
+  ];
 
   // Load team people
   useEffect(() => {
@@ -414,7 +426,10 @@ export default function TeamWorkspacePage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Topic</label>
-                <input value={generateForm.topic} onChange={e=>setGenerateForm(s=>({...s, topic: e.target.value}))} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="e.g., Onboarding Experience" />
+                <select value={generateForm.topic} onChange={e=>setGenerateForm(s=>({...s, topic: e.target.value}))} className="w-full border rounded-lg px-3 py-2 text-sm">
+                  <option value="">Select…</option>
+                  {topicOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">People</label>
