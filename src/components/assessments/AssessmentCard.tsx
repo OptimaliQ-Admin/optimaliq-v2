@@ -73,7 +73,7 @@ export default function AssessmentCard({
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load team members when component mounts
+  // Load team members when component mounts (use new Team API for data)
   useEffect(() => {
     if (user?.id) {
       loadTeamMembers();
@@ -99,23 +99,13 @@ export default function AssessmentCard({
 
   const loadTeamMembers = async () => {
     setLoadingTeam(true);
-    console.log('AssessmentCard - Loading team members for user:', user?.id);
+    console.log('AssessmentCard - Loading team members via /api/team/people for user:', user?.id);
     
     try {
-      const response = await fetch('/api/assessment-delegation/get-team-members', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ u_id: user?.id }),
-      });
-
+      const response = await fetch(`/api/team/people?u_id=${user?.id}`);
       if (response.ok) {
         const data = await response.json();
-        console.log('AssessmentCard - Team members loaded:', data);
-        setTeamMembers(data.teamMembers || []);
-      } else {
-        console.error('AssessmentCard - Failed to load team members:', response.status);
+        setTeamMembers(data.people || []);
       }
     } catch (error) {
       console.error('Error loading team members:', error);
