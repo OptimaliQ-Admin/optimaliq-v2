@@ -15,7 +15,7 @@ import SectionHeader from "@/components/growthstudio/SectionHeader";
 import StrategicAnalysisCard from "@/components/dashboard/StrategicAnalysisCard";
 import WhatIfScenarioSimulator from "@/components/dashboard/WhatIfScenarioSimulator";
 import GrowthLeversCard from "@/components/growthstudio/GrowthLeversCard";
-import PageNavigation from "@/components/shared/PageNavigation";
+// Salesforce-style shell: sticky header, tabs, left nav
 
 interface ProfileData {
   growth_studio_explanation_seen_at: string | null;
@@ -32,13 +32,9 @@ function GrowthStudioComponent() {
   const [showModal, setShowModal] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
 
-  // Define page sections for navigation
-  const pageSections = [
-    { id: "overview", label: "Overview", icon: "📊" },
-    { id: "strategic-analysis", label: "Strategic Analysis", icon: "🎯" },
-    { id: "simulation", label: "Scenario Simulation", icon: "🔮" },
-    { id: "growth-levers", label: "Growth Levers", icon: "⚙️" },
-  ];
+  const [activeTab, setActiveTab] = useState<'overview'|'analysis'|'simulation'|'levers'>(
+    'overview'
+  );
 
   // Check if user has seen growth studio explanation
   useEffect(() => {
@@ -109,7 +105,7 @@ function GrowthStudioComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-white">
       {/* Growth Studio Explanation Modal */}
       <GrowthStudioExplanationModal
         isOpen={showGrowthStudioExplanation}
@@ -117,117 +113,117 @@ function GrowthStudioComponent() {
         userId={userId}
       />
 
-      {/* Floating Page Navigation */}
-      <PageNavigation sections={pageSections} />
-
-      <div className="max-w-[1920px] mx-auto p-8 space-y-10">
-        {/* Header Section */}
-        <motion.section 
-          id="overview"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
-        >
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-gray-900">🚀 Growth Studio</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Your strategic command center for data-driven growth decisions. Explore trends, analyze positioning, and simulate scenarios to accelerate your business growth.
-            </p>
+      {/* Sticky header + tabs (Salesforce style) */}
+      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b">
+        <div className="max-w-[1400px] mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-blue-600" />
+            <div className="font-semibold">Growth Studio</div>
           </div>
-
-          {/* Growth Trends Card - Full Width */}
-          <TrendInsightCard />
-        </motion.section>
-
-        {/* Strategic Analysis Section */}
-        <motion.section 
-          id="strategic-analysis"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-8"
-        >
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">🎯 Strategic Analysis</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Comprehensive competitive positioning and benchmark analysis to understand your market position
-            </p>
+        </div>
+        <div className="border-t">
+          <div className="max-w-[1400px] mx-auto px-4">
+            <nav className="flex gap-6 text-sm">
+              {[
+                { key: 'overview', label: 'Overview' },
+                { key: 'analysis', label: 'Analysis' },
+                { key: 'simulation', label: 'Simulation' },
+                { key: 'levers', label: 'Levers' },
+              ].map(t => (
+                <button
+                  key={t.key}
+                  onClick={() => setActiveTab(t.key as any)}
+                  className={`h-10 border-b-2 -mb-px ${activeTab===t.key? 'border-blue-600 text-blue-700':'border-transparent text-gray-600 hover:text-gray-800'}`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </nav>
           </div>
-          
-          <StrategicAnalysisCard userId={userId} />
-        </motion.section>
+        </div>
+      </header>
 
-        {/* Advanced Simulation Section */}
-        <motion.section 
-          id="simulation"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-8"
-        >
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">🔮 Advanced Scenario Simulation</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Interactive what-if analysis with real-time impact visualization to test strategic decisions
-            </p>
+      {/* Workspace grid with left nav */}
+      <main className="max-w-[1400px] mx-auto p-4 grid grid-cols-12 gap-4">
+        <aside className="hidden lg:block col-span-2">
+          <div className="border rounded-xl overflow-hidden">
+            <div className="px-3 py-2 text-xs font-semibold tracking-wide bg-gray-50 border-b">Navigation</div>
+            <nav className="p-2 text-sm">
+              <a className={`block px-3 py-2 rounded ${activeTab==='overview'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('overview')}>Highlights</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='analysis'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('analysis')}>Strategic Analysis</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='simulation'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('simulation')}>Scenario Simulation</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='levers'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('levers')}>Growth Levers</a>
+            </nav>
           </div>
-          
-          <WhatIfScenarioSimulator />
-        </motion.section>
+        </aside>
 
-        {/* Growth Levers Section */}
-        <motion.section 
-          id="growth-levers"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="space-y-8"
-        >
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">⚙️ Growth Levers</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Strategic tools and insights to accelerate your growth with actionable initiatives
-            </p>
-          </div>
-          
-          <GrowthLeversCard />
-        </motion.section>
-
-        <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-xl bg-white p-6 rounded-xl shadow-xl">
-              <Dialog.Title className="text-lg font-bold text-gray-800 mb-4">
-                📊 Simulation Results
-              </Dialog.Title>
-
-              {simulationResult && <SimulationResults results={simulationResult} />}
-
-              {aiInsight ? (
-                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                  <p className="text-sm text-gray-700 leading-relaxed italic">
-                    💡 <strong>Strategic Insight:</strong><br />{aiInsight}
+        <section className="col-span-12 lg:col-span-10 space-y-4">
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12">
+                <div className="py-4">
+                  <h1 className="text-2xl font-bold text-gray-900">🚀 Growth Studio</h1>
+                  <p className="text-sm text-gray-600 mt-1 max-w-3xl">
+                    Your strategic command center for data-driven growth decisions. Explore trends, analyze positioning, and simulate scenarios.
                   </p>
                 </div>
-              ) : (
-                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md animate-pulse">
-                  <p className="text-sm text-gray-500 italic">⏳ Generating insight...</p>
-                </div>
-              )}
-
-              <div className="mt-6 text-right">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Close
-                </button>
+                <TrendInsightCard />
               </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-      </div>
+            </div>
+          )}
+
+          {activeTab === 'analysis' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12">
+                <div className="text-sm font-semibold mb-3">Strategic Analysis</div>
+                <StrategicAnalysisCard userId={userId} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'simulation' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12">
+                <div className="text-sm font-semibold mb-3">Scenario Simulation</div>
+                <WhatIfScenarioSimulator />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'levers' && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12">
+                <GrowthLeversCard />
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
+
+      {/* Results modal */}
+      <Dialog open={showModal} onClose={() => setShowModal(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="w-full max-w-xl bg-white p-6 rounded-xl shadow-xl">
+            <Dialog.Title className="text-lg font-bold text-gray-800 mb-4">📊 Simulation Results</Dialog.Title>
+            {simulationResult && <SimulationResults results={simulationResult} />}
+            {aiInsight ? (
+              <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                <p className="text-sm text-gray-700 leading-relaxed italic">
+                  💡 <strong>Strategic Insight:</strong><br />{aiInsight}
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md animate-pulse">
+                <p className="text-sm text-gray-500 italic">⏳ Generating insight...</p>
+              </div>
+            )}
+            <div className="mt-6 text-right">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Close</button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </div>
   );
 }
