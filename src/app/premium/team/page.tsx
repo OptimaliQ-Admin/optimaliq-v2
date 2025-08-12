@@ -34,6 +34,7 @@ export default function TeamWorkspacePage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [assignmentsByCampaign, setAssignmentsByCampaign] = useState<Record<string, Assignment[]>>({});
   const [loadingAssessments, setLoadingAssessments] = useState(false);
+  const [invitations, setInvitations] = useState<any[]>([]);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignForm, setAssignForm] = useState<{ topic: string; personIds: string[] }>({ topic: '', personIds: [] });
   const templateSlugByTitle: Record<string,string> = {
@@ -105,6 +106,10 @@ export default function TeamWorkspacePage() {
       const json = await res.json();
       const camps: Campaign[] = json.campaigns || [];
       setCampaigns(camps);
+      // Load invitations (legacy-style overview, excluding custom/pulse)
+      const inv = await fetch(`/api/team/invitations?u_id=${user.id}`);
+      const invJson = await inv.json();
+      setInvitations(invJson.invitations || []);
       // For each campaign, fetch assignments
       const byCamp: Record<string, Assignment[]> = {};
       await Promise.all(
@@ -294,33 +299,30 @@ export default function TeamWorkspacePage() {
                 <thead className="bg-gray-50 text-gray-600">
                   <tr>
                     <th className="text-left font-medium px-6 py-3">Assessment</th>
-                    <th className="text-left font-medium px-6 py-3">Campaign Created</th>
-                    <th className="text-left font-medium px-6 py-3">Assignments</th>
-                    <th className="text-left font-medium px-6 py-3">Completed</th>
-                    <th className="text-left font-medium px-6 py-3">Pending</th>
+                    <th className="text-left font-medium px-6 py-3">Assigned To</th>
+                    <th className="text-left font-medium px-6 py-3">Status</th>
+                    <th className="text-left font-medium px-6 py-3">Assigned On</th>
+                    <th className="text-left font-medium px-6 py-3">Completed On</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {loadingAssessments && (
                     <tr><td colSpan={5} className="px-6 py-6 text-center text-gray-500">Loading…</td></tr>
                   )}
-                  {!loadingAssessments && campaigns.length===0 && (
-                    <tr><td colSpan={5} className="px-6 py-6 text-center text-gray-500">No campaigns yet.</td></tr>
+                  {!loadingAssessments && invitations.length===0 && (
+                    <tr><td colSpan={5} className="px-6 py-6 text-center text-gray-500">No assignments yet.</td></tr>
                   )}
-                  {campaigns.map(c => {
-                    const list = assignmentsByCampaign[c.id] || [];
-                    const completed = list.filter(a => a.status==='completed' || a.status==='submitted').length;
-                    const pending = list.filter(a => a.status!=='completed' && a.status!=='submitted').length;
-                    return (
-                      <tr key={c.id}>
-                        <td className="px-6 py-3 text-gray-900 font-medium">{c.title}</td>
-                        <td className="px-6 py-3 text-gray-700">{new Date(c.created_at).toLocaleString()}</td>
-                        <td className="px-6 py-3 text-gray-700">{list.length}</td>
-                        <td className="px-6 py-3 text-gray-700">{completed}</td>
-                        <td className="px-6 py-3 text-gray-700">{pending}</td>
-                      </tr>
-                    );
-                  })}
+                  {invitations.map((row, idx) => (
+                    <tr key={idx}>
+                      <td className="px-6 py-3 text-gray-900 font-medium">{row.assessment}</td>
+                      <td className="px-6 py-3 text-gray-700">{row.assignedTo}</td>
+                      <td className="px-6 py-3">
+                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold border ${row.status==='completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>{row.status}</span>
+                      </td>
+                      <td className="px-6 py-3 text-gray-700">{new Date(row.created_at).toLocaleString()}</td>
+                      <td className="px-6 py-3 text-gray-700">{row.completed_at ? new Date(row.completed_at).toLocaleString() : '—'}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -343,7 +345,7 @@ export default function TeamWorkspacePage() {
                   <tr>
                     <th className="text-left font-medium px-6 py-3">Title</th>
                     <th className="text-left font-medium px-6 py-3">Created</th>
-                    <th className="text-left font-medium px-6 py-3">Type</th>
+                    {/* Type column removed as requested */}
                     <th className="text-right font-medium px-6 py-3">Action</th>
                   </tr>
                 </thead>
@@ -355,9 +357,7 @@ export default function TeamWorkspacePage() {
                     <tr key={c.id}>
                       <td className="px-6 py-3 text-gray-900 font-medium">{c.title}</td>
                       <td className="px-6 py-3 text-gray-700">{new Date(c.created_at).toLocaleString()}</td>
-                      <td className="px-6 py-3">
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">{c.type_slug}</span>
-                      </td>
+                      {/* Removed Type display */}
                       <td className="px-6 py-3 text-right">
                         <button onClick={()=>setReviewCampaignId(c.id)} className="text-xs text-blue-600 hover:text-blue-700 font-semibold">Review</button>
                       </td>
