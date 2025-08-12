@@ -74,6 +74,7 @@ export default function AssessmentCard({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [assigned, setAssigned] = useState<Array<{ email: string; status: string; created_at: string; completed_at: string | null }>>([]);
   const [loadingAssigned, setLoadingAssigned] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; kind: 'success'|'error'|'info' } | null>(null);
 
   // Load team members when component mounts (use new Team API for data)
   useEffect(() => {
@@ -173,20 +174,20 @@ export default function AssessmentCard({
         setSelectedMember(null);
         if ((result.blockedInfo || []).length) {
           const info = result.blockedInfo[0];
-          alert(`Blocked: last completed on ${new Date(info.lastCompletedAt).toLocaleDateString()}`);
+          setFeedback({ message: `Blocked: last completed on ${new Date(info.lastCompletedAt).toLocaleDateString()}`, kind: 'info' });
         } else if ((result.resent || 0) > 0) {
-          alert(`Invite resent to ${member.member_email}.`);
+          setFeedback({ message: `Invite resent to ${member.member_email}.`, kind: 'success' });
         } else {
-          alert(`Invitation sent successfully to ${member.member_email}.`);
+          setFeedback({ message: `Invitation sent to ${member.member_email}.`, kind: 'success' });
         }
         // refresh assignments list
         await loadAssigned();
       } else {
-        alert(`Failed to send invitation: ${result.error || 'Unknown error'}`);
+        setFeedback({ message: `Failed to send invitation: ${result.error || 'Unknown error'}`, kind: 'error' });
       }
     } catch (error) {
       console.error('Error sending invitation:', error);
-      alert('Failed to send invitation: Network error');
+      setFeedback({ message: 'Failed to send invitation: Network error', kind: 'error' });
     } finally {
       setSendingInvitation(false);
     }
@@ -305,6 +306,13 @@ export default function AssessmentCard({
 
           {/* Description */}
           <p className="text-gray-600 text-base leading-relaxed mb-8">{description}</p>
+
+          {/* Inline feedback */}
+          {feedback && (
+            <div className={`mb-4 rounded-lg border px-3 py-2 text-sm ${feedback.kind==='success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : feedback.kind==='error' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+              {feedback.message}
+            </div>
+          )}
 
           {/* Content based on status */}
           {!hasTaken && (
@@ -503,11 +511,6 @@ export default function AssessmentCard({
           </div>
         )}
 
-        {hasBlockingAssignment && (
-          <div className="border-t border-gray-100 p-6 bg-gray-50/50">
-            <div className="text-sm text-gray-600">An invitation is already active or was recently completed. Manage or unassign in Team Workspace.</div>
-          </div>
-        )}
 
         {/* No Team Members Message */}
         {teamMembers.length === 0 && !loadingTeam && (
