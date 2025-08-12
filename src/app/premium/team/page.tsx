@@ -18,8 +18,17 @@ export default function TeamWorkspacePage() {
   const [loadingPeople, setLoadingPeople] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ first_name: '', last_name: '', email: '', department: '', title: '' });
-  const departments = useMemo(() => ["Operations","Sales","Marketing","Engineering","Finance","HR"], []);
-  const titles = useMemo(() => ["Associate","Manager","Director","VP","C-Level"], []);
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [titles, setTitles] = useState<string[]>([]);
+  useEffect(() => {
+    if (!user?.id) return;
+    (async () => {
+      const res = await fetch(`/api/team/dictionaries?u_id=${user.id}`);
+      const json = await res.json();
+      setDepartments(json.departments || []);
+      setTitles(json.titles || []);
+    })();
+  }, [user?.id]);
 
   // Assessment state
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);

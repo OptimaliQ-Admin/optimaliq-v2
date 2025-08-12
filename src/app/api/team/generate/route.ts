@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generatePulseConfig } from "@/lib/ai/generatePulseConfig";
 import { createInviteToken } from "@/lib/security/tokens";
+import { randomUUID } from "node:crypto";
 import { resend } from "@/lib/resend";
 import { sendAssessmentInviteEmail } from "@/lib/email/sendInvite";
 
@@ -38,15 +39,15 @@ export async function POST(req: NextRequest) {
     for (const email of participant_emails) {
       const { data: assignment, error: asgErr } = await supabase
         .from('assessment_assignments')
-        .insert({ campaign_id: campaign.id, assignee_u_id: crypto.randomUUID(), due_at, status: 'pending' })
+        .insert({ campaign_id: campaign.id, assignee_u_id: randomUUID(), due_at, status: 'pending' })
         .select('*')
         .single();
       if (asgErr) return NextResponse.json({ error: asgErr.message }, { status: 500 });
 
-      const token = createInviteToken({ campaignId: campaign.id, assignmentId: assignment.id, email });
+      const { token, expiresAt } = createInviteToken({ campaignId: campaign.id, assignmentId: assignment.id, email });
       const { error: invErr } = await supabase
         .from('assessment_invites')
-        .insert({ campaign_id: campaign.id, assignment_id: assignment.id, invite_email: email, invite_name: null, token, expires_at: new Date(Date.now()+1000*60*60*24*14).toISOString(), status: 'sent' });
+        .insert({ campaign_id: campaign.id, assignment_id: assignment.id, invite_email: email, invite_name: null, token, expires_at: expiresAt.toISOString(), status: 'sent' });
       if (invErr) return NextResponse.json({ error: invErr.message }, { status: 500 });
 
       if (resend) {
