@@ -522,11 +522,11 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
     // Clear previous chart
     d3.select(radarSvgRef.current).selectAll("*").remove();
 
-    // Setup dimensions - larger circle and a bit more room for legend
+    // Setup dimensions tuned to fit within a fixed 600px SVG height without clipping
     const margin = { top: 60, right: 120, bottom: 60, left: 80 };
     const width = radarSvgRef.current.clientWidth - margin.left - margin.right;
-    const height = 700 - margin.top - margin.bottom;
-    const radius = Math.min(width, height) / 2 - 20; // maximize usable radius
+    const height = 600 - margin.top - margin.bottom; // keep total svg height at 600px
+    const radius = Math.min(width, height) / 2 - 28; // slightly smaller to avoid bottom cutoff
 
     // Create SVG
     const svg = d3
@@ -534,7 +534,7 @@ export default function StrategicAnalysisCard({ userId }: { userId: string }) {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", `translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`);
+      .attr("transform", `translate(${width / 2 + margin.left}, ${height / 2 + margin.top - 6})`);
 
     // Add background circle with enhanced styling
     svg

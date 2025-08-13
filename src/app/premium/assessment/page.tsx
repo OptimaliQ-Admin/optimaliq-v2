@@ -562,8 +562,8 @@ export default function AssessmentsPage() {
                 lastTakenDate={assessmentData.reassessment?.lastTakenDate ?? null}
                 userId={user?.id}
               />
-              {/* anchor for smooth scroll from modal */}
-              <div id="progress-start-anchor" />
+              {/* anchor for smooth scroll from modal (absolute to avoid taking grid space) */}
+              <div id="progress-start-anchor" className="absolute" />
               {user?.id && <TechToolsCard userId={user.id} />}
             </div>
           </motion.div>
