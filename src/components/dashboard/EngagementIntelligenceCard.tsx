@@ -256,18 +256,24 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
                     title: 'Why?',
                     content: (
                       <div>
-                        <div className="text-sm text-gray-700 mb-3">Top sources:</div>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {(data?.citations || []).map((c: any, i: number) => (
-                            <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
-                          ))}
-                        </ul>
+                        {Array.isArray(data?.citations) && data.citations.length > 0 ? (
+                          <>
+                            <div className="text-sm text-gray-700 mb-3">Top sources:</div>
+                            <ul className="list-disc pl-5 space-y-1">
+                              {data.citations.map((c: any, i: number) => (
+                                <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : (
+                          <div className="text-sm text-gray-600">No citations available yet. Data is refreshing—check back shortly.</div>
+                        )}
                       </div>
                     )
                   });
                 } catch {}
               }}
-              className="text-xs text-gray-600 hover:text-gray-800"
+              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
             >
               Why?
             </button>
@@ -277,7 +283,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
                   const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'engagement_intel', industry }) });
                   const lever = await leverRes.json();
                   if (lever?.applicable && lever?.lever) {
-                    await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+                    const addRes = await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
                       title: lever.lever.title,
                       description: lever.lever.reason,
                       success_metric: lever.lever.metric,
@@ -285,10 +291,13 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
                       due_date: lever.lever.due_date,
                       owner: lever.lever.ownerHint,
                     })});
+                    if (!addRes.ok) {
+                      console.warn('Failed to add lever');
+                    }
                   }
                 } catch {}
               }}
-              className="text-xs text-blue-600 hover:text-blue-800"
+              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100"
             >
               Propose Lever
             </button>

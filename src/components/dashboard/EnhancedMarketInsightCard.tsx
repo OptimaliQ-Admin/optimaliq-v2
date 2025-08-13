@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, AlertCircle, Globe } from 'lucide-react';
+import { BarChart3, TrendingUp, AlertCircle, Globe, HelpCircle, PlusCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { MarketSizeCard, GrowthRateCard, CompetitionCard, SentimentCard } from './MarketMetricCard';
 import TradingViewTicker from '../shared/TradingViewTicker';
 import { useModal } from '@/components/modals/ModalProvider';
@@ -201,34 +202,45 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
             </p>
           </div>
           <div className="flex items-center space-x-3">
-            <span className="text-xs text-gray-500">Confidence {Math.round((insightData?.insight?.confidenceScore || 0) * 100)}%</span>
-            <span className="text-xs text-gray-400">• Sources {(insightData as any)?.sources?.length ?? 0}</span>
+            {typeof insightData?.insight?.confidenceScore === 'number' && (insightData.insight.confidenceScore > 0) && (
+              <span className="text-xs text-gray-500">Confidence {Math.round((insightData.insight.confidenceScore || 0) * 100)}%</span>
+            )}
+            {((insightData as any)?.sources?.length ?? 0) > 0 && (
+              <span className="text-xs text-gray-400">• Sources {(insightData as any)?.sources?.length}</span>
+            )}
             <button
               onClick={async () => {
                 try {
                   const q = 'Why is sentiment moving?';
                   const res = await fetch(`/api/market/why?industry=${encodeURIComponent(industry)}&q=${encodeURIComponent(q)}`);
                   const data = await res.json();
+                  const citations = Array.isArray(data?.citations) ? data.citations : [];
                   openModal({
                     type: 'ai_insight',
                     size: 'md',
                     title: 'Why?',
                     content: (
                       <div>
-                        <div className="text-sm text-gray-700 mb-3">Top sources:</div>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {(data?.citations || []).map((c: any, i: number) => (
-                            <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
-                          ))}
-                        </ul>
+                        {citations.length > 0 ? (
+                          <>
+                            <div className="text-sm text-gray-700 mb-3">Top sources:</div>
+                            <ul className="list-disc pl-5 space-y-1">
+                              {citations.map((c: any, i: number) => (
+                                <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : (
+                          <div className="text-sm text-gray-600">No citations available yet. Data is refreshing—check back shortly.</div>
+                        )}
                       </div>
                     )
                   });
                 } catch {}
               }}
-              className="text-xs text-gray-600 hover:text-gray-800"
+              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
             >
-              Why?
+              <HelpCircle className="w-3.5 h-3.5 mr-1" /> Why?
             </button>
             <button
               onClick={async () => {
@@ -236,7 +248,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
                   const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'market_signals', industry }) });
                   const lever = await leverRes.json();
                   if (lever?.applicable && lever?.lever) {
-                    await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+                    const addRes = await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
                       title: lever.lever.title,
                       description: lever.lever.reason,
                       success_metric: lever.lever.metric,
@@ -244,12 +256,17 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
                       due_date: lever.lever.due_date,
                       owner: lever.lever.ownerHint,
                     })});
+                    if (addRes.ok) toast.success('Lever added to plan'); else toast.error('Unable to add lever');
+                  } else {
+                    toast('No lever proposed at this time');
                   }
-                } catch {}
+                } catch (e) {
+                  toast.error('Failed to propose lever');
+                }
               }}
-              className="text-xs text-blue-600 hover:text-blue-800"
+              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100"
             >
-              Propose Lever
+              <PlusCircle className="w-3.5 h-3.5 mr-1" /> Propose Lever
             </button>
           </div>
         </div>
