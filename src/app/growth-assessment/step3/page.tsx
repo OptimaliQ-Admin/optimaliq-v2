@@ -6,6 +6,8 @@ import { createClient } from "@supabase/supabase-js";
 import ScoreCardGrid from "../../../components/growthAssessment/step3/ScoreCardGrid";
 import ScoreLineChart from "../../../components/growthAssessment/step3/ScoreLineChart";
 import ScoreInsightGrid from "../../../components/growthAssessment/step3/ScoreInsightGrid";
+import SocialProofCard from "@/components/growthAssessment/step3/SocialProofCard";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { showToast } from "@/lib/utils/toast";
 import SubscriptionPopup from "@/components/modals/SubscriptionPopup";
 import { motion } from "framer-motion";
@@ -223,85 +225,96 @@ function Step3Component() {
         </motion.div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-6 pb-20 space-y-20">
-          {/* Score Overview Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="space-y-12"
-          >
-            <div className="text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Your Business Score Overview
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                See how you compare to industry leaders and discover your growth potential
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              <ScoreCardGrid score={score} />
-            </div>
-          </motion.div>
+      <div className="max-w-7xl mx-auto px-6 pb-20 space-y-10">
+        <Tabs defaultValue="overview">
+          <div className="flex items-center justify-between">
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="growth">Growth Chart</TabsTrigger>
+              <TabsTrigger value="insights">Strategic Insights</TabsTrigger>
+            </TabsList>
+          </div>
 
-          {/* Analysis Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12"
-          >
-            <ScoreLineChart data={roadmapData} score={score} />
-            <div className="space-y-8">
-              <ScoreInsightGrid loading={loading} insights={insights} />
-            </div>
-          </motion.div>
-
-          {/* Conversion Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
-            className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-12 text-white text-center relative overflow-hidden"
-          >
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-32 translate-x-32"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-                Ready to Accelerate Your Growth?
-              </h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Get unlimited access to AI-powered insights, real-time benchmarks, and personalized growth strategies.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-                <div className="flex items-center gap-3 text-blue-100">
-                  <CheckCircleIcon className="w-6 h-6" />
-                  <span>Instant access</span>
-                </div>
-                <div className="flex items-center gap-3 text-blue-100">
-                  <CheckCircleIcon className="w-6 h-6" />
-                  <span>No long-term contracts</span>
-                </div>
-                <div className="flex items-center gap-3 text-blue-100">
-                  <CheckCircleIcon className="w-6 h-6" />
-                  <span>Cancel anytime</span>
-                </div>
+          <TabsContent value="overview">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-8"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <ScoreCardGrid score={score} />
               </div>
-              
-              <button 
-                onClick={() => setShowSubscriptionPopup(true)}
-                className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/20"
-              >
-                Unlock Your Full Potential
-              </button>
+              <div>
+                <SocialProofCard />
+              </div>
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="growth">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <ScoreLineChart data={roadmapData} score={score} />
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="insights">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <ScoreInsightGrid loading={loading} insights={insights} />
+            </motion.div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Conversion Section now below tabs */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-12 text-white text-center relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-32 translate-x-32"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
+          
+          <div className="relative z-10">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+              Ready to Accelerate Your Growth?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Get unlimited access to AI-powered insights, real-time benchmarks, and personalized growth strategies.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+              <div className="flex items-center gap-3 text-blue-100">
+                <CheckCircleIcon className="w-6 h-6" />
+                <span>Instant access</span>
+              </div>
+              <div className="flex items-center gap-3 text-blue-100">
+                <CheckCircleIcon className="w-6 h-6" />
+                <span>No long-term contracts</span>
+              </div>
+              <div className="flex items-center gap-3 text-blue-100">
+                <CheckCircleIcon className="w-6 h-6" />
+                <span>Cancel anytime</span>
+              </div>
             </div>
-          </motion.div>
-        </div>
+            
+            <button 
+              onClick={() => setShowSubscriptionPopup(true)}
+              className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/20"
+            >
+              Unlock Your Full Potential
+            </button>
+          </div>
+        </motion.div>
+      </div>
       </div>
 
       {/* Subscription Popup */}
