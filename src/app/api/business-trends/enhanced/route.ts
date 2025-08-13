@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     const isFresh = cached && (now - createdMs) / 60000 < ttlMin;
 
     if (isFresh && !forceRefresh) {
-      return NextResponse.json({ data: cached.snapshot, cached: true, createdAt: cached.created_at });
+      return NextResponse.json({ data: cached.snapshot, sources: cached.sources || [], cached: true, createdAt: cached.created_at });
     }
 
     if (forceRefresh) {
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (fresh) return NextResponse.json({ data: fresh.snapshot, cached: false, createdAt: fresh.created_at });
+      if (fresh) return NextResponse.json({ data: fresh.snapshot, sources: fresh.sources || [], cached: false, createdAt: fresh.created_at });
     } else {
       await supabaseAdmin
         .from("snapshot_refresh_requests")
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (cached) {
-      return NextResponse.json({ data: cached.snapshot, cached: false, createdAt: cached.created_at, refreshing: true });
+      return NextResponse.json({ data: cached.snapshot, sources: cached.sources || [], cached: false, createdAt: cached.created_at, refreshing: true });
     }
 
     // Lightweight fallback resembling old payload
