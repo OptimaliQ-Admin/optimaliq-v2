@@ -288,7 +288,7 @@ function Step3Component() {
               Ready to Accelerate Your Growth?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Get unlimited access to AI-powered insights, real-time benchmarks, and personalized growth strategies.
+              Get a concise, newsletter-style growth brief with benchmarks, insights, and next steps — delivered straight to your inbox.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
@@ -310,7 +310,7 @@ function Step3Component() {
               onClick={() => setShowSubscriptionPopup(true)}
               className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/20"
             >
-              Unlock Your Full Potential
+              Subscribe to the Growth Brief
             </button>
           </div>
         </motion.div>
