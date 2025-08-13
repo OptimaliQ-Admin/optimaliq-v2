@@ -191,85 +191,82 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-            </h3>
-            <p className="text-sm text-gray-500">
-              Real-time market analysis and insights • Refreshes every Monday
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            {typeof insightData?.insight?.confidenceScore === 'number' && (insightData.insight.confidenceScore > 0) && (
-              <span className="text-xs text-gray-500">Confidence {Math.round((insightData.insight.confidenceScore || 0) * 100)}%</span>
-            )}
-            {((insightData as any)?.sources?.length ?? 0) > 0 && (
-              <span className="text-xs text-gray-400">• Sources {(insightData as any)?.sources?.length}</span>
-            )}
-            <button
-              onClick={async () => {
-                try {
-                  const q = 'Why is sentiment moving?';
-                  const res = await fetch(`/api/market/why?industry=${encodeURIComponent(industry)}&q=${encodeURIComponent(q)}`);
-                  const data = await res.json();
-                  const citations = Array.isArray(data?.citations) ? data.citations : [];
-                  openModal({
-                    type: 'ai_insight',
-                    size: 'md',
-                    title: 'Why?',
-                    content: (
-                      <div>
-                        {citations.length > 0 ? (
-                          <>
-                            <div className="text-sm text-gray-700 mb-3">Top sources:</div>
-                            <ul className="list-disc pl-5 space-y-1">
-                              {citations.map((c: any, i: number) => (
-                                <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
-                              ))}
-                            </ul>
-                          </>
-                        ) : (
-                          <div className="text-sm text-gray-600">No citations available yet. Data is refreshing—check back shortly.</div>
-                        )}
-                      </div>
-                    )
-                  });
-                } catch {}
-              }}
-              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              <HelpCircle className="w-3.5 h-3.5 mr-1" /> Why?
-            </button>
-            <button
-              onClick={async () => {
-                try {
-                  const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'market_signals', industry }) });
-                  const lever = await leverRes.json();
-                  if (lever?.applicable && lever?.lever) {
-                    const addRes = await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-                      title: lever.lever.title,
-                      description: lever.lever.reason,
-                      success_metric: lever.lever.metric,
-                      target_value: lever.lever.target,
-                      due_date: lever.lever.due_date,
-                      owner: lever.lever.ownerHint,
-                    })});
-                    if (addRes.ok) toast.success('Lever added to plan'); else toast.error('Unable to add lever');
-                  } else {
-                    toast('No lever proposed at this time');
-                  }
-                } catch (e) {
-                  toast.error('Failed to propose lever');
-                }
-              }}
-              className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100"
-            >
-              <PlusCircle className="w-3.5 h-3.5 mr-1" /> Propose Lever
-            </button>
-          </div>
-        </div>
+      <div className="mb-2">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Real-time market analysis and insights • Refreshes every Monday
+        </p>
+      </div>
+      {/* Controls under header */}
+      <div className="mb-4 flex items-center flex-wrap gap-2">
+        {typeof insightData?.insight?.confidenceScore === 'number' && (insightData.insight.confidenceScore > 0) && (
+          <span className="text-xs text-gray-600">Confidence {Math.round((insightData.insight.confidenceScore || 0) * 100)}%</span>
+        )}
+        {((insightData as any)?.sources?.length ?? 0) > 0 && (
+          <span className="text-xs text-gray-400">• Sources {(insightData as any)?.sources?.length}</span>
+        )}
+        <button
+          onClick={async () => {
+            try {
+              const q = 'Why is sentiment moving?';
+              const res = await fetch(`/api/market/why?industry=${encodeURIComponent(industry)}&q=${encodeURIComponent(q)}`);
+              const data = await res.json();
+              const citations = Array.isArray(data?.citations) ? data.citations : [];
+              openModal({
+                type: 'ai_insight',
+                size: 'md',
+                title: 'Why?',
+                content: (
+                  <div>
+                    {citations.length > 0 ? (
+                      <>
+                        <div className="text-sm text-gray-700 mb-3">Top sources:</div>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {citations.map((c: any, i: number) => (
+                            <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <div className="text-sm text-gray-600">No citations available yet. Data is refreshing—check back shortly.</div>
+                    )}
+                  </div>
+                )
+              });
+            } catch {}
+          }}
+          className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+        >
+          <HelpCircle className="w-3.5 h-3.5 mr-1" /> Why?
+        </button>
+        <button
+          onClick={async () => {
+            try {
+              const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'market_signals', industry }) });
+              const lever = await leverRes.json();
+              if (lever?.applicable && lever?.lever) {
+                const addRes = await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+                  title: lever.lever.title,
+                  description: lever.lever.reason,
+                  success_metric: lever.lever.metric,
+                  target_value: lever.lever.target,
+                  due_date: lever.lever.due_date,
+                  owner: lever.lever.ownerHint,
+                })});
+                if (addRes.ok) toast.success('Lever added to plan'); else toast.error('Unable to add lever');
+              } else {
+                toast('No lever proposed at this time');
+              }
+            } catch (e) {
+              toast.error('Failed to propose lever');
+            }
+          }}
+          className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100"
+        >
+          <PlusCircle className="w-3.5 h-3.5 mr-1" /> Propose Lever
+        </button>
       </div>
 
       {/* Market Radar Dials */}

@@ -230,21 +230,20 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Engagement Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-            </h3>
-            <p className="text-sm text-gray-500">
-              Strategic engagement trends and recommendations • Refreshes every Monday
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            {typeof (insight as any)?.confidenceScore === 'number' && (
-              <span className="text-xs text-gray-500">Confidence {Math.round(((insight as any).confidenceScore || 0) * 100)}%</span>
-            )}
-            <button
+      <div className="mb-2">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Engagement Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Strategic engagement trends and recommendations • Refreshes every Monday
+        </p>
+      </div>
+      {/* Controls under header */}
+      <div className="mb-4 flex items-center flex-wrap gap-2">
+        {typeof (insight as any)?.confidenceScore === 'number' && (
+          <span className="text-xs text-gray-500">Confidence {Math.round(((insight as any).confidenceScore || 0) * 100)}%</span>
+        )}
+        <button
               onClick={async () => {
                 try {
                   const q = 'Why did engagement shift?';
@@ -277,7 +276,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
             >
               Why?
             </button>
-            <button
+        <button
               onClick={async () => {
                 try {
                   const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'engagement_intel', industry }) });
@@ -301,8 +300,6 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
             >
               Propose Lever
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Signal Bar */}

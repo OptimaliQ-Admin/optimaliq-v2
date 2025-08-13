@@ -211,18 +211,17 @@ export default function BusinessTrendCard({ industry = 'technology', className =
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Business Trends: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-            </h3>
-            <p className="text-sm text-gray-500">
-              Strategic business trend analysis and insights • Refreshes every Monday
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <button
+      <div className="mb-2">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Business Trends: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+        </h3>
+        <p className="text-sm text-gray-500">
+          Strategic business trend analysis and insights • Refreshes every Monday
+        </p>
+      </div>
+      {/* Controls under header */}
+      <div className="mb-4 flex items-center flex-wrap gap-2">
+        <button
               onClick={async () => {
                 try {
                   const q = 'Why is this trend moving?';
@@ -256,7 +255,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
             >
               Why?
             </button>
-            <button
+        <button
               onClick={async () => {
                 try {
                   const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'business_trends', industry }) });
@@ -280,8 +279,6 @@ export default function BusinessTrendCard({ industry = 'technology', className =
             >
               Propose Lever
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Business Trends Grid */}
