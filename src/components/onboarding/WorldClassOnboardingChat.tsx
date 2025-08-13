@@ -23,6 +23,8 @@ interface WorldClassOnboardingChatProps {
   onComplete: (answers: any, scores: any) => void;
   questionGroupsOverride?: QuestionGroup[];
   disableQuestionAI?: boolean;
+  completeWithoutScoring?: boolean;
+  aiTimeoutMs?: number;
 }
 
 export default function WorldClassOnboardingChat({
@@ -30,7 +32,9 @@ export default function WorldClassOnboardingChat({
   userProfile,
   onComplete,
   questionGroupsOverride,
-  disableQuestionAI = false
+  disableQuestionAI = false,
+  completeWithoutScoring = false,
+  aiTimeoutMs = 7000
 }: WorldClassOnboardingChatProps) {
   const groups = questionGroupsOverride ?? questionGroups;
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
@@ -90,51 +94,68 @@ export default function WorldClassOnboardingChat({
           , timestamp: new Date()
         }]);
       } else {
-        const response = await fetch('/api/ai/onboarding-response', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            sessionId,
-            currentSection: currentGroup.id,
-            currentQuestion: currentQuestion.id,
-            userAnswer: answer,
-            conversationHistory: messages.map(msg => ({
-              type: msg.type,
-              content: msg.content,
-              timestamp: msg.timestamp
-            })),
-            userProfile,
-            nextQuestion: currentQuestionIndex < currentGroup.questions.length - 1 
-              ? {
-                  id: currentGroup.questions[currentQuestionIndex + 1].id,
-                  text: currentGroup.questions[currentQuestionIndex + 1].prompt,
-                  type: currentGroup.questions[currentQuestionIndex + 1].type
-                }
-              : undefined
-          })
-        });
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), aiTimeoutMs);
+        try {
+          const response = await fetch('/api/ai/onboarding-response', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              sessionId,
+              currentSection: currentGroup.id,
+              currentQuestion: currentQuestion.id,
+              userAnswer: answer,
+              conversationHistory: messages.map(msg => ({
+                type: msg.type,
+                content: msg.content,
+                timestamp: msg.timestamp
+              })),
+              userProfile,
+              nextQuestion: currentQuestionIndex < currentGroup.questions.length - 1 
+                ? {
+                    id: currentGroup.questions[currentQuestionIndex + 1].id,
+                    text: currentGroup.questions[currentQuestionIndex + 1].prompt,
+                    type: currentGroup.questions[currentQuestionIndex + 1].type
+                  }
+                : undefined
+            }),
+            signal: controller.signal
+          });
 
-        if (!response.ok) {
-          throw new Error('Failed to get AI response');
-        }
+          clearTimeout(timeout);
 
-        const aiResponse = await response.json();
+          if (!response.ok) {
+            throw new Error('Failed to get AI response');
+          }
 
-        setMessages(prev => [...prev, {
-          id: `ai-${currentQuestion.id}`,
-          type: 'ai',
-          content: aiResponse.response,
-          timestamp: new Date()
-        }]);
+          const aiResponse = await response.json();
 
-        // Store extracted data for dashboard
-        if (aiResponse.dataForDashboard) {
-          setAllAnswers(prev => ({
-            ...prev,
-            [`${currentQuestion.id}_insights`]: aiResponse.dataForDashboard
-          }));
+          setMessages(prev => [...prev, {
+            id: `ai-${currentQuestion.id}`,
+            type: 'ai',
+            content: aiResponse.response,
+            timestamp: new Date()
+          }]);
+
+          // Store extracted data for dashboard
+          if (aiResponse.dataForDashboard) {
+            setAllAnswers(prev => ({
+              ...prev,
+              [`${currentQuestion.id}_insights`]: aiResponse.dataForDashboard
+            }));
+          }
+        } catch (err) {
+          // Timeout or API failure: provide graceful acknowledgement and continue
+          setMessages(prev => [...prev, {
+            id: `ai-timeout-${currentQuestion.id}`,
+            type: 'ai',
+            content: "Thanks — that's helpful context. Let's keep going.",
+            timestamp: new Date()
+          }]);
+        } finally {
+          clearTimeout(timeout);
         }
       }
 
@@ -187,9 +208,13 @@ export default function WorldClassOnboardingChat({
       // Complete the assessment
       setIsComplete(true);
 
+      if (completeWithoutScoring) {
+        onComplete(allAnswers, null as any);
+        return;
+      }
+
       let scores = null as any;
       try {
-        // Try generating scores via AI
         scores = await generateDashboardScores(userProfile, {
           business_overview: allAnswers,
           user_responses: allAnswers,
@@ -200,7 +225,6 @@ export default function WorldClassOnboardingChat({
       }
 
       if (!scores) {
-        // Fallback if AI scoring fails
         scores = {
           fallback_used: true,
           strategy_score: 3.0,

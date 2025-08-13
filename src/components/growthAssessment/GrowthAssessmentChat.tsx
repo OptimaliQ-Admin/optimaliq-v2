@@ -16,6 +16,8 @@ export default function GrowthAssessmentChat() {
       sessionId={sessionId}
       questionGroupsOverride={growthAssessmentQuestionGroups}
       disableQuestionAI={false}
+      completeWithoutScoring={true}
+      aiTimeoutMs={6000}
       onComplete={async (answers) => {
         try {
           // Use the user ID generated at Step 1 lead form (with ReCAPTCHA)
