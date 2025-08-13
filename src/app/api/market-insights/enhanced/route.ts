@@ -36,17 +36,19 @@ export async function GET(req: NextRequest) {
     }
 
     if (forceRefresh) {
-      // Build synchronously for immediate UI update
-      await buildMarketSnapshot({ card: CARD, industry, ttl: DEFAULT_TTL_MIN });
-      const { data: fresh } = await supabaseAdmin
-        .from("market_snapshots")
-        .select("*")
+      // Queue a refresh instead of building synchronously to keep response fast and reliable
+      const { data: existingQueue } = await supabaseAdmin
+        .from("snapshot_refresh_requests")
+        .select("id")
         .eq("card", CARD)
         .eq("industry", industry)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (fresh) return NextResponse.json({ insight: fresh.snapshot, sources: fresh.sources || [], cached: false, createdAt: fresh.created_at });
+        .eq("status", "queued")
+        .limit(1);
+      if (!existingQueue || existingQueue.length === 0) {
+        await supabaseAdmin
+          .from("snapshot_refresh_requests")
+          .insert({ card: CARD, industry, status: "queued" });
+      }
     } else {
       // Enqueue refresh if not already queued (avoid relying on partial unique for upsert)
       const { data: existingQueue } = await supabaseAdmin

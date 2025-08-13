@@ -35,16 +35,10 @@ export async function GET(req: NextRequest) {
     }
 
     if (forceRefresh) {
-      await buildMarketSnapshot({ card: CARD, industry, ttl: DEFAULT_TTL_MIN });
-      const { data: fresh } = await supabaseAdmin
-        .from("market_snapshots")
-        .select("*")
-        .eq("card", CARD)
-        .eq("industry", industry)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (fresh) return NextResponse.json({ data: fresh.snapshot, sources: fresh.sources || [], cached: false, createdAt: fresh.created_at });
+      await supabaseAdmin
+        .from("snapshot_refresh_requests")
+        .upsert({ card: CARD, industry, status: "queued" }, { onConflict: "card,industry" })
+        .select();
     } else {
       await supabaseAdmin
         .from("snapshot_refresh_requests")

@@ -15,7 +15,7 @@ export default function GrowthAssessmentChat() {
     <WorldClassOnboardingChat
       sessionId={sessionId}
       questionGroupsOverride={growthAssessmentQuestionGroups}
-      disableQuestionAI={true}
+      disableQuestionAI={false}
       onComplete={async (answers) => {
         try {
           // Use the user ID generated at Step 1 lead form (with ReCAPTCHA)
@@ -48,10 +48,7 @@ export default function GrowthAssessmentChat() {
             return;
           }
 
-          // Small delay to ensure DB upsert is committed before analyzing step
-          setTimeout(() => {
-            router.push('/growth-assessment/analyzing');
-          }, 300);
+          router.push('/growth-assessment/analyzing');
         } catch (e) {
           console.error(e);
           showToast.error('Unexpected error. Please try again.');
