@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { normalizeIndustry } from "@/lib/utils/industry";
+import { buildMarketSnapshot } from "@/lib/ai/market/agent";
 
 const CARD = "market_signals" as const;
 const DEFAULT_TTL_MIN = 360;
@@ -9,6 +10,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const industry = normalizeIndustry(searchParams.get("industry") ?? "technology");
+    const forceRefresh = (searchParams.get("forceRefresh") ?? "false").toLowerCase() === "true";
 
     if (!supabaseAdmin) {
       return NextResponse.json({ error: "Server not configured" }, { status: 500 });
@@ -29,22 +31,36 @@ export async function GET(req: NextRequest) {
     const ttlMin = cached?.ttl_minutes ?? DEFAULT_TTL_MIN;
     const isFresh = cached && (now - createdMs) / 60000 < ttlMin;
 
-    if (isFresh) {
+    if (isFresh && !forceRefresh) {
       return NextResponse.json({ data: cached.snapshot, cached: true, createdAt: cached.created_at });
     }
 
-    // Enqueue refresh if not already queued (avoid relying on partial unique for upsert)
-    const { data: existingQueue } = await supabaseAdmin
-      .from("snapshot_refresh_requests")
-      .select("id")
-      .eq("card", CARD)
-      .eq("industry", industry)
-      .eq("status", "queued")
-      .limit(1);
-    if (!existingQueue || existingQueue.length === 0) {
-      await supabaseAdmin
+    if (forceRefresh) {
+      // Build synchronously for immediate UI update
+      await buildMarketSnapshot({ card: CARD, industry, ttl: DEFAULT_TTL_MIN });
+      const { data: fresh } = await supabaseAdmin
+        .from("market_snapshots")
+        .select("*")
+        .eq("card", CARD)
+        .eq("industry", industry)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (fresh) return NextResponse.json({ data: fresh.snapshot, cached: false, createdAt: fresh.created_at });
+    } else {
+      // Enqueue refresh if not already queued (avoid relying on partial unique for upsert)
+      const { data: existingQueue } = await supabaseAdmin
         .from("snapshot_refresh_requests")
-        .insert({ card: CARD, industry, status: "queued" });
+        .select("id")
+        .eq("card", CARD)
+        .eq("industry", industry)
+        .eq("status", "queued")
+        .limit(1);
+      if (!existingQueue || existingQueue.length === 0) {
+        await supabaseAdmin
+          .from("snapshot_refresh_requests")
+          .insert({ card: CARD, industry, status: "queued" });
+      }
     }
 
     if (cached) {

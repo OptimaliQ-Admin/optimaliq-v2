@@ -199,9 +199,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
             </p>
           </div>
           <div className="flex items-center space-x-3">
-            {typeof insightData?.insight?.confidenceScore === 'number' && (
-              <span className="text-xs text-gray-500">Confidence {Math.round((insightData.insight.confidenceScore || 0) * 100)}%</span>
-            )}
+            <span className="text-xs text-gray-500">Confidence {Math.round((insightData?.insight?.confidenceScore || 0) * 100)}%</span>
             <button
               onClick={async () => {
                 try {
