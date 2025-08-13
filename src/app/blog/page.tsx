@@ -64,7 +64,7 @@ export default function BlogPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed font-['Inter']"
             >
-            Join other executives staying ahead of the curve.
+            Join other executives getting concise, newsletter-style growth briefs with benchmarks, insights, and next steps.
             </motion.p>
 
             {/* Search Bar */}
@@ -282,6 +282,9 @@ export default function BlogPage() {
           <NewsletterSignup 
             variant="hero"
             source="blog_newsletter"
+            title="Ready to Unlock Your Growth Potential?"
+            description="Get concise, newsletter-style growth briefs with benchmarks, insights, and next steps—delivered to your inbox."
+            buttonText="Subscribe to the Growth Brief"
           />
         </motion.div>
       </div>
