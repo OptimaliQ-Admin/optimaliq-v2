@@ -102,7 +102,7 @@ export default function DashboardV2Page() {
         {/* Left navigation removed per request */}
 
         {/* Main content */}
-        <section className="col-span-12 lg:col-span-10 space-y-4">
+        <section className="col-span-12 space-y-4">
           {activeTab === 'overview' && (
             <div className="grid grid-cols-12 gap-4">
               {/* Highlights metric cards */}
