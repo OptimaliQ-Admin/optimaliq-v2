@@ -34,7 +34,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
     try {
       setError(null);
 
-      const url = `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}`;
+      const url = `/api/business-trends/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`;
 
       const response = await fetch(url);
       const result = await response.json();

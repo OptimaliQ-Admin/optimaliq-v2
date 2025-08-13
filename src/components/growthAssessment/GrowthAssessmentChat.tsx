@@ -48,7 +48,10 @@ export default function GrowthAssessmentChat() {
             return;
           }
 
-          router.push('/growth-assessment/analyzing');
+          // Small delay to ensure DB upsert is committed before analyzing step
+          setTimeout(() => {
+            router.push('/growth-assessment/analyzing');
+          }, 300);
         } catch (e) {
           console.error(e);
           showToast.error('Unexpected error. Please try again.');

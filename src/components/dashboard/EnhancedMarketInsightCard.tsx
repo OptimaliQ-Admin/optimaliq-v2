@@ -19,6 +19,7 @@ interface MarketInsightData {
   insight: EnhancedMarketInsight;
   cached: boolean;
   createdAt: string;
+  sources?: Array<{ title?: string; url?: string; source?: string; published_at?: string }>;
 }
 
 const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
@@ -34,7 +35,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
     try {
       setError(null);
 
-      const url = `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}`;
+      const url = `/api/market-insights/enhanced?industry=${encodeURIComponent(industry)}&forceRefresh=true`;
 
       const response = await fetch(url);
       const result = await response.json();
@@ -46,7 +47,8 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       setInsightData({
         insight: result.insight,
         cached: result.cached || false,
-        createdAt: result.createdAt || new Date().toISOString()
+        createdAt: result.createdAt || new Date().toISOString(),
+        sources: result.sources || [],
       });
 
     } catch (err) {
@@ -253,104 +255,29 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
         </div>
       </div>
 
-      {/* Market Metrics Grid */}
-      <div className="space-y-4 mb-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-          <BarChart3 className="w-4 h-4 mr-2" />
-          Market Metrics
-        </h4>
-        <AnimatePresence>
-          {/* Market Size */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <h4 className="text-sm font-medium text-gray-900">Market Size</h4>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                  {insightData.insight.marketSize.growth > 0 ? '+' : ''}{insightData.insight.marketSize.growth}%
-                </span>
-              </div>
-              <p className="text-xs text-gray-600">{insightData.insight.marketSize.description}</p>
+      {/* Market Radar Dials */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        {[
+          { label: 'Growth Momentum', value: Math.round((insightData?.insight?.growthRate?.value || 0) * 10) },
+          { label: 'Sentiment', value: Math.round(insightData?.insight?.sentiment?.score || 0) },
+          { label: 'Competition', value: insightData?.insight?.competition?.level === 'High' ? 80 : insightData?.insight?.competition?.level === 'Medium' ? 50 : 20 },
+          { label: 'Capital Flow', value: 60 },
+        ].map((d, i) => (
+          <div key={i} className="p-3 rounded-lg border bg-gradient-to-br from-white to-gray-50">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs text-gray-600">{d.label}</span>
+              <span className="text-xs text-gray-400">{d.value}/100</span>
             </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-gray-900">{insightData.insight.marketSize.value}</div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className={`h-2 rounded-full ${d.value >= 70 ? 'bg-green-500' : d.value >= 40 ? 'bg-orange-500' : 'bg-red-500'}`} style={{ width: `${d.value}%` }} />
             </div>
-          </motion.div>
-
-          {/* Growth Rate */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <h4 className="text-sm font-medium text-gray-900">Growth Rate</h4>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                  {insightData.insight.growthRate.trend > 0 ? '+' : ''}{insightData.insight.growthRate.trend}%
-                </span>
-              </div>
-              <p className="text-xs text-gray-600">{insightData.insight.growthRate.description}</p>
-            </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-gray-900">{insightData.insight.growthRate.value}%</div>
-            </div>
-          </motion.div>
-
-          {/* Competition */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <h4 className="text-sm font-medium text-gray-900">Competition</h4>
-                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
-                  {insightData.insight.competition.trend}
-                </span>
-              </div>
-              <p className="text-xs text-gray-600">{insightData.insight.competition.description}</p>
-            </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-gray-900">{insightData.insight.competition.level}</div>
-            </div>
-          </motion.div>
-
-          {/* Sentiment Score */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.4 }}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <h4 className="text-sm font-medium text-gray-900">Market Sentiment</h4>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  insightData.insight.sentiment.score >= 70 ? 'bg-green-100 text-green-700' :
-                  insightData.insight.sentiment.score >= 40 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
-                }`}>
-                  {getSentimentLabel(insightData.insight.sentiment.score)}
-                </span>
-              </div>
-              <p className="text-xs text-gray-600">Overall market confidence and outlook</p>
-            </div>
-            <div className="text-right">
-              <div className={`text-lg font-bold ${
-                getSentimentColor(insightData.insight.sentiment.score)
-              }`}>
-                {Math.round(insightData.insight.sentiment.score)}%
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ))}
+      </div>
+      {/* Forecast Cone Placeholder */}
+      <div className="mb-4 p-3 rounded-lg border bg-gray-50">
+        <div className="text-xs text-gray-600 mb-1">30-day Outlook</div>
+        <div className="h-8 bg-gradient-to-r from-green-200 via-yellow-200 to-red-200 rounded" />
       </div>
 
 
