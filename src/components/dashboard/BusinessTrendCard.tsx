@@ -222,9 +222,6 @@ export default function BusinessTrendCard({ industry = 'technology', className =
             </p>
           </div>
           <div className="flex items-center space-x-3">
-            {typeof trendData?.data?.confidenceScore === 'number' && (
-              <span className="text-xs text-gray-500">Confidence {Math.round((trendData.data as any).confidenceScore * 100)}%</span>
-            )}
             <button
               onClick={async () => {
                 try {
@@ -233,6 +230,7 @@ export default function BusinessTrendCard({ industry = 'technology', className =
                   const data = await res.json();
                   openModal({
                     type: 'ai_insight',
+                    size: 'md',
                     title: 'Why?',
                     content: (
                       <div>

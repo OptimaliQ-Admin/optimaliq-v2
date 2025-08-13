@@ -252,6 +252,7 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
                   const data = await res.json();
                   openModal({
                     type: 'ai_insight',
+                    size: 'md',
                     title: 'Why?',
                     content: (
                       <div>
