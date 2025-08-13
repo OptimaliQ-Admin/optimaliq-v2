@@ -200,6 +200,7 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
           </div>
           <div className="flex items-center space-x-3">
             <span className="text-xs text-gray-500">Confidence {Math.round((insightData?.insight?.confidenceScore || 0) * 100)}%</span>
+            <span className="text-xs text-gray-400">• Sources {(insightData as any)?.sources?.length ?? 0}</span>
             <button
               onClick={async () => {
                 try {

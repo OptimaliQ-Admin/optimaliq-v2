@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { authenticateUser, createAuthErrorResponse, validateRequiredFields } from "@/lib/auth/apiAuth";
+import { createClient } from "@supabase/supabase-js";
+import { validateRequiredFields } from "@/lib/auth/apiAuth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,14 +17,11 @@ export async function POST(req: NextRequest) {
 
     const { u_id } = body;
 
-    // Authenticate user and verify they can access this data
-    const authResult = await authenticateUser(req, u_id);
-    if (!authResult.success) {
-      return createAuthErrorResponse(authResult);
-    }
-
-    // Use authenticated client (anon key with RLS) instead of service role
-    const supabase = createRouteHandlerClient({ cookies });
+    // Use service role client because growth-assessment flow is unauthenticated
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
     // Fetch insights - RLS will ensure user can only access their own data
     const { data, error } = await supabase

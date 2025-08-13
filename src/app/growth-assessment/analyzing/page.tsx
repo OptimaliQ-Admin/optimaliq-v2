@@ -19,7 +19,7 @@ function AnalyzingComponent() {
 
     const generateInsights = async () => {
       try {
-        const res = await fetch("/api/growthAssessment/getInsights", {
+        const res = await fetch("/api/growth-assessment/get-insights", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ u_id }),
