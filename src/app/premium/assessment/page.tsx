@@ -187,6 +187,35 @@ export default function AssessmentsPage() {
         </div>
 
         <div className="max-w-[1920px] mx-auto p-6 space-y-10">
+          {/* Workspace grid with left nav (Salesforce-style) */}
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left vertical navigation */}
+            <aside className="hidden lg:block col-span-2">
+              <div className="border rounded-xl overflow-hidden">
+                <div className="px-3 py-2 text-xs font-semibold tracking-wide bg-gray-50 border-b">Navigation</div>
+                <nav className="p-2 text-sm">
+                  {[
+                    { key: 'overview', label: 'Overview' },
+                    { key: 'business', label: 'Business' },
+                    { key: 'technology', label: 'Technology' },
+                    { key: 'strategy', label: 'Strategy' },
+                    { key: 'customer', label: 'Customer Experience' },
+                    { key: 'progress', label: 'Progress' },
+                  ].map(t => (
+                    <a
+                      key={t.key}
+                      className={`block px-3 py-2 rounded ${activeTab===t.key?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`}
+                      onClick={() => setActiveTab(t.key as any)}
+                    >
+                      {t.label}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </aside>
+
+            {/* Main content */}
+            <div className="col-span-12 lg:col-span-10 space-y-10">
           {/* Header Section (Overview tab) */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -538,6 +567,8 @@ export default function AssessmentsPage() {
               {user?.id && <TechToolsCard userId={user.id} />}
             </div>
           </motion.div>
+            </div>
+          </div>
         </div>
       </div>
 

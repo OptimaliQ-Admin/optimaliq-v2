@@ -142,9 +142,20 @@ function GrowthStudioComponent() {
         </div>
       </header>
 
-      {/* Workspace grid without left nav */}
+      {/* Workspace grid with left nav */}
       <main className="max-w-[1400px] mx-auto p-4 grid grid-cols-12 gap-4">
-        <section className="col-span-12 space-y-4">
+        <aside className="hidden lg:block col-span-2">
+          <div className="border rounded-xl overflow-hidden">
+            <div className="px-3 py-2 text-xs font-semibold tracking-wide bg-gray-50 border-b">Navigation</div>
+            <nav className="p-2 text-sm">
+              <a className={`block px-3 py-2 rounded ${activeTab==='overview'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('overview')}>Highlights</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='analysis'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('analysis')}>Strategic Analysis</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='simulation'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('simulation')}>Scenario Simulation</a>
+            </nav>
+          </div>
+        </aside>
+
+        <section className="col-span-12 lg:col-span-10 space-y-4">
           {activeTab === 'overview' && (
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-12">

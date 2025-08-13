@@ -67,12 +67,12 @@ export default function DashboardV2Page() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* App header */}
+      {/* App header mimic (Salesforce style) */}
       <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b">
         <div className="max-w-[1400px] mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-blue-600" />
-            <div className="font-semibold">Dashboard</div>
+            <div className="font-semibold">Executive Dashboard</div>
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden md:inline text-xs text-gray-500">Overall</span>
@@ -99,10 +99,21 @@ export default function DashboardV2Page() {
       </header>
 
       <main className="max-w-[1400px] mx-auto p-4 grid grid-cols-12 gap-4">
-        {/* Left navigation removed per request */}
+        {/* Left vertical nav mimic */}
+        <aside className="hidden lg:block col-span-2">
+          <div className="border rounded-xl overflow-hidden">
+            <div className="px-3 py-2 text-xs font-semibold tracking-wide bg-gray-50 border-b">Navigation</div>
+            <nav className="p-2 text-sm">
+              <a className={`block px-3 py-2 rounded ${activeTab==='overview'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('overview')}>Highlights</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='analysis'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('analysis')}>Performance</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='market'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('market')}>Market</a>
+              <a className={`block px-3 py-2 rounded ${activeTab==='tasks'?'bg-blue-50 text-blue-700':'hover:bg-gray-50'}`} onClick={() => setActiveTab('tasks')}>Insights & Tasks</a>
+            </nav>
+          </div>
+        </aside>
 
         {/* Main content */}
-        <section className="col-span-12 space-y-4">
+        <section className="col-span-12 lg:col-span-10 space-y-4">
           {activeTab === 'overview' && (
             <div className="grid grid-cols-12 gap-4">
               {/* Highlights metric cards */}
@@ -158,33 +169,31 @@ export default function DashboardV2Page() {
                   showInsights={true}
                 />
               </div>
-              {/* Strengths and Areas centered under the chart */}
-              <div className="col-span-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
-                  <InsightCard 
-                    title="✅ Key Strengths" 
-                    items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
-                  />
-                  <InsightCard 
-                    title="🚨 Areas for Improvement" 
-                    items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
-                  />
-                </div>
+              {/* Strengths and Areas side by side under the chart */}
+              <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InsightCard 
+                  title="✅ Key Strengths" 
+                  items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
+                <InsightCard 
+                  title="🚨 Areas for Improvement" 
+                  items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
+                />
               </div>
             </div>
           )}
 
           {activeTab === 'market' && (
-            <div className="grid gap-6 max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-              <div className="border rounded-xl p-6">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">Market Signals</div>
                 <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
               </div>
-              <div className="border rounded-xl p-6">
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">Business Trends</div>
                 <BusinessTrendCard />
               </div>
-              <div className="border rounded-xl p-6">
+              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
                 <div className="text-sm font-semibold mb-3">Engagement Intelligence</div>
                 <EngagementIntelligenceCard industry={(insights.industry || "general").trim().toLowerCase()} />
               </div>
