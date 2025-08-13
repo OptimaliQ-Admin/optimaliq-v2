@@ -50,6 +50,18 @@ export default function TasksKanban() {
     setDraggingId(null);
   };
 
+  const handleUnblock = async (leverId: string) => {
+    try {
+      await fetch(`/api/growth-plan/levers/${leverId}/progress`, {
+        method: 'POST',
+        body: JSON.stringify({ status: 'in_progress', risk_status: 'ok' })
+      });
+      setLevers(prev => prev.map(l => l.id === leverId ? { ...l, status: 'in_progress' } : l));
+    } catch {
+      // no-op
+    }
+  };
+
   const columns: { id: Lever["status"]; title: string }[] = [
     { id: "todo", title: "To do" },
     { id: "in_progress", title: "In progress" },
@@ -66,7 +78,12 @@ export default function TasksKanban() {
             <SortableContext items={(levers.filter(l => l.status === col.id)).map(l => l.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-2 min-h-[60px]">
                 {levers.filter(l => l.status === col.id).map(l => (
-                  <KanbanCard key={l.id} lever={l} onBlock={(id)=> setShowBlockerPrompt({ leverId: id, toStatus: 'blocked' })} />
+                  <KanbanCard
+                    key={l.id}
+                    lever={l}
+                    onBlock={(id)=> setShowBlockerPrompt({ leverId: id, toStatus: 'blocked' })}
+                    onUnblock={handleUnblock}
+                  />
                 ))}
               </div>
             </SortableContext>
@@ -92,7 +109,7 @@ export default function TasksKanban() {
   );
 }
 
-function KanbanCard({ lever, onBlock }: { lever: Lever; onBlock: (id: string) => void }) {
+function KanbanCard({ lever, onBlock, onUnblock }: { lever: Lever; onBlock: (id: string) => void; onUnblock: (id: string) => void }) {
   return (
     <div id={lever.id} className="bg-white border rounded-lg p-3">
       <div className="text-sm font-medium">{lever.priority}. {lever.title}</div>
@@ -102,7 +119,11 @@ function KanbanCard({ lever, onBlock }: { lever: Lever; onBlock: (id: string) =>
       {lever.due_date && (
         <div className="flex items-center gap-3 mt-1">
           <a className="text-xs text-blue-600" href={`/api/growth-plan/levers/${lever.id}/ics`}>Add to calendar</a>
-          <button className="text-xs text-red-600 underline" onClick={()=> onBlock(lever.id)}>Mark blocked</button>
+          {lever.status !== 'blocked' ? (
+            <button className="text-xs text-red-600 underline" onClick={()=> onBlock(lever.id)}>Mark blocked</button>
+          ) : (
+            <button className="text-xs text-green-700 underline" onClick={()=> onUnblock(lever.id)}>Unblock (move to In progress)</button>
+          )}
         </div>
       )}
     </div>
