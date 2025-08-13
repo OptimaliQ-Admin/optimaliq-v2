@@ -158,31 +158,33 @@ export default function DashboardV2Page() {
                   showInsights={true}
                 />
               </div>
-              {/* Strengths and Areas side by side under the chart */}
-              <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InsightCard 
-                  title="✅ Key Strengths" 
-                  items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
-                />
-                <InsightCard 
-                  title="🚨 Areas for Improvement" 
-                  items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
-                />
+              {/* Strengths and Areas centered under the chart */}
+              <div className="col-span-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+                  <InsightCard 
+                    title="✅ Key Strengths" 
+                    items={(insights.strengths || []).map(item => ({ label: item.title, detail: item.impact }))}
+                  />
+                  <InsightCard 
+                    title="🚨 Areas for Improvement" 
+                    items={(insights.weaknesses || []).map(item => ({ label: item.title, detail: item.impact }))}
+                  />
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === 'market' && (
-            <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+            <div className="grid gap-6 max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+              <div className="border rounded-xl p-6">
                 <div className="text-sm font-semibold mb-3">Market Signals</div>
                 <MarketInsightCard industry={(insights.industry || "other").trim().toLowerCase()} />
               </div>
-              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+              <div className="border rounded-xl p-6">
                 <div className="text-sm font-semibold mb-3">Business Trends</div>
                 <BusinessTrendCard />
               </div>
-              <div className="col-span-12 xl:col-span-4 border rounded-xl p-4">
+              <div className="border rounded-xl p-6">
                 <div className="text-sm font-semibold mb-3">Engagement Intelligence</div>
                 <EngagementIntelligenceCard industry={(insights.industry || "general").trim().toLowerCase()} />
               </div>
