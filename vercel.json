@@ -10,6 +10,7 @@
     { "path": "/api/cron/cleanup-trial-records", "schedule": "0 3 * * 1" },
     { "path": "/api/cron/fetch-business-news", "schedule": "0 */6 * * *" },
     { "path": "/api/growth-plan/nudges/dispatch", "schedule": "0 14 * * *" }
-    ,{ "path": "/api/growth-plan/weekly-review", "schedule": "0 19 * * 5" }
+    ,{ "path": "/api/growth-plan/weekly-review", "schedule": "0 19 * * 5" },
+    { "path": "/api/cron/drain-snapshot-queue", "schedule": "0 * * * *" }
   ]
 }

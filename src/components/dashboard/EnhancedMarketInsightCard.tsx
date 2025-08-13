@@ -188,13 +188,48 @@ const EnhancedMarketInsightCard: React.FC<EnhancedMarketInsightCardProps> = ({
       transition={{ duration: 0.3 }}
     >
       {/* Header */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">
-          Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
-        </h3>
-        <p className="text-sm text-gray-500">
-          Real-time market analysis and insights • Refreshes every Monday
-        </p>
+      <div className="mb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Market Intelligence: {industry.charAt(0).toUpperCase() + industry.slice(1)}
+            </h3>
+            <p className="text-sm text-gray-500">
+              Real-time market analysis and insights • Refreshes every Monday
+            </p>
+          </div>
+          <div className="flex items-center space-x-3">
+            {typeof insightData?.insight?.confidenceScore === 'number' && (
+              <span className="text-xs text-gray-500">Confidence {Math.round((insightData.insight.confidenceScore || 0) * 100)}%</span>
+            )}
+            <button
+              onClick={async () => {
+                try {
+                  const q = 'Why is sentiment moving?';
+                  const res = await fetch(`/api/market/why?industry=${encodeURIComponent(industry)}&q=${encodeURIComponent(q)}`);
+                  const data = await res.json();
+                  openModal({
+                    type: 'ai_insight',
+                    title: 'Why?',
+                    content: (
+                      <div>
+                        <div className="text-sm text-gray-700 mb-3">Top sources:</div>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {(data?.citations || []).map((c: any, i: number) => (
+                            <li key={i}><a href={c.url} target="_blank" className="text-blue-600 hover:underline">{c.title}</a> <span className="text-xs text-gray-500">{new Date(c.published_at).toLocaleDateString()}</span></li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                  });
+                } catch {}
+              }}
+              className="text-xs text-gray-600 hover:text-gray-800"
+            >
+              Why?
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Market Metrics Grid */}
