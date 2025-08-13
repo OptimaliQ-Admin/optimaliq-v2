@@ -271,6 +271,27 @@ const EngagementIntelligenceCard: React.FC<EngagementIntelligenceCardProps> = ({
             >
               Why?
             </button>
+            <button
+              onClick={async () => {
+                try {
+                  const leverRes = await fetch('/api/market-insights/propose-lever', { method: 'POST', body: JSON.stringify({ card: 'engagement_intel', industry }) });
+                  const lever = await leverRes.json();
+                  if (lever?.applicable && lever?.lever) {
+                    await fetch('/api/growth-plan/levers/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+                      title: lever.lever.title,
+                      description: lever.lever.reason,
+                      success_metric: lever.lever.metric,
+                      target_value: lever.lever.target,
+                      due_date: lever.lever.due_date,
+                      owner: lever.lever.ownerHint,
+                    })});
+                  }
+                } catch {}
+              }}
+              className="text-xs text-blue-600 hover:text-blue-800"
+            >
+              Propose Lever
+            </button>
           </div>
         </div>
       </div>
