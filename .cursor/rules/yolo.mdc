@@ -43,4 +43,5 @@ alwaysApply: true
 
 ## Postflight (MANDATORY after updating To-Do & Tech Doc)
 - Read and apply guidance from `.cursor/rules/yolo.mdc`.
-- If `.cursor/rules/yolo.mdc` is missing, create a minimal placeholder referencing project rules and record this in **Tech Doc → Error Log**.
+- Continue with the implementation and created task with any new recommendations.
+placeholder referencing project rules and record this in **Tech Doc → Error Log**.
