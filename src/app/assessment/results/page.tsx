@@ -3,6 +3,8 @@
  * AI-powered results with comprehensive insights, recommendations, and action planning
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'

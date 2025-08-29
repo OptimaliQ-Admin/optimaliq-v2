@@ -3,6 +3,8 @@
  * Automated follow-up system with scheduling, notifications, and progress tracking
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'

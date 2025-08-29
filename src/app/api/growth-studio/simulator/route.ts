@@ -193,10 +193,10 @@ const GrowthSimulatorResponseSchema = z.object({
           name: z.string(),
           date: z.string(),
           status: z.enum(['pending', 'in_progress', 'completed']),
-          dependencies: z.array(z.string>)
+          dependencies: z.array(z.string())
         })),
         deliverables: z.array(z.string()),
-        resources: z.array(z.string>)
+        resources: z.array(z.string())
       })),
       criticalPath: z.array(z.string()),
       totalDuration: z.number()

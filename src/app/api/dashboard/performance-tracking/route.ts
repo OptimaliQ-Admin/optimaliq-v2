@@ -62,7 +62,7 @@ const PerformanceTrackingResponseSchema = z.object({
         activeLevers: z.number(),
         completionRate: z.number(),
         averageImpact: z.number(),
-        topPerforming: z.array(z.string>)
+        topPerforming: z.array(z.string())
       }).optional(),
       teamPerformance: z.object({
         averageScore: z.number(),
