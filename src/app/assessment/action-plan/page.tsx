@@ -3,6 +3,8 @@
  * 30-day growth plans, strategic roadmaps, and implementation tracking
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'

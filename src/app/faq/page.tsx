@@ -32,7 +32,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
 import { StatusBadge } from '@/components/ui/data-display'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 const faqData = {
   categories: [

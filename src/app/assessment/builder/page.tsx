@@ -3,6 +3,8 @@
  * Custom assessment creation with drag-and-drop interface and AI-powered suggestions
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
@@ -63,13 +65,13 @@ import {
   GripVertical,
   Type,
   List,
-  RadioButton,
+  Radio,
   ToggleLeft,
   Sliders,
   Image,
   Upload,
   Save,
-  Preview,
+  Eye as PreviewIcon,
   Wand2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -79,7 +81,8 @@ import { StatusBadge } from '@/components/ui/data-display'
 import { Alert } from '@/components/ui/feedback'
 import { Progress } from '@/components/ui/data-display'
 import { LineChart, PieChart, BarChart as BarChartComponent, MetricCard } from '@/components/ui/charts'
-import { Select, Checkbox, Input, RadioGroup, Slider } from '@/components/ui/form'
+import { Select, Checkbox, RadioGroup, Slider } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 // Sample Assessment Builder Data
 const builderData = {
@@ -99,7 +102,7 @@ const builderData = {
       id: 'multiple-choice',
       name: 'Multiple Choice',
       description: 'Single selection from multiple options',
-      icon: <RadioButton className="h-5 w-5" />,
+      icon: <Radio className="h-5 w-5" />,
       color: '#3b82f6',
       fields: ['question', 'options', 'correct_answer']
     },
@@ -307,8 +310,8 @@ export default function AssessmentBuilderPage() {
           
           <div className="flex items-center space-x-4">
             <Button variant="outline" size="sm" onClick={handlePreviewAssessment}>
-              <Preview className="h-4 w-4 mr-2" />
-              Preview
+                                <PreviewIcon className="h-4 w-4 mr-2" />
+                  Preview
             </Button>
             <Button variant="outline" size="sm" onClick={handleSaveAssessment} loading={isLoading}>
               <Save className="h-4 w-4 mr-2" />
@@ -673,8 +676,8 @@ export default function AssessmentBuilderPage() {
                     Save Draft
                   </Button>
                   <Button variant="outline" className="w-full justify-start" size="sm">
-                    <Preview className="h-4 w-4 mr-2" />
-                    Preview Assessment
+                                      <PreviewIcon className="h-4 w-4 mr-2" />
+                  Preview Assessment
                   </Button>
                   <Button variant="outline" className="w-full justify-start" size="sm">
                     <Share2 className="h-4 w-4 mr-2" />

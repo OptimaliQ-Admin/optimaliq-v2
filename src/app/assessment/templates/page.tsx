@@ -3,6 +3,8 @@
  * Pre-built assessment templates with industry-specific customizations
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
@@ -69,7 +71,7 @@ import {
   Image,
   Upload,
   Save,
-  Preview,
+  Eye as PreviewIcon,
   Wand2,
   Building,
   Stethoscope,
@@ -88,7 +90,8 @@ import { StatusBadge } from '@/components/ui/data-display'
 import { Alert } from '@/components/ui/feedback'
 import { Progress } from '@/components/ui/data-display'
 import { LineChart, PieChart, BarChart as BarChartComponent, MetricCard } from '@/components/ui/charts'
-import { Select, Checkbox, Input, RadioGroup, Slider } from '@/components/ui/form'
+import { Select, Checkbox, RadioGroup, Slider } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 // Sample Template Library Data
 const templateData = {
@@ -606,9 +609,9 @@ export default function TemplateLibraryPage() {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => handlePreviewTemplate(template.id)}
-                        >
-                          <Preview className="h-4 w-4" />
+                                                onClick={() => handlePreviewTemplate(template.id)}
+                    >
+                      <PreviewIcon className="h-4 w-4" />
                         </Button>
                         <Button variant="outline" size="sm">
                           <Copy className="h-4 w-4" />

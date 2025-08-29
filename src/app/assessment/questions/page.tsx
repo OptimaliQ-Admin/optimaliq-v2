@@ -3,6 +3,8 @@
  * AI-powered question flow with progress tracking and dynamic content
  */
 
+'use client'
+
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'

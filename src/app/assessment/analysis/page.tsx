@@ -3,6 +3,8 @@
  * Deep dive into assessment results with benchmarks, trends, and comprehensive insights
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
