@@ -1,0 +1,46 @@
+---
+alwaysApply: true
+---
+
+# Rule: OptimaliQ Complete Implementation (with Rules/Template Preflight + YOLO Post-Read)
+
+## Preflight (MANDATORY before any coding)
+- Scan and load **all** rule & template files from:
+  - `ai_docs/rules/**`
+  - `ai_docs/templates/**`
+- Summarize loaded items (filenames + 1-line purpose) in the task context.
+- If any referenced template/rule is missing, generate it from the SuperTemplate skeleton or block the task with a clear note in **OptimaliQ Tech Doc → Error Log** and proceed to next unblocked task.
+
+## Implementation Flow
+- Implement all tasks in `OptimaliQ_Implementation_ToDo.md` **sequentially**, respecting documented dependencies.
+- After completing each task:
+  - Replace `[ ]` with `[x]`
+  - Append `(Completed: YYYY-MM-DD, Notes: <short summary>)`
+- After completing each Phase, update **OptimaliQ Tech Doc** with:
+  - Overview of completed work
+  - Architecture/state diagrams
+  - API endpoints added/updated (with Zod contracts)
+  - Database schema diffs + migration filenames
+  - Key technical decisions (add to **ADRs**)
+  - Test coverage & CI/CD updates
+  - Known issues or blockers
+
+## Documentation Guarantees
+- If **OptimaliQ Tech Doc** does not exist, create it with phase placeholders, ADRs, and Error Log sections.
+- Log every DB change in the Tech Doc’s **Migrations Log** with up/down notes.
+
+## Quality & Process Gates
+- All commits follow **conventional commits**.
+- All DB changes ship via **Supabase migrations** (no ad-hoc schema edits).
+- Run linting & tests after each milestone; record pass/fail and coverage summary in the Tech Doc.
+- On error:
+  - Log details in **Tech Doc → Error Log** (root cause, fix, follow-ups)
+  - Suggest a resolution
+  - Retry once; if still blocked, mark task **Blocked** and continue to next
+
+## Recommendations & Improvements
+- When discovering improvements/tools, document rationale in **ADRs** and implement unless explicitly blocked by dependencies or policy.
+
+## Postflight (MANDATORY after updating To-Do & Tech Doc)
+- Read and apply guidance from `.cursor/rules/yolo.mdc`.
+- If `.cursor/rules/yolo.mdc` is missing, create a minimal placeholder referencing project rules and record this in **Tech Doc → Error Log**.
