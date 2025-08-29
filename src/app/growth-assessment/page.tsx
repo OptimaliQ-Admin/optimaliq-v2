@@ -12,7 +12,9 @@ import {
   Shield, 
   Award,
   ArrowLeft,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -150,7 +152,7 @@ export default function GrowthAssessmentPage() {
                     <h3 className="font-semibold">Quick Setup</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="industry">Industry</Label>
+                        <label htmlFor="industry" className="text-sm font-medium">Industry</label>
                         <select
                           id="industry"
                           value={userInfo.industry}
@@ -170,7 +172,7 @@ export default function GrowthAssessmentPage() {
                       </div>
                       
                       <div>
-                        <Label htmlFor="companySize">Company Size</Label>
+                        <label htmlFor="companySize" className="text-sm font-medium">Company Size</label>
                         <select
                           id="companySize"
                           value={userInfo.companySize}
