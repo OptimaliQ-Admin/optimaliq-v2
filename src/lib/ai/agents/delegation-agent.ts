@@ -143,7 +143,7 @@ export class DelegationAgent extends BaseAgent {
     return plan;
   }
 
-  async execute(plan: string[], request: DelegationRequest): Promise<any> {
+  async execute(_plan: string[], request: DelegationRequest): Promise<any> {
     const results: any = {};
 
     try {
@@ -248,7 +248,7 @@ export class DelegationAgent extends BaseAgent {
     };
   }
 
-  private analyzeTeamWorkload(organizationId: string): any {
+  private analyzeTeamWorkload(_organizationId: string): any {
     // Placeholder - would analyze actual workload data
     return {
       averageCapacity: 0.75,
@@ -258,7 +258,7 @@ export class DelegationAgent extends BaseAgent {
     };
   }
 
-  private generatePersonalizedMessage(messageType: string, recipient: any, context: any): string {
+  private generatePersonalizedMessage(messageType: string, recipient: any, _context: any): string {
     return `Personalized ${messageType} message for ${recipient.name}`;
   }
 
