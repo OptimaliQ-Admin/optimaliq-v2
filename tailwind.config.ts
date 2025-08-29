@@ -240,6 +240,23 @@ const config: Config = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
+    function({ addUtilities }: any) {
+      addUtilities({
+        '.glass': {
+          background: 'rgba(255, 255, 255, 0.1)',
+          'backdrop-filter': 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.1)'
+        },
+        '.glass-card': {
+          background: 'rgba(255, 255, 255, 0.1)',
+          'backdrop-filter': 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.1)',
+          'border-radius': '0.75rem'
+        }
+      });
+    }
   ],
 } satisfies Config;
 
