@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRealtimeDashboard, useRealtimeTeamActivity, useRealtimeAssessments } from '@/hooks/useRealtime';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -129,6 +130,9 @@ function getPriorityBadge(priority: string) {
 export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(mockDashboardData);
+  
+  // Mock organization ID - in production this would come from user context
+  const organizationId = 'mock-org-id';
 
   useEffect(() => {
     // Simulate loading dashboard data
@@ -150,6 +154,60 @@ export default function DashboardPage() {
 
     loadDashboard();
   }, []);
+
+  // Real-time dashboard updates
+  useRealtimeDashboard(organizationId, (event) => {
+    setDashboardData(prev => ({
+      ...prev,
+      overallScore: event.metrics.overallScore || prev.overallScore,
+      metrics: prev.metrics.map(metric => {
+        if (metric.label === 'Growth Potential' && event.metrics.growthPotential) {
+          return { ...metric, value: event.metrics.growthPotential };
+        }
+        if (metric.label === 'Efficiency Score' && event.metrics.efficiencyScore) {
+          return { ...metric, value: event.metrics.efficiencyScore };
+        }
+        if (metric.label === 'Team Performance' && event.metrics.teamPerformance) {
+          return { ...metric, value: event.metrics.teamPerformance };
+        }
+        return metric;
+      })
+    }));
+    toast.success('Dashboard updated with latest insights!');
+  });
+
+  // Real-time team activity updates
+  useRealtimeTeamActivity(organizationId, (event) => {
+    setDashboardData(prev => ({
+      ...prev,
+      recentActivities: [
+        {
+          id: Date.now().toString(),
+          action: event.activity.action,
+          time: 'Just now',
+          type: 'info'
+        },
+        ...prev.recentActivities.slice(0, 3)
+      ]
+    }));
+  });
+
+  // Real-time assessment completion updates
+  useRealtimeAssessments(organizationId, (event) => {
+    setDashboardData(prev => ({
+      ...prev,
+      recentActivities: [
+        {
+          id: Date.now().toString(),
+          action: `${event.assessment.completedBy} completed ${event.assessment.type} assessment`,
+          time: 'Just now',
+          type: 'success'
+        },
+        ...prev.recentActivities.slice(0, 3)
+      ]
+    }));
+    toast.success(`New assessment completed by ${event.assessment.completedBy}!`);
+  });
 
   if (isLoading) {
     return (
