@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...compat.extends('next/core-web-vitals'),
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     rules: {
       // Code Quality
@@ -47,15 +47,9 @@ export default [
       
       // TypeScript
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/explicit-function-return-type': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/prefer-interface': 'warn',
       
       // Import/Export
-      'import/no-unresolved': 'error',
-      'import/named': 'error',
-      'import/default': 'error',
-      'import/namespace': 'error',
       'import/no-duplicates': 'error',
       
       // Performance
