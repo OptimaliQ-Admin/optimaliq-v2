@@ -42,6 +42,16 @@
 
 * **Tech Doc** updated each milestone: Architecture, Schemas, APIs, Agents, Benchmarks, ADRs, Error Log.
 * **To-Do Doc** updated per task with timestamp + note.
+* **Frontend Architecture** reference `FRONTEND_UX_ARCHITECTURE.md` for all UI/UX decisions.
+
+## 1.8 Frontend & UI/UX Standards
+
+* **Design System First**: Use design tokens, never hardcode styles. Reference `FRONTEND_UX_ARCHITECTURE.md`.
+* **Component Architecture**: Follow Atomic Design (Atoms → Molecules → Organisms → Templates → Pages).
+* **Performance**: Target Core Web Vitals (LCP < 2.5s, FID < 100ms, CLS < 0.1).
+* **Accessibility**: WCAG 2.1 AA compliance built into every component.
+* **Animation**: Framer Motion with 60fps performance and reduced-motion support.
+* **Responsive**: Mobile-first with progressive enhancement across breakpoints.
 
 ---
 
