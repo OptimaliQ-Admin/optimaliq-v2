@@ -140,7 +140,7 @@ export class GrowthPlanningAgent extends BaseAgent {
     return plan;
   }
 
-  async execute(plan: string[], request: GrowthPlanningRequest): Promise<any> {
+  async execute(_plan: string[], request: GrowthPlanningRequest): Promise<any> {
     const results: any = {};
 
     try {

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { BaseAgent, AgentRequest, AgentResponse, AgentTool } from './base-agent';
-import { supabaseService } from '@/lib/supabase';
 import { AITask } from '@/lib/ai-router';
+import { AppError } from '@/utils';
 
 // Assessment Agent Response Schema
 const AssessmentResponseSchema = z.object({
@@ -59,7 +59,7 @@ export class AssessmentAgent extends BaseAgent {
         filters: z.record(z.any()),
         select: z.string().optional()
       }),
-      execute: async (params) => {
+      execute: async (_params) => {
         // Implementation would query Supabase based on parameters
         return { data: [], count: 0 };
       }
@@ -72,7 +72,7 @@ export class AssessmentAgent extends BaseAgent {
         industry: z.string(),
         categories: z.array(z.string())
       }),
-      execute: async (params) => {
+      execute: async (_params) => {
         // Query benchmark_data table
         return {
           benchmarks: [
@@ -118,7 +118,7 @@ export class AssessmentAgent extends BaseAgent {
     return plan;
   }
 
-  async execute(plan: string[], request: AssessmentRequest): Promise<any> {
+  async execute(_plan: string[], request: AssessmentRequest): Promise<any> {
     const results: any = {};
 
     try {
@@ -225,7 +225,7 @@ export class AssessmentAgent extends BaseAgent {
   }
 
   // Calculate deterministic scores based on assessment responses
-  private calculateDeterministicScores(responses: Record<string, any>, assessmentType: string): any {
+  private calculateDeterministicScores(responses: Record<string, any>, _assessmentType: string): any {
     const scores = {
       strategy: 0,
       process: 0,

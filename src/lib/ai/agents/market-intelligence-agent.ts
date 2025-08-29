@@ -146,7 +146,7 @@ export class MarketIntelligenceAgent extends BaseAgent {
     return plan;
   }
 
-  async execute(plan: string[], request: MarketIntelligenceRequest): Promise<any> {
+  async execute(_plan: string[], request: MarketIntelligenceRequest): Promise<any> {
     const results: any = {};
 
     try {
@@ -289,7 +289,7 @@ export class MarketIntelligenceAgent extends BaseAgent {
   }
 
   // Analyze trend clusters
-  private analyzeTrendClusters(clusters: any[], industry: string): any {
+  private analyzeTrendClusters(clusters: any[], _industry: string): any {
     return {
       trendDirection: 'up',
       trendMagnitude: Math.random() * 10,

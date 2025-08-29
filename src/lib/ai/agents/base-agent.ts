@@ -138,7 +138,8 @@ export abstract class BaseAgent {
         
         // Add metadata
         response.metadata = {
-          ...response.metadata,
+          tokensUsed: response.metadata?.tokensUsed || 0,
+          cost: response.metadata?.cost || 0,
           latency: Date.now() - startTime,
           provider: this.name,
           confidence: this.calculateConfidence(response)

@@ -188,7 +188,11 @@ export class AIModelRouter {
     
     // Return the provider with the lowest score (best)
     scoredProviders.sort((a, b) => a.score - b.score);
-    return scoredProviders[0].provider;
+    const bestProvider = scoredProviders[0];
+    if (!bestProvider) {
+      throw new AppError('No suitable provider found', 'NO_PROVIDER_AVAILABLE', 503);
+    }
+    return bestProvider.provider;
   }
   
   // Estimate cost for a request
@@ -280,7 +284,7 @@ export class AIModelRouter {
   }
   
   // Anthropic execution
-  private async executeAnthropic(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+  private async executeAnthropic(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
     // Note: This is a placeholder. You'll need to install @anthropic-ai/sdk
     // and implement the actual Anthropic API call
     throw new AppError(
@@ -291,7 +295,7 @@ export class AIModelRouter {
   }
   
   // Google execution
-  private async executeGoogle(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+  private async executeGoogle(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
     // Note: This is a placeholder. You'll need to install @google/generative-ai
     // and implement the actual Google API call
     throw new AppError(
@@ -302,7 +306,7 @@ export class AIModelRouter {
   }
   
   // Mistral execution
-  private async executeMistral(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+  private async executeMistral(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
     // Note: This is a placeholder. You'll need to install mistralai
     // and implement the actual Mistral API call
     throw new AppError(
@@ -328,7 +332,6 @@ export class AIModelRouter {
     
     // Use the highest priority fallback provider
     fallbackProviders.sort((a, b) => a.priority - b.priority);
-    const fallbackConfig = fallbackProviders[0];
     
     // Retry with fallback provider
     const retryRequest = { ...request, priority: 'high' as const };
@@ -414,7 +417,7 @@ export const ai = {
       priority: 'low'
     };
     
-    const response = await aiRouter.execute(request);
+    await aiRouter.execute(request);
     // Parse embeddings from response (implementation depends on provider)
     return []; // Placeholder
   },
