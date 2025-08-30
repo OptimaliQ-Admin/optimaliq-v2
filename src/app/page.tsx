@@ -386,7 +386,7 @@ export default function LandingPage() {
                         {testimonial.role}, {testimonial.organization}
                       </div>
                     </div>
-                  </div>
+        </div>
                 </Card>
               </motion.div>
             ))}
