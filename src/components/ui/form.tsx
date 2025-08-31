@@ -381,14 +381,14 @@ const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   RadioGroupProps
 >(({ 
-  className, 
+  className,
   variant, 
   size,
   options,
   error,
   success,
   warning,
-  ...props 
+  ...props
 }, ref) => {
   const getVariant = () => {
     if (error) return "error"
@@ -469,7 +469,7 @@ const Switch = React.forwardRef<
       <SwitchPrimitive.Root
         ref={ref}
         className={cn(switchVariants({ variant: getVariant(), size }), className)}
-        {...props}
+      {...props}
       >
         <SwitchPrimitive.Thumb className="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0" />
       </SwitchPrimitive.Root>
@@ -552,7 +552,7 @@ const Slider = React.forwardRef<
         value={value}
         onValueChange={onValueChange}
         className={cn(sliderVariants({ variant: getVariant(), size }), className)}
-        {...props}
+      {...props}
       >
         <SliderPrimitive.Track className="slider-track relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
           <SliderPrimitive.Range className="slider-range absolute h-full bg-primary" />

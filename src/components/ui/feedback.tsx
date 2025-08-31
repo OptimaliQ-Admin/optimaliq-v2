@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle, Bell, Settings } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-import * as PopoverPrimitive from "@radix-ui/react-popover"
+import { Popover, PopoverContent, PopoverTrigger, PopoverPortal, PopoverArrow } from "@radix-ui/react-popover"
 import * as ToastPrimitive from "@radix-ui/react-toast"
 
 // Tooltip Variants
@@ -48,7 +48,7 @@ const popoverVariants = cva(
         default: "bg-popover text-popover-foreground",
         primary: "bg-primary text-primary-foreground",
         secondary: "bg-secondary text-secondary-foreground",
-        glass: "bg-white/10 backdrop-blur-md border-white/20",
+
       },
       size: {
         default: "w-72 p-4",
@@ -174,17 +174,17 @@ const Tooltip = React.forwardRef<
 Tooltip.displayName = "Tooltip"
 
 // Popover Provider
-const PopoverProvider = PopoverPrimitive.Provider
+const PopoverProvider = Popover
 
 // Popover Root
-const PopoverRoot = PopoverPrimitive.Root
+const PopoverRoot = Popover
 
 // Popover Trigger
-const PopoverTrigger = PopoverPrimitive.Trigger
+const PopoverTriggerComponent = PopoverTrigger
 
 // Popover Props
 export interface PopoverProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
+  extends React.ComponentPropsWithoutRef<typeof PopoverContent>,
     VariantProps<typeof popoverVariants> {
   children: React.ReactNode
   trigger: React.ReactNode
@@ -198,8 +198,8 @@ export interface PopoverProps
 }
 
 // Popover Component
-const Popover = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
+const PopoverComponent = React.forwardRef<
+  React.ElementRef<typeof PopoverContent>,
   PopoverProps
 >(({ 
   className, 
@@ -219,10 +219,10 @@ const Popover = React.forwardRef<
   return (
     <PopoverProvider>
       <PopoverRoot open={open} onOpenChange={onOpenChange}>
-        <PopoverTrigger asChild>
+        <PopoverTriggerComponent asChild>
           {trigger}
-        </PopoverTrigger>
-        <PopoverPrimitive.Content
+        </PopoverTriggerComponent>
+        <PopoverContent
           ref={ref}
           side={side}
           align={align}
@@ -233,14 +233,14 @@ const Popover = React.forwardRef<
         >
           {children}
           {showArrow && (
-            <PopoverPrimitive.Arrow className="fill-current" />
+            <PopoverArrow className="fill-current" />
           )}
-        </PopoverPrimitive.Content>
+        </PopoverContent>
       </PopoverRoot>
     </PopoverProvider>
   )
 })
-Popover.displayName = "Popover"
+PopoverComponent.displayName = "Popover"
 
 // Toast Provider
 const ToastProvider = ToastPrimitive.Provider

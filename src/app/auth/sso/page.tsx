@@ -31,22 +31,18 @@ import {
   MessageSquare,
   HelpCircle,
   ExternalLink,
-  Chrome,
   Github,
   Linkedin,
   Twitter,
   Facebook,
   Apple,
-  Microsoft,
-  Google,
   Slack,
   AtSign,
   Database,
   Server,
   Cloud,
   Network,
-  Cpu,
-  Monitor
+  Cpu
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -61,7 +57,7 @@ const ssoData = {
       id: 'google',
       name: 'Google Workspace',
       description: 'Sign in with your Google Workspace account',
-      icon: <Google className="h-6 w-6" />,
+      icon: <Globe className="h-6 w-6" />,
       color: 'bg-red-500',
       popular: true,
       features: ['Single sign-on', 'Directory sync', 'Group management', 'Security policies'],
@@ -71,7 +67,7 @@ const ssoData = {
       id: 'microsoft',
       name: 'Microsoft Azure AD',
       description: 'Sign in with your Microsoft Azure Active Directory',
-      icon: <Microsoft className="h-6 w-6" />,
+      icon: <Building className="h-6 w-6" />,
       color: 'bg-blue-500',
       popular: true,
       features: ['Azure AD integration', 'Conditional access', 'Multi-factor auth', 'Compliance'],
@@ -112,14 +108,14 @@ const ssoData = {
     {
       id: 'google-social',
       name: 'Google',
-      icon: <Google className="h-5 w-5" />,
+      icon: <Globe className="h-5 w-5" />,
       color: 'bg-red-500',
       available: true
     },
     {
       id: 'microsoft-social',
       name: 'Microsoft',
-      icon: <Microsoft className="h-5 w-5" />,
+      icon: <Building className="h-5 w-5" />,
       color: 'bg-blue-500',
       available: true
     },

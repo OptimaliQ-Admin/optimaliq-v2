@@ -581,8 +581,9 @@ export default function TrialPage() {
                 <div className="text-3xl font-bold text-primary mb-2">96%</div>
                 <div className="text-sm text-muted-foreground">Trial Conversion</div>
               </div>
-              <div className="text-3xl font-bold text-primary mb-2">45%</div>
-              <div className="text-sm text-muted-foreground">Avg Improvement</div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">45%</div>
+                <div className="text-sm text-muted-foreground">Avg Improvement</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">$2.5M</div>
