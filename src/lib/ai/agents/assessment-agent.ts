@@ -249,6 +249,113 @@ export class AssessmentAgent extends BaseAgent {
     return scores;
   }
 
+  // Dynamic question branching logic
+  private determineNextQuestion(currentResponses: Record<string, any>, questionBank: any[]): any | null {
+    // Analyze current responses to determine the next most relevant question
+    const responsePatterns = this.analyzeResponsePatterns(currentResponses);
+    
+    // Find questions that haven't been answered yet
+    const unansweredQuestions = questionBank.filter(q => !currentResponses[q.id]);
+    
+    if (unansweredQuestions.length === 0) {
+      return null; // All questions answered
+    }
+
+    // Score each unanswered question based on relevance to current responses
+    const scoredQuestions = unansweredQuestions.map(question => {
+      let relevanceScore = 0;
+      
+      // Score based on category relevance
+      if (responsePatterns.weakCategories.includes(question.category)) {
+        relevanceScore += 3; // Prioritize weak areas
+      }
+      
+      // Score based on question dependencies
+      if (this.checkQuestionDependencies(question, currentResponses)) {
+        relevanceScore += 2;
+      }
+      
+      // Score based on assessment progress
+      const progressRatio = Object.keys(currentResponses).length / questionBank.length;
+      if (progressRatio < 0.3 && question.priority === 'high') {
+        relevanceScore += 2; // Prioritize high-priority questions early
+      }
+      
+      return { question, relevanceScore };
+    });
+
+    // Return the question with the highest relevance score
+    scoredQuestions.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    return scoredQuestions[0]?.question || null;
+  }
+
+  // Analyze response patterns to identify strengths and weaknesses
+  private analyzeResponsePatterns(responses: Record<string, any>): any {
+    const categoryScores: Record<string, number[]> = {};
+    
+    // Group responses by category
+    Object.entries(responses).forEach(([questionId, response]) => {
+      // This would need to be enhanced with actual question metadata
+      const category = this.getQuestionCategory(questionId);
+      if (!categoryScores[category]) {
+        categoryScores[category] = [];
+      }
+      categoryScores[category].push(Number(response) || 0);
+    });
+
+    // Calculate average scores per category
+    const categoryAverages = Object.entries(categoryScores).map(([category, scores]) => ({
+      category,
+      average: scores.reduce((sum, score) => sum + score, 0) / scores.length
+    }));
+
+    // Identify strong and weak categories
+    const sortedCategories = categoryAverages.sort((a, b) => b.average - a.average);
+    const strongCategories = sortedCategories.slice(0, Math.ceil(sortedCategories.length / 2)).map(c => c.category);
+    const weakCategories = sortedCategories.slice(Math.ceil(sortedCategories.length / 2)).map(c => c.category);
+
+    return {
+      strongCategories,
+      weakCategories,
+      categoryAverages
+    };
+  }
+
+  // Check if a question's dependencies are satisfied
+  private checkQuestionDependencies(question: any, currentResponses: Record<string, any>): boolean {
+    if (!question.dependencies || question.dependencies.length === 0) {
+      return true; // No dependencies
+    }
+
+    return question.dependencies.every((dep: any) => {
+      const response = currentResponses[dep.questionId];
+      if (dep.condition === 'answered') {
+        return response !== undefined;
+      }
+      if (dep.condition === 'value') {
+        return response === dep.value;
+      }
+      if (dep.condition === 'range') {
+        return response >= dep.min && response <= dep.max;
+      }
+      return false;
+    });
+  }
+
+  // Get question category (placeholder implementation)
+  private getQuestionCategory(questionId: string): string {
+    // This would be enhanced with actual question metadata
+    const categoryMap: Record<string, string> = {
+      'strategy_1': 'strategy',
+      'strategy_2': 'strategy',
+      'process_1': 'process',
+      'process_2': 'process',
+      'technology_1': 'technology',
+      'technology_2': 'technology'
+    };
+    return categoryMap[questionId] || 'general';
+  }
+
   // Format benchmarks with user scores
   private formatBenchmarks(userScores: any, industryBenchmarks: any[]): any[] {
     return industryBenchmarks.map(benchmark => ({
@@ -297,6 +404,20 @@ export class AssessmentAgent extends BaseAgent {
             "description": "Detailed description of the initiative",
             "category": "strategy|process|technology",
             "priority": 1-10,
+            "effort": 1-10,
+            "timeline": 1-12
+          }
+        ],
+        "personalizedInsights": [
+          {
+            "insight": "Specific insight tailored to this company's situation",
+            "category": "strategy|process|technology|growth|risk",
+            "confidence": 0.0-1.0,
+            "actionable": true,
+            "priority": "high|medium|low"
+          }
+        ]
+      }
             "effort": 1-10,
             "timeline": 1-12 (months)
           }
