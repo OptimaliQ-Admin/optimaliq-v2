@@ -297,6 +297,15 @@ export class GrowthPlanningAgent extends BaseAgent {
          - Specific, measurable targets
          - Clear success metrics
          
+      4. **Roadmap** (detailed implementation timeline):
+         - Phase-by-phase breakdown
+         - Resource requirements
+         - Success criteria
+         
+      5. **Risk Assessment** (potential risks and mitigation):
+         - Identify key risks for each lever
+         - Provide mitigation strategies
+         - Include probability and impact scores
       4. **Risk Assessment**:
          - Identify 3-5 key risks to the growth plan
          - Assess probability and impact
@@ -321,6 +330,216 @@ export class GrowthPlanningAgent extends BaseAgent {
     }, 0) / risks.length;
     
     return Math.min(10, weightedRiskScore);
+  }
+
+  // Generate detailed implementation roadmap
+  private generateRoadmap(growthLevers: any[], companySize: string, industry: string): any {
+    const roadmap = {
+      phases: [
+        {
+          name: 'Foundation Phase (Weeks 1-2)',
+          description: 'Establish baseline and quick wins',
+          levers: growthLevers.filter(lever => lever.effort <= 3 && lever.impact >= 7),
+          duration: '2 weeks',
+          resources: this.calculateResourceRequirements(growthLevers.filter(lever => lever.effort <= 3), companySize),
+          successCriteria: [
+            'Complete baseline assessment',
+            'Implement 2-3 quick wins',
+            'Establish measurement framework'
+          ]
+        },
+        {
+          name: 'Acceleration Phase (Weeks 3-4)',
+          description: 'Implement core growth initiatives',
+          levers: growthLevers.filter(lever => lever.effort > 3 && lever.effort <= 6),
+          duration: '2 weeks',
+          resources: this.calculateResourceRequirements(growthLevers.filter(lever => lever.effort > 3 && lever.effort <= 6), companySize),
+          successCriteria: [
+            'Launch 3-4 core initiatives',
+            'Achieve 15-25% improvement in key metrics',
+            'Establish feedback loops'
+          ]
+        },
+        {
+          name: 'Optimization Phase (Weeks 5-6)',
+          description: 'Refine and scale successful initiatives',
+          levers: growthLevers.filter(lever => lever.effort > 6),
+          duration: '2 weeks',
+          resources: this.calculateResourceRequirements(growthLevers.filter(lever => lever.effort > 6), companySize),
+          successCriteria: [
+            'Scale successful initiatives',
+            'Achieve 30-50% improvement in key metrics',
+            'Establish sustainable growth processes'
+          ]
+        }
+      ],
+      timeline: {
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 42 * 24 * 60 * 60 * 1000).toISOString(), // 6 weeks
+        milestones: this.generateMilestones(growthLevers)
+      },
+      resourceAllocation: {
+        team: this.estimateTeamRequirements(growthLevers, companySize),
+        budget: this.estimateBudgetRequirements(growthLevers, companySize, industry),
+        tools: this.identifyRequiredTools(growthLevers)
+      }
+    };
+
+    return roadmap;
+  }
+
+  // Calculate resource requirements for a set of levers
+  private calculateResourceRequirements(levers: any[], companySize: string): any {
+    const totalEffort = levers.reduce((sum, lever) => sum + lever.effort, 0);
+    const baseTeamSize = this.getBaseTeamSize(companySize);
+    
+    return {
+      teamMembers: Math.ceil(totalEffort / 10 * baseTeamSize),
+      hoursPerWeek: Math.ceil(totalEffort * 2),
+      externalConsultants: totalEffort > 20 ? Math.ceil(totalEffort / 10) : 0,
+      tools: this.identifyRequiredTools(levers)
+    };
+  }
+
+  // Get base team size based on company size
+  private getBaseTeamSize(companySize: string): number {
+    const sizeMap: Record<string, number> = {
+      '1-10': 2,
+      '11-50': 4,
+      '51-200': 8,
+      '201-1000': 15,
+      '1000+': 25
+    };
+    return sizeMap[companySize] || 4;
+  }
+
+  // Generate milestones based on growth levers
+  private generateMilestones(levers: any[]): any[] {
+    const milestones = [];
+    const sortedLevers = levers.sort((a, b) => a.priority - b.priority);
+    
+    // Week 1 milestone
+    milestones.push({
+      week: 1,
+      title: 'Foundation Complete',
+      description: 'Complete baseline assessment and implement first quick wins',
+      levers: sortedLevers.filter(lever => lever.effort <= 3).slice(0, 2),
+      successCriteria: '2 quick wins implemented, baseline established'
+    });
+
+    // Week 3 milestone
+    milestones.push({
+      week: 3,
+      title: 'Core Initiatives Launched',
+      description: 'Launch primary growth initiatives',
+      levers: sortedLevers.filter(lever => lever.effort > 3 && lever.effort <= 6).slice(0, 3),
+      successCriteria: '3 core initiatives active, 20% metric improvement'
+    });
+
+    // Week 6 milestone
+    milestones.push({
+      week: 6,
+      title: 'Growth Optimization',
+      description: 'Scale successful initiatives and establish sustainable processes',
+      levers: sortedLevers.filter(lever => lever.effort > 6),
+      successCriteria: '40% metric improvement, sustainable processes established'
+    });
+
+    return milestones;
+  }
+
+  // Estimate team requirements
+  private estimateTeamRequirements(levers: any[], companySize: string): any {
+    const totalEffort = levers.reduce((sum, lever) => sum + lever.effort, 0);
+    const baseTeamSize = this.getBaseTeamSize(companySize);
+    
+    return {
+      coreTeam: Math.ceil(totalEffort / 15 * baseTeamSize),
+      supportTeam: Math.ceil(totalEffort / 25 * baseTeamSize),
+      externalSupport: totalEffort > 30 ? Math.ceil(totalEffort / 20) : 0,
+      roles: this.identifyRequiredRoles(levers)
+    };
+  }
+
+  // Estimate budget requirements
+  private estimateBudgetRequirements(levers: any[], companySize: string, industry: string): any {
+    const totalEffort = levers.reduce((sum, lever) => sum + lever.effort, 0);
+    const baseBudget = this.getBaseBudget(companySize, industry);
+    
+    return {
+      tools: Math.ceil(totalEffort * 100), // $100 per effort point
+      consulting: totalEffort > 20 ? Math.ceil(totalEffort * 200) : 0, // $200 per effort point
+      training: Math.ceil(totalEffort * 50), // $50 per effort point
+      total: Math.ceil(totalEffort * 350) + baseBudget
+    };
+  }
+
+  // Get base budget based on company size and industry
+  private getBaseBudget(companySize: string, industry: string): number {
+    const sizeMultiplier: Record<string, number> = {
+      '1-10': 1000,
+      '11-50': 2500,
+      '51-200': 5000,
+      '201-1000': 10000,
+      '1000+': 25000
+    };
+    
+    const industryMultiplier: Record<string, number> = {
+      'technology': 1.2,
+      'healthcare': 1.1,
+      'finance': 1.3,
+      'retail': 0.9,
+      'manufacturing': 1.0
+    };
+    
+    const base = sizeMultiplier[companySize] || 2500;
+    const multiplier = industryMultiplier[industry] || 1.0;
+    
+    return Math.ceil(base * multiplier);
+  }
+
+  // Identify required tools for growth levers
+  private identifyRequiredTools(levers: any[]): string[] {
+    const tools = new Set<string>();
+    
+    levers.forEach(lever => {
+      if (lever.category === 'marketing') {
+        tools.add('Analytics Platform');
+        tools.add('CRM System');
+      }
+      if (lever.category === 'process') {
+        tools.add('Project Management');
+        tools.add('Automation Tools');
+      }
+      if (lever.category === 'technology') {
+        tools.add('Development Tools');
+        tools.add('Cloud Services');
+      }
+    });
+    
+    return Array.from(tools);
+  }
+
+  // Identify required roles for growth levers
+  private identifyRequiredRoles(levers: any[]): string[] {
+    const roles = new Set<string>();
+    
+    levers.forEach(lever => {
+      if (lever.category === 'marketing') {
+        roles.add('Marketing Specialist');
+        roles.add('Data Analyst');
+      }
+      if (lever.category === 'process') {
+        roles.add('Process Manager');
+        roles.add('Operations Specialist');
+      }
+      if (lever.category === 'technology') {
+        roles.add('Developer');
+        roles.add('DevOps Engineer');
+      }
+    });
+    
+    return Array.from(roles);
   }
 }
 
