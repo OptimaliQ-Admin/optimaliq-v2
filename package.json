@@ -18,8 +18,10 @@
     "db:reset": "supabase db reset",
     "db:push": "supabase db push",
     "db:migrate": "supabase migration up",
-    "db:seed": "tsx scripts/seed.ts",
-    "db:test": "tsx scripts/test-db.ts"
+    "db:seed": "tsx scripts/complete-seed.ts",
+    "db:test": "tsx scripts/final-phase1-verification.ts",
+    "db:verify": "tsx scripts/final-phase1-verification.ts",
+    "db:gap-analysis": "tsx scripts/phase1-gap-analysis.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
