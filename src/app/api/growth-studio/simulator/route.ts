@@ -18,9 +18,9 @@ const GrowthSimulatorSchema = z.object({
       leverId: z.string().uuid(),
       action: z.enum(['activate', 'deactivate', 'modify']),
       modifications: z.object({
-        investment: z.number().min(0).optional(),
-        timeline: z.number().min(1).optional(),
-        teamSize: z.number().min(1).optional(),
+        investment: z.number().finite().min(0).optional(),
+        timeline: z.number().finite().min(1).optional(),
+        teamSize: z.number().finite().min(1).optional(),
         priority: z.enum(['low', 'medium', 'high']).optional(),
         riskLevel: z.enum(['low', 'medium', 'high']).optional()
       }).optional()
@@ -34,8 +34,8 @@ const GrowthSimulatorSchema = z.object({
     customFactors: z.array(z.object({
       name: z.string(),
       impact: z.enum(['positive', 'negative', 'neutral']),
-      magnitude: z.number().min(0).max(10),
-      probability: z.number().min(0).max(1)
+      magnitude: z.number().finite().min(0).max(10),
+      probability: z.number().finite().min(0).max(1)
     })).optional()
   }),
   includeDetailedAnalysis: z.boolean().default(true),
@@ -51,41 +51,41 @@ const GrowthSimulatorResponseSchema = z.object({
       name: z.string(),
       description: z.string().optional(),
       timeframe: z.string(),
-      totalInvestment: z.number(),
-      expectedROI: z.number(),
-      riskScore: z.number(),
-      confidence: z.number()
+      totalInvestment: z.number().finite(),
+      expectedROI: z.number().finite(),
+      riskScore: z.number().finite(),
+      confidence: z.number().finite()
     }),
     projections: z.object({
       revenue: z.object({
-        baseline: z.number(),
-        projected: z.number(),
-        growth: z.number(),
+        baseline: z.number().finite(),
+        projected: z.number().finite(),
+        growth: z.number().finite(),
         monthly: z.array(z.object({
           month: z.string(),
-          revenue: z.number(),
-          growth: z.number()
+          revenue: z.number().finite(),
+          growth: z.number().finite()
         }))
       }),
       users: z.object({
-        baseline: z.number(),
-        projected: z.number(),
-        growth: z.number(),
+        baseline: z.number().finite(),
+        projected: z.number().finite(),
+        growth: z.number().finite(),
         monthly: z.array(z.object({
           month: z.string(),
-          users: z.number(),
-          growth: z.number()
+          users: z.number().finite(),
+          growth: z.number().finite()
         }))
       }),
       marketShare: z.object({
-        baseline: z.number(),
-        projected: z.number(),
-        growth: z.number()
+        baseline: z.number().finite(),
+        projected: z.number().finite(),
+        growth: z.number().finite()
       }),
       profitability: z.object({
-        baseline: z.number(),
-        projected: z.number(),
-        improvement: z.number()
+        baseline: z.number().finite(),
+        projected: z.number().finite(),
+        improvement: z.number().finite()
       })
     }),
     leverAnalysis: z.array(z.object({
@@ -93,93 +93,93 @@ const GrowthSimulatorResponseSchema = z.object({
       name: z.string(),
       category: z.string(),
       impact: z.object({
-        revenue: z.number(),
-        users: z.number(),
-        marketShare: z.number(),
-        profitability: z.number(),
-        timeline: z.number()
+        revenue: z.number().finite(),
+        users: z.number().finite(),
+        marketShare: z.number().finite(),
+        profitability: z.number().finite(),
+        timeline: z.number().finite()
       }),
-      investment: z.number(),
+      investment: z.number().finite(),
       risk: z.enum(['low', 'medium', 'high']),
-      confidence: z.number(),
+      confidence: z.number().finite(),
       dependencies: z.array(z.string()),
       blockers: z.array(z.string())
     })),
     riskAssessment: z.object({
-      overallRisk: z.number(),
+      overallRisk: z.number().finite(),
       riskFactors: z.array(z.object({
         factor: z.string(),
-        probability: z.number(),
-        impact: z.number(),
+        probability: z.number().finite(),
+        impact: z.number().finite(),
         mitigation: z.string(),
-        cost: z.number()
+        cost: z.number().finite()
       })),
       riskCategories: z.object({
-        operational: z.number(),
-        financial: z.number(),
-        market: z.number(),
-        competitive: z.number(),
-        regulatory: z.number()
+        operational: z.number().finite(),
+        financial: z.number().finite(),
+        market: z.number().finite(),
+        competitive: z.number().finite(),
+        regulatory: z.number().finite()
       })
     }).optional(),
     resourceRequirements: z.object({
       financial: z.object({
-        totalInvestment: z.number(),
-        breakdown: z.record(z.number()),
+        totalInvestment: z.number().finite(),
+        breakdown: z.record(z.number().finite()),
         fundingSources: z.array(z.object({
           source: z.string(),
-          amount: z.number(),
+          amount: z.number().finite(),
           terms: z.string()
         }))
       }),
       human: z.object({
-        totalFTE: z.number(),
-        breakdown: z.record(z.number()),
+        totalFTE: z.number().finite(),
+        breakdown: z.record(z.number().finite()),
         skills: z.array(z.object({
           skill: z.string(),
           level: z.enum(['entry', 'mid', 'senior', 'expert']),
-          quantity: z.number(),
+          quantity: z.number().finite(),
           availability: z.enum(['readily_available', 'moderate', 'scarce'])
         }))
       }),
       technology: z.object({
         infrastructure: z.array(z.object({
           component: z.string(),
-          cost: z.number(),
-          timeline: z.number()
+          cost: z.number().finite(),
+          timeline: z.number().finite()
         })),
         software: z.array(z.object({
           tool: z.string(),
-          cost: z.number(),
+          cost: z.number().finite(),
           subscription: z.boolean()
         }))
       })
     }).optional(),
     sensitivityAnalysis: z.object({
       bestCase: z.object({
-        revenue: z.number(),
-        users: z.number(),
-        roi: z.number(),
-        probability: z.number()
+        revenue: z.number().finite(),
+        users: z.number().finite(),
+        roi: z.number().finite(),
+        probability: z.number().finite()
       }),
       worstCase: z.object({
-        revenue: z.number(),
-        users: z.number(),
-        roi: z.number(),
-        probability: z.number()
+        revenue: z.number().finite(),
+        users: z.number().finite(),
+        roi: z.number().finite(),
+        probability: z.number().finite()
       }),
       mostLikely: z.object({
-        revenue: z.number(),
-        users: z.number(),
-        roi: z.number(),
-        probability: z.number()
+        revenue: z.number().finite(),
+        users: z.number().finite(),
+        roi: z.number().finite(),
+        probability: z.number().finite()
       })
     }),
     recommendations: z.array(z.object({
       priority: z.enum(['critical', 'high', 'medium', 'low']),
       category: z.string(),
       action: z.string(),
-      impact: z.number(),
+      impact: z.number().finite(),
       effort: z.enum(['low', 'medium', 'high']),
       timeline: z.string(),
       dependencies: z.array(z.string()),
@@ -188,7 +188,7 @@ const GrowthSimulatorResponseSchema = z.object({
     timeline: z.object({
       phases: z.array(z.object({
         phase: z.string(),
-        duration: z.number(),
+        duration: z.number().finite(),
         milestones: z.array(z.object({
           name: z.string(),
           date: z.string(),
@@ -199,7 +199,7 @@ const GrowthSimulatorResponseSchema = z.object({
         resources: z.array(z.string())
       })),
       criticalPath: z.array(z.string()),
-      totalDuration: z.number()
+      totalDuration: z.number().finite()
     })
   }).optional(),
   message: z.string().optional()

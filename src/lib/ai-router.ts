@@ -1,5 +1,11 @@
 import OpenAI from 'openai';
 import { AppError } from '@/utils';
+import { anthropicProvider } from '@/lib/ai/providers/anthropic';
+import { googleVertexProvider } from '@/lib/ai/providers/google-vertex';
+import { mistralProvider } from '@/lib/ai/providers/mistral';
+import { env } from '@/lib/env';
+import { telemetryService, TelemetryTimer } from '@/lib/ai/telemetry/telemetry-service';
+import { strategyEngine, StrategyContext } from '@/lib/ai/engines/strategy-engine';
 
 // AI Provider Configuration
 export interface AIProviderConfig {
@@ -21,6 +27,9 @@ export interface AIRequest {
   task: AITask;
   priority: 'low' | 'medium' | 'high';
   budget?: number;
+  strategy?: string;
+  context?: StrategyContext;
+  telemetryEnabled?: boolean;
 }
 
 export interface AIResponse {
@@ -31,6 +40,10 @@ export interface AIResponse {
   cost: number;
   latency: number;
   timestamp: Date;
+  confidence?: number;
+  quality?: number;
+  strategyUsed?: string;
+  telemetryId?: string;
 }
 
 export enum AITask {
@@ -71,10 +84,10 @@ export class AIModelRouter {
   
   private initializeProviders(): void {
     // OpenAI Configuration
-    if (process.env.OPENAI_API_KEY) {
+    if (env.OPENAI_API_KEY) {
       this.providers.set(AIProvider.OPENAI, {
         provider: AIProvider.OPENAI,
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: env.OPENAI_API_KEY,
         model: 'gpt-4',
         maxTokens: 8192,
         costPerToken: 0.00003, // $0.03 per 1K tokens
@@ -82,7 +95,8 @@ export class AIModelRouter {
           AITask.TEXT_GENERATION,
           AITask.REASONING,
           AITask.CREATIVE,
-          AITask.ANALYSIS
+          AITask.ANALYSIS,
+          AITask.EMBEDDINGS
         ],
         isActive: true,
         priority: 1
@@ -90,35 +104,37 @@ export class AIModelRouter {
     }
     
     // Anthropic Configuration
-    if (process.env.ANTHROPIC_API_KEY) {
+    if (env.ANTHROPIC_API_KEY) {
       this.providers.set(AIProvider.ANTHROPIC, {
         provider: AIProvider.ANTHROPIC,
-        apiKey: process.env.ANTHROPIC_API_KEY,
+        apiKey: env.ANTHROPIC_API_KEY,
         model: 'claude-3-sonnet-20240229',
         maxTokens: 4096,
         costPerToken: 0.000015, // $0.015 per 1K tokens
         capabilities: [
           AITask.TEXT_GENERATION,
           AITask.REASONING,
-          AITask.ANALYSIS
+          AITask.ANALYSIS,
+          AITask.CREATIVE
         ],
         isActive: true,
         priority: 2
       });
     }
     
-    // Google Configuration
-    if (process.env.GOOGLE_API_KEY) {
+    // Google Vertex AI Configuration
+    if (env.VERTEX_PROJECT_ID) {
       this.providers.set(AIProvider.GOOGLE, {
         provider: AIProvider.GOOGLE,
-        apiKey: process.env.GOOGLE_API_KEY,
-        model: 'gemini-pro',
+        apiKey: env.VERTEX_PROJECT_ID,
+        model: 'gemini-1.5-pro',
         maxTokens: 8192,
-        costPerToken: 0.00001, // $0.01 per 1K tokens
+        costPerToken: 0.0035, // $0.0035 per 1K tokens
         capabilities: [
           AITask.TEXT_GENERATION,
           AITask.REASONING,
-          AITask.ANALYSIS
+          AITask.ANALYSIS,
+          AITask.EMBEDDINGS
         ],
         isActive: true,
         priority: 3
@@ -126,17 +142,19 @@ export class AIModelRouter {
     }
     
     // Mistral Configuration
-    if (process.env.MISTRAL_API_KEY) {
+    if (env.MISTRAL_API_KEY) {
       this.providers.set(AIProvider.MISTRAL, {
         provider: AIProvider.MISTRAL,
-        apiKey: process.env.MISTRAL_API_KEY,
+        apiKey: env.MISTRAL_API_KEY,
         model: 'mistral-large-latest',
         maxTokens: 32768,
-        costPerToken: 0.000007, // $0.007 per 1K tokens
+        costPerToken: 0.000008, // $0.008 per 1K tokens
         capabilities: [
           AITask.TEXT_GENERATION,
           AITask.REASONING,
-          AITask.ANALYSIS
+          AITask.ANALYSIS,
+          AITask.EMBEDDINGS,
+          AITask.CREATIVE
         ],
         isActive: true,
         priority: 4
@@ -207,6 +225,30 @@ export class AIModelRouter {
   // Execute AI request with the best provider
   async execute(request: AIRequest): Promise<AIResponse> {
     const startTime = Date.now();
+    let timer: TelemetryTimer | null = null;
+    
+    // Initialize telemetry if enabled
+    if (request.telemetryEnabled !== false) {
+      timer = telemetryService.startTiming(`ai.${request.task}`);
+      timer.addMetadata('prompt_length', request.prompt.length);
+      timer.addMetadata('task', request.task);
+      timer.addMetadata('priority', request.priority);
+    }
+    
+    // Select strategy if specified
+    let strategyResult = null;
+    if (request.strategy && request.context) {
+      try {
+        strategyResult = await strategyEngine.executeStrategy(
+          request.strategy,
+          request.context,
+          'state'
+        );
+      } catch (error) {
+        console.warn('Strategy execution failed, continuing with default:', error);
+      }
+    }
+    
     const selectedProvider = this.selectProvider(request);
     
     try {
@@ -240,6 +282,29 @@ export class AIModelRouter {
         cost: response.cost
       });
       
+      // Add strategy and telemetry information
+      response.strategyUsed = request.strategy;
+      response.confidence = strategyResult?.confidence;
+      response.quality = strategyResult?.quality;
+      
+      // Complete telemetry logging
+      if (timer) {
+        response.telemetryId = `tel_${Date.now()}`;
+        await timer.end({
+          content_length: response.content.length,
+          tokens_used: response.tokensUsed,
+          provider: response.provider,
+          model: response.model
+        }, {
+          confidence: response.confidence,
+          quality: response.quality,
+          success: true,
+          cost: response.cost,
+          provider: response.provider,
+          model: response.model
+        });
+      }
+      
       return response;
       
     } catch (error) {
@@ -249,6 +314,15 @@ export class AIModelRouter {
         latency: Date.now() - startTime,
         cost: 0
       });
+      
+      // Complete telemetry logging for failure
+      if (timer) {
+        await timer.end(null, {
+          success: false,
+          errorMessage: error instanceof Error ? error.message : 'Unknown error',
+          provider: selectedProvider.provider
+        });
+      }
       
       // Try fallback provider if available
       return this.executeWithFallback(request, selectedProvider.provider);
@@ -284,36 +358,75 @@ export class AIModelRouter {
   }
   
   // Anthropic execution
-  private async executeAnthropic(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
-    // Note: This is a placeholder. You'll need to install @anthropic-ai/sdk
-    // and implement the actual Anthropic API call
-    throw new AppError(
-      'Anthropic integration not yet implemented',
-      'AI_PROVIDER_NOT_IMPLEMENTED',
-      501
-    );
+  private async executeAnthropic(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    const startTime = Date.now();
+    
+    const response = await anthropicProvider.generateCompletion({
+      prompt: request.prompt,
+      model: config.model,
+      maxTokens: request.maxTokens || config.maxTokens,
+      temperature: request.temperature || 0.7,
+    });
+    
+    const cost = response.usage.totalTokens * config.costPerToken;
+    
+    return {
+      content: response.text,
+      provider: AIProvider.ANTHROPIC,
+      model: response.model,
+      tokensUsed: response.usage.totalTokens,
+      cost,
+      latency: Date.now() - startTime,
+      timestamp: new Date()
+    };
   }
   
   // Google execution
-  private async executeGoogle(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
-    // Note: This is a placeholder. You'll need to install @google/generative-ai
-    // and implement the actual Google API call
-    throw new AppError(
-      'Google AI integration not yet implemented',
-      'AI_PROVIDER_NOT_IMPLEMENTED',
-      501
-    );
+  private async executeGoogle(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    const startTime = Date.now();
+    
+    const response = await googleVertexProvider.generateCompletion({
+      prompt: request.prompt,
+      model: config.model,
+      maxTokens: request.maxTokens || config.maxTokens,
+      temperature: request.temperature || 0.7,
+    });
+    
+    const cost = response.usage.totalTokens * config.costPerToken;
+    
+    return {
+      content: response.text,
+      provider: AIProvider.GOOGLE,
+      model: response.model,
+      tokensUsed: response.usage.totalTokens,
+      cost,
+      latency: Date.now() - startTime,
+      timestamp: new Date()
+    };
   }
   
   // Mistral execution
-  private async executeMistral(_request: AIRequest, _config: AIProviderConfig): Promise<AIResponse> {
-    // Note: This is a placeholder. You'll need to install mistralai
-    // and implement the actual Mistral API call
-    throw new AppError(
-      'Mistral integration not yet implemented',
-      'AI_PROVIDER_NOT_IMPLEMENTED',
-      501
-    );
+  private async executeMistral(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    const startTime = Date.now();
+    
+    const response = await mistralProvider.generateCompletion({
+      prompt: request.prompt,
+      model: config.model,
+      maxTokens: request.maxTokens || config.maxTokens,
+      temperature: request.temperature || 0.7,
+    });
+    
+    const cost = response.usage.totalTokens * config.costPerToken;
+    
+    return {
+      content: response.text,
+      provider: AIProvider.MISTRAL,
+      model: response.model,
+      tokensUsed: response.usage.totalTokens,
+      cost,
+      latency: Date.now() - startTime,
+      timestamp: new Date()
+    };
   }
   
   // Fallback execution with alternative provider

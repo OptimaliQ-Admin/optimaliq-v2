@@ -23,7 +23,7 @@ const buttonVariants = cva(
         success: "bg-green-600 text-white hover:bg-green-700",
         warning: "bg-yellow-600 text-white hover:bg-yellow-700",
         info: "bg-blue-600 text-white hover:bg-blue-700",
-        glass: "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20",
+
         gradient: "bg-gradient-to-r from-primary to-primary/80 text-white hover:from-primary/90 hover:to-primary/70",
       },
       size: {

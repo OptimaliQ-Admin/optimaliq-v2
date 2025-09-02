@@ -22,8 +22,8 @@ const UserSearchSchema = z.object({
   lastActiveBefore: z.string().datetime().optional(),
   sortBy: z.enum(['name', 'email', 'role', 'department', 'joinedDate', 'lastActive']).default('name'),
   sortOrder: z.enum(['asc', 'desc']).default('asc'),
-  page: z.number().min(1).default(1),
-  limit: z.number().min(1).max(100).default(20)
+  page: z.number().finite().min(1).default(1),
+  limit: z.number().finite().min(1).max(100).default(20)
 });
 
 // Response schema
@@ -44,14 +44,14 @@ const UserSearchResponseSchema = z.object({
     joinedDate: z.string(),
     lastActive: z.string().optional(),
     organizationName: z.string().optional(),
-    assessmentCount: z.number(),
-    averageScore: z.number().optional()
+    assessmentCount: z.number().finite(),
+    averageScore: z.number().finite().optional()
   })),
   pagination: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    totalPages: z.number(),
+    page: z.number().finite(),
+    limit: z.number().finite(),
+    total: z.number().finite(),
+    totalPages: z.number().finite(),
     hasNext: z.boolean(),
     hasPrevious: z.boolean()
   }),

@@ -55,7 +55,7 @@ export const AuthResponseSchema = z.object({
   session: z.object({
     access_token: z.string(),
     refresh_token: z.string(),
-    expires_at: z.number(),
+    expires_at: z.number().finite(),
     user: z.any()
   }).optional(),
   message: z.string().optional(),

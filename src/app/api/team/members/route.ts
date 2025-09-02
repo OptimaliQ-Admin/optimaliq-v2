@@ -31,10 +31,10 @@ const TeamMembersResponseSchema = z.object({
   success: z.boolean(),
   data: z.array(TeamMemberSchema),
   metadata: z.object({
-    totalMembers: z.number(),
-    activeMembers: z.number(),
-    departmentBreakdown: z.record(z.number()),
-    roleBreakdown: z.record(z.number())
+    totalMembers: z.number().finite(),
+    activeMembers: z.number().finite(),
+    departmentBreakdown: z.record(z.number().finite()),
+    roleBreakdown: z.record(z.number().finite())
   }),
   message: z.string().optional()
 });

@@ -10,13 +10,13 @@ const DashboardResponseSchema = z.object({
   success: z.boolean(),
   data: z.object({
     scores: z.object({
-      overall: z.number(),
-      strategy: z.number(),
-      process: z.number(),
-      technology: z.number(),
-      bmpScore: z.number().optional(),
-      salesScore: z.number().optional(),
-      aiReadinessScore: z.number().optional()
+      overall: z.number().finite(),
+      strategy: z.number().finite(),
+      process: z.number().finite(),
+      technology: z.number().finite(),
+      bmpScore: z.number().finite().optional(),
+      salesScore: z.number().finite().optional(),
+      aiReadinessScore: z.number().finite().optional()
     }),
     insights: z.object({
       roadmap: z.array(z.object({
@@ -24,32 +24,32 @@ const DashboardResponseSchema = z.object({
         title: z.string(),
         description: z.string(),
         category: z.string(),
-        priority: z.number(),
-        effort: z.number(),
-        timeline: z.number(),
+        priority: z.number().finite(),
+        effort: z.number().finite(),
+        timeline: z.number().finite(),
         dependencies: z.array(z.string()),
         isCompleted: z.boolean()
       })),
       benchmarks: z.array(z.object({
         category: z.string(),
-        userScore: z.number(),
-        industryAverage: z.number(),
-        topPerformers: z.number(),
-        percentile: z.number()
+        userScore: z.number().finite(),
+        industryAverage: z.number().finite(),
+        topPerformers: z.number().finite(),
+        percentile: z.number().finite()
       })),
       trends: z.array(z.object({
         category: z.string(),
         direction: z.enum(['up', 'down', 'stable']),
-        magnitude: z.number(),
-        confidence: z.number(),
+        magnitude: z.number().finite(),
+        confidence: z.number().finite(),
         description: z.string()
       }))
     }),
     lastAssessment: z.object({
       date: z.string(),
       type: z.string(),
-      score: z.number(),
-      daysAgo: z.number()
+      score: z.number().finite(),
+      daysAgo: z.number().finite()
     }).optional(),
     needsReassessment: z.boolean()
   }),

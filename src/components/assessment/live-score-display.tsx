@@ -99,7 +99,7 @@ export function LiveScoreDisplay({
       {/* Overall Score Card */}
       <motion.div variants={scoreVariants} initial="initial" animate="animate">
         <Card className="relative overflow-hidden bg-gradient-primary text-white">
-          <div className="absolute inset-0 bg-gradient-glass opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 opacity-20" />
           <CardHeader className="relative">
             <div className="flex items-center justify-between">
               <CardTitle className="text-white/90">Overall Score</CardTitle>

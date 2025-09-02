@@ -106,7 +106,7 @@ export type RealtimeEvent =
 // Real-time subscription manager
 export class RealtimeManager {
   private channels: Map<string, RealtimeChannel> = new Map();
-  private listeners: Map<string, Set<(event: RealtimeEvent) => void>> = new Map();
+  private listeners: Map<string, Set<(_event: RealtimeEvent) => void>> = new Map();
 
   /**
    * Subscribe to real-time events for a specific organization
@@ -114,7 +114,7 @@ export class RealtimeManager {
   subscribeToOrganization(
     organizationId: string,
     eventTypes: RealtimeEventType[],
-    callback: (event: RealtimeEvent) => void
+    callback: (_event: RealtimeEvent) => void
   ): () => void {
     const channelName = `org:${organizationId}`;
     
@@ -165,7 +165,7 @@ export class RealtimeManager {
    */
   subscribeToUser(
     userId: string,
-    callback: (event: RealtimeEvent) => void
+    callback: (_event: RealtimeEvent) => void
   ): () => void {
     const channelName = `user:${userId}`;
     
@@ -280,7 +280,7 @@ export const realtimeManager = new RealtimeManager();
 // Convenience hooks for common use cases
 export const useRealtimeDashboard = (
   organizationId: string,
-  callback: (event: DashboardUpdateEvent) => void
+  callback: (_event: DashboardUpdateEvent) => void
 ) => {
   return realtimeManager.subscribeToOrganization(
     organizationId,
@@ -295,7 +295,7 @@ export const useRealtimeDashboard = (
 
 export const useRealtimeTeamActivity = (
   organizationId: string,
-  callback: (event: TeamActivityEvent) => void
+  callback: (_event: TeamActivityEvent) => void
 ) => {
   return realtimeManager.subscribeToOrganization(
     organizationId,
@@ -310,7 +310,7 @@ export const useRealtimeTeamActivity = (
 
 export const useRealtimeMarketIntelligence = (
   organizationId: string,
-  callback: (event: MarketIntelligenceEvent) => void
+  callback: (_event: MarketIntelligenceEvent) => void
 ) => {
   return realtimeManager.subscribeToOrganization(
     organizationId,

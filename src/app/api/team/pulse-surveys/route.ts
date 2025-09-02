@@ -25,7 +25,7 @@ const CreatePulseSurveySchema = z.object({
     responseDeadline: z.string().datetime().optional(),
     reminderFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
     autoClose: z.boolean().default(true),
-    closeAfterDays: z.number().min(1).max(90).optional()
+    closeAfterDays: z.number().finite().min(1).max(90).optional()
   }).optional(),
   targetAudience: z.object({
     allMembers: z.boolean().default(true),
@@ -39,12 +39,12 @@ const SubmitPulseResponseSchema = z.object({
   surveyId: z.string().uuid(),
   responses: z.array(z.object({
     questionId: z.string().uuid(),
-    answer: z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]),
-    confidence: z.number().min(1).max(5).optional(),
+    answer: z.union([z.string(), z.number().finite(), z.boolean(), z.array(z.string())]),
+    confidence: z.number().finite().min(1).max(5).optional(),
     additionalComments: z.string().optional()
   })),
   metadata: z.object({
-    completionTime: z.number().optional(),
+    completionTime: z.number().finite().optional(),
     deviceType: z.string().optional(),
     location: z.string().optional()
   }).optional()
@@ -60,9 +60,9 @@ const PulseSurveyResponseSchema = z.object({
     status: z.enum(['draft', 'active', 'paused', 'closed']),
     createdAt: z.string(),
     updatedAt: z.string(),
-    responseCount: z.number(),
-    completionRate: z.number(),
-    averageScore: z.number().optional(),
+    responseCount: z.number().finite(),
+    completionRate: z.number().finite(),
+    averageScore: z.number().finite().optional(),
     questions: z.array(z.object({
       id: z.string(),
       text: z.string(),
@@ -70,8 +70,8 @@ const PulseSurveyResponseSchema = z.object({
       options: z.array(z.string()).optional(),
       required: z.boolean(),
       category: z.string().optional(),
-      responseCount: z.number(),
-      averageScore: z.number().optional()
+      responseCount: z.number().finite(),
+      averageScore: z.number().finite().optional()
     })),
     settings: z.object({
       anonymous: z.boolean(),
@@ -79,7 +79,7 @@ const PulseSurveyResponseSchema = z.object({
       responseDeadline: z.string().optional(),
       reminderFrequency: z.string().optional(),
       autoClose: z.boolean(),
-      closeAfterDays: z.number().optional()
+      closeAfterDays: z.number().finite().optional()
     }).optional(),
     targetAudience: z.object({
       allMembers: z.boolean(),
@@ -98,15 +98,15 @@ const PulseSurveyListResponseSchema = z.object({
     title: z.string(),
     status: z.string(),
     createdAt: z.string(),
-    responseCount: z.number(),
-    completionRate: z.number(),
-    averageScore: z.number().optional()
+    responseCount: z.number().finite(),
+    completionRate: z.number().finite(),
+    averageScore: z.number().finite().optional()
   })),
   pagination: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    totalPages: z.number()
+    page: z.number().finite(),
+    limit: z.number().finite(),
+    total: z.number().finite(),
+    totalPages: z.number().finite()
   }).optional(),
   message: z.string().optional()
 });

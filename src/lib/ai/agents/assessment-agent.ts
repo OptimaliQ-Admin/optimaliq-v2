@@ -5,33 +5,33 @@ import { AppError } from '@/utils';
 
 // Assessment Agent Response Schema
 const AssessmentResponseSchema = z.object({
-  overallScore: z.number().min(0).max(10),
-  strategyScore: z.number().min(0).max(10),
-  processScore: z.number().min(0).max(10),
-  technologyScore: z.number().min(0).max(10),
+  overallScore: z.number().finite().min(0).max(10),
+  strategyScore: z.number().finite().min(0).max(10),
+  processScore: z.number().finite().min(0).max(10),
+  technologyScore: z.number().finite().min(0).max(10),
   breakdown: z.object({
     strengths: z.array(z.string()),
     weaknesses: z.array(z.string()),
     recommendations: z.array(z.string()),
-    categoryScores: z.record(z.number())
+    categoryScores: z.record(z.number().finite())
   }),
   roadmap: z.array(z.object({
     id: z.string(),
     title: z.string(),
     description: z.string(),
     category: z.string(),
-    priority: z.number(),
-    effort: z.number(),
-    timeline: z.number(),
+    priority: z.number().finite(),
+    effort: z.number().finite(),
+    timeline: z.number().finite(),
     dependencies: z.array(z.string()),
     isCompleted: z.boolean().default(false)
   })),
   benchmarks: z.array(z.object({
     category: z.string(),
-    userScore: z.number(),
-    industryAverage: z.number(),
-    topPerformers: z.number(),
-    percentile: z.number()
+    userScore: z.number().finite(),
+    industryAverage: z.number().finite(),
+    topPerformers: z.number().finite(),
+    percentile: z.number().finite()
   }))
 });
 
@@ -156,9 +156,9 @@ export class AssessmentAgent extends BaseAgent {
           title: z.string(),
           description: z.string(),
           category: z.string(),
-          priority: z.number(),
-          effort: z.number(),
-          timeline: z.number()
+          priority: z.number().finite(),
+          effort: z.number().finite(),
+          timeline: z.number().finite()
         }))
       }));
 

@@ -220,7 +220,7 @@ export function HeroSection() {
           >
             {/* Main Dashboard Card */}
             <div className="relative">
-              <Card className="glass-card border-0 shadow-2xl overflow-hidden">
+              <Card className="bg-white/10 backdrop-blur-md border-white/20 border-0 shadow-2xl overflow-hidden">
                 <CardContent className="p-6">
                   {/* Dashboard Header */}
                   <div className="flex items-center justify-between mb-6">

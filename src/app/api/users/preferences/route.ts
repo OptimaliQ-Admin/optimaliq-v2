@@ -23,7 +23,7 @@ const UpdatePreferencesSchema = z.object({
   timezone: z.string().default('UTC').optional(),
   dashboard: z.object({
     defaultView: z.enum(['overview', 'assessments', 'growth', 'team']).default('overview'),
-    refreshInterval: z.number().min(30).max(300).default(60), // seconds
+    refreshInterval: z.number().finite().min(30).max(300).default(60), // seconds
     showAnimations: z.boolean().default(true),
     compactMode: z.boolean().default(false)
   }).optional(),
@@ -52,7 +52,7 @@ const PreferencesResponseSchema = z.object({
     timezone: z.string(),
     dashboard: z.object({
       defaultView: z.enum(['overview', 'assessments', 'growth', 'team']),
-      refreshInterval: z.number(),
+      refreshInterval: z.number().finite(),
       showAnimations: z.boolean(),
       compactMode: z.boolean()
     }),

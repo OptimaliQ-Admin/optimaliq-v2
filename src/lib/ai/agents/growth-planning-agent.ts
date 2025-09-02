@@ -10,34 +10,34 @@ const GrowthPlanningResponseSchema = z.object({
     title: z.string(),
     description: z.string(),
     category: z.string(),
-    impact: z.number().min(0).max(10),
-    effort: z.number().min(0).max(10),
-    priority: z.number().min(0).max(10),
-    timeline: z.number().min(1).max(12),
+    impact: z.number().finite().min(0).max(10),
+    effort: z.number().finite().min(0).max(10),
+    priority: z.number().finite().min(0).max(10),
+    timeline: z.number().finite().min(1).max(12),
     dependencies: z.array(z.string()).default([])
   })),
   scenarios: z.array(z.object({
     name: z.string(),
     description: z.string(),
-    projectedGrowth: z.number(),
-    confidence: z.number().min(0).max(1),
+    projectedGrowth: z.number().finite(),
+    confidence: z.number().finite().min(0).max(1),
     assumptions: z.array(z.string())
   })),
   milestones: z.array(z.object({
     title: z.string(),
     description: z.string(),
     targetDate: z.string(),
-    metrics: z.record(z.number()),
+    metrics: z.record(z.number().finite()),
     dependencies: z.array(z.string())
   })),
   riskAssessment: z.object({
     risks: z.array(z.object({
       risk: z.string(),
-      probability: z.number().min(0).max(1),
-      impact: z.number().min(0).max(10),
+      probability: z.number().finite().min(0).max(1),
+      impact: z.number().finite().min(0).max(10),
       mitigation: z.string()
     })),
-    overallRiskScore: z.number().min(0).max(10)
+    overallRiskScore: z.number().finite().min(0).max(10)
   })
 });
 
@@ -69,7 +69,7 @@ export class GrowthPlanningAgent extends BaseAgent {
       description: 'Retrieve historical assessment and growth data',
       parameters: z.object({
         userId: z.string(),
-        months: z.number().default(12)
+        months: z.number().finite().default(12)
       }),
       execute: async (params) => {
         try {
@@ -177,28 +177,28 @@ export class GrowthPlanningAgent extends BaseAgent {
           title: z.string(),
           description: z.string(),
           category: z.string(),
-          impact: z.number(),
-          effort: z.number(),
-          priority: z.number(),
-          timeline: z.number()
+          impact: z.number().finite(),
+          effort: z.number().finite(),
+          priority: z.number().finite(),
+          timeline: z.number().finite()
         })),
         scenarios: z.array(z.object({
           name: z.string(),
           description: z.string(),
-          projectedGrowth: z.number(),
-          confidence: z.number(),
+          projectedGrowth: z.number().finite(),
+          confidence: z.number().finite(),
           assumptions: z.array(z.string())
         })),
         milestones: z.array(z.object({
           title: z.string(),
           description: z.string(),
           targetDate: z.string(),
-          metrics: z.record(z.number())
+          metrics: z.record(z.number().finite())
         })),
         risks: z.array(z.object({
           risk: z.string(),
-          probability: z.number(),
-          impact: z.number(),
+          probability: z.number().finite(),
+          impact: z.number().finite(),
           mitigation: z.string()
         }))
       }));

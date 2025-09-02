@@ -219,8 +219,6 @@ const config: Config = {
       },
       // Box Shadows for Elevation
       boxShadow: {
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.1)',
-        'glass-lg': '0 16px 64px rgba(0, 0, 0, 0.15)',
         'elevation-1': '0 1px 3px rgba(0, 0, 0, 0.1)',
         'elevation-2': '0 4px 6px rgba(0, 0, 0, 0.1)',
         'elevation-3': '0 10px 15px rgba(0, 0, 0, 0.1)',
@@ -232,7 +230,6 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'gradient-primary': 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-        'gradient-glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
       },
     },
   },
@@ -240,23 +237,7 @@ const config: Config = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
-    function({ addUtilities }: any) {
-      addUtilities({
-        '.glass': {
-          background: 'rgba(255, 255, 255, 0.1)',
-          'backdrop-filter': 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.1)'
-        },
-        '.glass-card': {
-          background: 'rgba(255, 255, 255, 0.1)',
-          'backdrop-filter': 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.1)',
-          'border-radius': '0.75rem'
-        }
-      });
-    }
+
   ],
 } satisfies Config;
 

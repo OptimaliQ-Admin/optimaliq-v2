@@ -17,7 +17,7 @@ const cardVariants = cva(
         elevated: "bg-card border-border shadow-lg",
         outlined: "bg-transparent border-border",
         filled: "bg-muted/50 border-muted",
-        glass: "bg-white/10 backdrop-blur-md border-white/20 text-white",
+
         gradient: "bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20",
         interactive: "bg-card border-border hover:shadow-md transition-all duration-200 cursor-pointer",
         success: "bg-green-50 border-green-200 text-green-900 dark:bg-green-950 dark:border-green-800 dark:text-green-100",
@@ -69,7 +69,6 @@ export interface CardProps
   onClick?: () => void
   disabled?: boolean
   animated?: boolean
-  glass?: boolean
   gradient?: boolean
   status?: 'success' | 'warning' | 'error' | 'info'
   elevation?: 'none' | 'sm' | 'default' | 'lg' | 'xl' | '2xl'
@@ -89,7 +88,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     onClick,
     disabled = false,
     animated = false,
-    glass = false,
     gradient = false,
     status,
     elevation,
@@ -98,7 +96,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   }, ref) => {
     // Determine variant based on props
     let finalVariant = variant
-    if (glass) finalVariant = 'glass'
     if (gradient) finalVariant = 'gradient'
     if (status) finalVariant = status
     if (interactive || clickable) finalVariant = 'interactive'

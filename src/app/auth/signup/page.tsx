@@ -109,7 +109,7 @@ export default function SignUpPage() {
       animate="animate"
       className="w-full max-w-2xl mx-auto"
     >
-      <Card className="glass-card border-0 shadow-2xl">
+              <Card className="bg-white/10 backdrop-blur-md border-white/20 border-0 shadow-2xl">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Create Your Account</CardTitle>
           <p className="text-muted-foreground">

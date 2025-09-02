@@ -19,7 +19,7 @@ const inputVariants = cva(
         warning: "border-yellow-500 focus-visible:ring-yellow-500",
         ghost: "border-transparent bg-transparent",
         filled: "bg-muted/50 border-muted",
-        glass: "bg-white/10 backdrop-blur-md border-white/20 text-white placeholder:text-white/60",
+
       },
       size: {
         default: "h-10 px-3 py-2",

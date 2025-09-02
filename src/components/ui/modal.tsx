@@ -24,7 +24,7 @@ const modalVariants = cva(
     variants: {
       variant: {
         default: "bg-background border-border",
-        glass: "bg-white/10 backdrop-blur-md border-white/20 text-white",
+
         dark: "bg-gray-900 border-gray-700 text-white",
         light: "bg-white border-gray-200 text-gray-900",
       },
@@ -75,7 +75,7 @@ export interface ModalProps
   loading?: boolean
   loadingText?: string
   size?: 'sm' | 'default' | 'lg' | 'xl' | 'full'
-  variant?: 'default' | 'glass' | 'dark' | 'light'
+  variant?: 'default' | 'dark' | 'light'
   rounded?: 'default' | 'none' | 'lg' | 'xl'
   animated?: boolean
   preventScroll?: boolean
