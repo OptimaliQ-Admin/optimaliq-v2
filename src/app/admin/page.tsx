@@ -9,7 +9,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { 
-  Shield, Users, Settings, Database, Activity, BarChart3,
+  Shield, Users, Settings, Database, Activity,
   AlertTriangle, CheckCircle, XCircle, Clock, TrendingUp,
   TrendingDown, Eye, Edit, Trash, Plus, Search, Filter,
   Download, Upload, RefreshCw, Globe, Building, Star,
