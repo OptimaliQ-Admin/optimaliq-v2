@@ -266,7 +266,7 @@ export default function ChatInterface() {
 
         {/* Progress Bar */}
         <Section className="mb-6">
-          <Card className="bg-white/10 backdrop-blur-md border-white/20" className="p-4">
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 p-4">
             <div className="space-y-2">
               <Flex justify="between" align="center">
                 <span className="text-sm font-medium text-gray-700">
@@ -283,7 +283,7 @@ export default function ChatInterface() {
 
         {/* Chat Messages */}
         <Section className="mb-6">
-          <Card className="bg-white/10 backdrop-blur-md border-white/20" className="p-6 h-96 overflow-hidden">
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 p-6 h-96 overflow-hidden">
             <div className="h-full flex flex-col">
               {/* Messages Container */}
               <div className="flex-1 overflow-y-auto space-y-4 mb-4">
@@ -352,7 +352,7 @@ export default function ChatInterface() {
 
         {/* Input Area */}
         <Section>
-          <Card className="bg-white/10 backdrop-blur-md border-white/20" className="p-4">
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 p-4">
             <Flex gap="md" align="center">
               <div className="flex-1">
                 <Input

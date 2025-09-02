@@ -8,6 +8,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   Shield,
   Smartphone,
@@ -333,9 +334,11 @@ export default function TwoFactorAuthPage() {
                   <div className="text-center mb-8">
                     <h3 className="font-semibold mb-4">Scan QR Code</h3>
                     <div className="inline-block p-4 bg-white rounded-lg mb-4">
-                      <img 
+                      <Image 
                         src={twoFAData.qrCode} 
                         alt="QR Code for 2FA setup"
+                        width={192}
+                        height={192}
                         className="w-48 h-48"
                       />
                     </div>
@@ -385,7 +388,6 @@ export default function TwoFactorAuthPage() {
                     placeholder="000000"
                     className="text-center text-lg tracking-widest"
                     maxLength={6}
-                    autoFocus
                   />
                 </div>
 

@@ -51,12 +51,12 @@ const companyData = {
     {
       icon: <Shield className="h-8 w-8" />,
       title: 'Trust & Security',
-      description: 'We maintain the highest standards of data security and privacy to protect our clients\' information.'
+      description: 'We maintain the highest standards of data security and privacy to protect our clients&apos; information.'
     },
     {
       icon: <Rocket className="h-8 w-8" />,
       title: 'Innovation',
-      description: 'We continuously push the boundaries of what\'s possible with AI and business intelligence.'
+      description: 'We continuously push the boundaries of what&apos;s possible with AI and business intelligence.'
     }
   ],
   team: [
@@ -178,7 +178,7 @@ export default function AboutPage() {
               <span className="text-primary">AI-Driven Intelligence</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              We're on a mission to democratize business intelligence and strategic planning through advanced AI technology, 
+              We&apos;re on a mission to democratize business intelligence and strategic planning through advanced AI technology, 
               helping organizations of all sizes achieve their full potential.
             </p>
           </motion.div>
@@ -274,7 +274,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 gap-8">
             {companyData.values.map((value, index) => (
               <motion.div
-                key={index}
+                key={`value-${value.title}-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -314,7 +314,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 gap-8">
             {companyData.team.map((member, index) => (
               <motion.div
-                key={index}
+                key={`member-${member.name}-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -372,7 +372,7 @@ export default function AboutPage() {
           <div className="space-y-8">
             {companyData.milestones.map((milestone, index) => (
               <motion.div
-                key={index}
+                key={`milestone-${milestone.year}-${index}`}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -414,7 +414,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 gap-8">
             {companyData.testimonials.map((testimonial, index) => (
               <motion.div
-                key={index}
+                key={`testimonial-${testimonial.author}-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}

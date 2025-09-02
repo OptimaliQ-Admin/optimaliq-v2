@@ -1,3 +1,4 @@
+import React from 'react';
 import { Metadata } from 'next';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 
