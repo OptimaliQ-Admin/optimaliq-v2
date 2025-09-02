@@ -34,8 +34,18 @@ export default function EmailVerificationPage() {
   const [countdown, setCountdown] = React.useState(0)
 
   // Get verification token and email from URL (in real app)
-  const [verificationToken] = React.useState(new URLSearchParams(window.location.search).get('token'))
-  const [emailParam] = React.useState(new URLSearchParams(window.location.search).get('email'))
+  const [verificationToken] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('token')
+    }
+    return null
+  })
+  const [emailParam] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('email')
+    }
+    return null
+  })
 
   React.useEffect(() => {
     if (emailParam) {
@@ -72,7 +82,9 @@ export default function EmailVerificationPage() {
         setVerificationStatus('success')
         // In real app, redirect to dashboard or onboarding
         setTimeout(() => {
-          window.location.href = '/auth/login?message=email-verified'
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/login?message=email-verified'
+          }
         }, 3000)
       } else {
         setVerificationStatus('error')

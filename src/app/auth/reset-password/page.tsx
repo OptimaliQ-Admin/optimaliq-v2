@@ -40,7 +40,12 @@ export default function PasswordResetPage() {
   const [error, setError] = React.useState('')
 
   // Get reset token from URL (in real app)
-  const [resetToken] = React.useState(new URLSearchParams(window.location.search).get('token'))
+  const [resetToken] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('token')
+    }
+    return null
+  })
 
   React.useEffect(() => {
     if (resetToken) {
@@ -85,7 +90,9 @@ export default function PasswordResetPage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
       // Redirect to login with success message
-      window.location.href = '/auth/login?message=password-reset-success'
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth/login?message=password-reset-success'
+      }
     } catch (error) {
       setError('Failed to reset password. Please try again.')
     } finally {
