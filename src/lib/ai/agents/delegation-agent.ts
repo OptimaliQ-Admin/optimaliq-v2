@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { BaseAgent, AgentRequest, AgentResponse, AgentTool } from './base-agent';
 import { supabaseService } from '@/lib/supabase';
 import { AITask } from '@/lib/ai-router';
+import { env } from '@/lib/env';
 
 // Delegation Response Schema
 const DelegationResponseSchema = z.object({

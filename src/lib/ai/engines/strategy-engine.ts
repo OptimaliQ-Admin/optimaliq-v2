@@ -5,6 +5,7 @@
 
 import { z } from 'zod';
 import { telemetryService } from '../telemetry/telemetry-service';
+import { env } from '@/lib/env';
 
 // Base Strategy Interface
 export interface AIStrategy {

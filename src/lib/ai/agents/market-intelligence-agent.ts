@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { BaseAgent, AgentRequest, AgentResponse, AgentTool } from './base-agent';
 import { supabaseService } from '@/lib/supabase';
 import { AITask } from '@/lib/ai-router';
+import { env } from '@/lib/env';
 
 // Market Intelligence Response Schema
 const MarketIntelligenceResponseSchema = z.object({

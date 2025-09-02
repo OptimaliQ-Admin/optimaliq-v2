@@ -5,6 +5,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { env } from '@/lib/env';
 
 // Real-time event types
 export type RealtimeEventType = 
