@@ -22,9 +22,14 @@
     "db:test": "tsx scripts/final-phase1-verification.ts",
     "db:verify": "tsx scripts/final-phase1-verification.ts",
     "db:gap-analysis": "tsx scripts/phase1-gap-analysis.ts",
-    "phase2:verify": "tsx scripts/phase2-verification.ts"
+    "phase2:verify": "tsx scripts/phase2-verification.ts",
+    "phase3:verify": "tsx scripts/phase3-verification.ts",
+    "phase4:verify": "tsx scripts/phase4-verification.ts",
+    "phase5:verify": "tsx scripts/phase5-verification.ts",
+    "phase6:verify": "tsx scripts/phase6-verification.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.60.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@headlessui/react": "^2.2.7",

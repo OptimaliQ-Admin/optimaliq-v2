@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Assessment request schemas
 export const CreateAssessmentRequestSchema = z.object({
   type: z.enum(['onboarding', 'bmp', 'sales_performance', 'ai_readiness', 'strategy', 'process', 'technology']),
-  responses: z.record(z.union([z.string(), z.number(), z.boolean(), z.array(z.string())])),
+  responses: z.record(z.union([z.string(), z.number().finite(), z.boolean(), z.array(z.string())])),
   metadata: z.object({
     userAgent: z.string().optional(),
     ipAddress: z.string().optional(),
@@ -15,8 +15,8 @@ export const CreateAssessmentRequestSchema = z.object({
 
 export const GetAssessmentRequestSchema = z.object({
   type: z.enum(['onboarding', 'bmp', 'sales_performance', 'ai_readiness', 'strategy', 'process', 'technology']).optional(),
-  limit: z.number().min(1).max(100).default(10),
-  offset: z.number().min(0).default(0)
+  limit: z.number().finite().min(1).max(100).default(10),
+  offset: z.number().finite().min(0).default(0)
 });
 
 // Assessment response schemas
@@ -24,30 +24,30 @@ export const AssessmentResponseSchema = z.object({
   id: z.string(),
   type: z.string(),
   status: z.enum(['draft', 'in_progress', 'completed', 'archived']),
-  score: z.number().optional(),
+  score: z.number().finite().optional(),
   breakdown: z.object({
     strengths: z.array(z.string()),
     weaknesses: z.array(z.string()),
     recommendations: z.array(z.string()),
-    categoryScores: z.record(z.number())
+    categoryScores: z.record(z.number().finite())
   }).optional(),
   roadmap: z.array(z.object({
     id: z.string(),
     title: z.string(),
     description: z.string(),
     category: z.string(),
-    priority: z.number(),
-    effort: z.number(),
-    timeline: z.number(),
+    priority: z.number().finite(),
+    effort: z.number().finite(),
+    timeline: z.number().finite(),
     dependencies: z.array(z.string()),
     isCompleted: z.boolean()
   })).optional(),
   benchmarks: z.array(z.object({
     category: z.string(),
-    userScore: z.number(),
-    industryAverage: z.number(),
-    topPerformers: z.number(),
-    percentile: z.number()
+    userScore: z.number().finite(),
+    industryAverage: z.number().finite(),
+    topPerformers: z.number().finite(),
+    percentile: z.number().finite()
   })).optional(),
   createdAt: z.string(),
   completedAt: z.string().optional()
@@ -57,10 +57,10 @@ export const AssessmentListResponseSchema = z.object({
   success: z.boolean(),
   data: z.array(AssessmentResponseSchema),
   pagination: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    totalPages: z.number()
+    page: z.number().finite(),
+    limit: z.number().finite(),
+    total: z.number().finite(),
+    totalPages: z.number().finite()
   }),
   message: z.string().optional()
 });
@@ -83,14 +83,14 @@ export const AssessmentTemplateSchema = z.object({
     text: z.string(),
     type: z.enum(['multiple_choice', 'scale', 'text', 'boolean', 'ranking']),
     options: z.array(z.string()).optional(),
-    weight: z.number(),
+    weight: z.number().finite(),
     category: z.string(),
     required: z.boolean(),
-    order: z.number()
+    order: z.number().finite()
   })),
   scoringRules: z.array(z.object({
     category: z.string(),
-    weight: z.number(),
+    weight: z.number().finite(),
     algorithm: z.string(),
     parameters: z.record(z.any())
   })),

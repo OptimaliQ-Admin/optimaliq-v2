@@ -7,33 +7,24 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { 
-  Target, 
-  TrendingUp, 
-  Users, 
-  BarChart3, 
-  Zap, 
-  Award, 
-  Lightbulb, 
   Shield,
-  ArrowRight,
-  CheckCircle,
-  Star,
-  Globe,
   Heart,
   Brain,
   Rocket,
+  Zap,
   Building,
   MapPin,
-  Mail,
+  Users,
   Linkedin,
   Twitter,
+  Quote,
   Github,
   Calendar,
-  Quote
+  ArrowRight
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
+import { Container, Section, Grid } from '@/components/ui/layout'
 import { StatusBadge } from '@/components/ui/data-display'
 
 // Company data
@@ -198,7 +189,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Grid cols={4} gap={6} className="mb-20">
+            <Grid cols={4} gap="lg" className="mb-20">
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">{companyData.organizations}</div>
                 <div className="text-sm text-muted-foreground">Organizations Served</div>
@@ -215,7 +206,7 @@ export default function AboutPage() {
                 <div className="text-4xl font-bold text-primary mb-2">{companyData.employees}</div>
                 <div className="text-sm text-muted-foreground">Team Members</div>
               </div>
-            </Grid>
+            </div>
           </motion.div>
         </Container>
       </Section>
@@ -223,7 +214,7 @@ export default function AboutPage() {
       {/* Mission & Vision */}
       <Section className="py-20 bg-muted/30">
         <Container className="max-w-6xl">
-          <Grid cols={2} gap={12} className="items-center">
+          <div className="grid grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -261,7 +252,7 @@ export default function AboutPage() {
                 </div>
               </div>
             </motion.div>
-          </Grid>
+          </div>
         </Container>
       </Section>
 
@@ -280,7 +271,7 @@ export default function AboutPage() {
             </p>
           </motion.div>
 
-          <Grid cols={2} gap={8}>
+          <div className="grid grid-cols-2 gap-8">
             {companyData.values.map((value, index) => (
               <motion.div
                 key={index}
@@ -301,7 +292,7 @@ export default function AboutPage() {
                 </Card>
               </motion.div>
             ))}
-          </Grid>
+          </div>
         </Container>
       </Section>
 
@@ -320,7 +311,7 @@ export default function AboutPage() {
             </p>
           </motion.div>
 
-          <Grid cols={2} gap={8}>
+          <div className="grid grid-cols-2 gap-8">
             {companyData.team.map((member, index) => (
               <motion.div
                 key={index}
@@ -359,7 +350,7 @@ export default function AboutPage() {
                 </Card>
               </motion.div>
             ))}
-          </Grid>
+          </div>
         </Container>
       </Section>
 
@@ -446,7 +437,7 @@ export default function AboutPage() {
                 </Card>
               </motion.div>
             ))}
-          </Grid>
+          </div>
         </Container>
       </Section>
 

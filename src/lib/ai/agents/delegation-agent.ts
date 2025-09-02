@@ -15,23 +15,23 @@ const DelegationResponseSchema = z.object({
       text: z.string(),
       type: z.string(),
       options: z.array(z.string()).optional(),
-      weight: z.number()
+      weight: z.number().finite()
     })),
     dueDate: z.string(),
-    estimatedDuration: z.number(),
-    priority: z.number(),
+    estimatedDuration: z.number().finite(),
+    priority: z.number().finite(),
     context: z.string()
   })),
   teamAnalysis: z.object({
     teamStrengths: z.array(z.string()),
     skillGaps: z.array(z.string()),
-    workloadDistribution: z.record(z.number()),
+    workloadDistribution: z.record(z.number().finite()),
     collaborationOpportunities: z.array(z.string())
   }),
   communicationPlan: z.object({
     kickoffMessage: z.string(),
     reminderSchedule: z.array(z.object({
-      daysBefore: z.number(),
+      daysBefore: z.number().finite(),
       messageType: z.string(),
       content: z.string()
     })),
@@ -177,7 +177,7 @@ export class DelegationAgent extends BaseAgent {
         teamAnalysis: z.object({
           teamStrengths: z.array(z.string()),
           skillGaps: z.array(z.string()),
-          workloadDistribution: z.record(z.number()),
+          workloadDistribution: z.record(z.number().finite()),
           collaborationOpportunities: z.array(z.string())
         }),
         communicationPlan: z.object({

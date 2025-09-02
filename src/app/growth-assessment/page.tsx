@@ -134,7 +134,7 @@ export default function GrowthAssessmentPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Assessment Card */}
             <div className="lg:col-span-2">
-              <Card className="glass-card border-0 shadow-2xl">
+              <Card className="bg-white/10 backdrop-blur-md border-white/20 border-0 shadow-2xl">
                 <CardHeader className="text-center space-y-4">
                   <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center">
                     <Brain className="h-8 w-8 text-white" />

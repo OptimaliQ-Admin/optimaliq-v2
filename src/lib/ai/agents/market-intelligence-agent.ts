@@ -11,8 +11,8 @@ const MarketIntelligenceResponseSchema = z.object({
     summary: z.string(),
     category: z.string(),
     direction: z.enum(['up', 'down', 'stable']),
-    magnitude: z.number().min(0).max(10),
-    confidence: z.number().min(0).max(1),
+    magnitude: z.number().finite().min(0).max(10),
+    confidence: z.number().finite().min(0).max(1),
     timeframe: z.string(),
     sources: z.array(z.object({
       url: z.string(),
@@ -25,21 +25,21 @@ const MarketIntelligenceResponseSchema = z.object({
     title: z.string(),
     description: z.string(),
     category: z.string(),
-    impact: z.number().min(0).max(10),
-    urgency: z.number().min(0).max(10),
+    impact: z.number().finite().min(0).max(10),
+    urgency: z.number().finite().min(0).max(10),
     actionItems: z.array(z.string())
   })),
   risks: z.array(z.object({
     title: z.string(),
     description: z.string(),
     category: z.string(),
-    probability: z.number().min(0).max(1),
-    impact: z.number().min(0).max(10),
+    probability: z.number().finite().min(0).max(1),
+    impact: z.number().finite().min(0).max(10),
     mitigationStrategies: z.array(z.string())
   })),
   marketSnapshot: z.object({
     overview: z.string(),
-    keyMetrics: z.record(z.union([z.string(), z.number()])),
+    keyMetrics: z.record(z.union([z.string(), z.number().finite()])),
     competitiveAnalysis: z.string(),
     recommendations: z.array(z.string())
   })
@@ -82,8 +82,8 @@ export class MarketIntelligenceAgent extends BaseAgent {
       description: 'Search market articles using vector similarity',
       parameters: z.object({
         query: z.string(),
-        limit: z.number().default(10),
-        threshold: z.number().default(0.8)
+        limit: z.number().finite().default(10),
+        threshold: z.number().finite().default(0.8)
       }),
       execute: async (params) => {
         try {
@@ -100,7 +100,7 @@ export class MarketIntelligenceAgent extends BaseAgent {
       description: 'Cluster similar content for trend identification',
       parameters: z.object({
         articles: z.array(z.any()),
-        clusterCount: z.number().default(5)
+        clusterCount: z.number().finite().default(5)
       }),
       execute: async (params) => {
         return this.clusterArticles(params.articles, params.clusterCount);
@@ -194,7 +194,7 @@ export class MarketIntelligenceAgent extends BaseAgent {
         risks: z.array(z.any()),
         marketSnapshot: z.object({
           overview: z.string(),
-          keyMetrics: z.record(z.union([z.string(), z.number()])),
+          keyMetrics: z.record(z.union([z.string(), z.number().finite()])),
           competitiveAnalysis: z.string(),
           recommendations: z.array(z.string())
         })

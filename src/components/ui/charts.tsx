@@ -45,7 +45,7 @@ const chartContainerVariants = cva(
       variant: {
         default: "bg-background",
         card: "bg-card border rounded-lg p-4",
-        glass: "bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-4",
+
         dark: "bg-gray-900 border border-gray-800 rounded-lg p-4",
       },
       size: {
@@ -97,7 +97,7 @@ export interface ChartData {
 }
 
 // Chart Colors
-export const CHART_COLORS = {
+const CHART_COLORS = {
   primary: "#3b82f6",
   secondary: "#64748b",
   success: "#10b981",

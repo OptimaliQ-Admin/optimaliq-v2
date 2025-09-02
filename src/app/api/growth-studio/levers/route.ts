@@ -11,10 +11,10 @@ const GrowthLeverSchema = z.object({
   title: z.string(),
   description: z.string(),
   category: z.string(),
-  impact: z.number().min(0).max(10),
-  effort: z.number().min(0).max(10),
-  priority: z.number().min(0).max(10),
-  timeline: z.number().min(1).max(12),
+  impact: z.number().finite().min(0).max(10),
+  effort: z.number().finite().min(0).max(10),
+  priority: z.number().finite().min(0).max(10),
+  timeline: z.number().finite().min(1).max(12),
   isCompleted: z.boolean(),
   completedAt: z.string().optional(),
   generatedAt: z.string()
@@ -24,9 +24,9 @@ const GrowthLeversResponseSchema = z.object({
   success: z.boolean(),
   data: z.array(GrowthLeverSchema),
   metadata: z.object({
-    totalLevers: z.number(),
-    completedLevers: z.number(),
-    averageImpact: z.number(),
+    totalLevers: z.number().finite(),
+    completedLevers: z.number().finite(),
+    averageImpact: z.number().finite(),
     lastGenerated: z.string(),
     needsRegeneration: z.boolean()
   }),

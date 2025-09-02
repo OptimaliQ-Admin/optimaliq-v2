@@ -3,6 +3,8 @@ import { assessmentAgent } from './assessment-agent';
 import { growthPlanningAgent } from './growth-planning-agent';
 import { marketIntelligenceAgent } from './market-intelligence-agent';
 import { delegationAgent } from './delegation-agent';
+import { aiRouter } from '@/lib/ai-router';
+import { ragPipeline } from '@/lib/ai/rag-pipeline';
 import { AppError } from '@/utils';
 
 export enum AgentType {

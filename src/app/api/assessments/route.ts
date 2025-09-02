@@ -48,12 +48,17 @@ export async function POST(request: NextRequest) {
       throw new AppError('Failed to save assessment', 'ASSESSMENT_SAVE_FAILED', 500);
     }
 
-    // Process assessment with AI agent
-    const aiResult = await agents.processAssessment(
+    // Process assessment with enhanced AI agent using new router
+    const aiResult = await agents.processAssessmentEnhanced(
       validatedData.responses,
       validatedData.type,
       user.id,
-      userProfile?.industry || 'Technology'
+      userProfile?.industry || 'Technology',
+      {
+        useRAG: true,
+        useMultiProvider: true,
+        includeMarketContext: true
+      }
     );
 
     if (!aiResult.success) {

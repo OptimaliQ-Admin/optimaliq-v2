@@ -25,29 +25,29 @@ const ComparisonResponseSchema = z.object({
       userId: z.string(),
       userName: z.string(),
       organizationId: z.string(),
-      score: z.number(),
+      score: z.number().finite(),
       completedAt: z.string(),
       responses: z.record(z.any()).optional(),
-      categoryScores: z.record(z.number()).optional()
+      categoryScores: z.record(z.number().finite()).optional()
     })),
     analysis: z.object({
-      averageScore: z.number(),
+      averageScore: z.number().finite(),
       scoreRange: z.object({
-        min: z.number(),
-        max: z.number(),
-        variance: z.number()
+        min: z.number().finite(),
+        max: z.number().finite(),
+        variance: z.number().finite()
       }),
       categoryComparison: z.record(z.object({
-        average: z.number(),
-        scores: z.array(z.number()),
-        variance: z.number(),
+        average: z.number().finite(),
+        scores: z.array(z.number().finite()),
+        variance: z.number().finite(),
         trend: z.enum(['improving', 'declining', 'stable'])
       })).optional(),
       userPerformance: z.array(z.object({
         userId: z.string(),
         userName: z.string(),
-        averageScore: z.number(),
-        assessmentCount: z.number(),
+        averageScore: z.number().finite(),
+        assessmentCount: z.number().finite(),
         trend: z.enum(['improving', 'declining', 'stable']),
         strongCategories: z.array(z.string()),
         weakCategories: z.array(z.string())
@@ -56,12 +56,12 @@ const ComparisonResponseSchema = z.object({
         firstAssessment: z.string(),
         lastAssessment: z.string(),
         timespan: z.string(),
-        improvementRate: z.number(),
+        improvementRate: z.number().finite(),
         trendDirection: z.enum(['improving', 'declining', 'stable'])
       }).optional(),
       benchmarks: z.object({
-        industryAverage: z.number(),
-        percentileRank: z.number(),
+        industryAverage: z.number().finite(),
+        percentileRank: z.number().finite(),
         comparison: z.enum(['above', 'below', 'at'])
       }).optional()
     }),

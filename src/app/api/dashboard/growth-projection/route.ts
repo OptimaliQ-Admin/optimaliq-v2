@@ -18,8 +18,8 @@ const GrowthProjectionSchema = z.object({
   customFactors: z.array(z.object({
     factor: z.string(),
     impact: z.enum(['positive', 'negative', 'neutral']),
-    magnitude: z.number().min(0).max(10),
-    probability: z.number().min(0).max(1)
+    magnitude: z.number().finite().min(0).max(10),
+    probability: z.number().finite().min(0).max(1)
   })).optional()
 });
 
@@ -30,10 +30,10 @@ const GrowthProjectionResponseSchema = z.object({
     timeframe: z.string(),
     scenario: z.string(),
     summary: z.object({
-      projectedGrowth: z.number(),
+      projectedGrowth: z.number().finite(),
       confidenceInterval: z.object({
-        lower: z.number(),
-        upper: z.number()
+        lower: z.number().finite(),
+        upper: z.number().finite()
       }),
       keyDrivers: z.array(z.string()),
       majorRisks: z.array(z.string()),
@@ -41,27 +41,27 @@ const GrowthProjectionResponseSchema = z.object({
     }),
     monthlyProjections: z.array(z.object({
       month: z.string(),
-      projectedRevenue: z.number(),
-      projectedUsers: z.number(),
-      projectedScore: z.number(),
-      confidence: z.number(),
+      projectedRevenue: z.number().finite(),
+      projectedUsers: z.number().finite(),
+      projectedScore: z.number().finite(),
+      confidence: z.number().finite(),
       factors: z.array(z.object({
         name: z.string(),
-        impact: z.number(),
+        impact: z.number().finite(),
         description: z.string()
       }))
     })),
     scenarioComparison: z.object({
       conservative: z.object({
-        projectedGrowth: z.number(),
+        projectedGrowth: z.number().finite(),
         keyAssumptions: z.array(z.string())
       }),
       moderate: z.object({
-        projectedGrowth: z.number(),
+        projectedGrowth: z.number().finite(),
         keyAssumptions: z.array(z.string())
       }),
       aggressive: z.object({
-        projectedGrowth: z.number(),
+        projectedGrowth: z.number().finite(),
         keyAssumptions: z.array(z.string())
       })
     }),
@@ -69,42 +69,42 @@ const GrowthProjectionResponseSchema = z.object({
       industryTrends: z.array(z.object({
         trend: z.string(),
         impact: z.enum(['positive', 'negative', 'neutral']),
-        probability: z.number(),
+        probability: z.number().finite(),
         description: z.string()
       })),
       competitiveLandscape: z.object({
         threats: z.array(z.string()),
         opportunities: z.array(z.string()),
-        marketShare: z.number(),
+        marketShare: z.number().finite(),
         competitiveAdvantage: z.array(z.string())
       }),
       economicFactors: z.array(z.object({
         factor: z.string(),
-        impact: z.number(),
+        impact: z.number().finite(),
         trend: z.enum(['improving', 'declining', 'stable'])
       }))
     }).optional(),
     riskAssessment: z.object({
       highRiskFactors: z.array(z.object({
         factor: z.string(),
-        probability: z.number(),
-        impact: z.number(),
+        probability: z.number().finite(),
+        impact: z.number().finite(),
         mitigation: z.string()
       })),
       mediumRiskFactors: z.array(z.object({
         factor: z.string(),
-        probability: z.number(),
-        impact: z.number(),
+        probability: z.number().finite(),
+        impact: z.number().finite(),
         mitigation: z.string()
       })),
-      overallRiskScore: z.number(),
+      overallRiskScore: z.number().finite(),
       riskTrend: z.enum(['increasing', 'decreasing', 'stable'])
     }).optional(),
     recommendations: z.array(z.object({
       priority: z.enum(['high', 'medium', 'low']),
       category: z.string(),
       action: z.string(),
-      expectedImpact: z.number(),
+      expectedImpact: z.number().finite(),
       timeline: z.string(),
       resources: z.array(z.string()),
       successMetrics: z.array(z.string())

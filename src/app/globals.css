@@ -154,25 +154,9 @@
 }
 
 @layer components {
-  /* Glass Effect Utility Classes */
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  }
-  
-  .glass-card {
-    @apply glass rounded-xl;
-  }
-  
   /* Gradient Utilities */
   .gradient-primary {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  }
-  
-  .gradient-glass {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   }
 }
 

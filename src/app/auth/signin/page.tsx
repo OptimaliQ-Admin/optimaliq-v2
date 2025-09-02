@@ -84,7 +84,7 @@ export default function SignInPage() {
       initial="initial"
       animate="animate"
     >
-      <Card className="glass-card border-0 shadow-2xl">
+              <Card className="bg-white/10 backdrop-blur-md border-white/20 border-0 shadow-2xl">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
           <p className="text-muted-foreground">

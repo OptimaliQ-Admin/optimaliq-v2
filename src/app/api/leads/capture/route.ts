@@ -27,7 +27,7 @@ const LeadCaptureSchema = z.object({
     utm_content: z.string().optional()
   }).optional(),
   interests: z.array(z.string()).optional(),
-  assessmentScore: z.number().min(0).max(10).optional(),
+  assessmentScore: z.number().finite().min(0).max(10).optional(),
   budget: z.enum(['under_10k', '10k_50k', '50k_100k', '100k_500k', '500k+']).optional(),
   timeline: z.enum(['immediate', '1_3_months', '3_6_months', '6_12_months', '12_months+']).optional(),
   painPoints: z.array(z.string()).optional(),
@@ -37,7 +37,7 @@ const LeadCaptureSchema = z.object({
 const LeadUpdateSchema = z.object({
   leadId: z.string().uuid(),
   status: z.enum(['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'closed_won', 'closed_lost']).optional(),
-  score: z.number().min(0).max(100).optional(),
+  score: z.number().finite().min(0).max(100).optional(),
   notes: z.string().optional(),
   nextAction: z.string().optional(),
   assignedTo: z.string().uuid().optional(),
@@ -60,12 +60,12 @@ const LeadCaptureResponseSchema = z.object({
     source: z.string(),
     campaign: z.string().optional(),
     status: z.string(),
-    score: z.number(),
+    score: z.number().finite(),
     createdAt: z.string(),
     updatedAt: z.string(),
     qualification: z.object({
       isQualified: z.boolean(),
-      confidence: z.number(),
+      confidence: z.number().finite(),
       reasons: z.array(z.string()),
       nextSteps: z.array(z.string())
     }),
@@ -92,26 +92,26 @@ const LeadListResponseSchema = z.object({
     companySize: z.string(),
     source: z.string(),
     status: z.string(),
-    score: z.number(),
+    score: z.number().finite(),
     createdAt: z.string(),
     lastContacted: z.string().optional(),
     assignedTo: z.string().optional()
   })),
   pagination: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    totalPages: z.number()
+    page: z.number().finite(),
+    limit: z.number().finite(),
+    total: z.number().finite(),
+    totalPages: z.number().finite()
   }).optional(),
   analytics: z.object({
-    totalLeads: z.number(),
-    qualifiedLeads: z.number(),
-    conversionRate: z.number(),
-    averageScore: z.number(),
+    totalLeads: z.number().finite(),
+    qualifiedLeads: z.number().finite(),
+    conversionRate: z.number().finite(),
+    averageScore: z.number().finite(),
     topSources: z.array(z.object({
       source: z.string(),
-      count: z.number(),
-      conversionRate: z.number()
+      count: z.number().finite(),
+      conversionRate: z.number().finite()
     }))
   }).optional(),
   message: z.string().optional()

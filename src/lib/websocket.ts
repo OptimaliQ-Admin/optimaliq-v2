@@ -119,7 +119,7 @@ export class WebSocketService {
     })
   }
 
-  subscribeToMessageType(type: string, handler: (message: WebSocketMessage) => void): void {
+  subscribeToMessageType(type: string, handler: (_message: WebSocketMessage) => void): void {
     this.messageHandlers.set(type, handler)
   }
 
@@ -127,7 +127,7 @@ export class WebSocketService {
     this.messageHandlers.delete(type)
   }
 
-  onConnectionChange(handler: (status: string) => void): void {
+  onConnectionChange(handler: (_status: string) => void): void {
     this.connectionHandlers.set('connection', handler)
   }
 

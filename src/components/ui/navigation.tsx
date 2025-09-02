@@ -18,7 +18,7 @@ const navigationVariants = cva(
         default: "text-foreground",
         primary: "text-primary",
         secondary: "text-muted-foreground",
-        glass: "text-white bg-white/10 backdrop-blur-md",
+
       },
       size: {
         default: "text-sm",

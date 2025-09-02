@@ -32,75 +32,75 @@ const PerformanceTrackingResponseSchema = z.object({
   performance: z.object({
     timeframe: z.string(),
     summary: z.object({
-      overallScore: z.number(),
+      overallScore: z.number().finite(),
       trend: z.enum(['improving', 'declining', 'stable']),
       topPerformers: z.array(z.string()),
       areasOfConcern: z.array(z.string()),
       keyInsights: z.array(z.string())
     }),
     metrics: z.record(z.object({
-      current: z.number(),
-      previous: z.number(),
-      change: z.number(),
+      current: z.number().finite(),
+      previous: z.number().finite(),
+      change: z.number().finite(),
       trend: z.enum(['up', 'down', 'stable']),
-      target: z.number().optional(),
+      target: z.number().finite().optional(),
       status: z.enum(['on_track', 'at_risk', 'behind']),
       dataPoints: z.array(z.object({
         date: z.string(),
-        value: z.number(),
-        target: z.number().optional()
+        value: z.number().finite(),
+        target: z.number().finite().optional()
       }))
     })),
     trends: z.object({
       assessmentScores: z.object({
         trend: z.enum(['improving', 'declining', 'stable']),
-        averageChange: z.number(),
-        volatility: z.number(),
+        averageChange: z.number().finite(),
+        volatility: z.number().finite(),
         seasonality: z.boolean()
       }).optional(),
       growthLevers: z.object({
-        activeLevers: z.number(),
-        completionRate: z.number(),
-        averageImpact: z.number(),
+        activeLevers: z.number().finite(),
+        completionRate: z.number().finite(),
+        averageImpact: z.number().finite(),
         topPerforming: z.array(z.string())
       }).optional(),
       teamPerformance: z.object({
-        averageScore: z.number(),
-        participationRate: z.number(),
-        improvementRate: z.number(),
+        averageScore: z.number().finite(),
+        participationRate: z.number().finite(),
+        improvementRate: z.number().finite(),
         topContributors: z.array(z.object({
           name: z.string(),
-          score: z.number(),
-          improvement: z.number()
+          score: z.number().finite(),
+          improvement: z.number().finite()
         }))
       }).optional(),
       marketIntelligence: z.object({
-        trendAccuracy: z.number(),
-        coverage: z.number(),
-        actionableInsights: z.number(),
-        competitiveAdvantage: z.number()
+        trendAccuracy: z.number().finite(),
+        coverage: z.number().finite(),
+        actionableInsights: z.number().finite(),
+        competitiveAdvantage: z.number().finite()
       }).optional()
     }).optional(),
     benchmarks: z.object({
-      industry: z.record(z.number()),
-      competitors: z.record(z.number()),
-      historical: z.record(z.number()),
-      targets: z.record(z.number())
+      industry: z.record(z.number().finite()),
+      competitors: z.record(z.number().finite()),
+      historical: z.record(z.number().finite()),
+      targets: z.record(z.number().finite())
     }).optional(),
     forecasts: z.object({
-      nextPeriod: z.record(z.number()),
-      confidence: z.record(z.number()),
+      nextPeriod: z.record(z.number().finite()),
+      confidence: z.record(z.number().finite()),
       scenarios: z.object({
-        optimistic: z.record(z.number()),
-        realistic: z.record(z.number()),
-        pessimistic: z.record(z.number())
+        optimistic: z.record(z.number().finite()),
+        realistic: z.record(z.number().finite()),
+        pessimistic: z.record(z.number().finite())
       })
     }).optional(),
     recommendations: z.array(z.object({
       priority: z.enum(['high', 'medium', 'low']),
       category: z.string(),
       action: z.string(),
-      expectedImpact: z.number(),
+      expectedImpact: z.number().finite(),
       timeline: z.string(),
       effort: z.enum(['low', 'medium', 'high'])
     }))

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabase } from '@/lib/supabase';
 import { agents } from '@/lib/ai/agents';
+import { ragPipeline } from '@/lib/ai/rag-pipeline';
+import { contentIngestion } from '@/lib/external-apis';
+import { MarketIntelligenceAgent } from '@/lib/ai/agents/market-intelligence-agent';
 import { ErrorResponseSchema } from '../../auth/schema';
 import { AppError, handleError } from '@/utils';
 
@@ -21,8 +24,8 @@ const MarketTrendsResponseSchema = z.object({
       summary: z.string(),
       category: z.string(),
       direction: z.enum(['up', 'down', 'stable']),
-      magnitude: z.number().min(0).max(10),
-      confidence: z.number().min(0).max(1),
+      magnitude: z.number().finite().min(0).max(10),
+      confidence: z.number().finite().min(0).max(1),
       timeframe: z.string(),
       sources: z.array(z.object({
         url: z.string(),
@@ -35,21 +38,21 @@ const MarketTrendsResponseSchema = z.object({
       title: z.string(),
       description: z.string(),
       category: z.string(),
-      impact: z.number().min(0).max(10),
-      urgency: z.number().min(0).max(10),
+      impact: z.number().finite().min(0).max(10),
+      urgency: z.number().finite().min(0).max(10),
       actionItems: z.array(z.string())
     })),
     risks: z.array(z.object({
       title: z.string(),
       description: z.string(),
       category: z.string(),
-      probability: z.number().min(0).max(1),
-      impact: z.number().min(0).max(10),
+      probability: z.number().finite().min(0).max(1),
+      impact: z.number().finite().min(0).max(10),
       mitigationStrategies: z.array(z.string())
     })),
     marketSnapshot: z.object({
       overview: z.string(),
-      keyMetrics: z.record(z.union([z.string(), z.number()])),
+      keyMetrics: z.record(z.union([z.string(), z.number().finite()])),
       competitiveAnalysis: z.string(),
       recommendations: z.array(z.string())
     })
@@ -57,7 +60,7 @@ const MarketTrendsResponseSchema = z.object({
   metadata: z.object({
     generatedAt: z.string(),
     expiresAt: z.string(),
-    sourceCount: z.number(),
+    sourceCount: z.number().finite(),
     cacheHit: z.boolean()
   }),
   message: z.string().optional()
@@ -94,20 +97,52 @@ export async function GET(request: NextRequest) {
       marketIntelligence = cachedSnapshot.card_json;
       cacheHit = true;
     } else {
-      // Generate fresh market intelligence
-      console.log('Generating fresh market intelligence...');
+      // Generate fresh market intelligence using RAG pipeline
+      console.log('Generating fresh market intelligence with RAG...');
       
-      const aiResult = await agents.analyzeMarket(
-        validatedParams.industry,
-        validatedParams.timeframe,
-        validatedParams.focusAreas
-      );
+      // First, ingest fresh content for this industry
+      await contentIngestion.ingestAllSources({
+        includeMarketNews: true,
+        includeBusinessNews: true,
+        searchQueries: [
+          `${validatedParams.industry} industry trends`,
+          `${validatedParams.industry} market analysis`,
+          `${validatedParams.industry} business intelligence`
+        ]
+      });
+
+      // Use RAG pipeline for intelligent analysis
+      const ragQuery = `Analyze ${validatedParams.industry} industry trends and market intelligence for ${validatedParams.timeframe} timeframe`;
+      const ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
+        limit: 10,
+        threshold: 0.7,
+        includeContext: true
+      });
+
+      // Use Market Intelligence Agent for structured analysis
+      const agent = new MarketIntelligenceAgent();
+      const aiResult = await agent.processRequest({
+        task: `Analyze market trends for ${validatedParams.industry}`,
+        context: {
+          industry: validatedParams.industry,
+          timeframe: validatedParams.timeframe,
+          focusAreas: validatedParams.focusAreas,
+          ragContext: ragResult.context,
+          citations: ragResult.citations
+        },
+        userId: 'system',
+        organizationId: 'system'
+      });
 
       if (!aiResult.success) {
         throw new AppError('Market intelligence generation failed', 'AI_GENERATION_FAILED', 500);
       }
 
-      marketIntelligence = aiResult.data;
+      marketIntelligence = {
+        ...aiResult.data,
+        citations: ragResult.citations,
+        ragAnswer: ragResult.answer
+      };
 
       // Cache the results (TTL: 7 days)
       const expiresAt = new Date();
