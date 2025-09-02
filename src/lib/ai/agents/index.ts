@@ -29,15 +29,19 @@ export async function processAssessmentEnhanced(
     
     // Get market context using RAG if requested
     let marketContext = {};
-    if (options?.includeMarketContext && options?.useRAG) {
-      const ragResult = await ragPipeline.retrieveAndGenerate(
-        `${industry} industry benchmarks and performance metrics`,
-        { limit: 5, threshold: 0.7 }
-      );
-      marketContext = {
-        industryInsights: ragResult.answer,
-        citations: ragResult.citations,
-      };
+    if (options?.includeMarketContext && options?.useRAG && ragPipeline) {
+      try {
+        const ragResult = await ragPipeline.retrieveAndGenerate(
+          `${industry} industry benchmarks and performance metrics`,
+          { limit: 5, threshold: 0.7 }
+        );
+        marketContext = {
+          industryInsights: ragResult.answer,
+          citations: ragResult.citations,
+        };
+      } catch (error) {
+        console.warn('RAG pipeline not available for market context:', error);
+      }
     }
 
     // Process assessment with enhanced context
@@ -72,12 +76,19 @@ export async function analyzeMarketEnhanced(
     const agent = new MarketIntelligenceAgent();
     
     // Use RAG for market intelligence
-    const ragQuery = `${industry} industry market trends and analysis for ${timeframe}`;
-    const ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
-      limit: 10,
-      threshold: 0.7,
-      includeContext: true,
-    });
+    let ragResult = { context: [], answer: 'Market intelligence not available', citations: [] };
+    if (ragPipeline) {
+      try {
+        const ragQuery = `${industry} industry market trends and analysis for ${timeframe}`;
+        ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
+          limit: 10,
+          threshold: 0.7,
+          includeContext: true,
+        });
+      } catch (error) {
+        console.warn('RAG pipeline not available for market intelligence:', error);
+      }
+    }
 
     return await agent.processRequest({
       task: `Analyze ${industry} market trends`,

@@ -470,8 +470,8 @@ export class RAGPipeline {
   }
 }
 
-// Export singleton instance
-export const ragPipeline = new RAGPipeline();
+// Export singleton instance (only if Supabase is configured)
+export const ragPipeline = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new RAGPipeline() : null;
 
 // Export types for external use
 export type { Content, EmbeddingRequest, SearchRequest, Citation };

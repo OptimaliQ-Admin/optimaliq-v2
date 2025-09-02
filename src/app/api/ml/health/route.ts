@@ -91,7 +91,21 @@ export async function GET(_request: NextRequest) {
 
     // Check RAG pipeline health
     try {
-      healthChecks.ragPipeline = await ragPipeline.healthCheck();
+      if (ragPipeline) {
+        healthChecks.ragPipeline = await ragPipeline.healthCheck();
+      } else {
+        healthChecks.ragPipeline = {
+          status: 'unhealthy',
+          latency: 0,
+          checks: { database: false, openai: false, vectorSearch: false },
+        };
+        recommendations.push({
+          component: 'RAG Pipeline',
+          type: 'warning',
+          description: 'RAG pipeline not configured',
+          priority: 'medium',
+        });
+      }
     } catch (error) {
       healthChecks.ragPipeline = {
         status: 'unhealthy',
