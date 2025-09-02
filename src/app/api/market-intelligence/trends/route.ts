@@ -100,24 +100,37 @@ export async function GET(request: NextRequest) {
       // Generate fresh market intelligence using RAG pipeline
       console.log('Generating fresh market intelligence with RAG...');
       
-      // First, ingest fresh content for this industry
-      await contentIngestion.ingestAllSources({
-        includeMarketNews: true,
-        includeBusinessNews: true,
-        searchQueries: [
-          `${validatedParams.industry} industry trends`,
-          `${validatedParams.industry} market analysis`,
-          `${validatedParams.industry} business intelligence`
-        ]
-      });
+      // First, ingest fresh content for this industry (if available)
+      if (contentIngestion) {
+        try {
+          await contentIngestion.ingestAllSources({
+            includeMarketNews: true,
+            includeBusinessNews: true,
+            searchQueries: [
+              `${validatedParams.industry} industry trends`,
+              `${validatedParams.industry} market analysis`,
+              `${validatedParams.industry} business intelligence`
+            ]
+          });
+        } catch (error) {
+          console.warn('Content ingestion not available:', error);
+        }
+      }
 
-      // Use RAG pipeline for intelligent analysis
-      const ragQuery = `Analyze ${validatedParams.industry} industry trends and market intelligence for ${validatedParams.timeframe} timeframe`;
-      const ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
-        limit: 10,
-        threshold: 0.7,
-        includeContext: true
-      });
+      // Use RAG pipeline for intelligent analysis (if available)
+      let ragResult = { context: [], answer: 'Market intelligence not available', citations: [] };
+      if (ragPipeline) {
+        try {
+          const ragQuery = `Analyze ${validatedParams.industry} industry trends and market intelligence for ${validatedParams.timeframe} timeframe`;
+          ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
+            limit: 10,
+            threshold: 0.7,
+            includeContext: true
+          });
+        } catch (error) {
+          console.warn('RAG pipeline not available:', error);
+        }
+      }
 
       // Use Market Intelligence Agent for structured analysis
       const agent = new MarketIntelligenceAgent();

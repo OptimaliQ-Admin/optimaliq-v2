@@ -53,19 +53,34 @@ export async function POST(request: NextRequest) {
     
     const startTime = Date.now();
     
-    // Check RAG pipeline health first
-    const health = await ragPipeline.healthCheck();
+    // Check RAG pipeline health first (if available)
+    let health = { status: 'unhealthy' as const, checks: { database: false, openai: false, vectorSearch: false } };
+    if (ragPipeline) {
+      try {
+        health = await ragPipeline.healthCheck();
+      } catch (error) {
+        console.warn('RAG pipeline health check failed:', error);
+      }
+    }
+    
     if (health.status === 'unhealthy') {
       throw new AppError('RAG pipeline is unhealthy', 'RAG_UNHEALTHY', 503);
     }
 
-    // Trigger content ingestion
-    const ingestionResult = await contentIngestion.ingestAllSources({
-      includeMarketNews: validatedData.sources.includeMarketNews,
-      includeBusinessNews: validatedData.sources.includeBusinessNews,
-      companySymbols: validatedData.sources.companySymbols,
-      searchQueries: validatedData.sources.searchQueries,
-    });
+    // Trigger content ingestion (if available)
+    let ingestionResult = { totalIngested: 0, sources: { finnhubMarket: 0, finnhubCompany: 0, newsApiBusiness: 0, newsApiSearch: 0 }, errors: [] };
+    if (contentIngestion) {
+      try {
+        ingestionResult = await contentIngestion.ingestAllSources({
+          includeMarketNews: validatedData.sources.includeMarketNews,
+          includeBusinessNews: validatedData.sources.includeBusinessNews,
+          companySymbols: validatedData.sources.companySymbols,
+          searchQueries: validatedData.sources.searchQueries,
+        });
+      } catch (error) {
+        console.warn('Content ingestion not available:', error);
+      }
+    }
 
     const processingTime = Date.now() - startTime;
 
@@ -102,8 +117,15 @@ export async function GET(_request: NextRequest) {
       throw new AppError('Failed to get article statistics', 'STATS_ERROR', 500);
     }
 
-    // Get RAG pipeline health
-    const health = await ragPipeline.healthCheck();
+    // Get RAG pipeline health (if available)
+    let health = { status: 'unhealthy' as const, checks: { database: false, openai: false, vectorSearch: false } };
+    if (ragPipeline) {
+      try {
+        health = await ragPipeline.healthCheck();
+      } catch (error) {
+        console.warn('RAG pipeline health check failed:', error);
+      }
+    }
 
     // Get recent ingestion activity (last 24 hours)
     const { data: recentArticles, error: recentError } = await supabase

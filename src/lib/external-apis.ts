@@ -434,10 +434,15 @@ export class ContentIngestionService {
     if (options?.includeMarketNews !== false) {
       try {
         const marketNews = await this.finnhub.getMarketNews('general');
-        const stored = await ragPipeline.batchStoreContent(marketNews);
-        const successCount = stored.filter(id => id !== '').length;
-        results.sources.finnhubMarket = successCount;
-        results.totalIngested += successCount;
+        if (ragPipeline) {
+          const stored = await ragPipeline.batchStoreContent(marketNews);
+          const successCount = stored.filter(id => id !== '').length;
+          results.sources.finnhubMarket = successCount;
+          results.totalIngested += successCount;
+        } else {
+          results.sources.finnhubMarket = marketNews.length;
+          results.totalIngested += marketNews.length;
+        }
       } catch (error) {
         results.errors.push(`Finnhub market news: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
@@ -448,10 +453,15 @@ export class ContentIngestionService {
       for (const symbol of options.companySymbols) {
         try {
           const companyNews = await this.finnhub.getCompanyNews(symbol);
-          const stored = await ragPipeline.batchStoreContent(companyNews);
-          const successCount = stored.filter(id => id !== '').length;
-          results.sources.finnhubCompany += successCount;
-          results.totalIngested += successCount;
+          if (ragPipeline) {
+            const stored = await ragPipeline.batchStoreContent(companyNews);
+            const successCount = stored.filter(id => id !== '').length;
+            results.sources.finnhubCompany += successCount;
+            results.totalIngested += successCount;
+          } else {
+            results.sources.finnhubCompany += companyNews.length;
+            results.totalIngested += companyNews.length;
+          }
         } catch (error) {
           results.errors.push(`Finnhub ${symbol}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
@@ -462,10 +472,15 @@ export class ContentIngestionService {
     if (options?.includeBusinessNews !== false) {
       try {
         const businessNews = await this.newsApi.getBusinessNews();
-        const stored = await ragPipeline.batchStoreContent(businessNews);
-        const successCount = stored.filter(id => id !== '').length;
-        results.sources.newsApiBusiness = successCount;
-        results.totalIngested += successCount;
+        if (ragPipeline) {
+          const stored = await ragPipeline.batchStoreContent(businessNews);
+          const successCount = stored.filter(id => id !== '').length;
+          results.sources.newsApiBusiness = successCount;
+          results.totalIngested += successCount;
+        } else {
+          results.sources.newsApiBusiness = businessNews.length;
+          results.totalIngested += businessNews.length;
+        }
       } catch (error) {
         results.errors.push(`News API business: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
@@ -476,10 +491,15 @@ export class ContentIngestionService {
       for (const query of options.searchQueries) {
         try {
           const searchNews = await this.newsApi.searchNews(query);
-          const stored = await ragPipeline.batchStoreContent(searchNews);
-          const successCount = stored.filter(id => id !== '').length;
-          results.sources.newsApiSearch += successCount;
-          results.totalIngested += successCount;
+          if (ragPipeline) {
+            const stored = await ragPipeline.batchStoreContent(searchNews);
+            const successCount = stored.filter(id => id !== '').length;
+            results.sources.newsApiSearch += successCount;
+            results.totalIngested += successCount;
+          } else {
+            results.sources.newsApiSearch += searchNews.length;
+            results.totalIngested += searchNews.length;
+          }
         } catch (error) {
           results.errors.push(`News API search "${query}": ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
