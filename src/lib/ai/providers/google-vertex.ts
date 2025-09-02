@@ -638,8 +638,8 @@ export class GoogleVertexProvider {
   }
 }
 
-// Export singleton instance
-export const googleVertexProvider = new GoogleVertexProvider();
+// Export singleton instance (only if configured)
+export const googleVertexProvider = env.VERTEX_PROJECT_ID ? new GoogleVertexProvider() : null;
 
 // Export types
 export type { VertexRequest, VertexResponse };

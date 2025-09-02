@@ -108,9 +108,9 @@ export async function GET(_request: NextRequest) {
 
     // Check AI providers
     const providerChecks = await Promise.allSettled([
-      anthropicProvider.healthCheck(),
-      googleVertexProvider.healthCheck(),
-      mistralProvider.healthCheck(),
+      anthropicProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
+      googleVertexProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
+      mistralProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
     ]);
 
     healthChecks.aiProviders = {

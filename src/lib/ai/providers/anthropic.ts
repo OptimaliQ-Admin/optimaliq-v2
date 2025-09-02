@@ -510,8 +510,8 @@ export class AnthropicProvider {
   }
 }
 
-// Export singleton instance
-export const anthropicProvider = new AnthropicProvider();
+// Export singleton instance (only if configured)
+export const anthropicProvider = env.ANTHROPIC_API_KEY ? new AnthropicProvider() : null;
 
 // Export types
 export type { AnthropicRequest, AnthropicResponse };

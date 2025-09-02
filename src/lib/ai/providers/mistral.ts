@@ -605,8 +605,8 @@ export class MistralProvider {
   }
 }
 
-// Export singleton instance
-export const mistralProvider = new MistralProvider();
+// Export singleton instance (only if configured)
+export const mistralProvider = env.MISTRAL_API_KEY ? new MistralProvider() : null;
 
 // Export types
 export type { MistralRequest, MistralResponse };

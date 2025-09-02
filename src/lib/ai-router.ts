@@ -359,6 +359,10 @@ export class AIModelRouter {
   
   // Anthropic execution
   private async executeAnthropic(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    if (!anthropicProvider) {
+      throw new AppError('Anthropic provider not configured', 'PROVIDER_NOT_CONFIGURED', 503);
+    }
+    
     const startTime = Date.now();
     
     const response = await anthropicProvider.generateCompletion({
@@ -383,6 +387,10 @@ export class AIModelRouter {
   
   // Google execution
   private async executeGoogle(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    if (!googleVertexProvider) {
+      throw new AppError('Google Vertex AI provider not configured', 'PROVIDER_NOT_CONFIGURED', 503);
+    }
+    
     const startTime = Date.now();
     
     const response = await googleVertexProvider.generateCompletion({
@@ -407,6 +415,10 @@ export class AIModelRouter {
   
   // Mistral execution
   private async executeMistral(request: AIRequest, config: AIProviderConfig): Promise<AIResponse> {
+    if (!mistralProvider) {
+      throw new AppError('Mistral provider not configured', 'PROVIDER_NOT_CONFIGURED', 503);
+    }
+    
     const startTime = Date.now();
     
     const response = await mistralProvider.generateCompletion({
