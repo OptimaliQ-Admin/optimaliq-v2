@@ -657,4 +657,4 @@ export class StrategyEngine {
 }
 
 // Export singleton instance
-export const strategyEngine = new StrategyEngine();
+export const strategyEngine = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new StrategyEngine() : null;

@@ -321,4 +321,4 @@ export class DelegationAgent extends BaseAgent {
 }
 
 // Export singleton instance
-export const delegationAgent = new DelegationAgent();
+export const delegationAgent = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new DelegationAgent() : null;

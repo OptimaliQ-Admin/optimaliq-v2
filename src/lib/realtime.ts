@@ -274,8 +274,8 @@ export class RealtimeManager {
   }
 }
 
-// Singleton instance
-export const realtimeManager = new RealtimeManager();
+// Singleton instance (only if Supabase is configured)
+export const realtimeManager = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new RealtimeManager() : null;
 
 // Convenience hooks for common use cases
 export const useRealtimeDashboard = (

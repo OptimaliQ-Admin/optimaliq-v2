@@ -544,4 +544,4 @@ export class GrowthPlanningAgent extends BaseAgent {
 }
 
 // Export singleton instance
-export const growthPlanningAgent = new GrowthPlanningAgent();
+export const growthPlanningAgent = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new GrowthPlanningAgent() : null;

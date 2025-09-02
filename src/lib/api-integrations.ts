@@ -488,15 +488,15 @@ export class AnalyticsService {
   }
 }
 
-// Export service instances
-export const marketDataService = new MarketDataService()
-export const newsService = new NewsService()
-export const twitterService = new TwitterService()
-export const linkedInService = new LinkedInService()
-export const emailService = new EmailService()
-export const calendarService = new CalendarService()
-export const crmService = new CRMService()
-export const analyticsService = new AnalyticsService()
+// Export service instances (only if configured)
+export const marketDataService = process.env.FINNHUB_API_KEY ? new MarketDataService() : null;
+export const newsService = process.env.NEWSAPI_KEY ? new NewsService() : null;
+export const twitterService = process.env.NEXT_PUBLIC_TWITTER_BEARER_TOKEN ? new TwitterService() : null;
+export const linkedInService = process.env.NEXT_PUBLIC_LINKEDIN_ACCESS_TOKEN ? new LinkedInService() : null;
+export const emailService = process.env.NEXT_PUBLIC_EMAIL_API_KEY ? new EmailService() : null;
+export const calendarService = process.env.NEXT_PUBLIC_CALENDAR_API_KEY ? new CalendarService() : null;
+export const crmService = process.env.NEXT_PUBLIC_CRM_API_KEY ? new CRMService() : null;
+export const analyticsService = process.env.NEXT_PUBLIC_ANALYTICS_API_KEY ? new AnalyticsService() : null;
 
 // Unified API Integration Manager
 export class APIIntegrationManager {
@@ -537,4 +537,4 @@ export class APIIntegrationManager {
   }
 }
 
-export const apiManager = new APIIntegrationManager()
+export const apiManager = (process.env.FINNHUB_API_KEY || process.env.NEWSAPI_KEY || process.env.NEXT_PUBLIC_TWITTER_BEARER_TOKEN || process.env.NEXT_PUBLIC_LINKEDIN_ACCESS_TOKEN || process.env.NEXT_PUBLIC_EMAIL_API_KEY || process.env.NEXT_PUBLIC_CALENDAR_API_KEY || process.env.NEXT_PUBLIC_CRM_API_KEY || process.env.NEXT_PUBLIC_ANALYTICS_API_KEY) ? new APIIntegrationManager() : null;

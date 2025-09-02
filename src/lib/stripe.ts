@@ -6,11 +6,11 @@
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
 
-// Initialize Stripe with secret key
-export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+// Initialize Stripe with secret key (only if configured)
+export const stripe = env.STRIPE_SECRET_KEY ? new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20',
   typescript: true,
-});
+}) : null;
 
 // Stripe configuration
 export const STRIPE_CONFIG = {

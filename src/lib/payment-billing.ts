@@ -528,13 +528,13 @@ export class FinancialReportingService {
   }
 }
 
-// Export service instances
-export const stripeService = new StripeService()
-export const subscriptionService = new SubscriptionService()
-export const billingAutomationService = new BillingAutomationService()
-export const usageTrackingService = new UsageTrackingService()
-export const taxCalculationService = new TaxCalculationService()
-export const financialReportingService = new FinancialReportingService()
+// Export service instances (only if Stripe is configured)
+export const stripeService = process.env.STRIPE_SECRET_KEY ? new StripeService() : null;
+export const subscriptionService = process.env.STRIPE_SECRET_KEY ? new SubscriptionService() : null;
+export const billingAutomationService = process.env.STRIPE_SECRET_KEY ? new BillingAutomationService() : null;
+export const usageTrackingService = process.env.STRIPE_SECRET_KEY ? new UsageTrackingService() : null;
+export const taxCalculationService = process.env.STRIPE_SECRET_KEY ? new TaxCalculationService() : null;
+export const financialReportingService = process.env.STRIPE_SECRET_KEY ? new FinancialReportingService() : null;
 
 // Default subscription plans
 export const DEFAULT_PLANS: SubscriptionPlan[] = [

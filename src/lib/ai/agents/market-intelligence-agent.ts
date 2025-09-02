@@ -376,4 +376,4 @@ export class MarketIntelligenceAgent extends BaseAgent {
 }
 
 // Export singleton instance
-export const marketIntelligenceAgent = new MarketIntelligenceAgent();
+export const marketIntelligenceAgent = env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? new MarketIntelligenceAgent() : null;

@@ -521,7 +521,7 @@ export class ContentIngestionService {
   }
 }
 
-// Export singleton instances
-export const finnhubApi = new FinnhubAPI();
-export const newsApi = new NewsAPI();
-export const contentIngestion = new ContentIngestionService();
+// Export singleton instances (only if configured)
+export const finnhubApi = env.FINNHUB_API_KEY ? new FinnhubAPI() : null;
+export const newsApi = env.NEWS_API_KEY ? new NewsAPI() : null;
+export const contentIngestion = (env.FINNHUB_API_KEY || env.NEWS_API_KEY) ? new ContentIngestionService() : null;
