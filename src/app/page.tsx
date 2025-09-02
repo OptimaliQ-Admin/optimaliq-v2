@@ -32,6 +32,7 @@ import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
 import { StatusBadge } from '@/components/ui/data-display'
 import { Tooltip } from '@/components/ui/feedback'
 import { LineChart, MetricCard } from '@/components/ui/charts'
+import PageNavigation from '@/components/ui/page-navigation'
 
 // Hero Section Data - Original GMF Plus v3.1 content
 const heroData = {
@@ -161,14 +162,16 @@ const pageSections = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <>
+      <PageNavigation sections={pageSections} />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/95 shadow-sm">
         <Container className="flex h-16 items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Zap className="h-5 w-5 text-primary-foreground" />
+              <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                <Zap className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">OptimaliQ</span>
             </div>
@@ -188,18 +191,19 @@ export default function HomePage() {
       <Section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
         {/* Enhanced Background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/85 via-blue-900/75 to-indigo-900/80" />
-          <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-blue-900/80 to-indigo-900/85" />
+          <div className="absolute inset-0 bg-grid-pattern opacity-15" />
           
-          {/* Animated Background Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          {/* Enterprise-Grade Animated Background Elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-indigo-400/10 rounded-full blur-2xl animate-pulse delay-500" />
         </div>
         
         {/* Enhanced Content */}
         <div className="relative z-10 w-full">
           <Container className="max-w-7xl mx-auto px-6">
-          <Grid cols={2} gap={8} className="items-center">
+          <Grid cols={2} gap="xl" className="items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -268,8 +272,8 @@ export default function HomePage() {
                 transition={{ duration: 0.8, delay: 0.4 }}
               className="relative"
             >
-                {/* Dashboard Preview */}
-                <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
+                {/* Enterprise Dashboard Preview */}
+                <div className="relative bg-white/15 backdrop-blur-md rounded-3xl p-8 border border-white/25 shadow-2xl">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
                       <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
@@ -311,26 +315,26 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Floating Elements */}
+                {/* Enterprise Floating Elements */}
                 <motion.div
                   animate={{ y: [-10, 10, -10] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30"
+                  className="absolute -top-4 -right-4 bg-blue-500/25 backdrop-blur-md rounded-xl p-4 border border-blue-400/40 shadow-lg"
                 >
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-blue-400" />
-                    <span className="text-xs text-white">+15% ROI</span>
+                    <TrendingUp className="h-4 w-4 text-blue-300" />
+                    <span className="text-xs text-white font-medium">+15% ROI</span>
                   </div>
                 </motion.div>
 
                 <motion.div
                   animate={{ y: [10, -10, 10] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -bottom-4 -left-4 bg-green-500/20 backdrop-blur-sm rounded-lg p-3 border border-green-400/30"
+                  className="absolute -bottom-4 -left-4 bg-green-500/25 backdrop-blur-md rounded-xl p-4 border border-green-400/40 shadow-lg"
                 >
                   <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-green-400" />
-                    <span className="text-xs text-white">Goal Achieved</span>
+                    <Target className="h-4 w-4 text-green-300" />
+                    <span className="text-xs text-white font-medium">Goal Achieved</span>
                   </div>
                 </motion.div>
             </motion.div>
@@ -400,8 +404,8 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
               How It Works
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
@@ -467,8 +471,8 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
               Key Features
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
@@ -527,8 +531,8 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
               Why Choose <span className="text-blue-200">OptimaliQ</span>
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
@@ -602,7 +606,7 @@ export default function HomePage() {
               Get your comprehensive growth report and personalized strategic recommendations in minutes.
             </p>
             
-            <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
               <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input
                   type="email"
@@ -632,8 +636,8 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
               FAQ
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
@@ -672,6 +676,7 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
-    </div>
+      </div>
+    </>
   )
 }
