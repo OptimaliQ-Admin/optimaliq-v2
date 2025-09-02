@@ -118,7 +118,12 @@ export default function InvitationPage() {
   const [error, setError] = React.useState('')
 
   // Get invitation token from URL (in real app)
-  const [inviteToken] = React.useState(new URLSearchParams(window.location.search).get('token'))
+  const [inviteToken] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('token')
+    }
+    return null
+  })
   const [hasAccount, setHasAccount] = React.useState(false)
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -128,7 +133,9 @@ export default function InvitationPage() {
   const handleAcceptInvitation = async () => {
     if (hasAccount) {
       // Redirect to login with invitation context
-      window.location.href = `/auth/login?invite=${inviteToken}`
+      if (typeof window !== 'undefined') {
+        window.location.href = `/auth/login?invite=${inviteToken}`
+      }
       return
     }
 
