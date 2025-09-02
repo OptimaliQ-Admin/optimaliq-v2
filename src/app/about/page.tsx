@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Container, Section, Grid } from '@/components/ui/layout'
+import { Container, Section } from '@/components/ui/layout'
 import { StatusBadge } from '@/components/ui/data-display'
 
 // Company data
@@ -189,7 +189,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Grid cols={4} gap="lg" className="mb-20">
+            <div className="grid grid-cols-4 gap-6 mb-20">
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">{companyData.organizations}</div>
                 <div className="text-sm text-muted-foreground">Organizations Served</div>
@@ -411,7 +411,7 @@ export default function AboutPage() {
             </p>
           </motion.div>
 
-          <Grid cols={1} gap={8}>
+          <div className="grid grid-cols-1 gap-8">
             {companyData.testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
