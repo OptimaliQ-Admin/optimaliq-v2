@@ -225,9 +225,9 @@ export default function BlogPage() {
             <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
             <Link href="/blog" className="text-sm text-primary font-medium">Blog</Link>
             <Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-            <Button asChild>
-              <Link href="/assessment">Start Assessment</Link>
-            </Button>
+            <Link href="/assessment">
+              <Button>Start Assessment</Button>
+            </Link>
           </nav>
         </Container>
       </header>

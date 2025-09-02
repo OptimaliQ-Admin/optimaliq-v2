@@ -217,9 +217,9 @@ export default function AssessmentTeaserPage() {
               <Gift className="h-4 w-4 mr-1" />
               Free Preview
             </StatusBadge>
-            <Button asChild>
-              <Link href="/assessment">Start Full Assessment</Link>
-            </Button>
+            <Link href="/assessment">
+              <Button>Start Full Assessment</Button>
+            </Link>
           </div>
         </Container>
       </header>

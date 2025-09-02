@@ -125,9 +125,9 @@ export default function ResultsPreviewPage() {
               <Eye className="h-4 w-4 mr-1" />
               Preview Results
             </StatusBadge>
-            <Button asChild>
-              <Link href="/assessment">Unlock Full Results</Link>
-            </Button>
+            <Link href="/assessment">
+              <Button>Unlock Full Results</Button>
+            </Link>
           </div>
         </Container>
       </header>

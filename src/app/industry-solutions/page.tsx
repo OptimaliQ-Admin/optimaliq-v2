@@ -313,9 +313,9 @@ export default function IndustrySolutionsPage() {
             <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
             <Link href="/industry-solutions" className="text-sm text-primary font-medium">Solutions</Link>
             <Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-            <Button asChild>
-              <Link href="/assessment">Start Assessment</Link>
-            </Button>
+            <Link href="/assessment">
+              <Button>Start Assessment</Button>
+            </Link>
           </nav>
         </Container>
       </header>

@@ -175,9 +175,9 @@ export default function ContactPage() {
             <Link href="/about" className="text-sm hover:text-primary transition-colors">About</Link>
             <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
             <Link href="/contact" className="text-sm text-primary font-medium">Contact</Link>
-            <Button asChild>
-              <Link href="/assessment">Start Assessment</Link>
-            </Button>
+            <Link href="/assessment">
+              <Button>Start Assessment</Button>
+            </Link>
           </nav>
         </Container>
       </header>
