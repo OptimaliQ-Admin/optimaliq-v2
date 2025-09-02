@@ -5,7 +5,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -244,7 +244,7 @@ const builderData = {
   ]
 }
 
-export default function AssessmentBuilderPage() {
+function AssessmentBuilderContent() {
   const searchParams = useSearchParams()
   const [selectedQuestionType, setSelectedQuestionType] = React.useState<string>('')
   const [draggedQuestion, setDraggedQuestion] = React.useState<number | null>(null)
@@ -718,5 +718,13 @@ export default function AssessmentBuilderPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function AssessmentBuilderPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AssessmentBuilderContent />
+    </Suspense>
   )
 }

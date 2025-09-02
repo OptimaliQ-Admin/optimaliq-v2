@@ -3,9 +3,11 @@
  * 30-day growth plans, strategic roadmaps, and implementation tracking
  */
 
+export const dynamic = 'force-dynamic'
+
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -238,7 +240,7 @@ const actionPlanData = {
   ]
 }
 
-export default function ActionPlanningPage() {
+function ActionPlanningPageContent() {
   const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all')
   const [selectedStatus, setSelectedStatus] = React.useState<string>('all')
@@ -632,5 +634,14 @@ export default function ActionPlanningPage() {
         </Container>
       </Section>
     </div>
+  )
+
+}
+
+export default function ActionPlanningPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ActionPlanningPageContent />
+    </Suspense>
   )
 }
