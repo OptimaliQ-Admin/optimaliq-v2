@@ -3,6 +3,9 @@
  * AI-powered registration with comprehensive onboarding and organization setup
  */
 
+'use client'
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'

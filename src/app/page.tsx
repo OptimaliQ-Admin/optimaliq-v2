@@ -3,6 +3,9 @@
  * AI-powered business intelligence platform for non-profit organizations
  */
 
+'use client'
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { 

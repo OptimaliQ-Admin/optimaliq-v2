@@ -3,6 +3,9 @@
  * Comprehensive pricing plans with feature comparison and value proposition
  */
 
+'use client'
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'

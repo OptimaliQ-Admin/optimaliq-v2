@@ -3,6 +3,9 @@
  * Comprehensive frequently asked questions with search and categories
  */
 
+'use client'
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'

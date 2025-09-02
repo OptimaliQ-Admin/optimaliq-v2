@@ -3,6 +3,9 @@
  * Comprehensive privacy policy with GDPR and CCPA compliance
  */
 
+'use client'
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
