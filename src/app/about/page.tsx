@@ -3,6 +3,8 @@
  * Company story, mission, team, and values with professional presentation
  */
 
+'use client'
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
