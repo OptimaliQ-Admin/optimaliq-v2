@@ -42,3 +42,6 @@ next-env.d.ts
 
 # AI working context (never commit sample/reference code into app repo)
 /ai_docs/reference/**
+
+# Reference implementation (never commit reference code)
+REFERENCE_ONLY_gmf-plus-v3-1/

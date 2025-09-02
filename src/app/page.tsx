@@ -1,7 +1,10 @@
 /**
  * OptimaliQ Landing Page
- * AI-powered business intelligence platform for non-profit organizations
+ * AI-powered growth strategy platform for businesses
+ * Recreated from original GMF Plus v3.1 design
  */
+
+'use client'
 
 import React from 'react'
 import { motion } from 'framer-motion'
@@ -19,7 +22,9 @@ import {
   Globe,
   Award,
   Play,
-  Quote
+  Quote,
+  ArrowDown,
+  Check
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -28,144 +33,133 @@ import { StatusBadge } from '@/components/ui/data-display'
 import { Tooltip } from '@/components/ui/feedback'
 import { LineChart, MetricCard } from '@/components/ui/charts'
 
-// Hero Section Data
+// Hero Section Data - Original GMF Plus v3.1 content
 const heroData = {
-  title: "AI-Powered Business Intelligence for Non-Profits",
-  subtitle: "Transform your organization with data-driven insights, strategic planning, and growth optimization powered by advanced AI technology.",
-  cta: "Start Your Free Assessment",
-  stats: [
-    { value: "500+", label: "Organizations Served" },
-    { value: "95%", label: "Success Rate" },
-    { value: "2.5x", label: "Average Growth" },
+  title: "Smarter Decisions.",
+  subtitle: "Faster Growth.",
+  description: "Unlock predictable growth with AI-driven strategy insights and real-time competitive benchmarking.",
+  cta: "Start Free Growth Audit",
+  trustIndicators: [
+    "Free Assessment",
+    "No Credit Card Required", 
+    "Instant Results"
   ]
 }
 
-// Features Data
+// Key Features Data - Original GMF Plus v3.1 content
 const features = [
   {
-    icon: <Target className="h-8 w-8" />,
-    title: "Strategic Assessment",
-    description: "Comprehensive evaluation of your organization's strategy, processes, and technology with AI-powered insights.",
-    color: "primary"
+    icon: <BarChart3 className="h-8 w-8" />,
+    title: "AI-Powered Business Assessments",
+    description: "Instantly analyze your business health, identify strategy gaps, and uncover optimization potential.",
+    color: "from-blue-500 to-blue-600",
+    bgColor: "from-blue-50 to-blue-100"
   },
   {
-    icon: <BarChart3 className="h-8 w-8" />,
-    title: "Data-Driven Analytics",
-    description: "Advanced analytics and reporting with real-time dashboards and predictive insights.",
-    color: "success"
+    icon: <Zap className="h-8 w-8" />,
+    title: "Real-Time Strategy Optimization",
+    description: "Adapt dynamically with AI-driven insights, adjusting your business strategy as new data emerges.",
+    color: "from-purple-500 to-purple-600",
+    bgColor: "from-purple-50 to-purple-100"
   },
   {
     icon: <TrendingUp className="h-8 w-8" />,
-    title: "Growth Optimization",
-    description: "AI-powered growth strategies and 30-day action plans tailored to your organization.",
-    color: "warning"
-  },
-  {
-    icon: <Users className="h-8 w-8" />,
-    title: "Team Collaboration",
-    description: "Seamless team management with role-based access and collaborative assessment tools.",
-    color: "info"
+    title: "Competitive Benchmarking",
+    description: "Compare your performance with industry leaders and uncover actionable areas for growth.",
+    color: "from-green-500 to-green-600",
+    bgColor: "from-green-50 to-green-100"
   },
   {
     icon: <Lightbulb className="h-8 w-8" />,
-    title: "Market Intelligence",
-    description: "Real-time market insights and competitive analysis to stay ahead of industry trends.",
-    color: "purple"
-  },
-  {
-    icon: <Shield className="h-8 w-8" />,
-    title: "Secure & Compliant",
-    description: "Enterprise-grade security with SOC 2 compliance and data protection standards.",
-    color: "error"
+    title: "Predictive Growth Insights",
+    description: "Forecast market shifts and make proactive, data-driven decisions before your competition.",
+    color: "from-orange-500 to-orange-600",
+    bgColor: "from-orange-50 to-orange-100"
   }
 ]
 
-// Testimonials Data
-const testimonials = [
+// How It Works Data - Original GMF Plus v3.1 content
+const howItWorksSteps = [
   {
-    name: "Sarah Johnson",
-    role: "Executive Director",
-    organization: "Community Health Initiative",
-    content: "OptimaliQ transformed our strategic planning process. The AI insights helped us identify growth opportunities we never considered.",
-    rating: 5,
-    avatar: "/avatars/sarah.jpg"
+    id: 1,
+    title: "Assess & Identify",
+    description: "We analyze your strategy, operations, and market position to uncover high-impact growth opportunities. Our data-driven insights help you overcome obstacles, scale efficiently, and maximize ROI—tailored to your business challenges.",
+    icon: <BarChart3 className="h-8 w-8" />,
+    color: "from-blue-500 to-blue-600",
+    bgColor: "from-blue-50 to-blue-100"
   },
   {
-    name: "Michael Chen",
-    role: "Board President",
-    organization: "Youth Development Foundation",
-    content: "The data-driven approach and actionable recommendations have increased our impact by 300% in just 6 months.",
-    rating: 5,
-    avatar: "/avatars/michael.jpg"
+    id: 2,
+    title: "Data-Driven Insights",
+    description: "Harnessing machine learning across industries, we provide customized insights tailored to your business objectives. Our models analyze real-world trends, market shifts, and operational data to help you identify opportunities, mitigate risks, and drive scalable growth.",
+    icon: <Target className="h-8 w-8" />,
+    color: "from-purple-500 to-purple-600",
+    bgColor: "from-purple-50 to-purple-100"
   },
   {
-    name: "Dr. Emily Rodriguez",
-    role: "CEO",
-    organization: "Education First Alliance",
-    content: "OptimaliQ's market intelligence and growth strategies have positioned us as a leader in our sector.",
-    rating: 5,
-    avatar: "/avatars/emily.jpg"
+    id: 3,
+    title: "Implement & Scale",
+    description: "Transform strategic insights into measurable success with custom recommendations designed to enhance revenue, improve operational efficiency, and strengthen your competitive edge.",
+    icon: <TrendingUp className="h-8 w-8" />,
+    color: "from-green-500 to-green-600",
+    bgColor: "from-green-50 to-green-100"
   }
 ]
 
-// Sample Chart Data
-const growthData = [
-  { month: 'Jan', revenue: 12000, donors: 150, impact: 85 },
-  { month: 'Feb', revenue: 15000, donors: 180, impact: 88 },
-  { month: 'Mar', revenue: 18000, donors: 220, impact: 92 },
-  { month: 'Apr', revenue: 22000, donors: 280, impact: 95 },
-  { month: 'May', revenue: 28000, donors: 350, impact: 98 },
-  { month: 'Jun', revenue: 35000, donors: 420, impact: 100 }
+// Why OptimaliQ Data - Original GMF Plus v3.1 content
+const whyOptimaliQComparison = [
+  ["Cost", "Starts at $249/mo", "$10,000+ Retainers"],
+  ["Speed", "Instant, AI-Powered Insights", "Weeks of Manual Reporting"],
+  ["Actionability", "Real-Time Strategy Adjustments", "Static Reports & Decks"],
+  ["Market Awareness", "Live Trend + Benchmark Data", "Limited to Analyst Opinion"],
+  ["Scalability", "Continuously Learns & Improves", "Bound by Human Bandwidth"],
+  ["Execution", "AI Task Recommendations & Playbooks", "Requires Internal Teams"]
 ]
 
-// Pricing Data
-const pricingPlans = [
+// FAQ Data - Original GMF Plus v3.1 content
+const faqs = [
   {
-    name: "Starter",
-    price: "$99",
-    period: "/month",
-    description: "Perfect for small non-profits getting started",
-    features: [
-      "Basic assessment tools",
-      "5 team members",
-      "Standard reports",
-      "Email support"
-    ],
-    popular: false
+    question: "How does OptimaliQ compare to hiring a consultant?",
+    answer: "OptimaliQ delivers continuous, AI-powered insights instantly, while consulting firms charge high retainers for one-time reports. Our platform provides real-time strategy optimization, competitive benchmarking, and predictive insights at a fraction of the cost."
   },
   {
-    name: "Professional",
-    price: "$299",
-    period: "/month",
-    description: "Ideal for growing organizations",
-    features: [
-      "Advanced AI insights",
-      "Unlimited team members",
-      "Custom dashboards",
-      "Priority support",
-      "Market intelligence",
-      "Growth strategies"
-    ],
-    popular: true
+    question: "Can this work for small businesses?",
+    answer: "Absolutely! Whether you're a startup or enterprise, OptimaliQ adapts to your needs with AI-driven insights that scale as you grow. Our platform is designed to provide value for businesses of all sizes."
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "For large organizations with complex needs",
-    features: [
-      "Everything in Professional",
-      "Custom integrations",
-      "Dedicated success manager",
-      "Advanced analytics",
-      "White-label options",
-      "API access"
-    ],
-    popular: false
+    question: "Can I talk to a real person?",
+    answer: "Absolutely. Our team offers live onboarding and optional strategy sessions to help you succeed."
+  },
+  {
+    question: "How does OptimaliQ predict growth?",
+    answer: "We analyze real-time industry data, past performance, and competitive benchmarks using advanced machine learning algorithms to provide accurate business forecasts and strategic recommendations."
+  },
+  {
+    question: "Is my data secure?",
+    answer: "Absolutely. OptimaliQ uses industry best practices to ensure your business data is protected. We follow strict data privacy protocols, implement enterprise-grade encryption, and never share your information with third parties. Your trust is our priority, and we continuously monitor and improve our security posture."
+  },
+  {
+    question: "How often does OptimaliQ update insights?",
+    answer: "Our AI continuously learns and updates insights in real-time, ensuring you always have the latest competitive intelligence and market trends to inform your strategic decisions."
+  },
+  {
+    question: "What kind of support do you provide?",
+    answer: "We provide comprehensive support including onboarding, strategic consultation, and ongoing optimization. Our team of experts is available to help you maximize the value of your OptimaliQ investment."
   }
 ]
 
-export default function LandingPage() {
+// Page sections for navigation
+const pageSections = [
+  { id: "hero", label: "Home", icon: "🏠" },
+  { id: "trust-indicators", label: "Trust", icon: "🛡️" },
+  { id: "how-it-works", label: "How It Works", icon: "⚙️" },
+  { id: "key-features", label: "Features", icon: "✨" },
+  { id: "why-optimaliq", label: "Why OptimaliQ", icon: "🎯" },
+  { id: "newsletter", label: "Newsletter", icon: "📧" },
+  { id: "faq", label: "FAQ", icon: "❓" }
+]
+
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Navigation */}
@@ -181,9 +175,9 @@ export default function LandingPage() {
           </div>
           
           <div className="hidden md:flex items-center space-x-6">
-            <a href="#features" className="text-sm font-medium hover:text-primary transition-colors">Features</a>
-            <a href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">Pricing</a>
-            <a href="#testimonials" className="text-sm font-medium hover:text-primary transition-colors">Success Stories</a>
+            <a href="#key-features" className="text-sm font-medium hover:text-primary transition-colors">Features</a>
+            <a href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">How It Works</a>
+            <a href="#why-optimaliq" className="text-sm font-medium hover:text-primary transition-colors">Why OptimaliQ</a>
             <Button variant="ghost" size="sm">Sign In</Button>
             <Button size="sm">Get Started</Button>
           </div>
@@ -191,368 +185,493 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <Section className="py-20 lg:py-32">
-        <Container>
+      <Section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Enhanced Background */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/85 via-blue-900/75 to-indigo-900/80" />
+          <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+          
+          {/* Animated Background Elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+        
+        {/* Enhanced Content */}
+        <div className="relative z-10 w-full">
+          <Container className="max-w-7xl mx-auto px-6">
           <Grid cols={2} gap={8} className="items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-            >
-              <StatusBadge status="success" dot className="mb-4">
-                Trusted by 500+ Non-Profit Organizations
-              </StatusBadge>
-              
-              <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-6">
+                className="space-y-8"
+              >
+                {/* Enhanced Headline */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="text-5xl lg:text-7xl font-bold text-white leading-tight"
+                >
                 {heroData.title}
-              </h1>
-              
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+                  <br />
+                  <span className="text-blue-400 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 {heroData.subtitle}
-              </p>
-              
-              <Flex gap={4} className="mb-8">
-                <Button size="lg" className="group">
-                  {heroData.cta}
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" size="lg">
-                  <Play className="mr-2 h-4 w-4" />
-                  Watch Demo
-                </Button>
-              </Flex>
-              
-              <Flex gap={8}>
-                {heroData.stats.map((stat, index) => (
+                  </span>
+                </motion.h1>
+
+                {/* Enhanced Subtitle */}
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-2xl"
+                >
+                  {heroData.description}
+                </motion.p>
+
+                {/* Enhanced CTA Button */}
                   <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="flex flex-col sm:flex-row gap-4"
+                >
+                  <Button
+                    size="lg"
+                    className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800"
                   >
-                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    {heroData.cta}
+                  </Button>
                   </motion.div>
-                ))}
-              </Flex>
+
+                {/* Enhanced Trust Indicators */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className="flex items-center gap-6 pt-4"
+                >
+                  {heroData.trustIndicators.map((indicator, index) => (
+                    <div key={index} className="flex items-center gap-2 text-gray-300">
+                      <Check className="h-4 w-4 text-green-400" />
+                      <span className="text-sm">{indicator}</span>
+                    </div>
+                  ))}
+                </motion.div>
             </motion.div>
             
+              {/* Enhanced Visual Section */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
               className="relative"
             >
-              <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Growth Analytics</h3>
-                    <StatusBadge status="success" size="sm">+45%</StatusBadge>
+                {/* Dashboard Preview */}
+                <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                      <span className="text-white font-medium">Live Dashboard</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full" />
                   </div>
-                  <div className="h-48">
-                    <LineChart
-                      data={growthData}
-                      lines={[
-                        { key: 'revenue', color: '#3b82f6', strokeWidth: 3 },
-                        { key: 'donors', color: '#10b981', strokeWidth: 2 },
-                        { key: 'impact', color: '#f59e0b', strokeWidth: 2 }
-                      ]}
-                      showGrid={false}
-                      showLegend={false}
-                    />
                   </div>
+                  
+                  {/* Mock Dashboard Content */}
+                  <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
-                    <MetricCard
-                      title="Revenue"
-                      value="$35K"
-                      change={{ value: 45, type: "increase", period: "last month" }}
-                      trend="up"
-                      size="sm"
-                    />
-                    <MetricCard
-                      title="Donors"
-                      value="420"
-                      change={{ value: 28, type: "increase", period: "last month" }}
-                      trend="up"
-                      size="sm"
-                    />
-                    <MetricCard
-                      title="Impact"
-                      value="100%"
-                      change={{ value: 12, type: "increase", period: "last month" }}
-                      trend="up"
-                      size="sm"
-                    />
+                      <div className="bg-white/20 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-white">85.2</div>
+                        <div className="text-xs text-gray-300">Performance</div>
+                      </div>
+                      <div className="bg-white/20 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-white">+12.5%</div>
+                        <div className="text-xs text-gray-300">Growth</div>
+                      </div>
+                      <div className="bg-white/20 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-white">92%</div>
+                        <div className="text-xs text-gray-300">Efficiency</div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white/20 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm text-gray-300">Market Position</span>
+                        <span className="text-sm text-green-400">Top 10%</span>
+                      </div>
+                      <div className="w-full bg-white/20 rounded-full h-2">
+                        <div className="bg-gradient-to-r from-green-400 to-blue-400 h-2 rounded-full w-4/5" />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </Card>
+
+                {/* Floating Elements */}
+                <motion.div
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-4 -right-4 bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30"
+                >
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-blue-400" />
+                    <span className="text-xs text-white">+15% ROI</span>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [10, -10, 10] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -bottom-4 -left-4 bg-green-500/20 backdrop-blur-sm rounded-lg p-3 border border-green-400/30"
+                >
+                  <div className="flex items-center gap-2">
+                    <Target className="h-4 w-4 text-green-400" />
+                    <span className="text-xs text-white">Goal Achieved</span>
+                  </div>
+                </motion.div>
             </motion.div>
           </Grid>
+          </Container>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center text-white/60"
+          >
+            <span className="text-sm mb-2">Scroll to explore</span>
+            <ArrowDown className="h-4 w-4" />
+          </motion.div>
+        </motion.div>
+      </Section>
+
+      {/* Trust Indicators Section */}
+      <Section id="trust-indicators" className="py-16 bg-white">
+        <Container>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Trusted by Industry Leaders
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Join hundreds of executives who trust OptimaliQ to drive their growth strategy
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 mb-2">500+</div>
+              <div className="text-sm text-gray-600">Organizations Served</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-600 mb-2">95%</div>
+              <div className="text-sm text-gray-600">Success Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-600 mb-2">2.5x</div>
+              <div className="text-sm text-gray-600">Average Growth</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-orange-600 mb-2">24/7</div>
+              <div className="text-sm text-gray-600">AI Support</div>
+            </div>
+          </div>
         </Container>
       </Section>
 
-      {/* Features Section */}
-      <Section id="features" className="py-20 bg-muted/30">
+      {/* How It Works Section */}
+      <Section id="how-it-works" className="py-24 bg-gradient-to-br from-gray-50 to-white">
         <Container>
+          {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="primary" className="mb-4">
-              Powerful Features
-            </StatusBadge>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Everything You Need to Scale Your Impact
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              How It Works
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Three Steps to{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Strategic Excellence
+              </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive AI-powered tools designed specifically for non-profit organizations to maximize their social impact.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Our proven methodology combines AI-powered analysis with strategic execution to deliver measurable business impact.
             </p>
           </motion.div>
           
-          <Grid cols={3} gap={8}>
+          {/* Steps Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {howItWorksSteps.map((step, index) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="relative group"
+              >
+                {/* Step Number Badge */}
+                <div className="absolute -top-4 -left-4 z-20">
+                  <div className={`w-12 h-12 bg-gradient-to-r ${step.color} text-white flex items-center justify-center rounded-full text-xl font-bold shadow-lg`}>
+                    {step.id}
+                  </div>
+                </div>
+                
+                <div className={`relative bg-white rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-500 h-full`}>
+                  {/* Background Gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${step.bgColor} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
+                  
+                  <div className="relative z-10">
+                    {/* Icon */}
+                    <div className={`w-16 h-16 bg-gradient-to-r ${step.color} text-white flex items-center justify-center rounded-2xl mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      {step.icon}
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                    
+                    {/* Description */}
+                    <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Key Features Section */}
+      <Section id="key-features" className="py-24 bg-white">
+        <Container>
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              Key Features
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Enterprise-Grade{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Strategic Intelligence
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              The essential tools designed to accelerate growth, optimize strategy, and maximize efficiency across your entire organization.
+            </p>
+          </motion.div>
+          
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group relative"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-all duration-300 group">
-                  <div className={`inline-flex p-3 rounded-lg bg-${feature.color}/10 text-${feature.color} mb-4 group-hover:scale-110 transition-transform`}>
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </Grid>
-        </Container>
-      </Section>
-
-      {/* Testimonials Section */}
-      <Section id="testimonials" className="py-20">
-        <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <StatusBadge status="warning" className="mb-4">
-              Success Stories
-            </StatusBadge>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Trusted by Leading Non-Profits
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              See how organizations are transforming their impact with OptimaliQ's AI-powered insights.
-            </p>
-          </motion.div>
-          
-          <Grid cols={3} gap={8}>
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="p-6 h-full">
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <Quote className="h-8 w-8 text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    "{testimonial.content}"
-                  </p>
-                  <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-primary">
-                        {testimonial.name.split(' ').map(n => n[0]).join('')}
-                      </span>
+                <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-500 h-full">
+                  {/* Background Gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgColor} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
+                  
+                  <div className="relative z-10">
+                    {/* Icon */}
+                    <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} text-white flex items-center justify-center rounded-2xl mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      {feature.icon}
                     </div>
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {testimonial.role}, {testimonial.organization}
-                      </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">{feature.title}</h3>
+                    
+                    {/* Description */}
+                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                     </div>
         </div>
-                </Card>
               </motion.div>
             ))}
-          </Grid>
+          </div>
         </Container>
       </Section>
 
-      {/* Pricing Section */}
-      <Section id="pricing" className="py-20 bg-muted/30">
+      {/* Why OptimaliQ Section */}
+      <Section id="why-optimaliq" className="py-24 bg-gradient-to-br from-gray-50 to-white">
         <Container>
+          {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="info" className="mb-4">
-              Simple Pricing
-            </StatusBadge>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Choose the Perfect Plan for Your Organization
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              Why Choose <span className="text-blue-200">OptimaliQ</span>
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              The{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <span className="text-blue-600">OptimaliQ</span> Advantage
+              </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Flexible pricing options designed to scale with your organization's growth and impact.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Your competitors are scaling faster by using AI to optimize strategy, streamline execution, and stay ahead of the market. <span className="text-blue-600 font-semibold">OptimaliQ</span> gives you that same edge — for less than the cost of one hour with a consultant.
             </p>
           </motion.div>
           
-          <Grid cols={3} gap={8}>
-            {pricingPlans.map((plan, index) => (
-              <motion.div
-                key={plan.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className={`p-6 h-full relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}>
-                  {plan.popular && (
-                    <StatusBadge status="primary" className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      Most Popular
-                    </StatusBadge>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                    <div className="flex items-baseline justify-center mb-2">
-                      <span className="text-3xl font-bold">{plan.price}</span>
-                      <span className="text-muted-foreground">{plan.period}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{plan.description}</p>
-                  </div>
-                  
-                  <Stack spacing={3} className="mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center space-x-3">
-                        <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </Stack>
-                  
-                  <Button 
-                    className="w-full" 
-                    variant={plan.popular ? "default" : "outline"}
-                  >
-                    Get Started
-                  </Button>
-                </Card>
-              </motion.div>
-            ))}
-          </Grid>
-        </Container>
-      </Section>
-
-      {/* CTA Section */}
-      <Section className="py-20">
-        <Container>
+          {/* Comparison Table */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden mb-12"
           >
-            <Card className="p-12 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
-              <Award className="h-12 w-12 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Ready to Transform Your Organization?
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join hundreds of non-profit organizations already using OptimaliQ to maximize their social impact and drive sustainable growth.
-              </p>
-              <Flex gap={4} className="justify-center">
-                <Button size="lg" className="group">
-                  Start Free Assessment
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" size="lg">
-                  Schedule Demo
-                </Button>
-              </Flex>
-            </Card>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                    <th className="p-6 text-left font-semibold text-lg">Feature</th>
+                    <th className="p-6 text-center font-semibold text-lg"><span className="text-blue-200">OptimaliQ</span></th>
+                    <th className="p-6 text-center font-semibold text-lg">Traditional Consulting</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {whyOptimaliQComparison.map(([label, optimaliq, consulting], i) => (
+                    <motion.tr
+                      key={label}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: i * 0.1 }}
+                      className={`border-t border-gray-100 ${i % 2 === 1 ? "bg-gray-50" : "bg-white"} hover:bg-blue-50 transition-colors duration-200`}
+                    >
+                      <td className="p-6 font-semibold text-gray-900">{label}</td>
+                      <td className="p-6 text-center">
+                        <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          {optimaliq}
+                        </span>
+                      </td>
+                      <td className="p-6 text-center">
+                        <span className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">
+                          <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                          {consulting}
+                        </span>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </motion.div>
         </Container>
       </Section>
 
-      {/* Footer */}
-      <footer className="border-t bg-muted/30">
-        <Container className="py-12">
-          <Grid cols={4} gap={8}>
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                  <Zap className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-bold">OptimaliQ</span>
-              </div>
-              <p className="text-muted-foreground mb-4">
-                AI-powered business intelligence for non-profit organizations.
-              </p>
-              <div className="flex space-x-4">
-                <Globe className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer" />
-                <Award className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer" />
-                <Shield className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer" />
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <Stack spacing={2}>
-                <button className="text-sm text-muted-foreground hover:text-primary">Features</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Pricing</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">API</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Integrations</button>
-              </Stack>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <Stack spacing={2}>
-                <button className="text-sm text-muted-foreground hover:text-primary">About</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Blog</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Careers</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Contact</button>
-              </Stack>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <Stack spacing={2}>
-                <button className="text-sm text-muted-foreground hover:text-primary">Help Center</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Documentation</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Community</button>
-                <button className="text-sm text-muted-foreground hover:text-primary">Status</button>
-              </Stack>
-            </div>
-          </Grid>
-          
-          <div className="border-t mt-8 pt-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              © 2024 OptimaliQ. All rights reserved. | Privacy Policy | Terms of Service
+      {/* Newsletter Section */}
+      <Section id="newsletter" className="py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Ready to Unlock Your Growth Potential?
+            </h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Get your comprehensive growth report and personalized strategic recommendations in minutes.
             </p>
+            
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <Button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800">
+                  Get My Free Report
+                </Button>
+              </form>
+              <p className="text-sm text-gray-500 mt-4">
+                Join 500+ executives. No spam, unsubscribe anytime.
+              </p>
+            </div>
+            </div>
+        </Container>
+      </Section>
+
+      {/* FAQ Section */}
+      <Section id="faq" className="py-24 bg-white">
+        <Container>
+          {/* Section Header */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              FAQ
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Frequently Asked{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Questions
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Everything you need to know about <span className="text-blue-600 font-semibold">OptimaliQ</span>&apos;s AI-powered strategic intelligence platform.
+            </p>
+          </motion.div>
+
+          {/* FAQ Grid */}
+          <div className="max-w-4xl mx-auto space-y-4">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      {faq.question}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </Container>
-      </footer>
+      </Section>
     </div>
   )
 }
