@@ -393,12 +393,23 @@ export class NewsAPI {
  * Orchestrates content fetching from multiple sources and feeds into RAG pipeline
  */
 export class ContentIngestionService {
-  private finnhub: FinnhubAPI;
-  private newsApi: NewsAPI;
+  private finnhub: FinnhubAPI | null;
+  private newsApi: NewsAPI | null;
 
   constructor() {
-    this.finnhub = new FinnhubAPI();
-    this.newsApi = new NewsAPI();
+    try {
+      this.finnhub = env.FINNHUB_API_KEY ? new FinnhubAPI() : null;
+    } catch (error) {
+      console.warn('Finnhub API not configured:', error);
+      this.finnhub = null;
+    }
+    
+    try {
+      this.newsApi = env.NEWS_API_KEY ? new NewsAPI() : null;
+    } catch (error) {
+      console.warn('News API not configured:', error);
+      this.newsApi = null;
+    }
   }
 
   /**
@@ -431,7 +442,7 @@ export class ContentIngestionService {
     };
 
     // Ingest Finnhub market news
-    if (options?.includeMarketNews !== false) {
+    if (options?.includeMarketNews !== false && this.finnhub) {
       try {
         const marketNews = await this.finnhub.getMarketNews('general');
         if (ragPipeline) {
@@ -449,7 +460,7 @@ export class ContentIngestionService {
     }
 
     // Ingest company-specific news
-    if (options?.companySymbols?.length) {
+    if (options?.companySymbols?.length && this.finnhub) {
       for (const symbol of options.companySymbols) {
         try {
           const companyNews = await this.finnhub.getCompanyNews(symbol);
@@ -469,7 +480,7 @@ export class ContentIngestionService {
     }
 
     // Ingest News API business news
-    if (options?.includeBusinessNews !== false) {
+    if (options?.includeBusinessNews !== false && this.newsApi) {
       try {
         const businessNews = await this.newsApi.getBusinessNews();
         if (ragPipeline) {
@@ -487,7 +498,7 @@ export class ContentIngestionService {
     }
 
     // Ingest search-based news
-    if (options?.searchQueries?.length) {
+    if (options?.searchQueries?.length && this.newsApi) {
       for (const query of options.searchQueries) {
         try {
           const searchNews = await this.newsApi.searchNews(query);
