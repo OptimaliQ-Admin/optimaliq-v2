@@ -7,11 +7,11 @@
 const API_CONFIG = {
   FINNHUB: {
     baseUrl: 'https://finnhub.io/api/v1',
-    apiKey: process.env.NEXT_PUBLIC_FINNHUB_API_KEY || ''
+    apiKey: process.env.FINNHUB_API_KEY || ''
   },
   NEWS_API: {
     baseUrl: 'https://newsapi.org/v2',
-    apiKey: process.env.NEXT_PUBLIC_NEWS_API_KEY || ''
+    apiKey: process.env.NEWSAPI_KEY || ''
   },
   TWITTER: {
     baseUrl: 'https://api.twitter.com/2',
