@@ -48,8 +48,10 @@ export class AnthropicProvider {
   private rateLimitTracker: Map<string, number[]> = new Map();
 
   constructor() {
+    // Skip initialization if not configured
     if (!env.ANTHROPIC_API_KEY) {
-      throw new AppError('Anthropic API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('Anthropic API key not configured - skipping initialization');
+      return;
     }
 
     this.client = new Anthropic({
@@ -57,6 +59,13 @@ export class AnthropicProvider {
     });
     
     this.defaultModel = 'claude-3-sonnet-20240229';
+  }
+
+  /**
+   * Check if provider is properly configured
+   */
+  isConfigured(): boolean {
+    return !!env.ANTHROPIC_API_KEY && !!this.client;
   }
 
   /**

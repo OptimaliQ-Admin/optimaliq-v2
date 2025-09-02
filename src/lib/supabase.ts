@@ -2,19 +2,11 @@ import { createClient } from '@supabase/supabase-js';
 import { AppError } from '@/utils';
 
 // Environment variables will be loaded from .env.local
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new AppError(
-    'Missing Supabase environment variables',
-    'CONFIGURATION_ERROR',
-    500
-  );
-}
-
-// Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Create Supabase client (will be null if not configured)
+export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -28,7 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       'X-Client-Info': 'optimaliq-web'
     }
   }
-});
+}) : null;
 
 // Database table names
 export const TABLES = {
@@ -343,6 +335,9 @@ export class SupabaseService {
     }
   }
 }
+
+// Helper function to check if Supabase is configured
+export const isSupabaseConfigured = () => !!supabase;
 
 // Export singleton instance
 export const supabaseService = SupabaseService.getInstance();

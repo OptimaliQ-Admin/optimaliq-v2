@@ -61,8 +61,12 @@ export class GoogleVertexProvider {
   private rateLimitTracker: Map<string, number[]> = new Map();
 
   constructor() {
+    // Skip initialization if not configured
     if (!env.VERTEX_PROJECT_ID) {
-      throw new AppError('Google Vertex AI project ID not configured', 'CONFIG_ERROR', 500);
+      console.warn('Google Vertex AI project ID not configured - skipping initialization');
+      this.projectId = '';
+      this.apiEndpoint = '';
+      return;
     }
 
     this.projectId = env.VERTEX_PROJECT_ID;
@@ -70,16 +74,21 @@ export class GoogleVertexProvider {
   }
 
   /**
+   * Check if provider is properly configured
+   */
+  isConfigured(): boolean {
+    return !!env.VERTEX_PROJECT_ID && !!process.env.GOOGLE_AI_API_KEY;
+  }
+
+  /**
    * Get access token for Google Cloud API
    */
   private async getAccessToken(): Promise<string> {
     try {
-      // In production, you would use Google Cloud SDK or service account
-      // For now, we'll simulate the token request
-      // This should be replaced with actual Google Auth implementation
-      
+      // Skip if not configured
       if (!process.env.GOOGLE_AI_API_KEY) {
-        throw new AppError('Google Application Credentials not configured', 'CONFIG_ERROR', 500);
+        console.warn('Google AI API key not configured - skipping token request');
+        return 'no-token';
       }
 
       // Placeholder for actual Google Auth implementation
@@ -91,11 +100,8 @@ export class GoogleVertexProvider {
       
       return 'placeholder-token'; // Replace with actual token
     } catch (error) {
-      throw new AppError(
-        `Failed to get access token: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        'AUTH_ERROR',
-        500
-      );
+      console.warn(`Failed to get access token: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return 'no-token';
     }
   }
 

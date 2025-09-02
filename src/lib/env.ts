@@ -16,6 +16,7 @@ const envSchema = z.object({
   ANTHROPIC_API_KEY: z.string().optional(),
   GOOGLE_AI_API_KEY: z.string().optional(),
   MISTRAL_API_KEY: z.string().optional(),
+  VERTEX_PROJECT_ID: z.string().optional(),
 
   // Market / news / RAG
   ALPHA_VANTAGE_API_KEY: z.string().optional(),

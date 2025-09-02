@@ -53,11 +53,20 @@ export class MistralProvider {
   private rateLimitTracker: Map<string, number[]> = new Map();
 
   constructor() {
+    // Skip initialization if not configured
     if (!env.MISTRAL_API_KEY) {
-      throw new AppError('Mistral API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('Mistral API key not configured - skipping initialization');
+      return;
     }
 
     this.apiKey = env.MISTRAL_API_KEY;
+  }
+
+  /**
+   * Check if provider is properly configured
+   */
+  isConfigured(): boolean {
+    return !!env.MISTRAL_API_KEY;
   }
 
   /**
