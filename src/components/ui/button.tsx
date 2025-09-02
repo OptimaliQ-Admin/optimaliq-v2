@@ -92,7 +92,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     onClick,
     ...props 
   }, ref) => {
-    const Comp = asChild ? Slot : "button"
+    const Comp = asChild ? "div" : "button"
     const [isRippling, setIsRippling] = React.useState(false)
     const [rippleStyle, setRippleStyle] = React.useState({})
 
