@@ -17,6 +17,7 @@ import {
   Award,
   CheckCircle,
   ArrowRight,
+  ArrowLeft,
   Play,
   Clock,
   Star,
