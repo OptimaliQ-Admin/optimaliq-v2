@@ -98,6 +98,7 @@ import {
   Image,
   Video as VideoIcon,
   Audio,
+  CreditCard,
   Code,
   Terminal,
   Command,

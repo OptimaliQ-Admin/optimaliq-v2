@@ -518,30 +518,30 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <Stack spacing={2}>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Features</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Pricing</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">API</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Integrations</a>
+                <button className="text-sm text-muted-foreground hover:text-primary">Features</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Pricing</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">API</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Integrations</button>
               </Stack>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <Stack spacing={2}>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">About</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Blog</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Careers</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Contact</a>
+                <button className="text-sm text-muted-foreground hover:text-primary">About</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Blog</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Careers</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Contact</button>
               </Stack>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <Stack spacing={2}>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Help Center</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Documentation</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Community</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary">Status</a>
+                <button className="text-sm text-muted-foreground hover:text-primary">Help Center</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Documentation</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Community</button>
+                <button className="text-sm text-muted-foreground hover:text-primary">Status</button>
               </Stack>
             </div>
           </Grid>

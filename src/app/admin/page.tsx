@@ -10,22 +10,20 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { 
   Shield, Users, Settings, Database, Activity,
-  AlertTriangle, CheckCircle, XCircle, Clock, TrendingUp,
-  TrendingDown, Eye, Edit, Trash, Plus, Search, Filter,
-  Download, Upload, RefreshCw, Globe, Building, Star,
+  AlertTriangle, CheckCircle, XCircle, Eye, Plus, Star,
   Award, Rocket, Lightbulb, Gauge, Target, User, Lock,
   Unlock, Key, Database as DatabaseIcon, Cloud, Server,
   HardDrive, Cpu, Memory, Network, Zap, Bell, HelpCircle,
   MessageSquare, FileText, Calendar, Clock as ClockIcon,
   UserCheck, UserX, UserPlus, UserMinus, Settings as SettingsIcon,
-  Cog, Wrench, Tool, Hammer, Wrench as WrenchIcon, Info
+  Cog, Wrench, Tool, Hammer, Wrench as WrenchIcon, Info,
+  RefreshCw, Building
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
+import { StatusBadge, Progress } from '@/components/ui/data-display'
 import { Alert } from '@/components/ui/feedback'
-import { Progress } from '@/components/ui/data-display'
 import { MetricCard } from '@/components/ui/charts'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/form'
@@ -303,7 +301,7 @@ export default function AdminPage() {
                       <span className="text-sm text-muted-foreground">{adminData.systemStats.networkTraffic}</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full">
-                      <div className="h-2 bg-primary rounded-full w-3/4"></div>
+                      <div className="h-2 bg-primary rounded-full w-3/4" />
                     </div>
                   </div>
                 </div>
