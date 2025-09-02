@@ -78,6 +78,9 @@ export class SupabaseService {
   // User management
   async getUser(userId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.USERS)
         .select('*')
@@ -97,6 +100,9 @@ export class SupabaseService {
   
   async updateUser(userId: string, updates: Partial<any>) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.USERS)
         .update(updates)
@@ -118,6 +124,9 @@ export class SupabaseService {
   // Assessment management
   async createAssessment(assessment: any) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.ASSESSMENTS)
         .insert(assessment)
@@ -137,6 +146,9 @@ export class SupabaseService {
   
   async getAssessment(assessmentId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.ASSESSMENTS)
         .select('*')
@@ -156,6 +168,9 @@ export class SupabaseService {
   
   async getUserAssessments(userId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.ASSESSMENTS)
         .select('*')
@@ -176,6 +191,9 @@ export class SupabaseService {
   // Dashboard insights
   async getDashboardInsights(userId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.DASHBOARD_INSIGHTS)
         .select('*')
@@ -197,6 +215,9 @@ export class SupabaseService {
   
   async createDashboardInsights(insights: any) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.DASHBOARD_INSIGHTS)
         .insert(insights)
@@ -217,6 +238,9 @@ export class SupabaseService {
   // Growth levers
   async getGrowthLevers(userId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.GROWTH_LEVERS)
         .select('*')
@@ -236,6 +260,9 @@ export class SupabaseService {
   
   async createGrowthLevers(levers: any) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.GROWTH_LEVERS)
         .insert(levers)
@@ -255,6 +282,9 @@ export class SupabaseService {
   // Team management
   async getTeamMembers(organizationId: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.TEAM_MEMBERS)
         .select('*')
@@ -275,6 +305,9 @@ export class SupabaseService {
   
   async inviteTeamMember(invitation: any) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.TEAM_MEMBERS)
         .insert(invitation)
@@ -295,6 +328,9 @@ export class SupabaseService {
   // Market intelligence
   async getMarketSnapshots(industry: string) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase
         .from(TABLES.MARKET_SNAPSHOTS)
         .select('*')
@@ -316,6 +352,9 @@ export class SupabaseService {
   // Vector search for market articles
   async searchMarketArticles(query: string, limit: number = 10) {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       // This would use pgvector for semantic search
       // For now, we'll do a basic text search
       const { data, error } = await supabase
@@ -346,6 +385,9 @@ export const supabaseService = SupabaseService.getInstance();
 export const auth = {
   signUp: async (email: string, password: string, userData: any) => {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -367,6 +409,9 @@ export const auth = {
   
   signIn: async (email: string, password: string) => {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -385,6 +430,9 @@ export const auth = {
   
   signOut: async () => {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     } catch (error) {
@@ -398,6 +446,9 @@ export const auth = {
   
   getCurrentUser: async () => {
     try {
+      if (!supabase) {
+        throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+      }
       const { data: { user }, error } = await supabase.auth.getUser();
       if (error) throw error;
       return user;
@@ -411,6 +462,9 @@ export const auth = {
   },
   
   onAuthStateChange: (callback: (event: string, session: any) => void) => {
+    if (!supabase) {
+      throw new AppError('Supabase not configured', 'CONFIG_ERROR', 503);
+    }
     return supabase.auth.onAuthStateChange(callback);
   }
 };

@@ -4,10 +4,10 @@ import { createServerClient } from '@/lib/supabase/server';
 import { env } from '@/lib/env';
 import { AppError } from '@/utils';
 
-// OpenAI client initialization
-const openai = new OpenAI({
+// OpenAI client initialization (only if API key is provided)
+const openai = env.OPENAI_API_KEY ? new OpenAI({
   apiKey: env.OPENAI_API_KEY,
-});
+}) : null;
 
 // Content preprocessing schema
 const ContentSchema = z.object({
@@ -100,6 +100,11 @@ export class RAGPipeline {
    */
   async generateEmbedding(request: EmbeddingRequest): Promise<number[]> {
     try {
+      // Check if OpenAI is configured
+      if (!openai) {
+        throw new AppError('OpenAI not configured - embeddings unavailable', 'CONFIG_ERROR', 503);
+      }
+
       const validatedRequest = EmbeddingRequestSchema.parse(request);
       
       const response = await openai.embeddings.create({
@@ -186,6 +191,12 @@ export class RAGPipeline {
     similarity: number;
   }>> {
     try {
+      // Check if OpenAI is configured for embeddings
+      if (!openai) {
+        console.warn('OpenAI not configured - search unavailable');
+        return [];
+      }
+
       const validatedRequest = SearchRequestSchema.parse(request);
       
       // Generate query embedding
@@ -217,11 +228,9 @@ export class RAGPipeline {
     } catch (error) {
       if (error instanceof AppError) throw error;
       
-      throw new AppError(
-        `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        'SEARCH_ERROR',
-        500
-      );
+      // Return empty array instead of throwing for graceful degradation
+      console.warn(`Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return [];
     }
   }
 
@@ -258,6 +267,15 @@ export class RAGPipeline {
     context: string[];
   }> {
     try {
+      // Check if OpenAI is configured for embeddings
+      if (!openai) {
+        return {
+          answer: "AI services are not currently configured. Please check your configuration.",
+          citations: [],
+          context: [],
+        };
+      }
+
       // Search for relevant content
       const searchResults = await this.searchSimilarContent({
         query,
@@ -290,11 +308,13 @@ export class RAGPipeline {
         context: options?.includeContext ? context : [],
       };
     } catch (error) {
-      throw new AppError(
-        `RAG workflow failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        'RAG_ERROR',
-        500
-      );
+      // Return graceful fallback instead of throwing
+      console.warn(`RAG workflow failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return {
+        answer: "AI services are temporarily unavailable. Please try again later.",
+        citations: [],
+        context: [],
+      };
     }
   }
 
@@ -303,6 +323,11 @@ export class RAGPipeline {
    */
   private async generateAnswerWithContext(query: string, context: string[]): Promise<string> {
     try {
+      // Check if OpenAI is configured
+      if (!openai) {
+        throw new AppError('OpenAI not configured - answer generation unavailable', 'CONFIG_ERROR', 503);
+      }
+
       const contextText = context.join('\n\n');
       
       const response = await openai.chat.completions.create({
