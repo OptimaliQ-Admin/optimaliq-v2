@@ -360,11 +360,11 @@ export default function InvitationPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 
-                <Button variant="outline" size="lg" asChild>
-                  <Link href="/contact">
+                <Link href="/contact">
+              <Button variant="outline" size="lg">
                     Contact Support
-                  </Link>
-                </Button>
+                  </Button>
+            </Link>
               </div>
             </motion.div>
           )}

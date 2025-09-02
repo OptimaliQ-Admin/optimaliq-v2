@@ -321,11 +321,11 @@ export default function TrialPage() {
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
-                      <Button variant="outline" asChild>
-                        <Link href="/assessment">
+                      <Link href="/assessment">
+              <Button variant="outline">
                           Start First Assessment
-                        </Link>
-                      </Button>
+                        </Button>
+            </Link>
                     </div>
                   </div>
                 ) : (

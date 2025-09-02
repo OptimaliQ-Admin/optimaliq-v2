@@ -25,8 +25,20 @@ pagesWithButtonAsChild.forEach(pagePath => {
     
     // Check if page uses Button asChild pattern
     if (content.includes('Button asChild')) {
-      // Replace Button asChild pattern with nested Link/Button structure
-      const fixedContent = content.replace(
+      let fixedContent = content;
+      
+      // Handle complex Button asChild patterns with props
+      // Pattern: <Button variant="..." size="..." className="..." asChild>
+      fixedContent = fixedContent.replace(
+        /<Button\s+([^>]*?)asChild\s*([^>]*?)>\s*<Link\s+href="([^"]+)">([^<]+)<\/Link>\s*<\/Button>/g,
+        (match, props1, props2, href, text) => {
+          const allProps = (props1 + props2).trim();
+          return `<Link href="${href}">\n              <Button ${allProps}>${text}</Button>\n            </Link>`;
+        }
+      );
+      
+      // Handle simple Button asChild patterns
+      fixedContent = fixedContent.replace(
         /<Button asChild>\s*<Link href="([^"]+)">([^<]+)<\/Link>\s*<\/Button>/g,
         '<Link href="$1">\n              <Button>$2</Button>\n            </Link>'
       );
