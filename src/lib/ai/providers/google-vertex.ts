@@ -78,7 +78,7 @@ export class GoogleVertexProvider {
       // For now, we'll simulate the token request
       // This should be replaced with actual Google Auth implementation
       
-      if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      if (!process.env.GOOGLE_AI_API_KEY) {
         throw new AppError('Google Application Credentials not configured', 'CONFIG_ERROR', 500);
       }
 

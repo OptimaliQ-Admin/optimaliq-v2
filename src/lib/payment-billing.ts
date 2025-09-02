@@ -6,9 +6,9 @@
 // Payment Configuration
 const PAYMENT_CONFIG = {
   STRIPE: {
-    publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
-    secretKey: process.env.STRIPE_SECRET_KEY || '',
-    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || ''
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
+  secretKey: process.env.STRIPE_SECRET_KEY || '',
+  webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || ''
   }
 }
 

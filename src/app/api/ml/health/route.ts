@@ -191,8 +191,8 @@ export async function GET(_request: NextRequest) {
         available: !!process.env.FINNHUB_API_KEY,
       },
       newsApi: {
-        status: process.env.NEWS_API_KEY ? 'healthy' : 'unhealthy',
-        available: !!process.env.NEWS_API_KEY,
+              status: process.env.NEWSAPI_KEY ? 'healthy' : 'unhealthy',
+      available: !!process.env.NEWSAPI_KEY,
       },
     };
 
