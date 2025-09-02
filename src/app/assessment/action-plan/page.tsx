@@ -3,9 +3,9 @@
  * 30-day growth plans, strategic roadmaps, and implementation tracking
  */
 
-export const dynamic = 'force-dynamic'
-
 'use client'
+
+export const dynamic = 'force-dynamic'
 
 import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
