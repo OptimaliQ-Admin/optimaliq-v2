@@ -5,7 +5,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -273,7 +273,7 @@ const templateData = {
   }
 }
 
-export default function TemplateLibraryPage() {
+function TemplateLibraryContent() {
   const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all')
   const [selectedIndustry, setSelectedIndustry] = React.useState<string>('all')
@@ -643,5 +643,13 @@ export default function TemplateLibraryPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function TemplateLibraryPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TemplateLibraryContent />
+    </Suspense>
   )
 }

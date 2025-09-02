@@ -43,7 +43,7 @@ import { Select, Checkbox } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
 // Profile setup data
-const profileData = {
+const profileSetupData = {
   steps: [
     { id: 'personal', title: 'Personal Information', description: 'Basic profile details' },
     { id: 'organization', title: 'Organization Details', description: 'Company and role information' },
@@ -137,7 +137,7 @@ export default function ProfileSetupPage() {
   }
 
   const handleNext = () => {
-    if (currentStep < profileData.steps.length - 1) {
+    if (currentStep < profileSetupData.steps.length - 1) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -178,7 +178,7 @@ export default function ProfileSetupPage() {
   }
 
   const getStepProgress = () => {
-    return ((currentStep + 1) / profileData.steps.length) * 100
+    return ((currentStep + 1) / profileSetupData.steps.length) * 100
   }
 
   return (
@@ -221,7 +221,7 @@ export default function ProfileSetupPage() {
                 className="mb-4"
               />
               <div className="flex justify-between text-sm text-muted-foreground">
-                {profileData.steps.map((step, index) => (
+                {profileSetupData.steps.map((step, index) => (
                   <div key={step.id} className={`text-center ${index <= currentStep ? 'text-primary font-medium' : ''}`}>
                     <div>{step.title}</div>
                   </div>

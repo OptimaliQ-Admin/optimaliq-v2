@@ -5,7 +5,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { 
@@ -117,7 +117,7 @@ const categoryIcons = {
   Technology: <Zap className="h-5 w-5" />
 }
 
-export default function AssessmentQuestionsPage() {
+function AssessmentQuestionsContent() {
   const searchParams = useSearchParams()
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0)
   const [answers, setAnswers] = React.useState<Record<number, any>>({})
@@ -469,5 +469,13 @@ export default function AssessmentQuestionsPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function AssessmentQuestionsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AssessmentQuestionsContent />
+    </Suspense>
   )
 }

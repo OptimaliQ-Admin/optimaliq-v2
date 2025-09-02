@@ -5,7 +5,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -191,7 +191,7 @@ const analysisData = {
   ]
 }
 
-export default function AssessmentAnalysisPage() {
+function AssessmentAnalysisContent() {
   const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all')
   const [timeRange, setTimeRange] = React.useState<string>('6months')
@@ -553,5 +553,13 @@ export default function AssessmentAnalysisPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function AssessmentAnalysisPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AssessmentAnalysisContent />
+    </Suspense>
   )
 }

@@ -5,7 +5,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -202,7 +202,7 @@ const followUpData = {
   }
 }
 
-export default function FollowUpRemindersPage() {
+function FollowUpRemindersContent() {
   const searchParams = useSearchParams()
   const [selectedType, setSelectedType] = React.useState<string>('all')
   const [selectedStatus, setSelectedStatus] = React.useState<string>('all')
@@ -619,5 +619,13 @@ export default function FollowUpRemindersPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function FollowUpRemindersPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FollowUpRemindersContent />
+    </Suspense>
   )
 }

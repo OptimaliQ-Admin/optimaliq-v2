@@ -5,7 +5,7 @@
 
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { 
@@ -61,7 +61,7 @@ interface ProgressData {
   }
 }
 
-export default function AssessmentProgressPage() {
+function AssessmentProgressContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const assessmentId = searchParams.get('id')
@@ -391,5 +391,13 @@ export default function AssessmentProgressPage() {
         </AnimatePresence>
       </motion.div>
     </Container>
+  )
+}
+
+export default function AssessmentProgressPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AssessmentProgressContent />
+    </Suspense>
   )
 }
