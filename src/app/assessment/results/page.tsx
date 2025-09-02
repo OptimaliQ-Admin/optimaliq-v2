@@ -5,7 +5,9 @@
 
 'use client'
 
-import React from 'react'
+export const dynamic = 'force-dynamic'
+
+import React, { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -120,7 +122,7 @@ const performanceData = [
   { month: 'Jun', score: 72, benchmark: 70 }
 ]
 
-export default function AssessmentResultsPage() {
+function AssessmentResultsContent() {
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -462,5 +464,13 @@ export default function AssessmentResultsPage() {
         </Container>
       </Section>
     </div>
+  )
+}
+
+export default function AssessmentResultsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AssessmentResultsContent />
+    </Suspense>
   )
 }
