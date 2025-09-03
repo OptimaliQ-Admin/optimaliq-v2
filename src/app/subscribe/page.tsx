@@ -176,9 +176,9 @@ export default function SubscribePage() {
             </motion.p>
 
             {/* Feature Cards */}
-            <motion.div 
+          <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8"
             >
@@ -226,15 +226,15 @@ export default function SubscribePage() {
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-sm text-gray-600">Instant access</span>
               </div>
-            </motion.div>
+          </motion.div>
           </div>
 
           {/* Right Column - Pricing Plans */}
           <div className="space-y-6">
             {/* Billing Toggle */}
-            <motion.div
+          <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-center"
             >
@@ -264,7 +264,7 @@ export default function SubscribePage() {
                     </span>
                   )}
                 </button>
-              </div>
+                    </div>
             </motion.div>
 
             {/* Plans Grid */}
@@ -306,8 +306,8 @@ export default function SubscribePage() {
                             <span className="text-gray-600 ml-1">
                               /{billingCycle === 'annual' ? 'year' : plan.period}
                             </span>
-                          </div>
-                        ) : (
+                  </div>
+                ) : (
                           <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
                         )}
                         
@@ -341,8 +341,8 @@ export default function SubscribePage() {
                       {plan.cta}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
-                  </div>
-                </motion.div>
+                    </div>
+            </motion.div>
               ))}
             </div>
 
@@ -362,10 +362,10 @@ export default function SubscribePage() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </motion.div>
-          </div>
+                  </div>
         </motion.div>
-      </div>
-
+                </div>
+                
       {/* Trust Section */}
       <div className="bg-white border-t border-gray-200 py-16 mt-16">
         <Container>
@@ -397,8 +397,8 @@ export default function SubscribePage() {
                   <p className="text-sm text-gray-600">{indicator.description}</p>
                 </motion.div>
               ))}
-            </div>
-          </div>
+                  </div>
+                </div>
         </Container>
       </div>
 
@@ -409,16 +409,16 @@ export default function SubscribePage() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="text-3xl font-bold text-gray-900 text-center mb-12"
             >
               Frequently Asked Questions
             </motion.h2>
-            
-            <div className="space-y-6">
-              {[
-                {
+
+          <div className="space-y-6">
+            {[
+              {
                   question: "Can I change my plan at any time?",
                   answer: "Yes, you can upgrade, downgrade, or cancel your subscription at any time. Changes take effect immediately, and we'll prorate any billing adjustments."
                 },
@@ -435,9 +435,9 @@ export default function SubscribePage() {
                   answer: "All plans include email support. Strategic and Enterprise plans include priority support, while Enterprise includes dedicated success management."
                 }
               ].map((faq, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
@@ -445,8 +445,8 @@ export default function SubscribePage() {
                 >
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">{faq.question}</h3>
                   <p className="text-gray-600">{faq.answer}</p>
-                </motion.div>
-              ))}
+              </motion.div>
+            ))}
             </div>
           </div>
         </Container>
