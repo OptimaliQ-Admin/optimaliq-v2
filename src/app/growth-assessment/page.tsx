@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Container } from '@/components/ui/layout';
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
