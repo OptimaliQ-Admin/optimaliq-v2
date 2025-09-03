@@ -112,9 +112,9 @@ export default function GrowthAssessmentPage() {
         // Show success message
         toast.success(result.data.message);
         
-        // Redirect to personalized assessment
+        // Redirect to Step 2 (AI Chat Assessment) - following original GTM flow
         setTimeout(() => {
-          router.push(result.data.assessmentUrl);
+          router.push('/growth-assessment/step2');
         }, 1500);
       } else {
         throw new Error('Lead processing failed');
