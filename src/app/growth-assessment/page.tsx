@@ -1,34 +1,33 @@
-'use client';
+/**
+ * OptimaliQ Growth Assessment Page
+ * AI-powered growth analysis and strategic insights
+ * Recreated from original GTM Plus v3.1 design with enterprise-grade feel
+ */
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { AssessmentWizard } from '@/components/assessment/assessment-wizard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+'use client'
+
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { 
-  Brain, 
-  Clock, 
-  Shield, 
-  Award,
-  ArrowLeft,
-  Sparkles,
+  BarChart3,
+  Lightbulb,
+  Rocket,
+  CheckCircle,
+  ArrowRight,
+  Shield,
+  Users,
   TrendingUp,
-  ArrowRight
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { Container } from '@/components/ui/layout';
-
-const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' }
-  }
-};
+  Brain,
+  Clock,
+  Award,
+  Sparkles
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Container, Section } from '@/components/ui/layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function GrowthAssessmentPage() {
   const router = useRouter();
@@ -38,78 +37,18 @@ export default function GrowthAssessmentPage() {
     companySize: '11-50'
   });
 
-  const handleAssessmentComplete = async (responses: Record<string, any>) => {
-    try {
-      // Process assessment through our API
-      const response = await fetch('/api/assessments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'onboarding',
-          responses,
-          metadata: {
-            source: 'growth_assessment_page',
-            userAgent: navigator.userAgent,
-            completedAt: new Date().toISOString()
-          }
-        })
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Assessment completed! Generating your insights...');
-        router.push('/premium/dashboard');
-      } else {
-        toast.error('Assessment processing failed. Please try again.');
-      }
-    } catch (error) {
-      toast.error('Something went wrong. Please try again.');
-    }
-  };
-
   const startAssessment = () => {
-    setAssessmentStarted(true);
+    // Redirect to our AI-powered assessment system
+    router.push('/assessment');
   };
-
-  if (assessmentStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950">
-        <div className="container mx-auto px-6 py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <Link href="/">
-              <Button variant="ghost" className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-              </Button>
-            </Link>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-              <Brain className="h-3 w-3 mr-1" />
-              AI Assessment
-            </Badge>
-          </div>
-
-          {/* Assessment Wizard */}
-          <AssessmentWizard
-            assessmentType="onboarding"
-            industry={userInfo.industry}
-            companySize={userInfo.companySize}
-            onComplete={handleAssessmentComplete}
-            allowBack={true}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950">
       <div className="container mx-auto px-6 py-16">
         <motion.div
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
           className="max-w-4xl mx-auto"
         >
           {/* Header */}

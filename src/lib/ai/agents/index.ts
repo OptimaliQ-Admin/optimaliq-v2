@@ -112,5 +112,63 @@ export async function analyzeMarketEnhanced(
   }
 }
 
+// Generate strategic insights using AI
+export async function generateStrategicInsights({
+  userId,
+  dashboardData,
+  industry,
+  assessmentData,
+  useRAG = true,
+  includeMarketContext = true
+}: {
+  userId: string;
+  dashboardData: any;
+  industry: string;
+  assessmentData?: any;
+  useRAG?: boolean;
+  includeMarketContext?: boolean;
+}) {
+  try {
+    const agent = new AssessmentAgent();
+    
+    // Get market context using RAG if requested
+    let marketContext = {};
+    if (includeMarketContext && useRAG && ragPipeline) {
+      try {
+        const ragResult = await ragPipeline.retrieveAndGenerate(
+          `${industry} industry strategic insights and best practices`,
+          { limit: 8, threshold: 0.7 }
+        );
+        marketContext = {
+          industryInsights: ragResult.answer,
+          citations: ragResult.citations,
+        };
+      } catch (error) {
+        console.warn('RAG pipeline not available for strategic insights:', error);
+      }
+    }
+
+    // Generate strategic insights
+    return await agent.processRequest({
+      task: `Generate strategic insights for ${industry} industry`,
+      context: {
+        dashboardData,
+        industry,
+        assessmentData,
+        marketContext,
+        useRAG,
+      },
+      userId,
+      organizationId: 'strategic-insights',
+    });
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      errors: [error instanceof Error ? error.message : 'Strategic insights generation failed'],
+    };
+  }
+}
+
 // Re-export types
 export type { AgentTool, AgentMemory, AgentResponse, AgentRequest } from './base-agent';
