@@ -7,7 +7,6 @@ export { DelegationAgent, delegationAgent } from './delegation-agent';
 export { AgentManager, agentManager, agents, AgentType } from './agent-manager';
 
 // Enhanced agent functions using new ML/RAG infrastructure
-import { ragPipeline } from '@/lib/ai/rag-pipeline';
 import { aiRouter, AITask } from '@/lib/ai-router';
 import { AssessmentAgent } from './assessment-agent';
 import { MarketIntelligenceAgent } from './market-intelligence-agent';
@@ -29,16 +28,20 @@ export async function processAssessmentEnhanced(
     
     // Get market context using RAG if requested
     let marketContext = {};
-    if (options?.includeMarketContext && options?.useRAG && ragPipeline) {
+    if (options?.includeMarketContext && options?.useRAG) {
       try {
-        const ragResult = await ragPipeline.retrieveAndGenerate(
-          `${industry} industry benchmarks and performance metrics`,
-          { limit: 5, threshold: 0.7 }
-        );
-        marketContext = {
-          industryInsights: ragResult.answer,
-          citations: ragResult.citations,
-        };
+        // Dynamic import to avoid build-time issues
+        const { ragPipeline } = await import('@/lib/ai/rag-pipeline');
+        if (ragPipeline) {
+          const ragResult = await ragPipeline.retrieveAndGenerate(
+            `${industry} industry benchmarks and performance metrics`,
+            { limit: 5, threshold: 0.7 }
+          );
+          marketContext = {
+            industryInsights: ragResult.answer,
+            citations: ragResult.citations,
+          };
+        }
       } catch (error) {
         console.warn('RAG pipeline not available for market context:', error);
       }
@@ -77,17 +80,19 @@ export async function analyzeMarketEnhanced(
     
     // Use RAG for market intelligence
     let ragResult = { context: [], answer: 'Market intelligence not available', citations: [] };
-    if (ragPipeline) {
-      try {
+    try {
+      // Dynamic import to avoid build-time issues
+      const { ragPipeline } = await import('@/lib/ai/rag-pipeline');
+      if (ragPipeline) {
         const ragQuery = `${industry} industry market trends and analysis for ${timeframe}`;
         ragResult = await ragPipeline.retrieveAndGenerate(ragQuery, {
           limit: 10,
           threshold: 0.7,
           includeContext: true,
         });
-      } catch (error) {
-        console.warn('RAG pipeline not available for market intelligence:', error);
       }
+    } catch (error) {
+      console.warn('RAG pipeline not available for market intelligence:', error);
     }
 
     return await agent.processRequest({
@@ -133,16 +138,20 @@ export async function generateStrategicInsights({
     
     // Get market context using RAG if requested
     let marketContext = {};
-    if (includeMarketContext && useRAG && ragPipeline) {
+    if (includeMarketContext && useRAG) {
       try {
-        const ragResult = await ragPipeline.retrieveAndGenerate(
-          `${industry} industry strategic insights and best practices`,
-          { limit: 8, threshold: 0.7 }
-        );
-        marketContext = {
-          industryInsights: ragResult.answer,
-          citations: ragResult.citations,
-        };
+        // Dynamic import to avoid build-time issues
+        const { ragPipeline } = await import('@/lib/ai/rag-pipeline');
+        if (ragPipeline) {
+          const ragResult = await ragPipeline.retrieveAndGenerate(
+            `${industry} industry strategic insights and best practices`,
+            { limit: 8, threshold: 0.7 }
+          );
+          marketContext = {
+            industryInsights: ragResult.answer,
+            citations: ragResult.citations,
+          };
+        }
       } catch (error) {
         console.warn('RAG pipeline not available for strategic insights:', error);
       }

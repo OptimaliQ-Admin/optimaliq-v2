@@ -8,6 +8,10 @@ import { Database } from '@/types';
  */
 export function createServerClient() {
   if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
+    // Return null during build time to avoid errors
+    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
+      return null;
+    }
     throw new Error('Supabase server configuration missing: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required');
   }
   
@@ -29,6 +33,10 @@ export function createServerClient() {
  */
 export function createRouteClient() {
   if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    // Return null during build time to avoid errors
+    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
+      return null;
+    }
     throw new Error('Supabase route configuration missing: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY required');
   }
   

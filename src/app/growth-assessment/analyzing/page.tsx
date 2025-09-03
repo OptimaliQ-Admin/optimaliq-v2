@@ -11,11 +11,10 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { 
   Brain, 
-  ChartLine, 
+  TrendingUp, 
   Rocket, 
   Zap,
   CheckCircle,
-  TrendingUp,
   Target
 } from 'lucide-react'
 
@@ -79,7 +78,7 @@ function AnalyzingComponent() {
         }}
         className="absolute top-40 right-20 text-indigo-200 text-3xl opacity-30"
       >
-        <ChartLine />
+        <TrendingUp />
       </motion.div>
       
       <motion.div

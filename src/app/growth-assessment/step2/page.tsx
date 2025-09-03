@@ -11,7 +11,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { 
   Brain, 
-  ChartLine, 
+  TrendingUp, 
   Shield, 
   Lightbulb,
   MessageSquare,
@@ -180,7 +180,7 @@ export default function GrowthAssessmentStep2() {
           className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-            <ChartLine className="text-sm" />
+            <TrendingUp className="text-sm" />
             <span>Step 2 of 2 – Business Profile</span>
           </div>
           

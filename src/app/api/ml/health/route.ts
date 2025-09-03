@@ -1,12 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { ragPipeline } from '@/lib/ai/rag-pipeline';
-import { anthropicProvider } from '@/lib/ai/providers/anthropic';
-import { googleVertexProvider } from '@/lib/ai/providers/google-vertex';
-import { mistralProvider } from '@/lib/ai/providers/mistral';
-import { aiRouter } from '@/lib/ai-router';
-import { kMeansClusterer } from '@/lib/ai/clustering-algorithms';
-import { contentIngestion } from '@/lib/external-apis';
 import { AppError, handleError } from '@/utils';
 
 // Health check response schema
@@ -91,6 +84,7 @@ export async function GET(_request: NextRequest) {
 
     // Check RAG pipeline health
     try {
+      const { ragPipeline } = await import('@/lib/ai/rag-pipeline');
       if (ragPipeline) {
         healthChecks.ragPipeline = await ragPipeline.healthCheck();
       } else {
@@ -122,9 +116,30 @@ export async function GET(_request: NextRequest) {
 
     // Check AI providers
     const providerChecks = await Promise.allSettled([
-      anthropicProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
-      googleVertexProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
-      mistralProvider?.healthCheck() || Promise.resolve({ status: 'unhealthy' as const, latency: 0, available: false }),
+      (async () => {
+        try {
+          const { anthropicProvider } = await import('@/lib/ai/providers/anthropic');
+          return await anthropicProvider?.healthCheck() || { status: 'unhealthy' as const, latency: 0, available: false };
+        } catch {
+          return { status: 'unhealthy' as const, latency: 0, available: false };
+        }
+      })(),
+      (async () => {
+        try {
+          const { googleVertexProvider } = await import('@/lib/ai/providers/google-vertex');
+          return await googleVertexProvider?.healthCheck() || { status: 'unhealthy' as const, latency: 0, available: false };
+        } catch {
+          return { status: 'unhealthy' as const, latency: 0, available: false };
+        }
+      })(),
+      (async () => {
+        try {
+          const { mistralProvider } = await import('@/lib/ai/providers/mistral');
+          return await mistralProvider?.healthCheck() || { status: 'unhealthy' as const, latency: 0, available: false };
+        } catch {
+          return { status: 'unhealthy' as const, latency: 0, available: false };
+        }
+      })(),
     ]);
 
     healthChecks.aiProviders = {
@@ -170,6 +185,7 @@ export async function GET(_request: NextRequest) {
 
     // Check clustering algorithms
     try {
+      const { kMeansClusterer } = await import('@/lib/ai/clustering-algorithms');
       // Quick test with minimal data
       const testData = [
         { id: '1', vector: [1, 0, 0], metadata: {} },
