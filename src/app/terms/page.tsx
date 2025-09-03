@@ -1,14 +1,13 @@
 /**
  * OptimaliQ Terms of Service Page
- * Comprehensive terms of service with legal compliance
+ * Enterprise AI platform legal compliance and terms
+ * Recreated with enterprise-grade feel and AI platform specific terms
  */
 
 'use client'
 
-
 import React from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { 
   Shield,
   Lock,
@@ -29,13 +28,14 @@ import {
   Scale,
   CreditCard,
   Ban,
-  AlertCircle
+  AlertCircle,
+  Brain,
+  Rocket,
+  Cpu,
+  Server
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
-import { Alert } from '@/components/ui/feedback'
+import { Container, Section } from '@/components/ui/layout'
 
 const termsData = {
   lastUpdated: 'August 29, 2024',
@@ -65,15 +65,33 @@ const termsData = {
       content: [
         {
           subtitle: 'Platform Overview',
-          text: 'OptimaliQ provides AI-powered business intelligence and assessment services designed to help organizations analyze their performance, identify growth opportunities, and develop strategic action plans.'
+          text: 'OptimaliQ provides a next-generation, multi-tier agentic AI platform that revolutionizes how organizations assess and optimize their Strategy, Process, and Technology. Our platform uses advanced AI algorithms, including cutting-edge RAG (Retrieval-Augmented Generation) capabilities, to provide McKinsey-level strategic insights and actionable recommendations.'
+        },
+        {
+          subtitle: 'AI-Powered Services',
+          text: 'Our services include AI-powered business intelligence, strategic assessments, operational analysis, technology evaluation, and growth optimization tools. We utilize multi-provider AI orchestration systems and real-time market intelligence to deliver enterprise-grade insights.'
         },
         {
           subtitle: 'Service Availability',
-          text: 'We strive to maintain high service availability but do not guarantee uninterrupted access. We may temporarily suspend service for maintenance, updates, or unforeseen circumstances.'
+          text: 'We strive to maintain high service availability but do not guarantee uninterrupted access. We may temporarily suspend service for maintenance, updates, or unforeseen circumstances. Enterprise customers receive priority support and dedicated infrastructure.'
+        }
+      ]
+    },
+    {
+      id: 'ai-platform-terms',
+      title: 'AI Platform Specific Terms',
+      content: [
+        {
+          subtitle: 'AI Model Usage',
+          text: 'Our platform utilizes advanced AI models from multiple providers including OpenAI, Anthropic, Google, and Mistral. Users acknowledge that AI-generated insights are probabilistic and should be used as strategic inputs rather than definitive decisions.'
         },
         {
-          subtitle: 'Service Modifications',
-          text: 'We reserve the right to modify, suspend, or discontinue any part of our service at any time with reasonable notice to users. We will not be liable for any modifications or discontinuation of services.'
+          subtitle: 'Data Processing',
+          text: 'By using our AI services, you consent to the processing of your data by our AI systems for the purpose of generating insights and recommendations. We implement strict data protection measures and maintain complete data isolation between organizations.'
+        },
+        {
+          subtitle: 'AI Accuracy Disclaimer',
+          text: 'While we maintain high accuracy standards, AI-generated insights may contain errors or inaccuracies. Users are responsible for validating AI recommendations against their domain expertise and organizational context. We are not liable for decisions made based on AI insights.'
         }
       ]
     },
@@ -83,15 +101,15 @@ const termsData = {
       content: [
         {
           subtitle: 'Account Creation',
-          text: 'To access certain features, you must create an account by providing accurate, current, and complete information. You are responsible for maintaining the confidentiality of your account credentials.'
+          text: 'To access certain features, you must create an account by providing accurate, current, and complete information. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.'
         },
         {
           subtitle: 'Account Responsibility',
-          text: 'You are responsible for all activities that occur under your account. You must immediately notify us of any unauthorized use of your account or any other breach of security.'
+          text: 'You are responsible for all activities that occur under your account. You must immediately notify us of any unauthorized use of your account or any other breach of security. Enterprise accounts may have additional security requirements and compliance obligations.'
         },
         {
           subtitle: 'Account Termination',
-          text: 'We reserve the right to terminate or suspend your account at our discretion, with or without notice, for violations of these terms or for any other reason we deem appropriate.'
+          text: 'We reserve the right to terminate or suspend your account at our discretion, with or without notice, for violations of these terms or for any other reason we deem appropriate. Enterprise customers receive advance notice and transition support.'
         }
       ]
     },
@@ -101,37 +119,33 @@ const termsData = {
       content: [
         {
           subtitle: 'Permitted Uses',
-          text: 'You may use our service only for lawful purposes and in accordance with these terms. You may use the service to conduct assessments, analyze results, and develop business strategies for legitimate business purposes.'
+          text: 'You may use our services for legitimate business purposes, including organizational assessments, strategic planning, operational optimization, and growth analysis. Use must comply with all applicable laws and regulations.'
         },
         {
-          subtitle: 'Prohibited Activities',
-          text: 'You may not: (a) violate any laws or regulations; (b) infringe on intellectual property rights; (c) transmit harmful code or malware; (d) attempt to gain unauthorized access; (e) interfere with service operation; (f) use the service for competitive intelligence against us.'
+          subtitle: 'Prohibited Uses',
+          text: 'You may not use our services to: violate any laws or regulations, infringe on intellectual property rights, attempt to reverse engineer our AI systems, or use our platform for competitive intelligence gathering against other users.'
         },
         {
-          subtitle: 'Content Standards',
-          text: 'Any content you submit must be accurate, lawful, and not violate any third-party rights. You must not submit false, misleading, or inappropriate content through our platform.'
+          subtitle: 'AI System Integrity',
+          text: 'Users may not attempt to manipulate, exploit, or interfere with our AI systems, including attempting to bias AI responses, reverse engineer AI models, or use automated tools to extract AI training data.'
         }
       ]
     },
     {
-      id: 'payment-terms',
-      title: 'Payment and Billing',
+      id: 'data-privacy',
+      title: 'Data Privacy and Security',
       content: [
         {
-          subtitle: 'Subscription Plans',
-          text: 'Our service is offered through various subscription plans with different features and pricing. Current pricing is available on our pricing page and may be subject to change with notice.'
+          subtitle: 'Data Protection',
+          text: 'We implement enterprise-grade security measures including SOC 2 Type II compliance, GDPR readiness, end-to-end encryption, and secure data centers. Your data is protected with bank-level security standards and strict access controls.'
         },
         {
-          subtitle: 'Payment Processing',
-          text: 'Payments are processed through secure third-party payment processors. By providing payment information, you authorize us to charge the applicable fees to your chosen payment method.'
+          subtitle: 'Data Ownership',
+          text: 'You retain ownership of all data you submit to our platform. We process your data solely to provide our services and generate AI insights. We do not sell, rent, or share your data with third parties except as required by law.'
         },
         {
-          subtitle: 'Refund Policy',
-          text: 'Refunds are provided according to our refund policy. Generally, we offer refunds for unused portions of prepaid subscriptions within 30 days of cancellation, subject to certain conditions.'
-        },
-        {
-          subtitle: 'Late Payments',
-          text: 'Failure to pay fees when due may result in suspension or termination of your account. We reserve the right to charge interest on overdue amounts and recover collection costs.'
+          subtitle: 'Data Retention',
+          text: 'We retain your data for as long as your account is active and as needed to provide our services. Upon account termination, we will delete or anonymize your data according to our data retention policy and applicable regulations.'
         }
       ]
     },
@@ -140,88 +154,70 @@ const termsData = {
       title: 'Intellectual Property Rights',
       content: [
         {
-          subtitle: 'Our Rights',
-          text: 'The OptimaliQ platform, including all content, features, functionality, and technology, is owned by OptimaliQ and protected by intellectual property laws. You may not copy, modify, or create derivative works without permission.'
+          subtitle: 'Platform Ownership',
+          text: 'OptimaliQ retains all rights, title, and interest in and to our platform, including all intellectual property rights. This includes our AI models, algorithms, software, and platform design, but excludes your data and content.'
         },
         {
           subtitle: 'User Content',
-          text: 'You retain ownership of content you submit to our platform. By submitting content, you grant us a license to use, modify, and display such content as necessary to provide our services.'
+          text: 'You retain ownership of content you create using our platform. By using our services, you grant us a limited license to process your content for the purpose of providing AI insights and improving our services.'
         },
         {
-          subtitle: 'Feedback',
-          text: 'Any feedback, suggestions, or ideas you provide about our service become our property and may be used without compensation or attribution to you.'
+          subtitle: 'AI-Generated Content',
+          text: 'AI-generated insights and recommendations are provided for your use but remain subject to our intellectual property rights. You may use these insights for internal business purposes but may not redistribute or commercialize them.'
         }
       ]
     },
     {
-      id: 'privacy-data',
-      title: 'Privacy and Data Protection',
+      id: 'enterprise-features',
+      title: 'Enterprise Features and Compliance',
       content: [
         {
-          subtitle: 'Privacy Policy',
-          text: 'Our collection, use, and protection of your personal information is governed by our Privacy Policy, which is incorporated into these terms by reference.'
+          subtitle: 'Enterprise Security',
+          text: 'Enterprise customers receive enhanced security features including dedicated infrastructure, advanced access controls, custom compliance frameworks, and dedicated security reviews. We maintain SOC 2 Type II compliance and undergo regular security audits.'
         },
         {
-          subtitle: 'Data Security',
-          text: 'We implement appropriate technical and organizational measures to protect your data, but cannot guarantee absolute security. You acknowledge the inherent risks of internet transmission.'
+          subtitle: 'Compliance Support',
+          text: 'We provide compliance documentation and support for enterprise customers, including GDPR, CCPA, and industry-specific compliance requirements. Our platform is designed to meet enterprise security and compliance standards.'
         },
         {
-          subtitle: 'Data Retention',
-          text: 'We retain your data as necessary to provide services and comply with legal obligations. You may request data deletion subject to our data retention policies and legal requirements.'
+          subtitle: 'Custom Implementations',
+          text: 'Enterprise customers may request custom implementations, including custom AI model training, industry-specific assessment frameworks, and white-labeling options. These services are subject to separate agreements and additional fees.'
         }
       ]
     },
     {
-      id: 'disclaimers',
-      title: 'Disclaimers and Limitations',
+      id: 'limitations-liability',
+      title: 'Limitations of Liability',
       content: [
         {
-          subtitle: 'Service Warranty',
-          text: 'Our service is provided "as is" and "as available" without warranties of any kind. We disclaim all warranties, express or implied, including merchantability, fitness for a particular purpose, and non-infringement.'
+          subtitle: 'AI Insight Disclaimer',
+          text: 'Our AI-generated insights are provided "as is" without warranties of any kind. We are not liable for decisions made based on AI recommendations, business outcomes, or any indirect or consequential damages arising from use of our services.'
         },
         {
-          subtitle: 'Results Disclaimer',
-          text: 'While our AI-powered insights are based on sophisticated algorithms and data analysis, we do not guarantee specific results or outcomes from using our service. Business decisions should consider multiple factors beyond our recommendations.'
-        },
-        {
-          subtitle: 'Third-Party Services',
-          text: 'Our platform may integrate with third-party services. We are not responsible for the availability, accuracy, or content of such third-party services, and your use of them is subject to their own terms.'
-        }
-      ]
-    },
-    {
-      id: 'liability',
-      title: 'Limitation of Liability',
-      content: [
-        {
-          subtitle: 'Damage Limitations',
-          text: 'To the maximum extent permitted by law, OptimaliQ shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, data, or business opportunities.'
-        },
-        {
-          subtitle: 'Total Liability Cap',
-          text: 'Our total liability to you for all claims arising from or related to the service shall not exceed the amount you paid to us in the twelve months preceding the claim.'
+          subtitle: 'Service Availability',
+          text: 'We are not liable for any damages resulting from service interruptions, data loss, or system failures. Our liability is limited to the amount paid for our services in the 12 months preceding the claim.'
         },
         {
           subtitle: 'Force Majeure',
-          text: 'We shall not be liable for any failure or delay in performance due to circumstances beyond our reasonable control, including natural disasters, government actions, or network failures.'
+          text: 'We are not liable for any failure to perform due to circumstances beyond our reasonable control, including natural disasters, government actions, or third-party service failures.'
         }
       ]
     },
     {
       id: 'termination',
-      title: 'Termination',
+      title: 'Termination and Suspension',
       content: [
         {
-          subtitle: 'Termination Rights',
-          text: 'Either party may terminate the agreement at any time. You may cancel your subscription through your account settings or by contacting us. We may terminate your access for violations of these terms.'
+          subtitle: 'Termination by User',
+          text: 'You may terminate your account at any time by contacting our support team. Upon termination, you will lose access to our services and your data will be handled according to our data retention policy.'
         },
         {
-          subtitle: 'Effect of Termination',
-          text: 'Upon termination, your right to access the service ceases immediately. We may delete your data according to our data retention policy, though some information may be retained as required by law.'
+          subtitle: 'Termination by OptimaliQ',
+          text: 'We may terminate or suspend your account for violations of these terms, non-payment, or other reasons. Enterprise customers receive advance notice and transition support to ensure business continuity.'
         },
         {
-          subtitle: 'Survival',
-          text: 'Provisions relating to intellectual property, disclaimers, liability limitations, and dispute resolution shall survive termination of these terms.'
+          subtitle: 'Post-Termination',
+          text: 'After termination, you may request a copy of your data for up to 30 days. We will delete or anonymize your data according to our data retention policy and applicable regulations.'
         }
       ]
     },
@@ -231,277 +227,207 @@ const termsData = {
       content: [
         {
           subtitle: 'Governing Law',
-          text: 'These terms are governed by the laws of the State of California, United States, without regard to conflict of law principles. Any disputes shall be resolved in the courts of San Francisco County, California.'
+          text: 'These terms are governed by the laws of the State of California, United States, without regard to conflict of law principles. Any disputes will be resolved in the courts of San Francisco County, California.'
         },
         {
           subtitle: 'Dispute Resolution',
-          text: 'We encourage informal resolution of disputes. If informal resolution fails, disputes may be subject to binding arbitration under the American Arbitration Association rules, except for claims that may be brought in small claims court.'
+          text: 'We encourage resolution of disputes through direct communication. If disputes cannot be resolved, they will be subject to binding arbitration in San Francisco, California, in accordance with the American Arbitration Association rules.'
         },
         {
           subtitle: 'Class Action Waiver',
-          text: 'You agree that any arbitration or court proceeding shall be limited to the dispute between us and you individually. You waive any right to participate in class action lawsuits or class-wide arbitrations.'
+          text: 'You agree to resolve disputes individually and waive any right to participate in class action lawsuits or class-wide arbitration against OptimaliQ.'
         }
       ]
     }
-  ],
-  contact: {
-    email: 'legal@optimaliq.ai',
-    address: '123 Market Street, Suite 400\nSan Francisco, CA 94105\nUnited States',
-    phone: '+1 (555) 123-4567'
-  }
+  ]
 }
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <Container className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">OptimaliQ</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-sm hover:text-primary transition-colors">Home</Link>
-            <Link href="/about" className="text-sm hover:text-primary transition-colors">About</Link>
-            <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
-            <Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-            <Link href="/assessment">
-              <Button>Start Assessment</Button>
-            </Link>
-          </nav>
-        </Container>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <Section className="py-20">
-        <Container className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <StatusBadge status="primary" className="mb-6">
-              <FileText className="h-4 w-4 mr-2" />
-              Terms of Service
-            </StatusBadge>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-              Terms of Service &{' '}
-              <span className="text-primary">User Agreement</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              These terms govern your use of OptimaliQ's services. Please read them carefully 
-              as they contain important information about your rights and obligations.
-            </p>
-            
-            <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2">
+      <Section className="py-20 bg-gradient-to-br from-gray-900/90 via-blue-900/80 to-indigo-900/85 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/25 backdrop-blur-md rounded-xl border border-blue-400/40 shadow-lg animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-24 h-24 bg-indigo-500/25 backdrop-blur-md rounded-xl border border-indigo-400/40 shadow-lg animate-pulse delay-1000"></div>
+        
+        <Container>
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              {/* Section Badge */}
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                Legal & Compliance
+              </div>
+              
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+                Terms of{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  Service
+                </span>
+              </h1>
+              <p className="text-2xl font-semibold text-blue-300 mb-8">
+                Enterprise AI platform terms and legal compliance
+              </p>
+              <p className="text-lg text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                Comprehensive terms governing your use of OptimaliQ's enterprise AI platform. Our terms ensure transparency, protect your rights, and maintain the highest standards of security and compliance for enterprise organizations.
+              </p>
+            </motion.div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Terms Content Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            {/* Last Updated Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm mb-4">
                 <Calendar className="h-4 w-4" />
-                <span>Last Updated: {termsData.lastUpdated}</span>
+                Last Updated: {termsData.lastUpdated}
               </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4" />
-                <span>Effective: {termsData.effectiveDate}</span>
-              </div>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Terms of Service
+              </h2>
+              <p className="text-lg text-gray-700">
+                Effective Date: {termsData.effectiveDate}
+              </p>
+            </motion.div>
 
-      {/* Key Points */}
-      <Section className="pb-20">
-        <Container className="max-w-6xl">
-          <Grid cols={3} gap={6} className="mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
-              <Card className="p-6 text-center">
-                <div className="p-3 bg-blue-500/10 text-blue-600 rounded-lg inline-flex mb-4">
-                  <Scale className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Fair & Transparent</h3>
-                <p className="text-sm text-muted-foreground">
-                  Clear terms that protect both users and OptimaliQ with fair usage policies
-                </p>
-              </Card>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Card className="p-6 text-center">
-                <div className="p-3 bg-green-500/10 text-green-600 rounded-lg inline-flex mb-4">
-                  <CreditCard className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Flexible Billing</h3>
-                <p className="text-sm text-muted-foreground">
-                  Transparent pricing with flexible cancellation and refund policies
-                </p>
-              </Card>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <Card className="p-6 text-center">
-                <div className="p-3 bg-red-500/10 text-red-600 rounded-lg inline-flex mb-4">
-                  <Ban className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Usage Guidelines</h3>
-                <p className="text-sm text-muted-foreground">
-                  Clear acceptable use policies to ensure a safe environment for all users
-                </p>
-              </Card>
-            </motion.div>
-          </Grid>
-        </Container>
-      </Section>
-
-      {/* Terms Content */}
-      <Section className="pb-20">
-        <Container className="max-w-4xl">
-          <div className="space-y-16">
-            {termsData.sections.map((section, index) => (
-              <motion.div
-                key={section.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                id={section.id}
-              >
-                <Card className="p-8">
-                  <h2 className="text-2xl font-bold mb-6">{section.title}</h2>
+            {/* Terms Sections */}
+            <div className="space-y-12">
+              {termsData.sections.map((section, sectionIndex) => (
+                <motion.div
+                  key={section.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: sectionIndex * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-gray-50 rounded-2xl p-8 border border-gray-200"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
+                      {sectionIndex + 1}
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">{section.title}</h3>
+                  </div>
+                  
                   <div className="space-y-6">
                     {section.content.map((item, itemIndex) => (
-                      <div key={itemIndex}>
-                        <h3 className="text-lg font-semibold mb-3 text-primary">
+                      <div key={itemIndex} className="border-l-4 border-blue-200 pl-6">
+                        <h4 className="text-lg font-semibold text-gray-900 mb-3">
                           {item.subtitle}
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
+                        </h4>
+                        <p className="text-gray-700 leading-relaxed">
                           {item.text}
                         </p>
                       </div>
                     ))}
                   </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </Section>
+                </motion.div>
+              ))}
+            </div>
 
-      {/* Important Notices */}
-      <Section className="pb-20">
-        <Container className="max-w-4xl">
-          <div className="space-y-6">
-            <Alert
-              variant="warning"
-              title="Important Notice"
-              description="These terms constitute a legally binding agreement. By using our service, you acknowledge that you have read, understood, and agree to be bound by these terms."
-              icon={<AlertTriangle className="h-4 w-4" />}
-            />
-            
-            <Alert
-              variant="info"
-              title="Questions About Terms"
-              description="If you have questions about these terms or need clarification on any provisions, please contact our legal team before using the service."
-              icon={<Info className="h-4 w-4" />}
-            />
-          </div>
-        </Container>
-      </Section>
-
-      {/* Contact Information */}
-      <Section className="py-20 bg-muted/30">
-        <Container className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold mb-6">Legal Questions?</h2>
-            <p className="text-xl text-muted-foreground">
-              If you have questions about these terms or need legal clarification, 
-              our legal team is available to help.
-            </p>
-          </motion.div>
-
-          <Card className="p-8">
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-6">Legal Department Contact</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-center space-x-3">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <span className="font-medium">{termsData.contact.email}</span>
-                </div>
-                
-                <div className="flex items-center justify-center space-x-3">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <span className="font-medium">{termsData.contact.phone}</span>
-                </div>
-                
-                <div className="flex items-start justify-center space-x-3">
-                  <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <span className="font-medium whitespace-pre-line text-center">
-                    {termsData.contact.address}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <Button asChild>
-                  <Link href="/contact">
+            {/* Contact Legal Team */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mt-16"
+            >
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Questions About These Terms?
+                </h3>
+                <p className="text-gray-700 mb-6">
+                  Our legal team is here to help clarify any questions about our terms of service or compliance requirements.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
                     Contact Legal Team
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                    <Mail className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button variant="outline">
+                    Download PDF
+                    <FileText className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Card>
+            </motion.div>
+          </div>
         </Container>
       </Section>
 
-      {/* Footer */}
-      <footer className="border-t bg-muted/50">
-        <Container className="py-12">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Zap className="h-5 w-5 text-primary-foreground" />
+      {/* Compliance Section */}
+      <Section className="py-16">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Enterprise Compliance & Security
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                OptimaliQ maintains the highest standards of compliance and security for enterprise organizations
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-6">
+                {[
+                  {
+                    icon: <Shield className="h-8 w-8" />,
+                    title: 'SOC 2 Type II',
+                    description: 'Certified compliance with industry-leading security standards'
+                  },
+                  {
+                    icon: <Lock className="h-8 w-8" />,
+                    title: 'GDPR Ready',
+                    description: 'Full compliance with European data protection regulations'
+                  },
+                  {
+                    icon: <Server className="h-8 w-8" />,
+                    title: 'Enterprise Security',
+                    description: 'Bank-level encryption and secure data centers'
+                  }
+                ].map((compliance, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg"
+                  >
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-blue-600">
+                      {compliance.icon}
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{compliance.title}</h3>
+                    <p className="text-gray-600">{compliance.description}</p>
+                  </motion.div>
+                ))}
               </div>
-              <span className="text-xl font-bold">OptimaliQ</span>
-            </div>
-            
-            <nav className="flex items-center space-x-6 mb-4 md:mb-0">
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-sm text-primary font-medium">
-                Terms of Service
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Contact
-              </Link>
-            </nav>
-            
-            <div className="text-sm text-muted-foreground">
-              © 2024 OptimaliQ. All rights reserved.
-            </div>
+            </motion.div>
           </div>
         </Container>
-      </footer>
+      </Section>
     </div>
   )
 }
