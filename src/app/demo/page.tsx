@@ -1,13 +1,13 @@
 /**
- * OptimaliQ Demo Request Page
- * Professional demo scheduling with comprehensive lead capture
+ * OptimaliQ Demo Page
+ * Enterprise AI platform demo scheduling and conversion optimization
+ * Recreated with enterprise-grade feel and strong conversion focus
  */
 
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { 
   Calendar,
   Clock,
@@ -33,17 +33,17 @@ import {
   BookOpen,
   FileText,
   Settings,
-  Lightbulb
+  Lightbulb,
+  Check,
+  Brain,
+  Rocket
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
-import { Alert } from '@/components/ui/feedback'
+import { Container, Section } from '@/components/ui/layout'
 import { Select, Checkbox } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-// Demo data
+// Enterprise AI platform demo data
 const demoData = {
   demoTypes: [
     {
@@ -102,582 +102,472 @@ const demoData = {
     { value: '1000+', label: '1000+ employees' }
   ],
   industries: [
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'education', label: 'Education' },
     { value: 'technology', label: 'Technology' },
+    { value: 'healthcare', label: 'Healthcare' },
+    { value: 'finance', label: 'Financial Services' },
     { value: 'manufacturing', label: 'Manufacturing' },
-    { value: 'nonprofit', label: 'Non-Profit' },
-    { value: 'financial', label: 'Financial Services' },
-    { value: 'retail', label: 'Retail' },
+    { value: 'retail', label: 'Retail & E-commerce' },
+    { value: 'consulting', label: 'Consulting' },
+    { value: 'education', label: 'Education' },
     { value: 'other', label: 'Other' }
-  ],
-  benefits: [
-    {
-      icon: <Target className="h-6 w-6" />,
-      title: 'Personalized Experience',
-      description: 'See OptimaliQ configured for your specific industry and use case'
-    },
-    {
-      icon: <Users className="h-6 w-6" />,
-      title: 'Expert Guidance',
-      description: 'Get answers from our product experts and implementation specialists'
-    },
-    {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: 'Live Data Examples',
-      description: 'See real assessment results and insights relevant to your organization'
-    },
-    {
-      icon: <Lightbulb className="h-6 w-6" />,
-      title: 'Implementation Planning',
-      description: 'Discuss implementation strategy and timeline for your organization'
-    }
   ]
 }
 
 export default function DemoPage() {
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
     company: '',
     organizationSize: '',
     industry: '',
     demoType: 'live-demo',
     preferredDate: '',
     preferredTime: '',
-    timezone: '',
-    goals: '',
-    currentChallenges: ''
+    phone: '',
+    message: '',
+    agreeToContact: false,
+    agreeToTerms: false
   })
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [isSubmitted, setIsSubmitted] = React.useState(false)
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission
+    console.log('Demo request submitted:', formData)
+  }
+
+  const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setIsSubmitted(true)
-    } catch (error) {
-      console.error('Failed to submit demo request', error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const isFormValid = formData.firstName && formData.lastName && formData.email && 
-                     formData.company && formData.organizationSize && formData.industry &&
-                     formData.preferredDate && formData.preferredTime
-
-  const selectedDemoType = demoData.demoTypes.find(type => type.id === formData.demoType)
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <Container className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">OptimaliQ</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-sm hover:text-primary transition-colors">Home</Link>
-            <Link href="/about" className="text-sm hover:text-primary transition-colors">About</Link>
-            <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
-            <Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-            <Link href="/assessment">
-              <Button>Start Assessment</Button>
-            </Link>
-          </nav>
-        </Container>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <Section className="py-20">
-        <Container className="max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <StatusBadge status="primary" className="mb-6">
-              <Video className="h-4 w-4 mr-2" />
-              Schedule Your Demo
-            </StatusBadge>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              See OptimaliQ in{' '}
-              <span className="text-primary">Action</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Get a personalized demonstration of how OptimaliQ can transform your organization's 
-              strategic planning and growth initiatives. See real insights tailored to your industry.
-            </p>
-
-            {/* Trust Indicators */}
-            <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span>No commitment required</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-green-500" />
-                <span>30-60 minutes</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="h-4 w-4 text-green-500" />
-                <span>Secure & confidential</span>
-              </div>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      {/* Demo Benefits */}
-      <Section className="pb-20">
-        <Container className="max-w-6xl">
-          <Grid cols={4} gap={6} className="mb-20">
-            {demoData.benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-              >
-                <Card className="p-6 text-center h-full">
-                  <div className="p-3 bg-primary/10 text-primary rounded-lg inline-flex mb-4">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-3">{benefit.title}</h3>
-                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </Grid>
-        </Container>
-      </Section>
-
-      {/* Demo Form */}
-      <Section className="pb-20">
-        <Container className="max-w-6xl">
-          <Grid cols={2} gap={12} className="items-start">
-            {/* Demo Request Form */}
+      <Section className="py-20 bg-gradient-to-br from-gray-900/90 via-blue-900/80 to-indigo-900/85 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/25 backdrop-blur-md rounded-xl border border-blue-400/40 shadow-lg animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-24 h-24 bg-indigo-500/25 backdrop-blur-md rounded-xl border border-indigo-400/40 shadow-lg animate-pulse delay-1000"></div>
+        
+        <Container>
+          <div className="max-w-4xl mx-auto text-center relative z-10">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <Card className="p-8">
-                <h2 className="text-2xl font-bold mb-6">Schedule Your Demo</h2>
-                
-                {isSubmitted ? (
-                  <div className="text-center py-12">
-                    <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Demo Scheduled!</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Thank you for your interest. We'll send you a calendar invitation and demo details shortly.
-                    </p>
-                    <div className="space-y-3">
-                      <Button asChild>
-                        <Link href="/assessment">
-                          Start Free Assessment
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="outline" onClick={() => setIsSubmitted(false)}>
-                        Schedule Another Demo
-                      </Button>
+              {/* Section Badge */}
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                Schedule a Demo
+              </div>
+              
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+                See{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  OptimaliQ
+                </span>{" "}
+                in Action
+              </h1>
+              <p className="text-2xl font-semibold text-blue-300 mb-8">
+                Experience the power of enterprise AI-powered business intelligence
+              </p>
+              <p className="text-lg text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                Get a personalized demonstration of how OptimaliQ can transform your organization's strategic planning, operational efficiency, and growth trajectory. See real-time AI insights, advanced RAG capabilities, and enterprise-grade security in action.
+              </p>
+            </motion.div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Demo Types Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              Choose Your Demo Experience
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              Select the demo type that best fits your needs and schedule
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {demoData.demoTypes.map((demoType, index) => (
+              <motion.div
+                key={demoType.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`relative bg-white rounded-2xl border-2 shadow-xl hover:shadow-2xl transition-all duration-300 ${
+                  demoType.popular 
+                    ? 'border-blue-500 scale-105' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                {demoType.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                      Most Popular
                     </div>
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Contact Information */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-                      <Grid cols={2} gap={4}>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            First Name *
-                          </label>
-                          <Input
-                            value={formData.firstName}
-                            onChange={(e) => handleInputChange('firstName', e.target.value)}
-                            placeholder="Enter your first name"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Last Name *
-                          </label>
-                          <Input
-                            value={formData.lastName}
-                            onChange={(e) => handleInputChange('lastName', e.target.value)}
-                            placeholder="Enter your last name"
-                            required
-                          />
-                        </div>
-                      </Grid>
+                )}
 
-                      <Grid cols={2} gap={4} className="mt-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Email Address *
-                          </label>
-                          <Input
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => handleInputChange('email', e.target.value)}
-                            placeholder="Enter your email address"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Phone Number
-                          </label>
-                          <Input
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) => handleInputChange('phone', e.target.value)}
-                            placeholder="Enter your phone number"
-                          />
-                        </div>
-                      </Grid>
+                <div className="p-6">
+                  <div className="text-center mb-6">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 ${
+                      demoType.id === 'live-demo' ? 'bg-blue-100' :
+                      demoType.id === 'team-demo' ? 'bg-green-100' : 'bg-purple-100'
+                    }`}>
+                      {demoType.id === 'live-demo' ? <Video className="h-8 w-8 text-blue-600" /> :
+                       demoType.id === 'team-demo' ? <Users className="h-8 w-8 text-green-600" /> :
+                       <Settings className="h-8 w-8 text-purple-600" />}
                     </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{demoType.title}</h3>
+                    <p className="text-gray-600 text-sm mb-3">{demoType.description}</p>
+                    <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                      <Clock className="h-4 w-4" />
+                      {demoType.duration}
+                    </div>
+                  </div>
 
-                    {/* Organization Information */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Organization Information</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Company/Organization *
-                          </label>
-                          <Input
-                            value={formData.company}
-                            onChange={(e) => handleInputChange('company', e.target.value)}
-                            placeholder="Enter your organization name"
-                            required
-                          />
-                        </div>
-
-                        <Grid cols={2} gap={4}>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">
-                              Organization Size *
-                            </label>
-                            <Select
-                              options={demoData.organizationSizes}
-                              value={formData.organizationSize}
-                              onValueChange={(value) => handleInputChange('organizationSize', value)}
-                              placeholder="Select size"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">
-                              Industry *
-                            </label>
-                            <Select
-                              options={demoData.industries}
-                              value={formData.industry}
-                              onValueChange={(value) => handleInputChange('industry', value)}
-                              placeholder="Select industry"
-                              required
-                            />
-                          </div>
-                        </Grid>
+                  <div className="space-y-3 mb-6">
+                    {demoType.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-start">
+                        <Check className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
+                        <span className="text-gray-700 text-sm">{feature}</span>
                       </div>
-                    </div>
+                    ))}
+                  </div>
 
-                    {/* Demo Preferences */}
+                  <Button 
+                    className={`w-full ${
+                      demoType.popular 
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' 
+                        : 'bg-gray-900 hover:bg-gray-800'
+                    }`}
+                    onClick={() => handleInputChange('demoType', demoType.id)}
+                  >
+                    {formData.demoType === demoType.id ? 'Selected' : 'Select This Demo'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Demo Form Section */}
+      <Section className="py-16">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Schedule Your Demo
+              </h2>
+              <p className="text-lg text-gray-700">
+                Fill out the form below and we'll get back to you within 24 hours to confirm your demo
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Personal Information */}
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Demo Preferences</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Demo Type
-                          </label>
-                          <Select
-                            options={demoData.demoTypes.map(type => ({
-                              value: type.id,
-                              label: `${type.title} (${type.duration})`
-                            }))}
-                            value={formData.demoType}
-                            onValueChange={(value) => handleInputChange('demoType', value)}
-                          />
-                        </div>
-
-                        <Grid cols={3} gap={4}>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">
-                              Preferred Date *
-                            </label>
-                            <Input
-                              type="date"
-                              value={formData.preferredDate}
-                              onChange={(e) => handleInputChange('preferredDate', e.target.value)}
-                              min={new Date().toISOString().split('T')[0]}
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">
-                              Preferred Time *
-                            </label>
-                            <Select
-                              options={demoData.timeSlots}
-                              value={formData.preferredTime}
-                              onValueChange={(value) => handleInputChange('preferredTime', value)}
-                              placeholder="Select time"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">
-                              Timezone
-                            </label>
-                            <Select
-                              options={[
-                                { value: 'PST', label: 'Pacific Time (PST)' },
-                                { value: 'EST', label: 'Eastern Time (EST)' },
-                                { value: 'CST', label: 'Central Time (CST)' },
-                                { value: 'MST', label: 'Mountain Time (MST)' },
-                                { value: 'UTC', label: 'UTC' }
-                              ]}
-                              value={formData.timezone}
-                              onValueChange={(value) => handleInputChange('timezone', value)}
-                              placeholder="Select timezone"
-                            />
-                          </div>
-                        </Grid>
-                      </div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name *
+                      </label>
+                      <Input
+                        id="firstName"
+                        type="text"
+                        required
+                        value={formData.firstName}
+                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                        placeholder="Enter your first name"
+                        className="w-full"
+                      />
                     </div>
-
-                    {/* Additional Information */}
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Tell Us More</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            What are your main goals with OptimaliQ?
-                          </label>
-                          <textarea
-                            value={formData.goals}
-                            onChange={(e) => handleInputChange('goals', e.target.value)}
-                            placeholder="e.g., Improve strategic planning, enhance team collaboration, data-driven decision making..."
-                            rows={3}
-                            className="w-full p-3 border rounded-lg resize-none"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium mb-2">
-                            What challenges are you currently facing?
-                          </label>
-                          <textarea
-                            value={formData.currentChallenges}
-                            onChange={(e) => handleInputChange('currentChallenges', e.target.value)}
-                            placeholder="e.g., Lack of data insights, inefficient processes, limited growth visibility..."
-                            rows={3}
-                            className="w-full p-3 border rounded-lg resize-none"
-                          />
-                        </div>
-                      </div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name *
+                      </label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        required
+                        value={formData.lastName}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        placeholder="Enter your last name"
+                        className="w-full"
+                      />
                     </div>
+                  </div>
 
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      size="lg"
-                      disabled={!isFormValid}
-                      loading={isSubmitting}
-                      loadingText="Scheduling Demo..."
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                      </label>
+                      <Input
+                        id="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        placeholder="Enter your email address"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                      </label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        placeholder="Enter your phone number"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Company Information */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                        Company Name *
+                      </label>
+                      <Input
+                        id="company"
+                        type="text"
+                        required
+                        value={formData.company}
+                        onChange={(e) => handleInputChange('company', e.target.value)}
+                        placeholder="Enter your company name"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="organizationSize" className="block text-sm font-medium text-gray-700 mb-2">
+                        Organization Size *
+                      </label>
+                      <Select
+                        value={formData.organizationSize}
+                        onValueChange={(value) => handleInputChange('organizationSize', value)}
+                        options={demoData.organizationSizes}
+                        placeholder="Select organization size"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="industry" className="block text-sm font-medium text-gray-700 mb-2">
+                      Industry *
+                    </label>
+                    <Select
+                      value={formData.industry}
+                      onValueChange={(value) => handleInputChange('industry', value)}
+                      options={demoData.industries}
+                      placeholder="Select your industry"
+                    />
+                  </div>
+
+                  {/* Demo Preferences */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="preferredDate" className="block text-sm font-medium text-gray-700 mb-2">
+                        Preferred Date *
+                      </label>
+                      <Input
+                        id="preferredDate"
+                        type="date"
+                        required
+                        value={formData.preferredDate}
+                        onChange={(e) => handleInputChange('preferredDate', e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="preferredTime" className="block text-sm font-medium text-gray-700 mb-2">
+                        Preferred Time *
+                      </label>
+                      <Select
+                        value={formData.preferredTime}
+                        onValueChange={(value) => handleInputChange('preferredTime', value)}
+                        options={demoData.timeSlots}
+                        placeholder="Select preferred time"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                      Additional Information
+                    </label>
+                    <textarea
+                      id="message"
+                      value={formData.message}
+                      onChange={(e) => handleInputChange('message', e.target.value)}
+                      placeholder="Tell us about your specific needs or questions..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    />
+                  </div>
+
+                  {/* Checkboxes */}
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <Checkbox
+                        id="agreeToContact"
+                        checked={formData.agreeToContact}
+                        onCheckedChange={(checked) => handleInputChange('agreeToContact', checked as boolean)}
+                        className="mt-1 mr-3"
+                      />
+                      <label htmlFor="agreeToContact" className="text-sm text-gray-700">
+                        I agree to be contacted by OptimaliQ regarding this demo request
+                      </label>
+                    </div>
+                    <div className="flex items-start">
+                      <Checkbox
+                        id="agreeToTerms"
+                        checked={formData.agreeToTerms}
+                        onCheckedChange={(checked) => handleInputChange('agreeToTerms', checked as boolean)}
+                        className="mt-1 mr-3"
+                      />
+                      <label htmlFor="agreeToTerms" className="text-sm text-gray-700">
+                        I agree to the <a href="/terms" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      disabled={!formData.agreeToContact || !formData.agreeToTerms}
                     >
                       Schedule Demo
                       <Calendar className="ml-2 h-4 w-4" />
                     </Button>
-                  </form>
-                )}
-              </Card>
+                  </div>
+                </form>
+              </div>
             </motion.div>
-
-            {/* Demo Information */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-8"
-            >
-              {/* Selected Demo Type */}
-              {selectedDemoType && (
-                <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <Video className="h-6 w-6 text-primary" />
-                    <div>
-                      <h3 className="text-lg font-semibold">{selectedDemoType.title}</h3>
-                      <p className="text-sm text-muted-foreground">{selectedDemoType.duration}</p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-4">{selectedDemoType.description}</p>
-                  
-                  <div>
-                    <h4 className="font-medium mb-2">What's included:</h4>
-                    <div className="space-y-2">
-                      {selectedDemoType.features.map((feature, index) => (
-                        <div key={index} className="flex items-center space-x-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              )}
-
-              {/* What to Expect */}
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">What to Expect</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium">
-                      1
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Confirmation</h4>
-                      <p className="text-sm text-muted-foreground">
-                        You'll receive a calendar invitation within 1 hour
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Preparation</h4>
-                      <p className="text-sm text-muted-foreground">
-                        We'll prepare a customized demo based on your information
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Demo Session</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Live demonstration with Q&A and implementation planning
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium">
-                      4
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Follow-up</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Resources and next steps for your organization
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Alternative Options */}
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Other Options</h3>
-                <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start" asChild>
-                    <Link href="/assessment">
-                      <Play className="h-4 w-4 mr-3" />
-                      Try Free Assessment First
-                    </Link>
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start" asChild>
-                    <Link href="/contact">
-                      <MessageSquare className="h-4 w-4 mr-3" />
-                      Chat with Sales Team
-                    </Link>
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <BookOpen className="h-4 w-4 mr-3" />
-                    View Documentation
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Phone className="h-4 w-4 mr-3" />
-                    Call: +1 (555) 123-4567
-                  </Button>
-                </div>
-              </Card>
-
-              {/* Testimonial */}
-              <Card className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
-                <div className="flex items-start space-x-3">
-                  <Star className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <p className="text-sm mb-3">
-                      "The demo was incredibly insightful. OptimaliQ's AI-powered insights 
-                      immediately showed us opportunities we hadn't considered."
-                    </p>
-                    <div className="text-xs text-muted-foreground">
-                      <strong>Sarah Johnson</strong>, CEO at HealthForward
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          </Grid>
+          </div>
         </Container>
       </Section>
 
-      {/* Footer */}
-      <footer className="border-t bg-muted/50">
-        <Container className="py-12">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Zap className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">OptimaliQ</span>
-            </div>
-            
-            <nav className="flex items-center space-x-6 mb-4 md:mb-0">
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Contact
-              </Link>
-            </nav>
-            
-            <div className="text-sm text-muted-foreground">
-              © 2024 OptimaliQ. All rights reserved.
-            </div>
+      {/* Why Choose OptimaliQ Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              Why Choose OptimaliQ?
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              See how our enterprise AI platform delivers McKinsey-level strategic insights with Salesforce-like user experience
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Brain className="h-8 w-8" />,
+                title: 'AI-Powered Intelligence',
+                description: 'Advanced RAG capabilities and multi-provider AI orchestration for real-time strategic insights'
+              },
+              {
+                icon: <Shield className="h-8 w-8" />,
+                title: 'Enterprise Security',
+                description: 'SOC 2 Type II compliance, GDPR ready, and bulletproof security architecture'
+              },
+              {
+                icon: <Rocket className="h-8 w-8" />,
+                title: 'Rapid Implementation',
+                description: 'Get up and running in days, not months, with our intuitive platform design'
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </motion.div>
+            ))}
           </div>
         </Container>
-      </footer>
+      </Section>
+
+      {/* CTA Section */}
+      <Section className="py-16">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Ready to Transform Your Organization?
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                Join hundreds of organizations already using OptimaliQ to accelerate their growth and optimize their operations.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  Start Free Assessment
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button size="lg" variant="outline">
+                  Contact Sales
+                  <Phone className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </Container>
+      </Section>
     </div>
   )
 }
