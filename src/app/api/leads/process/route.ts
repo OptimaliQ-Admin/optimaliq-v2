@@ -99,35 +99,63 @@ export async function POST(request: NextRequest) {
       const tempPassword = `OptimaliQ_${Math.random().toString(36).substring(2, 15)}`;
       console.log('Generated temp password for:', validatedData.email);
       
-      // Create auth user
+      // Try to create auth user first, fallback to direct database insert if auth fails
       console.log('Creating auth user...');
-      const authResult = await auth.signUp(validatedData.email, tempPassword, {
-        first_name: validatedData.name.split(' ')[0] || validatedData.name,
-        last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
-        company: 'Lead from Growth Assessment',
-        title: validatedData.role,
-        industry: validatedData.industry,
-        company_size: validatedData.companySize,
-        revenue_range: validatedData.revenueRange,
-        agreed_terms: true,
-        agreed_marketing: validatedData.privacyConsent
-      });
+      try {
+        const authResult = await auth.signUp(validatedData.email, tempPassword, {
+          first_name: validatedData.name.split(' ')[0] || validatedData.name,
+          last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
+          company: 'Lead from Growth Assessment',
+          title: validatedData.role,
+          industry: validatedData.industry,
+          company_size: validatedData.companySize,
+          revenue_range: validatedData.revenueRange,
+          agreed_terms: true,
+          agreed_marketing: validatedData.privacyConsent
+        });
 
-      console.log('Auth result:', authResult);
+        console.log('Auth result:', authResult);
 
-      if (!authResult.user) {
-        console.error('User account creation failed:', authResult);
-        throw new AppError('User account creation failed', 'USER_CREATION_FAILED', 500);
+        if (!authResult.user) {
+          console.warn('Auth signup failed, creating user directly in database');
+          throw new Error('Auth signup failed');
+        }
+
+        userId = authResult.user.id;
+        console.log('Auth user created with ID:', userId);
+      } catch (authError) {
+        console.log('Auth creation failed, creating user directly in database...');
+        // Fallback: create user directly in tier2_users table
+        const { data: newUser, error: userError } = await supabase
+          .from('tier2_users')
+          .insert({
+            first_name: validatedData.name.split(' ')[0] || validatedData.name,
+            last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
+            email: validatedData.email,
+            industry: validatedData.industry,
+            company_size: validatedData.companySize,
+            revenue_range: validatedData.revenueRange,
+            title: validatedData.role,
+            agreed_terms: true,
+            agreed_marketing: validatedData.privacyConsent
+          })
+          .select('id')
+          .single();
+
+        if (userError) {
+          console.error('Direct user creation error:', userError);
+          throw new AppError(`Failed to create user: ${userError.message}`, 'USER_CREATION_FAILED', 500);
+        }
+
+        userId = newUser.id;
+        console.log('User created directly in database with ID:', userId);
       }
 
-      userId = authResult.user.id;
-      console.log('Auth user created with ID:', userId);
-
-      // Create user profile in tier2_users table
+      // Create user profile in tier2_users table (only if not already created)
       console.log('Creating user profile...');
       const { error: profileError } = await supabase
         .from('tier2_users')
-        .insert({
+        .upsert({
           id: userId,
           first_name: validatedData.name.split(' ')[0] || validatedData.name,
           last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
@@ -143,9 +171,9 @@ export async function POST(request: NextRequest) {
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
-        // Continue anyway - the auth user was created successfully
+        // Continue anyway - the user was created successfully
       } else {
-        console.log('User profile created successfully');
+        console.log('User profile created/updated successfully');
       }
 
       // Create initial user profile scores
