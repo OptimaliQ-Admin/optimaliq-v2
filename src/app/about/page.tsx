@@ -1,13 +1,13 @@
 /**
  * OptimaliQ About Page
- * Company story, mission, team, and values with professional presentation
+ * Company story, mission, team, and values with enterprise AI platform positioning
+ * Recreated from original GMF Plus v3.1 design with enterprise-grade feel
  */
 
 'use client'
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { 
   Shield,
   Heart,
@@ -22,235 +22,243 @@ import {
   Quote,
   Github,
   Calendar,
-  ArrowRight
+  ArrowRight,
+  Target,
+  BarChart3,
+  Lightbulb,
+  Award,
+  Globe,
+  CheckCircle,
+  TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Container, Section } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
-
-// Company data
-const companyData = {
-  founded: '2023',
-  headquarters: 'San Francisco, CA',
-  employees: '50+',
-  organizations: '500+',
-  assessments: '10,000+',
-  countries: '25+',
-  mission: 'To empower organizations with AI-driven insights that unlock their full potential and drive sustainable growth.',
-  vision: 'A world where every organization has access to intelligent, data-driven guidance to achieve their goals and create positive impact.',
-  values: [
-    {
-      icon: <Brain className="h-8 w-8" />,
-      title: 'Intelligence First',
-      description: 'We believe in the power of AI and data to provide insights that humans alone cannot achieve.'
-    },
-    {
-      icon: <Heart className="h-8 w-8" />,
-      title: 'Purpose Driven',
-      description: 'We are committed to helping organizations create positive impact in their communities and beyond.'
-    },
-    {
-      icon: <Shield className="h-8 w-8" />,
-      title: 'Trust & Security',
-      description: 'We maintain the highest standards of data security and privacy to protect our clients&apos; information.'
-    },
-    {
-      icon: <Rocket className="h-8 w-8" />,
-      title: 'Innovation',
-      description: 'We continuously push the boundaries of what&apos;s possible with AI and business intelligence.'
-    }
-  ],
-  team: [
-    {
-      name: 'Sarah Chen',
-      role: 'CEO & Co-Founder',
-      bio: 'Former McKinsey partner with 15+ years in strategy consulting. PhD in Business Analytics from Stanford.',
-      image: '/api/placeholder/150/150',
-      linkedin: '#',
-      twitter: '#'
-    },
-    {
-      name: 'Michael Rodriguez',
-      role: 'CTO & Co-Founder',
-      bio: 'Ex-Google AI researcher with expertise in machine learning and natural language processing. MS in Computer Science from MIT.',
-      image: '/api/placeholder/150/150',
-      linkedin: '#',
-      github: '#'
-    },
-    {
-      name: 'Emily Johnson',
-      role: 'Head of Product',
-      bio: 'Product leader with 10+ years at Salesforce and Microsoft. Expert in enterprise SaaS and user experience design.',
-      image: '/api/placeholder/150/150',
-      linkedin: '#'
-    },
-    {
-      name: 'David Kim',
-      role: 'Head of AI',
-      bio: 'AI researcher and engineer with experience at OpenAI and Anthropic. Specializes in large language models and reasoning systems.',
-      image: '/api/placeholder/150/150',
-      linkedin: '#',
-      github: '#'
-    }
-  ],
-  milestones: [
-    {
-      year: '2023',
-      title: 'Company Founded',
-      description: 'OptimaliQ was founded with the vision of democratizing business intelligence through AI.'
-    },
-    {
-      year: '2023',
-      title: 'First AI Models',
-      description: 'Developed our proprietary assessment and analysis AI models with initial beta testing.'
-    },
-    {
-      year: '2024',
-      title: 'Platform Launch',
-      description: 'Launched the OptimaliQ platform with comprehensive assessment and growth planning capabilities.'
-    },
-    {
-      year: '2024',
-      title: 'Scale Achievement',
-      description: 'Reached 500+ organizations served with 10,000+ assessments completed across 25+ countries.'
-    }
-  ],
-  testimonials: [
-    {
-      quote: "OptimaliQ transformed how we approach strategic planning. The AI-powered insights are incredibly accurate and actionable.",
-      author: "Jennifer Walsh",
-      role: "CEO, HealthForward",
-      company: "Healthcare Non-Profit"
-    },
-    {
-      quote: "The assessment process is seamless and the recommendations have directly contributed to our 40% growth this year.",
-      author: "Marcus Thompson",
-      role: "Director of Operations",
-      company: "EduTech Solutions"
-    },
-    {
-      quote: "Finally, a platform that understands the unique challenges of non-profit organizations and provides relevant, practical guidance.",
-      author: "Lisa Rodriguez",
-      role: "Executive Director",
-      company: "Community Impact Alliance"
-    }
-  ]
-}
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <Container className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">OptimaliQ</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-sm hover:text-primary transition-colors">Home</Link>
-            <Link href="/about" className="text-sm text-primary font-medium">About</Link>
-            <Link href="/pricing" className="text-sm hover:text-primary transition-colors">Pricing</Link>
-            <Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-            <Link href="/assessment">
-              <Button>Start Assessment</Button>
-            </Link>
-          </nav>
-        </Container>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <Section className="py-20">
-        <Container className="max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <StatusBadge status="primary" className="mb-6">
-              About OptimaliQ
-            </StatusBadge>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              Empowering Organizations with{' '}
-              <span className="text-primary">AI-Driven Intelligence</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              We&apos;re on a mission to democratize business intelligence and strategic planning through advanced AI technology, 
-              helping organizations of all sizes achieve their full potential.
-            </p>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="grid grid-cols-4 gap-6 mb-20">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">{companyData.organizations}</div>
-                <div className="text-sm text-muted-foreground">Organizations Served</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">{companyData.assessments}</div>
-                <div className="text-sm text-muted-foreground">Assessments Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">{companyData.countries}</div>
-                <div className="text-sm text-muted-foreground">Countries Reached</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">{companyData.employees}</div>
-                <div className="text-sm text-muted-foreground">Team Members</div>
-              </div>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
-
-      {/* Mission & Vision */}
-      <Section className="py-20 bg-muted/30">
-        <Container className="max-w-6xl">
-          <div className="grid grid-cols-2 gap-12 items-center">
+      <Section className="py-20 bg-gradient-to-br from-gray-900/90 via-blue-900/80 to-indigo-900/85 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/25 backdrop-blur-md rounded-xl border border-blue-400/40 shadow-lg animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-24 h-24 bg-indigo-500/25 backdrop-blur-md rounded-xl border border-indigo-400/40 shadow-lg animate-pulse delay-1000"></div>
+        
+        <Container>
+          <div className="max-w-4xl mx-auto text-center relative z-10">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                {companyData.mission}
-              </p>
+              {/* Section Badge */}
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                About OptimaliQ
+              </div>
               
-              <h2 className="text-3xl font-bold mb-6">Our Vision</h2>
-              <p className="text-lg text-muted-foreground">
-                {companyData.vision}
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+                About{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  OptimaliQ
+                </span>
+              </h1>
+              <p className="text-2xl font-semibold text-blue-300 mb-8">
+                Smarter decisions. Faster growth. Real-time insights.
+              </p>
+              <p className="text-lg text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                OptimaliQ is a next-generation, multi-tier agentic AI platform that revolutionizes how organizations assess and optimize their Strategy, Process, and Technology. We transform raw assessment data into strategic clarity—benchmarking your performance, identifying operational gaps, and delivering personalized roadmaps for growth.
               </p>
             </motion.div>
-            
+          </div>
+        </Container>
+      </Section>
+
+      {/* Why We Exist Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
             >
-              <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl p-8">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <Building className="h-12 w-12 text-primary mx-auto mb-4" />
-                    <div className="text-2xl font-bold">Founded</div>
-                    <div className="text-muted-foreground">{companyData.founded}</div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Why We Exist
+              </h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Most businesses rely on spreadsheets, gut checks, and generic advice to make critical decisions. We believe in a smarter way—where leaders can access McKinsey-style strategic insights in minutes, not months, without needing a six-figure consulting engagement.
+              </p>
+            </motion.div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* What We Do Section */}
+      <Section className="py-16">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                What We Do
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                OptimaliQ blends intelligent assessments, AI models, and real-time benchmarks to help organizations:
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-8 mb-12"
+            >
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <BarChart3 className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">
+                  Diagnose Performance
+                </h3>
+                <p className="text-gray-700 text-center">
+                  Comprehensive analysis across strategy, process, and technology to identify strengths and opportunities.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">
+                  Benchmark Against Peers
+                </h3>
+                <p className="text-gray-700 text-center">
+                  Compare your performance against industry peers and top performers to understand your competitive position.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">
+                  Actionable Growth Plans
+                </h3>
+                <p className="text-gray-700 text-center">
+                  Receive personalized 30-day and 90-day growth plans with specific, actionable recommendations.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">
+                  Track Progress
+                </h3>
+                <p className="text-gray-700 text-center">
+                  Monitor your growth journey and evolve strategies with each monthly assessment.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Whether you&apos;re a startup scaling operations or an established firm seeking a competitive edge, OptimaliQ gives you the clarity and confidence to move forward with enterprise-grade AI capabilities.
+              </p>
+            </motion.div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Who We Serve Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Who We Serve
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                OptimaliQ is used by forward-thinking organizations across industries:
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-8"
+            >
+              <div className="text-center">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-xl mb-4 shadow-lg">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Users className="h-8 w-8 text-white" />
                   </div>
-                  <div className="text-center">
-                    <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
-                    <div className="text-2xl font-bold">HQ</div>
-                    <div className="text-muted-foreground">{companyData.headquarters}</div>
+                  <h3 className="text-xl font-semibold mb-2">Founders & CEOs</h3>
+                  <p className="text-blue-100">
+                    Looking to scale with precision and data-driven insights
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-xl mb-4 shadow-lg">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <BarChart3 className="h-8 w-8 text-white" />
                   </div>
+                  <h3 className="text-xl font-semibold mb-2">Revenue & Operations Leaders</h3>
+                  <p className="text-green-100">
+                    Seeking clarity across teams and processes
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-xl mb-4 shadow-lg">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Lightbulb className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Consultants & Partners</h3>
+                  <p className="text-purple-100">
+                    Looking to add strategic value to their clients
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-xl mb-4 shadow-lg">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Building className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Enterprise Organizations</h3>
+                  <p className="text-orange-100">
+                    Driving transformation with multi-tenant AI architecture
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -258,250 +266,59 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Values */}
+      {/* Our Vision Section */}
       <Section className="py-20">
-        <Container className="max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-6">Our Values</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              The principles that guide everything we do and shape our culture.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 gap-8">
-            {companyData.values.map((value, index) => (
-              <motion.div
-                key={`value-${value.title}-${index}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-              >
-                <Card className="p-8 h-full">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 bg-primary/10 text-primary rounded-lg flex-shrink-0">
-                      {value.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                      <p className="text-muted-foreground">{value.description}</p>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Our Vision
+              </h2>
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-12 rounded-2xl shadow-2xl">
+                <p className="text-2xl font-semibold leading-relaxed">
+                  To make strategic clarity accessible—powered by AI, grounded in data, and designed for action. We envision a world where every organization has access to McKinsey-level strategic insights through cutting-edge AI technology.
+                </p>
+              </div>
+            </motion.div>
           </div>
         </Container>
       </Section>
 
-      {/* Team */}
-      <Section className="py-20 bg-muted/30">
-        <Container className="max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-6">Meet Our Team</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Passionate experts from top companies and institutions, united by our mission to transform business intelligence.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 gap-8">
-            {companyData.team.map((member, index) => (
-              <motion.div
-                key={`member-${member.name}-${index}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-              >
-                <Card className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Users className="h-8 w-8 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-                      <p className="text-primary font-medium mb-3">{member.role}</p>
-                      <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
-                      <div className="flex space-x-3">
-                        {member.linkedin && (
-                          <Button variant="ghost" size="sm">
-                            <Linkedin className="h-4 w-4" />
-                          </Button>
-                        )}
-                        {member.twitter && (
-                          <Button variant="ghost" size="sm">
-                            <Twitter className="h-4 w-4" />
-                          </Button>
-                        )}
-                        {member.github && (
-                          <Button variant="ghost" size="sm">
-                            <Github className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Timeline */}
-      <Section className="py-20">
-        <Container className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-6">Our Journey</h2>
-            <p className="text-xl text-muted-foreground">
-              Key milestones in our mission to democratize business intelligence.
-            </p>
-          </motion.div>
-
-          <div className="space-y-8">
-            {companyData.milestones.map((milestone, index) => (
-              <motion.div
-                key={`milestone-${milestone.year}-${index}`}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                className="flex items-start space-x-6"
-              >
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                    <Calendar className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <StatusBadge status="primary">{milestone.year}</StatusBadge>
-                    <h3 className="text-xl font-semibold">{milestone.title}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{milestone.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Testimonials */}
-      <Section className="py-20 bg-muted/30">
-        <Container className="max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-6">What Our Clients Say</h2>
-            <p className="text-xl text-muted-foreground">
-              Hear from organizations that have transformed their operations with OptimaliQ.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 gap-8">
-            {companyData.testimonials.map((testimonial, index) => (
-              <motion.div
-                key={`testimonial-${testimonial.author}-${index}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-              >
-                <Card className="p-8">
-                  <div className="flex items-start space-x-4">
-                    <Quote className="h-8 w-8 text-primary flex-shrink-0" />
-                    <div>
-                      <p className="text-lg mb-4">{testimonial.quote}</p>
-                      <div className="flex items-center space-x-4">
-                        <div>
-                          <div className="font-semibold">{testimonial.author}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {testimonial.role}, {testimonial.company}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* CTA */}
-      <Section className="py-20">
-        <Container className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <Card className="p-12 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-              <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Organization?</h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Join hundreds of organizations already using OptimaliQ to drive growth and achieve their goals.
+      {/* CTA Section */}
+      <Section className="py-16 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Ready to Transform Your Organization?
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                Join hundreds of organizations already using OptimaliQ to accelerate their growth and optimize their operations.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild>
-                  <Link href="/assessment">
-                    Start Free Assessment
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  Start Free Assessment
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <Link href="/contact">Contact Us</Link>
+                <Button size="lg" variant="outline">
+                  Schedule a Demo
+                  <Calendar className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-            </Card>
-          </motion.div>
-        </Container>
-      </Section>
-
-      {/* Footer */}
-      <footer className="border-t bg-muted/50">
-        <Container className="py-12">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Zap className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">OptimaliQ</span>
-            </div>
-            
-            <nav className="flex items-center space-x-6 mb-4 md:mb-0">
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Contact
-              </Link>
-            </nav>
-            
-            <div className="text-sm text-muted-foreground">
-              © 2024 OptimaliQ. All rights reserved.
-            </div>
+            </motion.div>
           </div>
         </Container>
-      </footer>
+      </Section>
     </div>
   )
 }
