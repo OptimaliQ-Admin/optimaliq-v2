@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { AppError } from '@/utils';
 
-// Environment variables will be loaded from .env.local
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Environment variables - support both client and server contexts
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://tsszcbfyopauponxynko.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzc3pjYmZ5b3BhdXBvbnh5bmtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5MjM5NjQsImV4cCI6MjA3MjQ5OTk2NH0.r-AJgQOEWil3gVoFn9D3u5asoe9BGVtgLYkgWBy3AOc';
 
 // Create Supabase client (will be null if not configured)
 export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey, {

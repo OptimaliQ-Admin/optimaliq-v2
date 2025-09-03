@@ -73,20 +73,56 @@ export default function GrowthAssessmentPage() {
     setIsSubmitting(true);
 
     try {
-      // Store user info in localStorage for the assessment
-      localStorage.setItem('growth_assessment_user', JSON.stringify(userInfo));
-      
-      // Show success message
-      toast.success('Great! Redirecting you to your personalized assessment...');
-      
-      // Redirect to assessment after a brief delay
-      setTimeout(() => {
-        router.push('/assessment');
-      }, 1500);
+      // Process lead through our API
+      const response = await fetch('/api/leads/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: userInfo.name,
+          email: userInfo.email,
+          industry: userInfo.industry,
+          role: userInfo.role,
+          companySize: userInfo.companySize,
+          revenueRange: userInfo.revenueRange,
+          privacyConsent: privacyConsent,
+          source: 'growth_assessment',
+          utmData: {
+            utm_source: 'growth_assessment',
+            utm_medium: 'form',
+            utm_campaign: 'lead_capture'
+          }
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to process lead');
+      }
+
+      if (result.success && result.data) {
+        // Store user info in localStorage for assessment personalization
+        localStorage.setItem('growth_assessment_user', JSON.stringify({
+          ...userInfo,
+          userId: result.data.userId
+        }));
+        
+        // Show success message
+        toast.success(result.data.message);
+        
+        // Redirect to personalized assessment
+        setTimeout(() => {
+          router.push(result.data.assessmentUrl);
+        }, 1500);
+      } else {
+        throw new Error('Lead processing failed');
+      }
       
     } catch (error) {
-      console.error('Error starting assessment:', error);
-      toast.error('An error occurred. Please try again.');
+      console.error('Error processing lead:', error);
+      toast.error(error instanceof Error ? error.message : 'An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

@@ -57,7 +57,8 @@ export async function POST(request: NextRequest) {
       {
         useRAG: true,
         useMultiProvider: true,
-        includeMarketContext: true
+        includeMarketContext: true,
+        userContext: validatedData.metadata?.userContext || {}
       }
     );
 
