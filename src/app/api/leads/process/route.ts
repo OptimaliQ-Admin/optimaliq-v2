@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { supabase, auth } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { AppError } from '@/utils';
 
 // Lead processing request schema
@@ -102,7 +102,11 @@ export async function POST(request: NextRequest) {
       // Try to create auth user first, fallback to direct database insert if auth fails
       console.log('Creating auth user...');
       try {
-        const authResult = await auth.signUp(validatedData.email, tempPassword, {
+        const { data: authResult, error: authError } = await supabase.auth.signUp({
+          email: validatedData.email,
+          password: tempPassword,
+          options: {
+            data: {
           first_name: validatedData.name.split(' ')[0] || validatedData.name,
           last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
           company: 'Lead from Growth Assessment',
@@ -112,9 +116,16 @@ export async function POST(request: NextRequest) {
           revenue_range: validatedData.revenueRange,
           agreed_terms: true,
           agreed_marketing: validatedData.privacyConsent
+            }
+          }
         });
 
         console.log('Auth result:', authResult);
+
+        if (authError) {
+          console.warn('Auth signup failed, creating user directly in database:', authError.message);
+          throw new Error('Auth signup failed');
+        }
 
         if (!authResult.user) {
           console.warn('Auth signup failed, creating user directly in database');
@@ -153,7 +164,7 @@ export async function POST(request: NextRequest) {
 
       // Create user profile in tier2_users table (only if not already created)
       console.log('Creating user profile...');
-      const { error: profileError } = await supabase
+      const { data: profileData, error: profileError } = await supabase
         .from('tier2_users')
         .upsert({
           id: userId,
@@ -167,13 +178,14 @@ export async function POST(request: NextRequest) {
           revenue_range: validatedData.revenueRange,
           agreed_terms: true,
           agreed_marketing: validatedData.privacyConsent
-        });
+        })
+        .select();
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
         // Continue anyway - the user was created successfully
       } else {
-        console.log('User profile created/updated successfully');
+        console.log('User profile created/updated successfully:', profileData);
       }
 
       // Create initial user profile scores
@@ -198,7 +210,7 @@ export async function POST(request: NextRequest) {
 
     // Create lead record
     console.log('Creating lead record...');
-    const { error: leadError } = await supabase
+    const { data: leadData, error: leadError } = await supabase
       .from('leads')
       .insert({
         email: validatedData.email,
@@ -212,13 +224,14 @@ export async function POST(request: NextRequest) {
         status: 'qualified',
         user_id: userId,
         created_at: new Date().toISOString()
-      });
+      })
+      .select();
 
     if (leadError) {
       console.error('Lead creation error:', leadError);
       // Continue anyway - the user was created successfully
     } else {
-      console.log('Lead record created successfully');
+      console.log('Lead record created successfully:', leadData);
     }
 
     // Generate assessment URL with user context
