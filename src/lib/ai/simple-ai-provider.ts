@@ -59,15 +59,15 @@ export class SimpleAIProvider {
     let content = ''
 
     // Analyze the prompt and generate contextual response
-    if (prompt.includes('challenge') || prompt.includes('problem')) {
+    if (prompt.includes('challenge') || prompt.includes('challenges') || prompt.includes('problem') || prompt.includes('struggling') || prompt.includes('acquisition')) {
       content = this.generateChallengeResponse(prompt)
-    } else if (prompt.includes('strategy') || prompt.includes('plan')) {
+    } else if (prompt.includes('strategy') || prompt.includes('strategic') || prompt.includes('plan') || prompt.includes('goal')) {
       content = this.generateStrategyResponse(prompt)
-    } else if (prompt.includes('team') || prompt.includes('hiring')) {
+    } else if (prompt.includes('team') || prompt.includes('hiring') || prompt.includes('staff') || prompt.includes('people')) {
       content = this.generateTeamResponse(prompt)
-    } else if (prompt.includes('metric') || prompt.includes('kpi')) {
+    } else if (prompt.includes('metric') || prompt.includes('metrics') || prompt.includes('kpi') || prompt.includes('data') || prompt.includes('tracking')) {
       content = this.generateMetricsResponse(prompt)
-    } else if (prompt.includes('technology') || prompt.includes('tech')) {
+    } else if (prompt.includes('technology') || prompt.includes('tech') || prompt.includes('system') || prompt.includes('tool')) {
       content = this.generateTechnologyResponse(prompt)
     } else {
       content = this.generateGenericResponse(prompt)
@@ -87,164 +87,267 @@ export class SimpleAIProvider {
   }
 
   private generateChallengeResponse(prompt: string): string {
-    return `Based on your challenge description, I can see you're facing common growth obstacles. Here's my analysis:
+    // Analyze the actual user response for personalization
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `I see you're testing the system! 😊 
 
-**Key Issues Identified:**
-• Market positioning and differentiation challenges
-• Customer acquisition and retention gaps
-• Operational efficiency and scaling bottlenecks
+Let me give you a real example: If you mentioned "struggling with customer acquisition," I'd ask specific follow-up questions like:
+• What channels are you currently using?
+• What's your current conversion rate?
+• How much are you spending per lead?
 
-**Immediate Actions:**
-• Conduct a comprehensive business audit
-• Identify and prioritize critical gaps
-• Develop targeted improvement strategies
+The key is being specific about your actual challenges so I can give you targeted advice. What's really keeping you up at night when it comes to growth?`
+    }
+    
+    if (response.includes('customer') || response.includes('acquisition') || response.includes('lead')) {
+      return `Ah, customer acquisition challenges! This is super common. 
 
-**Strategic Recommendations:**
-• Focus on customer-centric solutions
-• Implement systematic problem-solving approaches
-• Build scalable processes and systems
+A few quick questions to help you:
+• What's your current cost per acquisition?
+• Which channels are working best for you?
+• What's your conversion rate from lead to customer?
 
-**Next Steps:**
-• Create a detailed action plan with timelines
-• Establish key performance indicators
-• Monitor progress and adjust strategies
+Most companies I work with struggle with either the volume of leads or the quality. Which one is your bigger issue right now?`
+    }
+    
+    if (response.includes('team') || response.includes('hiring') || response.includes('staff')) {
+      return `Team scaling is tough! I hear this a lot.
 
-This challenge is solvable with the right strategic approach and systematic execution.`
+Quick reality check:
+• What roles are you missing most?
+• Are you struggling to find talent or afford it?
+• How's your current team handling the workload?
+
+The biggest mistake I see is hiring too fast without proper processes. What's your biggest team bottleneck right now?`
+    }
+    
+    if (response.includes('revenue') || response.includes('sales') || response.includes('money')) {
+      return `Revenue challenges - this hits close to home for most founders.
+
+Let's get specific:
+• What's your current monthly recurring revenue?
+• What's your biggest revenue blocker?
+• Are you losing deals or not finding enough prospects?
+
+I've seen companies double revenue just by fixing one key bottleneck. What's yours?`
+    }
+    
+    // Default response for other challenges
+    return `Interesting! I'd love to dig deeper into this.
+
+Can you be more specific? For example:
+• What exactly is the challenge?
+• How is it impacting your business?
+• What have you tried so far?
+
+The more specific you are, the better advice I can give you. What's the real story here?`
   }
 
   private generateStrategyResponse(prompt: string): string {
-    return `Your strategic thinking shows good business awareness. Here's my analysis:
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `I can tell you're testing! 😄
 
-**Strategic Strengths:**
-• Clear understanding of market dynamics
-• Focus on growth-oriented initiatives
-• Adaptability to changing conditions
+Here's what I'd ask if you gave me a real strategy:
+• What's your 12-month revenue goal?
+• How are you planning to get there?
+• What's your biggest strategic risk?
 
-**Areas for Enhancement:**
-• More specific goal-setting and milestones
-• Data-driven decision making processes
-• Competitive positioning and differentiation
+Most founders I work with have great ideas but struggle with execution. What's your biggest strategy challenge right now?`
+    }
+    
+    if (response.includes('digital') || response.includes('online') || response.includes('marketing')) {
+      return `Digital-first approach - smart! 
 
-**Strategic Recommendations:**
-• Develop a comprehensive growth framework
-• Implement regular strategy reviews
-• Focus on measurable outcomes and KPIs
+But here's what I see most companies miss:
+• Are you tracking which channels actually convert?
+• What's your customer lifetime value by channel?
+• How are you measuring ROI on your marketing spend?
 
-**Implementation Focus:**
-• Create clear action plans with timelines
-• Establish accountability and review processes
-• Monitor progress and adjust as needed
+The companies that win are the ones that double down on what works. What's your best-performing channel right now?`
+    }
+    
+    if (response.includes('product') || response.includes('development') || response.includes('feature')) {
+      return `Product-led growth is powerful when done right!
 
-Your strategic foundation is solid - let's make it more systematic and results-driven.`
+Quick questions:
+• What's your product-market fit score?
+• How do customers discover your product?
+• What's your activation rate?
+
+I've seen companies 10x growth just by fixing their onboarding flow. What's your biggest product challenge?`
+    }
+    
+    return `I'd love to understand your strategy better!
+
+Can you tell me:
+• What's your main growth goal this year?
+• How are you planning to achieve it?
+• What's your biggest strategic concern?
+
+The best strategies are simple and focused. What's yours?`
   }
 
   private generateTeamResponse(prompt: string): string {
-    return `Team development is crucial for sustainable growth. Here's my analysis:
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `Testing again! 😊
 
-**Team Strengths:**
-• Understanding of human capital importance
-• Focus on growth and development
-• Recognition of team scaling needs
+Here's what I'd ask about your team:
+• How many people do you have?
+• What roles are you missing?
+• What's your biggest hiring challenge?
 
-**Areas for Improvement:**
-• Role definition and organizational structure
-• Talent acquisition and retention strategies
-• Performance management and development
+The #1 mistake I see is hiring too fast without proper processes. What's your team situation really like?`
+    }
+    
+    if (response.includes('small') || response.includes('few') || response.includes('limited')) {
+      return `Small team challenges - I get it!
 
-**Strategic Recommendations:**
-• Develop clear job descriptions and growth paths
-• Implement employee development programs
-• Create performance management systems
+The reality check:
+• Are you wearing too many hats?
+• What's the one role that would make the biggest difference?
+• Can you afford to hire or do you need to get creative?
 
-**Implementation Strategy:**
-• Focus on hiring for growth-critical roles
-• Invest in team training and development
-• Build strong company culture and values
+Most successful companies I work with hire their first salesperson way too late. What's your biggest team gap?`
+    }
+    
+    if (response.includes('hiring') || response.includes('recruiting') || response.includes('talent')) {
+      return `Hiring is tough right now! 
 
-The right team is your biggest growth multiplier. Let's build a systematic approach to team development.`
+Quick reality check:
+• What's your biggest hiring challenge - finding people or affording them?
+• Are you competing with big tech for talent?
+• What's your current team size vs. where you want to be?
+
+I've seen companies solve this with remote work, equity, or creative compensation. What's your situation?`
+    }
+    
+    return `Team is everything in growth!
+
+Tell me more:
+• How big is your team now?
+• What's your biggest team challenge?
+• What role would make the biggest impact if you could hire it tomorrow?
+
+The right hire can 10x your growth. What's your team story?`
   }
 
   private generateMetricsResponse(prompt: string): string {
-    return `Your metrics awareness shows good business intelligence. Here's my analysis:
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `Testing the metrics question! 📊
 
-**Metrics Strengths:**
-• Understanding of key performance indicators
-• Focus on data-driven decision making
-• Recognition of measurement importance
+Here's what I'd ask about your data:
+• What's your monthly recurring revenue?
+• What's your customer acquisition cost?
+• What's your churn rate?
 
-**Areas for Enhancement:**
-• More comprehensive metrics framework
-• Advanced analytics and reporting
-• Predictive and leading indicators
+Most founders I work with are either tracking too many metrics or not enough. What's your current situation?`
+    }
+    
+    if (response.includes('revenue') || response.includes('mrr') || response.includes('arr')) {
+      return `Revenue metrics - the most important ones!
 
-**Strategic Recommendations:**
-• Implement a comprehensive metrics dashboard
-• Focus on both leading and lagging indicators
-• Develop predictive analytics capabilities
+Quick check:
+• What's your current MRR/ARR?
+• What's your growth rate month-over-month?
+• What's your revenue per customer?
 
-**Key Metrics to Track:**
-• Customer acquisition and retention metrics
-• Financial performance and growth indicators
-• Operational efficiency and productivity measures
+The companies that win track revenue metrics religiously. What's your biggest revenue question right now?`
+    }
+    
+    if (response.includes('customer') || response.includes('cac') || response.includes('ltv')) {
+      return `Customer metrics are gold! 
 
-**Implementation Focus:**
-• Create automated reporting systems
-• Establish regular metrics reviews
-• Use data to drive strategic decisions
+Let's get specific:
+• What's your customer acquisition cost?
+• What's your customer lifetime value?
+• What's your payback period?
 
-Good metrics are the foundation of great business decisions. Let's make your measurement more comprehensive and actionable.`
+I've seen companies double growth just by improving their CAC:LTV ratio. What's yours?`
+    }
+    
+    return `Metrics are your growth compass!
+
+Tell me:
+• What's the one metric you check every day?
+• What metric keeps you up at night?
+• What data do you wish you had?
+
+The best founders focus on 3-5 key metrics max. What are yours?`
   }
 
   private generateTechnologyResponse(prompt: string): string {
-    return `Your technology awareness shows modern business thinking. Here's my analysis:
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `Testing the tech question! 💻
 
-**Technology Strengths:**
-• Understanding of modern tech stack importance
-• Focus on automation and efficiency
-• Recognition of scalability needs
+Here's what I'd ask about your tech stack:
+• What tools are you using for sales/marketing?
+• How are you tracking customer data?
+• What's your biggest tech bottleneck?
 
-**Areas for Enhancement:**
-• More comprehensive technology strategy
-• Advanced automation and integration
-• Data analytics and business intelligence
+Most companies I work with have great products but terrible tech infrastructure. What's your situation?`
+    }
+    
+    if (response.includes('crm') || response.includes('salesforce') || response.includes('hubspot')) {
+      return `CRM setup - crucial for growth!
 
-**Strategic Recommendations:**
-• Develop a comprehensive technology roadmap
-• Focus on automation and efficiency gains
-• Implement advanced analytics and reporting
+Quick check:
+• Are you actually using your CRM daily?
+• Is your sales team updating it religiously?
+• What's your lead-to-customer conversion rate?
 
-**Technology Priorities:**
-• Customer relationship management systems
-• Business intelligence and analytics tools
-• Automation and workflow optimization
+I've seen companies 3x sales just by fixing their CRM process. How's yours working?`
+    }
+    
+    if (response.includes('analytics') || response.includes('data') || response.includes('tracking')) {
+      return `Data is everything in growth!
 
-**Implementation Strategy:**
-• Prioritize technology investments by ROI
-• Focus on integration and data flow
-• Build scalable and maintainable systems
+Let's get specific:
+• What analytics tools are you using?
+• Are you tracking the right metrics?
+• Can you see your customer journey clearly?
 
-Technology is a key enabler of growth. Let's make your tech stack more strategic and results-driven.`
+The companies that win have crystal-clear data visibility. What's your biggest data challenge?`
+    }
+    
+    return `Tech can make or break your growth!
+
+Tell me:
+• What's your biggest tech frustration?
+• What tool would make the biggest difference?
+• How much time do you waste on manual processes?
+
+The right tech investment can 10x your efficiency. What's your biggest tech need?`
   }
 
   private generateGenericResponse(prompt: string): string {
-    return `Thank you for that detailed response. I can see you're thinking strategically about your business approach. Based on your input, here are some key insights:
+    const response = prompt.toLowerCase()
+    
+    if (response.includes('test') || response.length < 20) {
+      return `I can tell you're testing! 😊
 
-**Key Observations:**
-• Your response shows good business awareness
-• There are opportunities for optimization
-• Strategic thinking is evident
+Here's the thing - I'm designed to give you personalized, actionable advice based on your real business situation. 
 
-**Recommendations:**
-• Develop more specific action plans
-• Focus on measurable outcomes
-• Consider industry best practices
+The more specific you are about your actual challenges, the better I can help you. What's really going on with your business right now?`
+    }
+    
+    return `Interesting response! I'd love to dig deeper.
 
-**Next Steps:**
-• Let's dive deeper into implementation
-• Identify specific improvement areas
-• Create actionable strategies
+Can you be more specific? For example:
+• What's the real challenge you're facing?
+• How is it impacting your business?
+• What have you tried so far?
 
-Your insights are valuable - let's build on them to create a comprehensive growth strategy.`
+The more details you give me, the better advice I can provide. What's your real situation?`
   }
 }
 

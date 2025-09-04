@@ -136,7 +136,7 @@ Keep the response professional but conversational, around 200-300 words.`
     // Use the simple AI provider for enhanced responses
     const aiProvider = createAIProvider('fallback') // Can be changed to 'openai', 'anthropic', etc.
     const aiResponse = await aiProvider.generateResponse({
-      prompt: `${aiPrompt}\n\nQuestion: ${question}\nUser Response: ${userResponse}\nContext: ${JSON.stringify(userContext)}`,
+      prompt: userResponse, // Only analyze the user's actual response
       maxTokens: 500,
       temperature: 0.7
     })
@@ -636,54 +636,45 @@ Your insights are valuable - let's build on them to create a comprehensive growt
 }
 
 function calculateCategoryScore(userResponse: string, category: string, userContext: any): number {
-  // Calculate score based on response quality, length, and context
-  let score = 50 // Base score
+  // Calculate score based on actual response quality and specificity
+  let score = 20 // Start low, earn points for quality
   
-  // Length factor (more detailed responses get higher scores)
-  const responseLength = userResponse.length
-  if (responseLength > 200) score += 15
-  else if (responseLength > 100) score += 10
-  else if (responseLength > 50) score += 5
-  
-  // Industry-specific scoring
-  const companySize = userContext?.companySize || ''
-  const revenueRange = userContext?.revenueRange || ''
-  
-  // Adjust score based on company size and revenue
-  if (companySize.includes('1000+') || revenueRange.includes('$50M+')) {
-    score += 10 // Larger companies typically have more sophisticated approaches
-  } else if (companySize.includes('201-500') || revenueRange.includes('$10M-$50M')) {
-    score += 5
-  }
-  
-  // Category-specific scoring
   const response = userResponse.toLowerCase()
+  const responseLength = userResponse.length
   
-  switch (category) {
-    case 'strategy':
-      if (response.includes('strategy') || response.includes('plan') || response.includes('goal')) score += 10
-      if (response.includes('market') || response.includes('competitive')) score += 5
-      break
-    case 'team':
-      if (response.includes('team') || response.includes('hiring') || response.includes('culture')) score += 10
-      if (response.includes('leadership') || response.includes('management')) score += 5
-      break
-    case 'technology':
-      if (response.includes('technology') || response.includes('system') || response.includes('tool')) score += 10
-      if (response.includes('automation') || response.includes('ai')) score += 5
-      break
-    case 'operations':
-      if (response.includes('process') || response.includes('efficiency') || response.includes('system')) score += 10
-      if (response.includes('metric') || response.includes('kpi')) score += 5
-      break
-    case 'market':
-      if (response.includes('customer') || response.includes('market') || response.includes('competition')) score += 10
-      if (response.includes('brand') || response.includes('positioning')) score += 5
-      break
+  // Penalize test responses and generic answers
+  if (response.includes('test') || response.length < 20) {
+    return 10 // Very low score for test responses
   }
   
-  // Ensure score is within bounds
-  return Math.min(100, Math.max(0, score))
+  // Reward detailed, specific responses
+  if (responseLength > 100) score += 20
+  else if (responseLength > 50) score += 10
+  else if (responseLength > 20) score += 5
+  
+  // Reward specific business terms and metrics
+  if (response.includes('revenue') || response.includes('mrr') || response.includes('arr')) score += 15
+  if (response.includes('customer') || response.includes('cac') || response.includes('ltv')) score += 15
+  if (response.includes('conversion') || response.includes('churn') || response.includes('retention')) score += 15
+  if (response.includes('team') || response.includes('hiring') || response.includes('staff')) score += 10
+  if (response.includes('strategy') || response.includes('plan') || response.includes('goal')) score += 10
+  if (response.includes('technology') || response.includes('crm') || response.includes('analytics')) score += 10
+  
+  // Reward industry-specific knowledge
+  const industry = userContext?.industry?.toLowerCase() || ''
+  if (industry === 'saas' && (response.includes('mrr') || response.includes('churn') || response.includes('activation'))) score += 10
+  if (industry === 'e-commerce' && (response.includes('conversion') || response.includes('aov') || response.includes('lifetime'))) score += 10
+  if (industry === 'technology' && (response.includes('product') || response.includes('development') || response.includes('feature'))) score += 10
+  
+  // Reward specific numbers and metrics
+  if (/\$[\d,]+/.test(userResponse) || /\d+%/.test(userResponse) || /\d+\.\d+/.test(userResponse)) score += 15
+  
+  // Reward actionable language
+  if (response.includes('trying') || response.includes('implementing') || response.includes('working on')) score += 10
+  if (response.includes('challenge') || response.includes('struggling') || response.includes('problem')) score += 5
+  
+  // Cap the score
+  return Math.min(95, Math.max(10, score))
 }
 
 function generateInsights(userResponse: string, category: string, userContext: any): string[] {
