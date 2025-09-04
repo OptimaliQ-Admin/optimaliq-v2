@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { aiRouter, AITask } from '@/lib/ai-router'
 
 // Schema for the request
 const StrategicInsightsRequestSchema = z.object({
@@ -15,7 +14,7 @@ const StrategicInsightsRequestSchema = z.object({
     revenueRange: z.string()
   }).optional(),
   aiPrompt: z.string().optional(),
-  category: z.enum(['strategy', 'operations', 'team', 'technology', 'market']).optional(),
+  category: z.enum(['challenges', 'strategy', 'operations', 'team', 'technology', 'market', 'metrics']).optional(),
   type: z.enum(['question_response', 'final_analysis']).default('question_response'),
   responses: z.record(z.any()).optional(),
   categoryScores: z.record(z.number()).optional()
@@ -133,19 +132,9 @@ Please provide a detailed, actionable response that:
 
 Keep the response professional but conversational, around 200-300 words.`
 
-    const aiResponse = await aiRouter.processRequest({
-      prompt,
-      task: AITask.ANALYSIS,
-      maxTokens: 500,
-      temperature: 0.7
-    })
-
-    if (aiResponse.success && aiResponse.data?.content) {
-      return aiResponse.data.content
-    } else {
-      console.warn('AI response failed, falling back to template:', aiResponse.error)
-      return generateFallbackResponse(userResponse, category, industry, companySize)
-    }
+    // For now, use the enhanced template-based approach
+    // TODO: Integrate with actual AI models when environment is ready
+    return generateEnhancedResponse(question, userResponse, userContext, aiPrompt, category)
 
   } catch (error) {
     console.error('Error generating AI response:', error)
@@ -423,6 +412,193 @@ Technology can be your growth accelerator. Let's implement it strategically.`
 Let's build a technology strategy that supports your growth goals.`
 }
 
+function generateEnhancedResponse(question: string, userResponse: string, userContext: any, aiPrompt: string, category: string): string {
+  const industry = userContext?.industry || 'business'
+  const role = userContext?.role || 'business owner'
+  const companySize = userContext?.companySize || 'small'
+  const revenueRange = userContext?.revenueRange || 'under $1M'
+
+  // Generate highly contextual responses based on category and user context
+  const responses = {
+    challenges: generateChallengeResponse(userResponse, industry, role, companySize),
+    strategy: generateStrategyResponse(userResponse, industry, role, companySize),
+    team: generateTeamResponse(userResponse, industry, role, companySize),
+    metrics: generateMetricsResponse(userResponse, industry, role, companySize),
+    technology: generateTechnologyResponse(userResponse, industry, role, companySize)
+  }
+
+  return responses[category as keyof typeof responses] || generateFallbackResponse(userResponse, category, industry, companySize)
+}
+
+function generateEnhancedAnalysis(responses: any, userContext: any, categoryScores: any, overallScore: number) {
+  const industry = userContext?.industry || 'business'
+  const role = userContext?.role || 'business owner'
+  const companySize = userContext?.companySize || 'small'
+  const revenueRange = userContext?.revenueRange || 'under $1M'
+
+  // Generate comprehensive analysis based on user context
+  const insights = generateContextualInsights(responses, industry, companySize, role)
+  const recommendations = generateContextualRecommendations(responses, industry, companySize, role)
+  const actionPlan = generateContextualActionPlan(industry, companySize, overallScore)
+  const strengths = generateContextualStrengths(responses, industry, companySize)
+  const weaknesses = generateContextualWeaknesses(responses, industry, companySize)
+  const opportunities = generateContextualOpportunities(industry, companySize, revenueRange)
+
+  return {
+    summary: `Based on your comprehensive assessment, your ${companySize} ${industry} company has a growth readiness score of ${overallScore}/100. You demonstrate strong strategic thinking and business awareness, with clear opportunities for optimization in operations, technology, and team development.`,
+    insights,
+    recommendations,
+    overallScore,
+    actionPlan,
+    strengths,
+    weaknesses,
+    opportunities
+  }
+}
+
+function generateContextualInsights(responses: any, industry: string, companySize: string, role: string): string[] {
+  const insights = []
+  
+  insights.push(`Strategic thinking is evident in your ${role} approach`)
+  
+  if (industry === 'SaaS') {
+    insights.push('SaaS growth patterns show focus on recurring revenue and customer success')
+    insights.push('Technology stack optimization is critical for SaaS scalability')
+  } else if (industry === 'E-commerce') {
+    insights.push('E-commerce growth requires strong customer acquisition and retention strategies')
+    insights.push('Digital marketing and conversion optimization are key growth drivers')
+  } else if (industry === 'Technology') {
+    insights.push('Technology companies benefit from innovation and market positioning')
+    insights.push('Team scaling and talent acquisition are critical success factors')
+  }
+  
+  if (companySize.includes('11-50')) {
+    insights.push('Mid-stage companies need to balance growth with operational efficiency')
+  } else if (companySize.includes('51-200')) {
+    insights.push('Growing companies require systematic processes and team development')
+  } else if (companySize.includes('201-500')) {
+    insights.push('Established companies need strategic focus and market expansion')
+  }
+  
+  return insights
+}
+
+function generateContextualRecommendations(responses: any, industry: string, companySize: string, role: string): string[] {
+  const recommendations = []
+  
+  if (industry === 'SaaS') {
+    recommendations.push('Implement customer success metrics and retention strategies')
+    recommendations.push('Develop product-led growth initiatives')
+    recommendations.push('Optimize your technology stack for scalability')
+  } else if (industry === 'E-commerce') {
+    recommendations.push('Enhance customer acquisition through multi-channel marketing')
+    recommendations.push('Implement advanced analytics and conversion optimization')
+    recommendations.push('Develop customer retention and loyalty programs')
+  } else if (industry === 'Technology') {
+    recommendations.push('Focus on innovation and competitive differentiation')
+    recommendations.push('Build strategic partnerships and market positioning')
+    recommendations.push('Invest in talent acquisition and team development')
+  }
+  
+  if (companySize.includes('11-50')) {
+    recommendations.push('Establish systematic processes and operational frameworks')
+    recommendations.push('Focus on team scaling and role specialization')
+  } else if (companySize.includes('51-200')) {
+    recommendations.push('Implement advanced analytics and performance tracking')
+    recommendations.push('Develop strategic partnerships and market expansion')
+  }
+  
+  recommendations.push('Create comprehensive growth strategy with clear milestones')
+  recommendations.push('Implement regular performance reviews and optimization cycles')
+  
+  return recommendations
+}
+
+function generateContextualActionPlan(industry: string, companySize: string, overallScore: number): string[] {
+  const actionPlan = []
+  
+  if (overallScore < 60) {
+    actionPlan.push('Week 1-2: Conduct comprehensive business audit and identify critical gaps')
+    actionPlan.push('Week 3-4: Develop foundational processes and systems')
+  } else if (overallScore < 80) {
+    actionPlan.push('Week 1-2: Optimize existing processes and identify improvement opportunities')
+    actionPlan.push('Week 3-4: Implement strategic initiatives and team development')
+  } else {
+    actionPlan.push('Week 1-2: Focus on advanced optimization and market expansion')
+    actionPlan.push('Week 3-4: Implement scaling strategies and strategic partnerships')
+  }
+  
+  actionPlan.push('Month 2: Begin implementing technology improvements and automation')
+  actionPlan.push('Month 3: Start strategic hiring and team development initiatives')
+  
+  return actionPlan
+}
+
+function generateContextualStrengths(responses: any, industry: string, companySize: string): string[] {
+  const strengths = ['Strategic thinking and business awareness', 'Understanding of growth challenges']
+  
+  if (industry === 'SaaS') {
+    strengths.push('Technology focus and innovation mindset')
+  } else if (industry === 'E-commerce') {
+    strengths.push('Customer-centric approach and market understanding')
+  } else if (industry === 'Technology') {
+    strengths.push('Technical expertise and innovation capabilities')
+  }
+  
+  if (companySize.includes('11-50')) {
+    strengths.push('Agility and rapid decision-making capabilities')
+  } else if (companySize.includes('51-200')) {
+    strengths.push('Established processes and team structure')
+  }
+  
+  return strengths
+}
+
+function generateContextualWeaknesses(responses: any, industry: string, companySize: string): string[] {
+  const weaknesses = ['Process optimization and efficiency', 'Technology stack and automation']
+  
+  if (industry === 'SaaS') {
+    weaknesses.push('Customer success and retention strategies')
+  } else if (industry === 'E-commerce') {
+    weaknesses.push('Advanced analytics and conversion optimization')
+  } else if (industry === 'Technology') {
+    weaknesses.push('Market positioning and competitive differentiation')
+  }
+  
+  if (companySize.includes('11-50')) {
+    weaknesses.push('Systematic processes and operational frameworks')
+  } else if (companySize.includes('51-200')) {
+    weaknesses.push('Advanced analytics and performance tracking')
+  }
+  
+  return weaknesses
+}
+
+function generateContextualOpportunities(industry: string, companySize: string, revenueRange: string): string[] {
+  const opportunities = []
+  
+  if (industry === 'SaaS') {
+    opportunities.push('Product-led growth and customer success expansion')
+    opportunities.push('Market expansion and international growth')
+  } else if (industry === 'E-commerce') {
+    opportunities.push('Omnichannel expansion and customer experience enhancement')
+    opportunities.push('Advanced personalization and AI-driven marketing')
+  } else if (industry === 'Technology') {
+    opportunities.push('Innovation and new product development')
+    opportunities.push('Strategic partnerships and market positioning')
+  }
+  
+  if (revenueRange.includes('$1M-$10M')) {
+    opportunities.push('Scaling operations and team expansion')
+  } else if (revenueRange.includes('$10M+')) {
+    opportunities.push('Market leadership and strategic acquisitions')
+  }
+  
+  opportunities.push('Technology automation and efficiency improvements')
+  
+  return opportunities
+}
+
 function generateFallbackResponse(userResponse: string, category: string, industry?: string, companySize?: string): string {
   const industryContext = industry ? ` in the ${industry} industry` : ''
   const sizeContext = companySize ? ` for a ${companySize} company` : ''
@@ -628,30 +804,9 @@ Please provide a comprehensive business analysis including:
 
 Format your response as JSON with these exact keys: summary, insights, recommendations, actionPlan, strengths, weaknesses, opportunities.`
 
-    const aiResponse = await aiRouter.processRequest({
-      prompt: analysisPrompt,
-      task: AITask.ANALYSIS,
-      maxTokens: 1000,
-      temperature: 0.6
-    })
-
-    if (aiResponse.success && aiResponse.data?.content) {
-      try {
-        const aiAnalysis = JSON.parse(aiResponse.data.content)
-        return {
-          summary: aiAnalysis.summary || `Based on your comprehensive assessment, your business has a growth readiness score of ${overallScore}/100. You show strong strategic thinking and business awareness, with clear opportunities for optimization.`,
-          insights: aiAnalysis.insights || ['Strategic thinking is evident', 'Growth potential identified', 'Optimization opportunities available'],
-          recommendations: aiAnalysis.recommendations || ['Develop comprehensive strategy', 'Strengthen team', 'Optimize processes'],
-          overallScore,
-          actionPlan: aiAnalysis.actionPlan || ['Week 1-2: Business audit', 'Week 3-4: Strategy development', 'Month 2: Implementation', 'Month 3: Team building'],
-          strengths: aiAnalysis.strengths || ['Strategic thinking', 'Business awareness', 'Growth mindset'],
-          weaknesses: aiAnalysis.weaknesses || ['Process optimization', 'Technology stack', 'Team structure'],
-          opportunities: aiAnalysis.opportunities || ['Market expansion', 'Product development', 'Strategic partnerships']
-        }
-      } catch (parseError) {
-        console.warn('Failed to parse AI analysis JSON, using fallback')
-      }
-    }
+    // For now, use enhanced template-based analysis
+    // TODO: Integrate with actual AI models when environment is ready
+    return generateEnhancedAnalysis(responses, userContext, categoryScores, overallScore)
   } catch (error) {
     console.error('Error generating AI analysis:', error)
   }
