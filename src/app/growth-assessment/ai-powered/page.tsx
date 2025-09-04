@@ -130,6 +130,7 @@ export default function AIPoweredAssessment() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const [assessmentData, setAssessmentData] = useState<AssessmentData>({
     currentQuestion: 0,
     totalQuestions: questions.length,
@@ -177,19 +178,25 @@ export default function AIPoweredAssessment() {
   }
 
   const startAssessment = () => {
-    const welcomeMessage: Message = {
-      id: '1',
-      type: 'ai',
-      content: `Hello ${userInfo?.name || 'there'}! 👋 I'm your AI Growth Strategist. I'll analyze your business and provide personalized insights to help you scale effectively.
+    // Show typing indicator first
+    setIsTyping(true)
+    
+    setTimeout(() => {
+      setIsTyping(false)
+      const welcomeMessage: Message = {
+        id: '1',
+        type: 'ai',
+        content: `Hello ${userInfo?.name || 'there'}! 👋 I'm your AI Growth Strategist. I'll analyze your business and provide personalized insights to help you scale effectively.
 
 I'll ask you 5 strategic questions about your growth challenges, strategy, team, metrics, and technology. As you answer, I'll provide real-time insights and recommendations.
 
 Ready to begin? Let's start with your biggest growth challenges.`,
-      timestamp: new Date(),
-      insights: ['AI-powered analysis', 'Real-time insights', 'Personalized recommendations']
-    }
+        timestamp: new Date(),
+        insights: ['AI-powered analysis', 'Real-time insights', 'Personalized recommendations']
+      }
 
-    setMessages([welcomeMessage])
+      setMessages([welcomeMessage])
+    }, 1500)
   }
 
   const generateAIResponse = async (userMessage: string, questionIndex: number) => {
@@ -254,19 +261,23 @@ Ready to begin? Let's start with your biggest growth challenges.`,
       // Move to next question or complete assessment
       if (questionIndex < questions.length - 1) {
         setTimeout(() => {
-          const nextQuestion = questions[questionIndex + 1]
-          const nextMessage: Message = {
-            id: (Date.now() + 1).toString(),
-            type: 'ai',
-            content: `Great insights! Now let's move to the next question:
+          setIsTyping(true)
+          setTimeout(() => {
+            setIsTyping(false)
+            const nextQuestion = questions[questionIndex + 1]
+            const nextMessage: Message = {
+              id: (Date.now() + 1).toString(),
+              type: 'ai',
+              content: `Great insights! Now let's move to the next question:
 
 **${nextQuestion.question}**
 
 ${nextQuestion.followUp ? nextQuestion.followUp : ''}`,
-            timestamp: new Date(),
-            questionId: nextQuestion.id
-          }
-          setMessages(prev => [...prev, nextMessage])
+              timestamp: new Date(),
+              questionId: nextQuestion.id
+            }
+            setMessages(prev => [...prev, nextMessage])
+          }, 1200)
         }, 2000)
       } else {
         // Complete assessment
@@ -634,92 +645,173 @@ Let me show you your detailed results...`,
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center px-4 py-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-4xl w-full bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl border border-white/20 p-0 flex flex-col lg:flex-row overflow-hidden"
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ 
+          duration: 0.6,
+          type: "spring",
+          stiffness: 100
+        }}
+        className="max-w-5xl w-full bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl border border-white/30 p-0 flex flex-col lg:flex-row overflow-hidden"
       >
         {/* Left Section: Chat Interface */}
         <div className="flex-1 p-8 border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col">
           {/* Chat Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-              <Bot className="w-5 h-5 text-white" />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <Bot className="w-6 h-6 text-white" />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                </div>
+              </div>
+              <div>
+                <h2 className="font-semibold text-gray-900 text-lg">AI Growth Strategist</h2>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <p className="text-sm text-gray-500">Online • Question {assessmentData.currentQuestion + 1} of {assessmentData.totalQuestions}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h2 className="font-semibold text-gray-900">AI Growth Strategist</h2>
-              <p className="text-sm text-gray-500">Question {assessmentData.currentQuestion + 1} of {assessmentData.totalQuestions}</p>
+            <div className="text-right">
+              <div className="text-sm font-medium text-gray-700">
+                {userInfo?.name || 'Guest'}
+              </div>
+              <div className="text-xs text-gray-500">
+                {userInfo?.industry} • {userInfo?.companySize}
+              </div>
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="mb-6">
-            <Progress 
-              value={(assessmentData.currentQuestion / assessmentData.totalQuestions) * 100} 
-              className="h-2"
-            />
-            <p className="text-sm text-gray-500 mt-2">
-              {Math.round((assessmentData.currentQuestion / assessmentData.totalQuestions) * 100)}% Complete
-            </p>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">Assessment Progress</span>
+              <span className="text-sm text-gray-500">
+                {Math.round((assessmentData.currentQuestion / assessmentData.totalQuestions) * 100)}%
+              </span>
+            </div>
+            <div className="relative">
+              <Progress 
+                value={(assessmentData.currentQuestion / assessmentData.totalQuestions) * 100} 
+                className="h-3 bg-gray-200"
+              />
+              <div className="absolute inset-0 flex items-center justify-between px-1">
+                {Array.from({ length: assessmentData.totalQuestions }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full ${
+                      i < assessmentData.currentQuestion
+                        ? 'bg-green-500'
+                        : i === assessmentData.currentQuestion
+                        ? 'bg-blue-500 animate-pulse'
+                        : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex justify-between text-xs text-gray-500 mt-2">
+              <span>Started</span>
+              <span>Complete</span>
+            </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto space-y-4 mb-6">
-            {messages.map((message) => (
+          <div className="flex-1 overflow-y-auto space-y-6 mb-6 pr-2">
+            {messages.map((message, index) => (
               <motion.div
                 key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.4,
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 100
+                }}
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[80%] ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
-                  <div className={`flex items-start gap-3 ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                <div className={`max-w-[85%] ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
+                  <div className={`flex items-end gap-3 ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    {/* Avatar */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                       message.type === 'user' 
-                        ? 'bg-blue-600' 
-                        : 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg' 
+                        : 'bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg'
                     }`}>
                       {message.type === 'user' ? (
-                        <UserIcon className="w-4 h-4 text-white" />
+                        <UserIcon className="w-5 h-5 text-white" />
                       ) : (
-                        <Bot className="w-4 h-4 text-white" />
+                        <Bot className="w-5 h-5 text-white" />
                       )}
                     </div>
-                    <div className={`rounded-2xl px-4 py-3 ${
+                    
+                    {/* Message Bubble */}
+                    <div className={`relative max-w-full ${
                       message.type === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}>
-                      <p className="whitespace-pre-wrap">{message.content}</p>
+                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+                        : 'bg-white text-gray-800 shadow-md border border-gray-100'
+                    } rounded-2xl px-5 py-4`}>
+                      {/* Message Content */}
+                      <div className="prose prose-sm max-w-none">
+                        <p className="whitespace-pre-wrap leading-relaxed m-0">{message.content}</p>
+                      </div>
+                      
+                      {/* Insights Badges */}
                       {message.insights && message.insights.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {message.insights.map((insight, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {message.insights.map((insight, insightIndex) => (
+                            <Badge 
+                              key={insightIndex} 
+                              variant={message.type === 'user' ? 'secondary' : 'default'}
+                              className={`text-xs px-2 py-1 ${
+                                message.type === 'user' 
+                                  ? 'bg-white/20 text-white border-white/30' 
+                                  : 'bg-blue-50 text-blue-700 border-blue-200'
+                              }`}
+                            >
                               {insight}
                             </Badge>
                           ))}
                         </div>
                       )}
+                      
+                      {/* Timestamp */}
+                      <div className={`text-xs mt-2 ${
+                        message.type === 'user' ? 'text-blue-100' : 'text-gray-400'
+                      }`}>
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
                     </div>
                   </div>
                 </div>
               </motion.div>
             ))}
             
-            {isLoading && (
+            {/* Typing Indicator */}
+            {(isLoading || isTyping) && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex justify-start"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                    <Bot className="w-4 h-4 text-white" />
+                <div className="flex items-end gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Bot className="w-5 h-5 text-white" />
                   </div>
-                  <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                  <div className="bg-white rounded-2xl px-5 py-4 shadow-md border border-gray-100">
                     <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-gray-600">Analyzing your response...</span>
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      </div>
+                      <span className="text-gray-500 text-sm ml-2">
+                        {isLoading ? 'Analyzing your response...' : 'AI is typing...'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -731,22 +823,34 @@ Let me show you your detailed results...`,
 
           {/* Input Area */}
           {!showResults && !isAnalyzing && (
-            <div className="flex gap-3">
-              <Textarea
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your response here..."
-                className="flex-1 min-h-[60px] resize-none"
-                disabled={isLoading}
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isLoading}
-                className="px-6"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
+              <div className="flex gap-3 items-end">
+                <div className="flex-1 relative">
+                  <Textarea
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your response here..."
+                    className="min-h-[60px] max-h-[120px] resize-none border-0 bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-500 pr-12"
+                    disabled={isLoading || isTyping}
+                    rows={2}
+                  />
+                  <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+                    {inputValue.length > 0 && `${inputValue.length} chars`}
+                  </div>
+                </div>
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!inputValue.trim() || isLoading || isTyping}
+                  className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  size="icon"
+                >
+                  <Send className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="mt-2 text-xs text-gray-500 text-center">
+                Press Enter to send • Shift+Enter for new line
+              </div>
             </div>
           )}
         </div>
