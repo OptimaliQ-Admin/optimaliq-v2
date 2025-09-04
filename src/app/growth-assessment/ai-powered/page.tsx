@@ -295,11 +295,20 @@ Ready to begin? Let's start with your biggest growth challenges.`,
         }
       }))
 
-      // Generate AI response message
+      // Generate AI response message with natural transition to next question
+      let aiResponseContent = aiData.response || generateFallbackResponse(userMessage, question)
+      
+      // If this is not the last question, add a natural transition to the next question
+      if (questionIndex < questions.length - 1) {
+        const nextQuestion = questions[questionIndex + 1]
+        const contextualTransition = generateContextualTransition(question, userMessage, nextQuestion)
+        aiResponseContent += `\n\n${contextualTransition}`
+      }
+
       const aiResponse: Message = {
         id: Date.now().toString(),
         type: 'ai',
-        content: aiData.response || generateFallbackResponse(userMessage, question),
+        content: aiResponseContent,
         timestamp: new Date(),
         insights: aiData.insights || [],
         questionId: question.id
@@ -309,25 +318,13 @@ Ready to begin? Let's start with your biggest growth challenges.`,
 
       // Move to next question or complete assessment
       if (questionIndex < questions.length - 1) {
+        // Update current question after a short delay
         setTimeout(() => {
-          setIsTyping(true)
-          setTimeout(() => {
-            setIsTyping(false)
-            const nextQuestion = questions[questionIndex + 1]
-            const nextMessage: Message = {
-              id: (Date.now() + 1).toString(),
-              type: 'ai',
-              content: `Thanks for that insight! 
-
-**${nextQuestion.question}**
-
-${nextQuestion.followUp ? nextQuestion.followUp : ''}`,
-              timestamp: new Date(),
-              questionId: nextQuestion.id
-            }
-            setMessages(prev => [...prev, nextMessage])
-          }, 1200)
-        }, 3000)
+          setAssessmentData(prev => ({
+            ...prev,
+            currentQuestion: prev.currentQuestion + 1
+          }))
+        }, 2000)
       } else {
         // Complete assessment
         setTimeout(() => {
@@ -363,6 +360,66 @@ ${nextQuestion.followUp ? nextQuestion.followUp : ''}`,
     }
     
     return responses[question.id as keyof typeof responses] || "Thank you for that insight. Let me analyze this and provide you with specific recommendations."
+  }
+
+  const generateContextualTransition = (currentQuestion: Question, userResponse: string, nextQuestion: Question): string => {
+    // Create natural transitions based on the current question and user response
+    const transitions = {
+      challenges: {
+        strategy: "Now that I understand your challenges, let's talk about your approach to solving them. ",
+        team: "Given those challenges, your team structure will be crucial. ",
+        metrics: "To tackle those challenges effectively, we need to measure what matters. ",
+        technology: "Those challenges often have technology solutions. "
+      },
+      strategy: {
+        team: "Your strategy is solid, but execution depends on having the right people. ",
+        metrics: "Great strategy! Now let's make sure you're tracking the right metrics to measure success. ",
+        technology: "Strategy without the right tools is just a plan. ",
+        challenges: "Let me understand what's holding back your strategy. "
+      },
+      team: {
+        metrics: "With the right team in place, you'll need to track their impact. ",
+        technology: "Your team will need the right tools to execute effectively. ",
+        strategy: "Team structure should align with your growth strategy. ",
+        challenges: "Team issues often create operational challenges. "
+      },
+      metrics: {
+        technology: "Good metrics require good systems to track them. ",
+        strategy: "Metrics should drive your strategic decisions. ",
+        team: "The right metrics help you hire and manage your team better. ",
+        challenges: "Metrics often reveal the root causes of challenges. "
+      },
+      technology: {
+        strategy: "Technology should enable your strategy, not limit it. ",
+        team: "The right tech stack helps your team work more efficiently. ",
+        metrics: "Technology should make it easier to track and analyze your metrics. ",
+        challenges: "Technology problems often create operational challenges. "
+      }
+    }
+
+    const currentCategory = currentQuestion.category
+    const nextCategory = nextQuestion.category
+    
+    // Get the contextual transition
+    const transition = transitions[currentCategory]?.[nextCategory] || ""
+    
+    // Create a natural flow that references the user's response
+    const userResponseLower = userResponse.toLowerCase()
+    let contextualReference = ""
+    
+    if (userResponseLower.includes('struggling') || userResponseLower.includes('challenge')) {
+      contextualReference = "I can see you're dealing with some real challenges. "
+    } else if (userResponseLower.includes('not sure') || userResponseLower.includes('don\'t know')) {
+      contextualReference = "That's totally normal - many founders feel that way. "
+    } else if (userResponseLower.includes('good') || userResponseLower.includes('working')) {
+      contextualReference = "That's a great foundation to build on. "
+    } else if (userResponseLower.includes('need') || userResponseLower.includes('want')) {
+      contextualReference = "I can help you figure that out. "
+    }
+    
+    return `${contextualReference}${transition}${nextQuestion.question}
+
+${nextQuestion.followUp ? nextQuestion.followUp : ''}`
   }
 
   const completeAssessment = async () => {
