@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { aiRouter, AITask } from '@/lib/ai-router'
 
 // Schema for the request
 const StrategicInsightsRequestSchema = z.object({
@@ -108,22 +109,48 @@ async function generateFinalAnalysis(data: any) {
 }
 
 async function generateIntelligentResponse(question: string, userResponse: string, userContext: any, aiPrompt: string, category: string): Promise<string> {
-  // Generate contextual responses based on category and user context
-  const industry = userContext?.industry || 'business'
-  const role = userContext?.role || 'business owner'
-  const companySize = userContext?.companySize || 'small'
-  const revenueRange = userContext?.revenueRange || 'under $1M'
+  try {
+    // Use real AI models for intelligent responses
+    const industry = userContext?.industry || 'business'
+    const role = userContext?.role || 'business owner'
+    const companySize = userContext?.companySize || 'small'
+    const revenueRange = userContext?.revenueRange || 'under $1M'
 
-  // Generate contextual responses based on category and user context
-  const responses = {
-    challenges: generateChallengeResponse(userResponse, industry, role, companySize),
-    strategy: generateStrategyResponse(userResponse, industry, role, companySize),
-    team: generateTeamResponse(userResponse, industry, role, companySize),
-    metrics: generateMetricsResponse(userResponse, industry, role, companySize),
-    technology: generateTechnologyResponse(userResponse, industry, role, companySize)
+    const prompt = `You are an expert business growth strategist analyzing a ${category} question for a ${companySize} ${industry} company.
+
+Question: ${question}
+User Response: ${userResponse}
+User Context: ${role} at a ${companySize} company with ${revenueRange} revenue in the ${industry} industry
+
+${aiPrompt}
+
+Please provide a detailed, actionable response that:
+1. Shows you understand their specific situation
+2. Identifies key insights and opportunities
+3. Provides specific, actionable recommendations
+4. Uses their industry and company size context
+5. Demonstrates strategic business thinking
+
+Keep the response professional but conversational, around 200-300 words.`
+
+    const aiResponse = await aiRouter.processRequest({
+      prompt,
+      task: AITask.ANALYSIS,
+      maxTokens: 500,
+      temperature: 0.7
+    })
+
+    if (aiResponse.success && aiResponse.data?.content) {
+      return aiResponse.data.content
+    } else {
+      console.warn('AI response failed, falling back to template:', aiResponse.error)
+      return generateFallbackResponse(userResponse, category, industry, companySize)
+    }
+
+  } catch (error) {
+    console.error('Error generating AI response:', error)
+    return generateFallbackResponse(userResponse, category, userContext?.industry, userContext?.companySize)
   }
-
-  return responses[category as keyof typeof responses] || generateGenericResponse(userResponse, category)
 }
 
 function generateChallengeResponse(userResponse: string, industry: string, role: string, companySize: string): string {
@@ -396,8 +423,11 @@ Technology can be your growth accelerator. Let's implement it strategically.`
 Let's build a technology strategy that supports your growth goals.`
 }
 
-function generateGenericResponse(userResponse: string, category: string): string {
-  return `Thank you for that detailed response. I can see you're thinking strategically about your ${category} approach. Based on your input, here are some key insights:
+function generateFallbackResponse(userResponse: string, category: string, industry?: string, companySize?: string): string {
+  const industryContext = industry ? ` in the ${industry} industry` : ''
+  const sizeContext = companySize ? ` for a ${companySize} company` : ''
+  
+  return `Thank you for that detailed response. I can see you're thinking strategically about your ${category} approach${industryContext}${sizeContext}. Based on your input, here are some key insights:
 
 **Key Observations:**
 • Your response shows good business awareness
@@ -558,60 +588,115 @@ function generateRecommendations(userResponse: string, category: string, userCon
 }
 
 async function generateComprehensiveAnalysis(responses: any, userContext: any, categoryScores: any) {
-  // Calculate overall score
+  try {
+    // Calculate overall score
+    const scores = Object.values(categoryScores) as number[]
+    const overallScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
+    
+    const industry = userContext?.industry || 'business'
+    const role = userContext?.role || 'business owner'
+    const companySize = userContext?.companySize || 'small'
+    const revenueRange = userContext?.revenueRange || 'under $1M'
+
+    // Use AI to generate comprehensive analysis
+    const analysisPrompt = `You are a senior business consultant analyzing a comprehensive growth assessment for a ${companySize} ${industry} company.
+
+Company Context:
+- Industry: ${industry}
+- Company Size: ${companySize}
+- Revenue Range: ${revenueRange}
+- Role: ${role}
+- Overall Growth Readiness Score: ${overallScore}/100
+
+Category Scores:
+${Object.entries(categoryScores).map(([category, score]) => `- ${category}: ${score}/100`).join('\n')}
+
+Assessment Responses:
+${Object.entries(responses).map(([question, response]: [string, any]) => 
+  `Question: ${question}\nResponse: ${response.answer || response}\n`
+).join('\n')}
+
+Please provide a comprehensive business analysis including:
+
+1. **Executive Summary** (2-3 sentences about their growth readiness)
+2. **Key Insights** (5 specific insights about their business)
+3. **Strategic Recommendations** (5 actionable recommendations)
+4. **30-Day Action Plan** (4 weekly milestones)
+5. **Strengths** (3 key strengths)
+6. **Weaknesses** (3 areas for improvement)
+7. **Opportunities** (3 growth opportunities)
+
+Format your response as JSON with these exact keys: summary, insights, recommendations, actionPlan, strengths, weaknesses, opportunities.`
+
+    const aiResponse = await aiRouter.processRequest({
+      prompt: analysisPrompt,
+      task: AITask.ANALYSIS,
+      maxTokens: 1000,
+      temperature: 0.6
+    })
+
+    if (aiResponse.success && aiResponse.data?.content) {
+      try {
+        const aiAnalysis = JSON.parse(aiResponse.data.content)
+        return {
+          summary: aiAnalysis.summary || `Based on your comprehensive assessment, your business has a growth readiness score of ${overallScore}/100. You show strong strategic thinking and business awareness, with clear opportunities for optimization.`,
+          insights: aiAnalysis.insights || ['Strategic thinking is evident', 'Growth potential identified', 'Optimization opportunities available'],
+          recommendations: aiAnalysis.recommendations || ['Develop comprehensive strategy', 'Strengthen team', 'Optimize processes'],
+          overallScore,
+          actionPlan: aiAnalysis.actionPlan || ['Week 1-2: Business audit', 'Week 3-4: Strategy development', 'Month 2: Implementation', 'Month 3: Team building'],
+          strengths: aiAnalysis.strengths || ['Strategic thinking', 'Business awareness', 'Growth mindset'],
+          weaknesses: aiAnalysis.weaknesses || ['Process optimization', 'Technology stack', 'Team structure'],
+          opportunities: aiAnalysis.opportunities || ['Market expansion', 'Product development', 'Strategic partnerships']
+        }
+      } catch (parseError) {
+        console.warn('Failed to parse AI analysis JSON, using fallback')
+      }
+    }
+  } catch (error) {
+    console.error('Error generating AI analysis:', error)
+  }
+
+  // Fallback to template-based analysis
   const scores = Object.values(categoryScores) as number[]
   const overallScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
   
-  // Generate comprehensive insights
-  const insights = [
-    'Your business shows strong potential for growth with the right strategic adjustments',
-    'Focus on optimizing your current processes before scaling operations',
-    'Consider investing in technology that can automate routine tasks',
-    'Team development and talent acquisition should be a priority',
-    'Market positioning and competitive advantage need strengthening'
-  ]
-  
-  const recommendations = [
-    'Develop a comprehensive growth strategy with clear milestones and KPIs',
-    'Strengthen your team with key hires in growth-critical roles',
-    'Implement better metrics tracking and reporting systems',
-    'Invest in technology that supports scalability and efficiency',
-    'Create a systematic approach to customer acquisition and retention'
-  ]
-  
-  const actionPlan = [
-    'Week 1-2: Conduct comprehensive business audit and identify bottlenecks',
-    'Week 3-4: Develop detailed growth strategy with specific KPIs and milestones',
-    'Month 2: Begin implementing technology improvements and automation',
-    'Month 3: Start hiring for key growth roles and team development'
-  ]
-  
-  const strengths = [
-    'Strategic thinking and business awareness',
-    'Understanding of growth challenges',
-    'Willingness to invest in improvement'
-  ]
-  
-  const weaknesses = [
-    'Process optimization and efficiency',
-    'Technology stack and automation',
-    'Team structure and talent acquisition'
-  ]
-  
-  const opportunities = [
-    'Market expansion and customer acquisition',
-    'Product development and innovation',
-    'Strategic partnerships and collaborations'
-  ]
-  
   return {
     summary: `Based on your comprehensive assessment, your business has a growth readiness score of ${overallScore}/100. You show strong strategic thinking and business awareness, with clear opportunities for optimization in operations, technology, and team development.`,
-    insights,
-    recommendations,
+    insights: [
+      'Your business shows strong potential for growth with the right strategic adjustments',
+      'Focus on optimizing your current processes before scaling operations',
+      'Consider investing in technology that can automate routine tasks',
+      'Team development and talent acquisition should be a priority',
+      'Market positioning and competitive advantage need strengthening'
+    ],
+    recommendations: [
+      'Develop a comprehensive growth strategy with clear milestones and KPIs',
+      'Strengthen your team with key hires in growth-critical roles',
+      'Implement better metrics tracking and reporting systems',
+      'Invest in technology that supports scalability and efficiency',
+      'Create a systematic approach to customer acquisition and retention'
+    ],
     overallScore,
-    actionPlan,
-    strengths,
-    weaknesses,
-    opportunities
+    actionPlan: [
+      'Week 1-2: Conduct comprehensive business audit and identify bottlenecks',
+      'Week 3-4: Develop detailed growth strategy with specific KPIs and milestones',
+      'Month 2: Begin implementing technology improvements and automation',
+      'Month 3: Start hiring for key growth roles and team development'
+    ],
+    strengths: [
+      'Strategic thinking and business awareness',
+      'Understanding of growth challenges',
+      'Willingness to invest in improvement'
+    ],
+    weaknesses: [
+      'Process optimization and efficiency',
+      'Technology stack and automation',
+      'Team structure and talent acquisition'
+    ],
+    opportunities: [
+      'Market expansion and customer acquisition',
+      'Product development and innovation',
+      'Strategic partnerships and collaborations'
+    ]
   }
 }
