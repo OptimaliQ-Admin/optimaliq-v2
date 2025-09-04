@@ -26,7 +26,7 @@ const ProcessLeadRequestSchema = z.object({
 const ProcessLeadResponseSchema = z.object({
   success: z.boolean(),
   data: z.object({
-    userId: z.string().optional(),
+    userId: z.string().nullable().optional(),
     email: z.string(),
     assessmentUrl: z.string(),
     message: z.string()
@@ -151,37 +151,16 @@ export async function POST(request: NextRequest) {
         userId = authResult.user.id;
         console.log('Auth user created with ID:', userId);
       } catch (authError) {
-        console.log('Auth creation failed, creating user directly in database...');
-        // Fallback: create user directly in tier2_users table
-        // Generate a UUID for the user since we're not using auth
-        const { data: newUser, error: userError } = await supabase
-          .from('tier2_users')
-          .insert({
-            id: crypto.randomUUID(), // Generate UUID for direct database insert
-            first_name: validatedData.name.split(' ')[0] || validatedData.name,
-            last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
-            email: validatedData.email,
-            industry: validatedData.industry,
-            company_size: validatedData.companySize,
-            revenue_range: mapRevenueRange(validatedData.revenueRange),
-            title: validatedData.role,
-            agreed_terms: true,
-            agreed_marketing: validatedData.privacyConsent
-          })
-          .select('id')
-          .single();
-
-        if (userError) {
-          console.error('Direct user creation error:', userError);
-          throw new AppError(`Failed to create user: ${userError.message}`, 'USER_CREATION_FAILED', 500);
-        }
-
-        userId = newUser.id;
+        console.log('Auth creation failed, creating lead without user account...');
+        // Fallback: create lead record without user account
+        // This happens when email validation fails or other auth issues occur
+        userId = null;
         console.log('User created directly in database with ID:', userId);
       }
 
-      // Create user profile in tier2_users table (only if not already created)
-      console.log('Creating user profile...');
+      // Create user profile in tier2_users table (only if we have a valid userId)
+      if (userId) {
+        console.log('Creating user profile...');
       const { data: profileData, error: profileError } = await supabase
         .from('tier2_users')
         .upsert({
@@ -211,7 +190,7 @@ export async function POST(request: NextRequest) {
       const { error: scoresError } = await supabase
         .from('tier2_profiles')
         .insert({
-          user_id: userId,
+          user_id: userId || null,
           score_overall: 0,
           score_strategy: 0,
           score_process: 0,
@@ -223,6 +202,9 @@ export async function POST(request: NextRequest) {
         // Continue anyway
       } else {
         console.log('Profile scores created successfully');
+      }
+      } else {
+        console.log('Skipping user profile and scores creation - no valid userId');
       }
     }
 
@@ -240,7 +222,7 @@ export async function POST(request: NextRequest) {
         source: validatedData.source,
         utm_data: validatedData.utmData || {},
         status: 'qualified',
-        user_id: userId,
+        user_id: userId || null,
         created_at: new Date().toISOString()
       })
       .select();
@@ -253,7 +235,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate assessment URL with user context
-    const assessmentUrl = `/assessment?user=${userId}&industry=${encodeURIComponent(validatedData.industry)}&role=${encodeURIComponent(validatedData.role)}`;
+    const assessmentUrl = userId 
+      ? `/assessment?user=${userId}&industry=${encodeURIComponent(validatedData.industry)}&role=${encodeURIComponent(validatedData.role)}`
+      : `/growth-assessment/ai-powered`;
     console.log('Generated assessment URL:', assessmentUrl);
 
     const response = ProcessLeadResponseSchema.parse({
