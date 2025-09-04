@@ -137,9 +137,11 @@ export async function POST(request: NextRequest) {
       } catch (authError) {
         console.log('Auth creation failed, creating user directly in database...');
         // Fallback: create user directly in tier2_users table
+        // Generate a UUID for the user since we're not using auth
         const { data: newUser, error: userError } = await supabase
           .from('tier2_users')
           .insert({
+            id: crypto.randomUUID(), // Generate UUID for direct database insert
             first_name: validatedData.name.split(' ')[0] || validatedData.name,
             last_name: validatedData.name.split(' ').slice(1).join(' ') || '',
             email: validatedData.email,
