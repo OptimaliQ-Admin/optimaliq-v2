@@ -34,6 +34,22 @@ const ProcessLeadResponseSchema = z.object({
   message: z.string()
 });
 
+// Map form revenue range values to database-compatible values
+function mapRevenueRange(formValue: string): string {
+  const mapping: Record<string, string> = {
+    'Under $100K': 'Under $1M',
+    '$100K-$500K': 'Under $1M',
+    '$500K-$1M': 'Under $1M',
+    '$1M-$5M': '$1M - $10M',
+    '$5M-$10M': '$1M - $10M',
+    '$10M-$50M': '$10M - $50M',
+    '$50M-$100M': '$50M - $100M',
+    'Over $100M': 'Over $100M'
+  };
+  
+  return mapping[formValue] || 'Under $1M';
+}
+
 export async function POST(request: NextRequest) {
   try {
     console.log('Leads processing started');
@@ -79,7 +95,7 @@ export async function POST(request: NextRequest) {
         .update({
           industry: validatedData.industry,
           company_size: validatedData.companySize,
-          revenue_range: validatedData.revenueRange,
+          revenue_range: mapRevenueRange(validatedData.revenueRange),
           title: validatedData.role,
           updated_at: new Date().toISOString()
         })
@@ -113,7 +129,7 @@ export async function POST(request: NextRequest) {
           title: validatedData.role,
           industry: validatedData.industry,
           company_size: validatedData.companySize,
-          revenue_range: validatedData.revenueRange,
+          revenue_range: mapRevenueRange(validatedData.revenueRange),
           agreed_terms: true,
           agreed_marketing: validatedData.privacyConsent
             }
@@ -147,7 +163,7 @@ export async function POST(request: NextRequest) {
             email: validatedData.email,
             industry: validatedData.industry,
             company_size: validatedData.companySize,
-            revenue_range: validatedData.revenueRange,
+            revenue_range: mapRevenueRange(validatedData.revenueRange),
             title: validatedData.role,
             agreed_terms: true,
             agreed_marketing: validatedData.privacyConsent
@@ -177,7 +193,7 @@ export async function POST(request: NextRequest) {
           title: validatedData.role,
           industry: validatedData.industry,
           company_size: validatedData.companySize,
-          revenue_range: validatedData.revenueRange,
+          revenue_range: mapRevenueRange(validatedData.revenueRange),
           agreed_terms: true,
           agreed_marketing: validatedData.privacyConsent
         })
@@ -220,7 +236,7 @@ export async function POST(request: NextRequest) {
         industry: validatedData.industry,
         role: validatedData.role,
         company_size: validatedData.companySize,
-        revenue_range: validatedData.revenueRange,
+                    revenue_range: mapRevenueRange(validatedData.revenueRange),
         source: validatedData.source,
         utm_data: validatedData.utmData || {},
         status: 'qualified',
