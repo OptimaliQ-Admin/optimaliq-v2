@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { 
@@ -26,13 +26,21 @@ import {
   Eye,
   BarChart,
   PieChart,
-  LineChart
+  LineChart,
+  Clock,
+  DollarSign,
+  Building2,
+  Globe,
+  AlertCircle,
+  CheckCircle2,
+  XCircle
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { Progress } from '@/components/ui/progress'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Message {
   id: string
@@ -41,6 +49,7 @@ interface Message {
   timestamp: Date
   insights?: string[]
   data?: any
+  questionId?: string
 }
 
 interface AssessmentData {
@@ -49,8 +58,72 @@ interface AssessmentData {
   responses: Record<string, any>
   insights: string[]
   score: number
+  categoryScores: Record<string, number>
   recommendations: string[]
+  actionPlan: string[]
+  strengths: string[]
+  weaknesses: string[]
+  opportunities: string[]
 }
+
+interface Question {
+  id: string
+  question: string
+  type: 'text' | 'textarea' | 'select'
+  options?: { value: string; label: string }[]
+  followUp?: string
+  category: 'strategy' | 'operations' | 'team' | 'technology' | 'market'
+  weight: number
+  aiPrompt: string
+}
+
+const questions: Question[] = [
+  {
+    id: 'challenges',
+    question: "What are your biggest growth challenges right now?",
+    type: 'textarea',
+    category: 'strategy',
+    weight: 25,
+    followUp: "Tell me more about how these challenges are impacting your business.",
+    aiPrompt: "Analyze the user's growth challenges and provide specific, actionable insights. Consider their industry, company size, and role. Identify the root causes and suggest immediate and long-term solutions. Be specific and avoid generic advice."
+  },
+  {
+    id: 'strategy',
+    question: "How would you describe your current growth strategy?",
+    type: 'textarea',
+    category: 'strategy',
+    weight: 20,
+    followUp: "What specific tactics are you using to drive growth?",
+    aiPrompt: "Evaluate their growth strategy based on best practices for their industry and company size. Identify gaps, strengths, and opportunities for improvement. Provide specific recommendations for strategy enhancement."
+  },
+  {
+    id: 'team',
+    question: "How is your team structured for growth?",
+    type: 'textarea',
+    category: 'team',
+    weight: 20,
+    followUp: "What roles are you missing or need to strengthen?",
+    aiPrompt: "Analyze their team structure for growth readiness. Consider their company size, industry, and growth goals. Identify missing roles, skill gaps, and organizational improvements needed for scaling."
+  },
+  {
+    id: 'metrics',
+    question: "What key metrics do you track for growth?",
+    type: 'textarea',
+    category: 'operations',
+    weight: 15,
+    followUp: "How often do you review these metrics and make decisions?",
+    aiPrompt: "Evaluate their metrics framework for growth tracking. Identify missing KPIs, suggest improvements to their measurement approach, and recommend data-driven decision-making processes."
+  },
+  {
+    id: 'technology',
+    question: "How is your technology stack supporting growth?",
+    type: 'textarea',
+    category: 'technology',
+    weight: 20,
+    followUp: "What tools and systems are you using?",
+    aiPrompt: "Assess their technology stack for growth scalability. Identify bottlenecks, suggest tool improvements, and recommend technology investments that will support their growth goals."
+  }
+]
 
 export default function AIPoweredAssessment() {
   const router = useRouter()
@@ -59,53 +132,27 @@ export default function AIPoweredAssessment() {
   const [isLoading, setIsLoading] = useState(false)
   const [assessmentData, setAssessmentData] = useState<AssessmentData>({
     currentQuestion: 0,
-    totalQuestions: 5,
+    totalQuestions: questions.length,
     responses: {},
     insights: [],
     score: 0,
-    recommendations: []
+    categoryScores: {
+      strategy: 0,
+      operations: 0,
+      team: 0,
+      technology: 0,
+      market: 0
+    },
+    recommendations: [],
+    actionPlan: [],
+    strengths: [],
+    weaknesses: [],
+    opportunities: []
   })
   const [showResults, setShowResults] = useState(false)
   const [userInfo, setUserInfo] = useState<any>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const questions = [
-    {
-      id: 'challenges',
-      question: "What are your biggest growth challenges right now?",
-      type: 'text',
-      followUp: "Tell me more about how these challenges are impacting your business.",
-      insights: ["Understanding pain points", "Identifying growth blockers", "Prioritizing solutions"]
-    },
-    {
-      id: 'strategy',
-      question: "How would you describe your current growth strategy?",
-      type: 'text',
-      followUp: "What specific tactics are you using to drive growth?",
-      insights: ["Strategy assessment", "Tactical analysis", "Growth methodology"]
-    },
-    {
-      id: 'team',
-      question: "How is your team structured for growth?",
-      type: 'text',
-      followUp: "What roles are you missing or need to strengthen?",
-      insights: ["Team optimization", "Role analysis", "Capacity planning"]
-    },
-    {
-      id: 'metrics',
-      question: "What key metrics do you track for growth?",
-      type: 'text',
-      followUp: "How often do you review these metrics and make decisions?",
-      insights: ["KPI analysis", "Measurement framework", "Data-driven decisions"]
-    },
-    {
-      id: 'goals',
-      question: "What are your growth goals for the next 12 months?",
-      type: 'text',
-      followUp: "What would success look like for you?",
-      insights: ["Goal setting", "Success metrics", "Timeline planning"]
-    }
-  ]
 
   useEffect(() => {
     // Load user info
@@ -135,7 +182,7 @@ export default function AIPoweredAssessment() {
       type: 'ai',
       content: `Hello ${userInfo?.name || 'there'}! 👋 I'm your AI Growth Strategist. I'll analyze your business and provide personalized insights to help you scale effectively.
 
-I'll ask you 5 strategic questions about your growth challenges, strategy, team, metrics, and goals. As you answer, I'll provide real-time insights and recommendations.
+I'll ask you 5 strategic questions about your growth challenges, strategy, team, metrics, and technology. As you answer, I'll provide real-time insights and recommendations.
 
 Ready to begin? Let's start with your biggest growth challenges.`,
       timestamp: new Date(),
@@ -147,56 +194,216 @@ Ready to begin? Let's start with your biggest growth challenges.`,
 
   const generateAIResponse = async (userMessage: string, questionIndex: number) => {
     const question = questions[questionIndex]
-    const insights = generateInsights(userMessage, question)
     
-    // Simulate AI processing time
-    await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000))
-    
-    let response = ''
-    let followUp = ''
-    
-    if (questionIndex < questions.length - 1) {
-      response = `Great insights! I can see ${insights[0].toLowerCase()}. This is valuable information for your growth strategy.
-
-${insights[1]}
-
-Now, let's move to the next question: **${questions[questionIndex + 1].question}**`
+    try {
+      setIsLoading(true)
       
-      if (questions[questionIndex + 1].followUp) {
-        followUp = questions[questionIndex + 1].followUp
-      }
-    } else {
-      // Final question - generate comprehensive analysis
-      response = `Excellent! I now have a comprehensive understanding of your growth situation. Let me analyze everything and provide you with personalized insights and recommendations.
+      // Call the AI API for intelligent response
+      const response = await fetch('/api/ai/strategic-insights', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: question.question,
+          userResponse: userMessage,
+          userContext: userInfo,
+          aiPrompt: question.aiPrompt,
+          category: question.category
+        }),
+      })
 
-Based on your responses, I can see several key opportunities for growth optimization. Let me generate your personalized growth strategy...`
+      if (!response.ok) {
+        throw new Error('Failed to get AI response')
+      }
+
+      const aiData = await response.json()
+      
+      // Store the response
+      const newResponses = {
+        ...assessmentData.responses,
+        [question.id]: {
+          answer: userMessage,
+          insights: aiData.insights || [],
+          recommendations: aiData.recommendations || [],
+          score: aiData.score || 0
+        }
+      }
+
+      setAssessmentData(prev => ({
+        ...prev,
+        responses: newResponses,
+        categoryScores: {
+          ...prev.categoryScores,
+          [question.category]: aiData.score || 0
+        }
+      }))
+
+      // Generate AI response message
+      const aiResponse: Message = {
+        id: Date.now().toString(),
+        type: 'ai',
+        content: aiData.response || generateFallbackResponse(userMessage, question),
+        timestamp: new Date(),
+        insights: aiData.insights || [],
+        questionId: question.id
+      }
+
+      setMessages(prev => [...prev, aiResponse])
+
+      // Move to next question or complete assessment
+      if (questionIndex < questions.length - 1) {
+        setTimeout(() => {
+          const nextQuestion = questions[questionIndex + 1]
+          const nextMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            type: 'ai',
+            content: `Great insights! Now let's move to the next question:
+
+**${nextQuestion.question}**
+
+${nextQuestion.followUp ? nextQuestion.followUp : ''}`,
+            timestamp: new Date(),
+            questionId: nextQuestion.id
+          }
+          setMessages(prev => [...prev, nextMessage])
+        }, 2000)
+      } else {
+        // Complete assessment
+        setTimeout(() => {
+          completeAssessment()
+        }, 2000)
+      }
+
+    } catch (error) {
+      console.error('Error generating AI response:', error)
+      toast.error('Failed to get AI response. Please try again.')
+      
+      // Fallback response
+      const fallbackResponse: Message = {
+        id: Date.now().toString(),
+        type: 'ai',
+        content: generateFallbackResponse(userMessage, question),
+        timestamp: new Date(),
+        questionId: question.id
+      }
+      setMessages(prev => [...prev, fallbackResponse])
+    } finally {
+      setIsLoading(false)
     }
-    
-    return { response, followUp, insights }
   }
 
-  const generateInsights = (response: string, question: any) => {
-    const insights = []
-    
-    if (question.id === 'challenges') {
-      if (response.toLowerCase().includes('scaling') || response.toLowerCase().includes('growth')) {
-        insights.push('Scaling challenges identified', 'Focus on operational efficiency and process optimization', 'Consider automation and team expansion strategies')
-      } else if (response.toLowerCase().includes('marketing') || response.toLowerCase().includes('sales')) {
-        insights.push('Marketing/sales challenges detected', 'Focus on lead generation and conversion optimization', 'Consider digital marketing and sales process improvements')
-      } else {
-        insights.push('Growth blockers identified', 'Focus on addressing core challenges', 'Consider strategic pivots or process improvements')
-      }
-    } else if (question.id === 'strategy') {
-      insights.push('Strategy analysis complete', 'Growth methodology assessed', 'Tactical approach evaluated')
-    } else if (question.id === 'team') {
-      insights.push('Team structure analyzed', 'Capacity assessment complete', 'Role optimization identified')
-    } else if (question.id === 'metrics') {
-      insights.push('KPI framework evaluated', 'Measurement approach assessed', 'Data-driven decision making analyzed')
-    } else if (question.id === 'goals') {
-      insights.push('Goal setting analyzed', 'Success metrics defined', 'Timeline planning assessed')
+  const generateFallbackResponse = (userMessage: string, question: Question): string => {
+    const responses = {
+      challenges: "I can see you're facing some significant growth challenges. Let me help you identify the root causes and develop a strategic approach to overcome them.",
+      strategy: "Your growth strategy shows potential, but there are opportunities to optimize and scale more effectively. Let's explore some enhancements.",
+      team: "Team structure is crucial for growth. I can see areas where we can strengthen your organization for better scalability.",
+      metrics: "Data-driven growth requires the right metrics. Let's ensure you're tracking the KPIs that matter most for your business.",
+      technology: "Technology can be a growth accelerator or a bottleneck. Let's evaluate your current stack and identify optimization opportunities."
     }
     
-    return insights
+    return responses[question.id as keyof typeof responses] || "Thank you for that insight. Let me analyze this and provide you with specific recommendations."
+  }
+
+  const completeAssessment = async () => {
+    setIsAnalyzing(true)
+    
+    try {
+      // Calculate overall score
+      const totalScore = Object.values(assessmentData.categoryScores).reduce((sum, score) => sum + score, 0)
+      const averageScore = totalScore / Object.keys(assessmentData.categoryScores).length
+      
+      // Generate final insights
+      const finalInsights = await generateFinalInsights()
+      
+      setAssessmentData(prev => ({
+        ...prev,
+        score: Math.round(averageScore),
+        insights: finalInsights.insights,
+        recommendations: finalInsights.recommendations,
+        actionPlan: finalInsights.actionPlan,
+        strengths: finalInsights.strengths,
+        weaknesses: finalInsights.weaknesses,
+        opportunities: finalInsights.opportunities
+      }))
+
+      // Show completion message
+      const completionMessage: Message = {
+        id: Date.now().toString(),
+        type: 'ai',
+        content: `🎉 **Assessment Complete!**
+
+I've analyzed your responses and generated a comprehensive growth strategy report. Your overall growth readiness score is **${Math.round(averageScore)}/100**.
+
+Here's what I found:
+• **Strengths**: ${finalInsights.strengths.slice(0, 2).join(', ')}
+• **Key Opportunities**: ${finalInsights.opportunities.slice(0, 2).join(', ')}
+• **Priority Actions**: ${finalInsights.actionPlan.slice(0, 2).join(', ')}
+
+Let me show you your detailed results...`,
+        timestamp: new Date(),
+        insights: ['Assessment Complete', 'Score Calculated', 'Insights Generated']
+      }
+
+      setMessages(prev => [...prev, completionMessage])
+      
+      setTimeout(() => {
+        setShowResults(true)
+        setIsAnalyzing(false)
+      }, 3000)
+
+    } catch (error) {
+      console.error('Error completing assessment:', error)
+      toast.error('Failed to complete assessment. Please try again.')
+      setIsAnalyzing(false)
+    }
+  }
+
+  const generateFinalInsights = async () => {
+    try {
+      const response = await fetch('/api/ai/strategic-insights', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'final_analysis',
+          responses: assessmentData.responses,
+          userContext: userInfo,
+          categoryScores: assessmentData.categoryScores
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        return data
+      }
+    } catch (error) {
+      console.error('Error generating final insights:', error)
+    }
+
+    // Fallback insights
+    return {
+      insights: [
+        "Your business shows strong potential for growth with the right strategic adjustments.",
+        "Focus on optimizing your current processes before scaling operations.",
+        "Consider investing in technology that can automate routine tasks."
+      ],
+      recommendations: [
+        "Develop a comprehensive growth strategy with clear milestones",
+        "Strengthen your team with key hires in growth-critical roles",
+        "Implement better metrics tracking and reporting systems"
+      ],
+      actionPlan: [
+        "Week 1-2: Audit current processes and identify bottlenecks",
+        "Week 3-4: Develop detailed growth strategy with KPIs",
+        "Month 2: Begin implementing technology improvements",
+        "Month 3: Start hiring for key growth roles"
+      ],
+      strengths: ["Clear vision", "Strong team foundation"],
+      weaknesses: ["Process optimization", "Technology stack"],
+      opportunities: ["Market expansion", "Product development"]
+    }
   }
 
   const handleSendMessage = async () => {
@@ -211,46 +418,14 @@ Based on your responses, I can see several key opportunities for growth optimiza
 
     setMessages(prev => [...prev, userMessage])
     setInputValue('')
-    setIsLoading(true)
 
-    try {
-      const { response, followUp, insights } = await generateAIResponse(inputValue, assessmentData.currentQuestion)
-      
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'ai',
-        content: response,
-        timestamp: new Date(),
-        insights,
-        data: { followUp }
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      
-      // Update assessment data
-      setAssessmentData(prev => ({
-        ...prev,
-        currentQuestion: prev.currentQuestion + 1,
-        responses: {
-          ...prev.responses,
-          [questions[prev.currentQuestion].id]: inputValue
-        },
-        insights: [...prev.insights, ...insights]
-      }))
-
-      // Check if assessment is complete
-      if (assessmentData.currentQuestion >= questions.length - 1) {
-        setTimeout(() => {
-          setShowResults(true)
-        }, 2000)
-      }
-
-    } catch (error) {
-      console.error('Error generating AI response:', error)
-      toast.error('Failed to generate AI response. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
+    // Generate AI response
+    await generateAIResponse(inputValue, assessmentData.currentQuestion)
+    
+    setAssessmentData(prev => ({
+      ...prev,
+      currentQuestion: prev.currentQuestion + 1
+    }))
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -260,243 +435,254 @@ Based on your responses, I can see several key opportunities for growth optimiza
     }
   }
 
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-green-600'
+    if (score >= 60) return 'text-yellow-600'
+    return 'text-red-600'
+  }
+
+  const getScoreIcon = (score: number) => {
+    if (score >= 80) return <CheckCircle2 className="w-5 h-5 text-green-600" />
+    if (score >= 60) return <AlertCircle className="w-5 h-5 text-yellow-600" />
+    return <XCircle className="w-5 h-5 text-red-600" />
+  }
+
   if (showResults) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
-            <div className="w-20 h-20 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="text-white text-3xl" />
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold mb-6">
+              <Award className="w-6 h-6" />
+              <span>Your Growth Assessment Results</span>
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Your AI Growth Assessment is Complete!
+              Growth Readiness Score: <span className={getScoreColor(assessmentData.score)}>{assessmentData.score}/100</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Based on your responses, I've generated personalized insights and recommendations to accelerate your growth.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Based on your responses, here's your comprehensive growth strategy report
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Overall Score */}
-            <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <BarChart className="text-white text-2xl" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Growth Score</h3>
-                <div className="text-4xl font-bold text-blue-600 mb-2">87/100</div>
-                <p className="text-gray-600 text-sm">Above Average</p>
-                <Progress value={87} className="mt-4" />
-              </div>
-            </Card>
+          {/* Score Overview */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8"
+          >
+            {Object.entries(assessmentData.categoryScores).map(([category, score]) => (
+              <Card key={category} className="text-center">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center mb-4">
+                    {getScoreIcon(score)}
+                  </div>
+                  <h3 className="font-semibold text-lg capitalize mb-2">{category}</h3>
+                  <div className="text-3xl font-bold mb-2">
+                    <span className={getScoreColor(score)}>{score}</span>
+                  </div>
+                  <Progress value={score} className="h-2" />
+                </CardContent>
+              </Card>
+            ))}
+          </motion.div>
 
-            {/* Key Insights */}
-            <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Lightbulb className="text-white text-2xl" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Key Insights</h3>
-                <div className="space-y-3 text-left">
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Strong strategic foundation</span>
+          {/* Main Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Strengths & Opportunities */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="w-5 h-5 text-yellow-500" />
+                    Strengths & Opportunities
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4" />
+                      Key Strengths
+                    </h4>
+                    <ul className="space-y-2">
+                      {assessmentData.strengths.map((strength, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                          <span className="text-gray-700">{strength}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Team structure is well-defined</span>
+                  
+                  <div>
+                    <h4 className="font-semibold text-blue-700 mb-3 flex items-center gap-2">
+                      <Lightbulb className="w-4 h-4" />
+                      Growth Opportunities
+                    </h4>
+                    <ul className="space-y-2">
+                      {assessmentData.opportunities.map((opportunity, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                          <span className="text-gray-700">{opportunity}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Clear growth goals established</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
 
             {/* Recommendations */}
-            <Card className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Rocket className="text-white text-2xl" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Top Recommendations</h3>
-                <div className="space-y-3 text-left">
-                  <div className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Implement data-driven decision making</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Optimize team processes</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">Scale marketing efforts</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="w-5 h-5 text-purple-500" />
+                    Strategic Recommendations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-4">
+                    {assessmentData.recommendations.map((recommendation, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-purple-600 font-semibold text-sm">{index + 1}</span>
+                        </div>
+                        <span className="text-gray-700">{recommendation}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
-
-          {/* Detailed Analysis */}
-          <Card className="mt-8 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Detailed Growth Analysis</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Strengths</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Clear strategic vision and goals</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Well-structured team organization</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Strong understanding of market challenges</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Opportunities</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Implement advanced analytics and reporting</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Automate repetitive processes</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <ArrowRight className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Expand market reach and customer acquisition</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card>
 
           {/* Action Plan */}
-          <Card className="mt-8 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">30-Day Action Plan</h2>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Week 1: Data Foundation</h3>
-                  <p className="text-gray-600 text-sm">Set up advanced analytics and reporting systems</p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="mt-8"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Rocket className="w-5 h-5 text-orange-500" />
+                  30-Day Action Plan
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {assessmentData.actionPlan.map((action, index) => (
+                    <div key={index} className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg border border-orange-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Clock className="w-4 h-4 text-orange-600" />
+                        <span className="font-semibold text-orange-800">Week {index + 1}</span>
+                      </div>
+                      <p className="text-gray-700 text-sm">{action}</p>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg">
-                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Week 2: Process Optimization</h3>
-                  <p className="text-gray-600 text-sm">Identify and automate key business processes</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg">
-                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Week 3: Team Enhancement</h3>
-                  <p className="text-gray-600 text-sm">Optimize team structure and add key roles</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4 p-4 bg-orange-50 rounded-lg">
-                <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Week 4: Growth Acceleration</h3>
-                  <p className="text-gray-600 text-sm">Launch new growth initiatives and measure impact</p>
-                </div>
-              </div>
-            </div>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
 
           {/* CTA */}
-          <div className="mt-12 text-center">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-              onClick={() => router.push('/dashboard')}
-            >
-              Access Your Growth Dashboard
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <p className="text-sm text-gray-500 mt-4">
-              Get started with your personalized growth strategy today
-            </p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="text-center mt-8"
+          >
+            <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold mb-4">Ready to Accelerate Your Growth?</h3>
+                <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                  Get personalized coaching, advanced analytics, and strategic guidance to implement these recommendations and achieve your growth goals.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+                    <Building2 className="w-5 h-5 mr-2" />
+                    Start Free Trial
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                    <MessageSquare className="w-5 h-5 mr-2" />
+                    Book Strategy Call
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <Brain className="text-white text-sm" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">OptimaliQ AI Assessment</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center px-4 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl w-full bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl border border-white/20 p-0 flex flex-col lg:flex-row overflow-hidden"
+      >
+        {/* Left Section: Chat Interface */}
+        <div className="flex-1 p-8 border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col">
+          {/* Chat Header */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+              <Bot className="w-5 h-5 text-white" />
             </div>
-            <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="text-blue-600 border-blue-200">
-                <Sparkles className="w-3 h-3 mr-1" />
-                AI-Powered
-              </Badge>
-              <div className="text-sm text-gray-500">
-                Question {assessmentData.currentQuestion + 1} of {assessmentData.totalQuestions}
-              </div>
+            <div>
+              <h2 className="font-semibold text-gray-900">AI Growth Strategist</h2>
+              <p className="text-sm text-gray-500">Question {assessmentData.currentQuestion + 1} of {assessmentData.totalQuestions}</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-            <span>Assessment Progress</span>
-            <span>{Math.round(((assessmentData.currentQuestion + 1) / assessmentData.totalQuestions) * 100)}%</span>
+          {/* Progress Bar */}
+          <div className="mb-6">
+            <Progress 
+              value={(assessmentData.currentQuestion / assessmentData.totalQuestions) * 100} 
+              className="h-2"
+            />
+            <p className="text-sm text-gray-500 mt-2">
+              {Math.round((assessmentData.currentQuestion / assessmentData.totalQuestions) * 100)}% Complete
+            </p>
           </div>
-          <Progress value={((assessmentData.currentQuestion + 1) / assessmentData.totalQuestions) * 100} />
-        </div>
 
-        {/* Chat Interface */}
-        <Card className="h-[600px] flex flex-col">
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            <AnimatePresence>
-              {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div className={`flex items-start space-x-3 max-w-[80%] ${
-                    message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                  }`}>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto space-y-4 mb-6">
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[80%] ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
+                  <div className={`flex items-start gap-3 ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       message.type === 'user' 
                         ? 'bg-blue-600' 
-                        : 'bg-gradient-to-r from-purple-600 to-pink-600'
+                        : 'bg-gradient-to-r from-blue-600 to-indigo-600'
                     }`}>
                       {message.type === 'user' ? (
-                        <UserIcon className="text-white text-sm" />
+                        <UserIcon className="w-4 h-4 text-white" />
                       ) : (
-                        <Bot className="text-white text-sm" />
+                        <Bot className="w-4 h-4 text-white" />
                       )}
                     </div>
                     <div className={`rounded-2xl px-4 py-3 ${
@@ -504,37 +690,36 @@ Based on your responses, I can see several key opportunities for growth optimiza
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-900'
                     }`}>
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                      {message.insights && (
-                        <div className="mt-3 space-y-1">
+                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      {message.insights && message.insights.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-2">
                           {message.insights.map((insight, index) => (
-                            <div key={index} className="flex items-center space-x-2 text-xs opacity-75">
-                              <Lightbulb className="w-3 h-3" />
-                              <span>{insight}</span>
-                            </div>
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {insight}
+                            </Badge>
                           ))}
                         </div>
                       )}
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                </div>
+              </motion.div>
+            ))}
             
             {isLoading && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex justify-start"
               >
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                    <Bot className="text-white text-sm" />
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
                   </div>
                   <div className="bg-gray-100 rounded-2xl px-4 py-3">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm text-gray-600">AI is analyzing your response...</span>
+                      <span className="text-gray-600">Analyzing your response...</span>
                     </div>
                   </div>
                 </div>
@@ -545,34 +730,85 @@ Based on your responses, I can see several key opportunities for growth optimiza
           </div>
 
           {/* Input Area */}
-          <div className="border-t p-4">
-            <div className="flex space-x-3">
-              <div className="flex-1">
-                <textarea
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your response here..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  rows={3}
-                  disabled={isLoading}
-                />
-              </div>
+          {!showResults && !isAnalyzing && (
+            <div className="flex gap-3">
+              <Textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Type your response here..."
+                className="flex-1 min-h-[60px] resize-none"
+                disabled={isLoading}
+              />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                className="px-6"
               >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <Send className="w-5 h-5" />
-                )}
+                <Send className="w-4 h-4" />
               </Button>
             </div>
+          )}
+        </div>
+
+        {/* Right Section: Real-time Insights */}
+        <div className="w-full lg:w-1/3 p-8 bg-gradient-to-b from-blue-50 to-indigo-50 flex flex-col justify-between">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Eye className="w-5 h-5" />
+              Real-time Insights
+            </h3>
+            
+            {assessmentData.currentQuestion > 0 && (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Category Scores</h4>
+                  <div className="space-y-2">
+                    {Object.entries(assessmentData.categoryScores).map(([category, score]) => (
+                      <div key={category} className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600 capitalize">{category}</span>
+                        <div className="flex items-center gap-2">
+                          <Progress value={score} className="w-16 h-2" />
+                          <span className="text-sm font-medium">{score}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {assessmentData.responses && Object.keys(assessmentData.responses).length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-gray-700 mb-2">Key Insights</h4>
+                    <div className="space-y-2">
+                      {Object.values(assessmentData.responses).slice(-2).map((response: any, index) => (
+                        <div key={index} className="text-sm text-gray-600">
+                          {response.insights?.[0] || 'Analyzing...'}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        </Card>
-      </div>
+
+          <div className="mt-6">
+            <div className="bg-white/50 rounded-lg p-4">
+              <h4 className="font-medium text-gray-700 mb-2">Assessment Progress</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>Questions Completed</span>
+                  <span>{assessmentData.currentQuestion}/{assessmentData.totalQuestions}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Estimated Time</span>
+                  <span>{Math.max(0, (assessmentData.totalQuestions - assessmentData.currentQuestion) * 2)} min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   )
 }
