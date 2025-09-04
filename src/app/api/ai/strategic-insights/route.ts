@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { createAIProvider } from '@/lib/ai/simple-ai-provider'
 
 // Schema for the request
 const StrategicInsightsRequestSchema = z.object({
@@ -132,9 +133,20 @@ Please provide a detailed, actionable response that:
 
 Keep the response professional but conversational, around 200-300 words.`
 
-    // For now, use the enhanced template-based approach
-    // TODO: Integrate with actual AI models when environment is ready
-    return generateEnhancedResponse(question, userResponse, userContext, aiPrompt, category)
+    // Use the simple AI provider for enhanced responses
+    const aiProvider = createAIProvider('fallback') // Can be changed to 'openai', 'anthropic', etc.
+    const aiResponse = await aiProvider.generateResponse({
+      prompt: `${aiPrompt}\n\nQuestion: ${question}\nUser Response: ${userResponse}\nContext: ${JSON.stringify(userContext)}`,
+      maxTokens: 500,
+      temperature: 0.7
+    })
+
+    if (aiResponse.success && aiResponse.content) {
+      return aiResponse.content
+    } else {
+      console.warn('AI response failed, falling back to template:', aiResponse.error)
+      return generateEnhancedResponse(question, userResponse, userContext, aiPrompt, category)
+    }
 
   } catch (error) {
     console.error('Error generating AI response:', error)
