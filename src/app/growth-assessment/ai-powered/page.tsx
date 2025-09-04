@@ -75,6 +75,7 @@ interface Question {
   category: 'strategy' | 'operations' | 'team' | 'technology' | 'market'
   weight: number
   aiPrompt: string
+  suggestedResponses?: string[]
 }
 
 const questions: Question[] = [
@@ -85,7 +86,15 @@ const questions: Question[] = [
     category: 'strategy',
     weight: 25,
     followUp: "Tell me more about how these challenges are impacting your business.",
-    aiPrompt: "Analyze the user's growth challenges and provide specific, actionable insights. Consider their industry, company size, and role. Identify the root causes and suggest immediate and long-term solutions. Be specific and avoid generic advice."
+    aiPrompt: "Analyze the user's growth challenges and provide specific, actionable insights. Consider their industry, company size, and role. Identify the root causes and suggest immediate and long-term solutions. Be specific and avoid generic advice.",
+    suggestedResponses: [
+      "We're struggling with customer acquisition and lead generation",
+      "Our conversion rates are too low and we need to improve them",
+      "We have trouble scaling our team and hiring the right people",
+      "Our technology stack is holding us back from growing faster",
+      "We need better data and metrics to make decisions",
+      "Other"
+    ]
   },
   {
     id: 'strategy',
@@ -94,7 +103,15 @@ const questions: Question[] = [
     category: 'strategy',
     weight: 20,
     followUp: "What specific tactics are you using to drive growth?",
-    aiPrompt: "Evaluate their growth strategy based on best practices for their industry and company size. Identify gaps, strengths, and opportunities for improvement. Provide specific recommendations for strategy enhancement."
+    aiPrompt: "Evaluate their growth strategy based on best practices for their industry and company size. Identify gaps, strengths, and opportunities for improvement. Provide specific recommendations for strategy enhancement.",
+    suggestedResponses: [
+      "We focus on digital marketing and content creation",
+      "We're using a product-led growth approach",
+      "We rely on partnerships and referrals",
+      "We're still figuring out our strategy",
+      "We use a mix of sales and marketing tactics",
+      "Other"
+    ]
   },
   {
     id: 'team',
@@ -103,7 +120,15 @@ const questions: Question[] = [
     category: 'team',
     weight: 20,
     followUp: "What roles are you missing or need to strengthen?",
-    aiPrompt: "Analyze their team structure for growth readiness. Consider their company size, industry, and growth goals. Identify missing roles, skill gaps, and organizational improvements needed for scaling."
+    aiPrompt: "Analyze their team structure for growth readiness. Consider their company size, industry, and growth goals. Identify missing roles, skill gaps, and organizational improvements needed for scaling.",
+    suggestedResponses: [
+      "We're a small team wearing multiple hats",
+      "We have dedicated sales and marketing roles",
+      "We need to hire more people but don't know where to start",
+      "We have the right people but need better processes",
+      "We're struggling to find and retain talent",
+      "Other"
+    ]
   },
   {
     id: 'metrics',
@@ -112,7 +137,15 @@ const questions: Question[] = [
     category: 'operations',
     weight: 15,
     followUp: "How often do you review these metrics and make decisions?",
-    aiPrompt: "Evaluate their metrics framework for growth tracking. Identify missing KPIs, suggest improvements to their measurement approach, and recommend data-driven decision-making processes."
+    aiPrompt: "Evaluate their metrics framework for growth tracking. Identify missing KPIs, suggest improvements to their measurement approach, and recommend data-driven decision-making processes.",
+    suggestedResponses: [
+      "Revenue, customer count, and basic conversion rates",
+      "We track detailed funnel metrics and customer lifetime value",
+      "We mainly look at website traffic and social media metrics",
+      "We don't really track metrics systematically",
+      "We have too many metrics and don't know which ones matter",
+      "Other"
+    ]
   },
   {
     id: 'technology',
@@ -121,7 +154,15 @@ const questions: Question[] = [
     category: 'technology',
     weight: 20,
     followUp: "What tools and systems are you using?",
-    aiPrompt: "Assess their technology stack for growth scalability. Identify bottlenecks, suggest tool improvements, and recommend technology investments that will support their growth goals."
+    aiPrompt: "Assess their technology stack for growth scalability. Identify bottlenecks, suggest tool improvements, and recommend technology investments that will support their growth goals.",
+    suggestedResponses: [
+      "We use basic tools like email and spreadsheets",
+      "We have a CRM and some marketing automation",
+      "Our tech stack is outdated and needs upgrading",
+      "We have good tools but don't use them effectively",
+      "We're overwhelmed by too many tools and systems",
+      "Other"
+    ]
   }
 ]
 
@@ -131,6 +172,7 @@ export default function AIPoweredAssessment() {
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
+  const [showTextInput, setShowTextInput] = useState(false)
   const [assessmentData, setAssessmentData] = useState<AssessmentData>({
     currentQuestion: 0,
     totalQuestions: questions.length,
@@ -170,7 +212,14 @@ export default function AIPoweredAssessment() {
   }, [router])
 
   useEffect(() => {
-    scrollToBottom()
+    // Only auto-scroll if user is near the bottom or it's a new message
+    const messagesContainer = messagesEndRef.current?.parentElement
+    if (messagesContainer) {
+      const isNearBottom = messagesContainer.scrollTop + messagesContainer.clientHeight >= messagesContainer.scrollHeight - 100
+      if (isNearBottom || messages.length <= 2) {
+        scrollToBottom()
+      }
+    }
   }, [messages])
 
   const scrollToBottom = () => {
@@ -268,7 +317,7 @@ Ready to begin? Let's start with your biggest growth challenges.`,
             const nextMessage: Message = {
               id: (Date.now() + 1).toString(),
               type: 'ai',
-              content: `Great insights! Now let's move to the next question:
+              content: `Thanks for that insight! 
 
 **${nextQuestion.question}**
 
@@ -278,12 +327,12 @@ ${nextQuestion.followUp ? nextQuestion.followUp : ''}`,
             }
             setMessages(prev => [...prev, nextMessage])
           }, 1200)
-        }, 2000)
+        }, 3000)
       } else {
         // Complete assessment
         setTimeout(() => {
           completeAssessment()
-        }, 2000)
+        }, 3000)
       }
 
     } catch (error) {
@@ -443,6 +492,30 @@ Let me show you your detailed results...`,
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
+    }
+  }
+
+  const handleSuggestedResponse = async (response: string) => {
+    if (response === 'Other') {
+      setShowTextInput(true)
+    } else {
+      // Create user message
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        type: 'user',
+        content: response,
+        timestamp: new Date()
+      }
+
+      setMessages(prev => [...prev, userMessage])
+
+      // Generate AI response
+      await generateAIResponse(response, assessmentData.currentQuestion)
+      
+      setAssessmentData(prev => ({
+        ...prev,
+        currentQuestion: prev.currentQuestion + 1
+      }))
     }
   }
 
@@ -652,10 +725,10 @@ Let me show you your detailed results...`,
           type: "spring",
           stiffness: 100
         }}
-        className="max-w-5xl w-full bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl border border-white/30 p-0 flex flex-col lg:flex-row overflow-hidden"
+        className="max-w-4xl w-full bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl border border-white/30 p-0 flex flex-col overflow-hidden"
       >
-        {/* Left Section: Chat Interface */}
-        <div className="flex-1 p-8 border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col">
+        {/* Chat Interface */}
+        <div className="flex-1 p-8 flex flex-col">
           {/* Chat Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
@@ -824,93 +897,70 @@ Let me show you your detailed results...`,
           {/* Input Area */}
           {!showResults && !isAnalyzing && (
             <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
-              <div className="flex gap-3 items-end">
-                <div className="flex-1 relative">
-                  <Textarea
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Type your response here..."
-                    className="min-h-[60px] max-h-[120px] resize-none border-0 bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-500 pr-12"
-                    disabled={isLoading || isTyping}
-                    rows={2}
-                  />
-                  <div className="absolute bottom-2 right-2 text-xs text-gray-400">
-                    {inputValue.length > 0 && `${inputValue.length} chars`}
-                  </div>
-                </div>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!inputValue.trim() || isLoading || isTyping}
-                  className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  size="icon"
-                >
-                  <Send className="w-5 h-5" />
-                </Button>
-              </div>
-              <div className="mt-2 text-xs text-gray-500 text-center">
-                Press Enter to send • Shift+Enter for new line
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right Section: Real-time Insights */}
-        <div className="w-full lg:w-1/3 p-8 bg-gradient-to-b from-blue-50 to-indigo-50 flex flex-col justify-between">
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Eye className="w-5 h-5" />
-              Real-time Insights
-            </h3>
-            
-            {assessmentData.currentQuestion > 0 && (
-              <div className="space-y-4">
+              {!showTextInput && assessmentData.currentQuestion < questions.length && questions[assessmentData.currentQuestion]?.suggestedResponses ? (
                 <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Category Scores</h4>
-                  <div className="space-y-2">
-                    {Object.entries(assessmentData.categoryScores).map(([category, score]) => (
-                      <div key={category} className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 capitalize">{category}</span>
-                        <div className="flex items-center gap-2">
-                          <Progress value={score} className="w-16 h-2" />
-                          <span className="text-sm font-medium">{score}</span>
-                        </div>
-                      </div>
+                  <div className="text-sm text-gray-600 mb-3">Choose a response or select "Other" to write your own:</div>
+                  <div className="grid grid-cols-1 gap-2">
+                    {questions[assessmentData.currentQuestion].suggestedResponses?.map((response, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSuggestedResponse(response)}
+                        disabled={isLoading || isTyping}
+                        className={`p-3 text-left rounded-lg border transition-all duration-200 ${
+                          response === 'Other'
+                            ? 'border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600'
+                            : 'border-gray-200 hover:border-blue-400 hover:bg-blue-50 text-gray-800'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {response}
+                      </button>
                     ))}
                   </div>
                 </div>
-                
-                {assessmentData.responses && Object.keys(assessmentData.responses).length > 0 && (
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Key Insights</h4>
-                    <div className="space-y-2">
-                      {Object.values(assessmentData.responses).slice(-2).map((response: any, index) => (
-                        <div key={index} className="text-sm text-gray-600">
-                          {response.insights?.[0] || 'Analyzing...'}
-                        </div>
-                      ))}
+              ) : (
+                <div>
+                  <div className="flex gap-3 items-end">
+                    <div className="flex-1 relative">
+                      <Textarea
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Type your response here..."
+                        className="min-h-[60px] max-h-[120px] resize-none border-0 bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-500 pr-12"
+                        disabled={isLoading || isTyping}
+                        rows={2}
+                        autoFocus
+                      />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+                        {inputValue.length > 0 && `${inputValue.length} chars`}
+                      </div>
                     </div>
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim() || isLoading || isTyping}
+                      className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      size="icon"
+                    >
+                      <Send className="w-5 h-5" />
+                    </Button>
                   </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="mt-6">
-            <div className="bg-white/50 rounded-lg p-4">
-              <h4 className="font-medium text-gray-700 mb-2">Assessment Progress</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span>Questions Completed</span>
-                  <span>{assessmentData.currentQuestion}/{assessmentData.totalQuestions}</span>
+                  <div className="mt-2 flex justify-between items-center">
+                    <div className="text-xs text-gray-500">
+                      Press Enter to send • Shift+Enter for new line
+                    </div>
+                    {showTextInput && (
+                      <button
+                        onClick={() => setShowTextInput(false)}
+                        className="text-xs text-blue-600 hover:text-blue-700"
+                      >
+                        ← Back to suggestions
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span>Estimated Time</span>
-                  <span>{Math.max(0, (assessmentData.totalQuestions - assessmentData.currentQuestion) * 2)} min</span>
-                </div>
-              </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </motion.div>
     </div>
