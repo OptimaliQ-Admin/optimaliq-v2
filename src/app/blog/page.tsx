@@ -3,7 +3,7 @@
  * Comprehensive blog with articles, guides, and resources
  */
 
-import React from 'react'
+import * as React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { 
