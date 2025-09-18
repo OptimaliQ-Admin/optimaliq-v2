@@ -8,11 +8,11 @@ const envSchema = z.object({
   NEXT_PUBLIC_DISABLE_SUBSCRIPTION_CHECK: z.string().optional(),
   NEXT_PUBLIC_MARKET_AGENTIC: z.string().optional(),
   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().min(1).optional(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
 
   // AI providers
-  OPENAI_API_KEY: z.string().min(1),
+  OPENAI_API_KEY: z.string().min(1).optional(),
   ANTHROPIC_API_KEY: z.string().min(1).optional(),
   GOOGLE_AI_API_KEY: z.string().min(1).optional(),
   MISTRAL_API_KEY: z.string().min(1).optional(),
@@ -27,16 +27,16 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1).optional(),
 
   // Stripe
-  STRIPE_SECRET_KEY: z.string().min(1),
-  STRIPE_PUBLISHABLE_KEY: z.string().min(1),
-  STRIPE_WEBHOOK_SECRET: z.string().min(1),
+  STRIPE_SECRET_KEY: z.string().min(1).optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().min(1).optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
   STRIPE_PRICE_ACCELERATOR_MONTHLY: z.string().optional(),
   STRIPE_PRICE_ACCELERATOR_ANNUAL: z.string().optional(),
 
   // Supabase / Postgres
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_ANON_KEY: z.string().min(1).optional(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   SUPABASE_JWT_SECRET: z.string().optional(),
   POSTGRES_URL: z.string().url().optional(),
   POSTGRES_PRISMA_URL: z.string().url().optional(),

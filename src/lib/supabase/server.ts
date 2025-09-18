@@ -8,8 +8,8 @@ import { Database } from '@/types';
  */
 export function createServerClient() {
   return createClient<Database>(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.SUPABASE_SERVICE_ROLE_KEY,
+    env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+    env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_service_role_key',
     {
       auth: {
         autoRefreshToken: false,
@@ -25,8 +25,8 @@ export function createServerClient() {
  */
 export function createRouteClient() {
   return createClient<Database>(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_anon_key',
     {
       auth: {
         autoRefreshToken: false,

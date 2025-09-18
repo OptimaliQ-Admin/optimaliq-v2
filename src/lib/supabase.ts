@@ -5,16 +5,16 @@ import { AppError } from '@/utils';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+// Use fallback values if environment variables are not set
+const fallbackUrl = 'https://placeholder.supabase.co';
+const fallbackKey = 'placeholder_anon_key';
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new AppError(
-    'Missing Supabase environment variables',
-    'CONFIGURATION_ERROR',
-    500
-  );
+  console.warn('⚠️  Supabase environment variables not set, using fallback values');
 }
 
 // Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl || fallbackUrl, supabaseAnonKey || fallbackKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,

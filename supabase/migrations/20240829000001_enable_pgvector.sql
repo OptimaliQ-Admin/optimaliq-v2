@@ -25,7 +25,7 @@ WITH (lists = 100);
 ALTER TABLE market_articles ENABLE ROW LEVEL SECURITY;
 
 -- Default deny policy
-CREATE POLICY "deny_all_market_articles" ON market_articles 
+CREATE POLICY IF NOT EXISTS "deny_all_market_articles" ON market_articles 
 FOR ALL USING (false);
 
 -- Allow public read access via API routes (will be controlled by service role)

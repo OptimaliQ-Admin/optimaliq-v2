@@ -54,7 +54,9 @@ export class MistralProvider {
 
   constructor() {
     if (!env.MISTRAL_API_KEY) {
-      throw new AppError('Mistral API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('⚠️  Mistral API key not configured, provider will be disabled');
+      this.apiKey = '';
+      return;
     }
 
     this.apiKey = env.MISTRAL_API_KEY;
@@ -82,6 +84,9 @@ export class MistralProvider {
     model: string;
     finishReason: string;
   }> {
+    if (!this.apiKey) {
+      throw new AppError('Mistral provider is disabled - API key not configured', 'PROVIDER_DISABLED', 503);
+    }
     try {
       await this.checkRateLimit();
 

@@ -49,7 +49,10 @@ export class AnthropicProvider {
 
   constructor() {
     if (!env.ANTHROPIC_API_KEY) {
-      throw new AppError('Anthropic API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('⚠️  Anthropic API key not configured, provider will be disabled');
+      this.client = null as any;
+      this.defaultModel = 'claude-3-sonnet-20240229';
+      return;
     }
 
     this.client = new Anthropic({
@@ -79,6 +82,9 @@ export class AnthropicProvider {
     model: string;
     stopReason?: string;
   }> {
+    if (!this.client) {
+      throw new AppError('Anthropic provider is disabled - API key not configured', 'PROVIDER_DISABLED', 503);
+    }
     try {
       // Rate limiting check
       await this.checkRateLimit();

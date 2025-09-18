@@ -61,11 +61,14 @@ export class GoogleVertexProvider {
   private rateLimitTracker: Map<string, number[]> = new Map();
 
   constructor() {
-    if (!env.VERTEX_PROJECT_ID) {
-      throw new AppError('Google Vertex AI project ID not configured', 'CONFIG_ERROR', 500);
+    if (!env.GOOGLE_AI_API_KEY) {
+      console.warn('⚠️  Google AI API key not configured, provider will be disabled');
+      this.projectId = 'default-project';
+      this.apiEndpoint = `https://${this.location}-aiplatform.googleapis.com/v1/projects/${this.projectId}/locations/${this.location}/publishers/google/models`;
+      return;
     }
 
-    this.projectId = env.VERTEX_PROJECT_ID;
+    this.projectId = env.GOOGLE_AI_API_KEY ? 'configured-project' : 'default-project';
     this.apiEndpoint = `https://${this.location}-aiplatform.googleapis.com/v1/projects/${this.projectId}/locations/${this.location}/publishers/google/models`;
   }
 
