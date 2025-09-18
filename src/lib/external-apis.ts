@@ -78,7 +78,9 @@ export class FinnhubAPI {
 
   constructor() {
     if (!env.FINNHUB_API_KEY) {
-      throw new AppError('Finnhub API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('⚠️  Finnhub API key not configured, provider will be disabled');
+      this.apiKey = '';
+      return;
     }
     this.apiKey = env.FINNHUB_API_KEY;
   }
@@ -219,7 +221,9 @@ export class NewsAPI {
 
   constructor() {
     if (!env.NEWS_API_KEY) {
-      throw new AppError('News API key not configured', 'CONFIG_ERROR', 500);
+      console.warn('⚠️  News API key not configured, provider will be disabled');
+      this.apiKey = '';
+      return;
     }
     this.apiKey = env.NEWS_API_KEY;
   }
