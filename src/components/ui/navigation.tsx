@@ -3,7 +3,7 @@
  * Core navigation components with comprehensive patterns and accessibility features
  */
 
-import * as React from "react"
+import React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight, Home, Settings, User, LogOut } from "lucide-react"

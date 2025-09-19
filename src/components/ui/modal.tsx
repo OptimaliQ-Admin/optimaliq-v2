@@ -3,7 +3,7 @@
  * Core modal component with comprehensive variants, accessibility features, and animations
  */
 
-import * as React from "react"
+import React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X, Loader2 } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"

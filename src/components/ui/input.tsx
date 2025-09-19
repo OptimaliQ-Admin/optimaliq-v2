@@ -3,7 +3,9 @@
  * Core input component with comprehensive variants, validation states, and accessibility features
  */
 
-import * as React from "react"
+'use client'
+
+import React, { useState } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Eye, EyeOff, Search, X, AlertCircle, CheckCircle } from "lucide-react"
@@ -83,9 +85,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     onKeyDown,
     ...props 
   }, ref) => {
-    const [showPassword, setShowPassword] = React.useState(false)
-    const [inputValue, setInputValue] = React.useState(value || '')
-    const [isFocused, setIsFocused] = React.useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [inputValue, setInputValue] = useState(value || '')
+    const [isFocused, setIsFocused] = useState(false)
 
     // Determine variant based on validation
     const finalVariant = validation?.type || variant

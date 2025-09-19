@@ -3,7 +3,7 @@
  * Core card component with comprehensive variants, interactive states, and accessibility features
  */
 
-import * as React from "react"
+import React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"

@@ -3,7 +3,7 @@
  * Core data display components with comprehensive patterns and accessibility features
  */
 
-import * as React from "react"
+import React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { ChevronUp, ChevronDown, MoreHorizontal, Filter, SortAsc, SortDesc } from "lucide-react"

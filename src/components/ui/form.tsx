@@ -3,7 +3,9 @@
  * Core form components with comprehensive patterns and accessibility features
  */
 
-import * as React from "react"
+'use client'
+
+import React, { useState, useRef } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
@@ -228,8 +230,8 @@ const Select = React.forwardRef<
   onValueChange,
   ...props 
 }, ref) => {
-  const [searchValue, setSearchValue] = React.useState("")
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [searchValue, setSearchValue] = useState("")
+  const [isOpen, setIsOpen] = useState(false)
 
   const getVariant = () => {
     if (error) return "error"
@@ -595,9 +597,9 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
     children,
     ...props 
   }, ref) => {
-    const [isDragOver, setIsDragOver] = React.useState(false)
-    const [selectedFiles, setSelectedFiles] = React.useState<File[]>([])
-    const fileInputRef = React.useRef<HTMLInputElement>(null)
+    const [isDragOver, setIsDragOver] = useState(false)
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const getVariant = () => {
       if (error) return "error"
