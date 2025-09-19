@@ -407,14 +407,12 @@ export default function TermsPage() {
               variant="warning"
               title="Important Notice"
               description="These terms constitute a legally binding agreement. By using our service, you acknowledge that you have read, understood, and agree to be bound by these terms."
-              icon={<AlertTriangle className="h-4 w-4" />}
             />
             
             <Alert
               variant="info"
               title="Questions About Terms"
               description="If you have questions about these terms or need clarification on any provisions, please contact our legal team before using the service."
-              icon={<Info className="h-4 w-4" />}
             />
           </div>
         </Container>
