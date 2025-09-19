@@ -49,7 +49,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
 import { Alert } from '@/components/ui/feedback'
 import { Select } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -191,9 +190,9 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="primary" className="mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6">
               Get in Touch
-            </StatusBadge>
+            </div>
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
               We're Here to{' '}
               <span className="text-primary">Help You Succeed</span>

@@ -40,7 +40,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
 import { MetricCard } from '@/components/ui/charts'
 
 // Industry solutions data
@@ -328,10 +327,10 @@ export default function IndustrySolutionsPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="primary" className="mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6">
               <Building className="h-4 w-4 mr-2" />
               Industry Solutions
-            </StatusBadge>
+            </div>
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
               Tailored Solutions for{' '}
               <span className="text-primary">Every Industry</span>
@@ -448,24 +447,20 @@ export default function IndustrySolutionsPage() {
                         <MetricCard
                           title="Organizations"
                           value={selectedIndustry.stats.organizations}
-                          icon={<Building className="h-5 w-5" />}
                         />
                         <MetricCard
                           title="Avg Improvement"
                           value={selectedIndustry.stats.avgImprovement}
-                          icon={<TrendingUp className="h-5 w-5" />}
                           trend="up"
                         />
                         <MetricCard
                           title="Cost Savings"
                           value={selectedIndustry.stats.costSavings}
-                          icon={<DollarSign className="h-5 w-5" />}
                           trend="up"
                         />
                         <MetricCard
                           title="Satisfaction"
                           value={selectedIndustry.stats.satisfaction}
-                          icon={<Star className="h-5 w-5" />}
                         />
                       </Grid>
                     </div>
@@ -603,7 +598,7 @@ export default function IndustrySolutionsPage() {
                       </td>
                       <td className="p-6 text-center font-medium">{industry.stats.organizations}</td>
                       <td className="p-6 text-center">
-                        <StatusBadge status="success">{industry.stats.avgImprovement}</StatusBadge>
+                        <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">{industry.stats.avgImprovement}</div>
                       </td>
                       <td className="p-6 text-center font-medium">{industry.stats.costSavings}</td>
                       <td className="p-6 text-center">

@@ -33,7 +33,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
 import { Input } from '@/components/ui/input'
 
 const faqData = {
@@ -256,10 +255,10 @@ export default function FAQPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="primary" className="mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6">
               <HelpCircle className="h-4 w-4 mr-2" />
               Frequently Asked Questions
-            </StatusBadge>
+            </div>
             <h1 className="text-4xl lg:text-5xl font-bold mb-6">
               How Can We{' '}
               <span className="text-primary">Help You?</span>
@@ -439,7 +438,7 @@ export default function FAQPage() {
                           <div className="flex items-center space-x-3 flex-1">
                             <h3 className="font-semibold text-left">{question.question}</h3>
                             {question.popular && (
-                              <StatusBadge status="primary" size="xs">Popular</StatusBadge>
+                              <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">Popular</div>
                             )}
                           </div>
                           {expandedItems.includes(question.id) ? (

@@ -17,6 +17,7 @@ import {
   Award,
   CheckCircle,
   ArrowRight,
+  ArrowLeft,
   Play,
   Clock,
   Star,
@@ -30,7 +31,8 @@ import {
   Brain,
   Rocket,
   Globe,
-  Heart
+  Heart,
+  Quote
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'

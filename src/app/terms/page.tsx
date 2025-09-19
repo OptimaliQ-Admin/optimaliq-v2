@@ -33,7 +33,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Container, Section, Grid, Flex, Stack } from '@/components/ui/layout'
-import { StatusBadge } from '@/components/ui/data-display'
 import { Alert } from '@/components/ui/feedback'
 
 const termsData = {
@@ -284,10 +283,10 @@ export default function TermsPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <StatusBadge status="primary" className="mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6">
               <FileText className="h-4 w-4 mr-2" />
               Terms of Service
-            </StatusBadge>
+            </div>
             <h1 className="text-4xl lg:text-5xl font-bold mb-6">
               Terms of Service &{' '}
               <span className="text-primary">User Agreement</span>
